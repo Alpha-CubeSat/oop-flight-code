@@ -6,9 +6,6 @@
 
  
 namespace sfr{
-    namespace gps{
-        extern float altitude;
-    }
     namespace photoresistor{
         extern bool covered;
     } 
@@ -27,6 +24,14 @@ namespace sfr{
         extern uint8_t receive_buffer[constants::rockblock::receive_buffer_size];
         extern size_t send_size;
         extern size_t receive_size;
+    }
+    namespace imu{
+        extern float mag_x;
+        extern float mag_y;
+        extern float mag_z;
+        extern float gyro_x;
+        extern float gyro_y;
+        extern float gyro_z;
     }
 };
 

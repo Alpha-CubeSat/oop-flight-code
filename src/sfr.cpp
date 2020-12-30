@@ -2,9 +2,6 @@
 #include "constants.hpp"
  
 namespace sfr{
-    namespace gps{
-        float altitude = 0.0;
-    }
     namespace photoresistor{
         bool covered = true;
     } 
@@ -21,5 +18,13 @@ namespace sfr{
     namespace rockblock{
         uint8_t send_buffer[constants::rockblock::send_buffer_size] = {0};
         //uint8_t receive_buffer[constants::rockblock::receive_buffer_size] = {0};
+    }
+    namespace imu{
+        float mag_x = 0.0;
+        float mag_y = 0.0;
+        float mag_z = 0.0;
+        float gyro_x = 0.0;
+        float gyro_y = 0.0;
+        float gyro_z = 0.0;
     }
 }
