@@ -32,6 +32,25 @@ namespace sfr{
         extern float gyro_x;
         extern float gyro_y;
         extern float gyro_z;
+        extern float acc_x;
+        extern float acc_y;
+        extern float acc_z;
+        extern int gyr;
+        extern int acc;
+        extern int mag;
+    }
+    namespace temperature{
+        extern float temp_c;
+        extern float raw_temp;
+    }
+    namespace current{
+        extern float solar_current;
+    }
+    namespace acs{
+        extern bool detuble;
+    }
+    namespace battery{
+        extern float voltage;
     }
 };
 

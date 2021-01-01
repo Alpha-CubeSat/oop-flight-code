@@ -22,6 +22,31 @@ namespace constants{
         constexpr int command_size = 6;
         constexpr int opcode_deploy = 1;
     }
+    namespace temperature{
+        constexpr int pin = 16;
+    }
+    namespace current{
+        constexpr int pin = 15;
+    }
+    namespace acs{
+        constexpr int yout1 = 5; 
+        constexpr int yout2 = 6; 
+        constexpr int zout1 = 9; 
+        constexpr int zout2 = 10; 
+        constexpr int xout1 = 7; 
+        constexpr int xout2 = 8; 
+        constexpr int xPWMpin = 2; 
+        constexpr int yPWMpin = 3; 
+        constexpr int zPWMpin = 4; 
+        constexpr int STBYpin = 21; 
+        constexpr int STBZpin = 20; 
+        constexpr int xtorqorder = 1;
+        constexpr int ytorqorder = 1;
+        constexpr int ztorqorder = 1;
+    }
+    namespace battery{
+        constexpr int pin = 32;
+    }
 };
 
 #endif

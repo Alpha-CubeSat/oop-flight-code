@@ -3,6 +3,7 @@
 
 #include <Adafruit_LSM9DS1.h>
 #include "sfr.hpp"
+#include "constants.hpp"
 #include <Arduino.h>
 
 class IMUMonitor{

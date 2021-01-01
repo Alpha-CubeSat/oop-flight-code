@@ -26,5 +26,24 @@ namespace sfr{
         float gyro_x = 0.0;
         float gyro_y = 0.0;
         float gyro_z = 0.0;
+        float acc_x = 0.0;
+        float acc_y = 0.0;
+        float acc_z = 0.0;
+        int gyr = 0;
+        int acc = 0;
+        int mag = 0;
+    }
+    namespace temperature{
+        float temp_c = 0.0;
+        float raw_temp = 0.0;
+    }
+    namespace current{
+        float solar_current = 0.0;
+    }
+    namespace acs{
+        bool detuble = true;
+    }
+    namespace battery{
+        float voltage = 0.0;
     }
 }
