@@ -8,10 +8,11 @@ class MissionManager{
     public:
         MissionManager();
         void execute();
-        void dispatch_ascent();
-        void dispatch_deploy_lightsail();
-        void dispatch_take_photo();
-        void dispatch_descent();
+        void dispatch_normal();
+        void dispatch_detumble();
+        void dispatch_safe_hold();
+        void dispatch_low_power();
+        void dispatch_deploy();
 };
 
 #endif

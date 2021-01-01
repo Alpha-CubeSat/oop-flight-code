@@ -1,6 +1,7 @@
 {
     "files.associations": {
         "algorithm": "cpp",
-        "memory": "cpp"
+        "memory": "cpp",
+        "*.enum": "cpp"
     }
 }

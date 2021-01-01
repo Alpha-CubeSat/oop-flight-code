@@ -6,43 +6,30 @@ void MissionManager::execute(){
     mission_mode_type mode = sfr::mission::mode;
 
     switch(mode){
-        case mission_mode_type::ascent:
-            dispatch_ascent();
+        case mission_mode_type::normal:
+            dispatch_normal();
             break;
-        case mission_mode_type::deploy_lightsail:
-            dispatch_deploy_lightsail();
+        case mission_mode_type::detumble:
+            dispatch_detumble();
             break;
-        case mission_mode_type::taking_photo:
-            dispatch_take_photo();
+        case mission_mode_type::safe_hold:
+            dispatch_safe_hold();
             break;
-        case mission_mode_type::descent:
-            dispatch_descent();
+        case mission_mode_type::low_power:
+            dispatch_low_power();
             break;
+        case mission_mode_type::deploy:
+            dispatch_deploy();
     }
 }
 
-void MissionManager::dispatch_ascent(){
-    
-}
+void MissionManager::dispatch_normal(){}
 
-void MissionManager::dispatch_deploy_lightsail(){
-    if(sfr::photoresistor::covered){
-        sfr::burnwire::on = true;
-    }
-    else{
-        sfr::burnwire::on = false;
-        sfr::mission::mode = mission_mode_type::taking_photo;
-    }
-}
+void MissionManager::dispatch_detumble(){}
 
-void MissionManager::dispatch_take_photo(){
-    if(!sfr::camera::photo_taken){
-        sfr::camera::take_photo = true;
-    }
-    else{
-        sfr::camera::take_photo = false;
-        sfr::mission::mode = mission_mode_type::descent;
-    }
-}
+void MissionManager::dispatch_safe_hold(){}
 
-void MissionManager::dispatch_descent(){}
+void MissionManager::dispatch_low_power(){}
+
+void MissionManager::dispatch_deploy(){}
+

@@ -6,7 +6,7 @@ namespace sfr{
         bool covered = true;
     } 
     namespace mission{
-        mission_mode_type mode = mission_mode_type::ascent;
+        mission_mode_type mode = mission_mode_type::normal;
     }
     namespace burnwire{
         bool on = false;
