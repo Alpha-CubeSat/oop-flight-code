@@ -22,9 +22,7 @@ void MissionManager::execute(){
 }
 
 void MissionManager::dispatch_ascent(){
-    if(sfr::gps::altitude > constants::gps::mand_deploy){
-        sfr::mission::mode = mission_mode_type::deploy_lightsail;
-    }
+    
 }
 
 void MissionManager::dispatch_deploy_lightsail(){

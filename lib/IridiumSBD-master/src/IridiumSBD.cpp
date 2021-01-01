@@ -37,16 +37,13 @@ void ISBDDiagsCallback(IridiumSBD *device, char c) { }
 // Power on the RockBLOCK or return from sleep
 int IridiumSBD::begin()
 {
-   
    if (this->reentrant)
       return ISBD_REENTRANT;
-  
+
    this->reentrant = true;
-   
    int ret = internalBegin();
-   
    this->reentrant = false;
-   
+
    // Absent a successful startup, keep the device turned off
    if (ret != ISBD_SUCCESS)
       power(false);
@@ -255,21 +252,20 @@ Private interface
 
 int IridiumSBD::internalBegin()
 {
-   
    diagprint(F("Calling internalBegin\r\n"));
 
    if (!this->asleep)
       return ISBD_ALREADY_AWAKE;
-   
+
    power(true); // power on
-   
+
    bool modemAlive = false;
 
    unsigned long startupTime = 500; //ms
    for (unsigned long start = millis(); millis() - start < startupTime;)
       if (cancelled())
          return ISBD_CANCELLED;
-   
+
    // Turn on modem and wait for a response from "AT" command to begin
    for (unsigned long start = millis(); !modemAlive && millis() - start < 1000UL * ISBD_STARTUP_MAX_TIME;)
    {
@@ -278,13 +274,13 @@ int IridiumSBD::internalBegin()
       if (cancelled())
          return ISBD_CANCELLED;
    }
-   
+
    if (!modemAlive)
    {
       diagprint(F("No modem detected.\r\n"));
       return ISBD_NO_MODEM_DETECTED;
    }
-   
+
    // The usual initialization sequence
    const char *strings[3] = { "ATE1\r", "AT&D0\r", "AT&K0\r" };
    for (int i=0; i<3; ++i)
@@ -293,7 +289,7 @@ int IridiumSBD::internalBegin()
       if (!waitForATResponse())
          return cancelled() ? ISBD_CANCELLED : ISBD_PROTOCOL_ERROR;
    }
-   
+
    // Enable or disable RING alerts as requested by user
    // By default they are on if a RING pin was supplied on constructor
    diagprint(F("Ring alerts are")); diagprint(ringAlertsEnabled ? F("") : F(" NOT")); diagprint(F(" enabled.\r\n"));
@@ -365,8 +361,6 @@ int IridiumSBD::internalSendReceiveSBD(const char *txTxtMessage, const uint8_t *
 
       if (!waitForATResponse(NULL, 0, NULL, "0\r\n\r\nOK\r\n"))
          return cancelled() ? ISBD_CANCELLED : ISBD_PROTOCOL_ERROR;
-
-
    }
 
    else // Text transmission
@@ -411,18 +405,16 @@ int IridiumSBD::internalSendReceiveSBD(const char *txTxtMessage, const uint8_t *
       {
          okToProceed = false;
          int ret = internalMSSTMWorkaround(okToProceed);
-         if (ret != ISBD_SUCCESS){
+         if (ret != ISBD_SUCCESS)
             return ret;
-         }
       }
 
       if (okToProceed)
       {
          uint16_t moCode = 0, moMSN = 0, mtCode = 0, mtMSN = 0, mtLen = 0, mtRemaining = 0;
          int ret = doSBDIX(moCode, moMSN, mtCode, mtMSN, mtLen, mtRemaining);
-         if (ret != ISBD_SUCCESS){
+         if (ret != ISBD_SUCCESS)
             return ret;
-         }
 
          diagprint(F("SBDIX MO code: "));
          diagprint(moCode);
@@ -457,18 +449,16 @@ int IridiumSBD::internalSendReceiveSBD(const char *txTxtMessage, const uint8_t *
          else // retry
          {
             diagprint(F("Waiting for SBDIX retry...\r\n"));
-            if (!noBlockWait(sbdixInterval)){
+            if (!noBlockWait(sbdixInterval))
                return ISBD_CANCELLED;
-            }
          }
       }
 
       else // MSSTM check fail
       {
          diagprint(F("Waiting for MSSTM retry...\r\n"));
-         if (!noBlockWait(ISBD_MSSTM_RETRY_INTERVAL)){
+         if (!noBlockWait(ISBD_MSSTM_RETRY_INTERVAL))
             return ISBD_CANCELLED;
-         }
       }
    } // big wait loop
 
@@ -571,9 +561,8 @@ bool IridiumSBD::waitForATResponse(char *response, int responseSize, const char 
    consoleprint(F("<< "));
    for (unsigned long start=millis(); millis() - start < 1000UL * atTimeout;)
    {
-      if (cancelled()){
+      if (cancelled())
          return false;
-      }
 
       while (filteredavailable() > 0)
       {
@@ -616,9 +605,8 @@ bool IridiumSBD::waitForATResponse(char *response, int responseSize, const char 
          if (c == terminator[matchTerminatorPos])
          {
             ++matchTerminatorPos;
-            if (terminator[matchTerminatorPos] == '\0'){
+            if (terminator[matchTerminatorPos] == '\0')
                return true;
-            }
          }
          else
          {
@@ -642,18 +630,15 @@ int IridiumSBD::doSBDIX(uint16_t &moCode, uint16_t &moMSN, uint16_t &mtCode, uin
    // Returns xx,xxxxx,xx,xxxxx,xx,xxx
    char sbdixResponseBuf[32];
    send(F("AT+SBDIX\r"));
-   if (!waitForATResponse(sbdixResponseBuf, sizeof(sbdixResponseBuf), "+SBDIX: ")){
-      Serial.println("returns protocol error here");
+   if (!waitForATResponse(sbdixResponseBuf, sizeof(sbdixResponseBuf), "+SBDIX: "))
       return cancelled() ? ISBD_CANCELLED : ISBD_PROTOCOL_ERROR;
-   }
 
    uint16_t *values[6] = { &moCode, &moMSN, &mtCode, &mtMSN, &mtLen, &mtRemaining };
    for (int i=0; i<6; ++i)
    {
       char *p = strtok(i == 0 ? sbdixResponseBuf : NULL, ", ");
-      if (p == NULL){
+      if (p == NULL)
          return ISBD_PROTOCOL_ERROR;
-      }
       *values[i] = atol(p);
    }
    return ISBD_SUCCESS;

@@ -20,7 +20,7 @@
 //
 #ifndef RTW_HEADER_StarshotACS0_h_
 #define RTW_HEADER_StarshotACS0_h_
-//#include <cmath>
+#include <cmath>
 #ifndef StarshotACS0_COMMON_INCLUDES_
 # define StarshotACS0_COMMON_INCLUDES_
 #include "rtwtypes.h"
