@@ -20,10 +20,9 @@ namespace sfr{
         extern bool take_photo;
     }
     namespace rockblock{
-        extern uint8_t send_buffer[constants::rockblock::send_buffer_size];
-        extern uint8_t receive_buffer[constants::rockblock::receive_buffer_size];
-        extern size_t send_size;
-        extern size_t receive_size;
+        extern uint8_t fault_report[70];
+        extern uint8_t old_fault_report[70];
+        extern size_t fault_report_size;
     }
     namespace imu{
         extern float mag_x;

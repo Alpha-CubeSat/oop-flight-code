@@ -16,8 +16,9 @@ namespace sfr{
         bool take_photo = false;
     }
     namespace rockblock{
-        uint8_t send_buffer[constants::rockblock::send_buffer_size] = {0};
-        //uint8_t receive_buffer[constants::rockblock::receive_buffer_size] = {0};
+        uint8_t fault_report[70] = {0};
+        uint8_t old_fault_report[70] = {2};
+        size_t fault_report_size = sizeof(fault_report);
     }
     namespace imu{
         float mag_x = 0.0;

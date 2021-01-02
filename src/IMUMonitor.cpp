@@ -1,10 +1,13 @@
 #include "IMUMonitor.hpp"
 
 IMUMonitor::IMUMonitor(){
+    imu.begin();
+    if (!imu.begin()){
+        sfr::rockblock::fault_report[constants::fault::imu_begin] = 1;
+    }
     imu.setupAccel(imu.LSM9DS1_ACCELRANGE_2G);
     imu.setupMag(imu.LSM9DS1_MAGGAIN_4GAUSS);
     imu.setupGyro(imu.LSM9DS1_GYROSCALE_245DPS);
-    imu.begin();
 }
 
 void IMUMonitor::execute(){

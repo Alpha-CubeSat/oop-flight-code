@@ -47,6 +47,11 @@ namespace constants{
     namespace battery{
         constexpr int pin = 32;
     }
+    namespace fault{
+        constexpr int imu_begin = 0;
+        constexpr int rockblock_begin = 1;
+        constexpr int incorrect_command = 2;
+    }
 };
 
 #endif
