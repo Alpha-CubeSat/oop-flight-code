@@ -20,7 +20,6 @@ MainControlLoop::MainControlLoop():
 void MainControlLoop::execute(){
     photoresistor_monitor.execute();
 
-    //mission_manager.execute();
 
     burnwire_control_task.execute();
     camera_control_task.execute();

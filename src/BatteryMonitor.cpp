@@ -5,5 +5,5 @@ BatteryMonitor::BatteryMonitor(){
 }
 
 void BatteryMonitor::execute(){
-    sfr::battery::voltage = map(analogRead(constants::battery::pin), 0, 1023, 0, 255);
+    sfr::battery::voltage = analogRead(constants::battery::pin);
 }

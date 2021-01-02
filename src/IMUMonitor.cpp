@@ -57,15 +57,15 @@ void IMUMonitor::execute(){
 
     imu.getEvent(&accel, &mag, &gyro, &temp);
 
-    sfr::imu::mag_x = map(mag.magnetic.x, -sfr::imu::mag, sfr::imu::mag, 0, 255);
-    sfr::imu::mag_y = map(mag.magnetic.y, -sfr::imu::mag, sfr::imu::mag, 0, 255);
-    sfr::imu::mag_z = map(mag.magnetic.z, -sfr::imu::mag, sfr::imu::mag, 0, 255);
+    sfr::imu::mag_x = mag.magnetic.x;
+    sfr::imu::mag_y = mag.magnetic.y;
+    sfr::imu::mag_z = mag.magnetic.z;
 
-    sfr::imu::gyro_x = map(gyro.gyro.x, -sfr::imu::gyr, sfr::imu::gyr, 0, 255);
-    sfr::imu::gyro_y = map(gyro.gyro.y, -sfr::imu::gyr, sfr::imu::gyr, 0, 255);
-    sfr::imu::gyro_z = map(gyro.gyro.z, -sfr::imu::gyr, sfr::imu::gyr, 0, 255);
+    sfr::imu::gyro_x = gyro.gyro.x;
+    sfr::imu::gyro_y = gyro.gyro.y;
+    sfr::imu::gyro_z = gyro.gyro.z;
 
-    sfr::imu::acc_x = map(accel.acceleration.x, -sfr::imu::acc, sfr::imu::acc, 0, 255);
-    sfr::imu::acc_y = map(accel.acceleration.y, -sfr::imu::acc, sfr::imu::acc, 0, 255);
-    sfr::imu::acc_z = map(accel.acceleration.z, -sfr::imu::acc, sfr::imu::acc, 0, 255);
+    sfr::imu::acc_x = accel.acceleration.x;
+    sfr::imu::acc_y = accel.acceleration.y;
+    sfr::imu::acc_z = accel.acceleration.z;
 }
