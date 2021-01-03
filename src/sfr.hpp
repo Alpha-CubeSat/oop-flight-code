@@ -47,6 +47,9 @@ namespace sfr{
     }
     namespace acs{
         extern bool detuble;
+        extern int current1;
+        extern int current2;
+        extern int current3;
     }
     namespace battery{
         extern float voltage;

@@ -43,6 +43,7 @@ namespace constants{
         constexpr int xtorqorder = 1;
         constexpr int ytorqorder = 1;
         constexpr int ztorqorder = 1;
+        constexpr float max_current = 5; //NEED TO CHECK
     }
     namespace battery{
         constexpr int pin = 32;

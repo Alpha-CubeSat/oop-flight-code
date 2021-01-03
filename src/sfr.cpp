@@ -43,6 +43,9 @@ namespace sfr{
     }
     namespace acs{
         bool detuble = true;
+        int current1 = 0;
+        int current2 = 0;
+        int current3 = 0;
     }
     namespace battery{
         float voltage = 0.0;

@@ -1,5 +1,4 @@
 #include "RockblockControlTask.hpp"
-#include <string>
 
 RockblockControlTask::RockblockControlTask():
     rockblock(Serial4){
