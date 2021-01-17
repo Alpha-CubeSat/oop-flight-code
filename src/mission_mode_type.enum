@@ -2,11 +2,9 @@
 #define mission_mode_type_enum_
 
 enum class mission_mode_type {
-    normal,
-    detumble,
-    safe_hold,
     low_power,
-    deploy
-};
+    deployment,
+    standby,
+    safe};
 
 #endif

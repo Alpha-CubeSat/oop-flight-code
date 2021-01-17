@@ -21,6 +21,8 @@ namespace constants{
         constexpr uint16_t send_buffer_size = 300;
         constexpr int command_size = 6;
         constexpr int opcode_deploy = 1;
+        constexpr unsigned long two_hours = 7200000;
+        constexpr unsigned long ten_minutes = 600000;
     }
     namespace temperature{
         constexpr int pin = 16;
@@ -49,9 +51,18 @@ namespace constants{
         constexpr int pin = 32;
     }
     namespace fault{
-        constexpr int imu_begin = 0;
-        constexpr int rockblock_begin = 1;
-        constexpr int incorrect_command = 2;
+        constexpr unsigned char mag_x = 1 << 0; 
+        constexpr unsigned char mag_y = 1 << 1; 
+        constexpr unsigned char mag_z = 1 << 2;
+        constexpr unsigned char gyro_x = 1 << 3; 
+        constexpr unsigned char gyro_y = 1 << 4; 
+        constexpr unsigned char gyro_z = 1 << 5;
+        constexpr unsigned char acc_x = 1 << 6; 
+        constexpr unsigned char acc_y = 1 << 7;
+    }
+    namespace camera{
+        //TODO
+        constexpr int sleep_pin = 0;
     }
 };
 

@@ -1,12 +1,11 @@
 #include "sfr.hpp"
-#include "constants.hpp"
  
 namespace sfr{
     namespace photoresistor{
         bool covered = true;
     } 
     namespace mission{
-        mission_mode_type mode = mission_mode_type::normal;
+        mission_mode_type mode = mission_mode_type::standby;
     }
     namespace burnwire{
         bool on = false;
@@ -14,11 +13,14 @@ namespace sfr{
     namespace camera{
         bool photo_taken = false;
         bool take_photo = false;
+        uint8_t buffer[255] = {0};
+        bool powered = true;
     }
     namespace rockblock{
         uint8_t fault_report[70] = {0};
-        uint8_t old_fault_report[70] = {2};
         size_t fault_report_size = sizeof(fault_report);
+        unsigned long last_downlink = 0;
+        unsigned long downlink_period = constants::rockblock::two_hours;
     }
     namespace imu{
         float mag_x = 0.0;
@@ -42,12 +44,16 @@ namespace sfr{
         float solar_current = 0.0;
     }
     namespace acs{
-        bool detuble = true;
+        acs_mode_type mode = acs_mode_type::detumble;
         int current1 = 0;
         int current2 = 0;
         int current3 = 0;
     }
     namespace battery{
         float voltage = 0.0;
+    }
+    namespace fault{
+        bool is_fault = false;
+        unsigned char imu_fault = 0;
     }
 }

@@ -8,11 +8,10 @@ class MissionManager{
     public:
         MissionManager();
         void execute();
-        void dispatch_normal();
-        void dispatch_detumble();
-        void dispatch_safe_hold();
+        void dispatch_standby();
+        void dispatch_safe();
         void dispatch_low_power();
-        void dispatch_deploy();
+        void dispatch_deployment();
 };
 
 #endif

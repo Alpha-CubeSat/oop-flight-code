@@ -2,9 +2,9 @@
 #define SFR_HPP_
 
 #include "mission_mode_type.enum"
+#include "acs_mode_type.enum"
 #include "constants.hpp"
 
- 
 namespace sfr{
     namespace photoresistor{
         extern bool covered;
@@ -18,11 +18,15 @@ namespace sfr{
     namespace camera{
         extern bool photo_taken;
         extern bool take_photo;
+        extern uint8_t buffer[255];
+        extern bool powered;
     }
     namespace rockblock{
         extern uint8_t fault_report[70];
         extern uint8_t old_fault_report[70];
         extern size_t fault_report_size;
+        extern unsigned long last_downlink;
+        extern unsigned long downlink_period;
     }
     namespace imu{
         extern float mag_x;
@@ -46,13 +50,17 @@ namespace sfr{
         extern float solar_current;
     }
     namespace acs{
-        extern bool detuble;
+        extern acs_mode_type mode;
         extern int current1;
         extern int current2;
         extern int current3;
     }
     namespace battery{
         extern float voltage;
+    }
+    namespace fault{
+        extern bool is_fault;
+        extern unsigned char imu_fault;
     }
 };
 

@@ -3,6 +3,8 @@
 
 void setup(){
     MainControlLoop mcl = MainControlLoop();
+
+    //delay for 2 hours"
     delay(2000);
     while(true){
         mcl.execute();

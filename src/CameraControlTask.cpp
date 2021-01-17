@@ -9,6 +9,8 @@ CameraControlTask::CameraControlTask():
     }
 
 void CameraControlTask::execute(){    
+    delay(3000);
+    sfr::camera::take_photo = true;
     if(sfr::camera::take_photo){
         adaCam.takePicture();
         
@@ -31,19 +33,28 @@ void CameraControlTask::execute(){
         uint16_t jpglen = adaCam.frameLength();
         
         // Read all the data up to # bytes!
-        byte wCount = 0; // For counting # of writes
         while (jpglen > 0) {
+            Serial.println(jpglen);
             // read 32 bytes at a time;
             uint8_t *buffer;
-            uint8_t bytesToRead = min(64, jpglen); // change 32 to 64 for a speedup but may not work with all setups!
+            //uint8_t bytesToRead = min(64, jpglen); // change 32 to 64 for a speedup but may not work with all setups!
+            uint8_t bytesToRead = adaCam.frameLength();
             buffer = adaCam.readPicture(bytesToRead);
-            imgFile.write(buffer, bytesToRead);
-            if(++wCount >= 64) { // Every 2K, give a little feedback so it doesn't appear locked up
-                wCount = 0;
+
+            Serial.println(sizeof(buffer));
+            Serial.println("__________________________________________________________");
+            for (int i = 0; i < sizeof(buffer); i++) {
+                Serial.println(buffer[i]);
             }
+
+            Serial.println("__________________________________________________________");
+
+            imgFile.write(buffer, bytesToRead);
             jpglen -= bytesToRead;
         }
         imgFile.close();
+        Serial.println("GOT HERE");
+        Serial.println(filename);
         sfr::camera::photo_taken = true;
     }
 }

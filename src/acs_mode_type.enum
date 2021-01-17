@@ -1,0 +1,9 @@
+#ifndef acs_mode_type_enum_
+#define acs_mode_type_enum_
+
+enum class acs_mode_type {
+    detumble,
+    point,
+    off};
+
+#endif

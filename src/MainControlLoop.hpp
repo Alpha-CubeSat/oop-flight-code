@@ -5,11 +5,13 @@
 #include "constants.hpp"
 #include "RockblockControlTask.hpp"
 #include "IMUMonitor.hpp"
+#include "CameraControlTask.hpp"
 
 class MainControlLoop{
     protected:
-        RockblockControlTask rockblock_control_task;
-        IMUMonitor imu_monitor;
+        //RockblockControlTask rockblock_control_task;
+        //IMUMonitor imu_monitor;
+        CameraControlTask camera_control_task;
     
     public:
         MainControlLoop();

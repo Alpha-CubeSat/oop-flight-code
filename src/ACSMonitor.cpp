@@ -13,14 +13,22 @@ void ACSMonitor::execute(){
     rtObj.rtU.Bfield_body[2] = sfr::imu::mag_z;
     rtObj.step();
 
-    if(sfr::acs::detuble){
-        sfr::acs::current1 = rtObj.rtY.detuble[0];
-        sfr::acs::current2 = rtObj.rtY.detuble[1];
-        sfr::acs::current3 = rtObj.rtY.detuble[2];
+    switch(sfr::acs::mode){
+        case acs_mode_type::detumble:
+            sfr::acs::current1 = rtObj.rtY.detuble[0];
+            sfr::acs::current2 = rtObj.rtY.detuble[1];
+            sfr::acs::current3 = rtObj.rtY.detuble[2];
+            break;
+        case acs_mode_type::point:
+            sfr::acs::current1 = rtObj.rtY.point[0];
+            sfr::acs::current2 = rtObj.rtY.point[1];
+            sfr::acs::current3 = rtObj.rtY.point[2];
+            break;
+        case acs_mode_type::off:
+            sfr::acs::current1 = 0;
+            sfr::acs::current2 = 0;
+            sfr::acs::current3 = 3;
+            break;
     }
-    else{
-        sfr::acs::current1 = rtObj.rtY.point[0];
-        sfr::acs::current2 = rtObj.rtY.point[1];
-        sfr::acs::current3 = rtObj.rtY.point[2];
-    }
+
 }
