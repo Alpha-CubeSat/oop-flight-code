@@ -35,7 +35,7 @@ void RockblockControlTask::execute(){
 
 
 
-        uint8_t report[70] = {mag_x, mag_y, mag_z, gyro_x, gyro_y, gyro_z, acc_x, acc_y, acc_z, voltage};
+        uint8_t report[70] = {mag_x, mag_y, mag_z, gyro_x, gyro_y, gyro_z, acc_x, acc_y, acc_z, voltage, sfr::fault::imu_fault};
         size_t send_size = sizeof(report);
 
         //rockblock.sendReceiveSBDBinary(report, send_size, receive_buffer, receive_size);

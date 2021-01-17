@@ -62,6 +62,9 @@ namespace sfr{
         extern bool is_fault;
         extern unsigned char imu_fault;
     }
+    namespace button{
+        extern bool pressed;
+    }
 };
 
 #endif

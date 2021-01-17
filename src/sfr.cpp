@@ -56,4 +56,7 @@ namespace sfr{
         bool is_fault = false;
         unsigned char imu_fault = 0;
     }
+    namespace button{
+        bool pressed = true;
+    }
 }
