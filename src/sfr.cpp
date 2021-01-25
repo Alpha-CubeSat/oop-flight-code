@@ -38,7 +38,6 @@ namespace sfr{
     }
     namespace temperature{
         float temp_c = 0.0;
-        float raw_temp = 0.0;
     }
     namespace current{
         float solar_current = 0.0;

@@ -5,7 +5,6 @@ TemperatureMonitor::TemperatureMonitor(){
 }
 
 void TemperatureMonitor::execute(){    
-    sfr::temperature::raw_temp = map(analogRead(constants::temperature::pin), 0, 1023, 0, 255);
     int reading = analogRead(constants::temperature::pin);
     float voltage = reading * 3.3;
     voltage /= 1024.0;

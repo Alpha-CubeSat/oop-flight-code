@@ -261,7 +261,7 @@ int IridiumSBD::internalBegin()
 
    bool modemAlive = false;
 
-   unsigned long startupTime = 500; //ms
+   unsigned long startupTime = 10; //ms
    for (unsigned long start = millis(); millis() - start < startupTime;)
       if (cancelled())
          return ISBD_CANCELLED;

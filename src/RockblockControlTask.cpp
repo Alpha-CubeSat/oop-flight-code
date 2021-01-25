@@ -4,19 +4,15 @@ RockblockControlTask::RockblockControlTask():
     rockblock(Serial4){
     Serial4.begin(19200);
     rockblock.setPowerProfile(IridiumSBD::DEFAULT_POWER_PROFILE);
-    delay(1000);
     int err = rockblock.begin();
-    if(err != ISBD_SUCCESS){
-        //sfr::rockblock::fault_report[constants::fault::rockblock_begin] = 1;
-    }
-    rockblock.adjustSendReceiveTimeout(30);
+    //TODO handle this
 }
 
 void RockblockControlTask::execute(){
     rockblock.getSignalQuality(quality);
-    waitingMessages = rockblock.getWaitingMessageCount();
+    waiting_messages = rockblock.getWaitingMessageCount();
 
-    if(((waitingMessages == -1 || waitingMessages > 0) && quality > 2) || (checkReady() && quality > 2)){
+    if(((waiting_messages == -1 || waiting_messages > 0) && quality > 2) || (checkReady() && quality > 2)){
         int mag_x = map(sfr::imu::mag_x, -sfr::imu::mag, sfr::imu::mag, 0, 255);
         int mag_y = map(sfr::imu::mag_y, -sfr::imu::mag, sfr::imu::mag, 0, 255);
         int mag_z = map(sfr::imu::mag_z, -sfr::imu::mag, sfr::imu::mag, 0, 255);

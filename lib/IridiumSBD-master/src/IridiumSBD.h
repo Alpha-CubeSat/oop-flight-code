@@ -27,12 +27,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #include "Arduino.h"
 
 #define ISBD_LIBRARY_REVISION           2
-#define ISBD_DEFAULT_AT_TIMEOUT         30
-#define ISBD_MSSTM_RETRY_INTERVAL       10
-#define ISBD_DEFAULT_SBDIX_INTERVAL     10
-#define ISBD_USB_SBDIX_INTERVAL         30
-#define ISBD_DEFAULT_SENDRECEIVE_TIME   300
-#define ISBD_STARTUP_MAX_TIME           240
+#define ISBD_DEFAULT_AT_TIMEOUT         1 //was 30
+#define ISBD_MSSTM_RETRY_INTERVAL       1
+#define ISBD_DEFAULT_SBDIX_INTERVAL     1
+#define ISBD_USB_SBDIX_INTERVAL         1 //was 30
+#define ISBD_DEFAULT_SENDRECEIVE_TIME   1 //was 300
+#define ISBD_STARTUP_MAX_TIME           1 //was 240
 #define ISBD_MAX_MESSAGE_LENGTH         340
 #define ISBD_MSSTM_WORKAROUND_FW_VER    13001
 

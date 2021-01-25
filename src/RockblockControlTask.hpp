@@ -15,9 +15,8 @@ class RockblockControlTask{
     private:
         unsigned char receive_buffer[6] = {0};
         size_t receive_size = 6;
-        int isFault = 0;
         int quality = 0;
-        int waitingMessages = -1;
+        int waiting_messages = -1;
         void handleCommand(int opcode, int argument);
         bool checkReady();
 };
