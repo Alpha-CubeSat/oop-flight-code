@@ -6,11 +6,9 @@ void setup(){
 
     //delay for 2 hours
     //delay(7200000);
+    delay(2000);
     while(true){
-        int old = millis();
         mcl.execute();
-        int time = millis() - old;
-        Serial.println(time);
     }
 }
 

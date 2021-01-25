@@ -18,6 +18,7 @@ MainControlLoop::MainControlLoop():
     }
 
 void MainControlLoop::execute(){
+    
     acs_monitor.execute();
     Serial.println("1");
     battery_monitor.execute();
