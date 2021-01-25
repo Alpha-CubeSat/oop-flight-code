@@ -5,7 +5,6 @@ CameraControlTask::CameraControlTask():
         SD.begin(254);
         adaCam.begin();
         adaCam.setImageSize(VC0706_160x120);
-        adaCam.setCompression(100);
         sfr::camera::take_photo = true;
     }
 
@@ -14,7 +13,6 @@ void CameraControlTask::execute(){
         adaCam.takePicture();
         sfr::camera::take_photo = false;
         jpglen = adaCam.frameLength();
-        Serial.println("picture has been taken");
 
         // Create an image with the name IMAGExx.JPG
         strcpy(filename, "IMAGE00.JPG");
@@ -26,13 +24,9 @@ void CameraControlTask::execute(){
                 break;
             }
         }
-
-        Serial.println(filename);
     }
 
     if(jpglen > 0){
-        Serial.println("writing to sd");
-        Serial.println(jpglen);
         // Open the file for writing
         File imgFile = SD.open(filename, FILE_WRITE);        
         
