@@ -19,7 +19,6 @@ namespace sfr{
         extern bool take_photo;
         extern uint8_t buffer[255];
         extern bool powered;
-        extern uint16_t jpglen;
     }
     namespace rockblock{
         extern uint8_t fault_report[70];

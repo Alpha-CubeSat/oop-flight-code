@@ -12,6 +12,8 @@ class CameraControlTask{
         CameraControlTask();
         void execute();
         Adafruit_VC0706 adaCam;
+        char filename[13];
+        uint16_t jpglen = 0;
        
 };
 

@@ -14,7 +14,6 @@ namespace sfr{
         bool take_photo = false;
         uint8_t buffer[255] = {0};
         bool powered = true;
-        uint16_t jpglen = 0;
     }
     namespace rockblock{
         uint8_t fault_report[70] = {0};

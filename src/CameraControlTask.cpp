@@ -4,7 +4,8 @@ CameraControlTask::CameraControlTask():
     adaCam(&Serial2){
         SD.begin(254);
         adaCam.begin();
-        adaCam.setImageSize(VC0706_640x480);
+        adaCam.setImageSize(VC0706_160x120);
+        adaCam.setCompression(100);
         sfr::camera::take_photo = true;
     }
 
@@ -12,22 +13,35 @@ void CameraControlTask::execute(){
     if(sfr::camera::take_photo){
         adaCam.takePicture();
         sfr::camera::take_photo = false;
-        sfr::camera::jpglen = adaCam.frameLength();
+        jpglen = adaCam.frameLength();
         Serial.println("picture has been taken");
+
+        // Create an image with the name IMAGExx.JPG
+        strcpy(filename, "IMAGE00.JPG");
+        for (int i = 0; i < 100; i++) {
+            filename[5] = '0' + i/10;
+            filename[6] = '0' + i%10;
+            // create if does not exist, do not open existing, write, sync after write
+            if (!SD.exists(filename)) {
+                break;
+            }
+        }
+
+        Serial.println(filename);
     }
 
-    if(sfr::camera::jpglen > 0){
+    if(jpglen > 0){
         Serial.println("writing to sd");
-        Serial.println(sfr::camera::jpglen);
+        Serial.println(jpglen);
         // Open the file for writing
-        File imgFile = SD.open("TESTING.JPG", FILE_WRITE);        
+        File imgFile = SD.open(filename, FILE_WRITE);        
         
         // Read all the data up to # bytes!
         uint8_t *buffer;
-        uint8_t bytesToRead = min(64, sfr::camera::jpglen); 
+        uint8_t bytesToRead = min(64, jpglen); 
         buffer = adaCam.readPicture(bytesToRead);
         imgFile.write(buffer, bytesToRead);
-        sfr::camera::jpglen -= bytesToRead;
+        jpglen -= bytesToRead;
         imgFile.close();     
     }
 }
