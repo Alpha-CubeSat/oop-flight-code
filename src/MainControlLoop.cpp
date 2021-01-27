@@ -3,6 +3,7 @@
 MainControlLoop::MainControlLoop():
     acs_monitor(),
     battery_monitor(),
+    button_monitor(),
     current_monitor(),
     imu_monitor(),
     photoresistor_monitor(),
@@ -20,31 +21,33 @@ MainControlLoop::MainControlLoop():
 void MainControlLoop::execute(){
     
     acs_monitor.execute();
-    Serial.println("1");
+    Serial.println("ACS MONITOR EXECUTED");
     battery_monitor.execute();
-    Serial.println("2");
+    Serial.println("BATTERY MONITOR EXECUTED");
+    button_monitor.execute();
+    Serial.println("BUTTON MONITOR EXECUTED");
     current_monitor.execute();
-    Serial.println("3");
+    Serial.println("CURRENT MONITOR EXECUTED");
     imu_monitor.execute();
-    Serial.println("4");
+    Serial.println("IMU MONITOR EXECUTED");
     photoresistor_monitor.execute();
-    Serial.println("5");
+    Serial.println("PHOTORESISTOR MONITOR EXECUTED");
     temperature_monitor.execute();
-    Serial.println("6");
+    Serial.println("TEMPERATURE MONITOR EXECUTED");
         
     fault_monitor.execute();
-    Serial.println("7");
+    Serial.println("FAULT MONITOR EXECUTED");
 
     mission_manager.execute();
-    Serial.println("8");
+    Serial.println("MISSION MANAGER EXECUTED");
 
     acs_control_task.execute();
-    Serial.println("9");
+    Serial.println("ACS CONTROL TASK EXECUTED");
     burnwire_control_task.execute();
-    Serial.println("10");
+    Serial.println("BURNWIRE CONTROL TASK EXECUTED");
     camera_control_task.execute();
-    Serial.println("11");
+    Serial.println("CAMERA CONTROL TASK EXECUTED");
     rockblock_control_task.execute();
-    Serial.println("12");
+    Serial.println("ROCKBLOCK CONTROL EXECUTED");
     
 }

@@ -22,10 +22,10 @@ namespace sfr{
     }
     namespace rockblock{
         extern uint8_t fault_report[70];
-        extern uint8_t old_fault_report[70];
         extern size_t fault_report_size;
         extern unsigned long last_downlink;
         extern unsigned long downlink_period;
+        extern bool awaiting_response;
     }
     namespace imu{
         extern float mag_x;
@@ -42,7 +42,6 @@ namespace sfr{
         extern int mag;
     }
     namespace temperature{
-        extern float temp_c;
         extern float raw_temp;
     }
     namespace current{
@@ -59,7 +58,20 @@ namespace sfr{
     }
     namespace fault{
         extern bool is_fault;
-        extern unsigned char imu_fault;
+        extern unsigned char fault_1;
+        extern unsigned char fault_2;
+        extern bool check_mag_x;
+        extern bool check_mag_y;
+        extern bool check_mag_z;
+        extern bool check_gyro_x;
+        extern bool check_gyro_y;
+        extern bool check_gyro_z;
+        extern bool check_acc_x;
+        extern bool check_acc_y;
+        extern bool check_acc_z;
+
+        extern bool check_raw_temp;
+        extern bool check_voltage;
     }
     namespace button{
         extern bool pressed;

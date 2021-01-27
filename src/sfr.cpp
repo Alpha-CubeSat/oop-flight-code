@@ -20,6 +20,7 @@ namespace sfr{
         size_t fault_report_size = sizeof(fault_report);
         unsigned long last_downlink = 0;
         unsigned long downlink_period = constants::rockblock::two_hours;
+        bool awaiting_respone = false;
     }
     namespace imu{
         float mag_x = 0.0;
@@ -36,7 +37,7 @@ namespace sfr{
         int mag = 0;
     }
     namespace temperature{
-        float temp_c = 0.0;
+        float raw_temp = 0.0;
     }
     namespace current{
         float solar_current = 0.0;
@@ -52,7 +53,20 @@ namespace sfr{
     }
     namespace fault{
         bool is_fault = false;
-        unsigned char imu_fault = 0;
+        unsigned char fault_1 = 0;
+        unsigned char fault_2 = 0;
+        bool check_mag_x = true;
+        bool check_mag_y = true;
+        bool check_mag_z = true;
+        bool check_gyro_x = true;
+        bool check_gyro_y = true;
+        bool check_gyro_z = true;
+        bool check_acc_x = true;
+        bool check_acc_y = true;
+        bool check_acc_z = true;
+
+        bool check_raw_temp = true;
+        bool check_voltage = true;
     }
     namespace button{
         bool pressed = true;

@@ -6,6 +6,7 @@
 #include "ACSControlTask.hpp"
 #include "ACSMonitor.hpp"
 #include "BatteryMonitor.hpp"
+#include "ButtonMonitor.hpp"
 #include "BurnwireControlTask.hpp"
 #include "CameraControlTask.hpp"
 #include "CurrentMonitor.hpp"
@@ -20,6 +21,7 @@ class MainControlLoop{
     protected:
         ACSMonitor acs_monitor;
         BatteryMonitor battery_monitor;
+        ButtonMonitor button_monitor;
         CurrentMonitor current_monitor;
         IMUMonitor imu_monitor;
         PhotoresistorMonitor photoresistor_monitor;

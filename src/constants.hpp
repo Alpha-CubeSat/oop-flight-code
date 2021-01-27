@@ -45,7 +45,6 @@ namespace constants{
         constexpr int xtorqorder = 1;
         constexpr int ytorqorder = 1;
         constexpr int ztorqorder = 1;
-        constexpr float max_current = 5; //NEED TO CHECK
     }
     namespace battery{
         constexpr int pin = 32;
@@ -59,10 +58,18 @@ namespace constants{
         constexpr unsigned char gyro_z = 1 << 5;
         constexpr unsigned char acc_x = 1 << 6; 
         constexpr unsigned char acc_y = 1 << 7;
+
+        constexpr unsigned char acc_z = 1 << 0; 
+        constexpr unsigned char temp_c = 1 << 1;
+        constexpr unsigned char solar_current = 1 << 2;
+
     }
     namespace camera{
         //TODO
         constexpr int sleep_pin = 0;
+    }
+    namespace button{
+        constexpr int button_pin = 13;
     }
 };
 

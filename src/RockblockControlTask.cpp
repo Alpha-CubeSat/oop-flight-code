@@ -13,25 +13,30 @@ void RockblockControlTask::execute(){
     waiting_messages = rockblock.getWaitingMessageCount();
 
     if(((waiting_messages == -1 || waiting_messages > 0) && quality > 2) || (checkReady() && quality > 2)){
-        int mag_x = map(sfr::imu::mag_x, -sfr::imu::mag, sfr::imu::mag, 0, 255);
-        int mag_y = map(sfr::imu::mag_y, -sfr::imu::mag, sfr::imu::mag, 0, 255);
-        int mag_z = map(sfr::imu::mag_z, -sfr::imu::mag, sfr::imu::mag, 0, 255);
+        uint8_t mag_x = map(sfr::imu::mag_x, -sfr::imu::mag, sfr::imu::mag, 0, 255);
+        uint8_t mag_y = map(sfr::imu::mag_y, -sfr::imu::mag, sfr::imu::mag, 0, 255);
+        uint8_t mag_z = map(sfr::imu::mag_z, -sfr::imu::mag, sfr::imu::mag, 0, 255);
 
-        int gyro_x = map(sfr::imu::gyro_x, -sfr::imu::gyr, sfr::imu::gyr, 0, 255);
-        int gyro_y = map(sfr::imu::gyro_y, -sfr::imu::gyr, sfr::imu::gyr, 0, 255);
-        int gyro_z = map(sfr::imu::gyro_z, -sfr::imu::gyr, sfr::imu::gyr, 0, 255);
+        uint8_t gyro_x = map(sfr::imu::gyro_x, -sfr::imu::gyr, sfr::imu::gyr, 0, 255);
+        uint8_t gyro_y = map(sfr::imu::gyro_y, -sfr::imu::gyr, sfr::imu::gyr, 0, 255);
+        uint8_t gyro_z = map(sfr::imu::gyro_z, -sfr::imu::gyr, sfr::imu::gyr, 0, 255);
 
-        int acc_x = map(sfr::imu::acc_x, -sfr::imu::acc, sfr::imu::acc, 0, 255);
-        int acc_y = map(sfr::imu::acc_y, -sfr::imu::acc, sfr::imu::acc, 0, 255);
-        int acc_z = map(sfr::imu::acc_z, -sfr::imu::acc, sfr::imu::acc, 0, 255);
+        uint8_t acc_x = map(sfr::imu::acc_x, -sfr::imu::acc, sfr::imu::acc, 0, 255);
+        uint8_t acc_y = map(sfr::imu::acc_y, -sfr::imu::acc, sfr::imu::acc, 0, 255);
+        uint8_t acc_z = map(sfr::imu::acc_z, -sfr::imu::acc, sfr::imu::acc, 0, 255);
+
+        //acs
+        uint8_t current1;
+        uint8_t current2;
+        uint8_t current3;
     
-        int voltage = map(sfr::battery::voltage, 0, 1023, 0, 255);
+        uint8_t voltage = map(sfr::battery::voltage, 0, 1023, 0, 255);
 
-        //triggered is byte
+        uint8_t solar_current = map(sfr::current::solar_current, 0, 1024, 0, 255);
 
+        uint8_t raw_temp = map(sfr::temperature::raw_temp, 0, 1023, 0, 255);
 
-
-        uint8_t report[70] = {mag_x, mag_y, mag_z, gyro_x, gyro_y, gyro_z, acc_x, acc_y, acc_z, voltage, sfr::fault::imu_fault};
+        uint8_t report[70] = {mag_x, mag_y, mag_z, gyro_x, gyro_y, gyro_z, acc_x, acc_y, acc_z, voltage, solar_current, current1, current2, current3, raw_temp, sfr::button::pressed, sfr::fault::fault_1};
         size_t send_size = sizeof(report);
 
         //rockblock.sendReceiveSBDBinary(report, send_size, receive_buffer, receive_size);

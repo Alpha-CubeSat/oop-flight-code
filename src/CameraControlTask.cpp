@@ -2,10 +2,10 @@
 
 CameraControlTask::CameraControlTask(): 
     adaCam(&Serial2){
+        //TODO add fault check for sd card
         SD.begin(254);
         adaCam.begin();
         adaCam.setImageSize(VC0706_160x120);
-        sfr::camera::take_photo = true;
     }
 
 void CameraControlTask::execute(){        
