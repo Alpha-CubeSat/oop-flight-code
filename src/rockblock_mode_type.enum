@@ -1,0 +1,16 @@
+#ifndef rockblock_mode_type_enum_
+#define rockblock_mode_type_enum_
+
+enum class rockblock_mode_type {
+    send_at,
+    await_at,
+    send_flow_control,
+    await_flow_control,
+    send_message_length,
+    await_message_length,
+    send_message,
+    await_message,
+    send_response,
+    await_response};
+
+#endif

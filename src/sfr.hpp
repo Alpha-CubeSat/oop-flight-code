@@ -3,6 +3,7 @@
 
 #include "mission_mode_type.enum"
 #include "acs_mode_type.enum"
+#include "rockblock_mode_type.enum"
 #include "constants.hpp"
 
 namespace sfr{
@@ -25,7 +26,7 @@ namespace sfr{
         extern size_t fault_report_size;
         extern unsigned long last_downlink;
         extern unsigned long downlink_period;
-        extern bool awaiting_response;
+        extern rockblock_mode_type mode;
     }
     namespace imu{
         extern float mag_x;

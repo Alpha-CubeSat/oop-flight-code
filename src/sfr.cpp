@@ -20,7 +20,7 @@ namespace sfr{
         size_t fault_report_size = sizeof(fault_report);
         unsigned long last_downlink = 0;
         unsigned long downlink_period = constants::rockblock::two_hours;
-        bool awaiting_respone = false;
+        rockblock_mode_type mode = rockblock_mode_type::send_at;
     }
     namespace imu{
         float mag_x = 0.0;

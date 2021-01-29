@@ -13,9 +13,6 @@ class RockblockControlTask{
         void execute();
         IridiumSBD rockblock;
     private:
-        unsigned char receive_buffer[6] = {0};
-        size_t receive_size = 6;
-        int quality = 0;
         int waiting_messages = -1;
         void handleCommand(int opcode, int argument);
         bool checkReady();

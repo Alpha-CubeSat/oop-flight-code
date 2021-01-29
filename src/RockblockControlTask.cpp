@@ -3,64 +3,144 @@
 RockblockControlTask::RockblockControlTask():
     rockblock(Serial4){
     Serial4.begin(19200);
-    rockblock.setPowerProfile(IridiumSBD::DEFAULT_POWER_PROFILE);
-    int err = rockblock.begin();
-    //TODO handle this
 }
 
 void RockblockControlTask::execute(){
-    rockblock.getSignalQuality(quality);
-    waiting_messages = rockblock.getWaitingMessageCount();
+    rockblock_mode_type mode = sfr::rockblock::mode;
 
-    if(((waiting_messages == -1 || waiting_messages > 0) && quality > 2) || (checkReady() && quality > 2)){
-        uint8_t mag_x = map(sfr::imu::mag_x, -sfr::imu::mag, sfr::imu::mag, 0, 255);
-        uint8_t mag_y = map(sfr::imu::mag_y, -sfr::imu::mag, sfr::imu::mag, 0, 255);
-        uint8_t mag_z = map(sfr::imu::mag_z, -sfr::imu::mag, sfr::imu::mag, 0, 255);
+    //if(waiting_messages > 0 || checkReady()){
+    if(true){
+        uint8_t report[70] = {0};
 
-        uint8_t gyro_x = map(sfr::imu::gyro_x, -sfr::imu::gyr, sfr::imu::gyr, 0, 255);
-        uint8_t gyro_y = map(sfr::imu::gyro_y, -sfr::imu::gyr, sfr::imu::gyr, 0, 255);
-        uint8_t gyro_z = map(sfr::imu::gyro_z, -sfr::imu::gyr, sfr::imu::gyr, 0, 255);
+        switch(mode){
+            case rockblock_mode_type::send_at:
+                {
+                    Serial.println("send_at");
+                    Serial4.print("AT\r");
+                    sfr::rockblock::mode = rockblock_mode_type::await_at;
+                    break;
+                }
+            case rockblock_mode_type::await_at:
+                {
+                    Serial.println("await_at");
+                    while(Serial4.available()){
+                        if(Serial4.read() == 79 && Serial4.read()==75){
+                            sfr::rockblock::mode = rockblock_mode_type::send_flow_control;
+                        } 
+                    }
+                    break;
+                }
+            case rockblock_mode_type::send_flow_control:
+                {
+                    Serial.println("send_flow_control");
+                    Serial4.print("AT&K0\r");
+                    sfr::rockblock::mode = rockblock_mode_type::await_flow_control;
+                    break;
+                }
+            case rockblock_mode_type::await_flow_control:
+                {
+                    Serial.println("await_flow_control");
+                    while(Serial4.available()){
+                        if(Serial4.read() == 79 && Serial4.read()==75){
+                            sfr::rockblock::mode = rockblock_mode_type::send_message_length;
+                        } 
+                    }
+                    break;
+                }
+            case rockblock_mode_type::send_message_length:
+                {
+                    Serial.println("send_message_length");
+                    Serial4.print("AT+SBDWB=70\r");
+                    sfr::rockblock::mode = rockblock_mode_type::await_message_length;
+                    break;
+                }
+            case rockblock_mode_type::await_message_length:
+                {
+                    Serial.println("await_message_length");
+                    while(Serial4.available()){
+                        if(Serial4.read() == 82 && Serial4.read()==69 && Serial4.read()==65 && Serial4.read()==68 && Serial4.read()==89){
+                            sfr::rockblock::mode = rockblock_mode_type::send_message;
+                        } 
+                    }
+                    break;
+                }
+            case rockblock_mode_type::send_message:
+                {
+                    Serial.println("send_message");
+                    uint16_t checksum = 0;
+                    for (size_t i=0; i<sizeof(report); ++i){
+                        Serial4.write(report[i]);
+                        checksum += (uint16_t)report[i];
+                    }
+                    Serial4.write(checksum >> 8);
+                    Serial4.write(checksum & 0xFF);
+                    sfr::rockblock::mode = rockblock_mode_type::await_message;
+                    break;
+                }
+            case rockblock_mode_type::await_message:
+                {
+                    Serial.println("await_message");
+                    while(Serial4.available()){
+                        uint8_t c = Serial4.read();
+                        if(c == 48 || c == 49 || c == 50 || c == 51){
+                            if(c == 48){
+                                sfr::rockblock::mode = rockblock_mode_type::send_response;
+                            }
+                            else{
+                                sfr::rockblock::mode = rockblock_mode_type::send_message;
+                            }
+                        }
+                    }
+                    break;
+                }
+            case rockblock_mode_type::send_response:
+                {
+                    Serial.println("send response");
+                    Serial4.print("AT+SBDIX\r");
+                    sfr::rockblock::mode = rockblock_mode_type::await_response;
+                    break;
+                }
+            case rockblock_mode_type::await_response:
+                {
+                    Serial.println("await response");
+                    while(Serial4.available()){
+                        if(Serial4.read() == 58){
+                            uint8_t c = Serial4.read();
+                            if(c == 44){
+                                
+                            }
 
-        uint8_t acc_x = map(sfr::imu::acc_x, -sfr::imu::acc, sfr::imu::acc, 0, 255);
-        uint8_t acc_y = map(sfr::imu::acc_y, -sfr::imu::acc, sfr::imu::acc, 0, 255);
-        uint8_t acc_z = map(sfr::imu::acc_z, -sfr::imu::acc, sfr::imu::acc, 0, 255);
 
-        //acs
-        uint8_t current1;
-        uint8_t current2;
-        uint8_t current3;
-    
-        uint8_t voltage = map(sfr::battery::voltage, 0, 1023, 0, 255);
+                        }
 
-        uint8_t solar_current = map(sfr::current::solar_current, 0, 1024, 0, 255);
 
-        uint8_t raw_temp = map(sfr::temperature::raw_temp, 0, 1023, 0, 255);
 
-        uint8_t report[70] = {mag_x, mag_y, mag_z, gyro_x, gyro_y, gyro_z, acc_x, acc_y, acc_z, voltage, solar_current, current1, current2, current3, raw_temp, sfr::button::pressed, sfr::fault::fault_1};
-        size_t send_size = sizeof(report);
+                    }
+                    /*if(Serial4.available() && Serial4.read() != 65){
+                        while(Serial4.available()){
+                            Serial.println(Serial4.read());
+                        }
 
-        //rockblock.sendReceiveSBDBinary(report, send_size, receive_buffer, receive_size);
 
-        char str[receive_size+1];
-        str[receive_size] = '\0';
-        for (int i = 0; i < receive_size; i++){
-            str[i] = receive_buffer[i];
+
+
+                        uint8_t buffer[Serial4.available()] = {0};
+                        for (size_t i=0; i<sizeof(buffer); ++i){
+                            buffer[i] = Serial4.read();
+                            Serial.println(buffer[i], 19200);
+                        }
+                    }
+                    else{
+                        while(Serial4.available()){
+                            Serial4.read();
+                        }
+                    }*/
+                    
+                    break;
+                }
         }
-
-        String commandStr(str);
-
-        int commaIdx = commandStr.indexOf(",");
-        int exclIdx = commandStr.indexOf("!");
-
-        if (commaIdx != 2 || exclIdx != 5){
-            //sfr::rockblock::fault_report[constants::fault::incorrect_command] = 1;
-        } else{
-            int opcode = commandStr.substring(0, commaIdx).toInt();
-            int argument = commandStr.substring(commaIdx + 1, exclIdx).toInt();
-            handleCommand(opcode, argument);
-        } 
-        sfr::rockblock::last_downlink = millis();
     }
+    
 }
 
 void RockblockControlTask::handleCommand(int opcode, int argument){
