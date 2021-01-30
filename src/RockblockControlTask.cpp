@@ -121,6 +121,8 @@ void RockblockControlTask::execute(){
                                 }
                             }
 
+                            length = buffer_iter;
+
                             if(comma_iter != 5){
                                 sfr::rockblock::mode = rockblock_mode_type::send_response;
                             }
@@ -139,13 +141,32 @@ void RockblockControlTask::execute(){
                         sfr::rockblock::mode = rockblock_mode_type::send_response;
                         break;
                     }
-                    if(buffer[commas[0]+1] != '0' || buffer[commas[0]+1] != '1' || buffer[commas[0]+1] != '2'){
+                    if(buffer[0] != '0' || buffer[0] != '1' || buffer[0] != '2'){
                         Serial.println("mo status is greater than 2");
                         sfr::rockblock::mode = rockblock_mode_type::send_response;
                         break;
                     }
-                    sfr::rockblock::mode = rockblock_mode_type::process_mt_status;
+                    sfr::rockblock::mode = rockblock_mode_type::process_queued;
                     break;
+                }
+            case rockblock_mode_type::process_queued:
+                {
+                    int length_waiting = length - commas[4];
+                    if(length_waiting > 1){
+                        /*for (int i = 0; i < length_waiting; i++) {
+                        char str[length_waiting*8];
+                        strcpy (str,buffer[commas[4]]);*/
+                        //TODO
+
+                    }else{
+                        waiting_messages = buffer[commas[4]+1];
+                    }
+                    if(waiting_messages > 0){
+                        sfr::rockblock::mode = rockblock_mode_type::process_mt_status;
+                    }
+                    else{
+                        sfr::rockblock::mode = rockblock_mode_type::send_at;
+                    }
                 }
             case rockblock_mode_type::process_mt_status:
                 {
@@ -175,6 +196,19 @@ void RockblockControlTask::execute(){
             case rockblock_mode_type::read_message:
             {
                 Serial.println("read message");
+                Serial4.print("AT+SBDRT\r");
+                sfr::rockblock::mode = rockblock_mode_type::process_message;
+                break;
+            }
+            case rockblock_mode_type::process_message:
+            {
+                Serial.println("process message");
+                while(Serial4.available()){
+                    if(Serial4.read() == 58){
+                        //need to get format of opcode/argument
+                    }
+                }
+
             }
         }
     }

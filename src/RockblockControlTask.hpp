@@ -18,6 +18,7 @@ class RockblockControlTask{
         bool checkReady();
         char buffer[63] = {0};
         int commas[5] = {0};
+        int length = 0;
 };
 
 #endif
