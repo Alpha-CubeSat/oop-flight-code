@@ -11,6 +11,9 @@ enum class rockblock_mode_type {
     send_message,
     await_message,
     send_response,
-    await_response};
+    create_buffer,
+    process_mo_status,
+    process_mt_status,
+    read_message};
 
 #endif
