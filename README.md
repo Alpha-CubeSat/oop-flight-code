@@ -18,7 +18,7 @@
 This code is structured based on [Lodestar](https://github.com/shihaocao/lodestar), a small scale electric demonstrator for the belly-flop and tail-sitting control algorithms necessary for SpaceX's Starship.
 
 ### main.cpp
-This file is comparable to a .ino file you would see in the Arduino IDE (notice setup and loop are exactly the same). 
+This file is comparable to a .ino file you would see in the Arduino IDE (notice setup and loop are exactly the same as they would be in an Arduino file). 
 
 ### MainControlLoop
 The MainControlLoop initializes and executes every monitor and control task.
