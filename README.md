@@ -43,6 +43,9 @@ Control tasks are any file that actuates/performs a task based on a value in the
 ### Monitors
 Monitors simply read input from sensors and update the sensor values in the SFR.
 
+### constants.hpp
+Constants contains values that will never be changed. This prevents "magic numbers".
+
 
 
 
