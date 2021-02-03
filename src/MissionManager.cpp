@@ -27,7 +27,7 @@ void MissionManager::dispatch_standby(){
         dispatch_safe();
     }
     if(sfr::battery::voltage < 3.75 && sfr::fault::check_voltage){
-        sfr::mission::mode == mission_mode_type::low_power;
+        sfr::mission::mode = mission_mode_type::low_power;
         dispatch_low_power();
     }
     //TODO: get these values
@@ -65,11 +65,11 @@ void MissionManager::dispatch_safe(){
 
 void MissionManager::dispatch_low_power(){
     if(sfr::fault::is_fault == true){
-        sfr::mission::mode == mission_mode_type::safe;
+        sfr::mission::mode = mission_mode_type::safe;
         dispatch_safe();
     }
     if(sfr::battery::voltage > 3.9 and sfr::fault::check_voltage){
-        sfr::mission::mode == mission_mode_type::standby;
+        sfr::mission::mode = mission_mode_type::standby;
         dispatch_standby();
     }
     sfr::acs::mode = acs_mode_type::off;
@@ -87,7 +87,7 @@ void MissionManager::dispatch_low_power(){
 void MissionManager::dispatch_deployment(){
     sfr::acs::mode = acs_mode_type::off;
     sfr::camera::powered = true;
-    if(sfr::button::pressed = false){
+    if(sfr::button::pressed == false){
         sfr::mission::mode = mission_mode_type::standby;
     }
 }
