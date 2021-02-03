@@ -37,7 +37,7 @@ namespace sfr{
         int mag = 0;
     }
     namespace temperature{
-        float raw_temp = 0.0;
+        float temp_c = 0.0;
     }
     namespace current{
         float solar_current = 0.0;
@@ -65,7 +65,7 @@ namespace sfr{
         bool check_acc_y = true;
         bool check_acc_z = true;
 
-        bool check_raw_temp = true;
+        bool check_temp_c = true;
         bool check_voltage = true;
     }
     namespace button{

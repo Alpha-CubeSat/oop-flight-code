@@ -41,8 +41,8 @@ void MissionManager::dispatch_standby(){
     }
     sfr::rockblock::downlink_period = constants::rockblock::ten_minutes;
     //TODO get this val
-    if(sfr::fault::check_raw_temp){
-        if(sfr::temperature::raw_temp < 0){
+    if(sfr::fault::check_temp_c){
+        if(sfr::temperature::temp_c < 0){
             sfr::camera::powered = false;
         }  else{
             sfr::camera::powered = true;
@@ -54,8 +54,8 @@ void MissionManager::dispatch_safe(){
     sfr::acs::mode = acs_mode_type::off;
     sfr::rockblock::downlink_period = constants::rockblock::ten_minutes;
     //TODO get this val
-    if(sfr::fault::check_raw_temp){
-        if(sfr::temperature::raw_temp < 0){
+    if(sfr::fault::check_temp_c){
+        if(sfr::temperature::temp_c < 0){
             sfr::camera::powered = false;
         }  else{
             sfr::camera::powered = true;
@@ -75,8 +75,8 @@ void MissionManager::dispatch_low_power(){
     sfr::acs::mode = acs_mode_type::off;
     sfr::rockblock::downlink_period= constants::rockblock::two_hours;
     //TODO get this val
-    if(sfr::fault::check_raw_temp){
-        if(sfr::temperature::raw_temp < 0){
+    if(sfr::fault::check_temp_c){
+        if(sfr::temperature::temp_c < 0){
             sfr::camera::powered = false;
         }  else{
             sfr::camera::powered = true;

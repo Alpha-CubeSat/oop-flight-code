@@ -43,7 +43,7 @@ namespace sfr{
         extern int mag;
     }
     namespace temperature{
-        extern float raw_temp;
+        extern float temp_c;
     }
     namespace current{
         extern float solar_current;
@@ -71,7 +71,7 @@ namespace sfr{
         extern bool check_acc_y;
         extern bool check_acc_z;
 
-        extern bool check_raw_temp;
+        extern bool check_temp_c;
         extern bool check_voltage;
     }
     namespace button{

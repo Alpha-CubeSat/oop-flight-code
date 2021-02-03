@@ -5,5 +5,5 @@ TemperatureMonitor::TemperatureMonitor(){
 }
 
 void TemperatureMonitor::execute(){    
-    sfr::temperature::raw_temp = analogRead(constants::temperature::pin);
+    sfr::temperature::temp_c = (((analogRead(constants::temperature::pin) * 3.3)/ 1023) - .5) * 100; 
 }
