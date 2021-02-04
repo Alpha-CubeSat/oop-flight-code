@@ -56,6 +56,7 @@ void MissionManager::dispatch_deployment(){
     sfr::camera::powered = true;
     if(!sfr::button::pressed){
         sfr::mission::mode = mission_mode_type::standby;
+        sfr::camera::take_photo = true;
     }
 }
 
