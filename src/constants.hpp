@@ -13,7 +13,9 @@ namespace constants{
         constexpr int light_val = 4;
     }
     namespace burnwire{
-        constexpr int pin = 35;
+        constexpr int first_pin = 35;
+        constexpr int second_pin = 0;
+        constexpr int burn_time = 1000;
     }
     namespace rockblock{
         constexpr int baud = 19200;
@@ -66,7 +68,7 @@ namespace constants{
     }
     namespace camera{
         //TODO
-        constexpr int sleep_pin = 0;
+        constexpr int sleep_pin = 28;
     }
     namespace button{
         constexpr int button_pin = 13;

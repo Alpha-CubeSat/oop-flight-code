@@ -14,11 +14,13 @@ namespace sfr{
         extern mission_mode_type mode;
     }
     namespace burnwire{
-        extern bool on;
+        extern bool fire;
     }
     namespace camera{
         extern bool take_photo;
         extern uint8_t buffer[255];
+        extern bool turn_on;
+        extern bool turn_off;
         extern bool powered;
     }
     namespace rockblock{

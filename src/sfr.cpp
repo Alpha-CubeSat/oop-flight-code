@@ -8,12 +8,14 @@ namespace sfr{
         mission_mode_type mode = mission_mode_type::standby;
     }
     namespace burnwire{
-        bool on = false;
+        bool fire = false;
     }
     namespace camera{
         bool take_photo = false;
         uint8_t buffer[255] = {0};
-        bool powered = true;
+        bool turn_on = false;
+        bool turn_off = false;
+        bool powered = false;
     }
     namespace rockblock{
         uint8_t fault_report[70] = {0};

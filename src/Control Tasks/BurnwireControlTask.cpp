@@ -14,11 +14,12 @@ void BurnwireControlTask::execute(){
         else{
             if((millis()-start_burn_time) >= constants::burnwire::burn_time){
                 digitalWrite(constants::burnwire::first_pin, LOW);
-                digitalWrite(constants::burnwire::second_pin, LOW);
+                digitalWrite(constants::burnwire::second_pin, HIGH);
             }
         }  
     }
-    if(!sfr::button::pressed){
-        sfr::burnwire::fire = false;
+    else{
+        digitalWrite(constants::burnwire::first_pin, LOW);
+        digitalWrite(constants::burnwire::second_pin, LOW);
     }
 }
