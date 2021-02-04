@@ -15,7 +15,9 @@ namespace constants{
     namespace burnwire{
         constexpr int first_pin = 35;
         constexpr int second_pin = 0;
-        constexpr int burn_time = 1000;
+        constexpr int burn_time = 500;
+        constexpr int burn_wait = 1000;
+        constexpr int max_attempts = 10;
     }
     namespace rockblock{
         constexpr int baud = 19200;
@@ -64,6 +66,7 @@ namespace constants{
         constexpr unsigned char acc_z = 1 << 0; 
         constexpr unsigned char temp_c = 1 << 1;
         constexpr unsigned char solar_current = 1 << 2;
+        constexpr unsigned char burn_wire = 1 << 3;
 
     }
     namespace camera{

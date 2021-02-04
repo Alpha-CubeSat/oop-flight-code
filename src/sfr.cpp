@@ -9,6 +9,7 @@ namespace sfr{
     }
     namespace burnwire{
         bool fire = false;
+        burnwire_mode_type mode = burnwire_mode_type::standby;
     }
     namespace camera{
         bool take_photo = false;

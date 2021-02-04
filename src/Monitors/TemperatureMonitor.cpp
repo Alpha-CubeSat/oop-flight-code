@@ -1,7 +1,7 @@
 #include "TemperatureMonitor.hpp"
 
 TemperatureMonitor::TemperatureMonitor(){
-    pinMode(constants::burnwire::pin, INPUT);
+    pinMode(constants::temperature::pin, INPUT);
 }
 
 void TemperatureMonitor::execute(){    

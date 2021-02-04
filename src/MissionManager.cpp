@@ -54,7 +54,7 @@ void MissionManager::dispatch_deployment(){
     check_fault();
     sfr::acs::mode = acs_mode_type::off;
     sfr::camera::powered = true;
-    if(sfr::button::pressed == false){
+    if(!sfr::button::pressed){
         sfr::mission::mode = mission_mode_type::standby;
     }
 }

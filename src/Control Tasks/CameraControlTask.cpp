@@ -4,14 +4,33 @@ CameraControlTask::CameraControlTask():
     adaCam(&Serial2){
         //TODO add fault check for sd card
         SD.begin(254);
-        adaCam.begin();
-        adaCam.setImageSize(VC0706_160x120);
+        pinMode(constants::camera::sleep_pin,OUTPUT);
+        digitalWrite(constants::camera::sleep_pin,LOW);
+        sfr::camera::take_photo = true;
     }
 
-void CameraControlTask::execute(){        
-    if(sfr::camera::take_photo){
+void CameraControlTask::execute(){   
+
+    if(sfr::camera::turn_on){
+        Serial.println("turned on camera");
+        digitalWrite(constants::camera::sleep_pin,HIGH);
+        adaCam.begin();
+        adaCam.setImageSize(VC0706_160x120); 
+        sfr::camera::powered = true;
+        sfr::camera::turn_on = false;
+
+    }
+    if(sfr::camera::turn_off){
+        digitalWrite(constants::camera::sleep_pin,LOW);
+        sfr::camera::powered = false;
+        sfr::camera::turn_off = false;
+    }
+
+    if(sfr::camera::take_photo && sfr::camera::powered){
+        Serial.println("took picture");
         adaCam.takePicture();
         sfr::camera::take_photo = false;
+        Serial.println(adaCam.frameLength());
         jpglen = adaCam.frameLength();
 
         // Create an image with the name IMAGExx.JPG

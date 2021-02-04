@@ -1,0 +1,11 @@
+#ifndef burnwire_mode_type_enum_
+#define burnwire_mode_type_enum_
+
+enum class burnwire_mode_type {
+    standby,
+    first_burn,
+    first_delay,
+    second_burn,
+    second_delay};
+
+#endif
