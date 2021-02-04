@@ -58,6 +58,7 @@ namespace sfr{
         bool is_fault = false;
         unsigned char fault_1 = 0;
         unsigned char fault_2 = 0;
+        unsigned char fault_3 = 0;
         bool check_mag_x = true;
         bool check_mag_y = true;
         bool check_mag_z = true;

@@ -39,7 +39,7 @@ void MainControlLoop::execute(){
     //Serial.println("FAULT MONITOR EXECUTED");
 
     mission_manager.execute();
-    //Serial.println("MISSION MANAGER EXECUTED");
+    Serial.println("MISSION MANAGER EXECUTED");
 
     acs_control_task.execute();
     //Serial.println("ACS CONTROL TASK EXECUTED");

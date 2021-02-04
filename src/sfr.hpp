@@ -65,6 +65,7 @@ namespace sfr{
         extern bool is_fault;
         extern unsigned char fault_1;
         extern unsigned char fault_2;
+        extern unsigned char fault_3;
         extern bool check_mag_x;
         extern bool check_mag_y;
         extern bool check_mag_z;

@@ -66,7 +66,8 @@ namespace constants{
         constexpr unsigned char acc_z = 1 << 0; 
         constexpr unsigned char temp_c = 1 << 1;
         constexpr unsigned char solar_current = 1 << 2;
-        constexpr unsigned char burn_wire = 1 << 3;
+
+        constexpr unsigned char burn_wire = 1 << 0;
 
     }
     namespace camera{
