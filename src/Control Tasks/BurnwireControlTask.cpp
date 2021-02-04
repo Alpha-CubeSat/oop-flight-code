@@ -46,6 +46,8 @@ void BurnwireControlTask::execute(){
                         }
                         else{
                             sfr::burnwire::mode = burnwire_mode_type::standby;
+                            digitalWrite(constants::burnwire::first_pin, LOW);
+                            digitalWrite(constants::burnwire::first_pin, LOW);
                             sfr::fault::fault_2 = sfr::fault::fault_1 | constants::fault::burn_wire;
                         }
                     }
