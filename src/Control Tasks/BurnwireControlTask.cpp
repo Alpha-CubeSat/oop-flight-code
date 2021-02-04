@@ -9,7 +9,7 @@ void BurnwireControlTask::execute(){
     if(sfr::burnwire::fire){
         if(start_burn_time == 0){
             digitalWrite(constants::burnwire::first_pin, HIGH);
-            start_burn_time == millis();
+            start_burn_time = millis();
         }
         else{
             if((millis()-start_burn_time) >= constants::burnwire::burn_time){
