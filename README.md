@@ -38,7 +38,7 @@ MissionManager sets which mode the CubeSat should be in based on these exit/entr
 SFR stands for State Field Registry. It contains the mode of each system, all sensor values, and universal flags that should be available to the entire CubeSat. 
 
 ### Control Tasks
-Control tasks are any file that actuates/performs a task based on a value in the SFR. For example, the BurnWire control task pulls the burnwire pin high is the SFR value burnwire::on is true.
+Control tasks are any file that actuates/performs a task based on a value in the SFR. 
 
 ### Monitors
 Monitors simply read input from sensors and update the sensor values in the SFR.
