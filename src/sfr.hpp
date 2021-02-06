@@ -20,14 +20,11 @@ namespace sfr{
     }
     namespace camera{
         extern bool take_photo;
-        extern uint8_t buffer[255];
         extern bool turn_on;
         extern bool turn_off;
         extern bool powered;
     }
     namespace rockblock{
-        extern uint8_t fault_report[70];
-        extern size_t fault_report_size;
         extern unsigned long last_downlink;
         extern unsigned long downlink_period;
         extern rockblock_mode_type mode;

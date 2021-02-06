@@ -19,8 +19,6 @@ namespace sfr{
         bool powered = false;
     }
     namespace rockblock{
-        uint8_t fault_report[70] = {0};
-        size_t fault_report_size = sizeof(fault_report);
         unsigned long last_downlink = 0;
         unsigned long downlink_period = constants::rockblock::two_hours;
         rockblock_mode_type mode = rockblock_mode_type::send_at;
