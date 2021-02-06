@@ -7,7 +7,7 @@
     * Make a GitHub account if you do not have one already
 * In VSCode, click on "Extensions" on the left hand toolbar. Search for and install PlatformIO IDE.
 * On the top toolbar, click "Terminal" and then "New Terminal". This should open a terminal at the bottom of your screen if it was not open already.
-* In the terminal, type "git clone" https://github.com/Alpha-CubeSat/oop-flight-code.git
+* In the terminal, type "git clone https://github.com/Alpha-CubeSat/oop-flight-code.git"
 * Now at the bottom of your screen in the blue toolbar you should see a check, arrow, and serial monitor icon (it looks like an electrical cord).
 * If you would just like to compile code but not upload to the teensy, press the check.
 * If you would like to upload to the teensy, press the arrow.
@@ -38,7 +38,7 @@ MissionManager sets which mode the CubeSat should be in based on these exit/entr
 SFR stands for State Field Registry. It contains the mode of each system, all sensor values, and universal flags that should be available to the entire CubeSat. 
 
 ### Control Tasks
-Control tasks are any file that actuates/performs a task based on a value in the SFR. For example, the BurnWire control task pulls the burnwire pin high is the SFR value burnwire::on is true.
+Control tasks are any file that actuates/performs a task based on a value in the SFR. 
 
 ### Monitors
 Monitors simply read input from sensors and update the sensor values in the SFR.
