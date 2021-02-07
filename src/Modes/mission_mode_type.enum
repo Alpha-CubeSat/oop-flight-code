@@ -1,8 +1,8 @@
 #ifndef mission_mode_type_enum_
 #define mission_mode_type_enum_
 
-enum class mission_mode_type {
-    low_power,
+enum class mission_mode_type: unsigned char {
+    low_power=0,
     deployment,
     standby,
     safe};

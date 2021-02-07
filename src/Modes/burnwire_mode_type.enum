@@ -1,8 +1,8 @@
 #ifndef burnwire_mode_type_enum_
 #define burnwire_mode_type_enum_
 
-enum class burnwire_mode_type {
-    standby,
+enum class burnwire_mode_type: unsigned char {
+    standby=0,
     first_burn,
     first_delay,
     second_burn,
