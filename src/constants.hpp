@@ -4,13 +4,9 @@
 #include <HardwareSerial.h>
 
 namespace constants{
-    namespace gps{
-        constexpr int baud = 9600;
-        constexpr int mand_deploy = 28000;
-    }
     namespace photoresistor{
         constexpr int pin = 22;
-        constexpr int light_val = 4;
+        constexpr int light_val = 0;
     }
     namespace burnwire{
         constexpr int first_pin = 35;
@@ -24,7 +20,6 @@ namespace constants{
         constexpr uint16_t receive_buffer_size = 240;
         constexpr uint16_t send_buffer_size = 300;
         constexpr int command_size = 6;
-        constexpr int opcode_deploy = 1;
         constexpr unsigned long two_hours = 7200000;
         constexpr unsigned long ten_minutes = 600000;
     }

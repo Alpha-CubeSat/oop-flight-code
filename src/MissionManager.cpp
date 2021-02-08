@@ -71,8 +71,8 @@ void MissionManager::regulate_temp(){
 }
 
 void MissionManager::regulate_acs(){
-    if(sfr::fault::check_acc_x and sfr::fault::check_acc_y){
-        if(sfr::imu::acc_x < 0 and sfr::imu::acc_y < 0){
+    if(sfr::fault::check_acc_x && sfr::fault::check_acc_y){
+        if(sfr::imu::gyro_x < 0 && sfr::imu::gyro_y < 0){
             sfr::acs::mode = acs_mode_type::point;
         }
         else{

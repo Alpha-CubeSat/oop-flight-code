@@ -1,24 +1,12 @@
 #include "MainControlLoop.hpp"
 
-MainControlLoop::MainControlLoop():
-    acs_monitor(),
-    battery_monitor(),
-    button_monitor(),
-    current_monitor(),
-    imu_monitor(),
-    photoresistor_monitor(),
-    temperature_monitor(),
-        
-    fault_monitor(),
-
-    acs_control_task(),
-    burnwire_control_task(),
-    camera_control_task(),
-    rockblock_control_task(){
-        delay(1000);
-    }
+MainControlLoop::MainControlLoop(){
+    delay(1000);
+}
 
 void MainControlLoop::execute(){
+    //start_time = millis();
+    //pass in to execute
     
     acs_monitor.execute();
     //Serial.println("ACS MONITOR EXECUTED");
@@ -39,7 +27,7 @@ void MainControlLoop::execute(){
     //Serial.println("FAULT MONITOR EXECUTED");
 
     mission_manager.execute();
-    Serial.println("MISSION MANAGER EXECUTED");
+    //Serial.println("MISSION MANAGER EXECUTED");
 
     acs_control_task.execute();
     //Serial.println("ACS CONTROL TASK EXECUTED");

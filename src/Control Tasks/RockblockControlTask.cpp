@@ -5,10 +5,12 @@ RockblockControlTask::RockblockControlTask(){
 }
 
 void RockblockControlTask::execute(){
+
+    //Serial.readBinary()
     rockblock_mode_type mode = sfr::rockblock::mode;
 
     //if(waiting_messages > 0 || checkReady()){
-    if(false){
+    if(true){
         uint8_t report[70] = {0};
 
         switch(mode){
@@ -194,6 +196,11 @@ void RockblockControlTask::execute(){
                 Serial.println("process message");
                 if(Serial4.read() == 58){
                     //need to get format of opcode/argument
+                    //TODO ask max about the best way to do this
+                    //call handlecommand
+
+
+                    
                 }
                 
 

@@ -2,6 +2,7 @@
  
 namespace sfr{
     namespace photoresistor{
+        //don't need check 
         bool covered = true;
     } 
     namespace mission{
@@ -17,6 +18,11 @@ namespace sfr{
         bool turn_on = false;
         bool turn_off = false;
         bool powered = false;
+        uint16_t current_serial = 0;
+        uint8_t fragment_number = 0;
+        uint8_t max_fragments = 0;
+        uint8_t data_length = 0;
+
     }
     namespace rockblock{
         unsigned long last_downlink = 0;
@@ -38,6 +44,7 @@ namespace sfr{
         int mag = 0;
     }
     namespace temperature{
+        //convert
         float temp_c = 0.0;
     }
     namespace current{
@@ -50,13 +57,17 @@ namespace sfr{
         int current3 = 0;
     }
     namespace battery{
+        //convert
         float voltage = 0.0;
     }
     namespace fault{
         bool is_fault = false;
+
         unsigned char fault_1 = 0;
         unsigned char fault_2 = 0;
         unsigned char fault_3 = 0;
+
+        //FAULT 1
         bool check_mag_x = true;
         bool check_mag_y = true;
         bool check_mag_z = true;
@@ -65,9 +76,11 @@ namespace sfr{
         bool check_gyro_z = true;
         bool check_acc_x = true;
         bool check_acc_y = true;
-        bool check_acc_z = true;
 
+        //FAULT 2
+        bool check_acc_z = true;
         bool check_temp_c = true;
+        bool check_solar_current = true;
         bool check_voltage = true;
     }
     namespace button{

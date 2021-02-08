@@ -60,9 +60,12 @@ namespace sfr{
     }
     namespace fault{
         extern bool is_fault;
+
         extern unsigned char fault_1;
         extern unsigned char fault_2;
         extern unsigned char fault_3;
+
+        //FAULT 1
         extern bool check_mag_x;
         extern bool check_mag_y;
         extern bool check_mag_z;
@@ -71,9 +74,11 @@ namespace sfr{
         extern bool check_gyro_z;
         extern bool check_acc_x;
         extern bool check_acc_y;
-        extern bool check_acc_z;
 
+        //FAULT 2
+        extern bool check_acc_z;
         extern bool check_temp_c;
+        extern bool check_solar_current;
         extern bool check_voltage;
     }
     namespace button{
