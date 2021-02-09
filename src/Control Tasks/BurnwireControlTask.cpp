@@ -10,13 +10,15 @@ void BurnwireControlTask::execute(){
 
     switch(mode){
         case burnwire_mode_type::standby:
-            {
-                digitalWrite(constants::burnwire::first_pin, LOW);
-                digitalWrite(constants::burnwire::second_pin, LOW);
+            { 
                 if(sfr::burnwire::fire){
                     start_time = millis();
                     dispatch_burn();
                     sfr::burnwire::mode = burnwire_mode_type::burn;
+                }
+                else{
+                    digitalWrite(constants::burnwire::first_pin, LOW);
+                    digitalWrite(constants::burnwire::second_pin, LOW);
                 }
                 break;
             }
