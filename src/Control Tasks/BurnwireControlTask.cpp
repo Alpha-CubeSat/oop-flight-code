@@ -9,62 +9,62 @@ void BurnwireControlTask::execute(){
     burnwire_mode_type mode = sfr::burnwire::mode;
 
     switch(mode){
-            case burnwire_mode_type::standby:
-                {
+        case burnwire_mode_type::standby:
+            {
+                digitalWrite(constants::burnwire::first_pin, LOW);
+                digitalWrite(constants::burnwire::second_pin, LOW);
+                if(sfr::burnwire::fire){
+                    start_time = millis();
+                    dispatch_burn();
+                    sfr::burnwire::mode = burnwire_mode_type::burn;
+                }
+                break;
+            }
+        case burnwire_mode_type::burn:
+            {
+                if(millis()-start_time >= constants::burnwire::burn_time){
+                    sfr::burnwire::mode = burnwire_mode_type::delay;
                     digitalWrite(constants::burnwire::first_pin, LOW);
-                    digitalWrite(constants::burnwire::first_pin, LOW);
-                    if(sfr::burnwire::fire){
-                        sfr::burnwire::mode = burnwire_mode_type::first_burn;
-                        start_time = millis();
-                        digitalWrite(constants::burnwire::first_pin, HIGH);
-                    }
-                    break;
+                    digitalWrite(constants::burnwire::second_pin, LOW);
+                    start_time = millis();
                 }
-            case burnwire_mode_type::first_burn:
-                {
-                    digitalWrite(constants::burnwire::first_pin, HIGH);
-                    if(millis()-start_time >= constants::burnwire::burn_time){
-                        sfr::burnwire::mode = burnwire_mode_type::first_delay;
-                        digitalWrite(constants::burnwire::first_pin, LOW);
-                        start_time = millis();
-                    }
-                    break;
+                else{
+                    dispatch_burn();
                 }
-            case burnwire_mode_type::first_delay:
-                {
-                    if(millis()-start_time >= constants::burnwire::burn_wait){
-                        sfr::burnwire::mode = burnwire_mode_type::second_burn;
-                        start_time = millis();
-                        digitalWrite(constants::burnwire::second_pin, HIGH);
-                    }
-                    break;
+                break;
+            }
+        case burnwire_mode_type::delay:
+            {
+                digitalWrite(constants::burnwire::first_pin, LOW);
+                digitalWrite(constants::burnwire::second_pin, LOW);
+                if(millis()-start_time >= constants::burnwire::burn_wait){
+                    sfr::burnwire::mode = burnwire_mode_type::burn;
+                    dispatch_burn();
+                    start_time = millis();
                 }
-            case burnwire_mode_type::second_burn:
-                {
-                    digitalWrite(constants::burnwire::second_pin, HIGH);
-                    if(millis()-start_time >= constants::burnwire::burn_time){
-                        digitalWrite(constants::burnwire::first_pin, LOW);
-                        attempts++;
-                        if(attempts < constants::burnwire::max_attempts){
-                            sfr::burnwire::mode = burnwire_mode_type::second_delay;
-                        }
-                        else{
-                            sfr::burnwire::mode = burnwire_mode_type::standby;
-                            digitalWrite(constants::burnwire::first_pin, LOW);
-                            digitalWrite(constants::burnwire::first_pin, LOW);
-                            attempts = 0;
-                            sfr::fault::fault_3 = sfr::fault::fault_3 | constants::fault::burn_wire;
-                        }
-                    }
-                    break;
-                }
-            case burnwire_mode_type::second_delay:
-                {
-                    if(millis()-start_time >= constants::burnwire::burn_wait){
-                        sfr::burnwire::mode = burnwire_mode_type::first_burn;
-                        start_time = millis();
-                    }
-                    break;
-                }
+                break;
+            }
+    }
+}
+
+void BurnwireControlTask::dispatch_burn(){
+    if(sfr::burnwire::attempts >= constants::burnwire::max_attempts){
+        sfr::burnwire::mode = burnwire_mode_type::standby;
+        digitalWrite(constants::burnwire::first_pin, LOW);
+        digitalWrite(constants::burnwire::first_pin, LOW);
+        sfr::burnwire::attempts = 0;
+        sfr::burnwire::fire = false;
+        sfr::fault::fault_3 = sfr::fault::fault_3 | constants::fault::burn_wire;
+    }
+    else{
+        if(sfr::burnwire::attempts%2 == 0){
+            digitalWrite(constants::burnwire::first_pin, HIGH);
+            digitalWrite(constants::burnwire::second_pin, LOW);
+        }
+        else{
+            digitalWrite(constants::burnwire::first_pin, LOW);
+            digitalWrite(constants::burnwire::second_pin, HIGH);
+        }
+        sfr::burnwire::attempts++;
     }
 }

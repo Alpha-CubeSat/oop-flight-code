@@ -10,7 +10,7 @@ class BurnwireControlTask{
         BurnwireControlTask();
         void execute();
         int start_time = 0;
-        int attempts = 0;
+        void dispatch_burn();
 };
 
 #endif
