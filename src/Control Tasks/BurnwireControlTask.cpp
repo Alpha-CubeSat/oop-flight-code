@@ -35,12 +35,14 @@ void BurnwireControlTask::execute(){
             }
         case burnwire_mode_type::delay:
             {
-                digitalWrite(constants::burnwire::first_pin, LOW);
-                digitalWrite(constants::burnwire::second_pin, LOW);
                 if(millis()-start_time >= constants::burnwire::burn_wait){
                     sfr::burnwire::mode = burnwire_mode_type::burn;
                     dispatch_burn();
                     start_time = millis();
+                }
+                else{
+                    digitalWrite(constants::burnwire::first_pin, LOW);
+                    digitalWrite(constants::burnwire::second_pin, LOW);
                 }
                 break;
             }
