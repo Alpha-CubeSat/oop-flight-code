@@ -11,6 +11,8 @@ namespace sfr{
     namespace burnwire{
         bool fire = false;
         burnwire_mode_type mode = burnwire_mode_type::standby;
+        int attempts = 0;
+        int start_time = 0;
     }
     namespace camera{
         bool take_photo = false;
@@ -28,6 +30,10 @@ namespace sfr{
         unsigned long last_downlink = 0;
         unsigned long downlink_period = constants::rockblock::two_hours;
         rockblock_mode_type mode = rockblock_mode_type::send_at;
+        bool waiting_message = false;
+        char buffer[constants::rockblock::buffer_size] = {0};
+        uint8_t report[constants::rockblock::packet_size] = {0};
+        int commas[constants::rockblock::num_commas] = {0};
     }
     namespace imu{
         float mag_x = 0.0;

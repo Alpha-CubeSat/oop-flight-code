@@ -11,12 +11,8 @@ class RockblockControlTask{
         RockblockControlTask();
         void execute();
     private:
-        int waiting_messages = -1;
         void handleCommand(int opcode, int argument);
         bool checkReady();
-        char buffer[63] = {0};
-        int commas[5] = {0};
-        int length = 0;
 };
 
 #endif

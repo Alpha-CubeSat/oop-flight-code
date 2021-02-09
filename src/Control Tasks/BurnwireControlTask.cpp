@@ -12,7 +12,7 @@ void BurnwireControlTask::execute(){
         case burnwire_mode_type::standby:
             { 
                 if(sfr::burnwire::fire){
-                    start_time = millis();
+                    sfr::burnwire::start_time = millis();
                     dispatch_burn();
                     sfr::burnwire::mode = burnwire_mode_type::burn;
                 }
@@ -24,11 +24,11 @@ void BurnwireControlTask::execute(){
             }
         case burnwire_mode_type::burn:
             {
-                if(millis()-start_time >= constants::burnwire::burn_time){
+                if(millis()-sfr::burnwire::start_time >= constants::burnwire::burn_time){
                     sfr::burnwire::mode = burnwire_mode_type::delay;
                     digitalWrite(constants::burnwire::first_pin, LOW);
                     digitalWrite(constants::burnwire::second_pin, LOW);
-                    start_time = millis();
+                    sfr::burnwire::start_time = millis();
                 }
                 else{
                     dispatch_burn();
@@ -37,10 +37,10 @@ void BurnwireControlTask::execute(){
             }
         case burnwire_mode_type::delay:
             {
-                if(millis()-start_time >= constants::burnwire::burn_wait){
+                if(millis()-sfr::burnwire::start_time >= constants::burnwire::burn_wait){
                     sfr::burnwire::mode = burnwire_mode_type::burn;
                     dispatch_burn();
-                    start_time = millis();
+                    sfr::burnwire::start_time = millis();
                 }
                 else{
                     digitalWrite(constants::burnwire::first_pin, LOW);

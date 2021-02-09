@@ -2,7 +2,8 @@
 #define rockblock_mode_type_enum_
 
 enum class rockblock_mode_type: unsigned char {
-    send_at=0,
+    standby=0,
+    send_at,
     await_at,
     send_flow_control,
     await_flow_control,

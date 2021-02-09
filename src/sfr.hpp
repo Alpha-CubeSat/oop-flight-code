@@ -17,6 +17,8 @@ namespace sfr{
     namespace burnwire{
         extern bool fire;
         extern burnwire_mode_type mode;
+        extern int attempts;
+        extern int start_time;
     }
     namespace camera{
         extern bool take_photo;
@@ -28,6 +30,10 @@ namespace sfr{
         extern unsigned long last_downlink;
         extern unsigned long downlink_period;
         extern rockblock_mode_type mode;
+        extern bool waiting_message;
+        extern char buffer[constants::rockblock::buffer_size];
+        extern uint8_t report[constants::rockblock::packet_size];
+        extern int commas[constants::rockblock::num_commas];
     }
     namespace imu{
         extern float mag_x;

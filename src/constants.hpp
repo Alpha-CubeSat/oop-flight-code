@@ -17,11 +17,11 @@ namespace constants{
     }
     namespace rockblock{
         constexpr int baud = 19200;
-        constexpr uint16_t receive_buffer_size = 240;
-        constexpr uint16_t send_buffer_size = 300;
-        constexpr int command_size = 6;
         constexpr unsigned long two_hours = 7200000;
         constexpr unsigned long ten_minutes = 600000;
+        constexpr int buffer_size = 63;
+        constexpr int packet_size = 70;
+        constexpr int num_commas = 5;
     }
     namespace temperature{
         constexpr int pin = 16;

@@ -9,7 +9,6 @@ class BurnwireControlTask{
     public:
         BurnwireControlTask();
         void execute();
-        int start_time = 0;
         void dispatch_burn();
 };
 
