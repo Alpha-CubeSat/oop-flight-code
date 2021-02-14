@@ -2,7 +2,6 @@
  
 namespace sfr{
     namespace photoresistor{
-        //don't need check 
         bool covered = true;
     } 
     namespace mission{
@@ -50,7 +49,6 @@ namespace sfr{
         int mag = 0;
     }
     namespace temperature{
-        //convert
         float temp_c = 0.0;
     }
     namespace current{
@@ -63,7 +61,6 @@ namespace sfr{
         int current3 = 0;
     }
     namespace battery{
-        //convert
         float voltage = 0.0;
     }
     namespace fault{

@@ -7,6 +7,7 @@ void FaultMonitor::execute(){
     sfr::fault::is_fault = false;
     sfr::fault::fault_1 = 0;
     sfr::fault::fault_2 = 0;
+    sfr::fault::fault_3 = 0;
 
     //FAULT_1
     if((sfr::imu::mag_x < 0 || sfr::imu::mag_x > 0) && sfr::fault::check_mag_x){
