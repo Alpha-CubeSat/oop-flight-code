@@ -1,7 +1,7 @@
 #include "RockblockControlTask.hpp"
 
 RockblockControlTask::RockblockControlTask(){
-    Serial4.begin(19200);
+    Serial4.begin(constants::rockblock::baud);
 }
 
 void RockblockControlTask::execute(){
