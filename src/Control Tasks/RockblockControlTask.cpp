@@ -6,7 +6,6 @@ RockblockControlTask::RockblockControlTask(){
 
 void RockblockControlTask::execute(){
     rockblock_mode_type mode = sfr::rockblock::mode;
-
     switch(mode){
         case rockblock_mode_type::standby:
             {
@@ -113,7 +112,6 @@ void RockblockControlTask::execute(){
                             buffer_iter++;
                         }
                     }
-
                     if(comma_iter != 5){
                         sfr::rockblock::mode = rockblock_mode_type::send_response;
                     }
@@ -136,19 +134,8 @@ void RockblockControlTask::execute(){
                     sfr::rockblock::mode = rockblock_mode_type::send_response;
                     break;
                 }
-                sfr::rockblock::mode = rockblock_mode_type::process_queued;
+                sfr::rockblock::mode = rockblock_mode_type::process_mt_status;
                 break;
-            }
-        case rockblock_mode_type::process_queued:
-            {
-                if(sfr::rockblock::buffer[sfr::rockblock::commas[4]+1] != 48){
-                    sfr::rockblock::waiting_message = true;
-                    sfr::rockblock::mode = rockblock_mode_type::process_mt_status;
-                }
-                else{
-                    sfr::rockblock::waiting_message = false;
-                    sfr::rockblock::mode = rockblock_mode_type::standby;
-                }
             }
         case rockblock_mode_type::process_mt_status:
             {
@@ -178,16 +165,26 @@ void RockblockControlTask::execute(){
         case rockblock_mode_type::read_message:
         {
             Serial.println("read message");
-            Serial4.print("AT+SBDRT\r");
+            Serial4.print("AT+SBDRB\r");
             sfr::rockblock::mode = rockblock_mode_type::process_message;
             break;
         }
         case rockblock_mode_type::process_message:
         {
+            /*
+
+            Command Structure:
+
+            !XX!YY!
+
+
+            */
             Serial.println("process message");
             if(Serial4.read() == 58){
-                //TODO
-                Serial4.readBytes(sfr::rockblock::buffer, Serial4.available());
+                while(Serial4.available()){
+                    Serial.println(Serial4.read());
+                }
+                //sfr::rockblock::mode = rockblock_mode_type::send_response;
             }
         }
     }
