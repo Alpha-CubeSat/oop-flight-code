@@ -76,6 +76,13 @@ namespace constants{
     namespace button{
         constexpr int button_pin = 13;
     }
+    namespace imu{
+        constexpr float gravity = 9.80665;
+        constexpr float two_g = 2*9.80665;
+        constexpr float four_g = 4*9.80665;
+        constexpr float eight_g = 8*9.80665;
+        
+    }
 };
 
 #endif

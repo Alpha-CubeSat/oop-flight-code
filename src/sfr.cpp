@@ -44,9 +44,6 @@ namespace sfr{
         float acc_x = 0.0;
         float acc_y = 0.0;
         float acc_z = 0.0;
-        int gyr = 0;
-        int acc = 0;
-        int mag = 0;
     }
     namespace temperature{
         float temp_c = 0.0;

@@ -25,6 +25,10 @@ namespace sfr{
         extern bool turn_on;
         extern bool turn_off;
         extern bool powered;
+        extern uint16_t current_serial;
+        extern uint8_t fragment_number;
+        extern uint8_t max_fragments;
+        extern uint8_t data_length;
     }
     namespace rockblock{
         extern unsigned long last_downlink;
@@ -45,9 +49,6 @@ namespace sfr{
         extern float acc_x;
         extern float acc_y;
         extern float acc_z;
-        extern int gyr;
-        extern int acc;
-        extern int mag;
     }
     namespace temperature{
         extern float temp_c;
