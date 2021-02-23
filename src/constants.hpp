@@ -81,6 +81,27 @@ namespace constants{
         constexpr float two_g = 2*9.80665;
         constexpr float four_g = 4*9.80665;
         constexpr float eight_g = 8*9.80665; 
+
+        constexpr float min_mag_x = 0.0;
+        constexpr float max_mag_x = 0.0;
+        constexpr float min_mag_y = 0.0;
+        constexpr float max_mag_y = 0.0;
+        constexpr float min_mag_z = 0.0;
+        constexpr float max_mag_z = 0.0;
+
+        constexpr float min_gyro_x = 0.0;
+        constexpr float max_gyro_x = 0.0;
+        constexpr float min_gyro_y = 0.0;
+        constexpr float max_gyro_y = 0.0;
+        constexpr float min_gyro_z = 0.0;
+        constexpr float max_gyro_z = 0.0;
+
+        constexpr float min_acc_x = 0.0;
+        constexpr float max_acc_x = 0.0;
+        constexpr float min_acc_y = 0.0;
+        constexpr float max_acc_y = 0.0;
+        constexpr float min_acc_z = 0.0;
+        constexpr float max_acc_z = 0.0;
     }
 };
 

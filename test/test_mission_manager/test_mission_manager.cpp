@@ -3,24 +3,16 @@
 
 void test_valid_initialization(){
     MissionManager mission_manager;
-    //TEST_ASSERT_EQUAL(mission_mode_type::ascent, sfr::mission::mode);
+    TEST_ASSERT_EQUAL(mission_mode_type::standby, sfr::mission::mode);
 }
 
 void test_execute(){
     MissionManager mission_manager;
-    //TEST_ASSERT_EQUAL(mission_mode_type::ascent, sfr::mission::mode);
+    TEST_ASSERT_EQUAL(mission_mode_type::standby, sfr::mission::mode);
 
-    //sfr::gps::altitude = constants::gps::mand_deploy + 1;
+    sfr::fault::is_fault = true;  
     mission_manager.execute();
-    //TEST_ASSERT_EQUAL(mission_mode_type::deploy_lightsail, sfr::mission::mode);
-
-    sfr::photoresistor::covered = true;
-    mission_manager.execute();
-    //TEST_ASSERT_EQUAL(true, sfr::burnwire::on);
-
-    sfr::photoresistor::covered = false;
-    mission_manager.execute();
-    //TEST_ASSERT_EQUAL(mission_mode_type::taking_photo, sfr::mission::mode);
+    TEST_ASSERT_EQUAL(mission_mode_type::safe, sfr::mission::mode);
 
 }
 
