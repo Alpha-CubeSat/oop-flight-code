@@ -8,11 +8,7 @@ on: [push, pull_request, workflow_dispatch]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        test_list: [test]
     steps:
     - uses: actions/checkout@v2
     - name: Cache pip
