@@ -1,7 +1,6 @@
 #ifndef CONSTANTS_HPP_
 #define CONSTANTS_HPP_
 
-#include <HardwareSerial.h>
 
 namespace constants{
     namespace photoresistor{
