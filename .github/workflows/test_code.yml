@@ -32,5 +32,5 @@ jobs:
       run: pio lib -g install 1
     - name: Compile project 
       run: pio run
-    #- name: Run unit tests
-      #run : pio test
+    - name: Run unit tests
+      run : pio test
