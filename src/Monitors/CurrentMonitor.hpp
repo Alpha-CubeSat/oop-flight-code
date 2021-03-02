@@ -3,7 +3,6 @@
 
 #include "sfr.hpp"
 #include "constants.hpp"
-#include <Arduino.h> 
 
 class CurrentMonitor{
     public:

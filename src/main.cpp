@@ -1,5 +1,5 @@
 #include "MainControlLoop.hpp"
-#include <Arduino.h>
+#include "sfr.hpp"
 
 MainControlLoop mcl;
 
