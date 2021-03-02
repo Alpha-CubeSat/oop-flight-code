@@ -33,4 +33,4 @@ jobs:
     - name: Compile project 
       run: pio run
     - name: Run unit tests
-      run : platformio test -e git -v
+      run : platformio test -e teensy35 -v
