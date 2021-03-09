@@ -32,3 +32,4 @@ void setup() {
 }
 
 void loop() {}
+void main() {}
