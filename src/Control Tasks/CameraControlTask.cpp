@@ -60,6 +60,6 @@ void CameraControlTask::execute(){
     }
 }
 #else
-CameraControlTask::CameraControlTask();
+CameraControlTask::CameraControlTask(){}
 void CameraControlTask::execute(){}
 #endif

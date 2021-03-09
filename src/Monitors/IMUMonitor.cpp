@@ -60,6 +60,6 @@ void IMUMonitor::execute(){
     sfr::imu::acc_z = accel.acceleration.z;
 }
 #else
-IMUMonitor::IMUMonitor();
-void IMUMonitor::execute();
+IMUMonitor::IMUMonitor(){}
+void IMUMonitor::execute(){}
 #endif
