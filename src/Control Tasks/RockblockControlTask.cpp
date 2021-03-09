@@ -199,7 +199,7 @@ bool RockblockControlTask::checkReady(){
     }
 }
 #else
-RockblockControlTask::RockblockControlTask();
-void RockblockControlTask::execute();
-bool RockblockControlTask::checkReady();
+RockblockControlTask::RockblockControlTask(){}
+void RockblockControlTask::execute(){}
+bool RockblockControlTask::checkReady(){}
 #endif
