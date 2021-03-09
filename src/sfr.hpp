@@ -1,7 +1,7 @@
 #ifndef SFR_HPP_
 #define SFR_HPP_
 
-#ifdef UNIT_TEST
+#ifdef GIT
     #include "ArduinoFake.h"
 #else
     #include "Arduino.h"
