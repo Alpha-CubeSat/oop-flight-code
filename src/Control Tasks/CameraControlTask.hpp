@@ -2,8 +2,8 @@
 #define CAMERA_CONTROL_TASK_HPP_
 
 #ifndef DESKTOP
-#include <SD.h>
-#include <Adafruit_VC0706.h>
+//#include <SD.h>
+//#include <Adafruit_VC0706.h>
 #endif
 
 #include "sfr.hpp"
