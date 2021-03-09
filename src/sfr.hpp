@@ -1,11 +1,13 @@
 #ifndef SFR_HPP_
 #define SFR_HPP_
 
-#ifdef GIT
+/*#ifdef GIT
     #include "ArduinoFake.h"
 #else
     #include "Arduino.h"
-#endif
+#endif*/
+
+#include "Arduino.h"
 
 #include "Arduino.h"
 #include "Modes/mission_mode_type.enum"
