@@ -1,10 +1,13 @@
 #include "RockblockControlTask.hpp"
 
 RockblockControlTask::RockblockControlTask(){
+    #ifndef GIT
     Serial4.begin(constants::rockblock::baud);
+    #endif
 }
 
 void RockblockControlTask::execute(){
+    #ifndef GIT
     rockblock_mode_type mode = sfr::rockblock::mode;
     switch(mode){
         case rockblock_mode_type::standby:
@@ -188,6 +191,7 @@ void RockblockControlTask::execute(){
             }
         }
     }
+    #endif
 }
 
 bool RockblockControlTask::checkReady(){
