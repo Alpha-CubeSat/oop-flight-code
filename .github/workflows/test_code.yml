@@ -30,7 +30,5 @@ jobs:
         pip install --upgrade platformio
     - name: Install library dependencies
       run: pio lib -g install 1
-    - name: Compile project 
-      run: pio run
     - name: Run unit tests
       run : platformio test -e native -v -d GIT
