@@ -59,4 +59,7 @@ void CameraControlTask::execute(){
         imgFile.close();     
     }
 }
+#else
+CameraControlTask::CameraControlTask();
+void CameraControlTask::execute(){}
 #endif
