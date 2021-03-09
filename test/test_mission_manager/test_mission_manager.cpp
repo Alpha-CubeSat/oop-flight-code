@@ -32,4 +32,4 @@ void setup() {
 }
 
 void loop() {}
-void main() {}
+int main() { int test = 1; return test;}
