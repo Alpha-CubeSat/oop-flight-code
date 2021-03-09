@@ -24,11 +24,11 @@ int test_mission_manager() {
     return UNITY_END();
 }
 
-#ifdef DESKTOP
-int main() {
-    return test_mission_manager();
-}
-#else
+//#ifdef DESKTOP
+//int main() {
+//    return test_mission_manager();
+//}
+//#else
 #include <Arduino.h>
 void setup() {
     delay(2000);
@@ -37,4 +37,4 @@ void setup() {
 }
 
 void loop() {}
-#endif
+//#endif
