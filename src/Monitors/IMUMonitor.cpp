@@ -1,6 +1,7 @@
 #include "IMUMonitor.hpp"
 
 IMUMonitor::IMUMonitor(){
+    #ifndef GIT
     imu.begin();
     if (!imu.begin()){
         //sfr::rockblock::fault_report[constants::fault::imu_begin] = 1;
@@ -8,9 +9,11 @@ IMUMonitor::IMUMonitor(){
     imu.setupAccel(imu.LSM9DS1_ACCELRANGE_2G);
     imu.setupMag(imu.LSM9DS1_MAGGAIN_4GAUSS);
     imu.setupGyro(imu.LSM9DS1_GYROSCALE_245DPS);
+    #endif
 }
 
 void IMUMonitor::execute(){
+    #ifndef GIT
     sensors_event_t accel, mag, gyro, temp;
     imu.getEvent(&accel, &mag, &gyro, &temp);
 
@@ -57,4 +60,5 @@ void IMUMonitor::execute(){
     sfr::imu::acc_x = accel.acceleration.x;
     sfr::imu::acc_y = accel.acceleration.y;
     sfr::imu::acc_z = accel.acceleration.z;
+    #endif
 }
