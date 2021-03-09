@@ -1,5 +1,6 @@
 #include "CameraControlTask.hpp"
 
+#ifndef GIT
 CameraControlTask::CameraControlTask(): 
     adaCam(&Serial2){
         //TODO add fault check for sd card
@@ -58,3 +59,4 @@ void CameraControlTask::execute(){
         imgFile.close();     
     }
 }
+#endif
