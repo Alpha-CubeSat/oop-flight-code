@@ -1,7 +1,7 @@
 #ifndef CAMERA_CONTROL_TASK_HPP_
 #define CAMERA_CONTROL_TASK_HPP_
 
-#ifndef UNITY_TEST
+#ifndef DESKTOP
 #include <SD.h>
 #include <Adafruit_VC0706.h>
 #endif
