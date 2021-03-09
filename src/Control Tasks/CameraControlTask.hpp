@@ -1,8 +1,11 @@
 #ifndef CAMERA_CONTROL_TASK_HPP_
 #define CAMERA_CONTROL_TASK_HPP_
 
+#ifndef UNITY_TEST
 #include <SD.h>
 #include <Adafruit_VC0706.h>
+#endif
+
 #include "sfr.hpp"
 #include "constants.hpp"
 
