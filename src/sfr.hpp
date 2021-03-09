@@ -8,8 +8,6 @@
 #endif*/
 
 #include "Arduino.h"
-
-#include "Arduino.h"
 #include "Modes/mission_mode_type.enum"
 #include "Modes/acs_mode_type.enum"
 #include "Modes/rockblock_mode_type.enum"
