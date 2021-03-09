@@ -1,0 +1,8 @@
+#ifndef fault_mode_type_enum_
+#define fault_mode_type_enum_
+
+enum class fault_mode_type: unsigned char {
+    inactive=0,
+    active};
+
+#endif

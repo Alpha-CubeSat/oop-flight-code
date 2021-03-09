@@ -11,6 +11,8 @@
 #include "Modes/acs_mode_type.enum"
 #include "Modes/rockblock_mode_type.enum"
 #include "Modes/burnwire_mode_type.enum"
+#include "Modes/temp_mode_type.enum"
+#include "Modes/fault_mode_type.enum"
 #include "constants.hpp"
 
 namespace sfr{
@@ -58,6 +60,7 @@ namespace sfr{
     }
     namespace temperature{
         extern float temp_c;
+        extern temp_mode_type mode;
     }
     namespace current{
         extern float solar_current;
@@ -73,6 +76,7 @@ namespace sfr{
     }
     namespace fault{
         extern bool is_fault;
+        extern fault_mode_type mode;
 
         extern unsigned char fault_1;
         extern unsigned char fault_2;

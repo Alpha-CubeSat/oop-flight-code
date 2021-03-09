@@ -13,6 +13,15 @@ void ACSMonitor::execute(){
     rtObj.rtU.Bfield_body[2] = sfr::imu::mag_z;
     rtObj.step();
 
+    if(sfr::fault::check_acc_x && sfr::fault::check_acc_y && sfr::acs::mode != acs_mode_type::off){
+        if(sfr::imu::gyro_x < 0 && sfr::imu::gyro_y < 0){
+            sfr::acs::mode = acs_mode_type::point;
+        }
+        else{
+            sfr::acs::mode = acs_mode_type::detumble;
+        }
+    }
+
     switch(sfr::acs::mode){
         case acs_mode_type::detumble:
             sfr::acs::current1 = rtObj.rtY.detuble[0];

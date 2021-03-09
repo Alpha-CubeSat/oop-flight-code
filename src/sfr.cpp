@@ -47,6 +47,7 @@ namespace sfr{
     }
     namespace temperature{
         float temp_c = 0.0;
+        temp_mode_type mode = temp_mode_type::active;
     }
     namespace current{
         float solar_current = 0.0;
@@ -62,6 +63,7 @@ namespace sfr{
     }
     namespace fault{
         bool is_fault = false;
+        fault_mode_type mode = fault_mode_type::active;
 
         unsigned char fault_1 = 0;
         unsigned char fault_2 = 0;

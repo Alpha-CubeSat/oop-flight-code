@@ -13,9 +13,10 @@ class MissionManager{
         void dispatch_low_power();
         void dispatch_deployment();
 
-        void regulate_temp();
-        void regulate_acs();
-        void check_fault();
+        void transition_to_standby();
+        void transition_to_safe();
+        void transition_to_low_power();
+        void transition_to_deployment();
 };
 
 #endif
