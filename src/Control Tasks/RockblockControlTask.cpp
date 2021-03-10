@@ -119,6 +119,7 @@ void RockblockControlTask::execute(){
                     else{
                         sfr::rockblock::mode = rockblock_mode_type::process_mo_status;
                     }
+                    
                 }
                 break;
             }
@@ -130,7 +131,7 @@ void RockblockControlTask::execute(){
                     sfr::rockblock::mode = rockblock_mode_type::send_response;
                     break;
                 }
-                if(sfr::rockblock::buffer[0] != '0' || sfr::rockblock::buffer[0] != '1' || sfr::rockblock::buffer[0] != '2'){
+                if(sfr::rockblock::buffer[0] != '0' && sfr::rockblock::buffer[0] != '1' && sfr::rockblock::buffer[0] != '2'){
                     Serial.println("mo status is greater than 2");
                     sfr::rockblock::mode = rockblock_mode_type::send_response;
                     break;
@@ -157,6 +158,7 @@ void RockblockControlTask::execute(){
                     case '0':
                         {
                             Serial.println("there were no messages to retrieve");
+                            delay(5000);
                             sfr::rockblock::mode = rockblock_mode_type::standby;
                             break;
                         }
@@ -167,26 +169,32 @@ void RockblockControlTask::execute(){
         {
             Serial.println("read message");
             Serial4.print("AT+SBDRB\r");
-            sfr::rockblock::mode = rockblock_mode_type::process_message;
+            sfr::rockblock::mode = rockblock_mode_type::process_opcode;
             break;
         }
-        case rockblock_mode_type::process_message:
+        case rockblock_mode_type::process_opcode:
         {
-            /*
-
-            Command Structure:
-
-            !XX!YY!
-
-
-            */
-            Serial.println("process message");
-            if(Serial4.read() == 58){
-                while(Serial4.available()){
-                    Serial.println(Serial4.read());
-                }
-                //sfr::rockblock::mode = rockblock_mode_type::send_response;
+            Serial.println("process opcode");
+            if(Serial4.read() == 33){
+                for (int i=0; i<Serial4.available(); ++i){
+                    if(Serial4.read() != 33){
+                        sfr::rockblock::opcode[i] = Serial4.read();
+                    }else{
+                        sfr::rockblock::mode = rockblock_mode_type::process_argument;
+                    }
+                }  
             }
+        }
+        case rockblock_mode_type::process_argument:
+        {
+            Serial.println("process argument");
+            for (int i=0; i<Serial4.available(); ++i){
+                if(Serial4.read() != 33){
+                    sfr::rockblock::opcode[i] = Serial4.read();
+                }else{
+                    sfr::rockblock::mode = rockblock_mode_type::standby;
+                }
+            }  
         }
     }
 }
