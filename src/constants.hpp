@@ -21,6 +21,7 @@ namespace constants{
         constexpr int buffer_size = 63;
         constexpr int packet_size = 70;
         constexpr int num_commas = 5;
+        constexpr int max_iter = 200;
     }
     namespace temperature{
         constexpr int pin = 16;
@@ -101,6 +102,15 @@ namespace constants{
         constexpr float max_acc_y = 0.0;
         constexpr float min_acc_z = 0.0;
         constexpr float max_acc_z = 0.0;
+    }
+    namespace ascii{
+        constexpr int K = 75;
+        constexpr int zero = 48;
+        constexpr int one = 49;
+        constexpr int two = 50;
+        constexpr int three = 51;
+        constexpr int Y = 89;
+        constexpr int exclamation = 33;
     }
 };
 

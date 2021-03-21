@@ -43,6 +43,7 @@ namespace sfr{
         extern int commas[constants::rockblock::num_commas];
         extern char opcode[constants::rockblock::buffer_size];
         extern char argument[constants::rockblock::buffer_size];
+        extern int num_iter;
     }
     namespace imu{
         extern float mag_x;
