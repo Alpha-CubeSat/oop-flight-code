@@ -219,20 +219,22 @@ void RockblockControlTask::dispatch_read_message(){
 
 void RockblockControlTask::dispatch_process_opcode(){
     if(Serial4.read() == constants::ascii::exclamation){
-        sfr::rockblock::opcode[0] = Serial4.read();
-        sfr::rockblock::opcode[1] = Serial4.read();
+        sfr::rockblock::opcode[0] = (char)Serial4.read();
+        sfr::rockblock::opcode[1] = (char)Serial4.read();
         Serial.println(sfr::rockblock::opcode[0]);
         Serial.println(sfr::rockblock::opcode[1]);
+        sfr::rockblock::waiting_command = true;
         transition_to(rockblock_mode_type::process_argument); 
     }    
 }
 
 void RockblockControlTask::dispatch_process_argument(){
     if(Serial4.read() == constants::ascii::exclamation){
-        sfr::rockblock::argument[0] = Serial4.read();
-        sfr::rockblock::argument[1] = Serial4.read();
+        sfr::rockblock::argument[0] = (char)Serial4.read();
+        sfr::rockblock::argument[1] = (char)Serial4.read();
         Serial.println(sfr::rockblock::argument[0]);
         Serial.println(sfr::rockblock::argument[1]);
+        sfr::rockblock::waiting_command = true;
         transition_to(rockblock_mode_type::standby); 
     } 
     

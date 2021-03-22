@@ -13,10 +13,10 @@ class MissionManager{
         void dispatch_low_power();
         void dispatch_deployment();
 
-        void transition_to_standby();
-        void transition_to_safe();
-        void transition_to_low_power();
-        void transition_to_deployment();
+        static void transition_to_standby();
+        static void transition_to_safe();
+        static void transition_to_low_power();
+        static void transition_to_deployment();
 };
 
 #endif

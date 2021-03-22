@@ -36,6 +36,7 @@ namespace sfr{
         char opcode[constants::rockblock::buffer_size] = {0};
         char argument[constants::rockblock::buffer_size] = {0};
         int num_iter = 0;
+        bool waiting_command = false;
     }
     namespace imu{
         float mag_x = 0.0;

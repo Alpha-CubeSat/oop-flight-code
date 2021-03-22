@@ -9,6 +9,7 @@
 #include "Modes/temp_mode_type.enum"
 #include "Modes/fault_mode_type.enum"
 #include "constants.hpp"
+#include "MissionManager.hpp"
 
 namespace sfr{
     namespace photoresistor{
@@ -44,6 +45,7 @@ namespace sfr{
         extern char opcode[constants::rockblock::buffer_size];
         extern char argument[constants::rockblock::buffer_size];
         extern int num_iter;
+        extern bool waiting_command;
     }
     namespace imu{
         extern float mag_x;
