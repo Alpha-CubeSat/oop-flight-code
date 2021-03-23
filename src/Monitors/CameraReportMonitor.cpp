@@ -102,5 +102,10 @@ void CameraReportMonitor::execute()
         sfr::camera::fragment_requested = true;
       }
     }
+    if (sfr::camera::report_ready == true && sfr::camera::current_serial == sfr::camera::images_written)
+    {
+      sfr::camera::report_ready = false;
+      Serial.println("Report finished");
+    }
   }
 }
