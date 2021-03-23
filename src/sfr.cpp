@@ -1,31 +1,46 @@
 #include "sfr.hpp"
- 
-namespace sfr{
-    namespace photoresistor{
+
+namespace sfr
+{
+    namespace photoresistor
+    {
         bool covered = true;
-    } 
-    namespace mission{
+    }
+    namespace mission
+    {
         mission_mode_type mode = mission_mode_type::standby;
     }
-    namespace burnwire{
+    namespace burnwire
+    {
         bool fire = false;
         burnwire_mode_type mode = burnwire_mode_type::standby;
         int attempts = 0;
         int start_time = 0;
     }
-    namespace camera{
-        bool take_photo = false;
-        uint8_t buffer[255] = {0};
-        bool turn_on = false;
+    namespace camera
+    {
+        bool take_photo = true;
+        bool turn_on = true;
         bool turn_off = false;
         bool powered = false;
+        uint8_t buffer[255] = {0};
         uint16_t current_serial = 0;
         uint8_t fragment_number = 0;
         uint8_t max_fragments = 0;
         uint8_t data_length = 0;
-
+        uint8_t fragment_number_requested = 3;
+        uint8_t serial_requested = 0;
+        bool fragment_requested = false;
+        uint8_t images_written = 0;
+        uint16_t image_lengths[255];
+        bool report_ready = false;
+        bool sd_card_failed = false;
+        bool camera_failed = false;
+        bool full_image_written = false;
+        bool report_downlinked = true;
     }
-    namespace rockblock{
+    namespace rockblock
+    {
         unsigned long last_downlink = 0;
         unsigned long downlink_period = constants::rockblock::two_hours;
         rockblock_mode_type mode = rockblock_mode_type::send_at;
@@ -38,7 +53,8 @@ namespace sfr{
         int num_iter = 0;
         bool waiting_command = false;
     }
-    namespace imu{
+    namespace imu
+    {
         float mag_x = 0.0;
         float mag_y = 0.0;
         float mag_z = 0.0;
@@ -49,23 +65,28 @@ namespace sfr{
         float acc_y = 0.0;
         float acc_z = 0.0;
     }
-    namespace temperature{
+    namespace temperature
+    {
         float temp_c = 0.0;
         temp_mode_type mode = temp_mode_type::active;
     }
-    namespace current{
+    namespace current
+    {
         float solar_current = 0.0;
     }
-    namespace acs{
+    namespace acs
+    {
         acs_mode_type mode = acs_mode_type::detumble;
         int current1 = 0;
         int current2 = 0;
         int current3 = 0;
     }
-    namespace battery{
+    namespace battery
+    {
         float voltage = 0.0;
     }
-    namespace fault{
+    namespace fault
+    {
         bool is_fault = false;
         fault_mode_type mode = fault_mode_type::active;
 
@@ -89,7 +110,8 @@ namespace sfr{
         bool check_solar_current = true;
         bool check_voltage = true;
     }
-    namespace button{
+    namespace button
+    {
         bool pressed = true;
     }
 }

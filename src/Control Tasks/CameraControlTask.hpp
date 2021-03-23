@@ -9,21 +9,19 @@
 #include "sfr.hpp"
 #include "constants.hpp"
 
-class CameraControlTask{
+class CameraControlTask
+{
 
-    public:
-        CameraControlTask();
-        void execute();
-        #ifndef GIT
-        Adafruit_VC0706 adaCam;
-        #endif
+public:
+    CameraControlTask();
+    void execute();
+#ifndef GIT
+    Adafruit_VC0706 adaCam;
+#endif
 
-        //move to sfr
-        char filename[13];
-        uint16_t jpglen = 0;
-       
+    //move to sfr
+    char filename[13];
+    uint16_t jpglen = 0;
 };
-
-
 
 #endif

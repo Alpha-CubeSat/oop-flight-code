@@ -3,12 +3,14 @@
 
 #include "sfr.hpp"
 #include "constants.hpp"
+#include <SD.h>
 
-
-class CameraReportMonitor{
-    public:
-        CameraReportMonitor();
-        void execute();
+class CameraReportMonitor
+{
+public:
+    CameraReportMonitor();
+    void execute();
+    File imgFile;
 };
 
 #endif

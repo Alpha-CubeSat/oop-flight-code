@@ -1,13 +1,15 @@
 #include "MainControlLoop.hpp"
 
-MainControlLoop::MainControlLoop(){
+MainControlLoop::MainControlLoop()
+{
     delay(1000);
 }
 
-void MainControlLoop::execute(){
+void MainControlLoop::execute()
+{
     //start_time = millis();
     //pass in to execute
-    
+
     acs_monitor.execute();
     //Serial.println("ACS MONITOR EXECUTED");
     battery_monitor.execute();
@@ -22,7 +24,8 @@ void MainControlLoop::execute(){
     //Serial.println("PHOTORESISTOR MONITOR EXECUTED");
     temperature_monitor.execute();
     //Serial.println("TEMPERATURE MONITOR EXECUTED");
-        
+    camera_report_monitor.execute();
+    //Serial.println("CAMERA REPORT MONITOR EXECUTED");
     fault_monitor.execute();
     //Serial.println("FAULT MONITOR EXECUTED");
 
@@ -37,5 +40,4 @@ void MainControlLoop::execute(){
     //Serial.println("CAMERA CONTROL TASK EXECUTED");
     rockblock_control_task.execute();
     //Serial.println("ROCKBLOCK CONTROL EXECUTED");
-    
 }
