@@ -10,30 +10,47 @@
 #include "Modes/fault_mode_type.enum"
 #include "constants.hpp"
 
-namespace sfr{
-    namespace photoresistor{
+namespace sfr
+{
+    namespace photoresistor
+    {
         extern bool covered;
-    } 
-    namespace mission{
+    }
+    namespace mission
+    {
         extern mission_mode_type mode;
     }
-    namespace burnwire{
+    namespace burnwire
+    {
         extern bool fire;
         extern burnwire_mode_type mode;
         extern int attempts;
         extern int start_time;
     }
-    namespace camera{
+    namespace camera
+    {
         extern bool take_photo;
         extern bool turn_on;
         extern bool turn_off;
         extern bool powered;
+        extern uint8_t buffer[255];
         extern uint16_t current_serial;
         extern uint8_t fragment_number;
         extern uint8_t max_fragments;
         extern uint8_t data_length;
+        extern uint8_t fragment_number_requested;
+        extern uint8_t serial_requested;
+        extern bool fragment_requested;
+        extern uint8_t images_written;
+        extern uint16_t image_lengths[255];
+        extern bool report_ready;
+        extern bool sd_card_failed;
+        extern bool camera_failed;
+        extern bool full_image_written;
+        extern bool report_downlinked;
     }
-    namespace rockblock{
+    namespace rockblock
+    {
         extern unsigned long last_downlink;
         extern unsigned long downlink_period;
         extern rockblock_mode_type mode;
@@ -44,7 +61,8 @@ namespace sfr{
         extern char opcode[constants::rockblock::buffer_size];
         extern char argument[constants::rockblock::buffer_size];
     }
-    namespace imu{
+    namespace imu
+    {
         extern float mag_x;
         extern float mag_y;
         extern float mag_z;
@@ -55,23 +73,28 @@ namespace sfr{
         extern float acc_y;
         extern float acc_z;
     }
-    namespace temperature{
+    namespace temperature
+    {
         extern float temp_c;
         extern temp_mode_type mode;
     }
-    namespace current{
+    namespace current
+    {
         extern float solar_current;
     }
-    namespace acs{
+    namespace acs
+    {
         extern acs_mode_type mode;
         extern int current1;
         extern int current2;
         extern int current3;
     }
-    namespace battery{
+    namespace battery
+    {
         extern float voltage;
     }
-    namespace fault{
+    namespace fault
+    {
         extern bool is_fault;
         extern fault_mode_type mode;
 
@@ -95,7 +118,8 @@ namespace sfr{
         extern bool check_solar_current;
         extern bool check_voltage;
     }
-    namespace button{
+    namespace button
+    {
         extern bool pressed;
     }
 };
