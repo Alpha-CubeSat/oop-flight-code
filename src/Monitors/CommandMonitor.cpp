@@ -40,7 +40,7 @@ void CommandMonitor::dispatch_change_mission_mode(){
 }
 
 void CommandMonitor::dispatch_change_fault_checks(){
-    switch(sfr::rockblock::opcode[0]){
+    /*switch(sfr::rockblock::opcode[0]){
         case '1':
             switch(sfr::rockblock::opcode[1]){
                 case '0':
@@ -63,7 +63,7 @@ void CommandMonitor::dispatch_change_fault_checks(){
             switch(sfr::rockblock::opcode[1]){
             }
 
-    }
+    }*/
 
 }
 
