@@ -16,7 +16,6 @@ enum class rockblock_mode_type: unsigned char {
     process_mo_status,
     process_mt_status,
     read_message,
-    process_opcode,
-    process_argument};
+    process_command};
 
 #endif

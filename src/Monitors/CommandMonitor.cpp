@@ -3,7 +3,7 @@
 CommandMonitor::CommandMonitor(){}
 
 void CommandMonitor::execute(){
-    if(sfr::rockblock::waiting_command){
+    /*if(sfr::rockblock::waiting_command){
         //transition to mission mode
         //change rockblock downlink frequency
 
@@ -14,12 +14,12 @@ void CommandMonitor::execute(){
             dispatch_change_fault_checks();
         }
         sfr::rockblock::waiting_command = false;
-    }
+    }*/
 
 }
 
 void CommandMonitor::dispatch_change_mission_mode(){
-    switch(sfr::rockblock::argument[1]){
+    /*switch(sfr::rockblock::argument[1]){
         case '0':
             sfr::mission::mode = mission_mode_type::low_power;
             MissionManager::transition_to_low_power();
@@ -36,7 +36,7 @@ void CommandMonitor::dispatch_change_mission_mode(){
             sfr::mission::mode = mission_mode_type::safe;
             MissionManager::transition_to_safe();
             break;
-    }
+    }*/
 }
 
 void CommandMonitor::dispatch_change_fault_checks(){

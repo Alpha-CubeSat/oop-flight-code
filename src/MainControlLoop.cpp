@@ -24,7 +24,7 @@ void MainControlLoop::execute()
     //Serial.println("PHOTORESISTOR MONITOR EXECUTED");
     temperature_monitor.execute();
     //Serial.println("TEMPERATURE MONITOR EXECUTED");
-    camera_report_monitor.execute();
+    //camera_report_monitor.execute();
     //Serial.println("CAMERA REPORT MONITOR EXECUTED");
     fault_monitor.execute();
     //Serial.println("FAULT MONITOR EXECUTED");
@@ -36,7 +36,7 @@ void MainControlLoop::execute()
     //Serial.println("ACS CONTROL TASK EXECUTED");
     burnwire_control_task.execute();
     //Serial.println("BURNWIRE CONTROL TASK EXECUTED");
-    camera_control_task.execute();
+    //camera_control_task.execute();
     //Serial.println("CAMERA CONTROL TASK EXECUTED");
     rockblock_control_task.execute();
     //Serial.println("ROCKBLOCK CONTROL EXECUTED");

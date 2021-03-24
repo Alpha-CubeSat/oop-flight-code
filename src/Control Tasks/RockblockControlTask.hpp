@@ -3,6 +3,9 @@
 
 #include "sfr.hpp"
 #include "constants.hpp"
+#include <iostream>
+#include <string>
+
 
 class RockblockControlTask{
     public:
@@ -25,9 +28,9 @@ class RockblockControlTask{
         void dispatch_process_mo_status();
         void dispatch_process_mt_status();
         void dispatch_read_message();
-        void dispatch_process_opcode();
-        void dispatch_process_argument();
+        void dispatch_process_command();
         void transition_to(rockblock_mode_type new_mode);
+        
         
 };
 

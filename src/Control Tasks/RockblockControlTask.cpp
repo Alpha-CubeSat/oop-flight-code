@@ -1,4 +1,5 @@
 #include "RockblockControlTask.hpp"
+#include <sstream>
 
 #ifndef GIT
 RockblockControlTask::RockblockControlTask(){
@@ -68,13 +69,9 @@ void RockblockControlTask::execute(){
             Serial.println("read_message");
             dispatch_read_message();
             break;
-        case rockblock_mode_type::process_opcode:
-            Serial.println("process_opcode");
-            dispatch_process_opcode();
-            break;
-        case rockblock_mode_type::process_argument:
-            Serial.println("process_argument");
-            dispatch_process_argument();
+        case rockblock_mode_type::process_command:
+            Serial.println("process_command");
+            dispatch_process_command();
             break;
     }
 }
@@ -100,9 +97,9 @@ void RockblockControlTask::dispatch_send_at(){
 }
 
 void RockblockControlTask::dispatch_await_at(){
-    if(Serial4.read()==constants::ascii::K){
+    if(Serial4.read()=='K'){
         transition_to(rockblock_mode_type::send_flow_control);
-    } 
+    }
 }
 
 void RockblockControlTask::dispatch_send_flow_control(){
@@ -111,7 +108,7 @@ void RockblockControlTask::dispatch_send_flow_control(){
 }
 
 void RockblockControlTask::dispatch_await_flow_control(){
-    if(Serial4.read()==constants::ascii::K){
+    if(Serial4.read()=='K'){
         transition_to(rockblock_mode_type::send_message_length);
     } 
 }
@@ -122,7 +119,7 @@ void RockblockControlTask::dispatch_send_message_length(){
 }
 
 void RockblockControlTask::dispatch_await_message_length(){
-    if(Serial4.read()==constants::ascii::Y){
+    if(Serial4.read()=='Y'){
         transition_to(rockblock_mode_type::send_message);
     } 
 }
@@ -139,9 +136,9 @@ void RockblockControlTask::dispatch_send_message(){
 }
 
 void RockblockControlTask::dispatch_await_message(){
-    uint8_t c = Serial4.read();
-    if(c == constants::ascii::zero || c == constants::ascii::one || c == constants::ascii::two || c == constants::ascii::three){
-        if(c == constants::ascii::zero){
+    char c = Serial4.read();
+    if(c == '0' || c == '1' || c == '2' || c == '3'){
+        if(c == '0'){
             transition_to(rockblock_mode_type::send_response);
         }
         else{
@@ -156,16 +153,16 @@ void RockblockControlTask::dispatch_send_response(){
 }
 
 void RockblockControlTask::dispatch_create_buffer(){
-    if(Serial4.read() == 58){
+    if(Serial4.read() == ':'){
         int relevant_chars = Serial4.available()-8;
         int buffer_iter = 0;
         int comma_iter = 0;
         for (int i=0; i<relevant_chars; ++i){
-            uint8_t c = Serial4.read();
-            if(c != 32){
+            char c = Serial4.read();
+            if(c != ' '){
                 sfr::rockblock::buffer[buffer_iter] = c;
                 Serial.println( sfr::rockblock::buffer[buffer_iter]);
-                if(c == 44){
+                if(c == ','){
                     sfr::rockblock::commas[comma_iter] = buffer_iter;
                     comma_iter++;
                 }
@@ -214,32 +211,76 @@ void RockblockControlTask::dispatch_process_mt_status(){
 
 void RockblockControlTask::dispatch_read_message(){
     Serial4.print("AT+SBDRB\r");
-    transition_to(rockblock_mode_type::process_opcode);
+    transition_to(rockblock_mode_type::process_command);
 }
 
-void RockblockControlTask::dispatch_process_opcode(){
-    if(Serial4.read() == constants::ascii::exclamation){
-        sfr::rockblock::opcode[0] = (char)Serial4.read();
-        sfr::rockblock::opcode[1] = (char)Serial4.read();
+void RockblockControlTask::dispatch_process_command(){
+    if(Serial4.read() == 'S' && Serial4.read() == 'B' && Serial4.read() == 'D' && Serial4.read() == 'R' && Serial4.read() == 'B'){
+        Serial.println("entered if");
+        Serial4.read();
+        Serial4.read();
+        Serial4.read();
+        sfr::rockblock::data_length[0] = Serial4.read();
+        sfr::rockblock::data_length[1] = Serial4.read();
+        sfr::rockblock::data_length[2] = Serial4.read();
+        sfr::rockblock::data_length[3] = Serial4.read();
+
+        sfr::rockblock::opcode[0] = Serial4.read();
         Serial.println(sfr::rockblock::opcode[0]);
+        sfr::rockblock::opcode[1] = Serial4.read();
         Serial.println(sfr::rockblock::opcode[1]);
-        sfr::rockblock::waiting_command = true;
-        transition_to(rockblock_mode_type::process_argument); 
-    }    
+
+        sfr::rockblock::arg_1[0] = Serial4.read();
+        Serial.println(sfr::rockblock::arg_1[0]);
+        sfr::rockblock::arg_1[1] = Serial4.read();
+        Serial.println(sfr::rockblock::arg_1[1]);
+        sfr::rockblock::arg_1[2] = Serial4.read();
+        Serial.println(sfr::rockblock::arg_1[2]);
+        sfr::rockblock::arg_1[3] = Serial4.read();
+        Serial.println(sfr::rockblock::arg_1[3]);
+
+        sfr::rockblock::arg_2[0] = Serial4.read();
+        Serial.println(sfr::rockblock::arg_2[0]);
+        sfr::rockblock::arg_2[1] = Serial4.read();
+        Serial.println(sfr::rockblock::arg_2[1]);
+        sfr::rockblock::arg_2[2] = Serial4.read();
+        Serial.println(sfr::rockblock::arg_2[2]);
+        sfr::rockblock::arg_2[3] = Serial4.read();
+        Serial.println(sfr::rockblock::arg_2[3]);
+
+        uint32_t c_data_length = sfr::rockblock::data_length[0] | (sfr::rockblock::data_length[1] << 8) | (sfr::rockblock::data_length[2] << 16) | (sfr::rockblock::data_length[3] << 24);
+        uint32_t c_opcode = (sfr::rockblock::opcode[0] << 16) | (sfr::rockblock::opcode[1] << 24);
+        uint32_t c_arg_1 = sfr::rockblock::arg_1[0] | (sfr::rockblock::arg_1[1] << 8) | (sfr::rockblock::arg_1[2] << 16) | (sfr::rockblock::arg_1[3] << 24);
+        uint32_t c_arg_2 = sfr::rockblock::arg_2[0] | (sfr::rockblock::arg_2[1] << 8) | (sfr::rockblock::arg_2[2] << 16) | (sfr::rockblock::arg_2[3] << 24);
+
+        std::stringstream ss_data_length;
+        ss_data_length << c_data_length;
+        int f_data_length;
+        ss_data_length >> f_data_length;
+
+        std::stringstream ss_opcode;
+        ss_opcode << c_opcode;
+        int f_opcode;
+        ss_opcode >> f_opcode;
+
+        std::stringstream ss_arg_1;
+        ss_arg_1 << c_arg_1;
+        int f_arg_1;
+        ss_arg_1 >> f_arg_1;
+
+        std::stringstream ss_arg_2;
+        ss_arg_2 << c_arg_2;
+        int f_arg_2;
+        ss_arg_2 >> f_arg_2;
+        
+        Serial.println(f_data_length);
+        Serial.println(f_opcode);
+        Serial.println(f_arg_1);
+        Serial.println(f_arg_2);
+
+    } 
 }
 
-void RockblockControlTask::dispatch_process_argument(){
-    if(Serial4.read() == constants::ascii::exclamation){
-        sfr::rockblock::argument[0] = (char)Serial4.read();
-        sfr::rockblock::argument[1] = (char)Serial4.read();
-        Serial.println(sfr::rockblock::argument[0]);
-        Serial.println(sfr::rockblock::argument[1]);
-        sfr::rockblock::waiting_command = true;
-        transition_to(rockblock_mode_type::standby); 
-    } 
-    
-    
-}
 
 void RockblockControlTask::transition_to(rockblock_mode_type new_mode){
     sfr::rockblock::mode = new_mode;
