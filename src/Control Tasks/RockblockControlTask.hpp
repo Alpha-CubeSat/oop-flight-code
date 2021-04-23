@@ -5,11 +5,11 @@
 #include "constants.hpp"
 #include <iostream>
 #include <string>
+#include "Control Tasks/TimedControlTask.hpp"
 
-
-class RockblockControlTask{
+class RockblockControlTask : public TimedControlTask<void>{
     public:
-        RockblockControlTask();
+        RockblockControlTask(unsigned int offset);
         void execute();
     private:
         void handle_command(int opcode, int argument);

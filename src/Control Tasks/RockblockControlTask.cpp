@@ -2,7 +2,7 @@
 #include <sstream>
 
 #ifndef GIT
-RockblockControlTask::RockblockControlTask(){
+RockblockControlTask::RockblockControlTask(unsigned int offset): TimedControlTask<void>(offset){
     Serial4.begin(constants::rockblock::baud);
 }
 

@@ -1,6 +1,6 @@
 #include "BurnwireControlTask.hpp"
 
-BurnwireControlTask::BurnwireControlTask(){
+BurnwireControlTask::BurnwireControlTask(unsigned int offset): TimedControlTask<void>(offset){
     pinMode(constants::burnwire::first_pin, OUTPUT);
     pinMode(constants::burnwire::second_pin, OUTPUT);
 }

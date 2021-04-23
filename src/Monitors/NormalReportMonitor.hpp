@@ -3,10 +3,11 @@
 
 #include "sfr.hpp"
 #include "constants.hpp"
+#include "Control Tasks/TimedControlTask.hpp"
 
-class NormalReportMonitor{
+class NormalReportMonitor : public TimedControlTask<void>{
     public:
-        NormalReportMonitor();
+        NormalReportMonitor(unsigned int offset);
         void execute();
 };
 

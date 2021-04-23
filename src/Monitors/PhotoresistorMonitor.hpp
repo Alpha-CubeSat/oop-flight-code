@@ -3,10 +3,11 @@
 
 #include "sfr.hpp"
 #include "constants.hpp"
+#include "Control Tasks/TimedControlTask.hpp"
 
-class PhotoresistorMonitor{
+class PhotoresistorMonitor : public TimedControlTask<void>{
     public:
-        PhotoresistorMonitor();
+        PhotoresistorMonitor(unsigned int offset);
         void execute();
 };
 

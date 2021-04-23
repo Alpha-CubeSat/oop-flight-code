@@ -1,6 +1,6 @@
 #include "CommandMonitor.hpp"
 
-CommandMonitor::CommandMonitor(){}
+CommandMonitor::CommandMonitor(unsigned int offset): TimedControlTask<void>(offset){}
 
 void CommandMonitor::execute(){
     /*if(sfr::rockblock::waiting_command){

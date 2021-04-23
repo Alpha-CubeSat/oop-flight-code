@@ -3,10 +3,11 @@
 
 #include "sfr.hpp"
 #include "constants.hpp"
+#include "Control Tasks/TimedControlTask.hpp"
 
-class MissionManager{
+class MissionManager : public TimedControlTask<void>{
     public:
-        MissionManager();
+        MissionManager(unsigned int offset);
         void execute();
         void dispatch_standby();
         void dispatch_safe();

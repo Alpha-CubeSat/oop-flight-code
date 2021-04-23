@@ -1,6 +1,6 @@
 #include "MissionManager.hpp"
 
-MissionManager::MissionManager(){}
+MissionManager::MissionManager(unsigned int offset): TimedControlTask<void>(offset){}
 
 void MissionManager::execute(){
     mission_mode_type mode = sfr::mission::mode;

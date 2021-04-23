@@ -27,6 +27,21 @@
         "ostream": "cpp",
         "sstream": "cpp",
         "stdexcept": "cpp",
-        "streambuf": "cpp"
+        "streambuf": "cpp",
+        "array": "cpp",
+        "atomic": "cpp",
+        "chrono": "cpp",
+        "cstring": "cpp",
+        "ctime": "cpp",
+        "unordered_map": "cpp",
+        "unordered_set": "cpp",
+        "vector": "cpp",
+        "functional": "cpp",
+        "ratio": "cpp",
+        "tuple": "cpp",
+        "fstream": "cpp",
+        "iomanip": "cpp",
+        "iostream": "cpp",
+        "thread": "cpp"
     }
 }

@@ -1,6 +1,6 @@
 #include "FaultMonitor.hpp"
 
-FaultMonitor::FaultMonitor(){}
+FaultMonitor::FaultMonitor(unsigned int offset): TimedControlTask<void>(offset){}
 
 void FaultMonitor::execute(){
 

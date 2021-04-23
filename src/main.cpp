@@ -1,5 +1,4 @@
 #include "MainControlLoop.hpp"
-#include "sfr.hpp"
 
 MainControlLoop mcl;
 

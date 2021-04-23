@@ -7,13 +7,13 @@
 #endif
 
 #include "sfr.hpp"
-#include "constants.hpp"
+#include "Control Tasks/TimedControlTask.hpp"
 
-class CameraControlTask
+class CameraControlTask : public TimedControlTask<void>
 {
 
 public:
-    CameraControlTask();
+    CameraControlTask(unsigned int offset);
     void execute();
 #ifndef GIT
     Adafruit_VC0706 adaCam;

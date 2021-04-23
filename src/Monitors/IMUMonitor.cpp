@@ -1,7 +1,8 @@
 #include "IMUMonitor.hpp"
 
 #ifndef GIT
-IMUMonitor::IMUMonitor(){
+IMUMonitor::IMUMonitor(unsigned int offset)
+    : TimedControlTask<void>(offset){
     imu.begin();
     if (!imu.begin()){
         //sfr::rockblock::fault_report[constants::fault::imu_begin] = 1;
