@@ -4,11 +4,12 @@
 #include "sfr.hpp"
 #include "constants.hpp"
 #include <SD.h>
+#include "Control Tasks/TimedControlTask.hpp"
 
-class CameraReportMonitor
+class CameraReportMonitor : public TimedControlTask<void>
 {
 public:
-    CameraReportMonitor();
+    CameraReportMonitor(unsigned int offset);
     void execute();
     File imgFile;
 };

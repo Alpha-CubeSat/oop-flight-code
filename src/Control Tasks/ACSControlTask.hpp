@@ -3,10 +3,11 @@
 
 #include "sfr.hpp"
 #include "constants.hpp"
+#include "Control Tasks/TimedControlTask.hpp"
 
-class ACSControlTask{
+class ACSControlTask : public TimedControlTask<void>{
     public:
-        ACSControlTask();
+        ACSControlTask(unsigned int offset);
         void execute();
     private:
         void ACSWrite(int torqorder, int current, int out1, int out2, int PWMpin);

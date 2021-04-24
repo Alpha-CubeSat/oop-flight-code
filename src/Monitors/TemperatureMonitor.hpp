@@ -3,10 +3,11 @@
 
 #include "sfr.hpp"
 #include "constants.hpp"
+#include "Control Tasks/TimedControlTask.hpp"
 
-class TemperatureMonitor{
+class TemperatureMonitor : public TimedControlTask<void>{
     public:
-        TemperatureMonitor();
+        TemperatureMonitor(unsigned int offset);
         void execute();
 };
 

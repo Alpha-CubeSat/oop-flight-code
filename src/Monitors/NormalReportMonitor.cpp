@@ -1,6 +1,6 @@
 #include "NormalReportMonitor.hpp"
 
-NormalReportMonitor::NormalReportMonitor(){}
+NormalReportMonitor::NormalReportMonitor(unsigned int offset): TimedControlTask<void>(offset){}
 
 void NormalReportMonitor::execute(){
     uint8_t mag_x = map(sfr::imu::mag_x, constants::imu::min_mag_x, constants::imu::max_mag_x, 0, 255);

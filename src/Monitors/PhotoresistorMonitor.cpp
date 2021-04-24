@@ -1,6 +1,6 @@
 #include "PhotoresistorMonitor.hpp"
 
-PhotoresistorMonitor::PhotoresistorMonitor(){}
+PhotoresistorMonitor::PhotoresistorMonitor(unsigned int offset): TimedControlTask<void>(offset){}
 
 void PhotoresistorMonitor::execute(){
     if(analogRead(constants::photoresistor::pin) > constants::photoresistor::light_val){

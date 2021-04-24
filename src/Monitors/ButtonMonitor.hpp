@@ -3,10 +3,11 @@
 
 #include "sfr.hpp"
 #include "constants.hpp"
+#include "Control Tasks/TimedControlTask.hpp"
 
-class ButtonMonitor{
+class ButtonMonitor : public TimedControlTask<void>{
     public:
-        ButtonMonitor();
+        ButtonMonitor(unsigned int offset);
         void execute();
 };
 

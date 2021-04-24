@@ -3,10 +3,11 @@
 
 #include "sfr.hpp"
 #include "constants.hpp"
+#include "Control Tasks/TimedControlTask.hpp"
 
-class FaultMonitor{
+class FaultMonitor : public TimedControlTask<void>{
     public:
-        FaultMonitor();
+        FaultMonitor(unsigned int offset);
         void execute();
 };
 

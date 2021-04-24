@@ -3,10 +3,11 @@
 
 #include "sfr.hpp"
 #include "constants.hpp"
+#include "Control Tasks/TimedControlTask.hpp"
 
-class BurnwireControlTask{
+class BurnwireControlTask : public TimedControlTask<void>{
     public:
-        BurnwireControlTask();
+        BurnwireControlTask(unsigned int offset);
         void execute();
         void dispatch_burn();
 };

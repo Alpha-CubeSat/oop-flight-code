@@ -1,6 +1,6 @@
 #include "ACSControlTask.hpp"
 
-ACSControlTask::ACSControlTask(){
+ACSControlTask::ACSControlTask(unsigned int offset): TimedControlTask<void>(offset){
     //H-bridge standby pins
     pinMode(constants::acs::STBYpin, OUTPUT);  
     pinMode(constants::acs::STBZpin, OUTPUT);

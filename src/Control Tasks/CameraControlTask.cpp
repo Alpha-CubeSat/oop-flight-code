@@ -1,7 +1,7 @@
 #include "CameraControlTask.hpp"
 
 #ifndef GIT
-CameraControlTask::CameraControlTask() : adaCam(&Serial5)
+CameraControlTask::CameraControlTask(unsigned int offset): TimedControlTask<void>(offset), adaCam(&Serial5)
 {
     //Fault check for SD card
     if (!SD.begin(254))

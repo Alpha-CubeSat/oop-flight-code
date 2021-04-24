@@ -2,7 +2,6 @@
 #define MAIN_CONTROL_LOOP_HPP_
 
 #include "sfr.hpp"
-#include "constants.hpp"
 #include "Control Tasks/ACSControlTask.hpp"
 #include "Monitors/ACSMonitor.hpp"
 #include "Monitors/BatteryMonitor.hpp"
@@ -17,10 +16,14 @@
 #include "Control Tasks/RockblockControlTask.hpp"
 #include "Monitors/TemperatureMonitor.hpp"
 #include "Monitors/CameraReportMonitor.hpp"
+#include "Control Tasks/ClockManager.hpp"
 
-class MainControlLoop
+class MainControlLoop : ControlTask<void>
 {
 protected:
+    
+    ClockManager clock_manager;
+
     ACSMonitor acs_monitor;
     BatteryMonitor battery_monitor;
     ButtonMonitor button_monitor;
@@ -41,7 +44,7 @@ protected:
 
 public:
     MainControlLoop();
-    void execute();
+    void execute() override;
 };
 
 #endif

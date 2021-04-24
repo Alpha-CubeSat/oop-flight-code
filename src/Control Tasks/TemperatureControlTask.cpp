@@ -1,6 +1,6 @@
 #include "TemperatureControlTask.hpp"
 
-TemperatureControlTask::TemperatureControlTask(){}
+TemperatureControlTask::TemperatureControlTask(unsigned int offset): TimedControlTask<void>(offset){}
         
 
 void TemperatureControlTask::execute(){   
