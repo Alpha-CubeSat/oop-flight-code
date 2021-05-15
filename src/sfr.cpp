@@ -19,8 +19,8 @@ namespace sfr
     }
     namespace camera
     {
-        bool take_photo = true;
-        bool turn_on = true;
+        bool take_photo = false;
+        bool turn_on = false;
         bool turn_off = false;
         bool powered = false;
         uint8_t buffer[255] = {0};
