@@ -61,6 +61,7 @@ void IMUMonitor::execute(){
     sfr::imu::acc_z = accel.acceleration.z;
 }
 #else
-IMUMonitor::IMUMonitor(){}
+IMUMonitor::IMUMonitor(unsigned int offset)
+    : TimedControlTask<void>(offset){}
 void IMUMonitor::execute(){}
 #endif
