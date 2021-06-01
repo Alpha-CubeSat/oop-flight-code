@@ -38,6 +38,7 @@ namespace sfr
         bool camera_failed = false;
         bool full_image_written = false;
         bool report_downlinked = true;
+        HardwareSerial serial = Serial5;
     }
     namespace rockblock
     {
@@ -52,6 +53,7 @@ namespace sfr
         unsigned char opcode[2] = {0};
         unsigned char arg_1[4] = {0};
         unsigned char arg_2[4] = {0};
+        HardwareSerial serial = Serial1;
 
 
         int num_iter = 0;

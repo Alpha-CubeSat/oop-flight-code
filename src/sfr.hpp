@@ -8,16 +8,16 @@
 #include "Modes/burnwire_mode_type.enum"
 #include "Modes/temp_mode_type.enum"
 #include "Modes/fault_mode_type.enum"
+#include "Control Tasks/TimedControlTask.hpp"
 #include "constants.hpp"
 #include "MissionManager.hpp"
-#include "Control Tasks/TimedControlTask.hpp"
 #include <SD.h>
 #include <Adafruit_VC0706.h>
-#include <iostream>
-#include <string>
 #include <StarshotACS0.h>
 #include <Adafruit_LSM9DS1.h>
-
+#include <iostream>
+#include <string>
+#include <sstream>
 
 namespace sfr
 {
@@ -57,6 +57,7 @@ namespace sfr
         extern bool camera_failed;
         extern bool full_image_written;
         extern bool report_downlinked;
+        extern HardwareSerial serial;
     }
     namespace rockblock
     {
@@ -71,10 +72,9 @@ namespace sfr
         extern unsigned char opcode[2];
         extern unsigned char arg_1[4];
         extern unsigned char arg_2[4];
-
-
         extern int num_iter;
         extern bool waiting_command;
+        extern HardwareSerial serial;
     }
     namespace imu
     {

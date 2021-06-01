@@ -5,13 +5,13 @@ namespace constants
 {
     namespace photoresistor
     {
-        constexpr int pin = 22;
+        constexpr int pin = 17;
         constexpr int light_val = 0;
     }
     namespace burnwire
     {
-        constexpr int first_pin = 35;
-        constexpr int second_pin = 0;
+        constexpr int first_pin = 37;
+        constexpr int second_pin = 35;
         constexpr int burn_time = 500;
         constexpr int burn_wait = 1000;
         constexpr int max_attempts = 10;
@@ -36,24 +36,26 @@ namespace constants
     }
     namespace acs
     {
-        constexpr int yout1 = 5;
-        constexpr int yout2 = 6;
-        constexpr int zout1 = 9;
-        constexpr int zout2 = 10;
-        constexpr int xout1 = 7;
-        constexpr int xout2 = 8;
         constexpr int xPWMpin = 2;
         constexpr int yPWMpin = 3;
         constexpr int zPWMpin = 4;
-        constexpr int STBYpin = 21;
+
+        constexpr int yout1 = 5;
+        constexpr int yout2 = 6;
+
+        constexpr int xout1 = 7;
+        constexpr int xout2 = 8;
+
+        constexpr int zout1 = 9;
+        constexpr int zout2 = 10;
+
+        constexpr int STBXYpin = 21;
         constexpr int STBZpin = 20;
-        constexpr int xtorqorder = 1;
-        constexpr int ytorqorder = 1;
-        constexpr int ztorqorder = 1;
     }
     namespace battery
     {
-        constexpr int pin = 32;
+        constexpr int voltage_value_pin = 32;
+        constexpr int allow_measurement_pin = 36;
     }
     namespace fault
     {
@@ -82,10 +84,12 @@ namespace constants
     {
         //Power Control Pin
         constexpr int power_on_pin = 24;
+        
     }
     namespace button
     {
-        constexpr int button_pin = 13;
+        //low when door is opened
+        constexpr int button_pin = 31;
     }
     namespace imu
     {
@@ -114,6 +118,9 @@ namespace constants
         constexpr float max_acc_y = 0.0;
         constexpr float min_acc_z = 0.0;
         constexpr float max_acc_z = 0.0;
+
+        constexpr int SCL = 19;
+        constexpr int SDA = 18;
     }
     namespace timecontrol{
         // Environment-based initializations of the control loop time.

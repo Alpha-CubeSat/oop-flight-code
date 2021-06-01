@@ -1,6 +1,6 @@
 #include "CameraControlTask.hpp"
 
-CameraControlTask::CameraControlTask(unsigned int offset): TimedControlTask<void>(offset), adaCam(&Serial5)
+CameraControlTask::CameraControlTask(unsigned int offset): TimedControlTask<void>(offset), adaCam(&sfr::camera::serial)
 {
     //Fault check for SD card
     if (!SD.begin(254))
