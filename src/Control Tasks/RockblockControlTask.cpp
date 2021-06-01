@@ -24,6 +24,14 @@ void RockblockControlTask::execute(){
             Serial.println("await_at");
             dispatch_await_at();
             break;
+        case rockblock_mode_type::send_signal_strength:
+            Serial.println("send_signal_strength");
+            dispatch_send_signal_strength();
+            break;
+        case rockblock_mode_type::await_signal_strength:
+            // Serial.println("await_signal_strength");
+            dispatch_await_signal_strength();
+            break;
         case rockblock_mode_type::send_flow_control:
             Serial.println("send_flow_control");
             dispatch_send_flow_control();
@@ -72,6 +80,10 @@ void RockblockControlTask::execute(){
             Serial.println("process_command");
             dispatch_process_command();
             break;
+        case rockblock_mode_type::end_transmission:
+            Serial.println("end_transmission");
+            dispatch_end_transmission();
+            break;
     }
 }
 
@@ -84,9 +96,9 @@ bool RockblockControlTask::check_ready(){
 }
 
 void RockblockControlTask::dispatch_standby(){
-    /*if(sfr::rockblock::waiting_message || check_ready()){
+    if(sfr::rockblock::waiting_message || check_ready()){
         transition_to(rockblock_mode_type::send_at);
-    }*/
+    }
     transition_to(rockblock_mode_type::send_at);
 }
 
@@ -97,7 +109,25 @@ void RockblockControlTask::dispatch_send_at(){
 
 void RockblockControlTask::dispatch_await_at(){
     if(Serial4.read()=='K'){
-        transition_to(rockblock_mode_type::send_flow_control);
+        transition_to(rockblock_mode_type::send_signal_strength);
+    }
+}
+
+void RockblockControlTask::dispatch_send_signal_strength(){
+    Serial4.print("AT+CSQ\r");
+    transition_to(rockblock_mode_type::await_signal_strength);
+}
+
+void RockblockControlTask::dispatch_await_signal_strength(){
+    if(Serial4.read()==':'){
+        char signal = Serial4.read();
+        Serial.print("SIGNAL: ");
+        Serial.println(signal);
+        if(signal =='3' || signal =='4' || signal =='5'){
+            transition_to(rockblock_mode_type::send_flow_control);
+        } else{
+            transition_to(rockblock_mode_type::send_signal_strength);
+        }
     }
 }
 
@@ -203,7 +233,7 @@ void RockblockControlTask::dispatch_process_mt_status(){
             break;
         case '0':
             Serial.println("there were no messages to retrieve");
-            transition_to(rockblock_mode_type::standby);
+            transition_to(rockblock_mode_type::end_transmission);
             break;
     }              
 }
@@ -214,7 +244,7 @@ void RockblockControlTask::dispatch_read_message(){
 }
 
 void RockblockControlTask::dispatch_process_command(){
-    if(Serial4.read() == 'S' && Serial4.read() == 'B' && Serial4.read() == 'D' && Serial4.read() == 'R' && Serial4.read() == 'B'){
+    if(Serial4.read() == 'B'){
         Serial.println("entered if");
         Serial4.read();
         Serial4.read();
@@ -277,7 +307,16 @@ void RockblockControlTask::dispatch_process_command(){
         Serial.println(f_arg_1);
         Serial.println(f_arg_2);
 
+        sfr::rockblock::waiting_command = true;
+
+        transition_to(rockblock_mode_type::end_transmission);
+
     } 
+}
+
+void RockblockControlTask::dispatch_end_transmission(){
+    sfr::rockblock::last_downlink = millis();
+    transition_to(rockblock_mode_type::standby);
 }
 
 void RockblockControlTask::transition_to(rockblock_mode_type new_mode){

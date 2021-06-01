@@ -13,6 +13,8 @@ class RockblockControlTask : public TimedControlTask<void>{
         void dispatch_standby();
         void dispatch_send_at();
         void dispatch_await_at();
+        void dispatch_send_signal_strength();
+        void dispatch_await_signal_strength();
         void dispatch_send_flow_control();
         void dispatch_await_flow_control();
         void dispatch_send_message_length();
@@ -25,6 +27,7 @@ class RockblockControlTask : public TimedControlTask<void>{
         void dispatch_process_mt_status();
         void dispatch_read_message();
         void dispatch_process_command();
+        void dispatch_end_transmission();
         void transition_to(rockblock_mode_type new_mode);
         
         

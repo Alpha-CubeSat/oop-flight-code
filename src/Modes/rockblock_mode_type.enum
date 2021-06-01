@@ -5,6 +5,8 @@ enum class rockblock_mode_type: unsigned char {
     standby=0,
     send_at,
     await_at,
+    send_signal_strength,
+    await_signal_strength,
     send_flow_control,
     await_flow_control,
     send_message_length,
@@ -16,6 +18,7 @@ enum class rockblock_mode_type: unsigned char {
     process_mo_status,
     process_mt_status,
     read_message,
-    process_command};
+    process_command,
+    end_transmission};
 
 #endif
