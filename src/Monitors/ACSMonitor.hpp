@@ -2,9 +2,6 @@
 #define ACS_MONITOR_HPP_
 
 #include "sfr.hpp"
-#include "constants.hpp"
-#include <StarshotACS0.h>
-#include "Control Tasks/TimedControlTask.hpp"
 
 class ACSMonitor : public TimedControlTask<void>{
     public:

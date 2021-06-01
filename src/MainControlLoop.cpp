@@ -24,7 +24,7 @@ rockblock_control_task(constants::timecontrol::rockblock_control_task_offset)
 void MainControlLoop::execute()
 {
 
-    clock_manager.execute();
+    /*clock_manager.execute();
     //Serial.println("CLOCK MANAGER EXECUTED")
 
     acs_monitor.execute_on_time();
@@ -57,5 +57,7 @@ void MainControlLoop::execute()
     //camera_control_task.execute_on_time();
     //Serial.println("CAMERA CONTROL TASK EXECUTED");
     rockblock_control_task.execute_on_time();
-    //Serial.println("ROCKBLOCK CONTROL EXECUTED");
+    //Serial.println("ROCKBLOCK CONTROL EXECUTED");*/
+
+    rockblock_control_task.execute();
 }

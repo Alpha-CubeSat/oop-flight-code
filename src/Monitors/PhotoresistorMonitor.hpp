@@ -2,8 +2,6 @@
 #define PHOTORESISTOR_MONITOR_HPP_
 
 #include "sfr.hpp"
-#include "constants.hpp"
-#include "Control Tasks/TimedControlTask.hpp"
 
 class PhotoresistorMonitor : public TimedControlTask<void>{
     public:

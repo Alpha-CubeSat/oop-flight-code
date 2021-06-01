@@ -10,6 +10,14 @@
 #include "Modes/fault_mode_type.enum"
 #include "constants.hpp"
 #include "MissionManager.hpp"
+#include "Control Tasks/TimedControlTask.hpp"
+#include <SD.h>
+#include <Adafruit_VC0706.h>
+#include <iostream>
+#include <string>
+#include <StarshotACS0.h>
+#include <Adafruit_LSM9DS1.h>
+
 
 namespace sfr
 {

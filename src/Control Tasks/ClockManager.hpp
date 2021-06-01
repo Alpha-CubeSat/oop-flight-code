@@ -1,8 +1,7 @@
 #ifndef CLOCK_MANAGER_HPP_
 #define CLOCK_MANAGER_HPP_
 
-#include "TimedControlTask.hpp"
-
+#include "sfr.hpp"
 
 class ClockManager : public TimedControlTask<void> {
    public:

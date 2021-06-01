@@ -1,6 +1,5 @@
 #include "IMUMonitor.hpp"
 
-#ifndef GIT
 IMUMonitor::IMUMonitor(unsigned int offset)
     : TimedControlTask<void>(offset){
     imu.begin();
@@ -60,8 +59,3 @@ void IMUMonitor::execute(){
     sfr::imu::acc_y = accel.acceleration.y;
     sfr::imu::acc_z = accel.acceleration.z;
 }
-#else
-IMUMonitor::IMUMonitor(unsigned int offset)
-    : TimedControlTask<void>(offset){}
-void IMUMonitor::execute(){}
-#endif

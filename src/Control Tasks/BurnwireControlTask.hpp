@@ -2,8 +2,6 @@
 #define BURNWIRE_CONTROL_TASK_HPP_
 
 #include "sfr.hpp"
-#include "constants.hpp"
-#include "Control Tasks/TimedControlTask.hpp"
 
 class BurnwireControlTask : public TimedControlTask<void>{
     public:
