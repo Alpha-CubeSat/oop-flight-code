@@ -1,3 +1,5 @@
+//Taken from Cornell's PAN
+
 #include "ClockManager.hpp"
 
 ClockManager::ClockManager(const unsigned int _control_cycle_size) :

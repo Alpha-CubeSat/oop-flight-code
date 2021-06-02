@@ -1,3 +1,5 @@
+//Taken from Cornell's PAN
+
 #ifndef CLOCK_MANAGER_HPP_
 #define CLOCK_MANAGER_HPP_
 

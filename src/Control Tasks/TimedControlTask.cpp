@@ -1,3 +1,5 @@
+//Taken from Cornell's PAN
+
 #include "TimedControlTask.hpp"
 
 sys_time_t TimedControlTaskBase::control_cycle_start_time;
