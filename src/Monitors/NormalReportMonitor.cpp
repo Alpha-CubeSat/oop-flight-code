@@ -11,13 +11,36 @@ void NormalReportMonitor::execute(){
 
     Serial.println("--------------------MISSION-------------------------");
     Serial.print("mode: ");
-    Serial.println((int)sfr::mission::mode);
+    switch((int)sfr::mission::mode){
+        case 0:
+            Serial.println("low_power");
+            break;
+        case 1:
+            Serial.println("deployment");
+            break;
+        case 2:
+            Serial.println("standby");
+            break;
+        case 3:
+            Serial.println("safe");
+            break;
+    }
 
     Serial.println("-------------------BURNWIRE-------------------------");
     Serial.print("fire: ");
     Serial.println(sfr::burnwire::fire);
     Serial.print("mode: ");
-    Serial.println((int)sfr::burnwire::mode);
+    switch((int)sfr::burnwire::mode){
+        case 0:
+            Serial.println("standby");
+            break;
+        case 1:
+            Serial.println("burn");
+            break;
+        case 2:
+            Serial.println("delay");
+            break;
+    }
     Serial.print("attempts: ");
     Serial.println(sfr::burnwire::attempts);
     Serial.print("start_time: ");
@@ -65,7 +88,62 @@ void NormalReportMonitor::execute(){
     Serial.print("downlink_period: ");
     Serial.println(sfr::rockblock::downlink_period);
     Serial.print("mode: ");
-    Serial.println((int)sfr::rockblock::mode);
+    switch((int)sfr::rockblock::mode){
+        case 0:
+            Serial.println("standby");
+            break;
+        case 1:
+            Serial.println("send_at");
+            break;
+        case 2:
+            Serial.println("await_at");
+            break;
+        case 3:
+            Serial.println("send_signal_strength");
+            break;
+        case 4:
+            Serial.println("await_signal_strength");
+            break;
+        case 5:
+            Serial.println("send_flow_control");
+            break;
+        case 6:
+            Serial.println("await_flow_control");
+            break;
+        case 7:
+            Serial.println("send_message_length");
+            break;
+        case 8:
+            Serial.println("await_message_length");
+            break;
+        case 9:
+            Serial.println("send_message");
+            break;
+        case 10:
+            Serial.println("await_message");
+            break;
+        case 11:
+            Serial.println("send_response");
+            break;
+        case 12:
+            Serial.println("create_buffer");
+            break;
+        case 13:
+            Serial.println("process_mo_status");
+            break;
+        case 14:
+            Serial.println("process_mt_status");
+            break;
+        case 15:
+            Serial.println("read_message");
+            break;
+        case 16:
+            Serial.println("process_command");
+            break;
+        case 17:
+            Serial.println("end_transmission");
+            break;
+    }
     Serial.print("waiting_message: ");
     Serial.println(sfr::rockblock::waiting_message);
     Serial.print("num_iter: ");
@@ -83,37 +161,44 @@ void NormalReportMonitor::execute(){
 
     Serial.println("----------------------IMU----------------------------");
     Serial.print("mag_x: ");
-    Serial.println((int)sfr::imu::mag_x);
+    Serial.println(sfr::imu::mag_x);
     Serial.print("mag_y: ");
-    Serial.println((int)sfr::imu::mag_y);
+    Serial.println(sfr::imu::mag_y);
     Serial.print("mag_z: ");
-    Serial.println((int)sfr::imu::mag_z);
+    Serial.println(sfr::imu::mag_z);
     Serial.print("gyro_x: ");
-    Serial.println((int)sfr::imu::gyro_x);
+    Serial.println(sfr::imu::gyro_x);
     Serial.print("gyro_y: ");
-    Serial.println((int)sfr::imu::gyro_y);
+    Serial.println(sfr::imu::gyro_y);
     Serial.print("gyro_z: ");
-    Serial.println((int)sfr::imu::gyro_z);
+    Serial.println(sfr::imu::gyro_z);
     Serial.print("acc_x: ");
-    Serial.println((int)sfr::imu::acc_x);
+    Serial.println(sfr::imu::acc_x);
     Serial.print("acc_y: ");
-    Serial.println((int)sfr::imu::acc_y);
+    Serial.println(sfr::imu::acc_y);
     Serial.print("acc_z: ");
-    Serial.println((int)sfr::imu::acc_z);
+    Serial.println(sfr::imu::acc_z);
 
     Serial.println("------------------TEMPERATURE-----------------------");
     Serial.print("temp_c: ");
-    Serial.println((int)sfr::temperature::temp_c);
+    Serial.println(sfr::temperature::temp_c);
     Serial.print("mode: ");
-    Serial.println((int)sfr::temperature::mode);
+    switch((int)sfr::temperature::mode){
+        case 0:
+            Serial.println("inactive");
+            break;
+        case 1:
+            Serial.println("active");
+            break;
+    }
 
     Serial.println("--------------------CURRENT-----------------------");
     Serial.print("solar_current: ");
-    Serial.println((int)sfr::current::solar_current);
+    Serial.println(sfr::current::solar_current);
 
     Serial.println("--------------------BATTERY-----------------------");
     Serial.print("voltage: ");
-    Serial.println((int)sfr::battery::voltage);
+    Serial.println(sfr::battery::voltage);
 
     Serial.println("--------------------BUTTON-----------------------");
     Serial.print("pressed: ");

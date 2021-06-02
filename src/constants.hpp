@@ -133,24 +133,24 @@ namespace constants
 
         // Control cycle time offsets, in microseconds 
         static constexpr unsigned int acs_monitor_offset = 0;
-        static constexpr unsigned int battery_monitor_offset = 1000000;
-        static constexpr unsigned int button_monitor_offset = 2000000;
-        static constexpr unsigned int camera_report_monitor_offset = 3000000;
-        static constexpr unsigned int command_monitor_offset = 4000000;
-        static constexpr unsigned int current_monitor_offset = 5000000;
-        static constexpr unsigned int fault_monitor_offset = 6000000;
-        static constexpr unsigned int imu_monitor_offset = 7000000;
-        static constexpr unsigned int normal_report_monitor_offset = 8000000;
-        static constexpr unsigned int photoresistor_monitor_offset = 9000000;
-        static constexpr unsigned int temperature_monitor_offset = 10000000;
+        static constexpr unsigned int battery_monitor_offset = 1*30000;
+        static constexpr unsigned int button_monitor_offset = 2*30000;
+        static constexpr unsigned int camera_report_monitor_offset = 3*30000;
+        static constexpr unsigned int command_monitor_offset = 4*30000;
+        static constexpr unsigned int current_monitor_offset = 5*30000;
+        static constexpr unsigned int fault_monitor_offset = 6*30000;
+        static constexpr unsigned int imu_monitor_offset = 7*30000;
+        static constexpr unsigned int normal_report_monitor_offset = 8*30000;
+        static constexpr unsigned int photoresistor_monitor_offset = 9*30000;
+        static constexpr unsigned int temperature_monitor_offset = 10*30000;
         
-        static constexpr unsigned int acs_control_task_offset = 11000000;
-        static constexpr unsigned int burnwire_control_task_offset = 12000000;
-        static constexpr unsigned int camera_control_task_offset = 13000000;
-        static constexpr unsigned int rockblock_control_task_offset = 14000000;
-        static constexpr unsigned int temperature_control_task_offset = 15000000;
+        static constexpr unsigned int acs_control_task_offset = 11*30000;
+        static constexpr unsigned int burnwire_control_task_offset = 12*30000;
+        static constexpr unsigned int camera_control_task_offset = 13*30000;
+        static constexpr unsigned int rockblock_control_task_offset = 14*30000;
+        static constexpr unsigned int temperature_control_task_offset = 15*30000;
 
-        static constexpr unsigned int mission_manager_offset = 16000000;
+        static constexpr unsigned int mission_manager_offset = 16*30000;
     }
 };
 

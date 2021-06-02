@@ -47,7 +47,7 @@ void MainControlLoop::execute()
     //acs_control_task.execute_on_time();
     burnwire_control_task.execute_on_time();
     camera_control_task.execute_on_time();
-    //rockblock_control_task.execute_on_time();
+    rockblock_control_task.execute_on_time();
     temperature_control_task.execute_on_time();
 
     mission_manager.execute_on_time(); 
