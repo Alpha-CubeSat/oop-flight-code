@@ -1,6 +1,6 @@
-#ifdef UNIT_TEST
 #include <unity.h>
 #include <MissionManager.hpp>
+#include "Monitors/FaultMonitor.hpp"
 void test_valid_initialization(){
     MissionManager mission_manager(0);
     TEST_ASSERT_EQUAL(mission_mode_type::standby, sfr::mission::mode);
@@ -8,10 +8,12 @@ void test_valid_initialization(){
 
 void test_execute(){
     MissionManager mission_manager(0);
+    FaultMonitor fault_monitor(0);
     TEST_ASSERT_EQUAL(mission_mode_type::standby, sfr::mission::mode);
 
-    sfr::fault::is_fault = true;  
+    sfr::fault::fault_1 = sfr::fault::fault_1 | constants::fault::mag_x;  
     mission_manager.execute();
+    fault_monitor.execute();
     TEST_ASSERT_EQUAL(mission_mode_type::safe, sfr::mission::mode);
 
 }
@@ -23,6 +25,12 @@ int test_mission_manager() {
     return UNITY_END();
 }
 
+
+#ifdef DESKTOP
+int main() {
+    return test_mission_manager();
+}
+#else
 #include <Arduino.h>
 void setup() {
     delay(2000);
@@ -31,5 +39,4 @@ void setup() {
 }
 
 void loop() {}
-int main() { int test = 1; return test;}
 #endif

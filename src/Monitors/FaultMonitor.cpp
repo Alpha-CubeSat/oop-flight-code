@@ -5,12 +5,6 @@ FaultMonitor::FaultMonitor(unsigned int offset): TimedControlTask<void>(offset){
 void FaultMonitor::execute(){
 
     if(sfr::fault::mode == fault_mode_type::active){
-
-        sfr::fault::is_fault = false;
-        sfr::fault::fault_1 = 0;
-        sfr::fault::fault_2 = 0;
-        sfr::fault::fault_3 = 0;
-
         //FAULT_1
         if((sfr::imu::mag_x < constants::imu::max_mag_x || sfr::imu::mag_x > constants::imu::min_mag_x) && sfr::fault::check_mag_x){
             sfr::fault::fault_1 = sfr::fault::fault_1 | constants::fault::mag_x;
@@ -52,7 +46,9 @@ void FaultMonitor::execute(){
         }
 
         if(sfr::fault::fault_1 > 0 || sfr::fault::fault_2 > 0 || sfr::fault::fault_3 > 0){
-            sfr::fault::is_fault = true;
+            //transition to standby
+            sfr::mission::mode = mission_mode_type::safe;
+            MissionManager::transition_to_standby();
         }
     }
     

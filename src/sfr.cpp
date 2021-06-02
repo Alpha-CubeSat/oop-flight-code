@@ -93,7 +93,6 @@ namespace sfr
     }
     namespace fault
     {
-        bool is_fault = false;
         fault_mode_type mode = fault_mode_type::active;
 
         unsigned char fault_1 = 0;

@@ -1,6 +1,8 @@
 #include "MissionManager.hpp"
 
-MissionManager::MissionManager(unsigned int offset): TimedControlTask<void>(offset){}
+MissionManager::MissionManager(unsigned int offset): TimedControlTask<void>(offset){
+    transition_to_standby();
+}
 
 void MissionManager::execute(){
     mission_mode_type mode = sfr::mission::mode;

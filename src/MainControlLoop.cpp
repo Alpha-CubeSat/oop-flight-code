@@ -19,10 +19,17 @@ camera_control_task(constants::timecontrol::camera_control_task_offset),
 rockblock_control_task(constants::timecontrol::rockblock_control_task_offset)
 {
     delay(1000);
+   
+
 }
 
 void MainControlLoop::execute()
 {
+
+    sfr::fault::fault_1 = 0;
+    sfr::fault::fault_2 = 0;
+    sfr::fault::fault_3 = 0;
+
 
     /*clock_manager.execute();
     //Serial.println("CLOCK MANAGER EXECUTED")
@@ -59,5 +66,8 @@ void MainControlLoop::execute()
     rockblock_control_task.execute_on_time();
     //Serial.println("ROCKBLOCK CONTROL EXECUTED");*/
 
+    
+    fault_monitor.execute();
+    mission_manager.execute();
     rockblock_control_task.execute();
 }

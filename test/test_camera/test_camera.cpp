@@ -1,4 +1,3 @@
-#ifdef UNIT_TEST
 #include <unity.h>
 #include <Monitors/CameraReportMonitor.hpp>
 #include <Control Tasks/CameraControlTask.hpp>
@@ -64,6 +63,11 @@ int test_camera() {
     return UNITY_END();
 }
 
+#ifdef DESKTOP
+int main() {
+    return test_camera();
+}
+#else
 #include <Arduino.h>
 void setup() {
     delay(2000);
@@ -72,5 +76,4 @@ void setup() {
 }
 
 void loop() {}
-int main() { int test = 1; return test;}
 #endif

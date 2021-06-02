@@ -110,7 +110,6 @@ namespace sfr
     }
     namespace fault
     {
-        extern bool is_fault;
         extern fault_mode_type mode;
 
         extern unsigned char fault_1;
