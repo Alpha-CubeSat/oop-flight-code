@@ -11,6 +11,7 @@
 * Now at the bottom of your screen in the blue toolbar you should see a check, arrow, and serial monitor icon (it looks like an electrical cord). If you do not see the blue toolbar make sure you have the cloned git repo folder open.
 * If you would just like to compile code but not upload to the teensy, press the check.
 * If you would like to upload to the teensy, press the arrow.
+* You can also use `pio run -e debug -t upload` to upload code with debugging print statements, or `pio run -e teensy -t upload` to upload code without debugging print statements.
 * To view the serial monitor press the electrical cord icon.
 
 ## Code Overview

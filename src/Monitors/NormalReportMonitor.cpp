@@ -3,6 +3,8 @@
 NormalReportMonitor::NormalReportMonitor(unsigned int offset): TimedControlTask<void>(offset){}
 
 void NormalReportMonitor::execute(){
+
+    #ifdef PRINT
     Serial.println("-----------------PHOTORESISTOR----------------------");
     Serial.print("covered: ");
     Serial.println(sfr::photoresistor::covered);
@@ -116,6 +118,7 @@ void NormalReportMonitor::execute(){
     Serial.println("--------------------BUTTON-----------------------");
     Serial.print("pressed: ");
     Serial.println(sfr::button::pressed);
+    #endif
     
     uint8_t mag_x = map(sfr::imu::mag_x, constants::imu::min_mag_x, constants::imu::max_mag_x, 0, 255);
     uint8_t mag_y = map(sfr::imu::mag_y, constants::imu::min_mag_y, constants::imu::max_mag_y, 0, 255);
