@@ -306,6 +306,11 @@ void RockblockControlTask::dispatch_process_command(){
         Serial.println(f_arg_1);
         Serial.println(f_arg_2);
 
+        sfr::rockblock::f_data_length = f_data_length;
+        sfr::rockblock::f_opcode = f_opcode;
+        sfr::rockblock::f_arg_1 = f_arg_1;
+        sfr::rockblock::f_arg_2 = f_arg_2;
+        
         sfr::rockblock::waiting_command = true;
 
         transition_to(rockblock_mode_type::end_transmission);

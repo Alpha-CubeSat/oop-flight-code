@@ -54,10 +54,12 @@ namespace sfr
         unsigned char arg_1[4] = {0};
         unsigned char arg_2[4] = {0};
         HardwareSerial serial = Serial1;
-
-
         int num_iter = 0;
         bool waiting_command = false;
+        int f_data_length = 0;
+        int f_opcode = 0;
+        int f_arg_1 = 0;
+        int f_arg_2 = 0;
     }
     namespace imu
     {

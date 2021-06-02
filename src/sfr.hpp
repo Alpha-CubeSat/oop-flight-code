@@ -75,6 +75,10 @@ namespace sfr
         extern int num_iter;
         extern bool waiting_command;
         extern HardwareSerial serial;
+        extern int f_data_length;
+        extern int f_opcode;
+        extern int f_arg_1;
+        extern int f_arg_2;
     }
     namespace imu
     {
