@@ -34,35 +34,21 @@ void MainControlLoop::execute()
 
     //acs_monitor.execute_on_time();
     battery_monitor.execute_on_time();
-    //Serial.println("battery_monitor");
     button_monitor.execute_on_time();
-    //Serial.println("button_monitor");
     camera_report_monitor.execute_on_time();
-    //Serial.println("camera_report_monitor");
     command_monitor.execute_on_time();
-    //Serial.println("command_monitor");
     current_monitor.execute_on_time();
-    //Serial.println("current_monitor");
     fault_monitor.execute_on_time();
-    //Serial.println("fault_monitor");
     imu_monitor.execute_on_time();
-    //Serial.println("imu_monitor");
     normal_report_monitor.execute_on_time();
-    //Serial.println("normal_report_monitor");
     photoresistor_monitor.execute_on_time();
-    //Serial.println("photoresistor_monitor");
     temperature_monitor.execute_on_time();
-    //Serial.println("temperature_monitor");
 
     //acs_control_task.execute_on_time();
     burnwire_control_task.execute_on_time();
-    //Serial.println("burnwire_control_task");
     camera_control_task.execute_on_time();
-    //Serial.println("camera_control_task");
     //rockblock_control_task.execute_on_time();
     temperature_control_task.execute_on_time();
-    //Serial.println("temperature_control_task");
 
     mission_manager.execute_on_time(); 
-    //Serial.println("mission_manager");
 }
