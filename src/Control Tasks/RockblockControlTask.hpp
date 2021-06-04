@@ -29,6 +29,7 @@ class RockblockControlTask : public TimedControlTask<void>{
         void dispatch_process_command();
         void dispatch_end_transmission();
         void transition_to(rockblock_mode_type new_mode);
+        bool valid_command();
         
         
 };

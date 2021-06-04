@@ -11,7 +11,14 @@ void BurnwireControlTask::execute(){
     switch(mode){
         case burnwire_mode_type::standby:
             { 
-                if(sfr::burnwire::fire){
+                if(sfr::burnwire::arm){
+                    sfr::burnwire::mode = burnwire_mode_type::armed;
+                }
+                break;  
+            }
+        case burnwire_mode_type::armed:
+            {
+                if((sfr::burnwire::fire && sfr::current::in_sun && sfr::fault::check_solar_current) || (sfr::burnwire::fire && !sfr::fault::check_solar_current)){
                     sfr::burnwire::start_time = millis();
                     dispatch_burn();
                     sfr::burnwire::mode = burnwire_mode_type::burn;

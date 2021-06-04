@@ -13,6 +13,7 @@ namespace sfr
     namespace burnwire
     {
         bool fire = false;
+        bool arm = false;
         burnwire_mode_type mode = burnwire_mode_type::standby;
         int attempts = 0;
         int start_time = 0;
@@ -49,14 +50,12 @@ namespace sfr
         char buffer[constants::rockblock::buffer_size] = {0};
         uint8_t report[constants::rockblock::packet_size] = {0};
         int commas[constants::rockblock::num_commas] = {0};
-        unsigned char data_length[4] = {0};
         unsigned char opcode[2] = {0};
         unsigned char arg_1[4] = {0};
         unsigned char arg_2[4] = {0};
         HardwareSerial serial = Serial1;
         int num_iter = 0;
         bool waiting_command = false;
-        int f_data_length = 0;
         int f_opcode = 0;
         int f_arg_1 = 0;
         int f_arg_2 = 0;
@@ -81,6 +80,7 @@ namespace sfr
     namespace current
     {
         float solar_current = 0.0;
+        bool in_sun = false;
     }
     namespace acs
     {

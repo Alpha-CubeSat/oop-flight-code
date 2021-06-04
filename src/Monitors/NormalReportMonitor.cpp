@@ -150,8 +150,6 @@ void NormalReportMonitor::execute(){
     Serial.println(sfr::rockblock::num_iter);
     Serial.print("waiting_command: ");
     Serial.println(sfr::rockblock::waiting_command);
-    Serial.print("f_data_length: ");
-    Serial.println(sfr::rockblock::f_data_length);
     Serial.print("f_opcode: ");
     Serial.println(sfr::rockblock::f_opcode);
     Serial.print("f_arg_1: ");

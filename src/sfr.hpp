@@ -32,6 +32,7 @@ namespace sfr
     namespace burnwire
     {
         extern bool fire;
+        extern bool arm;
         extern burnwire_mode_type mode;
         extern int attempts;
         extern int start_time;
@@ -68,14 +69,12 @@ namespace sfr
         extern char buffer[constants::rockblock::buffer_size];
         extern uint8_t report[constants::rockblock::packet_size];
         extern int commas[constants::rockblock::num_commas];
-        extern unsigned char data_length[4];
         extern unsigned char opcode[2];
         extern unsigned char arg_1[4];
         extern unsigned char arg_2[4];
         extern int num_iter;
         extern bool waiting_command;
         extern HardwareSerial serial;
-        extern int f_data_length;
         extern int f_opcode;
         extern int f_arg_1;
         extern int f_arg_2;
@@ -100,6 +99,7 @@ namespace sfr
     namespace current
     {
         extern float solar_current;
+        extern bool in_sun;
     }
     namespace acs
     {

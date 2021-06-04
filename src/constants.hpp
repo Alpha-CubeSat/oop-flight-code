@@ -25,6 +25,8 @@ namespace constants
         constexpr int packet_size = 70;
         constexpr int num_commas = 5;
         constexpr int max_iter = 200;
+        //0A0B0C0D0E0F01020304
+        constexpr int known_commands[19][10] = {{10,11,12,13,14,15,1,2,3,4}};
     }
     namespace temperature
     {
@@ -119,6 +121,7 @@ namespace constants
         constexpr float min_acc_z = 0.0;
         constexpr float max_acc_z = 0.0;
 
+        //TODO: When are these passed in to the driver?
         constexpr int SCL = 19;
         constexpr int SDA = 18;
     }
