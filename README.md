@@ -12,6 +12,7 @@
 * If you would just like to compile code but not upload to the teensy, press the check.
 * If you would like to upload to the teensy, press the arrow.
 * You can also use `pio run -e debug -t upload` to upload code with debugging print statements, or `pio run -e teensy35 -t upload` to upload code without debugging print statements.
+* Use `pio test` to run unit tests.
 * To view the serial monitor press the electrical cord icon.
 
 ## Code Overview
