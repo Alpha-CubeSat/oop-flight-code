@@ -9,6 +9,7 @@
 #include "Modes/temp_mode_type.enum"
 #include "Modes/fault_mode_type.enum"
 #include "Control Tasks/TimedControlTask.hpp"
+#include "Control Tasks/BurnwireControlTask.hpp"
 #include "constants.hpp"
 #include "MissionManager.hpp"
 #include <SD.h>

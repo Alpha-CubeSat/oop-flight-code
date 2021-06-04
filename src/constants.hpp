@@ -15,6 +15,9 @@ namespace constants
         constexpr int burn_time = 500;
         constexpr int burn_wait = 1000;
         constexpr int max_attempts = 10;
+        
+        //2 days in milliseconds
+        constexpr int armed_time = 172800000;
     }
     namespace rockblock
     {

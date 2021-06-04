@@ -8,6 +8,7 @@ class BurnwireControlTask : public TimedControlTask<void>{
         BurnwireControlTask(unsigned int offset);
         void execute();
         void dispatch_burn();
+        static void transition_to_standby();
 };
 
 #endif
