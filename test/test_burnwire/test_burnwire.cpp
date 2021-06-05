@@ -27,7 +27,12 @@ void test_out_of_order_commands(){
 
     sfr::current::in_sun = true;
     burnwire_control_task.execute();
+    TEST_ASSERT_EQUAL(burnwire_mode_type::fire, sfr::burnwire::mode);
+
+    sfr::camera::powered = true;
+    burnwire_control_task.execute();
     TEST_ASSERT_EQUAL(burnwire_mode_type::burn, sfr::burnwire::mode);
+
 
     for(int i=0; i <constants::burnwire::max_attempts; ++i){
         delay(constants::burnwire::burn_time);
@@ -56,6 +61,10 @@ void test_max_attempts(){
 
     sfr::burnwire::fire = true;
     sfr::current::in_sun = true;
+    burnwire_control_task.execute();
+    TEST_ASSERT_EQUAL(burnwire_mode_type::fire, sfr::burnwire::mode);
+
+    sfr::camera::powered = true;
     burnwire_control_task.execute();
     TEST_ASSERT_EQUAL(burnwire_mode_type::burn, sfr::burnwire::mode);
 
@@ -105,6 +114,24 @@ void test_exit_deployment(){
     sfr::burnwire::fire = true;
     sfr::current::in_sun = true;
     burnwire_control_task.execute();
+    TEST_ASSERT_EQUAL(burnwire_mode_type::fire, sfr::burnwire::mode);
+
+    sfr::mission::mode = mission_mode_type::standby;
+    burnwire_control_task.execute();
+    TEST_ASSERT_EQUAL(burnwire_mode_type::standby, sfr::burnwire::mode);
+
+    sfr::burnwire::arm = true;
+    sfr::mission::mode = mission_mode_type::deployment;
+    burnwire_control_task.execute();
+    TEST_ASSERT_EQUAL(burnwire_mode_type::armed, sfr::burnwire::mode);
+
+    sfr::burnwire::fire = true;
+    sfr::current::in_sun = true;
+    burnwire_control_task.execute();
+    TEST_ASSERT_EQUAL(burnwire_mode_type::fire, sfr::burnwire::mode);
+
+    sfr::camera::powered = true;
+    burnwire_control_task.execute();
     TEST_ASSERT_EQUAL(burnwire_mode_type::burn, sfr::burnwire::mode);
 
     sfr::mission::mode = mission_mode_type::standby;
@@ -118,6 +145,10 @@ void test_exit_deployment(){
 
     sfr::burnwire::fire = true;
     sfr::current::in_sun = true;
+    burnwire_control_task.execute();
+    TEST_ASSERT_EQUAL(burnwire_mode_type::fire, sfr::burnwire::mode);
+
+    sfr::camera::powered = true;
     burnwire_control_task.execute();
     TEST_ASSERT_EQUAL(burnwire_mode_type::burn, sfr::burnwire::mode);
 
@@ -147,8 +178,13 @@ void test_sensor(){
     sfr::current::in_sun = true;
     burnwire_control_task.execute();
     mission_manager.execute();
-    TEST_ASSERT_EQUAL(burnwire_mode_type::burn, sfr::burnwire::mode);
+    TEST_ASSERT_EQUAL(burnwire_mode_type::fire, sfr::burnwire::mode);
 
+    sfr::camera::powered = true;
+    burnwire_control_task.execute();
+    mission_manager.execute();
+    TEST_ASSERT_EQUAL(burnwire_mode_type::burn, sfr::burnwire::mode);
+    
     sfr::photoresistor::covered = false;
     burnwire_control_task.execute();
     mission_manager.execute();

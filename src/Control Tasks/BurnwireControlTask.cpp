@@ -27,9 +27,8 @@ void BurnwireControlTask::execute(){
                         transition_to_standby();
                     }
                     if((sfr::burnwire::fire && sfr::current::in_sun && sfr::fault::check_solar_current) || (sfr::burnwire::fire && !sfr::fault::check_solar_current)){
-                        sfr::burnwire::start_time = millis();
-                        dispatch_burn();
-                        sfr::burnwire::mode = burnwire_mode_type::burn;
+                        sfr::burnwire::mode = burnwire_mode_type::fire;
+                        sfr::camera::turn_on = true;
                     }
                     else{
                         digitalWrite(constants::burnwire::first_pin, LOW);
@@ -39,6 +38,19 @@ void BurnwireControlTask::execute(){
                     transition_to_standby();
                 }
                 break;
+            }
+        case burnwire_mode_type::fire:
+            {
+                if(sfr::mission::mode == mission_mode_type::deployment){
+                    if(sfr::camera::powered){
+                        sfr::burnwire::start_time = millis();
+                        dispatch_burn();
+                        sfr::burnwire::mode = burnwire_mode_type::burn;
+                    }
+                } else{
+                    transition_to_standby();
+                }
+            break;
             }
         case burnwire_mode_type::burn:
             {
