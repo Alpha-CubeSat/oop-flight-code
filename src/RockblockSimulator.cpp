@@ -9,50 +9,68 @@ void RockblockSimulator::begin(uint32_t baud) {
 }
 
 int RockblockSimulator::available() {
-    return input.str().size();
+    return output.size();
 }
 
 size_t RockblockSimulator::write(uint8_t c) {
-    input << (char) c;
+    input += (char) c;
     process();
     return 1;
 }
 
 size_t RockblockSimulator::print(const char* s) {
-    input << s;
+    input += s;
     process();
     return strlen(s);
 }
 
 int RockblockSimulator::read() {
-    int c = 0;
+    char c = 0;
     if( available() ) {
-        output >> c;
+        c = output[output.size() - 1];
+        output = output.substr(0, output.size() - 1);
     }
-    return c;
+    return (int) c;
 }
 
+
 void RockblockSimulator::process() {
-    if( input.peek() == '\r' ) {
-        input >> buffer;
-        if( buffer == "AT\r" ) {
-            output << "AT\r\r\nOK\r\n";
-        } else if( buffer == "AT+CSQ\r" ) {
-            // TODO: select signal strength 0->5
-            output << "AT+CSQ\r\r\n+CSQ:0\r\n\r\nOK\r\n";
-        } else if( buffer == "AT&K\r" ) {
-            output << "AT&K0\r\r\nOK\r\n";
-        } else if( buffer == "AT+SBDWB=70\r" ) {
-            output << "AT+SBDWB=70\r\r\nREADY\r\n";
-        } else if( buffer.size() == 73 ) {
-            // TODO: verify checksum?
-            output << "\r\n0\r\n\r\nOK\r\n";
-        } else if( buffer == "AT+SBDIX\r" ) {
+    if( input.back() == '\r' ) {
+        if( input == "AT\r" ) {
+            // OK reply
+            output = "AT\r\r\nOK\r\n";
+        } else if( input == "AT+CSQ\r" ) {
+            // simulating signal strength of 5
+            // OK reply
+            output = "AT+CSQ\r\r\n+CSQ:5\r\n\r\nOK\r\n";
+        } else if( input == "AT&K0\r" ) {
+            // OK reply
+            output = "AT&K0\r\r\nOK\r\n";
+        } else if( input == "AT+SBDWB=70\r" ) {
+            // READY reply
+            output = "AT+SBDWB=70\r\r\nREADY\r\n";
+        } else if( input.size() == 73 ) {
+            // checksum calculation
+            // OK reply
+            uint16_t checksum = 0;
+            for(size_t i = 0; i < 70; i++) {
+                checksum += (uint16_t) input[i];
+            }
+            char b1 = checksum >> 8;
+            char b2 = checksum & 0xFF;
+
+            if(b1 == input[70] && b2 == input[71]) {
+                output = "\r\n0\r\n\r\nOK\r\n";
+            } else {
+                output = "\r\n2\r\n\r\nOK\r\n";
+            }
+        } else if( input == "AT+SBDIX\r" ) {
             // TODO: process MO / MT
             // requires active rockblock for mailbox check
             // https://docs.rockblock.rock7.com/docs/receive-data
-            output << "AT+SBDIX\r";
+            output = "AT+SBDIX\r";
         }
-        buffer.clear();
+        std::reverse( output.begin(), output.end() ); // reverse string for proper extraction
+        input.clear();
     }
 }

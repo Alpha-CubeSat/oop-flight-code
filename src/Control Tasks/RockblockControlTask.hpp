@@ -9,6 +9,9 @@ class RockblockControlTask : public TimedControlTask<void>{
         void execute();
     private:
         void handle_command(int opcode, int argument);
+        std::string read_data();
+        void print_data(std::string s);
+        bool contains(std::string str, std::string test);
         bool check_ready();
         void dispatch_standby();
         void dispatch_send_at();

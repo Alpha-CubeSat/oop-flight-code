@@ -1,7 +1,9 @@
 #ifndef ROCKBLOCK_SIMULATOR_HPP_
 #define ROCKBLOCK_SIMULATOR_HPP_
 
-#include "sfr.hpp"
+#include <sstream>
+#include <cstring>
+#include <algorithm>
 
 class RockblockSimulator {
     public:
@@ -14,9 +16,8 @@ class RockblockSimulator {
     private:
         void process();
         uint32_t baud;
-        std::stringstream input;
-        std::stringstream output;
-        std::string buffer;
+        std::string input;
+        std::string output;
 };
 
 #endif
