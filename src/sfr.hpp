@@ -76,8 +76,8 @@ namespace sfr
         extern unsigned char arg_2[4];
         extern int num_iter;
         extern bool waiting_command;
-        extern HardwareSerial serial;
-        // extern RockblockSimulator serial;
+        // extern HardwareSerial serial;
+        extern RockblockSimulator serial;
         extern int f_opcode;
         extern int f_arg_1;
         extern int f_arg_2;

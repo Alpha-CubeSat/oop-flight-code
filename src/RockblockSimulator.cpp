@@ -65,10 +65,11 @@ void RockblockSimulator::process() {
                 output = "\r\n2\r\n\r\nOK\r\n";
             }
         } else if( input == "AT+SBDIX\r" ) {
-            // TODO: process MO / MT
-            // requires active rockblock for mailbox check
-            // https://docs.rockblock.rock7.com/docs/receive-data
+            // TODO
             output = "AT+SBDIX\r";
+        } else if( input == "AT+SBDRB\r" ) {
+            // TODO
+            output = "AT+SBDRB\r";
         }
         std::reverse( output.begin(), output.end() ); // reverse string for proper extraction
         input.clear();
