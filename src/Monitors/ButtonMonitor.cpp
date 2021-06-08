@@ -8,5 +8,5 @@ void ButtonMonitor::execute(){
         total += digitalRead(constants::button::button_pin);
     }
     float probability = total / constants::sensor::collect;
-    sfr::button::pressed = probability > 0.5; 
+    sfr::button::pressed = probability > constants::sensor::threshold; 
 }

@@ -45,17 +45,35 @@ void IMUMonitor::execute(){
         imu.setupGyro(imu.LSM9DS1_GYROSCALE_2000DPS);
     } 
 
-    imu.getEvent(&accel, &mag, &gyro, &temp);
+    float total_mag_x, total_mag_y, total_mag_z;
+    float total_gyro_x, total_gyro_y, total_gyro_z;
+    float total_acc_x, total_acc_y, total_acc_z;
 
-    sfr::imu::mag_x = mag.magnetic.x;
-    sfr::imu::mag_y = mag.magnetic.y;
-    sfr::imu::mag_z = mag.magnetic.z;
+    for(size_t i = 0; i < constants::sensor::threshold; i++) {
+        imu.getEvent(&accel, &mag, &gyro, &temp);
+        
+        total_mag_x = mag.magnetic.x;
+        total_mag_y = mag.magnetic.y;
+        total_mag_z = mag.magnetic.z;
 
-    sfr::imu::gyro_x = gyro.gyro.x;
-    sfr::imu::gyro_y = gyro.gyro.y;
-    sfr::imu::gyro_z = gyro.gyro.z;
+        total_gyro_x = gyro.gyro.x;
+        total_gyro_y = gyro.gyro.y;
+        total_gyro_z = gyro.gyro.z;
 
-    sfr::imu::acc_x = accel.acceleration.x;
-    sfr::imu::acc_y = accel.acceleration.y;
-    sfr::imu::acc_z = accel.acceleration.z;
+        total_acc_x = accel.acceleration.x;
+        total_acc_y = accel.acceleration.y;
+        total_acc_z = accel.acceleration.z;
+    }
+
+    sfr::imu::mag_x = total_mag_x / constants::sensor::threshold;
+    sfr::imu::mag_y = total_mag_y / constants::sensor::threshold;
+    sfr::imu::mag_z = total_mag_z / constants::sensor::threshold;
+
+    sfr::imu::gyro_x = total_gyro_x / constants::sensor::threshold;
+    sfr::imu::gyro_y = total_gyro_y / constants::sensor::threshold;
+    sfr::imu::gyro_z = total_gyro_z / constants::sensor::threshold;
+
+    sfr::imu::acc_x = total_acc_x / constants::sensor::threshold;
+    sfr::imu::acc_y = total_acc_y / constants::sensor::threshold;
+    sfr::imu::acc_z = total_acc_z / constants::sensor::threshold;
 }

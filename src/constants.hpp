@@ -6,6 +6,7 @@ namespace constants
     namespace sensor
     {
         constexpr int collect = 3;
+        constexpr float threshold = 50 / 100;
     }
     namespace photoresistor
     {
