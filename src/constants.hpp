@@ -3,6 +3,10 @@
 
 namespace constants
 {
+    namespace sensor
+    {
+        constexpr int collect = 3;
+    }
     namespace photoresistor
     {
         constexpr int pin = 17;
