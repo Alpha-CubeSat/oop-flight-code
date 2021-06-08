@@ -45,35 +45,47 @@ void IMUMonitor::execute(){
         imu.setupGyro(imu.LSM9DS1_GYROSCALE_2000DPS);
     } 
 
-    float total_mag_x, total_mag_y, total_mag_z;
-    float total_gyro_x, total_gyro_y, total_gyro_z;
-    float total_acc_x, total_acc_y, total_acc_z;
+    float total_mag_x = 0.0, total_mag_y = 0.0, total_mag_z = 0.0;
+    float total_gyro_x = 0.0, total_gyro_y = 0.0, total_gyro_z = 0.0;
+    float total_acc_x = 0.0, total_acc_y = 0.0, total_acc_z = 0.0;
 
-    for(size_t i = 0; i < constants::sensor::threshold; i++) {
+    for(size_t i = 0; i < constants::sensor::collect; i++) {
         imu.getEvent(&accel, &mag, &gyro, &temp);
         
-        total_mag_x = mag.magnetic.x;
-        total_mag_y = mag.magnetic.y;
-        total_mag_z = mag.magnetic.z;
+        total_mag_x += mag.magnetic.x;
+        total_mag_y += mag.magnetic.y;
+        total_mag_z += mag.magnetic.z;
 
-        total_gyro_x = gyro.gyro.x;
-        total_gyro_y = gyro.gyro.y;
-        total_gyro_z = gyro.gyro.z;
+        total_gyro_x += gyro.gyro.x;
+        total_gyro_y += gyro.gyro.y;
+        total_gyro_z += gyro.gyro.z;
 
-        total_acc_x = accel.acceleration.x;
-        total_acc_y = accel.acceleration.y;
-        total_acc_z = accel.acceleration.z;
+        total_acc_x += accel.acceleration.x;
+        total_acc_y += accel.acceleration.y;
+        total_acc_z += accel.acceleration.z;
     }
 
-    sfr::imu::mag_x = total_mag_x / constants::sensor::threshold;
-    sfr::imu::mag_y = total_mag_y / constants::sensor::threshold;
-    sfr::imu::mag_z = total_mag_z / constants::sensor::threshold;
+    sfr::imu::mag_x = mag.magnetic.x;
+    sfr::imu::mag_y = mag.magnetic.y;
+    sfr::imu::mag_z = mag.magnetic.z;
 
-    sfr::imu::gyro_x = total_gyro_x / constants::sensor::threshold;
-    sfr::imu::gyro_y = total_gyro_y / constants::sensor::threshold;
-    sfr::imu::gyro_z = total_gyro_z / constants::sensor::threshold;
+    sfr::imu::gyro_x = gyro.gyro.x;
+    sfr::imu::gyro_y = gyro.gyro.y;
+    sfr::imu::gyro_z = gyro.gyro.z;
 
-    sfr::imu::acc_x = total_acc_x / constants::sensor::threshold;
-    sfr::imu::acc_y = total_acc_y / constants::sensor::threshold;
-    sfr::imu::acc_z = total_acc_z / constants::sensor::threshold;
+    sfr::imu::acc_x = accel.acceleration.x;
+    sfr::imu::acc_y = accel.acceleration.y;
+    sfr::imu::acc_z = accel.acceleration.z;
+
+    sfr::imu::mag_x_average = total_mag_x / constants::sensor::collect;
+    sfr::imu::mag_y_average = total_mag_y / constants::sensor::collect;
+    sfr::imu::mag_z_average = total_mag_z / constants::sensor::collect;
+
+    sfr::imu::gyro_x_average = total_gyro_x / constants::sensor::collect;
+    sfr::imu::gyro_y_average = total_gyro_y / constants::sensor::collect;
+    sfr::imu::gyro_z_average = total_gyro_z / constants::sensor::collect;
+
+    sfr::imu::acc_x_average = total_acc_x / constants::sensor::collect;
+    sfr::imu::acc_y_average = total_acc_y / constants::sensor::collect;
+    sfr::imu::acc_z_average = total_acc_z / constants::sensor::collect;
 }

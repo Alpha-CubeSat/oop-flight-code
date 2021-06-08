@@ -91,15 +91,27 @@ namespace sfr
         extern float acc_x;
         extern float acc_y;
         extern float acc_z;
+        
+        extern float mag_x_average;
+        extern float mag_y_average;
+        extern float mag_z_average;
+        extern float gyro_x_average;
+        extern float gyro_y_average;
+        extern float gyro_z_average;
+        extern float acc_x_average;
+        extern float acc_y_average;
+        extern float acc_z_average;
     }
     namespace temperature
     {
         extern float temp_c;
+        extern float temp_c_average;
         extern temp_mode_type mode;
     }
     namespace current
     {
         extern float solar_current;
+        extern float solar_current_average;
         extern bool in_sun;
     }
     namespace acs
@@ -112,6 +124,7 @@ namespace sfr
     namespace battery
     {
         extern float voltage;
+        extern float voltage_average;
     }
     namespace fault
     {

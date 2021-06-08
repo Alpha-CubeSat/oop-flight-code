@@ -6,8 +6,11 @@ CurrentMonitor::CurrentMonitor(unsigned int offset): TimedControlTask<void>(offs
 
 void CurrentMonitor::execute(){
     float total = 0.0;
+    int val;
     for(size_t i = 0; i < constants::sensor::collect; i++) {
-        total += analogRead(constants::current::pin);
+        val = analogRead(constants::current::pin);
+        total += val;
     }
-    sfr::current::solar_current = total / constants::sensor::collect;
+    sfr::current::solar_current = val;
+    sfr::current::solar_current_average = total / constants::sensor::collect;
 }

@@ -71,15 +71,27 @@ namespace sfr
         float acc_x = 0.0;
         float acc_y = 0.0;
         float acc_z = 0.0;
+        
+        float mag_x_average = 0.0;
+        float mag_y_average = 0.0;
+        float mag_z_average = 0.0;
+        float gyro_x_average = 0.0;
+        float gyro_y_average = 0.0;
+        float gyro_z_average = 0.0;
+        float acc_x_average = 0.0;
+        float acc_y_average = 0.0;
+        float acc_z_average = 0.0;
     }
     namespace temperature
     {
         float temp_c = 0.0;
+        float temp_c_average = 0.0;
         temp_mode_type mode = temp_mode_type::active;
     }
     namespace current
     {
         float solar_current = 0.0;
+        float solar_current_average = 0.0;
         bool in_sun = false;
     }
     namespace acs
@@ -92,6 +104,7 @@ namespace sfr
     namespace battery
     {
         float voltage = 0.0;
+        float voltage_average = 0.0;
     }
     namespace fault
     {
