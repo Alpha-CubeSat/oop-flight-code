@@ -4,6 +4,14 @@ TemperatureMonitor::TemperatureMonitor(unsigned int offset): TimedControlTask<vo
     pinMode(constants::temperature::pin, INPUT);
 }
 
-void TemperatureMonitor::execute(){    
-    sfr::temperature::temp_c = (((analogRead(constants::temperature::pin) * 3.3)/ 1023) - .5) * 100; 
+void TemperatureMonitor::execute(){
+    float val = (((analogRead(constants::temperature::pin) * 3.3)/ 1023) - .5) * 100;
+    sfr::temperature::temp_c_buffer.push_front(val);
+    sfr::temperature::temp_c = val;
+
+    if(sfr::temperature::temp_c_buffer.size() > constants::sensor::collect) {
+        sfr::temperature::temp_c_buffer.pop_back();
+    }
+    float sum = std::accumulate(sfr::temperature::temp_c_buffer.begin(), sfr::temperature::temp_c_buffer.end(), 0.0);
+    sfr::temperature::temp_c_average = sum / sfr::temperature::temp_c_buffer.size();
 }
