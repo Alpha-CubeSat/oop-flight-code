@@ -5,12 +5,13 @@ BatteryMonitor::BatteryMonitor(unsigned int offset): TimedControlTask<void>(offs
 }
 
 void BatteryMonitor::execute(){
-    float total = 0.0;
-    int val;
-    for(size_t i = 0; i < constants::sensor::collect; i++) {
-        val = analogRead(constants::battery::voltage_value_pin);
-        total += val;
-    }
+    float val = analogRead(constants::battery::voltage_value_pin);
+    sfr::battery::voltage_buffer.push_front(val);
     sfr::battery::voltage = val;
-    sfr::battery::voltage_average = total / constants::sensor::collect;
+
+    if(sfr::battery::voltage_buffer.size() > constants::sensor::collect) {
+        sfr::battery::voltage_buffer.pop_back();
+    }
+    float sum = std::accumulate(sfr::battery::voltage_buffer.begin(), sfr::battery::voltage_buffer.end(), 0.0);
+    sfr::battery::voltage_average = sum / sfr::battery::voltage_buffer.size();
 }
