@@ -332,7 +332,7 @@ void RockblockControlTask::dispatch_process_command(){
     std::string front = data.substr(0, idx1 + 1);
     print_data(front);
 
-    Serial.println("RECIEVED: <data>");
+    Serial.println("RECIEVED: <len><data><cksm>");
 
     size_t idx2 = indexOf(data, "OK") - 2;
     std::string back = data.substr(idx2, 6);
@@ -340,6 +340,9 @@ void RockblockControlTask::dispatch_process_command(){
 
     if( contains(data, "OK") ){
         size_t len = 256 * (int) data[idx1 + 1] + (int) data[idx1 + 2];
+        uint16_t checksum = 256 * (int) data[idx2 -2 ] + (int) data[idx2 - 1];
+        Serial.print("<len>: ");
+        Serial.println(len);
         std::string bytes = data.substr(idx1 + 3, len);
         Serial.print("<data>: ");
         for(size_t i = 0; i < len; i++) {
@@ -350,6 +353,8 @@ void RockblockControlTask::dispatch_process_command(){
             Serial.print(j, HEX);
         }
         Serial.println();
+        Serial.print("<cksm>: ");
+        Serial.println(checksum);
     }
 
     transition_to(rockblock_mode_type::end_transmission);
