@@ -99,6 +99,16 @@ std::string RockblockControlTask::read_data() {
     return s;
 }
 
+std::string RockblockControlTask::read_data_no_print() {
+    std::string s = "";
+    while( !sfr::rockblock::serial.available() );
+    while( sfr::rockblock::serial.available() ) {
+        char c = sfr::rockblock::serial.read();
+        s += c;
+    }
+    return s;
+}
+
 void RockblockControlTask::print_data(std::string s) {
     std::replace( s.begin(), s.end(), '\r', 'r' );
     std::replace( s.begin(), s.end(), '\n', 'n' );
@@ -106,8 +116,21 @@ void RockblockControlTask::print_data(std::string s) {
     Serial.println( s.c_str() );
 }
 
+size_t RockblockControlTask::indexOf(std::string str, char test) {
+    return str.find(test);
+}
+
+size_t RockblockControlTask::indexOf(std::string str, std::string test) {
+    return str.find(test);
+}
+
+bool RockblockControlTask::contains(std::string str, char test) {
+    size_t idx = indexOf(str, test);
+    return (idx != std::string::npos);
+}
+
 bool RockblockControlTask::contains(std::string str, std::string test) {
-    size_t idx = str.find_first_of(test);
+    size_t idx = indexOf(str, test);
     return (idx != std::string::npos);
 }
 
@@ -223,6 +246,22 @@ void RockblockControlTask::dispatch_send_response(){
 void RockblockControlTask::dispatch_create_buffer(){
     std::string data = read_data();
     // TODO: updated based on real data
+    if( contains(data, "+SBDIX:") && contains(data, "OK") ){
+        size_t idx1 = indexOf(data, ':') + 1;
+        size_t idx2 = indexOf(data, "OK") - 4;
+        size_t len = idx2 - idx1;
+        std::string nums = data.substr(idx1, len);
+        nums.erase( std::remove(nums.begin(), nums.end(), ' '), nums.end() );
+        std::replace( nums.begin(), nums.end(), ',', ' ');
+        int status[6];
+        std::stringstream ss;
+        ss << nums;
+        for(size_t i = 0; i < 6; i++) {
+            ss >> status[i];
+            // Serial.println(status[i]);
+        }
+    }
+    transition_to(rockblock_mode_type::process_mo_status);
     // if(sfr::rockblock::serial.read() == ':'){
     //     int relevant_chars = sfr::rockblock::serial.available()-8;
     //     int buffer_iter = 0;
@@ -249,33 +288,35 @@ void RockblockControlTask::dispatch_create_buffer(){
 }
 
 void RockblockControlTask::dispatch_process_mo_status(){
-    if(sfr::rockblock::commas[0] > 1){
-        Serial.println("there is another character");
-        transition_to(rockblock_mode_type::send_response);
-    }
-    else if(sfr::rockblock::buffer[0] != '0' && sfr::rockblock::buffer[0] != '1' && sfr::rockblock::buffer[0] != '2'){
-        Serial.println("mo status is greater than 2");
-        transition_to(rockblock_mode_type::send_response);
-    } else{
-        transition_to(rockblock_mode_type::process_mt_status);
-    }             
+    transition_to(rockblock_mode_type::process_mt_status);
+    // if(sfr::rockblock::commas[0] > 1){
+    //     Serial.println("there is another character");
+    //     transition_to(rockblock_mode_type::send_response);
+    // }
+    // else if(sfr::rockblock::buffer[0] != '0' && sfr::rockblock::buffer[0] != '1' && sfr::rockblock::buffer[0] != '2'){
+    //     Serial.println("mo status is greater than 2");
+    //     transition_to(rockblock_mode_type::send_response);
+    // } else{
+    //     transition_to(rockblock_mode_type::process_mt_status);
+    // }             
 }
 
 void RockblockControlTask::dispatch_process_mt_status(){
-    switch(sfr::rockblock::buffer[sfr::rockblock::commas[1]+1]){
-        case '2':
-            Serial.println("error during check");
-            transition_to(rockblock_mode_type::send_response);
-            break;
-        case '1':
-            Serial.println("there are messages waiting");
-            transition_to(rockblock_mode_type::read_message);
-            break;
-        case '0':
-            Serial.println("there were no messages to retrieve");
-            transition_to(rockblock_mode_type::end_transmission);
-            break;
-    }              
+    transition_to(rockblock_mode_type::read_message);
+    // switch(sfr::rockblock::buffer[sfr::rockblock::commas[1]+1]){
+    //     case '2':
+    //         Serial.println("error during check");
+    //         transition_to(rockblock_mode_type::send_response);
+    //         break;
+    //     case '1':
+    //         Serial.println("there are messages waiting");
+    //         transition_to(rockblock_mode_type::read_message);
+    //         break;
+    //     case '0':
+    //         Serial.println("there were no messages to retrieve");
+    //         transition_to(rockblock_mode_type::end_transmission);
+    //         break;
+    // }              
 }
 
 void RockblockControlTask::dispatch_read_message(){
@@ -285,8 +326,33 @@ void RockblockControlTask::dispatch_read_message(){
 }
 
 void RockblockControlTask::dispatch_process_command(){
-    std::string data = read_data();
+    std::string data = read_data_no_print();
     // TODO: update based on real data
+    size_t idx1 = indexOf(data, '\r');
+    std::string front = data.substr(0, idx1 + 1);
+    print_data(front);
+
+    Serial.println("RECIEVED: <data>");
+
+    size_t idx2 = indexOf(data, "OK") - 2;
+    std::string back = data.substr(idx2, 6);
+    print_data(back);
+
+    if( contains(data, "OK") ){
+        size_t len = 256 * (int) data[idx1 + 1] + (int) data[idx1 + 2];
+        std::string bytes = data.substr(idx1 + 3, len);
+        Serial.print("<data>: ");
+        for(size_t i = 0; i < len; i++) {
+            int j = bytes[i];
+            if(j < 0x10) {
+                Serial.print('0');
+            }
+            Serial.print(j, HEX);
+        }
+        Serial.println();
+    }
+
+    transition_to(rockblock_mode_type::end_transmission);
     // if(sfr::rockblock::serial.read() == 'B'){
     //     sfr::rockblock::serial.read();
     //     sfr::rockblock::serial.read();
