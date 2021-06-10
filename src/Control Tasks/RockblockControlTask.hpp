@@ -10,6 +10,7 @@ class RockblockControlTask : public TimedControlTask<void>{
     private:
         void handle_command(int opcode, int argument);
         std::string read_data();
+        std::string read_data_2();
         void print_data(std::string s);
         bool contains(std::string str, std::string test);
         bool check_ready();

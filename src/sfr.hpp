@@ -76,6 +76,7 @@ namespace sfr
         extern unsigned char arg_2[4];
         extern int num_iter;
         extern bool waiting_command;
+        // TODO: handle switch using ifdef?
         // extern HardwareSerial serial;
         extern RockblockSimulator serial;
         extern int f_opcode;

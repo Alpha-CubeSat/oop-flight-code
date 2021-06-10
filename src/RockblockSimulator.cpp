@@ -65,11 +65,29 @@ void RockblockSimulator::process() {
                 output = "\r\n2\r\n\r\nOK\r\n";
             }
         } else if( input == "AT+SBDIX\r" ) {
-            // TODO
-            output = "AT+SBDIX\r";
+            // Message downlinked & 10 byte message ready for uplink
+            output = "AT+SBDIX\r\r\n+SBDIX: 0, 5, 1, 2, 10, 0\r\n\r\nOK\r\n";
         } else if( input == "AT+SBDRB\r" ) {
             // TODO
             output = "AT+SBDRB\r";
+            // Message Length
+            output += (char) 0;
+            output += (char) 10;
+            // Binary Message
+            output += (char) 10;
+            output += (char) 11;
+            output += (char) 12;
+            output += (char) 13;
+            output += (char) 14;
+            output += (char) 15;
+            output += (char) 1;
+            output += (char) 2;
+            output += (char) 3;
+            output += (char) 4;
+            // Checksum
+            output += (char) 0;
+            output += (char) 85;
+            output += "\r\nOK\r\n";
         }
         std::reverse( output.begin(), output.end() ); // reverse string for proper extraction
         input.clear();
