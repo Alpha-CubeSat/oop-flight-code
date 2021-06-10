@@ -10,6 +10,7 @@
 #include "Modes/fault_mode_type.enum"
 #include "Control Tasks/TimedControlTask.hpp"
 #include "Control Tasks/BurnwireControlTask.hpp"
+#include "RockblockSimulator.hpp"
 #include "constants.hpp"
 #include "MissionManager.hpp"
 #include <SD.h>
@@ -77,7 +78,9 @@ namespace sfr
         extern unsigned char arg_2[4];
         extern int num_iter;
         extern bool waiting_command;
-        extern HardwareSerial serial;
+        // TODO: handle switch using ifdef?
+        // extern HardwareSerial serial;
+        extern RockblockSimulator serial;
         extern int f_opcode;
         extern int f_arg_1;
         extern int f_arg_2;
