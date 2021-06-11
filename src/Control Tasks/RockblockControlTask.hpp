@@ -9,15 +9,6 @@ class RockblockControlTask : public TimedControlTask<void>{
         void execute();
     private:
         void handle_command(int opcode, int argument);
-
-        std::string read_data();
-        std::string read_data_no_print();
-        void print_data(std::string s);
-        size_t indexOf(std::string str, char test);
-        size_t indexOf(std::string str, std::string test);
-        bool contains(std::string str, char test);
-        bool contains(std::string str, std::string test);
-
         bool check_ready();
         void dispatch_standby();
         void dispatch_send_at();
@@ -38,9 +29,7 @@ class RockblockControlTask : public TimedControlTask<void>{
         void dispatch_process_command();
         void dispatch_end_transmission();
         void transition_to(rockblock_mode_type new_mode);
-        bool valid_command();
-        
-        
+        bool valid_command();       
 };
 
 #endif
