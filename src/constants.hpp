@@ -38,10 +38,14 @@ namespace constants
     namespace temperature
     {
         constexpr int pin = 16;
+        constexpr float min_temp_c;
+        constexpr float max_temp_c;
     }
     namespace current
     {
         constexpr int pin = 15;
+        constexpr float max_solar_current;
+        constexpr float min_solar_current;
     }
     namespace acs
     {
@@ -65,6 +69,8 @@ namespace constants
     {
         constexpr int voltage_value_pin = 32;
         constexpr int allow_measurement_pin = 36;
+        constexpr int max_voltage;
+        constexpr int min_voltage;
     }
     namespace fault
     {
