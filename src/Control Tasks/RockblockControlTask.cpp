@@ -183,12 +183,18 @@ void RockblockControlTask::dispatch_send_response(){
 
 void RockblockControlTask::dispatch_create_buffer(){
     if(sfr::rockblock::serial.read() == ':'){
-        int relevant_chars = sfr::rockblock::serial.available()-8;
+        // clear buffer to nulls
+        memset(sfr::rockblock::buffer, '\0', constants::rockblock::buffer_size);
+        // clear commas to -1
+        memset(sfr::rockblock::commas, -1, constants::rockblock::num_commas);
+        // int relevant_chars = sfr::rockblock::serial.available()-8;
         int buffer_iter = 0;
         int comma_iter = 0;
-        memset(sfr::rockblock::buffer, 0, constants::rockblock::buffer_size);
-        for (int i=0; i<relevant_chars; ++i){
+        for(size_t i = 0; i < constants::rockblock::buffer_size; i++) {
             char c = sfr::rockblock::serial.read();
+            if(c == '\r') {
+                break;
+            }
             if(c != ' '){
                 sfr::rockblock::buffer[buffer_iter] = c;
                 Serial.println( sfr::rockblock::buffer[buffer_iter]);
