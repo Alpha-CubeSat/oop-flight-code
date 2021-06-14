@@ -40,6 +40,7 @@ namespace sfr
         extern burnwire_mode_type mode;
         extern int attempts;
         extern int start_time;
+        extern int camera_attempts;
     }
     namespace camera
     {
@@ -92,9 +93,6 @@ namespace sfr
         extern float gyro_x;
         extern float gyro_y;
         extern float gyro_z;
-        extern float acc_x;
-        extern float acc_y;
-        extern float acc_z;
         
         extern std::deque<float> mag_x_buffer;
         extern std::deque<float> mag_y_buffer;
@@ -102,9 +100,6 @@ namespace sfr
         extern std::deque<float> gyro_x_buffer;
         extern std::deque<float> gyro_y_buffer;
         extern std::deque<float> gyro_z_buffer;
-        extern std::deque<float> acc_x_buffer;
-        extern std::deque<float> acc_y_buffer;
-        extern std::deque<float> acc_z_buffer;
 
         extern float mag_x_average;
         extern float mag_y_average;
@@ -112,9 +107,6 @@ namespace sfr
         extern float gyro_x_average;
         extern float gyro_y_average;
         extern float gyro_z_average;
-        extern float acc_x_average;
-        extern float acc_y_average;
-        extern float acc_z_average;
     }
     namespace temperature
     {

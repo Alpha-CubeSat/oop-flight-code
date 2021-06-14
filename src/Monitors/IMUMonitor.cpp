@@ -15,17 +15,6 @@ void IMUMonitor::execute(){
     sensors_event_t accel, mag, gyro, temp;
     imu.getEvent(&accel, &mag, &gyro, &temp);
 
-    imu.setupAccel(imu.LSM9DS1_ACCELRANGE_2G);
-    if (accel.acceleration.x > constants::imu::two_g || accel.acceleration.y > constants::imu::two_g || accel.acceleration.z > constants::imu::two_g) {
-        imu.setupAccel(imu.LSM9DS1_ACCELRANGE_4G);
-    }
-    if (accel.acceleration.x > constants::imu::four_g || accel.acceleration.y > constants::imu::four_g || accel.acceleration.z > constants::imu::four_g) {
-        imu.setupAccel(imu.LSM9DS1_ACCELRANGE_8G);
-    }
-    if (accel.acceleration.x > constants::imu::eight_g || accel.acceleration.y > constants::imu::eight_g || accel.acceleration.z > constants::imu::eight_g) {
-        imu.setupAccel(imu.LSM9DS1_ACCELRANGE_16G);
-    } 
-
     imu.setupMag(imu.LSM9DS1_MAGGAIN_4GAUSS);
     if (mag.magnetic.x > 4 || mag.magnetic.y > 4 || mag.magnetic.z > 4) {
         imu.setupMag(imu.LSM9DS1_MAGGAIN_8GAUSS);
@@ -59,10 +48,6 @@ void IMUMonitor::execute(){
     sfr::imu::gyro_y = gyro.gyro.y;
     sfr::imu::gyro_z = gyro.gyro.z;
 
-    sfr::imu::acc_x = accel.acceleration.x;
-    sfr::imu::acc_y = accel.acceleration.y;
-    sfr::imu::acc_z = accel.acceleration.z;
-
     // Add reading to buffer
 
     sfr::imu::mag_x_buffer.push_front(mag.magnetic.x);
@@ -72,10 +57,6 @@ void IMUMonitor::execute(){
     sfr::imu::gyro_x_buffer.push_front(gyro.gyro.x);
     sfr::imu::gyro_y_buffer.push_front(gyro.gyro.y);
     sfr::imu::gyro_z_buffer.push_front(gyro.gyro.z);
-
-    sfr::imu::acc_x_buffer.push_front(accel.acceleration.x);
-    sfr::imu::acc_y_buffer.push_front(accel.acceleration.y);
-    sfr::imu::acc_z_buffer.push_front(accel.acceleration.z);
 
     // Remove old readings
 
@@ -97,15 +78,6 @@ void IMUMonitor::execute(){
     if(sfr::imu::gyro_z_buffer.size() > constants::sensor::collect) {
         sfr::imu::gyro_z_buffer.pop_back();
     }
-    if(sfr::imu::acc_x_buffer.size() > constants::sensor::collect) {
-        sfr::imu::acc_x_buffer.pop_back();
-    }
-    if(sfr::imu::acc_y_buffer.size() > constants::sensor::collect) {
-        sfr::imu::acc_y_buffer.pop_back();
-    }
-    if(sfr::imu::acc_z_buffer.size() > constants::sensor::collect) {
-        sfr::imu::acc_z_buffer.pop_back();
-    }
 
     // Calculate sums
 
@@ -115,9 +87,6 @@ void IMUMonitor::execute(){
     float gyro_x_sum = std::accumulate(sfr::imu::gyro_x_buffer.begin(), sfr::imu::gyro_x_buffer.end(), 0.0);
     float gyro_y_sum = std::accumulate(sfr::imu::gyro_y_buffer.begin(), sfr::imu::gyro_y_buffer.end(), 0.0);
     float gyro_z_sum = std::accumulate(sfr::imu::gyro_z_buffer.begin(), sfr::imu::gyro_z_buffer.end(), 0.0);
-    float acc_x_sum = std::accumulate(sfr::imu::acc_x_buffer.begin(), sfr::imu::acc_x_buffer.end(), 0.0);
-    float acc_y_sum = std::accumulate(sfr::imu::acc_y_buffer.begin(), sfr::imu::acc_y_buffer.end(), 0.0);
-    float acc_z_sum = std::accumulate(sfr::imu::acc_z_buffer.begin(), sfr::imu::acc_z_buffer.end(), 0.0);
 
     // Calculate averages
 
@@ -128,8 +97,4 @@ void IMUMonitor::execute(){
     sfr::imu::gyro_x_average = gyro_x_sum / sfr::imu::gyro_x_buffer.size();
     sfr::imu::gyro_y_average = gyro_y_sum / sfr::imu::gyro_y_buffer.size();
     sfr::imu::gyro_z_average = gyro_z_sum / sfr::imu::gyro_z_buffer.size();
-
-    sfr::imu::acc_x_average = acc_x_sum / sfr::imu::acc_x_buffer.size();
-    sfr::imu::acc_y_average = acc_y_sum / sfr::imu::acc_y_buffer.size();
-    sfr::imu::acc_z_average = acc_z_sum / sfr::imu::acc_z_buffer.size();
 }

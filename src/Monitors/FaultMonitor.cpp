@@ -24,17 +24,8 @@ void FaultMonitor::execute(){
         if((sfr::imu::gyro_z > constants::imu::max_gyro_z || sfr::imu::gyro_z < constants::imu::min_gyro_z) && sfr::fault::check_gyro_z){
             sfr::fault::fault_1 = sfr::fault::fault_1 | constants::fault::gyro_z;
         }
-        if((sfr::imu::acc_x > constants::imu::max_acc_x || sfr::imu::acc_x < constants::imu::min_acc_x) && sfr::fault::check_acc_x){
-            sfr::fault::fault_1 = sfr::fault::fault_1 | constants::fault::acc_x;
-        }
-        if((sfr::imu::acc_y > constants::imu::max_acc_y || sfr::imu::acc_y < constants::imu::min_acc_y) && sfr::fault::check_acc_y){
-            sfr::fault::fault_1 = sfr::fault::fault_1 | constants::fault::acc_y;
-        }
 
         //FAULT_2
-        if((sfr::imu::acc_z > constants::imu::max_acc_z || sfr::imu::acc_z < constants::imu::min_acc_z) && sfr::fault::check_acc_z){
-            sfr::fault::fault_2 = sfr::fault::fault_2 | constants::fault::acc_z;
-        }
         if((sfr::temperature::temp_c > constants::temperature::max_temp_c || sfr::temperature::temp_c < constants::temperature::min_temp_c) && sfr::fault::check_temp_c){
             sfr::fault::fault_2 = sfr::fault::fault_2 | constants::fault::temp_c;
         }
