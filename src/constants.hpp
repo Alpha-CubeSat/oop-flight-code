@@ -19,6 +19,7 @@ namespace constants
         constexpr int burn_time = 500;
         constexpr int burn_wait = 1000;
         constexpr int max_attempts = 10;
+        constexpr int camera_max_attempts = 50;
         
         //2 days in milliseconds
         constexpr int armed_time = 172800000;
@@ -81,11 +82,8 @@ namespace constants
         constexpr unsigned char gyro_x = 1 << 3;
         constexpr unsigned char gyro_y = 1 << 4;
         constexpr unsigned char gyro_z = 1 << 5;
-        constexpr unsigned char acc_x = 1 << 6;
-        constexpr unsigned char acc_y = 1 << 7;
 
         //fault 2
-        constexpr unsigned char acc_z = 1 << 0;
         constexpr unsigned char temp_c = 1 << 1;
         constexpr unsigned char solar_current = 1 << 2;
         constexpr unsigned char voltage = 1 << 3;
@@ -126,13 +124,6 @@ namespace constants
         constexpr float max_gyro_y = 0.0;
         constexpr float min_gyro_z = 0.0;
         constexpr float max_gyro_z = 0.0;
-
-        constexpr float min_acc_x = 0.0;
-        constexpr float max_acc_x = 0.0;
-        constexpr float min_acc_y = 0.0;
-        constexpr float max_acc_y = 0.0;
-        constexpr float min_acc_z = 0.0;
-        constexpr float max_acc_z = 0.0;
 
         //TODO: When are these passed in to the driver?
         constexpr int SCL = 19;

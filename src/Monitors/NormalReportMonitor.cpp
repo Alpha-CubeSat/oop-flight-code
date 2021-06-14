@@ -170,12 +170,6 @@ void NormalReportMonitor::execute(){
     Serial.println(sfr::imu::gyro_y);
     Serial.print("gyro_z: ");
     Serial.println(sfr::imu::gyro_z);
-    Serial.print("acc_x: ");
-    Serial.println(sfr::imu::acc_x);
-    Serial.print("acc_y: ");
-    Serial.println(sfr::imu::acc_y);
-    Serial.print("acc_z: ");
-    Serial.println(sfr::imu::acc_z);
 
     Serial.println("------------------TEMPERATURE-----------------------");
     Serial.print("temp_c: ");
@@ -219,16 +213,17 @@ void NormalReportMonitor::execute(){
 
     uint8_t report[70] = {
         sfr::photoresistor::covered,
+        sfr::button::pressed,
 
-        (int)sfr::mission::mode,
+        (uint8_t)sfr::mission::mode,
 
         sfr::burnwire::fire,
         sfr::burnwire::arm,
-        (int)sfr::burnwire::mode,
+        (uint8_t)sfr::burnwire::mode,
         sfr::burnwire::attempts,
 
         sfr::rockblock::downlink_period,
-        (int)sfr::rockblock::mode,
+        (uint8_t)sfr::rockblock::mode,
         sfr::rockblock::waiting_message,
         sfr::rockblock::waiting_command,
         sfr::rockblock::f_opcode,
@@ -243,18 +238,16 @@ void NormalReportMonitor::execute(){
         gyro_z,
 
         temp_c,
-        (int)sfr::temperature::mode,
+        (uint8_t)sfr::temperature::mode,
 
         solar_current,
         sfr::current::in_sun,
 
-        (int)sfr::acs::mode,
+        (uint8_t)sfr::acs::mode,
 
         voltage,
 
-        (int)sfr::fault::mode,
-
-        sfr::button::pressed,
+        (uint8_t)sfr::fault::mode,
 
         sfr::fault::check_mag_x,
         sfr::fault::check_mag_y,
@@ -262,10 +255,6 @@ void NormalReportMonitor::execute(){
         sfr::fault::check_gyro_x,
         sfr::fault::check_gyro_y,
         sfr::fault::check_gyro_z,
-        sfr::fault::check_acc_x,
-        sfr::fault::check_acc_y,
-
-        sfr::fault::check_acc_z,
         sfr::fault::check_temp_c,
         sfr::fault::check_solar_current,
         sfr::fault::check_voltage,

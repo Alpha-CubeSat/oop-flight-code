@@ -17,6 +17,7 @@ namespace sfr
         burnwire_mode_type mode = burnwire_mode_type::standby;
         int attempts = 0;
         int start_time = 0;
+        int camera_attempts = 0;
     }
     namespace camera
     {
@@ -69,9 +70,6 @@ namespace sfr
         float gyro_x = 0.0;
         float gyro_y = 0.0;
         float gyro_z = 0.0;
-        float acc_x = 0.0;
-        float acc_y = 0.0;
-        float acc_z = 0.0;
         
         std::deque<float> mag_x_buffer;
         std::deque<float> mag_y_buffer;

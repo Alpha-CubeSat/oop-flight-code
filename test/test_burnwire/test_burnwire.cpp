@@ -203,6 +203,79 @@ void test_sensor(){
     TEST_ASSERT_EQUAL(burnwire_mode_type::standby, sfr::burnwire::mode);
 }
 
+void test_camera_max_attempts(){
+    BurnwireControlTask burnwire_control_task(0);
+
+    sfr::mission::mode = mission_mode_type::deployment;
+    TEST_ASSERT_EQUAL(burnwire_mode_type::standby, sfr::burnwire::mode);
+
+    sfr::burnwire::arm = true;
+    burnwire_control_task.execute();
+    TEST_ASSERT_EQUAL(burnwire_mode_type::armed, sfr::burnwire::mode);
+
+    sfr::burnwire::fire = true;
+    sfr::current::in_sun = true;
+    burnwire_control_task.execute();
+    TEST_ASSERT_EQUAL(burnwire_mode_type::fire, sfr::burnwire::mode);
+
+    sfr::camera::powered = false;
+    for(int i=0; i < constants::burnwire::camera_max_attempts; ++i){
+        burnwire_control_task.execute();
+        TEST_ASSERT_EQUAL(burnwire_mode_type::fire, sfr::burnwire::mode);
+    }
+
+    burnwire_control_task.execute();
+    TEST_ASSERT_EQUAL(burnwire_mode_type::burn, sfr::burnwire::mode);
+    TEST_ASSERT_EQUAL(sfr::burnwire::camera_attempts, 0);
+
+    delay(constants::burnwire::burn_time);
+    burnwire_control_task.execute();
+    TEST_ASSERT_EQUAL(burnwire_mode_type::delay, sfr::burnwire::mode);
+
+    sfr::mission::mode = mission_mode_type::standby;
+    burnwire_control_task.execute();
+    TEST_ASSERT_EQUAL(burnwire_mode_type::standby, sfr::burnwire::mode);
+}
+
+void test_camera_some_attempts(){
+    BurnwireControlTask burnwire_control_task(0);
+
+    sfr::mission::mode = mission_mode_type::deployment;
+    TEST_ASSERT_EQUAL(burnwire_mode_type::standby, sfr::burnwire::mode);
+
+    sfr::burnwire::arm = true;
+    burnwire_control_task.execute();
+    TEST_ASSERT_EQUAL(burnwire_mode_type::armed, sfr::burnwire::mode);
+
+    sfr::burnwire::fire = true;
+    sfr::current::in_sun = true;
+    burnwire_control_task.execute();
+    TEST_ASSERT_EQUAL(burnwire_mode_type::fire, sfr::burnwire::mode);
+
+    sfr::camera::powered = false;
+    for(int i=0; i < constants::burnwire::camera_max_attempts/2; ++i){
+        burnwire_control_task.execute();
+        TEST_ASSERT_EQUAL(burnwire_mode_type::fire, sfr::burnwire::mode);
+    }
+
+    burnwire_control_task.execute();
+    TEST_ASSERT_EQUAL(burnwire_mode_type::fire, sfr::burnwire::mode);
+
+
+    sfr::camera::powered = true;
+    burnwire_control_task.execute();
+    TEST_ASSERT_EQUAL(burnwire_mode_type::burn, sfr::burnwire::mode);
+    TEST_ASSERT_EQUAL(sfr::burnwire::camera_attempts, 0);
+
+    delay(constants::burnwire::burn_time);
+    burnwire_control_task.execute();
+    TEST_ASSERT_EQUAL(burnwire_mode_type::delay, sfr::burnwire::mode);
+
+    sfr::mission::mode = mission_mode_type::standby;
+    burnwire_control_task.execute();
+    TEST_ASSERT_EQUAL(burnwire_mode_type::standby, sfr::burnwire::mode);
+}
+
 int test_burnwire() {
     UNITY_BEGIN();
     RUN_TEST(test_valid_initialization);
@@ -210,6 +283,8 @@ int test_burnwire() {
     RUN_TEST(test_max_attempts);
     RUN_TEST(test_exit_deployment);
     RUN_TEST(test_sensor);
+    RUN_TEST(test_camera_max_attempts);
+    RUN_TEST(test_camera_some_attempts);
     return UNITY_END();
 }
 
