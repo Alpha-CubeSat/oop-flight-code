@@ -186,6 +186,7 @@ void RockblockControlTask::dispatch_create_buffer(){
         int relevant_chars = sfr::rockblock::serial.available()-8;
         int buffer_iter = 0;
         int comma_iter = 0;
+        memset(sfr::rockblock::buffer, 0, constants::rockblock::buffer_size);
         for (int i=0; i<relevant_chars; ++i){
             char c = sfr::rockblock::serial.read();
             if(c != ' '){
@@ -293,8 +294,33 @@ void RockblockControlTask::dispatch_process_command(){
             
             sfr::rockblock::waiting_command = true;
         }
+        transition_to(rockblock_mode_type::queue_check);
+    }
+}
+
+void RockblockControlTask::dispatch_queue_check() {
+    size_t idx = sfr::rockblock::commas[1] + 1;
+    char* ptr = sfr::rockblock::buffer + idx;
+    int len = strtol(ptr, nullptr, 10);
+    if( len >= constants::rockblock::max_queue ) {
+        transition_to(rockblock_mode_type::send_flush);
+    } else if(len > 0) {
+        transition_to(rockblock_mode_type::send_response);
+    } else {
         transition_to(rockblock_mode_type::end_transmission);
-    } 
+    }
+    
+}
+
+void RockblockControlTask::dispatch_send_flush(){
+    sfr::rockblock::serial.print("AT+SBDWT=FLUSH_MT\r");
+    transition_to(rockblock_mode_type::await_flush);
+}
+
+void RockblockControlTask::dispatch_await_flush() {
+    if(sfr::rockblock::serial.read()=='K'){
+        transition_to(rockblock_mode_type::send_response);
+    }
 }
 
 void RockblockControlTask::dispatch_end_transmission(){

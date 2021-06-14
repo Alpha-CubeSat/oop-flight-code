@@ -34,6 +34,7 @@ namespace constants
         constexpr int max_iter = 200;
         //0A0B0C0D0E0F01020304
         constexpr int known_commands[19][10] = {{10,11,12,13,14,15,1,2,3,4}};
+        constexpr int max_queue = 10;
     }
     namespace temperature
     {
