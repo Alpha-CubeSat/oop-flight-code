@@ -166,10 +166,17 @@ void RockblockControlTask::dispatch_await_message_length(){
 
 void RockblockControlTask::dispatch_send_message(){
     uint16_t checksum = 0;
-    for (size_t i=0; i<sizeof(sfr::rockblock::report); ++i){
+    // Serial.print("DATA: ");
+    for (size_t i=0; i < constants::rockblock::packet_size; ++i){
+        // Serial.print(sfr::rockblock::report[i]);
         sfr::rockblock::serial.write(sfr::rockblock::report[i]);
-        checksum += (uint16_t)sfr::rockblock::report[i];
+        checksum += (uint16_t) sfr::rockblock::report[i];
     }
+    // Serial.println();
+    // Serial.print("CHKSM: ");
+    // Serial.print(checksum >> 8);
+    // Serial.print(checksum & 0xFF);
+    // Serial.println();
     sfr::rockblock::serial.write(checksum >> 8);
     sfr::rockblock::serial.write(checksum & 0xFF);
     sfr::rockblock::serial.write('\r');
@@ -209,7 +216,7 @@ void RockblockControlTask::dispatch_create_buffer(){
             }
             if(c != ' '){
                 sfr::rockblock::buffer[buffer_iter] = c;
-                Serial.println( sfr::rockblock::buffer[buffer_iter]);
+                Serial.print( sfr::rockblock::buffer[buffer_iter]);
                 if(c == ','){
                     sfr::rockblock::commas[comma_iter] = buffer_iter;
                     comma_iter++;
@@ -217,6 +224,7 @@ void RockblockControlTask::dispatch_create_buffer(){
                 buffer_iter++;
             }
         }
+        Serial.println();
         if(comma_iter != 5){
             transition_to(rockblock_mode_type::send_response);
         }
@@ -321,9 +329,11 @@ void RockblockControlTask::dispatch_process_command(){
 }
 
 void RockblockControlTask::dispatch_queue_check() {
-    size_t idx = sfr::rockblock::commas[1] + 1;
+    size_t idx = sfr::rockblock::commas[4] + 1;
     char* ptr = sfr::rockblock::buffer + idx;
     int len = strtol(ptr, nullptr, 10);
+    Serial.print("waiting messages: ");
+    Serial.println(len);
     if( len >= constants::rockblock::max_queue ) {
         transition_to(rockblock_mode_type::send_flush);
     } else if(len > 0) {

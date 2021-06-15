@@ -2,8 +2,11 @@
 #define ROCKBLOCK_SIMULATOR_HPP_
 
 #include <sstream>
-#include <cstring>
+#include <string>
 #include <algorithm>
+#include <deque>
+#include <numeric>
+#include "Arduino.h"
 
 class RockblockSimulator {
     public:
@@ -14,10 +17,21 @@ class RockblockSimulator {
         size_t print(const char* s);
         int read();
     private:
+        void insert();
         void process();
         uint32_t baud;
         std::string input;
         std::string output;
+        std::deque<std::string> mt_queue;
+        std::string uplink_data;
+        std::string downlink_data;
+        uint16_t send_len;
+        uint8_t mo_status;
+        uint16_t momsn;
+        uint8_t  mt_status;
+        uint16_t mtmsn;
+        uint16_t mt_len;
+        uint8_t mt_queue_len;
 };
 
 #endif
