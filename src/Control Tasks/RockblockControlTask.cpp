@@ -79,6 +79,18 @@ void RockblockControlTask::execute(){
             Serial.println("process_command");
             dispatch_process_command();
             break;
+        case rockblock_mode_type::queue_check:
+            Serial.println("queue_check");
+            dispatch_queue_check();
+            break;
+        case rockblock_mode_type::send_flush:
+            Serial.println("send_flush");
+            dispatch_send_flush();
+            break;
+        case rockblock_mode_type::await_flush:
+            Serial.println("await_flush");
+            dispatch_await_flush();
+            break;
         case rockblock_mode_type::end_transmission:
             Serial.println("end_transmission");
             dispatch_end_transmission();
@@ -235,7 +247,7 @@ void RockblockControlTask::dispatch_process_mt_status(){
             transition_to(rockblock_mode_type::send_response);
             break;
         case '1':
-            Serial.println("there are messages waiting");
+            Serial.println("message retrieved");
             transition_to(rockblock_mode_type::read_message);
             break;
         case '0':
@@ -259,21 +271,25 @@ void RockblockControlTask::dispatch_process_command(){
         sfr::rockblock::serial.read();
         sfr::rockblock::serial.read();
 
+
+        Serial.print("COMMAND: ");
         for (size_t o=0; o<sizeof(sfr::rockblock::opcode); ++o){
             sfr::rockblock::opcode[o] = sfr::rockblock::serial.read();
-            Serial.println(sfr::rockblock::opcode[o]);
+            if( sfr::rockblock::opcode[o] < 0x10 ) Serial.print(0, HEX);
+            Serial.print(sfr::rockblock::opcode[o], HEX);
         }
-
         for (size_t a1=0; a1<sizeof(sfr::rockblock::arg_1); ++a1){
             sfr::rockblock::arg_1[a1] = sfr::rockblock::serial.read();
-            Serial.println(sfr::rockblock::arg_1[a1]);
+            if( sfr::rockblock::arg_1[a1] < 0x10 ) Serial.print(0, HEX);
+            Serial.print(sfr::rockblock::arg_1[a1], HEX);
         }
-
         for (size_t a2=0; a2<sizeof(sfr::rockblock::arg_2); ++a2){
             sfr::rockblock::arg_2[a2] = sfr::rockblock::serial.read();
-            Serial.println(sfr::rockblock::arg_2[a2]);
+            if( sfr::rockblock::arg_2[a2] < 0x10 ) Serial.print(0, HEX);
+            Serial.print(sfr::rockblock::arg_2[a2], HEX);
         }
-    
+        Serial.println();
+
         if(valid_command()){
             uint32_t c_opcode = (sfr::rockblock::opcode[0] << 16) | (sfr::rockblock::opcode[1] << 24);
             uint32_t c_arg_1 = sfr::rockblock::arg_1[0] | (sfr::rockblock::arg_1[1] << 8) | (sfr::rockblock::arg_1[2] << 16) | (sfr::rockblock::arg_1[3] << 24);
@@ -344,49 +360,33 @@ bool RockblockControlTask::valid_command(){
     bool arg_1 = false;
     bool arg_2 = false;
 
-    //iterate over possible commands
-    for (size_t c=0; c<(sizeof(constants::rockblock::known_commands)/sizeof(constants::rockblock::known_commands[0])); ++c){
-        //iterate over character in known commands
+    for( size_t c = 0; c < constants::rockblock::num_commands; c++ ) {
         opcode = true;
         arg_1 = true;
         arg_2 = true;
-        for (size_t i=0; i<sizeof(constants::rockblock::known_commands[c]); ++i){
-            //iterate over opcode
-            for (size_t o=0; o<sizeof(sfr::rockblock::opcode); ++o){
-                if(sfr::rockblock::opcode[o] != constants::rockblock::known_commands[c][i]){
-                    Serial.println(sfr::rockblock::opcode[o]);
-                    Serial.println(constants::rockblock::known_commands[c][i]);
-                    opcode = false;
-                }
-            }
-            if(opcode == true){
-                for (size_t a1=0; a1<sizeof(sfr::rockblock::arg_1); ++a1){
-                    if(sfr::rockblock::arg_1[a1] != constants::rockblock::known_commands[c][i]){
-                        arg_1 = false;
-                    }
-                }
-            }
-            if(opcode == true && arg_1 == true){
-                for (size_t a2=0; a2<sizeof(sfr::rockblock::arg_2); ++a2){
-                    if(sfr::rockblock::arg_2[a2] != constants::rockblock::known_commands[c][i]){
-                        arg_2 = false;
-                    }
-                }
+
+        for( size_t o = 0; o < constants::rockblock::opcode_len; o++ ) {
+            if(sfr::rockblock::opcode[o] != constants::rockblock::known_commands[c][o]) {
+                opcode = false;
             }
         }
+        for( size_t a1 = 0; a1 < constants::rockblock::arg1_len; a1++ ) {
+            if(sfr::rockblock::arg_1[a1] != constants::rockblock::known_commands[c][a1 + constants::rockblock::opcode_len]) {
+                arg_1 = false;
+            }  
+        }
+        for( size_t a2 = 0; a2 < constants::rockblock::arg2_len; a2++ ) {
+            if(sfr::rockblock::arg_2[a2] != constants::rockblock::known_commands[c][a2 + constants::rockblock::opcode_len + constants::rockblock::arg1_len]) {
+                arg_2 = false;
+            }     
+        }
 
-        Serial.print("opcode: ");
-        Serial.println(opcode);
-
-        Serial.print("arg_1: ");
-        Serial.println(arg_1);
-
-        Serial.print("arg_2: ");
-        Serial.println(arg_2);
-
-        if(opcode == true && arg_1 == true && arg_2 == true){
+        if( opcode && arg_1 && arg_2 ) {
+            Serial.println("command validated");
             return true;
         }
     }
-    return false;  
+
+    Serial.println("command invalid");
+    return false;
 }
