@@ -8,9 +8,31 @@ RockblockSimulator::RockblockSimulator() {
     mtmsn = 0;
     mt_len = 0;
     mt_queue_len = 0;
-    char c[] = {0xA, 0xB, 0xC, 0xD, 0xE, 0xF, 0x1, 0x2, 0x3, 0x4, 0x0};
-    for(size_t i = 0; i < 11; i++) {
-        mt_queue.push_back(c);
+}
+
+void RockblockSimulator::execute() {
+    while(Serial.available()) {
+        char c = Serial.read();
+        if( !(c == '\r' || c == '\n') ) {
+            interface += c;
+        }
+        if(c == '\n') {
+            Serial.println();
+            if( interface.length() == 20 ) {
+                Serial.print("ADDED: ");
+                Serial.println(interface.c_str());
+
+                std::string tmp = "";
+                for(size_t i = 0; i < 20; i += 2) {
+                    const char* sub = interface.substr(i, 2).c_str();
+                    char c = strtol(sub, nullptr, 16);
+                    tmp += c;
+                }
+
+                mt_queue.push_back(tmp);
+            }
+            interface.clear();
+        }
     }
 }
 
@@ -19,18 +41,21 @@ void RockblockSimulator::begin(uint32_t baud) {
 }
 
 int RockblockSimulator::available() {
+    execute();
     process();
     return output.size();
 }
 
 size_t RockblockSimulator::write(uint8_t c) {
     input += (char) c;
+    execute();
     process();
     return 1;
 }
 
 size_t RockblockSimulator::print(const char* s) {
     input += s;
+    execute();
     process();
     return strlen(s);
 }
@@ -41,24 +66,12 @@ int RockblockSimulator::read() {
         c = output[output.size() - 1];
         output = output.substr(0, output.size() - 1);
     }
+    execute();
     process();
     return (int) c;
 }
 
-void RockblockSimulator::insert() {
-    std::string str = Serial.readString().c_str();
-    if(str.length() > 0) {
-        std::string tmp = str;
-        std::replace( tmp.begin(), tmp.end(), '\r', 'r');
-        std::replace( tmp.begin(), tmp.end(), '\n', 'n');
-        Serial.print("INSERT: ");
-        Serial.println(tmp.c_str());
-        mt_queue.push_back(str);
-    }
-}
-
 void RockblockSimulator::process() {
-    // insert();
     if( input.back() == '\r' ) {
         std::string tmp = input;
         std::replace( tmp.begin(), tmp.end(), '\r', 'r');

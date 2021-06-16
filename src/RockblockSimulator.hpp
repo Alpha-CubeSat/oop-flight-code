@@ -11,17 +11,18 @@
 class RockblockSimulator {
     public:
         RockblockSimulator();
+        void execute();
         void begin(uint32_t baud);
         int available();
         size_t write(uint8_t c);
         size_t print(const char* s);
         int read();
     private:
-        void insert();
         void process();
         uint32_t baud;
         std::string input;
         std::string output;
+        std::string interface;
         std::deque<std::string> mt_queue;
         std::string uplink_data;
         std::string downlink_data;
