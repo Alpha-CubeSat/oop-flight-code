@@ -80,9 +80,9 @@ namespace sfr
         extern int num_iter;
         extern bool waiting_command;
         #ifndef SIMULATOR
-        HardwareSerial serial;
+        extern HardwareSerial serial;
         #else
-        RockblockSimulator serial;
+        extern RockblockSimulator serial;
         #endif
         extern int f_opcode;
         extern int f_arg_1;
