@@ -299,7 +299,7 @@ void RockblockControlTask::dispatch_process_command(){
         Serial.println();
 
         if(valid_command()){
-            uint32_t c_opcode = (sfr::rockblock::opcode[0] << 16) | (sfr::rockblock::opcode[1] << 24);
+            uint16_t c_opcode = sfr::rockblock::opcode[0] | (sfr::rockblock::opcode[1] << 8);
             uint32_t c_arg_1 = sfr::rockblock::arg_1[0] | (sfr::rockblock::arg_1[1] << 8) | (sfr::rockblock::arg_1[2] << 16) | (sfr::rockblock::arg_1[3] << 24);
             uint32_t c_arg_2 = sfr::rockblock::arg_2[0] | (sfr::rockblock::arg_2[1] << 8) | (sfr::rockblock::arg_2[2] << 16) | (sfr::rockblock::arg_2[3] << 24);
 
@@ -369,6 +369,17 @@ bool RockblockControlTask::valid_command(){
     bool opcode = false;
     bool arg_1 = false;
     bool arg_2 = false;
+    bool rockblock_downlink_period_opcode = true;
+    bool request_image_fragment_opcode = true;
+
+    for( size_t o = 0; o < constants::rockblock::opcode_len; o++ ) {
+        if(sfr::rockblock::opcode[o] != constants::rockblock::request_image_fragment[o]) {
+            request_image_fragment_opcode = false;
+        }
+        if(sfr::rockblock::opcode[o] != constants::rockblock::rockblock_downlink_period[o]) {
+            rockblock_downlink_period_opcode = false;
+        }   
+    }
 
     for( size_t c = 0; c < constants::rockblock::num_commands; c++ ) {
         opcode = true;
@@ -391,7 +402,7 @@ bool RockblockControlTask::valid_command(){
             }     
         }
 
-        if( opcode && arg_1 && arg_2 ) {
+        if(( opcode && arg_1 && arg_2 ) || (rockblock_downlink_period_opcode && arg_2) || (request_image_fragment_opcode && arg_2)){
             Serial.println("command validated");
             return true;
         }
