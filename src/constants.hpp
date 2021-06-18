@@ -26,6 +26,10 @@ namespace constants
     }
     namespace rockblock
     {
+        //TODO
+        constexpr int max_downlink_period = 0;
+        constexpr int min_downlink_period = 0;
+
         constexpr int baud = 19200;
         constexpr unsigned long two_hours = 7200000;
         constexpr unsigned long ten_minutes = 600000;
@@ -58,7 +62,6 @@ namespace constants
         constexpr int fault_check_temp_c[opcode_len] =         {0x00,0x00};
         constexpr int fault_check_solar_current[opcode_len] =  {0x00,0x00};
         constexpr int fault_check_voltage[opcode_len] =        {0x00,0x00};
-
 
         constexpr int low_power[arg1_len] =  {0x01,0x00,0x00,0x00};
         constexpr int deployment[arg1_len]=  {0x00,0x00,0x00,0x00};
