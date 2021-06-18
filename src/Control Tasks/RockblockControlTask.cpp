@@ -369,9 +369,20 @@ bool RockblockControlTask::valid_command(){
     bool opcode = false;
     bool arg_1 = false;
     bool arg_2 = false;
+    bool rockblock_downlink_period_opcode = true;
+    bool request_image_fragment_opcode = true;
+
+    for( size_t o = 0; o < constants::rockblock::opcode_len; o++ ) {
+        if(sfr::rockblock::opcode[o] != constants::rockblock::request_image_fragment[o]) {
+            request_image_fragment_opcode = false;
+        }
+        if(sfr::rockblock::opcode[o] != constants::rockblock::rockblock_downlink_period[o]) {
+            rockblock_downlink_period_opcode = false;
+        }   
+    }
 
     for( size_t c = 0; c < constants::rockblock::num_commands; c++ ) {
-        /*opcode = true;
+        opcode = true;
         arg_1 = true;
         arg_2 = true;
 
@@ -391,10 +402,10 @@ bool RockblockControlTask::valid_command(){
             }     
         }
 
-        if( opcode && arg_1 && arg_2 ) {
+        if(( opcode && arg_1 && arg_2 ) || (rockblock_downlink_period_opcode && arg_2) || (request_image_fragment_opcode && arg_2)){
             Serial.println("command validated");
             return true;
-        }*/
+        }
     }
 
     Serial.println("command invalid");

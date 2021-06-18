@@ -44,24 +44,24 @@ namespace constants
         constexpr int command_len = opcode_len + arg1_len + arg2_len;
         constexpr int max_queue = 10;
 
-        constexpr int mission_mode[opcode_len] =               {0xF4,0xFF};
-        constexpr int burnwire_arm[opcode_len] =               {0x00,0x00};
-        constexpr int burnwire_fire[opcode_len] =              {0x00,0x00};
-        constexpr int rockblock_downlink_period[opcode_len] =  {0x00,0x00};
-        constexpr int request_image_fragment[opcode_len] =     {0x00,0x00};
-        constexpr int camera_take_photo[opcode_len] =          {0x00,0x00};
-        constexpr int temperature_mode[opcode_len] =           {0x00,0x00};
-        constexpr int acs_mode[opcode_len] =                   {0x00,0x00};
-        constexpr int fault_mode[opcode_len] =                 {0x00,0x00};
-        constexpr int fault_check_mag_x[opcode_len] =          {0x00,0x00};
-        constexpr int fault_check_mag_y[opcode_len] =          {0x00,0x00};
-        constexpr int fault_check_mag_z[opcode_len] =          {0x00,0x00};
-        constexpr int fault_check_gyro_x[opcode_len] =         {0x00,0x00};
-        constexpr int fault_check_gyro_y[opcode_len] =         {0x00,0x00};
-        constexpr int fault_check_gyro_z[opcode_len] =         {0x00,0x00};
-        constexpr int fault_check_temp_c[opcode_len] =         {0x00,0x00};
-        constexpr int fault_check_solar_current[opcode_len] =  {0x00,0x00};
-        constexpr int fault_check_voltage[opcode_len] =        {0x00,0x00};
+        constexpr int mission_mode[opcode_len] =               {0x00,0x00};
+        constexpr int burnwire_arm[opcode_len] =               {0x01,0x00};
+        constexpr int burnwire_fire[opcode_len] =              {0x02,0x00};
+        constexpr int rockblock_downlink_period[opcode_len] =  {0x03,0x00};
+        constexpr int request_image_fragment[opcode_len] =     {0x04,0x00};
+        constexpr int camera_take_photo[opcode_len] =          {0x05,0x00};
+        constexpr int temperature_mode[opcode_len] =           {0x06,0x00};
+        constexpr int acs_mode[opcode_len] =                   {0x07,0x00};
+        constexpr int fault_mode[opcode_len] =                 {0xF1,0xFF};
+        constexpr int fault_check_mag_x[opcode_len] =          {0xF2,0xFF};
+        constexpr int fault_check_mag_y[opcode_len] =          {0xF3,0xFF};
+        constexpr int fault_check_mag_z[opcode_len] =          {0xF4,0xFF};
+        constexpr int fault_check_gyro_x[opcode_len] =         {0xF5,0xFF};
+        constexpr int fault_check_gyro_y[opcode_len] =         {0xF6,0xFF};
+        constexpr int fault_check_gyro_z[opcode_len] =         {0xF7,0xFF};
+        constexpr int fault_check_temp_c[opcode_len] =         {0xF8,0xFF};
+        constexpr int fault_check_solar_current[opcode_len] =  {0xF9,0xFF};
+        constexpr int fault_check_voltage[opcode_len] =        {0xFA,0xFF};
 
         constexpr int low_power[arg1_len] =  {0x01,0x00,0x00,0x00};
         constexpr int deployment[arg1_len]=  {0x00,0x00,0x00,0x00};
@@ -69,10 +69,10 @@ namespace constants
         constexpr int safe[arg1_len] =       {0x03,0x00,0x00,0x00};
         constexpr int true_arg[arg1_len] =   {0x01,0x00,0x00,0x00};
         constexpr int false_arg[arg1_len] =  {0x00,0x00,0x00,0x00};
-        constexpr int active[arg1_len] =     {0x00,0x00,0x00,0x00};
+        constexpr int active[arg1_len] =     {0x01,0x00,0x00,0x00};
         constexpr int inactive[arg1_len] =   {0x00,0x00,0x00,0x00};
-        constexpr int detumbling[arg1_len] = {0x00,0x00,0x00,0x00};
-        constexpr int pointing[arg1_len] =   {0x00,0x00,0x00,0x00};
+        constexpr int detumbling[arg1_len] = {0x02,0x00,0x00,0x00};
+        constexpr int pointing[arg1_len] =   {0x01,0x00,0x00,0x00};
         constexpr int off[arg1_len] =        {0x00,0x00,0x00,0x00};
 
         constexpr int no_arg_2[arg2_len] = {0x00,0x00,0x00,0x00};
