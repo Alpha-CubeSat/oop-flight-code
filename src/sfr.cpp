@@ -54,8 +54,11 @@ namespace sfr
         unsigned char opcode[2] = {0};
         unsigned char arg_1[4] = {0};
         unsigned char arg_2[4] = {0};
+        #ifndef SIMULATOR
         HardwareSerial serial = Serial1;
-        // RockblockSimulator serial;
+        #else
+        RockblockSimulator serial;
+        #endif
         int num_iter = 0;
         bool waiting_command = false;
         int f_opcode = 0;
