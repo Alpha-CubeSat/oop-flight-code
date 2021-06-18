@@ -3,18 +3,25 @@
 CommandMonitor::CommandMonitor(unsigned int offset): TimedControlTask<void>(offset){}
 
 void CommandMonitor::execute(){
-    /*if(sfr::rockblock::waiting_command){
-        //transition to mission mode
-        //change rockblock downlink frequency
+    if(sfr::rockblock::waiting_command){
 
+        switch(sfr::rockblock::f_opcode){
+            int mission_mode = get_decimal_opcode(constants::rockblock::mission_mode[0], constants::rockblock::mission_mode[1]);
+            case mission_mode:
+                dispatch_change_mission_mode();
+                break;
+            case 1:
+                dispatch_change_fault_checks();
+            case 2
+        }
         if(sfr::rockblock::opcode[0] == '0' && sfr::rockblock::opcode[1] == '0'){
-            dispatch_change_mission_mode();
+            
         }
         else if(sfr::rockblock::opcode[0] == '1' || sfr::rockblock::opcode[0] == '2'){
-            dispatch_change_fault_checks();
+            
         }
         sfr::rockblock::waiting_command = false;
-    }*/
+    }
 
 }
 
@@ -65,6 +72,24 @@ void CommandMonitor::dispatch_change_fault_checks(){
 
     }*/
 
+}
+
+int CommandMonitor::get_decimal_opcode(uint8_t hex_opcode_byte_one, uint8_t hex_opcode_byte_two){
+    uint16_t c_opcode = hex_opcode_byte_one | (hex_opcode_byte_two << 8);
+    std::stringstream ss_opcode;
+    ss_opcode << c_opcode;
+    int f_opcode;
+    ss_opcode >> f_opcode;
+    return f_opcode;
+}
+
+int CommandMonitor::get_decimal_arg(uint8_t hex_arg_byte_one, uint8_t hex_arg_byte_two, uint8_t hex_arg_byte_three, uint8_t hex_arg_byte_four){
+    uint32_t c_arg = sfr::rockblock::arg_2[0] | (sfr::rockblock::arg_2[1] << 8) | (sfr::rockblock::arg_2[2] << 16) | (sfr::rockblock::arg_2[3] << 24);
+    std::stringstream ss_arg;
+    ss_arg << c_arg;
+    int f_arg;
+    ss_arg >> f_arg;
+    return f_arg;
 }
 
 

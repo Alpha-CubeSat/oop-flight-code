@@ -33,62 +33,226 @@ namespace constants
         constexpr int packet_size = 70;
         constexpr int num_commas = 5;
         constexpr int max_iter = 200;
-        constexpr int num_commands = 46 + 1;
+        constexpr int num_commands = 35;
         constexpr int opcode_len = 2;
         constexpr int arg1_len = 4;
         constexpr int arg2_len = 4;
         constexpr int command_len = opcode_len + arg1_len + arg2_len;
+        constexpr int max_queue = 10;
+
+        constexpr int mission_mode[opcode_len] =               {0xF4,0xFF};
+        constexpr int burnwire_arm[opcode_len] =               {0x00,0x00};
+        constexpr int burnwire_fire[opcode_len] =              {0x00,0x00};
+        constexpr int rockblock_downlink_period[opcode_len] =  {0x00,0x00};
+        constexpr int request_image_fragment[opcode_len] =     {0x00,0x00};
+        constexpr int camera_take_photo[opcode_len] =          {0x00,0x00};
+        constexpr int temperature_mode[opcode_len] =           {0x00,0x00};
+        constexpr int acs_mode[opcode_len] =                   {0x00,0x00};
+        constexpr int fault_mode[opcode_len] =                 {0x00,0x00};
+        constexpr int fault_check_mag_x[opcode_len] =          {0x00,0x00};
+        constexpr int fault_check_mag_y[opcode_len] =          {0x00,0x00};
+        constexpr int fault_check_mag_z[opcode_len] =          {0x00,0x00};
+        constexpr int fault_check_gyro_x[opcode_len] =         {0x00,0x00};
+        constexpr int fault_check_gyro_y[opcode_len] =         {0x00,0x00};
+        constexpr int fault_check_gyro_z[opcode_len] =         {0x00,0x00};
+        constexpr int fault_check_temp_c[opcode_len] =         {0x00,0x00};
+        constexpr int fault_check_solar_current[opcode_len] =  {0x00,0x00};
+        constexpr int fault_check_voltage[opcode_len] =        {0x00,0x00};
+
+
+        constexpr int low_power[arg1_len] =  {0x01,0x00,0x00,0x00};
+        constexpr int deployment[arg1_len]=  {0x00,0x00,0x00,0x00};
+        constexpr int standby[arg1_len] =    {0x02,0x00,0x00,0x00};
+        constexpr int safe[arg1_len] =       {0x03,0x00,0x00,0x00};
+        constexpr int true_arg[arg1_len] =   {0x01,0x00,0x00,0x00};
+        constexpr int false_arg[arg1_len] =  {0x00,0x00,0x00,0x00};
+        constexpr int active[arg1_len] =     {0x00,0x00,0x00,0x00};
+        constexpr int inactive[arg1_len] =   {0x00,0x00,0x00,0x00};
+        constexpr int detumbling[arg1_len] = {0x00,0x00,0x00,0x00};
+        constexpr int pointing[arg1_len] =   {0x00,0x00,0x00,0x00};
+        constexpr int off[arg1_len] =        {0x00,0x00,0x00,0x00};
+
+        constexpr int no_arg_2[arg2_len] = {0x00,0x00,0x00,0x00};
+
+        constexpr int mission_mode_low_power[command_len] = {mission_mode[0], mission_mode[1], 
+                                                             low_power[0], low_power[1], low_power[2], low_power[3],
+                                                             no_arg_2[0], no_arg_2[1], no_arg_2[2], no_arg_2[3]};
+
+        constexpr int mission_mode_deployment[command_len] = {mission_mode[0], mission_mode[1], 
+                                                              deployment[0], deployment[1], deployment[2], deployment[3],
+                                                              no_arg_2[0], no_arg_2[1], no_arg_2[2], no_arg_2[3]};
+
+        constexpr int mission_mode_standby[command_len] = {mission_mode[0], mission_mode[1], 
+                                                           standby[0], standby[1], standby[2], standby[3],
+                                                           no_arg_2[0], no_arg_2[1], no_arg_2[2], no_arg_2[3]};
+        
+        constexpr int mission_mode_safe[command_len] = {mission_mode[0], mission_mode[1], 
+                                                        safe[0], safe[1], safe[2], safe[3],
+                                                        no_arg_2[0], no_arg_2[1], no_arg_2[2], no_arg_2[3]};
+
+        constexpr int burnwire_arm_true[command_len] = {burnwire_arm[0], burnwire_arm[1], 
+                                                        true_arg[0], true_arg[1], true_arg[2], true_arg[3],
+                                                        no_arg_2[0],  no_arg_2[1],  no_arg_2[2],  no_arg_2[3]};   
+
+        constexpr int burnwire_arm_false[command_len] = {burnwire_arm[0], burnwire_arm[1], 
+                                                        false_arg[0], false_arg[1], false_arg[2], false_arg[3],
+                                                        no_arg_2[0],  no_arg_2[1],  no_arg_2[2],  no_arg_2[3]};    
+
+        constexpr int burnwire_fire_true[command_len] = {burnwire_fire[0], burnwire_fire[1], 
+                                                        true_arg[0], true_arg[1], true_arg[2], true_arg[3],
+                                                        no_arg_2[0],  no_arg_2[1],  no_arg_2[2],  no_arg_2[3]};  
+
+        constexpr int burnwire_fire_false[command_len] = {burnwire_fire[0], burnwire_fire[1], 
+                                                        false_arg[0], false_arg[1], false_arg[2], false_arg[3],
+                                                        no_arg_2[0],  no_arg_2[1],  no_arg_2[2],  no_arg_2[3]};    
+ 
+
+        constexpr int camera_take_photo_true[command_len] = {camera_take_photo[0], camera_take_photo[1], 
+                                                        true_arg[0], true_arg[1], true_arg[2], true_arg[3],
+                                                        no_arg_2[0],  no_arg_2[1],  no_arg_2[2],  no_arg_2[3]};    
+
+        constexpr int camera_take_photo_false[command_len] = {camera_take_photo[0], camera_take_photo[1], 
+                                                        false_arg[0], false_arg[1], false_arg[2], false_arg[3],
+                                                        no_arg_2[0],  no_arg_2[1],  no_arg_2[2],  no_arg_2[3]};  
+
+        constexpr int temperature_mode_active[command_len] = {temperature_mode[0], temperature_mode[1], 
+                                                        active[0], active[1], active[2], active[3],
+                                                        no_arg_2[0],  no_arg_2[1],  no_arg_2[2],  no_arg_2[3]}; 
+
+        constexpr int temperature_mode_inactive[command_len] = {temperature_mode[0], temperature_mode[1], 
+                                                        inactive[0], inactive[1], inactive[2], inactive[3],
+                                                        no_arg_2[0],  no_arg_2[1],  no_arg_2[2],  no_arg_2[3]};   
+
+        constexpr int acs_mode_detumbling[command_len] = {acs_mode[0], acs_mode[1], 
+                                                        detumbling[0], detumbling[1], detumbling[2], detumbling[3],
+                                                        no_arg_2[0],  no_arg_2[1],  no_arg_2[2],  no_arg_2[3]};  
+
+        constexpr int acs_mode_pointing[command_len] = {acs_mode[0], acs_mode[1], 
+                                                        pointing[0], pointing[1], pointing[2], pointing[3],
+                                                        no_arg_2[0],  no_arg_2[1],  no_arg_2[2],  no_arg_2[3]};  
+
+        constexpr int acs_mode_off[command_len] = {acs_mode[0], acs_mode[1], 
+                                                        off[0], off[1], off[2], off[3],
+                                                        no_arg_2[0],  no_arg_2[1],  no_arg_2[2],  no_arg_2[3]};   
+
+        constexpr int fault_mode_active[command_len] = {fault_mode[0], fault_mode[1], 
+                                                        active[0], active[1], active[2], active[3],
+                                                        no_arg_2[0],  no_arg_2[1],  no_arg_2[2],  no_arg_2[3]}; 
+
+        constexpr int fault_mode_inactive[command_len] = {fault_mode[0], fault_mode[1], 
+                                                        inactive[0], inactive[1], inactive[2], inactive[3],
+                                                        no_arg_2[0],  no_arg_2[1],  no_arg_2[2],  no_arg_2[3]};                    
+
+        constexpr int fault_check_mag_x_true[command_len] = {fault_check_mag_x[0], fault_check_mag_x[1], 
+                                                        true_arg[0], true_arg[1], true_arg[2], true_arg[3],
+                                                        no_arg_2[0],  no_arg_2[1],  no_arg_2[2],  no_arg_2[3]}; 
+
+        constexpr int fault_check_mag_x_false[command_len] = {fault_check_mag_x[0], fault_check_mag_x[1], 
+                                                        false_arg[0], false_arg[1], false_arg[2], false_arg[3],
+                                                        no_arg_2[0],  no_arg_2[1],  no_arg_2[2],  no_arg_2[3]}; 
+
+        constexpr int fault_check_mag_y_true[command_len] = {fault_check_mag_y[0], fault_check_mag_y[1], 
+                                                        true_arg[0], true_arg[1], true_arg[2], true_arg[3],
+                                                        no_arg_2[0],  no_arg_2[1],  no_arg_2[2],  no_arg_2[3]}; 
+
+        constexpr int fault_check_mag_y_false[command_len] = {fault_check_mag_y[0], fault_check_mag_y[1], 
+                                                        false_arg[0], false_arg[1], false_arg[2], false_arg[3],
+                                                        no_arg_2[0],  no_arg_2[1],  no_arg_2[2],  no_arg_2[3]}; 
+        
+        constexpr int fault_check_mag_z_true[command_len] = {fault_check_mag_z[0], fault_check_mag_z[1], 
+                                                        true_arg[0], true_arg[1], true_arg[2], true_arg[3],
+                                                        no_arg_2[0],  no_arg_2[1],  no_arg_2[2],  no_arg_2[3]}; 
+
+        constexpr int fault_check_mag_z_false[command_len] = {fault_check_mag_z[0], fault_check_mag_z[1], 
+                                                        false_arg[0], false_arg[1], false_arg[2], false_arg[3],
+                                                        no_arg_2[0],  no_arg_2[1],  no_arg_2[2],  no_arg_2[3]};
+
+        constexpr int fault_check_gyro_x_true[command_len] = {fault_check_gyro_x[0], fault_check_gyro_x[1], 
+                                                        true_arg[0], true_arg[1], true_arg[2], true_arg[3],
+                                                        no_arg_2[0],  no_arg_2[1],  no_arg_2[2],  no_arg_2[3]}; 
+
+        constexpr int fault_check_gyro_x_false[command_len] = {fault_check_gyro_x[0], fault_check_gyro_x[1], 
+                                                        false_arg[0], false_arg[1], false_arg[2], false_arg[3],
+                                                        no_arg_2[0],  no_arg_2[1],  no_arg_2[2],  no_arg_2[3]}; 
+
+        constexpr int fault_check_gyro_y_true[command_len] = {fault_check_gyro_y[0], fault_check_gyro_y[1], 
+                                                        true_arg[0], true_arg[1], true_arg[2], true_arg[3],
+                                                        no_arg_2[0],  no_arg_2[1],  no_arg_2[2],  no_arg_2[3]}; 
+
+        constexpr int fault_check_gyro_y_false[command_len] = {fault_check_gyro_y[0], fault_check_gyro_y[1], 
+                                                        false_arg[0], false_arg[1], false_arg[2], false_arg[3],
+                                                        no_arg_2[0],  no_arg_2[1],  no_arg_2[2],  no_arg_2[3]}; 
+        
+        constexpr int fault_check_gyro_z_true[command_len] = {fault_check_gyro_z[0], fault_check_gyro_z[1], 
+                                                        true_arg[0], true_arg[1], true_arg[2], true_arg[3],
+                                                        no_arg_2[0],  no_arg_2[1],  no_arg_2[2],  no_arg_2[3]}; 
+
+        constexpr int fault_check_gyro_z_false[command_len] = {fault_check_gyro_z[0], fault_check_gyro_z[1], 
+                                                        false_arg[0], false_arg[1], false_arg[2], false_arg[3],
+                                                        no_arg_2[0],  no_arg_2[1],  no_arg_2[2],  no_arg_2[3]}; 
+
+        constexpr int fault_check_temp_c_true[command_len] = {fault_check_temp_c[0], fault_check_temp_c[1], 
+                                                        true_arg[0], true_arg[1], true_arg[2], true_arg[3],
+                                                        no_arg_2[0],  no_arg_2[1],  no_arg_2[2],  no_arg_2[3]}; 
+
+        constexpr int fault_check_temp_c_false[command_len] = {fault_check_temp_c[0], fault_check_temp_c[1], 
+                                                        false_arg[0], false_arg[1], false_arg[2], false_arg[3],
+                                                        no_arg_2[0],  no_arg_2[1],  no_arg_2[2],  no_arg_2[3]}; 
+
+        constexpr int fault_check_solar_current_true[command_len] = {fault_check_solar_current[0], fault_check_solar_current[1], 
+                                                        true_arg[0], true_arg[1], true_arg[2], true_arg[3],
+                                                        no_arg_2[0],  no_arg_2[1],  no_arg_2[2],  no_arg_2[3]}; 
+
+        constexpr int fault_check_solar_current_false[command_len] = {fault_check_solar_current[0], fault_check_solar_current[1], 
+                                                        false_arg[0], false_arg[1], false_arg[2], false_arg[3],
+                                                        no_arg_2[0],  no_arg_2[1],  no_arg_2[2],  no_arg_2[3]}; 
+
+        constexpr int fault_check_voltage_true[command_len] = {fault_check_voltage[0], fault_check_voltage[1], 
+                                                        true_arg[0], true_arg[1], true_arg[2], true_arg[3],
+                                                        no_arg_2[0],  no_arg_2[1],  no_arg_2[2],  no_arg_2[3]}; 
+
+        constexpr int fault_check_voltage_false[command_len] = {fault_check_voltage[0], fault_check_voltage[1], 
+                                                        false_arg[0], false_arg[1], false_arg[2], false_arg[3],
+                                                        no_arg_2[0],  no_arg_2[1],  no_arg_2[2],  no_arg_2[3]};
+
         constexpr int known_commands[num_commands][command_len] = 
         {
-            {0x00,0x00,0x01,0x00,0x00,0x00,0x00,0x00,0x00,0x00},
-            {0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00},
-            {0x00,0x00,0x02,0x00,0x00,0x00,0x00,0x00,0x00,0x00},
-            {0x00,0x00,0x03,0x00,0x00,0x00,0x00,0x00,0x00,0x00},
-            {0x01,0x00,0x01,0x00,0x00,0x00,0x00,0x00,0x00,0x00},
-            {0x01,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00},
-            {0x02,0x00,0x01,0x00,0x00,0x00,0x00,0x00,0x00,0x00},
-            {0x02,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00},
-            {0x03,0x00,0x01,0x00,0x00,0x00,0x00,0x00,0x00,0x00},
-            {0x03,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00},
-            {0x04,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00},
-            {0x04,0x00,0xFF,0xFF,0xFF,0xFF,0x00,0x00,0x00,0x00},
-            {0x05,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00},
-            {0x06,0x00,0x01,0x00,0x00,0x00,0x00,0x00,0x00,0x00},
-            {0x06,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00},
-            {0x07,0x00,0x01,0x00,0x00,0x00,0x00,0x00,0x00,0x00},
-            {0x07,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00},
-            {0x08,0x00,0x02,0x00,0x00,0x00,0x00,0x00,0x00,0x00},
-            {0x08,0x00,0x01,0x00,0x00,0x00,0x00,0x00,0x00,0x00},
-            {0x08,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00},
-            {0x09,0x00,0x01,0x00,0x00,0x00,0x00,0x00,0x00,0x00},
-            {0x09,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00},
-            {0xFF,0xF4,0x01,0x00,0x00,0x00,0x00,0x00,0x00,0x00},
-            {0xFF,0xF4,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00},
-            {0xFF,0xF5,0x01,0x00,0x00,0x00,0x00,0x00,0x00,0x00},
-            {0xFF,0xF5,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00},
-            {0xFF,0xF6,0x01,0x00,0x00,0x00,0x00,0x00,0x00,0x00},
-            {0xFF,0xF6,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00},
-            {0xFF,0xF7,0x01,0x00,0x00,0x00,0x00,0x00,0x00,0x00},
-            {0xFF,0xF7,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00},
-            {0xFF,0xF8,0x01,0x00,0x00,0x00,0x00,0x00,0x00,0x00},
-            {0xFF,0xF8,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00},
-            {0xFF,0xF9,0x01,0x00,0x00,0x00,0x00,0x00,0x00,0x00},
-            {0xFF,0xF9,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00},
-            {0xFF,0xFA,0x01,0x00,0x00,0x00,0x00,0x00,0x00,0x00},
-            {0xFF,0xFA,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00},
-            {0xFF,0xFB,0x01,0x00,0x00,0x00,0x00,0x00,0x00,0x00},
-            {0xFF,0xFB,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00},
-            {0xFF,0xFC,0x01,0x00,0x00,0x00,0x00,0x00,0x00,0x00},
-            {0xFF,0xFC,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00},
-            {0xFF,0xFD,0x01,0x00,0x00,0x00,0x00,0x00,0x00,0x00},
-            {0xFF,0xFD,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00},
-            {0xFF,0xFE,0x01,0x00,0x00,0x00,0x00,0x00,0x00,0x00},
-            {0xFF,0xFE,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00},
-            {0xFF,0xFF,0x01,0x00,0x00,0x00,0x00,0x00,0x00,0x00},
-            {0xFF,0xFF,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00},
-            {0x0A,0x0B,0x0C,0x0D,0x0E,0x0F,0x01,0x02,0x03,0x04}
+            {mission_mode_low_power[0], mission_mode_low_power[1], mission_mode_low_power[2], mission_mode_low_power[3], mission_mode_low_power[4], mission_mode_low_power[5], mission_mode_low_power[6], mission_mode_low_power[7], mission_mode_low_power[8], mission_mode_low_power[9]},
+            {mission_mode_deployment[0], mission_mode_deployment[1], mission_mode_deployment[2], mission_mode_deployment[3], mission_mode_deployment[4], mission_mode_deployment[5],mission_mode_deployment[6], mission_mode_deployment[7], mission_mode_deployment[8], mission_mode_deployment[9]},
+            {mission_mode_standby[0], mission_mode_standby[1], mission_mode_standby[2], mission_mode_standby[3], mission_mode_standby[4], mission_mode_standby[5], mission_mode_standby[6], mission_mode_standby[7], mission_mode_standby[8], mission_mode_standby[9]},
+            {mission_mode_safe[0], mission_mode_safe[1], mission_mode_safe[2], mission_mode_safe[3], mission_mode_safe[4], mission_mode_safe[5], mission_mode_safe[6], mission_mode_safe[7], mission_mode_safe[8], mission_mode_safe[9]},
+            {burnwire_arm_true[0], burnwire_arm_true[1], burnwire_arm_true[2], burnwire_arm_true[3], burnwire_arm_true[4], burnwire_arm_true[5], burnwire_arm_true[6], burnwire_arm_true[7], burnwire_arm_true[8], burnwire_arm_true[9]},
+            {burnwire_arm_false[0], burnwire_arm_false[1], burnwire_arm_false[2], burnwire_arm_false[3], burnwire_arm_false[4], burnwire_arm_false[5], burnwire_arm_false[6], burnwire_arm_false[7], burnwire_arm_false[8], burnwire_arm_false[9]},
+            {burnwire_fire_true[0], burnwire_fire_true[1], burnwire_fire_true[2], burnwire_fire_true[3], burnwire_fire_true[4], burnwire_fire_true[5], burnwire_fire_true[6], burnwire_fire_true[7], burnwire_fire_true[8], burnwire_fire_true[9]},
+            {burnwire_fire_false[0], burnwire_fire_false[1], burnwire_fire_false[2], burnwire_fire_false[3], burnwire_fire_false[4], burnwire_fire_false[5], burnwire_fire_false[6], burnwire_fire_false[7], burnwire_fire_false[8], burnwire_fire_false[9]},
+            {camera_take_photo_true[0], camera_take_photo_true[1], camera_take_photo_true[2], camera_take_photo_true[3], camera_take_photo_true[4], camera_take_photo_true[5], camera_take_photo_true[6], camera_take_photo_true[7], camera_take_photo_true[8], camera_take_photo_true[9]},
+            {camera_take_photo_false[0], camera_take_photo_false[1], camera_take_photo_false[2], camera_take_photo_false[3], camera_take_photo_false[4], camera_take_photo_false[5], camera_take_photo_false[6], camera_take_photo_false[7], camera_take_photo_false[8], camera_take_photo_false[9]},
+            {temperature_mode_active[0], temperature_mode_active[1], temperature_mode_active[2], temperature_mode_active[3], temperature_mode_active[4], temperature_mode_active[5], temperature_mode_active[6], temperature_mode_active[7], temperature_mode_active[8], temperature_mode_active[9]},
+            {temperature_mode_inactive[0], temperature_mode_inactive[1], temperature_mode_inactive[2], temperature_mode_inactive[3], temperature_mode_inactive[4], temperature_mode_inactive[5], temperature_mode_inactive[6], temperature_mode_inactive[7], temperature_mode_inactive[8], temperature_mode_inactive[9]},
+            {acs_mode_detumbling[0], acs_mode_detumbling[1], acs_mode_detumbling[2], acs_mode_detumbling[3], acs_mode_detumbling[4], acs_mode_detumbling[5], acs_mode_detumbling[6], acs_mode_detumbling[7], acs_mode_detumbling[8], acs_mode_detumbling[9]},
+            {acs_mode_pointing[0], acs_mode_pointing[1], acs_mode_pointing[2], acs_mode_pointing[3], acs_mode_pointing[4], acs_mode_pointing[5], acs_mode_pointing[6], acs_mode_pointing[7], acs_mode_pointing[8], acs_mode_pointing[9]},
+            {acs_mode_off[0], acs_mode_off[1], acs_mode_off[2], acs_mode_off[3], acs_mode_off[4], acs_mode_off[5], acs_mode_off[6], acs_mode_off[7], acs_mode_off[8], acs_mode_off[9]},
+            {fault_mode_active[0], fault_mode_active[1], fault_mode_active[2], fault_mode_active[3], fault_mode_active[4], fault_mode_active[5], fault_mode_active[6], fault_mode_active[7], fault_mode_active[8], fault_mode_active[9]},
+            {fault_mode_inactive[0], fault_mode_inactive[1], fault_mode_inactive[2], fault_mode_inactive[3], fault_mode_inactive[4], fault_mode_inactive[5], fault_mode_inactive[6], fault_mode_inactive[7], fault_mode_inactive[8], fault_mode_inactive[9]},
+            {fault_check_mag_x_true[0], fault_check_mag_x_true[1], fault_check_mag_x_true[2], fault_check_mag_x_true[3], fault_check_mag_x_true[4], fault_check_mag_x_true[5], fault_check_mag_x_true[6], fault_check_mag_x_true[7], fault_check_mag_x_true[8], fault_check_mag_x_true[9]},
+            {fault_check_mag_x_false[0], fault_check_mag_x_false[1], fault_check_mag_x_false[2], fault_check_mag_x_false[3], fault_check_mag_x_false[4], fault_check_mag_x_false[5], fault_check_mag_x_false[6], fault_check_mag_x_false[7], fault_check_mag_x_false[8], fault_check_mag_x_false[9]},
+            {fault_check_mag_y_true[0], fault_check_mag_y_true[1], fault_check_mag_y_true[2], fault_check_mag_y_true[3], fault_check_mag_y_true[4], fault_check_mag_y_true[5], fault_check_mag_y_true[6], fault_check_mag_y_true[7], fault_check_mag_y_true[8], fault_check_mag_y_true[9]},
+            {fault_check_mag_y_false[0], fault_check_mag_y_false[1], fault_check_mag_y_false[2], fault_check_mag_y_false[3], fault_check_mag_y_false[4], fault_check_mag_y_false[5], fault_check_mag_y_false[6], fault_check_mag_y_false[7], fault_check_mag_y_false[8], fault_check_mag_y_false[9]},
+            {fault_check_mag_z_true[0], fault_check_mag_z_true[1], fault_check_mag_z_true[2], fault_check_mag_z_true[3], fault_check_mag_z_true[4], fault_check_mag_z_true[5], fault_check_mag_z_true[6], fault_check_mag_z_true[7], fault_check_mag_z_true[8], fault_check_mag_z_true[9]},
+            {fault_check_mag_z_false[0], fault_check_mag_z_false[1], fault_check_mag_z_false[2], fault_check_mag_z_false[3], fault_check_mag_z_false[4], fault_check_mag_z_false[5], fault_check_mag_z_false[6], fault_check_mag_z_false[7], fault_check_mag_z_false[8], fault_check_mag_z_false[9]},
+            {fault_check_gyro_x_true[0], fault_check_gyro_x_true[1], fault_check_gyro_x_true[2], fault_check_gyro_x_true[3], fault_check_gyro_x_true[4], fault_check_gyro_x_true[5], fault_check_gyro_x_true[6], fault_check_gyro_x_true[7], fault_check_gyro_x_true[8], fault_check_gyro_x_true[9]},
+            {fault_check_gyro_x_false[0], fault_check_gyro_x_false[1], fault_check_gyro_x_false[2], fault_check_gyro_x_false[3], fault_check_gyro_x_false[4], fault_check_gyro_x_false[5], fault_check_gyro_x_false[6], fault_check_gyro_x_false[7], fault_check_gyro_x_false[8], fault_check_gyro_x_false[9]},
+            {fault_check_gyro_y_true[0], fault_check_gyro_y_true[1], fault_check_gyro_y_true[2], fault_check_gyro_y_true[3], fault_check_gyro_y_true[4], fault_check_gyro_y_true[5], fault_check_gyro_y_true[6], fault_check_gyro_y_true[7], fault_check_gyro_y_true[8], fault_check_gyro_y_true[9]},
+            {fault_check_gyro_y_false[0], fault_check_gyro_y_false[1], fault_check_gyro_y_false[2], fault_check_gyro_y_false[3], fault_check_gyro_y_false[4], fault_check_gyro_y_false[5], fault_check_gyro_y_false[6], fault_check_gyro_y_false[7], fault_check_gyro_y_false[8], fault_check_gyro_y_false[9]},
+            {fault_check_gyro_z_true[0], fault_check_gyro_z_true[1], fault_check_gyro_z_true[2], fault_check_gyro_z_true[3], fault_check_gyro_z_true[4], fault_check_gyro_z_true[5], fault_check_gyro_z_true[6], fault_check_gyro_z_true[7], fault_check_gyro_z_true[8], fault_check_gyro_z_true[9]},
+            {fault_check_gyro_z_false[0], fault_check_gyro_z_false[1], fault_check_gyro_z_false[2], fault_check_gyro_z_false[3], fault_check_gyro_z_false[4], fault_check_gyro_z_false[5], fault_check_gyro_z_false[6], fault_check_gyro_z_false[7], fault_check_gyro_z_false[8], fault_check_gyro_z_false[9]},
+            {fault_check_temp_c_true[0], fault_check_temp_c_true[1], fault_check_temp_c_true[2], fault_check_temp_c_true[3], fault_check_temp_c_true[4], fault_check_temp_c_true[5], fault_check_temp_c_true[6], fault_check_temp_c_true[7], fault_check_temp_c_true[8], fault_check_temp_c_true[9]},
+            {fault_check_temp_c_false[0], fault_check_temp_c_false[1], fault_check_temp_c_false[2], fault_check_temp_c_false[3], fault_check_temp_c_false[4], fault_check_temp_c_false[5], fault_check_temp_c_false[6], fault_check_temp_c_false[7], fault_check_temp_c_false[8], fault_check_temp_c_false[9]},
+            {fault_check_solar_current_true[0], fault_check_solar_current_true[1], fault_check_solar_current_true[2], fault_check_solar_current_true[3], fault_check_solar_current_true[4], fault_check_solar_current_true[5], fault_check_solar_current_true[6], fault_check_solar_current_true[7], fault_check_solar_current_true[8], fault_check_solar_current_true[9]},
+            {fault_check_solar_current_false[0], fault_check_solar_current_false[1], fault_check_solar_current_false[2], fault_check_solar_current_false[3], fault_check_solar_current_false[4], fault_check_solar_current_false[5], fault_check_solar_current_false[6], fault_check_solar_current_false[7], fault_check_solar_current_false[8], fault_check_solar_current_false[9]},
+            {fault_check_voltage_true[0], fault_check_voltage_true[1], fault_check_voltage_true[2], fault_check_voltage_true[3], fault_check_voltage_true[4], fault_check_voltage_true[5], fault_check_voltage_true[6], fault_check_voltage_true[7], fault_check_voltage_true[8], fault_check_voltage_true[9]},
+            {fault_check_voltage_false[0], fault_check_voltage_false[1], fault_check_voltage_false[2], fault_check_voltage_false[3], fault_check_voltage_false[4], fault_check_voltage_false[5], fault_check_voltage_false[6], fault_check_voltage_false[7], fault_check_voltage_false[8], fault_check_voltage_false[9]}
         };
-        constexpr int max_queue = 10;
     }
     namespace temperature
     {
@@ -214,5 +378,7 @@ namespace constants
         static constexpr unsigned int mission_manager_offset = 16*30000;
     }
 };
+
+
 
 #endif

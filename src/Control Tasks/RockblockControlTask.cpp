@@ -299,7 +299,7 @@ void RockblockControlTask::dispatch_process_command(){
         Serial.println();
 
         if(valid_command()){
-            uint32_t c_opcode = (sfr::rockblock::opcode[0] << 16) | (sfr::rockblock::opcode[1] << 24);
+            uint16_t c_opcode = sfr::rockblock::opcode[0] | (sfr::rockblock::opcode[1] << 8);
             uint32_t c_arg_1 = sfr::rockblock::arg_1[0] | (sfr::rockblock::arg_1[1] << 8) | (sfr::rockblock::arg_1[2] << 16) | (sfr::rockblock::arg_1[3] << 24);
             uint32_t c_arg_2 = sfr::rockblock::arg_2[0] | (sfr::rockblock::arg_2[1] << 8) | (sfr::rockblock::arg_2[2] << 16) | (sfr::rockblock::arg_2[3] << 24);
 
@@ -371,7 +371,7 @@ bool RockblockControlTask::valid_command(){
     bool arg_2 = false;
 
     for( size_t c = 0; c < constants::rockblock::num_commands; c++ ) {
-        opcode = true;
+        /*opcode = true;
         arg_1 = true;
         arg_2 = true;
 
@@ -394,7 +394,7 @@ bool RockblockControlTask::valid_command(){
         if( opcode && arg_1 && arg_2 ) {
             Serial.println("command validated");
             return true;
-        }
+        }*/
     }
 
     Serial.println("command invalid");
