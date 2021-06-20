@@ -78,6 +78,7 @@ namespace sfr
         extern unsigned char arg_1[4];
         extern unsigned char arg_2[4];
         extern int num_iter;
+        extern bool flush_status;
         extern bool waiting_command;
         #ifndef SIMULATOR
         extern HardwareSerial serial;

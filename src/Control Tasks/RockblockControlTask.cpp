@@ -323,6 +323,9 @@ void RockblockControlTask::dispatch_process_command(){
             sfr::rockblock::f_arg_2 = f_arg_2;
             
             sfr::rockblock::waiting_command = true;
+        } else if(sfr::rockblock::opcode[0] == 'F' && sfr::rockblock::opcode[1] == 'L') {
+            Serial.println("flush confirmed");
+            sfr::rockblock::flush_status = false;
         }
         transition_to(rockblock_mode_type::queue_check);
     }
@@ -334,7 +337,7 @@ void RockblockControlTask::dispatch_queue_check() {
     int len = strtol(ptr, nullptr, 10);
     Serial.print("waiting messages: ");
     Serial.println(len);
-    if( len >= constants::rockblock::max_queue ) {
+    if( len >= constants::rockblock::max_queue && !sfr::rockblock::flush_status ) {
         transition_to(rockblock_mode_type::send_flush);
     } else if(len > 0) {
         transition_to(rockblock_mode_type::send_response);
@@ -351,6 +354,7 @@ void RockblockControlTask::dispatch_send_flush(){
 
 void RockblockControlTask::dispatch_await_flush() {
     if(sfr::rockblock::serial.read()=='K'){
+        sfr::rockblock::flush_status = true;
         transition_to(rockblock_mode_type::send_response);
     }
 }

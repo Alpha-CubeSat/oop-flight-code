@@ -8,6 +8,7 @@ RockblockSimulator::RockblockSimulator() {
     mtmsn = 0;
     mt_len = 0;
     mt_queue_len = 0;
+    flush_stage = 0;
 }
 
 void RockblockSimulator::execute() {
@@ -71,6 +72,18 @@ int RockblockSimulator::read() {
     return (int) c;
 }
 
+void RockblockSimulator::check_flush() {
+    if(flush_stage == 1) {
+        flush_stage = 2;
+    } else if(flush_stage == 2) {
+        while(mt_queue.size()) {
+            mt_queue.pop_back();
+        }
+        mt_queue.push_back("FLUSH_MT");
+        flush_stage = 0;
+    }
+}
+
 void RockblockSimulator::process() {
     if( input.back() == '\r' ) {
         std::string tmp = input;
@@ -112,12 +125,13 @@ void RockblockSimulator::process() {
                 output = "\r\n2\r\n\r\nOK\r\n";
             }
         } else if( input == "AT+SBDIX\r" ) {
+            check_flush();
             // MO_STATUS
             mo_status = 0;
             // MOMSN
             momsn++;
             // MT_STATUS
-            if(mt_queue.size() > 0) {
+            if(mt_queue.size()) {
                 mt_status = 1;
                 uplink_data = mt_queue[0];
                 mt_queue.pop_front();
@@ -172,9 +186,7 @@ void RockblockSimulator::process() {
             output += "\r\nOK\r\n";
             uplink_data.clear();
         } else if( input == "AT+SBDWT=FLUSH_MT\r" ) {
-            while(mt_queue.size() > 1) {
-                mt_queue.pop_back();
-            }
+            flush_stage = 1;
             output = "AT+SBDWT=FLUSH_MT\r\r\nOK\r\n";
         }
 

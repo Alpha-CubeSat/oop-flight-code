@@ -18,6 +18,7 @@ class RockblockSimulator {
         size_t print(const char* s);
         int read();
     private:
+        void check_flush();
         void process();
         uint32_t baud;
         std::string input;
@@ -33,6 +34,7 @@ class RockblockSimulator {
         uint16_t mtmsn;
         uint16_t mt_len;
         uint8_t mt_queue_len;
+        uint8_t flush_stage;
 };
 
 #endif

@@ -60,6 +60,7 @@ namespace sfr
         RockblockSimulator serial;
         #endif
         int num_iter = 0;
+        bool flush_status = false;
         bool waiting_command = false;
         int f_opcode = 0;
         int f_arg_1 = 0;
