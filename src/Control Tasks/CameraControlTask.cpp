@@ -3,11 +3,11 @@
 CameraControlTask::CameraControlTask(unsigned int offset): TimedControlTask<void>(offset), adaCam(&sfr::camera::serial)
 {
     //Fault check for SD card
-    if (!SD.begin(254))
+    /*if (!SD.begin(254))
     {
         Serial.println("SD card failed to open!");
         sfr::camera::sd_card_failed = true;
-    }
+    }*/
     pinMode(constants::camera::power_on_pin, OUTPUT);
     digitalWrite(constants::camera::power_on_pin, LOW);
 }

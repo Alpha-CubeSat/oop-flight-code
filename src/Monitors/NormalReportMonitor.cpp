@@ -4,11 +4,11 @@ NormalReportMonitor::NormalReportMonitor(unsigned int offset): TimedControlTask<
 
 void NormalReportMonitor::execute(){
 
-    #ifdef PRINT
+    #ifdef PRINT/*
     Serial.println("-----------------PHOTORESISTOR----------------------");
     Serial.print("covered: ");
     Serial.println(sfr::photoresistor::covered);
-
+*/
     Serial.println("--------------------MISSION-------------------------");
     Serial.print("mode: ");
     switch((int)sfr::mission::mode){
@@ -41,6 +41,7 @@ void NormalReportMonitor::execute(){
             Serial.println("delay");
             break;
     }
+/*
     Serial.print("attempts: ");
     Serial.println(sfr::burnwire::attempts);
     Serial.print("start_time: ");
@@ -170,10 +171,16 @@ void NormalReportMonitor::execute(){
     Serial.println(sfr::imu::gyro_y);
     Serial.print("gyro_z: ");
     Serial.println(sfr::imu::gyro_z);
-
+    Serial.print("acc_x: ");
+    Serial.println(sfr::imu::acc_x);
+    Serial.print("acc_y: ");
+    Serial.println(sfr::imu::acc_y);
+    Serial.print("acc_z: ");
+    Serial.println(sfr::imu::acc_z);
+*/
     Serial.println("------------------TEMPERATURE-----------------------");
     Serial.print("temp_c: ");
-    Serial.println(sfr::temperature::temp_c);
+    Serial.println(sfr::temperature::temp_c);/*
     Serial.print("mode: ");
     switch((int)sfr::temperature::mode){
         case 0:
@@ -194,7 +201,7 @@ void NormalReportMonitor::execute(){
 
     Serial.println("--------------------BUTTON-----------------------");
     Serial.print("pressed: ");
-    Serial.println(sfr::button::pressed);
+    Serial.println(sfr::button::pressed);*/
     #endif
     
     uint8_t mag_x = map(sfr::imu::mag_x_average, constants::imu::min_mag_x, constants::imu::max_mag_x, 0, 255);

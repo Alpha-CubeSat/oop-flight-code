@@ -20,7 +20,7 @@ void RockblockControlTask::execute(){
             dispatch_send_at();
             break;
         case rockblock_mode_type::await_at:
-            Serial.println("await_at");
+            //Serial.println("await_at");
             dispatch_await_at();
             break;
         case rockblock_mode_type::send_signal_strength:
