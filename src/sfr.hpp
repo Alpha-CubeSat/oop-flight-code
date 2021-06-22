@@ -77,14 +77,15 @@ namespace sfr
         extern unsigned char opcode[2];
         extern unsigned char arg_1[4];
         extern unsigned char arg_2[4];
-        extern int num_iter;
-        extern bool flush_status;
-        extern bool waiting_command;
         #ifndef SIMULATOR
         extern HardwareSerial serial;
         #else
         extern RockblockSimulator serial;
         #endif
+        extern int num_iter;
+        extern bool flush_status;
+        extern bool waiting_command;
+        extern int conseq_reads;
         extern int f_opcode;
         extern int f_arg_1;
         extern int f_arg_2;

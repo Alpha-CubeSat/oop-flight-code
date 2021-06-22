@@ -42,7 +42,7 @@ namespace constants
         constexpr int arg1_len = 4;
         constexpr int arg2_len = 4;
         constexpr int command_len = opcode_len + arg1_len + arg2_len;
-        constexpr int max_queue = 10;
+        constexpr int max_conseq_read = 3;
 
         constexpr int mission_mode[opcode_len] =               {0x00,0x00};
         constexpr int burnwire_arm[opcode_len] =               {0x01,0x00};

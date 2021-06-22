@@ -56,7 +56,7 @@ void RockblockSimulator::serial_check() {
         if(c == '\n') {
             Serial.println();
             if( interface.length() == 20 ) {
-                Serial.print("ADDED: ");
+                Serial.print("SIM MESSAGE: ");
                 Serial.println(interface.c_str());
 
                 std::string tmp = "";
@@ -91,7 +91,7 @@ void RockblockSimulator::serial_process() {
         std::string tmp = input;
         std::replace( tmp.begin(), tmp.end(), '\r', 'r');
         std::replace( tmp.begin(), tmp.end(), '\n', 'n');
-        Serial.print("RECEIVED: ");
+        Serial.print("SIM RECEIVE: ");
         if(tmp.length() > 50) {
             Serial.println("<data>");
         } else {
@@ -201,7 +201,7 @@ void RockblockSimulator::serial_process() {
         tmp = output;
         std::replace( tmp.begin(), tmp.end(), '\r', 'r');
         std::replace( tmp.begin(), tmp.end(), '\n', 'n');
-        Serial.print("SENT: ");
+        Serial.print("SIM REPLY: ");
         Serial.println(tmp.c_str());
 
         std::reverse( output.begin(), output.end() ); // reverse string for proper extraction
