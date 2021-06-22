@@ -25,7 +25,6 @@ void MissionManager::execute(){
 
 void MissionManager::dispatch_standby(){
     if(sfr::battery::voltage < 3.75 && sfr::fault::check_voltage){
-        sfr::mission::mode = mission_mode_type::low_power;
         transition_to_low_power();
     }
 }
@@ -34,16 +33,13 @@ void MissionManager::dispatch_safe(){}
 
 void MissionManager::dispatch_low_power(){
     if(sfr::battery::voltage > 3.9 and sfr::fault::check_voltage){
-        sfr::mission::mode = mission_mode_type::standby;
         transition_to_standby();
     }    
 }
 
 void MissionManager::dispatch_deployment(){
     if(!sfr::button::pressed && !sfr::photoresistor::covered){
-        sfr::mission::mode = mission_mode_type::standby;
         sfr::camera::take_photo = true;
-        sfr::mission::mode = mission_mode_type::standby;
         BurnwireControlTask::transition_to_standby();
         transition_to_standby();
     }

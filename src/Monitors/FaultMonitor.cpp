@@ -37,9 +37,7 @@ void FaultMonitor::execute(){
         }
 
         if(sfr::fault::fault_1 > 0 || sfr::fault::fault_2 > 0 || sfr::fault::fault_3 > 0){
-            //transition to standby
-            sfr::mission::mode = mission_mode_type::safe;
-            MissionManager::transition_to_standby();
+            MissionManager::transition_to_safe();
         }
     }
     
