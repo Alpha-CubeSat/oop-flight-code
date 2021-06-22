@@ -11,15 +11,15 @@
 class RockblockSimulator {
     public:
         RockblockSimulator();
-        void execute();
         void begin(uint32_t baud);
         int available();
         size_t write(uint8_t c);
         size_t print(const char* s);
         int read();
     private:
-        void check_flush();
-        void process();
+        void serial_check();
+        void flush_check();
+        void serial_process();
         uint32_t baud;
         std::string input;
         std::string output;
@@ -35,6 +35,7 @@ class RockblockSimulator {
         uint16_t mt_len;
         uint8_t mt_queue_len;
         uint8_t flush_stage;
+        uint8_t bin_transmit;
 };
 
 #endif
