@@ -47,6 +47,26 @@ int RockblockSimulator::read() {
     return (int) c;
 }
 
+bool RockblockSimulator::insert(std::string s) {
+    if(s.length() == 20) {
+        std::string tmp = "";
+        for(size_t i = 0; i < 20; i += 2) {
+            const char* sub = s.substr(i, 2).c_str();
+            char c = strtol(sub, nullptr, 16);
+            tmp += c;
+        }
+        mt_queue.push_back(tmp);
+        return true;
+    } else {
+        return false;
+    }
+}
+
+bool RockblockSimulator::insert(const char* s) {
+    std::string str = s;
+    return insert(str);
+}
+
 void RockblockSimulator::serial_check() {
     while(Serial.available()) {
         char c = Serial.read();
@@ -55,18 +75,9 @@ void RockblockSimulator::serial_check() {
         }
         if(c == '\n') {
             Serial.println();
-            if( interface.length() == 20 ) {
-                Serial.print("SIM MESSAGE: ");
+            if( insert(interface) ) {
+                Serial.print("SIM INSERT: ");
                 Serial.println(interface.c_str());
-
-                std::string tmp = "";
-                for(size_t i = 0; i < 20; i += 2) {
-                    const char* sub = interface.substr(i, 2).c_str();
-                    char c = strtol(sub, nullptr, 16);
-                    tmp += c;
-                }
-
-                mt_queue.push_back(tmp);
             }
             interface.clear();
         }

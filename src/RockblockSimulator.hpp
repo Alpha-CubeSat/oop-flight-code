@@ -16,7 +16,9 @@ class RockblockSimulator {
         size_t write(uint8_t c);
         size_t print(const char* s);
         int read();
+        bool insert(const char* s);
     private:
+        bool insert(std::string s);
         void serial_check();
         void flush_check();
         void serial_process();
