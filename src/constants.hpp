@@ -10,7 +10,7 @@ namespace constants
     namespace photoresistor
     {
         constexpr int pin = 17;
-        constexpr int light_val = 0;
+        constexpr int light_val = 150;
     }
     namespace burnwire
     {
@@ -291,8 +291,8 @@ namespace constants
     {
         constexpr int voltage_value_pin = 32;
         constexpr int allow_measurement_pin = 36;
-        constexpr int max_voltage;
-        constexpr int min_voltage;
+        constexpr int max_voltage = 5;
+        constexpr int min_voltage = 3;
     }
     namespace fault
     {
