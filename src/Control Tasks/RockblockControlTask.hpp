@@ -24,6 +24,8 @@ class RockblockControlTask : public TimedControlTask<void>{
         void dispatch_send_response();
         void dispatch_create_buffer();
         void dispatch_process_mo_status();
+        void dispatch_send_signal_strength_mo();
+        void dispatch_await_signal_strength_mo();
         void dispatch_process_mt_status();
         void dispatch_read_message();
         void dispatch_process_command();
