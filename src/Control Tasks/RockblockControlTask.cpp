@@ -449,13 +449,13 @@ bool RockblockControlTask::valid_command(){
                 arg_1 = false;
             }  
         }
-        // for( size_t a2 = 0; a2 < constants::rockblock::arg2_len; a2++ ) {
-        //     if(sfr::rockblock::arg_2[a2] != constants::rockblock::known_commands[c][a2 + constants::rockblock::opcode_len + constants::rockblock::arg1_len]) {
-        //         arg_2 = false;
-        //     }     
-        // }
+        for( size_t a2 = 0; a2 < constants::rockblock::arg2_len; a2++ ) {
+            if(sfr::rockblock::arg_2[a2] != constants::rockblock::known_commands[c][a2 + constants::rockblock::opcode_len + constants::rockblock::arg1_len]) {
+                arg_2 = false;
+            }     
+        }
 
-        if(( opcode && arg_1 && arg_2 ) || (rockblock_downlink_period_opcode && arg_2) || (request_image_fragment_opcode && arg_2)){
+        if(( opcode && arg_1 && arg_2 ) || (rockblock_downlink_period_opcode && arg_2) || (request_image_fragment_opcode)){
             Serial.println("SAT INFO: command validated");
             return true;
         }

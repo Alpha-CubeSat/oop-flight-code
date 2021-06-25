@@ -211,55 +211,43 @@ void NormalReportMonitor::execute(){
 
     uint8_t voltage = map(sfr::battery::voltage_average, constants::battery::min_voltage, constants::battery::max_voltage, 0, 255);
 
-    uint8_t report[70] = {
-        sfr::photoresistor::covered,
-        sfr::button::pressed,
+    uint8_t downlink_period = map(sfr::rockblock::downlink_period, constants::rockblock::min_downlink_period, constants::rockblock::max_downlink_period, 0, 255);
 
-        (uint8_t)sfr::mission::mode,
-
-        sfr::burnwire::fire,
-        sfr::burnwire::arm,
-        (uint8_t)sfr::burnwire::mode,
-        sfr::burnwire::attempts,
-
-        sfr::rockblock::downlink_period,
-        (uint8_t)sfr::rockblock::mode,
-        sfr::rockblock::waiting_message,
-        sfr::rockblock::waiting_command,
-        sfr::rockblock::f_opcode,
-        sfr::rockblock::f_arg_1,
-        sfr::rockblock::f_arg_2,
-
-        mag_x,
-        mag_y,
-        mag_z,
-        gyro_x,
-        gyro_y,
-        gyro_z,
-
-        temp_c,
-        (uint8_t)sfr::temperature::mode,
-
-        solar_current,
-        sfr::current::in_sun,
-
-        (uint8_t)sfr::acs::mode,
-
-        voltage,
-
-        (uint8_t)sfr::fault::mode,
-
-        sfr::fault::check_mag_x,
-        sfr::fault::check_mag_y,
-        sfr::fault::check_mag_z,
-        sfr::fault::check_gyro_x,
-        sfr::fault::check_gyro_y,
-        sfr::fault::check_gyro_z,
-        sfr::fault::check_temp_c,
-        sfr::fault::check_solar_current,
-        sfr::fault::check_voltage,
-
-        sfr::camera::take_photo,
-        sfr::camera::powered
-    };   
+    sfr::rockblock::report[0] = sfr::photoresistor::covered;
+    sfr::rockblock::report[1] = sfr::button::pressed;
+    sfr::rockblock::report[2] = (uint8_t)sfr::mission::mode;
+    sfr::rockblock::report[3] = sfr::burnwire::fire;
+    sfr::rockblock::report[4] = sfr::burnwire::arm;
+    sfr::rockblock::report[5] = (uint8_t)sfr::burnwire::mode;
+    sfr::rockblock::report[6] = sfr::burnwire::attempts;
+    sfr::rockblock::report[7] = downlink_period;
+    sfr::rockblock::report[8] = sfr::rockblock::waiting_message;
+    sfr::rockblock::report[9] = sfr::rockblock::waiting_command;
+    sfr::rockblock::report[10] = sfr::rockblock::f_opcode;
+    sfr::rockblock::report[11] = sfr::rockblock::f_arg_1;
+    sfr::rockblock::report[12] = sfr::rockblock::f_arg_2;
+    sfr::rockblock::report[13] = mag_x;
+    sfr::rockblock::report[14] = mag_y;
+    sfr::rockblock::report[15] = mag_z;
+    sfr::rockblock::report[16] = gyro_x;
+    sfr::rockblock::report[17] = gyro_y;
+    sfr::rockblock::report[18] = gyro_z;
+    sfr::rockblock::report[19] = temp_c;
+    sfr::rockblock::report[20] = (uint8_t)sfr::temperature::mode;
+    sfr::rockblock::report[21] = solar_current;
+    sfr::rockblock::report[22] = sfr::current::in_sun;
+    sfr::rockblock::report[23] = (uint8_t)sfr::acs::mode;
+    sfr::rockblock::report[24] = voltage;
+    sfr::rockblock::report[25] = (uint8_t)sfr::fault::mode;
+    sfr::rockblock::report[26] = sfr::fault::check_mag_x;
+    sfr::rockblock::report[27] = sfr::fault::check_mag_y;
+    sfr::rockblock::report[28] = sfr::fault::check_mag_z;
+    sfr::rockblock::report[29] = sfr::fault::check_gyro_x;
+    sfr::rockblock::report[30] = sfr::fault::check_gyro_y;
+    sfr::rockblock::report[31] = sfr::fault::check_gyro_z;
+    sfr::rockblock::report[32] = sfr::fault::check_temp_c;
+    sfr::rockblock::report[33] = sfr::fault::check_voltage;
+    sfr::rockblock::report[34] = sfr::fault::check_solar_current;
+    sfr::rockblock::report[35] = sfr::camera::take_photo;
+    sfr::rockblock::report[36] = sfr::camera::powered;
 }
