@@ -67,6 +67,14 @@ void RockblockControlTask::execute(){
             Serial.println("process_mo_status");
             dispatch_process_mo_status(); 
             break;
+        case rockblock_mode_type::send_signal_strength_mo:
+            Serial.println("send_signal_strength_mo");
+            dispatch_send_signal_strength_mo(); 
+            break;
+        case rockblock_mode_type::await_signal_strength_mo:
+            Serial.println("await_signal_strength_mo");
+            dispatch_await_signal_strength_mo(); 
+            break;
         case rockblock_mode_type::process_mt_status:
             Serial.println("process_mt_status");
             dispatch_process_mt_status();
@@ -115,8 +123,10 @@ void RockblockControlTask::dispatch_standby(){
 
 void RockblockControlTask::dispatch_send_at(){
     sfr::rockblock::conseq_reads = 0;
+    #ifdef VERBOSE
+    Serial.println("SENT: ATr");
+    #endif
     sfr::rockblock::serial.print("AT\r");
-    // Serial.println("SENT: ATr");
     transition_to(rockblock_mode_type::await_at);
 }
 
@@ -128,8 +138,10 @@ void RockblockControlTask::dispatch_await_at(){
 }
 
 void RockblockControlTask::dispatch_send_signal_strength(){
+    #ifdef VERBOSE
+    Serial.println("SENT: AT+CSQr");
+    #endif
     sfr::rockblock::serial.print("AT+CSQ\r");
-    // Serial.println("SENT: AT+CSQr");
     transition_to(rockblock_mode_type::await_signal_strength);
 }
 
@@ -147,8 +159,10 @@ void RockblockControlTask::dispatch_await_signal_strength(){
 }
 
 void RockblockControlTask::dispatch_send_flow_control(){
+    #ifdef VERBOSE
+    Serial.println("SENT: AT&K0r");
+    #endif
     sfr::rockblock::serial.print("AT&K0\r");
-    // Serial.println("SENT: AT&K0r");
     transition_to(rockblock_mode_type::await_flow_control);
 }
 
@@ -160,8 +174,10 @@ void RockblockControlTask::dispatch_await_flow_control(){
 }
 
 void RockblockControlTask::dispatch_send_message_length(){
+    #ifdef VERBOSE
+    Serial.println("SENT: AT+SBDWB=70r");
+    #endif
     sfr::rockblock::serial.print("AT+SBDWB=70\r");
-    // Serial.println("SENT: AT+SBDWB=70r");
     transition_to(rockblock_mode_type::await_message_length);
 }
 
@@ -174,18 +190,24 @@ void RockblockControlTask::dispatch_await_message_length(){
 
 void RockblockControlTask::dispatch_send_message(){
     uint16_t checksum = 0;
-    // Serial.print("SENT: ");
+    #ifdef VERBOSE
+    Serial.print("SENT: ");
+    #endif
     for (size_t i=0; i < constants::rockblock::packet_size; ++i){
-        // Serial.print(sfr::rockblock::report[i]);
+        #ifdef VERBOSE
+        Serial.print(sfr::rockblock::report[i]);
+        #endif
         sfr::rockblock::serial.write(sfr::rockblock::report[i]);
         checksum += (uint16_t) sfr::rockblock::report[i];
     }
-    // Serial.println();
-    // Serial.print("SENT: ");
-    // Serial.print(checksum >> 8);
-    // Serial.print(checksum & 0xFF);
-    // Serial.print('r');
-    // Serial.println();
+    #ifdef VERBOSE
+    Serial.println();
+    Serial.print("SENT: ");
+    Serial.print(checksum >> 8);
+    Serial.print(checksum & 0xFF);
+    Serial.print('r');
+    Serial.println();
+    #endif
     sfr::rockblock::serial.write(checksum >> 8);
     sfr::rockblock::serial.write(checksum & 0xFF);
     sfr::rockblock::serial.write('\r');
@@ -206,8 +228,10 @@ void RockblockControlTask::dispatch_await_message(){
 }
 
 void RockblockControlTask::dispatch_send_response(){
+    #ifdef VERBOSE
+    Serial.println("SENT: AT+SBDIXr");
+    #endif
     sfr::rockblock::serial.print("AT+SBDIX\r");
-    // Serial.println("SENT: AT+SBDIXr");
     transition_to(rockblock_mode_type::create_buffer);
 }
 
@@ -226,7 +250,7 @@ void RockblockControlTask::dispatch_create_buffer(){
             }
             if(c != ' '){
                 sfr::rockblock::buffer[buffer_iter] = c;
-                // Serial.print( sfr::rockblock::buffer[buffer_iter]);
+                Serial.print( sfr::rockblock::buffer[buffer_iter]);
                 if(c == ','){
                     sfr::rockblock::commas[comma_iter] = buffer_iter;
                     comma_iter++;
@@ -234,7 +258,7 @@ void RockblockControlTask::dispatch_create_buffer(){
                 buffer_iter++;
             }
         }
-        // Serial.println();
+        Serial.println();
         if(comma_iter != 5){
             transition_to(rockblock_mode_type::send_response);
         }
@@ -248,7 +272,7 @@ void RockblockControlTask::dispatch_create_buffer(){
 void RockblockControlTask::dispatch_process_mo_status(){
     if(sfr::rockblock::commas[0] > 1){
         Serial.println("SAT INFO: there is another character");
-        transition_to(rockblock_mode_type::send_response);
+        transition_to(rockblock_mode_type::send_signal_strength_mo);
     }
     else if(sfr::rockblock::buffer[0] != '0' && sfr::rockblock::buffer[0] != '1' && sfr::rockblock::buffer[0] != '2'){
         Serial.println("SAT INFO: mo status is greater than 2");
@@ -256,6 +280,27 @@ void RockblockControlTask::dispatch_process_mo_status(){
     } else{
         transition_to(rockblock_mode_type::process_mt_status);
     }             
+}
+
+void RockblockControlTask::dispatch_send_signal_strength_mo(){
+    #ifdef VERBOSE
+    Serial.println("SENT: AT+CSQr");
+    #endif
+    sfr::rockblock::serial.print("AT+CSQ\r");
+    transition_to(rockblock_mode_type::await_signal_strength_mo);
+}
+
+void RockblockControlTask::dispatch_await_signal_strength_mo(){
+    if(sfr::rockblock::serial.read()==':'){
+        char signal = sfr::rockblock::serial.read();
+        Serial.print("SAT INFO: signal level ");
+        Serial.println(signal);
+        if(signal =='3' || signal =='4' || signal =='5'){
+            transition_to(rockblock_mode_type::send_response);
+        } else{
+            transition_to(rockblock_mode_type::send_signal_strength_mo);
+        }
+    }
 }
 
 void RockblockControlTask::dispatch_process_mt_status(){
@@ -276,8 +321,10 @@ void RockblockControlTask::dispatch_process_mt_status(){
 }
 
 void RockblockControlTask::dispatch_read_message(){
+    #ifdef VERBOSE
+    Serial.println("SENT: AT+SBDRBr");
+    #endif
     sfr::rockblock::serial.print("AT+SBDRB\r");
-    // Serial.println("SENT: AT+SBDRBr");
     transition_to(rockblock_mode_type::process_command);
 }
 
@@ -292,17 +339,17 @@ void RockblockControlTask::dispatch_process_command(){
 
 
         Serial.print("SAT CMD: ");
-        for (size_t o=0; o<sizeof(sfr::rockblock::opcode); ++o){
+        for (size_t o=0; o<constants::rockblock::opcode_len; ++o){
             sfr::rockblock::opcode[o] = sfr::rockblock::serial.read();
             if( sfr::rockblock::opcode[o] < 0x10 ) Serial.print(0, HEX);
             Serial.print(sfr::rockblock::opcode[o], HEX);
         }
-        for (size_t a1=0; a1<sizeof(sfr::rockblock::arg_1); ++a1){
+        for (size_t a1=0; a1<constants::rockblock::arg1_len; ++a1){
             sfr::rockblock::arg_1[a1] = sfr::rockblock::serial.read();
             if( sfr::rockblock::arg_1[a1] < 0x10 ) Serial.print(0, HEX);
             Serial.print(sfr::rockblock::arg_1[a1], HEX);
         }
-        for (size_t a2=0; a2<sizeof(sfr::rockblock::arg_2); ++a2){
+        for (size_t a2=0; a2<constants::rockblock::arg2_len; ++a2){
             sfr::rockblock::arg_2[a2] = sfr::rockblock::serial.read();
             if( sfr::rockblock::arg_2[a2] < 0x10 ) Serial.print(0, HEX);
             Serial.print(sfr::rockblock::arg_2[a2], HEX);
@@ -310,28 +357,9 @@ void RockblockControlTask::dispatch_process_command(){
         Serial.println();
 
         if(valid_command()){
-            uint16_t c_opcode = sfr::rockblock::opcode[0] | (sfr::rockblock::opcode[1] << 8);
-            uint32_t c_arg_1 = sfr::rockblock::arg_1[0] | (sfr::rockblock::arg_1[1] << 8) | (sfr::rockblock::arg_1[2] << 16) | (sfr::rockblock::arg_1[3] << 24);
-            uint32_t c_arg_2 = sfr::rockblock::arg_2[0] | (sfr::rockblock::arg_2[1] << 8) | (sfr::rockblock::arg_2[2] << 16) | (sfr::rockblock::arg_2[3] << 24);
-
-            std::stringstream ss_opcode;
-            ss_opcode << c_opcode;
-            int f_opcode;
-            ss_opcode >> f_opcode;
-
-            std::stringstream ss_arg_1;
-            ss_arg_1 << c_arg_1;
-            int f_arg_1;
-            ss_arg_1 >> f_arg_1;
-
-            std::stringstream ss_arg_2;
-            ss_arg_2 << c_arg_2;
-            int f_arg_2;
-            ss_arg_2 >> f_arg_2;
-
-            sfr::rockblock::f_opcode = f_opcode;
-            sfr::rockblock::f_arg_1 = f_arg_1;
-            sfr::rockblock::f_arg_2 = f_arg_2;
+            sfr::rockblock::f_opcode = (sfr::rockblock::opcode[1] << 8) | (sfr::rockblock::opcode[0]);
+            sfr::rockblock::f_arg_1  = (sfr::rockblock::arg_1[3] << 24) | (sfr::rockblock::arg_1[2] << 16) | (sfr::rockblock::arg_1[1] << 8) | (sfr::rockblock::arg_1[0]);
+            sfr::rockblock::f_arg_2  = (sfr::rockblock::arg_2[3] << 24) | (sfr::rockblock::arg_2[2] << 16) | (sfr::rockblock::arg_2[1] << 8) | (sfr::rockblock::arg_2[0]);
             
             sfr::rockblock::waiting_command = true;
         } else if(sfr::rockblock::opcode[0] == 'F' && sfr::rockblock::opcode[1] == 'L') {
@@ -361,12 +389,13 @@ void RockblockControlTask::dispatch_queue_check() {
     } else {
         transition_to(rockblock_mode_type::end_transmission);
     }
-    
 }
 
 void RockblockControlTask::dispatch_send_flush(){
+    #ifdef VERBOSE
+    Serial.println("SENT: AT+SBDWT=FLUSH_MTr");
+    #endif
     sfr::rockblock::serial.print("AT+SBDWT=FLUSH_MT\r");
-    // Serial.println("SENT: AT+SBDWT=FLUSH_MTr");
     transition_to(rockblock_mode_type::await_flush);
 }
 
@@ -381,6 +410,7 @@ void RockblockControlTask::dispatch_await_flush() {
 void RockblockControlTask::dispatch_end_transmission(){
     sfr::rockblock::last_downlink = millis();
     transition_to(rockblock_mode_type::standby);
+    while(1);
 }
 
 void RockblockControlTask::transition_to(rockblock_mode_type new_mode){
@@ -425,7 +455,7 @@ bool RockblockControlTask::valid_command(){
             }     
         }
 
-        if(( opcode && arg_1 && arg_2 ) || (rockblock_downlink_period_opcode && arg_2) || (request_image_fragment_opcode && arg_2)){
+        if(( opcode && arg_1 && arg_2 ) || (rockblock_downlink_period_opcode && arg_2) || (request_image_fragment_opcode)){
             Serial.println("SAT INFO: command validated");
             return true;
         }

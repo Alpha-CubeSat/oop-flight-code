@@ -74,21 +74,21 @@ namespace sfr
         extern char buffer[constants::rockblock::buffer_size];
         extern uint8_t report[constants::rockblock::packet_size];
         extern int commas[constants::rockblock::num_commas];
-        extern unsigned char opcode[2];
-        extern unsigned char arg_1[4];
-        extern unsigned char arg_2[4];
+        extern uint8_t opcode[2];
+        extern uint8_t arg_1[4];
+        extern uint8_t arg_2[4];
         #ifndef SIMULATOR
         extern HardwareSerial serial;
         #else
         extern RockblockSimulator serial;
         #endif
-        extern int num_iter;
+        extern size_t num_iter;
         extern bool flush_status;
         extern bool waiting_command;
-        extern int conseq_reads;
-        extern int f_opcode;
-        extern int f_arg_1;
-        extern int f_arg_2;
+        extern size_t conseq_reads;
+        extern uint16_t f_opcode;
+        extern uint32_t f_arg_1;
+        extern uint32_t f_arg_2;
     }
     namespace imu
     {

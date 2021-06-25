@@ -10,6 +10,9 @@ RockblockSimulator::RockblockSimulator() {
     mt_queue_len = 0;
     flush_stage = 0;
     bin_transmit = 0;
+    // insert("01000100000000000000");
+    // insert("01000000000000000000");
+    // insert("01000100000000000000");
 }
 
 void RockblockSimulator::begin(uint32_t baud) {

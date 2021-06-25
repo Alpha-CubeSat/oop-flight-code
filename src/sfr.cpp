@@ -51,21 +51,21 @@ namespace sfr
         char buffer[constants::rockblock::buffer_size] = {0};
         uint8_t report[constants::rockblock::packet_size] = {0};
         int commas[constants::rockblock::num_commas] = {0};
-        unsigned char opcode[2] = {0};
-        unsigned char arg_1[4] = {0};
-        unsigned char arg_2[4] = {0};
+        uint8_t opcode[2] = {0};
+        uint8_t arg_1[4] = {0};
+        uint8_t arg_2[4] = {0};
         #ifndef SIMULATOR
         HardwareSerial serial = Serial1;
         #else
         RockblockSimulator serial;
         #endif
-        int num_iter = 0;
+        size_t num_iter = 0;
         bool flush_status = false;
         bool waiting_command = false;
-        int conseq_reads = 0;
-        int f_opcode = 0;
-        int f_arg_1 = 0;
-        int f_arg_2 = 0;
+        size_t conseq_reads = 0;
+        uint16_t f_opcode = 0;
+        uint32_t f_arg_1 = 0;
+        uint32_t f_arg_2 = 0;
     }
     namespace imu
     {

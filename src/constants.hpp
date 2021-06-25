@@ -33,193 +33,262 @@ namespace constants
         constexpr int baud = 19200;
         constexpr unsigned long two_hours = 7200000;
         constexpr unsigned long ten_minutes = 600000;
-        constexpr int buffer_size = 63;
-        constexpr int packet_size = 70;
-        constexpr int num_commas = 5;
-        constexpr int max_iter = 200;
-        constexpr int num_commands = 35;
-        constexpr int opcode_len = 2;
-        constexpr int arg1_len = 4;
-        constexpr int arg2_len = 4;
-        constexpr int command_len = opcode_len + arg1_len + arg2_len;
-        constexpr int max_conseq_read = 3;
+        constexpr size_t buffer_size = 63;
+        constexpr size_t packet_size = 70;
+        constexpr size_t num_commas = 5;
+        constexpr size_t max_iter = 200;
+        constexpr size_t num_commands = 35;
+        constexpr size_t opcode_len = 2;
+        constexpr size_t arg1_len = 4;
+        constexpr size_t arg2_len = 4;
+        constexpr size_t command_len = opcode_len + arg1_len + arg2_len;
+        constexpr size_t max_conseq_read = 3;
 
-        constexpr int mission_mode[opcode_len] =               {0x00,0x00};
-        constexpr int burnwire_arm[opcode_len] =               {0x01,0x00};
-        constexpr int burnwire_fire[opcode_len] =              {0x02,0x00};
-        constexpr int rockblock_downlink_period[opcode_len] =  {0x03,0x00};
-        constexpr int request_image_fragment[opcode_len] =     {0x04,0x00};
-        constexpr int camera_take_photo[opcode_len] =          {0x05,0x00};
-        constexpr int temperature_mode[opcode_len] =           {0x06,0x00};
-        constexpr int acs_mode[opcode_len] =                   {0x07,0x00};
-        constexpr int fault_mode[opcode_len] =                 {0xF1,0xFF};
-        constexpr int fault_check_mag_x[opcode_len] =          {0xF2,0xFF};
-        constexpr int fault_check_mag_y[opcode_len] =          {0xF3,0xFF};
-        constexpr int fault_check_mag_z[opcode_len] =          {0xF4,0xFF};
-        constexpr int fault_check_gyro_x[opcode_len] =         {0xF5,0xFF};
-        constexpr int fault_check_gyro_y[opcode_len] =         {0xF6,0xFF};
-        constexpr int fault_check_gyro_z[opcode_len] =         {0xF7,0xFF};
-        constexpr int fault_check_temp_c[opcode_len] =         {0xF8,0xFF};
-        constexpr int fault_check_solar_current[opcode_len] =  {0xF9,0xFF};
-        constexpr int fault_check_voltage[opcode_len] =        {0xFA,0xFF};
+        constexpr uint8_t mission_mode[opcode_len] =               {0x00,0x00};
+        constexpr uint8_t burnwire_arm[opcode_len] =               {0x01,0x00};
+        constexpr uint8_t burnwire_fire[opcode_len] =              {0x02,0x00};
+        constexpr uint8_t rockblock_downlink_period[opcode_len] =  {0x03,0x00};
+        constexpr uint8_t request_image_fragment[opcode_len] =     {0x04,0x00};
+        constexpr uint8_t camera_take_photo[opcode_len] =          {0x05,0x00};
+        constexpr uint8_t temperature_mode[opcode_len] =           {0x06,0x00};
+        constexpr uint8_t acs_mode[opcode_len] =                   {0x07,0x00};
+        constexpr uint8_t fault_mode[opcode_len] =                 {0xF1,0xFF};
+        constexpr uint8_t fault_check_mag_x[opcode_len] =          {0xF2,0xFF};
+        constexpr uint8_t fault_check_mag_y[opcode_len] =          {0xF3,0xFF};
+        constexpr uint8_t fault_check_mag_z[opcode_len] =          {0xF4,0xFF};
+        constexpr uint8_t fault_check_gyro_x[opcode_len] =         {0xF5,0xFF};
+        constexpr uint8_t fault_check_gyro_y[opcode_len] =         {0xF6,0xFF};
+        constexpr uint8_t fault_check_gyro_z[opcode_len] =         {0xF7,0xFF};
+        constexpr uint8_t fault_check_temp_c[opcode_len] =         {0xF8,0xFF};
+        constexpr uint8_t fault_check_solar_current[opcode_len] =  {0xF9,0xFF};
+        constexpr uint8_t fault_check_voltage[opcode_len] =        {0xFA,0xFF};
 
-        constexpr int low_power[arg1_len] =  {0x01,0x00,0x00,0x00};
-        constexpr int deployment[arg1_len]=  {0x00,0x00,0x00,0x00};
-        constexpr int standby[arg1_len] =    {0x02,0x00,0x00,0x00};
-        constexpr int safe[arg1_len] =       {0x03,0x00,0x00,0x00};
-        constexpr int true_arg[arg1_len] =   {0x01,0x00,0x00,0x00};
-        constexpr int false_arg[arg1_len] =  {0x00,0x00,0x00,0x00};
-        constexpr int active[arg1_len] =     {0x01,0x00,0x00,0x00};
-        constexpr int inactive[arg1_len] =   {0x00,0x00,0x00,0x00};
-        constexpr int detumbling[arg1_len] = {0x02,0x00,0x00,0x00};
-        constexpr int pointing[arg1_len] =   {0x01,0x00,0x00,0x00};
-        constexpr int off[arg1_len] =        {0x00,0x00,0x00,0x00};
+        constexpr uint8_t low_power[arg1_len] =     {0x01,0x00,0x00,0x00};
+        constexpr uint8_t deployment[arg1_len]=     {0x00,0x00,0x00,0x00};
+        constexpr uint8_t standby[arg1_len] =       {0x02,0x00,0x00,0x00};
+        constexpr uint8_t safe[arg1_len] =          {0x03,0x00,0x00,0x00};
+        constexpr uint8_t true_arg[arg1_len] =      {0x01,0x00,0x00,0x00};
+        constexpr uint8_t false_arg[arg1_len] =     {0x00,0x00,0x00,0x00};
+        constexpr uint8_t active[arg1_len] =        {0x01,0x00,0x00,0x00};
+        constexpr uint8_t inactive[arg1_len] =      {0x00,0x00,0x00,0x00};
+        constexpr uint8_t detumbling[arg1_len] =    {0x02,0x00,0x00,0x00};
+        constexpr uint8_t pointing[arg1_len] =      {0x01,0x00,0x00,0x00};
+        constexpr uint8_t off[arg1_len] =           {0x00,0x00,0x00,0x00};
 
-        constexpr int no_arg_2[arg2_len] = {0x00,0x00,0x00,0x00};
+        constexpr uint8_t no_arg_2[arg2_len] =      {0x00,0x00,0x00,0x00};
 
-        constexpr int mission_mode_low_power[command_len] = {mission_mode[0], mission_mode[1], 
-                                                             low_power[0], low_power[1], low_power[2], low_power[3],
-                                                             no_arg_2[0], no_arg_2[1], no_arg_2[2], no_arg_2[3]};
+        constexpr uint8_t mission_mode_low_power[command_len] = {
+            mission_mode[0], mission_mode[1], 
+            low_power[0], low_power[1], low_power[2], low_power[3],
+            no_arg_2[0], no_arg_2[1], no_arg_2[2], no_arg_2[3]
+        };
 
-        constexpr int mission_mode_deployment[command_len] = {mission_mode[0], mission_mode[1], 
-                                                              deployment[0], deployment[1], deployment[2], deployment[3],
-                                                              no_arg_2[0], no_arg_2[1], no_arg_2[2], no_arg_2[3]};
+        constexpr uint8_t mission_mode_deployment[command_len] = {
+            mission_mode[0], mission_mode[1], 
+            deployment[0], deployment[1], deployment[2], deployment[3],
+            no_arg_2[0], no_arg_2[1], no_arg_2[2], no_arg_2[3]
+        };
 
-        constexpr int mission_mode_standby[command_len] = {mission_mode[0], mission_mode[1], 
-                                                           standby[0], standby[1], standby[2], standby[3],
-                                                           no_arg_2[0], no_arg_2[1], no_arg_2[2], no_arg_2[3]};
+        constexpr uint8_t mission_mode_standby[command_len] = {
+            mission_mode[0], mission_mode[1], 
+            standby[0], standby[1], standby[2], standby[3],
+            no_arg_2[0], no_arg_2[1], no_arg_2[2], no_arg_2[3]
+        };
         
-        constexpr int mission_mode_safe[command_len] = {mission_mode[0], mission_mode[1], 
-                                                        safe[0], safe[1], safe[2], safe[3],
-                                                        no_arg_2[0], no_arg_2[1], no_arg_2[2], no_arg_2[3]};
+        constexpr uint8_t mission_mode_safe[command_len] = {
+            mission_mode[0], mission_mode[1], 
+            safe[0], safe[1], safe[2], safe[3],
+            no_arg_2[0], no_arg_2[1], no_arg_2[2], no_arg_2[3]
+        };
 
-        constexpr int burnwire_arm_true[command_len] = {burnwire_arm[0], burnwire_arm[1], 
-                                                        true_arg[0], true_arg[1], true_arg[2], true_arg[3],
-                                                        no_arg_2[0],  no_arg_2[1],  no_arg_2[2],  no_arg_2[3]};   
+        constexpr uint8_t burnwire_arm_true[command_len] = {
+            burnwire_arm[0], burnwire_arm[1], 
+            true_arg[0], true_arg[1], true_arg[2], true_arg[3],
+            no_arg_2[0],  no_arg_2[1],  no_arg_2[2],  no_arg_2[3]
+        };   
 
-        constexpr int burnwire_arm_false[command_len] = {burnwire_arm[0], burnwire_arm[1], 
-                                                        false_arg[0], false_arg[1], false_arg[2], false_arg[3],
-                                                        no_arg_2[0],  no_arg_2[1],  no_arg_2[2],  no_arg_2[3]};    
+        constexpr uint8_t burnwire_arm_false[command_len] = {
+            burnwire_arm[0], burnwire_arm[1], 
+            false_arg[0], false_arg[1], false_arg[2], false_arg[3],
+            no_arg_2[0],  no_arg_2[1],  no_arg_2[2],  no_arg_2[3]
+        };    
 
-        constexpr int burnwire_fire_true[command_len] = {burnwire_fire[0], burnwire_fire[1], 
-                                                        true_arg[0], true_arg[1], true_arg[2], true_arg[3],
-                                                        no_arg_2[0],  no_arg_2[1],  no_arg_2[2],  no_arg_2[3]};  
+        constexpr uint8_t burnwire_fire_true[command_len] = {
+            burnwire_fire[0], burnwire_fire[1], 
+            true_arg[0], true_arg[1], true_arg[2], true_arg[3],
+            no_arg_2[0],  no_arg_2[1],  no_arg_2[2],  no_arg_2[3]
+        };  
 
-        constexpr int burnwire_fire_false[command_len] = {burnwire_fire[0], burnwire_fire[1], 
-                                                        false_arg[0], false_arg[1], false_arg[2], false_arg[3],
-                                                        no_arg_2[0],  no_arg_2[1],  no_arg_2[2],  no_arg_2[3]};    
+        constexpr uint8_t burnwire_fire_false[command_len] = {
+            burnwire_fire[0], burnwire_fire[1], 
+            false_arg[0], false_arg[1], false_arg[2], false_arg[3],
+            no_arg_2[0],  no_arg_2[1],  no_arg_2[2],  no_arg_2[3]
+        };    
  
 
-        constexpr int camera_take_photo_true[command_len] = {camera_take_photo[0], camera_take_photo[1], 
-                                                        true_arg[0], true_arg[1], true_arg[2], true_arg[3],
-                                                        no_arg_2[0],  no_arg_2[1],  no_arg_2[2],  no_arg_2[3]};    
+        constexpr uint8_t camera_take_photo_true[command_len] = {
+            camera_take_photo[0], camera_take_photo[1], 
+            true_arg[0], true_arg[1], true_arg[2], true_arg[3],
+            no_arg_2[0],  no_arg_2[1],  no_arg_2[2],  no_arg_2[3]
+        };    
 
-        constexpr int camera_take_photo_false[command_len] = {camera_take_photo[0], camera_take_photo[1], 
-                                                        false_arg[0], false_arg[1], false_arg[2], false_arg[3],
-                                                        no_arg_2[0],  no_arg_2[1],  no_arg_2[2],  no_arg_2[3]};  
+        constexpr uint8_t camera_take_photo_false[command_len] = {
+            camera_take_photo[0], camera_take_photo[1], 
+            false_arg[0], false_arg[1], false_arg[2], false_arg[3],
+            no_arg_2[0],  no_arg_2[1],  no_arg_2[2],  no_arg_2[3]
+        };  
 
-        constexpr int temperature_mode_active[command_len] = {temperature_mode[0], temperature_mode[1], 
-                                                        active[0], active[1], active[2], active[3],
-                                                        no_arg_2[0],  no_arg_2[1],  no_arg_2[2],  no_arg_2[3]}; 
+        constexpr uint8_t temperature_mode_active[command_len] = {
+            temperature_mode[0], temperature_mode[1], 
+            active[0], active[1], active[2], active[3],
+            no_arg_2[0],  no_arg_2[1],  no_arg_2[2],  no_arg_2[3]
+        }; 
 
-        constexpr int temperature_mode_inactive[command_len] = {temperature_mode[0], temperature_mode[1], 
-                                                        inactive[0], inactive[1], inactive[2], inactive[3],
-                                                        no_arg_2[0],  no_arg_2[1],  no_arg_2[2],  no_arg_2[3]};   
+        constexpr uint8_t temperature_mode_inactive[command_len] = {
+            temperature_mode[0], temperature_mode[1], 
+            inactive[0], inactive[1], inactive[2], inactive[3],
+            no_arg_2[0],  no_arg_2[1],  no_arg_2[2],  no_arg_2[3]
+        };   
 
-        constexpr int acs_mode_detumbling[command_len] = {acs_mode[0], acs_mode[1], 
-                                                        detumbling[0], detumbling[1], detumbling[2], detumbling[3],
-                                                        no_arg_2[0],  no_arg_2[1],  no_arg_2[2],  no_arg_2[3]};  
+        constexpr uint8_t acs_mode_detumbling[command_len] = {
+            acs_mode[0], acs_mode[1], 
+            detumbling[0], detumbling[1], detumbling[2], detumbling[3],
+            no_arg_2[0],  no_arg_2[1],  no_arg_2[2],  no_arg_2[3]
+        };  
 
-        constexpr int acs_mode_pointing[command_len] = {acs_mode[0], acs_mode[1], 
-                                                        pointing[0], pointing[1], pointing[2], pointing[3],
-                                                        no_arg_2[0],  no_arg_2[1],  no_arg_2[2],  no_arg_2[3]};  
+        constexpr uint8_t acs_mode_pointing[command_len] = {
+            acs_mode[0], acs_mode[1], 
+            pointing[0], pointing[1], pointing[2], pointing[3],
+            no_arg_2[0],  no_arg_2[1],  no_arg_2[2],  no_arg_2[3]
+        };  
 
-        constexpr int acs_mode_off[command_len] = {acs_mode[0], acs_mode[1], 
-                                                        off[0], off[1], off[2], off[3],
-                                                        no_arg_2[0],  no_arg_2[1],  no_arg_2[2],  no_arg_2[3]};   
+        constexpr uint8_t acs_mode_off[command_len] = {
+            acs_mode[0], acs_mode[1], 
+            off[0], off[1], off[2], off[3],
+            no_arg_2[0],  no_arg_2[1],  no_arg_2[2],  no_arg_2[3]
+        };   
 
-        constexpr int fault_mode_active[command_len] = {fault_mode[0], fault_mode[1], 
-                                                        active[0], active[1], active[2], active[3],
-                                                        no_arg_2[0],  no_arg_2[1],  no_arg_2[2],  no_arg_2[3]}; 
+        constexpr uint8_t fault_mode_active[command_len] = {
+            fault_mode[0], fault_mode[1], 
+            active[0], active[1], active[2], active[3],
+            no_arg_2[0],  no_arg_2[1],  no_arg_2[2],  no_arg_2[3]
+        }; 
 
-        constexpr int fault_mode_inactive[command_len] = {fault_mode[0], fault_mode[1], 
-                                                        inactive[0], inactive[1], inactive[2], inactive[3],
-                                                        no_arg_2[0],  no_arg_2[1],  no_arg_2[2],  no_arg_2[3]};                    
+        constexpr uint8_t fault_mode_inactive[command_len] = {
+            fault_mode[0], fault_mode[1], 
+            inactive[0], inactive[1], inactive[2], inactive[3],
+            no_arg_2[0],  no_arg_2[1],  no_arg_2[2],  no_arg_2[3]
+        };                    
 
-        constexpr int fault_check_mag_x_true[command_len] = {fault_check_mag_x[0], fault_check_mag_x[1], 
-                                                        true_arg[0], true_arg[1], true_arg[2], true_arg[3],
-                                                        no_arg_2[0],  no_arg_2[1],  no_arg_2[2],  no_arg_2[3]}; 
+        constexpr uint8_t fault_check_mag_x_true[command_len] = {
+            fault_check_mag_x[0], fault_check_mag_x[1], 
+            true_arg[0], true_arg[1], true_arg[2], true_arg[3],
+            no_arg_2[0],  no_arg_2[1],  no_arg_2[2],  no_arg_2[3]
+        }; 
 
-        constexpr int fault_check_mag_x_false[command_len] = {fault_check_mag_x[0], fault_check_mag_x[1], 
-                                                        false_arg[0], false_arg[1], false_arg[2], false_arg[3],
-                                                        no_arg_2[0],  no_arg_2[1],  no_arg_2[2],  no_arg_2[3]}; 
+        constexpr uint8_t fault_check_mag_x_false[command_len] = {
+            fault_check_mag_x[0], fault_check_mag_x[1], 
+            false_arg[0], false_arg[1], false_arg[2], false_arg[3],
+            no_arg_2[0],  no_arg_2[1],  no_arg_2[2],  no_arg_2[3]
+        }; 
 
-        constexpr int fault_check_mag_y_true[command_len] = {fault_check_mag_y[0], fault_check_mag_y[1], 
-                                                        true_arg[0], true_arg[1], true_arg[2], true_arg[3],
-                                                        no_arg_2[0],  no_arg_2[1],  no_arg_2[2],  no_arg_2[3]}; 
+        constexpr uint8_t fault_check_mag_y_true[command_len] = {
+            fault_check_mag_y[0], fault_check_mag_y[1], 
+            true_arg[0], true_arg[1], true_arg[2], true_arg[3],
+            no_arg_2[0],  no_arg_2[1],  no_arg_2[2],  no_arg_2[3]
+        }; 
 
-        constexpr int fault_check_mag_y_false[command_len] = {fault_check_mag_y[0], fault_check_mag_y[1], 
-                                                        false_arg[0], false_arg[1], false_arg[2], false_arg[3],
-                                                        no_arg_2[0],  no_arg_2[1],  no_arg_2[2],  no_arg_2[3]}; 
+        constexpr uint8_t fault_check_mag_y_false[command_len] = {
+            fault_check_mag_y[0], fault_check_mag_y[1], 
+            false_arg[0], false_arg[1], false_arg[2], false_arg[3],
+            no_arg_2[0],  no_arg_2[1],  no_arg_2[2],  no_arg_2[3]
+        }; 
         
-        constexpr int fault_check_mag_z_true[command_len] = {fault_check_mag_z[0], fault_check_mag_z[1], 
-                                                        true_arg[0], true_arg[1], true_arg[2], true_arg[3],
-                                                        no_arg_2[0],  no_arg_2[1],  no_arg_2[2],  no_arg_2[3]}; 
+        constexpr uint8_t fault_check_mag_z_true[command_len] = {
+            fault_check_mag_z[0], fault_check_mag_z[1], 
+            true_arg[0], true_arg[1], true_arg[2], true_arg[3],
+            no_arg_2[0],  no_arg_2[1],  no_arg_2[2],  no_arg_2[3]
+        }; 
 
-        constexpr int fault_check_mag_z_false[command_len] = {fault_check_mag_z[0], fault_check_mag_z[1], 
-                                                        false_arg[0], false_arg[1], false_arg[2], false_arg[3],
-                                                        no_arg_2[0],  no_arg_2[1],  no_arg_2[2],  no_arg_2[3]};
+        constexpr uint8_t fault_check_mag_z_false[command_len] = {
+            fault_check_mag_z[0], fault_check_mag_z[1], 
+            false_arg[0], false_arg[1], false_arg[2], false_arg[3],
+            no_arg_2[0],  no_arg_2[1],  no_arg_2[2],  no_arg_2[3]
+        };
 
-        constexpr int fault_check_gyro_x_true[command_len] = {fault_check_gyro_x[0], fault_check_gyro_x[1], 
-                                                        true_arg[0], true_arg[1], true_arg[2], true_arg[3],
-                                                        no_arg_2[0],  no_arg_2[1],  no_arg_2[2],  no_arg_2[3]}; 
+        constexpr uint8_t fault_check_gyro_x_true[command_len] = {
+            fault_check_gyro_x[0], fault_check_gyro_x[1], 
+            true_arg[0], true_arg[1], true_arg[2], true_arg[3],
+            no_arg_2[0],  no_arg_2[1],  no_arg_2[2],  no_arg_2[3]
+        }; 
 
-        constexpr int fault_check_gyro_x_false[command_len] = {fault_check_gyro_x[0], fault_check_gyro_x[1], 
-                                                        false_arg[0], false_arg[1], false_arg[2], false_arg[3],
-                                                        no_arg_2[0],  no_arg_2[1],  no_arg_2[2],  no_arg_2[3]}; 
+        constexpr uint8_t fault_check_gyro_x_false[command_len] = {
+            fault_check_gyro_x[0], fault_check_gyro_x[1], 
+            false_arg[0], false_arg[1], false_arg[2], false_arg[3],
+            no_arg_2[0],  no_arg_2[1],  no_arg_2[2],  no_arg_2[3]
+        }; 
 
-        constexpr int fault_check_gyro_y_true[command_len] = {fault_check_gyro_y[0], fault_check_gyro_y[1], 
-                                                        true_arg[0], true_arg[1], true_arg[2], true_arg[3],
-                                                        no_arg_2[0],  no_arg_2[1],  no_arg_2[2],  no_arg_2[3]}; 
+        constexpr uint8_t fault_check_gyro_y_true[command_len] = {
+            fault_check_gyro_y[0], fault_check_gyro_y[1], 
+            true_arg[0], true_arg[1], true_arg[2], true_arg[3],
+            no_arg_2[0],  no_arg_2[1],  no_arg_2[2],  no_arg_2[3]
+        }; 
 
-        constexpr int fault_check_gyro_y_false[command_len] = {fault_check_gyro_y[0], fault_check_gyro_y[1], 
-                                                        false_arg[0], false_arg[1], false_arg[2], false_arg[3],
-                                                        no_arg_2[0],  no_arg_2[1],  no_arg_2[2],  no_arg_2[3]}; 
+        constexpr uint8_t fault_check_gyro_y_false[command_len] = {
+            fault_check_gyro_y[0], fault_check_gyro_y[1], 
+            false_arg[0], false_arg[1], false_arg[2], false_arg[3],
+            no_arg_2[0],  no_arg_2[1],  no_arg_2[2],  no_arg_2[3]
+        }; 
         
-        constexpr int fault_check_gyro_z_true[command_len] = {fault_check_gyro_z[0], fault_check_gyro_z[1], 
-                                                        true_arg[0], true_arg[1], true_arg[2], true_arg[3],
-                                                        no_arg_2[0],  no_arg_2[1],  no_arg_2[2],  no_arg_2[3]}; 
+        constexpr uint8_t fault_check_gyro_z_true[command_len] = {
+            fault_check_gyro_z[0], fault_check_gyro_z[1], 
+            true_arg[0], true_arg[1], true_arg[2], true_arg[3],
+            no_arg_2[0],  no_arg_2[1],  no_arg_2[2],  no_arg_2[3]
+        }; 
 
-        constexpr int fault_check_gyro_z_false[command_len] = {fault_check_gyro_z[0], fault_check_gyro_z[1], 
-                                                        false_arg[0], false_arg[1], false_arg[2], false_arg[3],
-                                                        no_arg_2[0],  no_arg_2[1],  no_arg_2[2],  no_arg_2[3]}; 
+        constexpr uint8_t fault_check_gyro_z_false[command_len] = {
+            fault_check_gyro_z[0], fault_check_gyro_z[1], 
+            false_arg[0], false_arg[1], false_arg[2], false_arg[3],
+            no_arg_2[0],  no_arg_2[1],  no_arg_2[2],  no_arg_2[3]
+        }; 
 
-        constexpr int fault_check_temp_c_true[command_len] = {fault_check_temp_c[0], fault_check_temp_c[1], 
-                                                        true_arg[0], true_arg[1], true_arg[2], true_arg[3],
-                                                        no_arg_2[0],  no_arg_2[1],  no_arg_2[2],  no_arg_2[3]}; 
+        constexpr uint8_t fault_check_temp_c_true[command_len] = {
+            fault_check_temp_c[0], fault_check_temp_c[1], 
+            true_arg[0], true_arg[1], true_arg[2], true_arg[3],
+            no_arg_2[0],  no_arg_2[1],  no_arg_2[2],  no_arg_2[3]
+        }; 
 
-        constexpr int fault_check_temp_c_false[command_len] = {fault_check_temp_c[0], fault_check_temp_c[1], 
-                                                        false_arg[0], false_arg[1], false_arg[2], false_arg[3],
-                                                        no_arg_2[0],  no_arg_2[1],  no_arg_2[2],  no_arg_2[3]}; 
+        constexpr uint8_t fault_check_temp_c_false[command_len] = {
+            fault_check_temp_c[0], fault_check_temp_c[1], 
+            false_arg[0], false_arg[1], false_arg[2], false_arg[3],
+            no_arg_2[0],  no_arg_2[1],  no_arg_2[2],  no_arg_2[3]
+        }; 
 
-        constexpr int fault_check_solar_current_true[command_len] = {fault_check_solar_current[0], fault_check_solar_current[1], 
-                                                        true_arg[0], true_arg[1], true_arg[2], true_arg[3],
-                                                        no_arg_2[0],  no_arg_2[1],  no_arg_2[2],  no_arg_2[3]}; 
+        constexpr uint8_t fault_check_solar_current_true[command_len] = {
+            fault_check_solar_current[0], fault_check_solar_current[1], 
+            true_arg[0], true_arg[1], true_arg[2], true_arg[3],
+            no_arg_2[0],  no_arg_2[1],  no_arg_2[2],  no_arg_2[3]
+        }; 
 
-        constexpr int fault_check_solar_current_false[command_len] = {fault_check_solar_current[0], fault_check_solar_current[1], 
-                                                        false_arg[0], false_arg[1], false_arg[2], false_arg[3],
-                                                        no_arg_2[0],  no_arg_2[1],  no_arg_2[2],  no_arg_2[3]}; 
+        constexpr uint8_t fault_check_solar_current_false[command_len] = {
+            fault_check_solar_current[0], fault_check_solar_current[1], 
+            false_arg[0], false_arg[1], false_arg[2], false_arg[3],
+            no_arg_2[0],  no_arg_2[1],  no_arg_2[2],  no_arg_2[3]
+        }; 
 
-        constexpr int fault_check_voltage_true[command_len] = {fault_check_voltage[0], fault_check_voltage[1], 
-                                                        true_arg[0], true_arg[1], true_arg[2], true_arg[3],
-                                                        no_arg_2[0],  no_arg_2[1],  no_arg_2[2],  no_arg_2[3]}; 
+        constexpr uint8_t fault_check_voltage_true[command_len] = {
+            fault_check_voltage[0], fault_check_voltage[1], 
+            true_arg[0], true_arg[1], true_arg[2], true_arg[3],
+            no_arg_2[0],  no_arg_2[1],  no_arg_2[2],  no_arg_2[3]
+        }; 
 
-        constexpr int fault_check_voltage_false[command_len] = {fault_check_voltage[0], fault_check_voltage[1], 
-                                                        false_arg[0], false_arg[1], false_arg[2], false_arg[3],
-                                                        no_arg_2[0],  no_arg_2[1],  no_arg_2[2],  no_arg_2[3]};
+        constexpr uint8_t fault_check_voltage_false[command_len] = {
+            fault_check_voltage[0], fault_check_voltage[1], 
+            false_arg[0], false_arg[1], false_arg[2], false_arg[3],
+            no_arg_2[0],  no_arg_2[1],  no_arg_2[2],  no_arg_2[3]
+        };
 
-        constexpr int known_commands[num_commands][command_len] = 
-        {
+        constexpr int known_commands[num_commands][command_len] = {
             {mission_mode_low_power[0], mission_mode_low_power[1], mission_mode_low_power[2], mission_mode_low_power[3], mission_mode_low_power[4], mission_mode_low_power[5], mission_mode_low_power[6], mission_mode_low_power[7], mission_mode_low_power[8], mission_mode_low_power[9]},
             {mission_mode_deployment[0], mission_mode_deployment[1], mission_mode_deployment[2], mission_mode_deployment[3], mission_mode_deployment[4], mission_mode_deployment[5],mission_mode_deployment[6], mission_mode_deployment[7], mission_mode_deployment[8], mission_mode_deployment[9]},
             {mission_mode_standby[0], mission_mode_standby[1], mission_mode_standby[2], mission_mode_standby[3], mission_mode_standby[4], mission_mode_standby[5], mission_mode_standby[6], mission_mode_standby[7], mission_mode_standby[8], mission_mode_standby[9]},
@@ -297,22 +366,22 @@ namespace constants
     namespace fault
     {
         //fault 1
-        constexpr unsigned char mag_x = 1 << 0;
-        constexpr unsigned char mag_y = 1 << 1;
-        constexpr unsigned char mag_z = 1 << 2;
-        constexpr unsigned char gyro_x = 1 << 3;
-        constexpr unsigned char gyro_y = 1 << 4;
-        constexpr unsigned char gyro_z = 1 << 5;
+        constexpr uint8_t mag_x = 1 << 0;
+        constexpr uint8_t mag_y = 1 << 1;
+        constexpr uint8_t mag_z = 1 << 2;
+        constexpr uint8_t gyro_x = 1 << 3;
+        constexpr uint8_t gyro_y = 1 << 4;
+        constexpr uint8_t gyro_z = 1 << 5;
 
         //fault 2
-        constexpr unsigned char temp_c = 1 << 1;
-        constexpr unsigned char solar_current = 1 << 2;
-        constexpr unsigned char voltage = 1 << 3;
+        constexpr uint8_t temp_c = 1 << 1;
+        constexpr uint8_t solar_current = 1 << 2;
+        constexpr uint8_t voltage = 1 << 3;
 
         //fault 3
-        constexpr unsigned char burn_wire = 1 << 0;
-        constexpr unsigned char sd_card = 1 << 1;
-        constexpr unsigned char camera_on_failed = 1 << 2;
+        constexpr uint8_t burn_wire = 1 << 0;
+        constexpr uint8_t sd_card = 1 << 1;
+        constexpr uint8_t camera_on_failed = 1 << 2;
     }
     namespace camera
     {
@@ -381,7 +450,5 @@ namespace constants
         static constexpr unsigned int mission_manager_offset = 16*30000;
     }
 };
-
-
 
 #endif
