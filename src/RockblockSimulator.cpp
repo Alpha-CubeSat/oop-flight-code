@@ -10,6 +10,7 @@ RockblockSimulator::RockblockSimulator() {
     mt_queue_len = 0;
     flush_stage = 0;
     bin_transmit = 0;
+    signal = 0;
     // insert("01000100000000000000");
     // insert("01000000000000000000");
     // insert("01000100000000000000");
@@ -17,6 +18,7 @@ RockblockSimulator::RockblockSimulator() {
 
 void RockblockSimulator::begin(uint32_t baud) {
     this->baud = baud;
+    signal = 5;
 }
 
 int RockblockSimulator::available() {
@@ -50,24 +52,42 @@ int RockblockSimulator::read() {
     return (int) c;
 }
 
-bool RockblockSimulator::insert(std::string s) {
-    if(s.length() == 20) {
-        std::string tmp = "";
-        for(size_t i = 0; i < 20; i += 2) {
-            const char* sub = s.substr(i, 2).c_str();
-            char c = strtol(sub, nullptr, 16);
-            tmp += c;
-        }
-        mt_queue.push_back(tmp);
-        return true;
+void RockblockSimulator::insert(std::string s) {
+    std::string st;
+    if(s.length() % 2 == 0) {
+        st = s + "0";
     } else {
+        st = s;
+    }
+    std::string tmp = "";
+    for(size_t i = 0; i < st.length(); i += 2) {
+        const char* sub = s.substr(i, 2).c_str();
+        char c = strtol(sub, nullptr, 16);
+        tmp += c;
+    }
+    mt_queue.push_back(tmp);
+}
+
+std::string RockblockSimulator::latest_downlink() {
+    return downlink_hist[0];
+}
+
+std::deque<std::string> RockblockSimulator::all_downlinks() {
+    return downlink_hist;
+}
+
+bool RockblockSimulator::set_signal(uint8_t signal){
+    if(signal > 5) {
         return false;
+    } else {
+        this->signal = signal;
+        return true;
     }
 }
 
-bool RockblockSimulator::insert(const char* s) {
+void RockblockSimulator::insert(const char* s) {
     std::string str = s;
-    return insert(str);
+    insert(str);
 }
 
 void RockblockSimulator::serial_check() {
@@ -77,11 +97,8 @@ void RockblockSimulator::serial_check() {
             interface += c;
         }
         if(c == '\n') {
-            Serial.println();
-            if( insert(interface) ) {
-                Serial.print("SIM INSERT: ");
-                Serial.println(interface.c_str());
-            }
+            Serial.print("SIM INSERT: ");
+            Serial.println(interface.c_str());
             interface.clear();
         }
     }
@@ -115,16 +132,15 @@ void RockblockSimulator::serial_process() {
         if( input == "AT\r" ) { // check AT
             output = "AT\r\r\nOK\r\n"; // reply OK
         } else if( input == "AT+CSQ\r" ) { // signal quality check
-            output = "AT+CSQ\r\r\n+CSQ:5\r\n\r\nOK\r\n"; // replay with signal 5
+            output = "AT+CSQ\r\r\n+CSQ:";
+            output += '0' + signal;
+            output += "\r\n\r\nOK\r\n"; // reply with signal 5
         } else if( input == "AT&K0\r" ) { // flow control
             output = "AT&K0\r\r\nOK\r\n"; // reply OK
         } else if( input.find("AT+SBDWT=") == 0 ) { // transmit ASCII
             size_t idx1 = input.find('=') + 1;
             size_t idx2 = input.find('\r');
             downlink_data = input.substr(idx1, idx2 - idx1);
-            if(downlink_data == "FLUSH_MT") {
-                flush_stage = 1;
-            }
             output = input;
             output += "\r\nOK\r\n"; // reply OK
         } else if( input.find("AT+SBDWB=") == 0 ) { // transmit binary (length)
@@ -175,6 +191,7 @@ void RockblockSimulator::serial_process() {
             // MT_QUEUE_LEN: num messages waiting
             mt_queue_len = mt_queue.size();
             // print downlinked data
+            downlink_hist.push_front(downlink_data);
             Serial.print("DOWNLINK: ");
             if(downlink_data.length() == 0) {
                 Serial.println("-");

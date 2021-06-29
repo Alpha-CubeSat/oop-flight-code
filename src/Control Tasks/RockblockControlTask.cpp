@@ -410,7 +410,6 @@ void RockblockControlTask::dispatch_await_flush() {
 void RockblockControlTask::dispatch_end_transmission(){
     sfr::rockblock::last_downlink = millis();
     transition_to(rockblock_mode_type::standby);
-    while(1);
 }
 
 void RockblockControlTask::transition_to(rockblock_mode_type new_mode){
