@@ -94,11 +94,11 @@ void CommandMonitor::dispatch_change_temperature_mode(){
     sfr::rockblock::waiting_command = false;
 }
 void CommandMonitor::dispatch_change_acs_mode(){
-    if(sfr::rockblock::f_arg_1 == get_decimal_arg(constants::rockblock::detumbling)){
-        sfr::acs::mode = acs_mode_type::detumble;
+    if(sfr::rockblock::f_arg_1 == get_decimal_arg(constants::rockblock::full)){
+        sfr::acs::mode = acs_mode_type::full;
     } 
-    else if(sfr::rockblock::f_arg_1 == get_decimal_arg(constants::rockblock::pointing)){
-        sfr::acs::mode = acs_mode_type::point;
+    else if(sfr::rockblock::f_arg_1 == get_decimal_arg(constants::rockblock::simple)){
+        sfr::acs::mode = acs_mode_type::simple;
     }
     else if(sfr::rockblock::f_arg_1 == get_decimal_arg(constants::rockblock::off)){
         sfr::acs::mode = acs_mode_type::off;

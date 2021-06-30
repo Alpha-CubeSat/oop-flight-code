@@ -112,7 +112,7 @@ namespace sfr
     }
     namespace acs
     {
-        acs_mode_type mode = acs_mode_type::detumble;
+        acs_mode_type mode = acs_mode_type::full;
         int current1 = 0;
         int current2 = 0;
         int current3 = 0;

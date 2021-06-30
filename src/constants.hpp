@@ -71,8 +71,8 @@ namespace constants
         constexpr uint8_t false_arg[arg1_len] =     {0x00,0x00,0x00,0x00};
         constexpr uint8_t active[arg1_len] =        {0x01,0x00,0x00,0x00};
         constexpr uint8_t inactive[arg1_len] =      {0x00,0x00,0x00,0x00};
-        constexpr uint8_t detumbling[arg1_len] =    {0x02,0x00,0x00,0x00};
-        constexpr uint8_t pointing[arg1_len] =      {0x01,0x00,0x00,0x00};
+        constexpr uint8_t full[arg1_len] =    {0x02,0x00,0x00,0x00};
+        constexpr uint8_t simple[arg1_len] =      {0x01,0x00,0x00,0x00};
         constexpr uint8_t off[arg1_len] =           {0x00,0x00,0x00,0x00};
 
         constexpr uint8_t no_arg_2[arg2_len] =      {0x00,0x00,0x00,0x00};
@@ -150,15 +150,15 @@ namespace constants
             no_arg_2[0],  no_arg_2[1],  no_arg_2[2],  no_arg_2[3]
         };   
 
-        constexpr uint8_t acs_mode_detumbling[command_len] = {
+        constexpr uint8_t acs_mode_full[command_len] = {
             acs_mode[0], acs_mode[1], 
-            detumbling[0], detumbling[1], detumbling[2], detumbling[3],
+            full[0], full[1], full[2], full[3],
             no_arg_2[0],  no_arg_2[1],  no_arg_2[2],  no_arg_2[3]
         };  
 
-        constexpr uint8_t acs_mode_pointing[command_len] = {
+        constexpr uint8_t acs_mode_simple[command_len] = {
             acs_mode[0], acs_mode[1], 
-            pointing[0], pointing[1], pointing[2], pointing[3],
+            simple[0], simple[1], simple[2], simple[3],
             no_arg_2[0],  no_arg_2[1],  no_arg_2[2],  no_arg_2[3]
         };  
 
@@ -301,8 +301,8 @@ namespace constants
             {camera_take_photo_false[0], camera_take_photo_false[1], camera_take_photo_false[2], camera_take_photo_false[3], camera_take_photo_false[4], camera_take_photo_false[5], camera_take_photo_false[6], camera_take_photo_false[7], camera_take_photo_false[8], camera_take_photo_false[9]},
             {temperature_mode_active[0], temperature_mode_active[1], temperature_mode_active[2], temperature_mode_active[3], temperature_mode_active[4], temperature_mode_active[5], temperature_mode_active[6], temperature_mode_active[7], temperature_mode_active[8], temperature_mode_active[9]},
             {temperature_mode_inactive[0], temperature_mode_inactive[1], temperature_mode_inactive[2], temperature_mode_inactive[3], temperature_mode_inactive[4], temperature_mode_inactive[5], temperature_mode_inactive[6], temperature_mode_inactive[7], temperature_mode_inactive[8], temperature_mode_inactive[9]},
-            {acs_mode_detumbling[0], acs_mode_detumbling[1], acs_mode_detumbling[2], acs_mode_detumbling[3], acs_mode_detumbling[4], acs_mode_detumbling[5], acs_mode_detumbling[6], acs_mode_detumbling[7], acs_mode_detumbling[8], acs_mode_detumbling[9]},
-            {acs_mode_pointing[0], acs_mode_pointing[1], acs_mode_pointing[2], acs_mode_pointing[3], acs_mode_pointing[4], acs_mode_pointing[5], acs_mode_pointing[6], acs_mode_pointing[7], acs_mode_pointing[8], acs_mode_pointing[9]},
+            {acs_mode_full[0], acs_mode_full[1], acs_mode_full[2], acs_mode_full[3], acs_mode_full[4], acs_mode_full[5], acs_mode_full[6], acs_mode_full[7], acs_mode_full[8], acs_mode_full[9]},
+            {acs_mode_simple[0], acs_mode_simple[1], acs_mode_simple[2], acs_mode_simple[3], acs_mode_simple[4], acs_mode_simple[5], acs_mode_simple[6], acs_mode_simple[7], acs_mode_simple[8], acs_mode_simple[9]},
             {acs_mode_off[0], acs_mode_off[1], acs_mode_off[2], acs_mode_off[3], acs_mode_off[4], acs_mode_off[5], acs_mode_off[6], acs_mode_off[7], acs_mode_off[8], acs_mode_off[9]},
             {fault_mode_active[0], fault_mode_active[1], fault_mode_active[2], fault_mode_active[3], fault_mode_active[4], fault_mode_active[5], fault_mode_active[6], fault_mode_active[7], fault_mode_active[8], fault_mode_active[9]},
             {fault_mode_inactive[0], fault_mode_inactive[1], fault_mode_inactive[2], fault_mode_inactive[3], fault_mode_inactive[4], fault_mode_inactive[5], fault_mode_inactive[6], fault_mode_inactive[7], fault_mode_inactive[8], fault_mode_inactive[9]},
