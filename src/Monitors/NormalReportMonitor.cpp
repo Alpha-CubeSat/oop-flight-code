@@ -29,9 +29,6 @@ void NormalReportMonitor::execute(){
     sfr::rockblock::report[7] = downlink_period;
     sfr::rockblock::report[8] = sfr::rockblock::waiting_message;
     sfr::rockblock::report[9] = sfr::rockblock::waiting_command;
-    sfr::rockblock::report[10] = sfr::rockblock::f_opcode;
-    sfr::rockblock::report[11] = sfr::rockblock::f_arg_1;
-    sfr::rockblock::report[12] = sfr::rockblock::f_arg_2;
     sfr::rockblock::report[13] = mag_x;
     sfr::rockblock::report[14] = mag_y;
     sfr::rockblock::report[15] = mag_z;

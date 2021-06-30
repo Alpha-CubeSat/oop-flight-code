@@ -25,8 +25,12 @@ namespace constants
         constexpr int armed_time = 172800000;
     }
     namespace rockblock
-    {
+    {   
         //TODO
+        constexpr int sleep_pin = 38;
+
+        constexpr int min_sleep_period = 120000; //currently 2 minutes
+
         constexpr int max_downlink_period = 0;
         constexpr int min_downlink_period = 0;
 
@@ -387,6 +391,8 @@ namespace constants
     {
         //Power Control Pin
         constexpr int power_on_pin = 24;
+
+        constexpr int content_length = 62;
         
     }
     namespace button

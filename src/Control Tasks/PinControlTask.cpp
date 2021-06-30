@@ -26,6 +26,7 @@ PinControlTask::PinControlTask(){
     pinMode(constants::burnwire::first_pin, OUTPUT);
     pinMode(constants::battery::allow_measurement_pin, OUTPUT);
     pinMode(constants::burnwire::second_pin, OUTPUT);
+    pinMode(constants::rockblock::sleep_pin, OUTPUT);
 }
         
 
@@ -45,4 +46,5 @@ void PinControlTask::execute(){
     digitalWrite(constants::burnwire::first_pin, LOW);
     digitalWrite(constants::battery::allow_measurement_pin, HIGH);
     digitalWrite(constants::burnwire::second_pin, LOW);
+    digitalWrite(constants::rockblock::sleep_pin, LOW);
 }

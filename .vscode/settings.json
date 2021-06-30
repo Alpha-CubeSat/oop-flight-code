@@ -42,6 +42,8 @@
         "fstream": "cpp",
         "iomanip": "cpp",
         "iostream": "cpp",
-        "thread": "cpp"
+        "thread": "cpp",
+        "deque": "cpp",
+        "numeric": "cpp"
     }
 }

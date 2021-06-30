@@ -117,6 +117,7 @@ bool RockblockControlTask::check_ready(){
 void RockblockControlTask::dispatch_standby(){
     if(sfr::rockblock::waiting_message || check_ready()){
         transition_to(rockblock_mode_type::send_at);
+        digitalWrite(constants::rockblock::sleep_pin, HIGH);
     }
     transition_to(rockblock_mode_type::send_at);
 }
@@ -409,6 +410,9 @@ void RockblockControlTask::dispatch_await_flush() {
 
 void RockblockControlTask::dispatch_end_transmission(){
     sfr::rockblock::last_downlink = millis();
+    if(sfr::rockblock::downlink_period > constants::rockblock::min_sleep_period){
+        digitalWrite(constants::rockblock::sleep_pin, LOW);
+    }
     transition_to(rockblock_mode_type::standby);
 }
 

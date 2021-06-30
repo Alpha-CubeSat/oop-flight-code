@@ -117,7 +117,9 @@ void CommandMonitor::dispatch_change_fault_mode(){
 }
 
 void CommandMonitor::dispatch_request_image_fragment(){
-    //TODO read Kinjal's code
+    sfr::camera::fragment_requested = true;
+    sfr::camera::fragment_number_requested = sfr::rockblock::f_arg_2;
+    sfr::camera::serial_requested = sfr::rockblock::f_arg_1;
     sfr::rockblock::waiting_command = false;
 }
 
