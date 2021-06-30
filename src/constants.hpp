@@ -391,9 +391,8 @@ namespace constants
     }
     namespace button
     {
-        constexpr int pin = 31;
-        //TODO
-        constexpr int pressed_val = 0;
+        //low when door is opened
+        constexpr int button_pin = 31;
     }
     namespace imu
     {
