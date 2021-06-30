@@ -48,14 +48,14 @@ void MissionManager::dispatch_deployment(){
 void MissionManager::transition_to_standby(){
     sfr::mission::mode = mission_mode_type::standby;
     sfr::fault::mode = fault_mode_type::active;
-    sfr::acs::mode = acs_mode_type::point;
+    sfr::acs::mode = acs_mode_type::full;
     sfr::temperature::mode = temp_mode_type::active;
     sfr::rockblock::downlink_period = constants::rockblock::ten_minutes;
 }
 
 void MissionManager::transition_to_safe(){
     sfr::mission::mode = mission_mode_type::safe;
-    sfr::acs::mode = acs_mode_type::off;
+    sfr::acs::mode = acs_mode_type::simple;
     sfr::rockblock::downlink_period = constants::rockblock::ten_minutes;
     sfr::temperature::mode = temp_mode_type::active;
     sfr::fault::mode = fault_mode_type::inactive;

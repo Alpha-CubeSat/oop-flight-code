@@ -2,8 +2,8 @@
 #define acs_mode_type_enum_
 
 enum acs_mode_type: unsigned char {
-    detumble=0,
-    point,
-    off};
+    full=0,
+    off, 
+    simple};
 
 #endif
