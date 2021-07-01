@@ -10,7 +10,7 @@ RockblockSimulator::RockblockSimulator() {
     mt_queue_len = 0;
     flush_stage = 0;
     bin_transmit = 0;
-    signal = 0;
+    signal = 5;
     // insert("01000100000000000000");
     // insert("01000000000000000000");
     // insert("01000100000000000000");
@@ -18,7 +18,6 @@ RockblockSimulator::RockblockSimulator() {
 
 void RockblockSimulator::begin(uint32_t baud) {
     this->baud = baud;
-    signal = 5;
 }
 
 int RockblockSimulator::available() {
@@ -54,7 +53,7 @@ int RockblockSimulator::read() {
 
 void RockblockSimulator::insert(std::string s) {
     std::string st;
-    if(s.length() % 2 == 0) {
+    if(s.length() % 2 != 0) {
         st = s + "0";
     } else {
         st = s;
