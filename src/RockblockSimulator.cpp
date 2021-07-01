@@ -11,9 +11,9 @@ RockblockSimulator::RockblockSimulator() {
     flush_stage = 0;
     bin_transmit = 0;
     signal = 5;
+    // insert("00000000000000000000");
     // insert("01000100000000000000");
-    // insert("01000000000000000000");
-    // insert("01000100000000000000");
+    // insert("02000100000000000000");
 }
 
 void RockblockSimulator::begin(uint32_t baud) {
@@ -127,6 +127,10 @@ void RockblockSimulator::flush_check() {
 
 void RockblockSimulator::serial_process() {
     if( input.back() == '\r' ) { // process on line end
+        // edge case that binary data contains 0x0A '\r'
+        if(bin_transmit && (int) input.size() != send_len + 3) {
+            return;
+        }
         // print received data
         std::string tmp = input;
         std::replace( tmp.begin(), tmp.end(), '\r', 'r');

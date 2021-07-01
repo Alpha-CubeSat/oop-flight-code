@@ -459,11 +459,11 @@ bool RockblockControlTask::valid_command(){
         }
 
         if(( opcode && arg_1 && arg_2 ) || (rockblock_downlink_period_opcode && arg_2) || (request_image_fragment_opcode)){
-            Serial.println("SAT INFO: command validated");
+            Serial.println("SAT CMD: command validated");
             return true;
         }
     }
 
-    Serial.println("SAT INFO: command invalid");
+    Serial.println("SAT CMD: command invalid");
     return false;
 }
