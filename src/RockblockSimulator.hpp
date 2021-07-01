@@ -20,6 +20,8 @@ class RockblockSimulator {
         std::string latest_downlink();
         std::deque<std::string> all_downlinks();
         bool set_signal(uint8_t signal);
+        uint8_t get_signal();
+        void execute();
     private:
         void insert(std::string s);
         void serial_check();

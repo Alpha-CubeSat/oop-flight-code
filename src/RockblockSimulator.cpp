@@ -21,22 +21,19 @@ void RockblockSimulator::begin(uint32_t baud) {
 }
 
 int RockblockSimulator::available() {
-    serial_check();
-    serial_process();
+    execute();
     return output.size();
 }
 
 size_t RockblockSimulator::write(uint8_t c) {
     input += (char) c;
-    serial_check();
-    serial_process();
+    execute();
     return 1;
 }
 
 size_t RockblockSimulator::print(const char* s) {
     input += s;
-    serial_check();
-    serial_process();
+    execute();
     return strlen(s);
 }
 
@@ -46,8 +43,7 @@ int RockblockSimulator::read() {
         c = output[output.size() - 1];
         output = output.substr(0, output.size() - 1);
     }
-    serial_check();
-    serial_process();
+    execute();
     return (int) c;
 }
 
@@ -68,7 +64,12 @@ void RockblockSimulator::insert(std::string s) {
 }
 
 std::string RockblockSimulator::latest_downlink() {
-    return downlink_hist[0];
+    if(downlink_hist.size() > 0) {
+        return downlink_hist[0];
+    } else {
+        std::string s;
+        return s;
+    }
 }
 
 std::deque<std::string> RockblockSimulator::all_downlinks() {
@@ -82,6 +83,15 @@ bool RockblockSimulator::set_signal(uint8_t signal){
         this->signal = signal;
         return true;
     }
+}
+
+uint8_t RockblockSimulator::get_signal() {
+    return signal;
+}
+
+void RockblockSimulator::execute() {
+    serial_check();
+    serial_process();
 }
 
 void RockblockSimulator::insert(const char* s) {
