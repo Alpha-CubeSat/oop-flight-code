@@ -108,6 +108,7 @@ void RockblockSimulator::serial_check() {
         if(c == '\n') {
             Serial.print("SIM INSERT: ");
             Serial.println(interface.c_str());
+            insert(interface);
             interface.clear();
         }
     }
