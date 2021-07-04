@@ -59,16 +59,17 @@ namespace sfr
         extern int images_written;
         extern int image_lengths[255];
         extern bool report_ready;
-        extern bool sd_card_failed;
-        extern bool camera_failed;
         extern bool full_image_written;
         extern bool report_downlinked;
-        extern HardwareSerial serial;
+        extern char filename[13];
+        extern uint16_t jpglen;
     }
     namespace rockblock
     {
+        extern bool downlink_camera;
         extern unsigned long last_downlink;
         extern unsigned long downlink_period;
+        extern unsigned long camera_downlink_period;
         extern rockblock_mode_type mode;
         extern bool waiting_message;
         extern char buffer[constants::rockblock::buffer_size];

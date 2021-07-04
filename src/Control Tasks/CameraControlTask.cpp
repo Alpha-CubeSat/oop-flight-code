@@ -1,19 +1,22 @@
 #include "CameraControlTask.hpp"
 
-CameraControlTask::CameraControlTask(unsigned int offset): TimedControlTask<void>(offset), adaCam(&sfr::camera::serial)
+CameraControlTask::CameraControlTask(unsigned int offset): TimedControlTask<void>(offset), adaCam(&Serial5)
 {
     //Fault check for SD card
     if (!SD.begin(254))
     {
-        Serial.println("SD card failed to open!");
-        sfr::camera::sd_card_failed = true;
+        sfr::fault::fault_3 = sfr::fault::fault_3 | constants::fault::sd_card;
     }
     pinMode(constants::camera::power_on_pin, OUTPUT);
-    digitalWrite(constants::camera::power_on_pin, LOW);
+    digitalWrite(constants::camera::power_on_pin, LOW);  
 }
 
 void CameraControlTask::execute()
 {
+    if (!SD.begin(254))
+    {
+        sfr::fault::fault_3 = sfr::fault::fault_3 | constants::fault::sd_card;
+    }
 
     if (sfr::camera::turn_on)
     {
@@ -21,8 +24,7 @@ void CameraControlTask::execute()
         digitalWrite(constants::camera::power_on_pin, HIGH);
         while (!adaCam.begin())
         {
-            sfr::camera::camera_failed = true;
-            Serial.println("camera failed to begin");
+            sfr::fault::fault_3 = sfr::fault::fault_3 | constants::fault::camera_on_failed;
         }
         adaCam.setImageSize(VC0706_160x120);
         sfr::camera::powered = true;
@@ -37,14 +39,14 @@ void CameraControlTask::execute()
 
     if (sfr::camera::take_photo && sfr::camera::powered)
     {
-        if (!adaCam.takePicture())
+        if (!adaCam.takePicture()){
             Serial.println("Failed to snap!");
-        else
-        {
+        }
+        else {
             Serial.println("Picture taken!");
-            jpglen = adaCam.frameLength();
-            Serial.println("Camera frame length: " + String(jpglen));
-            if (jpglen > 0)
+            sfr::camera::jpglen = adaCam.frameLength();
+            Serial.println("Camera frame length: " + String(sfr::camera::jpglen));
+            if (sfr::camera::jpglen > 0)
             {
                 sfr::camera::take_photo = false;
             }
@@ -55,31 +57,31 @@ void CameraControlTask::execute()
             }
             filetocreate += String(sfr::camera::images_written) + ".JPG";
             // Create an image with the name IMAGExx.JPG
-            strcpy(filename, filetocreate.c_str());
+            strcpy(sfr::camera::filename, filetocreate.c_str());
             // create if does not exist, do not open existing, write, sync after write
-            if (!SD.exists(filename))
+            if (!SD.exists(sfr::camera::filename))
             {
             }
         }
     }
 
-    if (jpglen > 0)
+    if (sfr::camera::jpglen > 0)
     {
-        sfr::camera::image_lengths[sfr::camera::images_written] = jpglen;
+        sfr::camera::image_lengths[sfr::camera::images_written] = sfr::camera::jpglen;
         // Open the file for writing
-        Serial.println(filename);
-        File imgFile = SD.open(filename, FILE_WRITE);
+        Serial.println(sfr::camera::filename);
+        File imgFile = SD.open(sfr::camera::filename, FILE_WRITE);
         Serial.println("Writing file");
-        Serial.println("Image size: " + String(jpglen));
+        Serial.println("Image size: " + String(sfr::camera::jpglen));
         // Read all the data up to # bytes!
         uint8_t *buffer;
-        uint8_t bytesToRead = min(64, jpglen);
-        while (jpglen > 0)
+        uint8_t bytesToRead = min(64, sfr::camera::jpglen);
+        while (sfr::camera::jpglen > 0)
         {
             buffer = adaCam.readPicture(bytesToRead);
             imgFile.write(buffer, bytesToRead);
-            jpglen -= bytesToRead;
-            bytesToRead = min(64, jpglen);
+            sfr::camera::jpglen -= bytesToRead;
+            bytesToRead = min(64, sfr::camera::jpglen);
         }
         imgFile.close();
         sfr::camera::report_ready = true;

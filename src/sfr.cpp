@@ -36,16 +36,17 @@ namespace sfr
         int images_written = 0;
         int image_lengths[255];
         bool report_ready = false;
-        bool sd_card_failed = false;
-        bool camera_failed = false;
         bool full_image_written = false;
         bool report_downlinked = true;
-        HardwareSerial serial = Serial5;
+        char filename[13];
+        uint16_t jpglen = 0;
     }
     namespace rockblock
     {
+        bool downlink_camera = false;
         unsigned long last_downlink = 0;
         unsigned long downlink_period = constants::rockblock::two_hours;
+        unsigned long camera_downlink_period = constants::rockblock::two_hours;
         rockblock_mode_type mode = rockblock_mode_type::send_at;
         bool waiting_message = false;
         char buffer[constants::rockblock::buffer_size] = {0};

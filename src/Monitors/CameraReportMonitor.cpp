@@ -3,18 +3,6 @@ CameraReportMonitor::CameraReportMonitor(unsigned int offset): TimedControlTask<
 
 void CameraReportMonitor::execute()
 {
-  //Set SD card fault
-  if (sfr::camera::sd_card_failed == true)
-  {
-    sfr::fault::fault_3 = sfr::fault::fault_3 | constants::fault::sd_card;
-  }
-  //Set camera power on fault
-  if (sfr::camera::camera_failed == true)
-  {
-    sfr::fault::fault_3 = sfr::fault::fault_3 | constants::fault::camera_on_failed;
-  }
-
-
   //Get a requested fragment
   if (sfr::camera::fragment_requested == true)
   {
