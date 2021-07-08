@@ -136,4 +136,5 @@ void CameraReportMonitor::create_camera_report(uint8_t tempbuffer[constants::cam
     x = x + 1;
   }
   sfr::camera::report_ready = true;
+  sfr::camera::report_downlinked = false;
 }

@@ -12,95 +12,95 @@ void RockblockControlTask::execute(){
     sfr::rockblock::num_iter++;
     switch(mode){
         case rockblock_mode_type::standby:
-            Serial.println("standby");
+            //Serial.println("standby");
             dispatch_standby();
             break;
         case rockblock_mode_type::send_at:
-            Serial.println("send_at");
+            //Serial.println("send_at");
             dispatch_send_at();
             break;
         case rockblock_mode_type::await_at:
-            Serial.println("await_at");
+            //Serial.println("await_at");
             dispatch_await_at();
             break;
         case rockblock_mode_type::send_signal_strength:
-            Serial.println("send_signal_strength");
+            //Serial.println("send_signal_strength");
             dispatch_send_signal_strength();
             break;
         case rockblock_mode_type::await_signal_strength:
-            Serial.println("await_signal_strength");
+            //Serial.println("await_signal_strength");
             dispatch_await_signal_strength();
             break;
         case rockblock_mode_type::send_flow_control:
-            Serial.println("send_flow_control");
+            //Serial.println("send_flow_control");
             dispatch_send_flow_control();
             break;
         case rockblock_mode_type::await_flow_control:
-            Serial.println("await_flow_control");
+            //Serial.println("await_flow_control");
             dispatch_await_flow_control();
             break;
         case rockblock_mode_type::send_message_length:
-            Serial.println("send_message_length");
+            //Serial.println("send_message_length");
             dispatch_send_message_length();
             break;
         case rockblock_mode_type::await_message_length:
-            Serial.println("await_message_length");
+            //Serial.println("await_message_length");
             dispatch_await_message_length();
             break;
         case rockblock_mode_type::send_message:
-            Serial.println("send_message");
+            //Serial.println("send_message");
             dispatch_send_message(); 
             break;
         case rockblock_mode_type::await_message:
-            Serial.println("await_message");
+            //Serial.println("await_message");
             dispatch_await_message();
             break; 
         case rockblock_mode_type::send_response:
-            Serial.println("send_response");
+            //Serial.println("send_response");
             dispatch_send_response(); 
             break;
         case rockblock_mode_type::create_buffer:
-            Serial.println("create_buffer");
+            //Serial.println("create_buffer");
             dispatch_create_buffer(); 
             break;
         case rockblock_mode_type::process_mo_status:
-            Serial.println("process_mo_status");
+            //Serial.println("process_mo_status");
             dispatch_process_mo_status(); 
             break;
         case rockblock_mode_type::send_signal_strength_mo:
-            Serial.println("send_signal_strength_mo");
+            //Serial.println("send_signal_strength_mo");
             dispatch_send_signal_strength_mo(); 
             break;
         case rockblock_mode_type::await_signal_strength_mo:
-            Serial.println("await_signal_strength_mo");
+            //Serial.println("await_signal_strength_mo");
             dispatch_await_signal_strength_mo(); 
             break;
         case rockblock_mode_type::process_mt_status:
-            Serial.println("process_mt_status");
+            //Serial.println("process_mt_status");
             dispatch_process_mt_status();
             break;
         case rockblock_mode_type::read_message:
-            Serial.println("read_message");
+            //Serial.println("read_message");
             dispatch_read_message();
             break;
         case rockblock_mode_type::process_command:
-            Serial.println("process_command");
+            //Serial.println("process_command");
             dispatch_process_command();
             break;
         case rockblock_mode_type::queue_check:
-            Serial.println("queue_check");
+            //Serial.println("queue_check");
             dispatch_queue_check();
             break;
         case rockblock_mode_type::send_flush:
-            Serial.println("send_flush");
+            //Serial.println("send_flush");
             dispatch_send_flush();
             break;
         case rockblock_mode_type::await_flush:
-            Serial.println("await_flush");
+            //Serial.println("await_flush");
             dispatch_await_flush();
             break;
         case rockblock_mode_type::end_transmission:
-            Serial.println("end_transmission");
+            //Serial.println("end_transmission");
             dispatch_end_transmission();
             break;
     }
@@ -111,6 +111,7 @@ bool RockblockControlTask::check_ready(){
         sfr::rockblock::downlink_camera = false;
         return true;
     } else if((millis() - sfr::rockblock::last_downlink >= sfr::rockblock::camera_downlink_period) && sfr::camera::report_ready == true){
+        Serial.println("downlink camera");
         sfr::rockblock::downlink_camera = true;
         return true;
     } else{
@@ -198,16 +199,19 @@ void RockblockControlTask::dispatch_send_message(){
     Serial.print("SENT: ");
     #endif
     for (size_t i=0; i < constants::rockblock::packet_size; ++i){
-            if(sfr::rockblock::camera_downlink_period == false){
+        if(sfr::rockblock::downlink_camera == false){
             #ifdef VERBOSE
             Serial.print(sfr::rockblock::report[i]);
             #endif
             sfr::rockblock::serial.write(sfr::rockblock::report[i]);
             checksum += (uint16_t) sfr::rockblock::report[i];
         } else{
-            #ifdef VERBOSE
-            Serial.print(sfr::rockblock::camera_report[i]);
-            #endif
+            //#ifdef VERBOSE
+            if(sfr::rockblock::camera_report[i] < 16){
+                Serial.print(0);
+            } 
+            Serial.print(sfr::rockblock::camera_report[i], HEX);
+            //#endif
             sfr::rockblock::serial.write(sfr::rockblock::camera_report[i]);
             checksum += (uint16_t) sfr::rockblock::camera_report[i];
         }
@@ -424,6 +428,10 @@ void RockblockControlTask::dispatch_end_transmission(){
     if(sfr::rockblock::downlink_period > constants::rockblock::min_sleep_period){
         digitalWrite(constants::rockblock::sleep_pin, LOW);
     }
+    if(sfr::rockblock::downlink_camera == true){
+        sfr::camera::report_downlinked = true;
+    }
+    sfr::rockblock::downlink_camera = false;
     transition_to(rockblock_mode_type::standby);
 }
 
