@@ -3,11 +3,8 @@
 #include <constants.hpp>
 
 void test_simulator_initialize() {
-    // check signal field starts at 0
+    // check signal field starts at 5
     RockblockSimulator sim;
-    TEST_ASSERT_EQUAL(0, sim.get_signal());
-
-    // check that begin sets signal to 5
     sim.begin(constants::rockblock::baud);
     TEST_ASSERT_EQUAL(5, sim.get_signal());
 
@@ -24,19 +21,35 @@ void test_simulator_initialize() {
 
 void test_signal_change() {
     RockblockSimulator sim;
-    // signal starts at 0
+    // signal starts at 5
+    TEST_ASSERT_EQUAL(5, sim.get_signal());
+
+    // signal set to 0
+    sim.set_signal(0);
     TEST_ASSERT_EQUAL(0, sim.get_signal());
+
+    // signal set to 1
+    sim.set_signal(1);
+    TEST_ASSERT_EQUAL(1, sim.get_signal());
+
+    // signal set to 2
+    sim.set_signal(2);
+    TEST_ASSERT_EQUAL(2, sim.get_signal());
 
     // signal set to 3
     sim.set_signal(3);
     TEST_ASSERT_EQUAL(3, sim.get_signal());
 
+    // signal set to 4
+    sim.set_signal(4);
+    TEST_ASSERT_EQUAL(4, sim.get_signal());
+
+    // signal set to 5
+    sim.set_signal(5);
+    TEST_ASSERT_EQUAL(5, sim.get_signal());
+
     // signal set to out of bounds value
     sim.set_signal(6);
-    TEST_ASSERT_EQUAL(3, sim.get_signal());
-
-    // signal set to max val
-    sim.set_signal(5);
     TEST_ASSERT_EQUAL(5, sim.get_signal());
 }
 
