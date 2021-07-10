@@ -26,17 +26,23 @@ namespace constants
     }
     namespace rockblock
     {   
-        //TODO
+        constexpr unsigned long one_second = 1000;
+        constexpr unsigned long one_minute = 60 * one_second;
+        constexpr unsigned long one_hour = 60 * one_minute;
+        constexpr unsigned long one_day = 24 * one_hour;
+
+        constexpr unsigned long ten_minutes = 10 * one_minute;
+        constexpr unsigned long two_hours = 2 * one_hour;
+        constexpr unsigned long two_days = 2 * one_day;
+
         constexpr int sleep_pin = 38;
 
-        constexpr int min_sleep_period = 120000; //currently 2 minutes
+        constexpr int min_sleep_period = 2 * one_minute;
 
-        constexpr int max_downlink_period = 0;
-        constexpr int min_downlink_period = 0;
+        constexpr int min_downlink_period = one_second;
+        constexpr int max_downlink_period = two_days;
 
         constexpr int baud = 19200;
-        constexpr unsigned long two_hours = 7200000;
-        constexpr unsigned long ten_minutes = 600000;
         constexpr size_t buffer_size = 63;
         constexpr size_t packet_size = 70;
         constexpr size_t num_commas = 5;
@@ -75,8 +81,8 @@ namespace constants
         constexpr uint8_t false_arg[arg1_len] =     {0x00,0x00,0x00,0x00};
         constexpr uint8_t active[arg1_len] =        {0x01,0x00,0x00,0x00};
         constexpr uint8_t inactive[arg1_len] =      {0x00,0x00,0x00,0x00};
-        constexpr uint8_t full[arg1_len] =    {0x02,0x00,0x00,0x00};
-        constexpr uint8_t simple[arg1_len] =      {0x01,0x00,0x00,0x00};
+        constexpr uint8_t full[arg1_len] =          {0x02,0x00,0x00,0x00};
+        constexpr uint8_t simple[arg1_len] =        {0x01,0x00,0x00,0x00};
         constexpr uint8_t off[arg1_len] =           {0x00,0x00,0x00,0x00};
 
         constexpr uint8_t no_arg_2[arg2_len] =      {0x00,0x00,0x00,0x00};
