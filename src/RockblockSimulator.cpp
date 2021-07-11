@@ -185,6 +185,9 @@ void RockblockSimulator::serial_process() {
                 output = "\r\n2\r\n\r\nOK\r\n"; // reply ERROR
             }
         } else if( input == "AT+SBDIX\r" ) {
+            if(downlink_data == "FLUSH_MT") {
+                flush_stage = 1;
+            }
             flush_check();
             // MO_STATUS: successful transmission (TBD)
             mo_status = 0;

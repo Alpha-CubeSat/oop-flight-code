@@ -411,7 +411,7 @@ void test_flush() {
                 r3 += "0, 3, 1, 3, 10, 1";
                 break;
             case 3:
-                r3 += "0, 4, 1, 4, 10, 0";
+                r3 += "0, 4, 1, 4, 8, 0";
                 break;
         }
         r3 += "\r\n\r\nOK\r\n";
@@ -446,13 +446,10 @@ void test_flush() {
             r4 += (char) 85;
         } else {
             r4 += (char) 0;
-            r4 += (char) 10;
-            r4 += "FLUSH_MT\r\n";
+            r4 += (char) 8;
+            r4 += "FLUSH_MT";
             r4 += (char) 2;
-            r4 += (char) 153;
-            for(char c : s4) {
-                Serial.println(c, DEC);
-            }
+            r4 += (char) 130;
         }
         r4 += "\r\nOK\r\n";
         TEST_ASSERT(s4 == r4);
@@ -470,7 +467,7 @@ int test_simulator() {
     RUN_TEST(test_downlink_incorrect_checksum);
     RUN_TEST(test_mailbox_empty);
     RUN_TEST(test_receive_uplink);
-    // RUN_TEST(test_flush); // not functional
+    RUN_TEST(test_flush);
     return UNITY_END();
 }
 
