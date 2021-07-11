@@ -108,10 +108,10 @@ void CommandMonitor::dispatch_change_acs_mode(){
 
 void CommandMonitor::dispatch_change_fault_mode(){
     if(sfr::rockblock::f_arg_1 == get_decimal_arg(constants::rockblock::active)){
-        sfr::temperature::mode = temp_mode_type::active;
+        sfr::fault::mode = fault_mode_type::active;
     } 
     else if(sfr::rockblock::f_arg_1 == get_decimal_arg(constants::rockblock::inactive)){
-        sfr::temperature::mode = temp_mode_type::inactive;
+        sfr::fault::mode = fault_mode_type::inactive;
     }
     sfr::rockblock::waiting_command = false;
 }
