@@ -129,13 +129,13 @@ void CommandMonitor::dispatch_change_rockblock_downlink_period(){
     }
 }
 
-void dispatch_change_burnwire_time() {
+void CommandMonitor::dispatch_change_burnwire_time() {
     if(sfr::rockblock::f_arg_1 < constants::burnwire::max_burnwire_time && sfr::rockblock::f_arg_1 > constants::burnwire::min_burnwire_time){
         sfr::burnwire::burn_time = sfr::rockblock::f_arg_1;
     }
 }
 
-void dispatch_change_burnwire_timeout() {
+void CommandMonitor::dispatch_change_burnwire_timeout() {
     if(sfr::rockblock::f_arg_1 < constants::burnwire::max_armed_time && sfr::rockblock::f_arg_1 > constants::burnwire::min_armed_time){
         sfr::burnwire::armed_time = sfr::rockblock::f_arg_1;
     }
