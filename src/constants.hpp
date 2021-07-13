@@ -31,6 +31,7 @@ namespace constants
         constexpr unsigned long one_hour = 60 * one_minute;
         constexpr unsigned long one_day = 24 * one_hour;
 
+        constexpr unsigned long half_second = one_second / 2;
         constexpr unsigned long ten_minutes = 10 * one_minute;
         constexpr unsigned long two_hours = 2 * one_hour;
         constexpr unsigned long two_days = 2 * one_day;

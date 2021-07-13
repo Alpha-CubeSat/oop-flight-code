@@ -70,6 +70,38 @@ void test_burnwire() {
     TEST_ASSERT(sfr::burnwire::fire == false);
 }
 
+void test_burn_times() {
+    CommandMonitor command_monitor(0);
+
+    // burn time > max burn time
+    sfr::rockblock::f_opcode = command_monitor.get_decimal_opcode(constants::rockblock::burnwire_time);
+    sfr::rockblock::f_arg_1 = 2 * constants::burnwire::max_burnwire_time;
+    sfr::rockblock::waiting_command = true;
+    command_monitor.execute();
+    TEST_ASSERT(sfr::burnwire::burn_time == constants::rockblock::half_second);
+
+    // burn time in range
+    sfr::rockblock::f_opcode = command_monitor.get_decimal_opcode(constants::rockblock::burnwire_time);
+    sfr::rockblock::f_arg_1 = constants::rockblock::one_second;
+    sfr::rockblock::waiting_command = true;
+    command_monitor.execute();
+    TEST_ASSERT(sfr::burnwire::burn_time == constants::rockblock::one_second);
+
+    // armed time > max armed time
+    sfr::rockblock::f_opcode = command_monitor.get_decimal_opcode(constants::rockblock::burnwire_timeout);
+    sfr::rockblock::f_arg_1 = 2 * constants::burnwire::max_armed_time;
+    sfr::rockblock::waiting_command = true;
+    command_monitor.execute();
+    TEST_ASSERT(sfr::burnwire::armed_time == constants::rockblock::two_days);
+
+    // arm time in range
+    sfr::rockblock::f_opcode = command_monitor.get_decimal_opcode(constants::rockblock::burnwire_timeout);
+    sfr::rockblock::f_arg_1 = constants::rockblock::one_hour;
+    sfr::rockblock::waiting_command = true;
+    command_monitor.execute();
+    TEST_ASSERT(sfr::burnwire::armed_time == constants::rockblock::one_hour);
+}
+
 void test_camera() {
     CommandMonitor command_monitor(0);
 
@@ -343,6 +375,7 @@ int test_command_monitor() {
     RUN_TEST(test_initialize);
     RUN_TEST(test_mission);
     RUN_TEST(test_burnwire);
+    RUN_TEST(test_burn_times);
     RUN_TEST(test_camera);
     RUN_TEST(test_temp_mode);
     RUN_TEST(test_acs_mode);
