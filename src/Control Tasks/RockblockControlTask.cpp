@@ -446,16 +446,34 @@ bool RockblockControlTask::valid_command(){
     bool arg_2 = false;
     bool rockblock_downlink_period_opcode = true;
     bool request_image_fragment_opcode = true;
+    bool burnwire_time_opcode = true;
+    bool burnwire_timeout_opcode = true;
 
+    // Check if opcode matches non-standard command (variable arg)
     for( size_t o = 0; o < constants::rockblock::opcode_len; o++ ) {
         if(sfr::rockblock::opcode[o] != constants::rockblock::request_image_fragment[o]) {
             request_image_fragment_opcode = false;
         }
         if(sfr::rockblock::opcode[o] != constants::rockblock::rockblock_downlink_period[o]) {
             rockblock_downlink_period_opcode = false;
-        }   
+        }
+        if(sfr::rockblock::opcode[o] != constants::rockblock::burnwire_time[o]) {
+            burnwire_time_opcode = false;
+        }
+        if(sfr::rockblock::opcode[o] != constants::rockblock::burnwire_timeout[o]) {
+            burnwire_timeout_opcode = false;
+        }
+    }
+    bool non_std_cmd = (rockblock_downlink_period_opcode && arg_2) || 
+                      (request_image_fragment_opcode) ||
+                      (burnwire_time_opcode) ||
+                      (burnwire_timeout_opcode);
+    if(non_std_cmd) {
+        Serial.println("SAT CMD: command validated");
+        return true;
     }
 
+    // Loop over all standard commands
     for( size_t c = 0; c < constants::rockblock::num_commands; c++ ) {
         opcode = true;
         arg_1 = true;
@@ -477,12 +495,13 @@ bool RockblockControlTask::valid_command(){
             }     
         }
 
-        if(( opcode && arg_1 && arg_2 ) || (rockblock_downlink_period_opcode && arg_2) || (request_image_fragment_opcode)){
+        if( (opcode && arg_1 && arg_2) ){
             Serial.println("SAT CMD: command validated");
             return true;
         }
     }
 
+    // Command neither standard or non-standard
     Serial.println("SAT CMD: command invalid");
     return false;
 }

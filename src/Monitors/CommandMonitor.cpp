@@ -13,6 +13,18 @@ void CommandMonitor::execute(){
         else if(sfr::rockblock::f_opcode == get_decimal_opcode(constants::rockblock::burnwire_fire)){
             dispatch_change_true_false(sfr::burnwire::fire);
         }
+        else if(sfr::rockblock::f_opcode == get_decimal_opcode(constants::rockblock::burnwire_time)){
+            dispatch_change_burnwire_time();
+        }
+        else if(sfr::rockblock::f_opcode == get_decimal_opcode(constants::rockblock::burnwire_timeout)){
+            dispatch_change_burnwire_timeout();
+        }
+        else if(sfr::rockblock::f_opcode == get_decimal_opcode(constants::rockblock::rockblock_downlink_period)){
+            dispatch_change_rockblock_downlink_period();
+        }
+        else if(sfr::rockblock::f_opcode == get_decimal_opcode(constants::rockblock::request_image_fragment)){
+            dispatch_request_image_fragment();
+        }
         else if(sfr::rockblock::f_opcode == get_decimal_opcode(constants::rockblock::camera_take_photo)){
             dispatch_change_true_false(sfr::camera::take_photo);
         }
@@ -52,14 +64,8 @@ void CommandMonitor::execute(){
         else if(sfr::rockblock::f_opcode == get_decimal_opcode(constants::rockblock::fault_check_voltage)){
             dispatch_change_true_false(sfr::fault::check_voltage);
         }
-        else if(sfr::rockblock::f_opcode == get_decimal_opcode(constants::rockblock::request_image_fragment)){
-            dispatch_request_image_fragment();
-        }
-        else if(sfr::rockblock::f_opcode == get_decimal_opcode(constants::rockblock::rockblock_downlink_period)){
-            dispatch_change_rockblock_downlink_period();
-        } else{
-            sfr::rockblock::waiting_command = false;
-        }
+
+        sfr::rockblock::waiting_command = false;
     }
 }
 
@@ -76,12 +82,10 @@ void CommandMonitor::dispatch_change_mission_mode(){
     else if(sfr::rockblock::f_arg_1 == get_decimal_arg(constants::rockblock::low_power)){
         MissionManager::transition_to_low_power();
     }
-    sfr::rockblock::waiting_command = false;
 }
 
 void CommandMonitor::dispatch_change_true_false(bool& value){
     value = sfr::rockblock::f_arg_1;
-    sfr::rockblock::waiting_command = false;
 }
 
 void CommandMonitor::dispatch_change_temperature_mode(){
@@ -91,7 +95,6 @@ void CommandMonitor::dispatch_change_temperature_mode(){
     else if(sfr::rockblock::f_arg_1 == get_decimal_arg(constants::rockblock::inactive)){
         sfr::temperature::mode = temp_mode_type::inactive;
     }
-    sfr::rockblock::waiting_command = false;
 }
 void CommandMonitor::dispatch_change_acs_mode(){
     if(sfr::rockblock::f_arg_1 == get_decimal_arg(constants::rockblock::full)){
@@ -103,7 +106,6 @@ void CommandMonitor::dispatch_change_acs_mode(){
     else if(sfr::rockblock::f_arg_1 == get_decimal_arg(constants::rockblock::off)){
         sfr::acs::mode = acs_mode_type::off;
     }
-    sfr::rockblock::waiting_command = false;
 }
 
 void CommandMonitor::dispatch_change_fault_mode(){
@@ -113,21 +115,30 @@ void CommandMonitor::dispatch_change_fault_mode(){
     else if(sfr::rockblock::f_arg_1 == get_decimal_arg(constants::rockblock::inactive)){
         sfr::fault::mode = fault_mode_type::inactive;
     }
-    sfr::rockblock::waiting_command = false;
 }
 
 void CommandMonitor::dispatch_request_image_fragment(){
     sfr::camera::fragment_requested = true;
     sfr::camera::fragment_number_requested = sfr::rockblock::f_arg_2;
     sfr::camera::serial_requested = sfr::rockblock::f_arg_1;
-    sfr::rockblock::waiting_command = false;
 }
 
 void CommandMonitor::dispatch_change_rockblock_downlink_period(){
     if(sfr::rockblock::f_arg_1 < constants::rockblock::max_downlink_period && sfr::rockblock::f_arg_1 > constants::rockblock::min_downlink_period){
         sfr::rockblock::downlink_period = sfr::rockblock::f_arg_1;
     }
-    sfr::rockblock::waiting_command = false;
+}
+
+void CommandMonitor::dispatch_change_burnwire_time() {
+    if(sfr::rockblock::f_arg_1 < constants::burnwire::max_burnwire_time && sfr::rockblock::f_arg_1 > constants::burnwire::min_burnwire_time){
+        sfr::burnwire::burn_time = sfr::rockblock::f_arg_1;
+    }
+}
+
+void CommandMonitor::dispatch_change_burnwire_timeout() {
+    if(sfr::rockblock::f_arg_1 < constants::burnwire::max_armed_time && sfr::rockblock::f_arg_1 > constants::burnwire::min_armed_time){
+        sfr::burnwire::armed_time = sfr::rockblock::f_arg_1;
+    }
 }
 
 uint16_t CommandMonitor::get_decimal_opcode(const uint8_t* hex_opcode_bytes){
