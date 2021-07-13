@@ -18,6 +18,8 @@ namespace sfr
         int attempts = 0;
         int start_time = 0;
         int camera_attempts = 0;
+        int burn_time = 500;
+        int armed_time = constants::rockblock::two_days;
     }
     namespace camera
     {

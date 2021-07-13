@@ -16,13 +16,13 @@ namespace constants
     {
         constexpr int first_pin = 37;
         constexpr int second_pin = 35;
-        constexpr int burn_time = 500;
         constexpr int burn_wait = 1000;
         constexpr int max_attempts = 10;
         constexpr int camera_max_attempts = 50;
-        
-        //2 days in milliseconds
-        constexpr int armed_time = 172800000;
+        constexpr int min_burnwire_time = 0;
+        constexpr int max_burnwire_time = 60000;
+        constexpr int min_armed_time = 0;
+        constexpr int max_armed_time = 86400000;
     }
     namespace rockblock
     {   
@@ -57,11 +57,13 @@ namespace constants
         constexpr uint8_t mission_mode[opcode_len] =               {0x00,0x00};
         constexpr uint8_t burnwire_arm[opcode_len] =               {0x01,0x00};
         constexpr uint8_t burnwire_fire[opcode_len] =              {0x02,0x00};
-        constexpr uint8_t rockblock_downlink_period[opcode_len] =  {0x03,0x00};
-        constexpr uint8_t request_image_fragment[opcode_len] =     {0x04,0x00};
-        constexpr uint8_t camera_take_photo[opcode_len] =          {0x05,0x00};
-        constexpr uint8_t temperature_mode[opcode_len] =           {0x06,0x00};
-        constexpr uint8_t acs_mode[opcode_len] =                   {0x07,0x00};
+        constexpr uint8_t burnwire_time[opcode_len] =              {0x03,0x00};
+        constexpr uint8_t burnwire_timeout[opcode_len] =           {0x04,0x00};
+        constexpr uint8_t rockblock_downlink_period[opcode_len] =  {0x05,0x00};
+        constexpr uint8_t request_image_fragment[opcode_len] =     {0x06,0x00};
+        constexpr uint8_t camera_take_photo[opcode_len] =          {0x07,0x00};
+        constexpr uint8_t temperature_mode[opcode_len] =           {0x08,0x00};
+        constexpr uint8_t acs_mode[opcode_len] =                   {0x09,0x00};
         constexpr uint8_t fault_mode[opcode_len] =                 {0xF1,0xFF};
         constexpr uint8_t fault_check_mag_x[opcode_len] =          {0xF2,0xFF};
         constexpr uint8_t fault_check_mag_y[opcode_len] =          {0xF3,0xFF};
@@ -409,9 +411,9 @@ namespace constants
     namespace imu
     {
         constexpr float gravity = 9.80665;
-        constexpr float two_g = 2 * 9.80665;
-        constexpr float four_g = 4 * 9.80665;
-        constexpr float eight_g = 8 * 9.80665;
+        constexpr float two_g = 2 * gravity;
+        constexpr float four_g = 4 * gravity;
+        constexpr float eight_g = 8 * gravity;
 
         constexpr float min_mag_x = 0.0;
         constexpr float max_mag_x = 0.0;
@@ -439,27 +441,27 @@ namespace constants
         constexpr unsigned int control_cycle_time_us = control_cycle_time_ms * 1000;
         constexpr unsigned int control_cycle_time = control_cycle_time_us;
 
-
+        static constexpr unsigned int base_offset = 30000;
         // Control cycle time offsets, in microseconds 
         static constexpr unsigned int acs_monitor_offset = 0;
-        static constexpr unsigned int battery_monitor_offset = 1*30000;
-        static constexpr unsigned int button_monitor_offset = 2*30000;
-        static constexpr unsigned int camera_report_monitor_offset = 3*30000;
-        static constexpr unsigned int command_monitor_offset = 4*30000;
-        static constexpr unsigned int current_monitor_offset = 5*30000;
-        static constexpr unsigned int fault_monitor_offset = 6*30000;
-        static constexpr unsigned int imu_monitor_offset = 7*30000;
-        static constexpr unsigned int normal_report_monitor_offset = 8*30000;
-        static constexpr unsigned int photoresistor_monitor_offset = 9*30000;
-        static constexpr unsigned int temperature_monitor_offset = 10*30000;
+        static constexpr unsigned int battery_monitor_offset = 1 * base_offset;
+        static constexpr unsigned int button_monitor_offset = 2 * base_offset;
+        static constexpr unsigned int camera_report_monitor_offset = 3 * base_offset;
+        static constexpr unsigned int command_monitor_offset = 4 * base_offset;
+        static constexpr unsigned int current_monitor_offset = 5 * base_offset;
+        static constexpr unsigned int fault_monitor_offset = 6 * base_offset;
+        static constexpr unsigned int imu_monitor_offset = 7 * base_offset;
+        static constexpr unsigned int normal_report_monitor_offset = 8 * base_offset;
+        static constexpr unsigned int photoresistor_monitor_offset = 9 * base_offset;
+        static constexpr unsigned int temperature_monitor_offset = 10 * base_offset;
         
-        static constexpr unsigned int acs_control_task_offset = 11*30000;
-        static constexpr unsigned int burnwire_control_task_offset = 12*30000;
-        static constexpr unsigned int camera_control_task_offset = 13*30000;
-        static constexpr unsigned int rockblock_control_task_offset = 14*30000;
-        static constexpr unsigned int temperature_control_task_offset = 15*30000;
+        static constexpr unsigned int acs_control_task_offset = 11 * base_offset;
+        static constexpr unsigned int burnwire_control_task_offset = 12 * base_offset;
+        static constexpr unsigned int camera_control_task_offset = 13 * base_offset;
+        static constexpr unsigned int rockblock_control_task_offset = 14 * base_offset;
+        static constexpr unsigned int temperature_control_task_offset = 15 * base_offset;
 
-        static constexpr unsigned int mission_manager_offset = 16*30000;
+        static constexpr unsigned int mission_manager_offset = 16 * base_offset;
     }
 };
 

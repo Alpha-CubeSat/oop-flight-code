@@ -41,6 +41,8 @@ namespace sfr
         extern int attempts;
         extern int start_time;
         extern int camera_attempts;
+        extern int burn_time;
+        extern int armed_time;
     }
     namespace camera
     {
