@@ -39,7 +39,7 @@ void test_out_of_order_commands(){
 
 
     for(int i=0; i <constants::burnwire::max_attempts; ++i){
-        delay(constants::burnwire::burn_time);
+        delay(sfr::burnwire::burn_time);
         burnwire_control_task.execute();
         TEST_ASSERT_EQUAL(burnwire_mode_type::delay, sfr::burnwire::mode);
 
@@ -76,7 +76,7 @@ void test_max_attempts(){
     TEST_ASSERT_EQUAL(burnwire_mode_type::burn, sfr::burnwire::mode);
 
     for(int i=0; i <constants::burnwire::max_attempts; ++i){
-        delay(constants::burnwire::burn_time);
+        delay(sfr::burnwire::burn_time);
         burnwire_control_task.execute();
         TEST_ASSERT_EQUAL(burnwire_mode_type::delay, sfr::burnwire::mode);
 
@@ -156,7 +156,7 @@ void test_exit_deployment(){
     burnwire_control_task.execute();
     TEST_ASSERT_EQUAL(burnwire_mode_type::burn, sfr::burnwire::mode);
 
-    delay(constants::burnwire::burn_time);
+    delay(sfr::burnwire::burn_time);
     burnwire_control_task.execute();
     TEST_ASSERT_EQUAL(burnwire_mode_type::delay, sfr::burnwire::mode);
 
@@ -239,7 +239,7 @@ void test_camera_max_attempts(){
     TEST_ASSERT_EQUAL(burnwire_mode_type::burn, sfr::burnwire::mode);
     TEST_ASSERT_EQUAL(sfr::burnwire::camera_attempts, 0);
 
-    delay(constants::burnwire::burn_time);
+    delay(sfr::burnwire::burn_time);
     burnwire_control_task.execute();
     TEST_ASSERT_EQUAL(burnwire_mode_type::delay, sfr::burnwire::mode);
 
@@ -280,7 +280,7 @@ void test_camera_some_attempts(){
     TEST_ASSERT_EQUAL(burnwire_mode_type::burn, sfr::burnwire::mode);
     TEST_ASSERT_EQUAL(sfr::burnwire::camera_attempts, 0);
 
-    delay(constants::burnwire::burn_time);
+    delay(sfr::burnwire::burn_time);
     burnwire_control_task.execute();
     TEST_ASSERT_EQUAL(burnwire_mode_type::delay, sfr::burnwire::mode);
 
@@ -319,7 +319,7 @@ void test_armed_timeout(){
     burnwire_control_task.execute();
     TEST_ASSERT_EQUAL(burnwire_mode_type::armed, sfr::burnwire::mode);
 
-    delay(constants::burnwire::armed_time);
+    delay(sfr::burnwire::armed_time);
 
     burnwire_control_task.execute();
     TEST_ASSERT_EQUAL(burnwire_mode_type::standby, sfr::burnwire::mode);

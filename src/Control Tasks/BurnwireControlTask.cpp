@@ -23,7 +23,7 @@ void BurnwireControlTask::execute(){
         case burnwire_mode_type::armed:
             {
                 if(sfr::mission::mode == mission_mode_type::deployment){
-                    if(millis()-sfr::burnwire::start_time >= sfr::burnwire::armed_time){
+                    if(millis()-sfr::burnwire::start_time >= (uint32_t) sfr::burnwire::armed_time){
                         transition_to_standby();
                     }
                     if((sfr::burnwire::fire && sfr::current::in_sun && sfr::fault::check_solar_current) || (sfr::burnwire::fire && !sfr::fault::check_solar_current)){
@@ -59,7 +59,7 @@ void BurnwireControlTask::execute(){
         case burnwire_mode_type::burn:
             {
                 if(sfr::mission::mode == mission_mode_type::deployment){
-                    if(millis()-sfr::burnwire::start_time >= sfr::burnwire::burn_time){
+                    if(millis()-sfr::burnwire::start_time >= (uint32_t) sfr::burnwire::burn_time){
                         sfr::burnwire::mode = burnwire_mode_type::delay;
                         digitalWrite(constants::burnwire::first_pin, LOW);
                         digitalWrite(constants::burnwire::second_pin, LOW);
