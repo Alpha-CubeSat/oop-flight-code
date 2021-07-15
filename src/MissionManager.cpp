@@ -40,6 +40,7 @@ void MissionManager::dispatch_low_power(){
 void MissionManager::dispatch_deployment(){
     if(!sfr::button::pressed && !sfr::photoresistor::covered){
         sfr::camera::take_photo = true;
+        sfr::camera::turn_on = true;
         BurnwireControlTask::transition_to_standby();
         transition_to_standby();
     }

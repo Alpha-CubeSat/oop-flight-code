@@ -24,7 +24,7 @@ namespace sfr
     namespace camera
     {
         bool take_photo = false;
-        bool turn_on = false;
+        bool turn_on = true;
         bool turn_off = false;
         bool powered = false;
         uint8_t buffer[255] = {0};
@@ -47,8 +47,8 @@ namespace sfr
     {
         bool downlink_camera = false;
         unsigned long last_downlink = 0;
-        unsigned long downlink_period = constants::rockblock::two_hours;
-        unsigned long camera_downlink_period = constants::rockblock::two_hours;
+        unsigned long downlink_period = 60000;
+        unsigned long camera_downlink_period = 0;
         rockblock_mode_type mode = rockblock_mode_type::send_at;
         bool waiting_message = false;
         char buffer[constants::rockblock::buffer_size] = {0};

@@ -18,25 +18,6 @@ void CameraControlTask::execute()
         sfr::fault::fault_3 = sfr::fault::fault_3 | constants::fault::sd_card;
     }
 
-    if (sfr::camera::turn_on)
-    {
-        Serial.println("turned on camera");
-        digitalWrite(constants::camera::power_on_pin, HIGH);
-        while (!adaCam.begin())
-        {
-            sfr::fault::fault_3 = sfr::fault::fault_3 | constants::fault::camera_on_failed;
-        }
-        adaCam.setImageSize(VC0706_160x120);
-        sfr::camera::powered = true;
-        sfr::camera::turn_on = false;
-    }
-    if (sfr::camera::turn_off)
-    {
-        digitalWrite(constants::camera::power_on_pin, LOW);
-        sfr::camera::powered = false;
-        sfr::camera::turn_off = false;
-    }
-
     if (sfr::camera::take_photo && sfr::camera::powered)
     {
         if (!adaCam.takePicture()){
@@ -65,6 +46,27 @@ void CameraControlTask::execute()
         }
     }
 
+    if (sfr::camera::turn_on)
+    {
+        Serial.println("turned on camera");
+        digitalWrite(constants::camera::power_on_pin, HIGH);
+        if (!adaCam.begin())
+        {
+            sfr::fault::fault_3 = sfr::fault::fault_3 | constants::fault::camera_on_failed;
+        } else{
+            adaCam.setImageSize(VC0706_160x120);
+            sfr::camera::powered = true;
+            sfr::camera::turn_on = false;
+        }
+    }
+    
+    if (sfr::camera::turn_off)
+    {
+        digitalWrite(constants::camera::power_on_pin, LOW);
+        sfr::camera::powered = false;
+        sfr::camera::turn_off = false;
+    }
+
     if (sfr::camera::jpglen > 0)
     {
         sfr::camera::image_lengths[sfr::camera::images_written] = sfr::camera::jpglen;
@@ -84,7 +86,6 @@ void CameraControlTask::execute()
             bytesToRead = min(64, sfr::camera::jpglen);
         }
         imgFile.close();
-        sfr::camera::report_ready = true;
         sfr::camera::images_written++;
         Serial.println("Done writing file");
     }

@@ -26,6 +26,7 @@ void CommandMonitor::execute(){
             dispatch_request_image_fragment();
         }
         else if(sfr::rockblock::f_opcode == get_decimal_opcode(constants::rockblock::camera_take_photo)){
+            
             dispatch_change_true_false(sfr::camera::take_photo);
         }
         else if(sfr::rockblock::f_opcode == get_decimal_opcode(constants::rockblock::temperature_mode)){
@@ -118,9 +119,15 @@ void CommandMonitor::dispatch_change_fault_mode(){
 }
 
 void CommandMonitor::dispatch_request_image_fragment(){
+    Serial.println("REQUESTING IMAGE FRAGMENT");
     sfr::camera::fragment_requested = true;
     sfr::camera::fragment_number_requested = sfr::rockblock::f_arg_2;
+    Serial.print("Fragment requested: ");
+    Serial.println(sfr::camera::fragment_number_requested);
+
     sfr::camera::serial_requested = sfr::rockblock::f_arg_1;
+    Serial.print("Serial requested: ");
+    Serial.println(sfr::camera::serial_requested);
 }
 
 void CommandMonitor::dispatch_change_rockblock_downlink_period(){
