@@ -350,6 +350,7 @@ namespace constants
         constexpr int pin = 15;
         constexpr float max_solar_current;
         constexpr float min_solar_current;
+        constexpr int in_sun_val = 70;
     }
     namespace acs
     {

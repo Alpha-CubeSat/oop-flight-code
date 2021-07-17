@@ -14,4 +14,6 @@ void CurrentMonitor::execute(){
     }
     float sum = std::accumulate(sfr::current::solar_current_buffer.begin(), sfr::current::solar_current_buffer.end(), 0.0);
     sfr::current::solar_current_average = sum / sfr::current::solar_current_buffer.size();
+
+    sfr::current::in_sun = sfr::current::solar_current_average >= constants::current::in_sun_val;
 }
