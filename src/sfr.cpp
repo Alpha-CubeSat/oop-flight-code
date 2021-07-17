@@ -36,11 +36,12 @@ namespace sfr
         int serial_requested = 0;
         bool fragment_requested = false;
         int images_written = 0;
+        int fragments_written = 0;
         int image_lengths[255];
         bool report_ready = false;
         bool full_image_written = false;
         bool report_downlinked = true;
-        char filename[13];
+        char filename[15];
         uint16_t jpglen = 0;
     }
     namespace rockblock

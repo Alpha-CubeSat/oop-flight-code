@@ -31,7 +31,6 @@ void CameraReportMonitor::execute(){
         Serial.println("Current fragment: " + String(sfr::camera::fragment_number));
         #endif
 
-
         if (sfr::camera::full_image_written == true || sfr::camera::fragment_number == 0 || sfr::camera::max_fragments == 0){
             sfr::camera::max_fragments = (sfr::camera::image_lengths[sfr::camera::current_serial] / constants::camera::content_length) + (sfr::camera::image_lengths[sfr::camera::current_serial] % constants::camera::content_length != 0 ? 1 : 0);
             sfr::camera::full_image_written = false;
@@ -49,36 +48,31 @@ void CameraReportMonitor::execute(){
             sfr::camera::data_length = constants::camera::content_length;
         }
 
-        if (sfr::camera::fragment_number == 0) {
-            String filename = "Image";
-            if (sfr::camera::current_serial < 10){
-                filename += "0";
-            }
-            filename += String(sfr::camera::current_serial) + ".JPG";
-            imgFile = SD.open(filename.c_str(), FILE_READ);
+        String filename = "Image";
+        if (sfr::camera::current_serial < 10){
+            filename += "0";
         }
-            
-        size_t i = 0;
-        sfr::camera::buffer[i++] = sfr::camera::current_serial;
-        sfr::camera::buffer[i++] = sfr::camera::fragment_number;
-        sfr::camera::buffer[i++] = sfr::camera::max_fragments;
-        sfr::camera::buffer[i++] = sfr::camera::data_length;
+        filename += String(sfr::camera::current_serial) + String(sfr::camera::fragment_number) + ".JPG";
+        imgFile = SD.open(filename.c_str(), FILE_READ);
+
+        Serial.println(filename.c_str());
+        
         uint8_t tempbuffer[constants::camera::content_length];
+        Serial.println(sfr::camera::fragment_number*constants::camera::content_length);
         imgFile.read(tempbuffer, sfr::camera::data_length);
-        for (int j = 0; j < sfr::camera::data_length; j++){
-            sfr::camera::buffer[i++] = tempbuffer[j];
-        }
+
+        imgFile.close();
+
         if (sfr::camera::fragment_number == sfr::camera::max_fragments && sfr::camera::max_fragments != 0){
-            imgFile.close();
             add_possible_command();
             sfr::camera::fragment_number = 0;
-            Serial.println("INCEASING CURRENT SERIAL");
             sfr::camera::current_serial += 1;
-            sfr::camera::fragment_requested = true;
         }
         create_camera_report(tempbuffer, sfr::camera::fragment_number, sfr::camera::current_serial);
-        sfr::camera::fragment_number++;
-        
+        sfr::camera::fragment_number++;  
+    }
+    if (sfr::camera::fragment_number == sfr::camera::max_fragments+1  && sfr::camera::current_serial == sfr::camera::images_written &&sfr::camera::max_fragments != 0){
+        sfr::camera::report_ready = false;
     }
     
 }

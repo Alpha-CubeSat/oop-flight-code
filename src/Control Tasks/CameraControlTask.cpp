@@ -31,18 +31,7 @@ void CameraControlTask::execute()
             {
                 sfr::camera::take_photo = false;
             }
-            String filetocreate = "Image";
-            if (sfr::camera::images_written < 10)
-            {
-                filetocreate += "0";
-            }
-            filetocreate += String(sfr::camera::images_written) + ".JPG";
-            // Create an image with the name IMAGExx.JPG
-            strcpy(sfr::camera::filename, filetocreate.c_str());
-            // create if does not exist, do not open existing, write, sync after write
-            if (!SD.exists(sfr::camera::filename))
-            {
-            }
+            
         }
     }
 
@@ -69,24 +58,37 @@ void CameraControlTask::execute()
 
     if (sfr::camera::jpglen > 0)
     {
+        String filetocreate = "Image";
+        if (sfr::camera::images_written < 10)
+        {
+            filetocreate += "0";
+        }
+        filetocreate += String(sfr::camera::images_written);
         sfr::camera::image_lengths[sfr::camera::images_written] = sfr::camera::jpglen;
         // Open the file for writing
-        Serial.println(sfr::camera::filename);
-        File imgFile = SD.open(sfr::camera::filename, FILE_WRITE);
-        Serial.println("Writing file");
-        Serial.println("Image size: " + String(sfr::camera::jpglen));
+        
         // Read all the data up to # bytes!
-        uint8_t *buffer;
-        uint8_t bytesToRead = min(64, sfr::camera::jpglen);
-        while (sfr::camera::jpglen > 0)
+        if (sfr::camera::jpglen > 0)
         {
+            Serial.println(sfr::camera::filename);
+            if (sfr::camera::fragments_written < 10)
+            {
+                filetocreate += "0";
+            }
+            filetocreate += String(sfr::camera::fragments_written) + ".JPG";
+            strcpy(sfr::camera::filename, filetocreate.c_str());
+            File imgFile = SD.open(sfr::camera::filename, FILE_WRITE);
+            uint8_t *buffer;
+            uint8_t bytesToRead = min(constants::camera::content_length, sfr::camera::jpglen);
             buffer = adaCam.readPicture(bytesToRead);
             imgFile.write(buffer, bytesToRead);
             sfr::camera::jpglen -= bytesToRead;
-            bytesToRead = min(64, sfr::camera::jpglen);
+            imgFile.close();
+            sfr::camera::fragments_written++;
+        } else{
+            sfr::camera::images_written++;
+            Serial.println("Done writing file");
         }
-        imgFile.close();
-        sfr::camera::images_written++;
-        Serial.println("Done writing file");
+
     }
 }

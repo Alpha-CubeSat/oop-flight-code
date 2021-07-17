@@ -59,11 +59,12 @@ namespace sfr
         extern int serial_requested;
         extern bool fragment_requested;
         extern int images_written;
+        extern int fragments_written;
         extern int image_lengths[255];
         extern bool report_ready;
         extern bool full_image_written;
         extern bool report_downlinked;
-        extern char filename[13];
+        extern char filename[15];
         extern uint16_t jpglen;
     }
     namespace rockblock
