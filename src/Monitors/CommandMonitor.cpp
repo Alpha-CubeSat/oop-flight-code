@@ -119,21 +119,24 @@ void CommandMonitor::dispatch_change_fault_mode(){
 }
 
 void CommandMonitor::dispatch_request_image_fragment(){
-    Serial.println("REQUESTING IMAGE FRAGMENT");
-    sfr::camera::fragment_requested = true;
-    sfr::camera::fragment_number_requested = sfr::rockblock::f_arg_2;
-    Serial.print("Fragment requested: ");
-    Serial.println(sfr::camera::fragment_number_requested);
+    if(sfr::rockblock::f_arg_2 < sfr::rockblock::camera_max_fragments[sfr::rockblock::f_arg_1]){
+        sfr::camera::fragment_requested = true;
+        sfr::camera::fragment_number_requested = sfr::rockblock::f_arg_2;
+        sfr::camera::serial_requested = sfr::rockblock::f_arg_1;
 
-    sfr::camera::serial_requested = sfr::rockblock::f_arg_1;
-    Serial.print("Serial requested: ");
-    Serial.println(sfr::camera::serial_requested);
+        #ifdef VERBOSE
+        Serial.print("Fragment requested: ");
+        Serial.println(sfr::camera::fragment_number_requested);
+        Serial.print("Serial requested: ");
+        Serial.println(sfr::camera::serial_requested);
+        #endif
+    }  
 }
 
 void CommandMonitor::dispatch_change_rockblock_downlink_period(){
     if(sfr::rockblock::f_arg_1 < constants::rockblock::max_downlink_period && sfr::rockblock::f_arg_1 > constants::rockblock::min_downlink_period){
         sfr::rockblock::downlink_period = sfr::rockblock::f_arg_1;
-    }
+    } 
 }
 
 void CommandMonitor::dispatch_change_burnwire_time() {
