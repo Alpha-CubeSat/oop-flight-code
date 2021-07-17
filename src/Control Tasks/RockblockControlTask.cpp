@@ -442,8 +442,8 @@ void RockblockControlTask::transition_to(rockblock_mode_type new_mode){
 
 bool RockblockControlTask::valid_command(){
     bool opcode = false;
-    bool arg_1 = false;
-    bool arg_2 = false;
+    bool arg_1 = true;
+    bool arg_2 = true;
     bool rockblock_downlink_period_opcode = true;
     bool request_image_fragment_opcode = true;
     bool burnwire_time_opcode = true;
@@ -464,8 +464,19 @@ bool RockblockControlTask::valid_command(){
             burnwire_timeout_opcode = false;
         }
     }
+
+    if(request_image_fragment_opcode){
+        for( size_t c = 0; c < 99; c++ ) {
+            for( size_t a1 = 0; a1 < constants::rockblock::arg1_len; a1++ ) {
+                if(sfr::rockblock::arg_1[a1] != sfr::rockblock::camera_commands[c][a1 + constants::rockblock::opcode_len]) {
+                    arg_1 = false;
+                }  
+            }
+        }
+    }
+
     bool non_std_cmd = (rockblock_downlink_period_opcode && arg_2) || 
-                      (request_image_fragment_opcode) ||
+                      (request_image_fragment_opcode && arg_1) ||
                       (burnwire_time_opcode) ||
                       (burnwire_timeout_opcode);
     if(non_std_cmd) {

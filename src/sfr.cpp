@@ -45,6 +45,7 @@ namespace sfr
     }
     namespace rockblock
     {
+        int camera_commands[99][constants::rockblock::command_len] = {};
         bool downlink_camera = false;
         unsigned long last_downlink = 0;
         unsigned long downlink_period = 60000;
