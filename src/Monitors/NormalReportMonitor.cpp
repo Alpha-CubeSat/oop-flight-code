@@ -13,6 +13,7 @@ void NormalReportMonitor::execute(){
 
     uint8_t temp_c = map(sfr::temperature::temp_c_average, constants::temperature::min_temp_c, constants::temperature::max_temp_c, 0, 255);
 
+    // TODO: finalize min/max
     uint8_t solar_current = map(sfr::current::solar_current_average, constants::current::min_solar_current, constants::current::max_solar_current, 0, 255);
 
     uint8_t voltage = map(sfr::battery::voltage_average, constants::battery::min_voltage, constants::battery::max_voltage, 0, 255);
