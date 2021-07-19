@@ -49,6 +49,7 @@ protected:
 public:
     MainControlLoop();
     void execute() override;
+    int count = 0;
 };
 
 #endif
