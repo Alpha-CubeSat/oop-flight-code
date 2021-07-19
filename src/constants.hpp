@@ -348,8 +348,10 @@ namespace constants
     namespace current
     {
         constexpr int pin = 15;
-        constexpr float max_solar_current = 0;
-        constexpr float min_solar_current = 300;
+        // TODO: finalize min/max
+        constexpr float min_solar_current = 0;
+        constexpr float max_solar_current = 300;
+        // TODO: finalize in_sun_val
         constexpr int in_sun_val = 70;
         constexpr float voltage_ref = 3.3;
         constexpr int resolution = 1024;
