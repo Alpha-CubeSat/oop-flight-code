@@ -53,8 +53,6 @@ namespace sfr
         extern uint8_t buffer[255];
         extern int current_serial;
         extern int fragment_number;
-        extern int max_fragments;
-        extern int data_length;
         extern int fragment_number_requested;
         extern int serial_requested;
         extern bool fragment_requested;

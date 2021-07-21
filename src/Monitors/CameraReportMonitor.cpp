@@ -13,95 +13,109 @@ void CameraReportMonitor::execute(){
         imgFile = SD.open(filename.c_str(), FILE_READ);
         int i = 0;
         uint8_t tempbuffer[constants::camera::content_length];
-        while (i < sfr::camera::fragment_number_requested){
-            imgFile.read(tempbuffer, sfr::camera::data_length);
-            i = i + 1;
-        }
-        sfr::camera::data_length = constants::camera::content_length;
-        imgFile.read(tempbuffer, sfr::camera::data_length);
+        
+        imgFile.read(tempbuffer, constants::camera::content_length);
         create_camera_report(tempbuffer, sfr::camera::fragment_number_requested, sfr::camera::serial_requested);
         sfr::camera::fragment_requested = false;
     }
 
     //Prepare data from an image taken for downlink
-    else if (sfr::camera::report_downlinked == true) {
+    else if (sfr::camera::report_downlinked == true && sfr::camera::images_written != 0) {
         #ifdef VERBOSE
         Serial.println("Report monitor started");
         Serial.println("Current serial: " + String(sfr::camera::current_serial));
         Serial.println("Current fragment: " + String(sfr::camera::fragment_number));
         #endif
 
-        if (sfr::camera::full_image_written == true || sfr::camera::fragment_number == 0 || sfr::camera::max_fragments == 0){
-            sfr::camera::max_fragments = (sfr::camera::image_lengths[sfr::camera::current_serial] / constants::camera::content_length) + (sfr::camera::image_lengths[sfr::camera::current_serial] % constants::camera::content_length != 0 ? 1 : 0);
+        if (sfr::camera::full_image_written == true || sfr::camera::fragment_number == 0){
             sfr::camera::full_image_written = false;
         }
 
-        #ifdef VERBOSE
-        Serial.println("Max fragments: " + String(sfr::camera::max_fragments));
-        #endif
-
-        if (sfr::camera::fragment_number == sfr::camera::max_fragments - 1 && sfr::camera::max_fragments != 0){
-            sfr::camera::data_length = sfr::camera::image_lengths[sfr::camera::current_serial] % constants::camera::content_length;
-            sfr::camera::full_image_written = true;
-        }
-        else {
-            sfr::camera::data_length = constants::camera::content_length;
-        }
-
-        String filename = "Image";
+        String filename = "";
         if (sfr::camera::current_serial < 10){
             filename += "0";
         }
-        filename += String(sfr::camera::current_serial) + String(sfr::camera::fragment_number) + ".JPG";
+        filename += String(sfr::camera::current_serial);
+
+        if (sfr::camera::fragment_number < 10) {
+            filename += "0";
+        }
+        filename += String(sfr::camera::fragment_number) + ".jpg";
+
         imgFile = SD.open(filename.c_str(), FILE_READ);
 
-        Serial.println(filename.c_str());
+        uint8_t tempbuffer[constants::camera::content_length*2];
+        uint8_t parsedbuffer[constants::camera::content_length];
+
+
+        for(int i = 0; i < sizeof(tempbuffer); i++){
+            tempbuffer[i] = imgFile.read();
+        }
         
-        uint8_t tempbuffer[constants::camera::content_length];
-        Serial.println(sfr::camera::fragment_number*constants::camera::content_length);
-        imgFile.read(tempbuffer, sfr::camera::data_length);
+        imgFile.read(tempbuffer, constants::camera::content_length);
+
+
+        int x = 0;
+        for(int i = 0; i < sizeof(tempbuffer); i++){
+            int byte_0;
+            int byte_1;
+            if(tempbuffer[i] <= 90 && tempbuffer[i] >= 65){
+                byte_0 = tempbuffer[i]- 55;
+            } else{
+                byte_0 = tempbuffer[i]- 48;
+            }
+
+            if(tempbuffer[i+1] <= 90 && tempbuffer[i+1] >= 65){
+                byte_1 = tempbuffer[i+1]- 55;
+            } else{
+                byte_1 = tempbuffer[i+1]- 48;
+            }
+
+            parsedbuffer[x] = byte_1 + (byte_0 * 16);
+            x++;
+            i++;
+        }
 
         imgFile.close();
 
-        if (sfr::camera::fragment_number == sfr::camera::max_fragments && sfr::camera::max_fragments != 0){
+        //TODO
+        /*if (sfr::camera::fragment_number == sfr::camera::max_fragments && sfr::camera::max_fragments != 0){
             add_possible_command();
             sfr::camera::fragment_number = 0;
             sfr::camera::current_serial += 1;
-        }
-        create_camera_report(tempbuffer, sfr::camera::fragment_number, sfr::camera::current_serial);
+        }*/
+
+
+        create_camera_report(parsedbuffer, sfr::camera::fragment_number, sfr::camera::current_serial);
         sfr::camera::fragment_number++;  
     }
-    if (sfr::camera::fragment_number == sfr::camera::max_fragments+1  && sfr::camera::current_serial == sfr::camera::images_written &&sfr::camera::max_fragments != 0){
+
+    //TODO
+    /*if (sfr::camera::fragment_number == sfr::camera::max_fragments+1  && sfr::camera::current_serial == sfr::camera::images_written &&sfr::camera::max_fragments != 0){
         sfr::camera::report_ready = false;
-    }
+    }*/
     
 }
 
-void CameraReportMonitor::create_camera_report(uint8_t tempbuffer[constants::camera::content_length], int fragment_number, int serial_number){
-    std::vector<unsigned char> serial(constants::rockblock::arg1_len);
-    for (size_t i = 0; i < constants::rockblock::arg1_len; i++){
-        serial[3 - i] = (serial_number >> (i * 8));
-    }
+void CameraReportMonitor::create_camera_report(uint8_t tempbuffer[constants::camera::content_length], int fragment_number, short serial_number){
+    sfr::rockblock::camera_report[0] = (serial_number & 255);
+    sfr::rockblock::camera_report[1] = ((serial_number >> 8) & 255);
 
-    for(size_t i = 0; i < constants::rockblock::arg1_len; i++ ) {
-        sfr::rockblock::camera_report[i] = serial[i];
-    }
-
-    std::vector<unsigned char> fragment(constants::rockblock::arg2_len);
-    for (size_t i = 0; i < constants::rockblock::arg2_len; i++){
+    std::vector<unsigned char> fragment(constants::camera::bytes_allocated_fragment);
+    for (size_t i = 0; i < constants::camera::bytes_allocated_fragment; i++){
         fragment[3 - i] = (fragment_number >> (i * 8));
     }
 
     size_t i = 0;
-    int a = constants::rockblock::arg1_len;
-    while(i < constants::rockblock::arg2_len){
+    int a = constants::camera::bytes_allocated_serial;
+    while(i < constants::camera::bytes_allocated_fragment){
         sfr::rockblock::camera_report[a] = fragment[i];
         a = a + 1;
         i = i + 1;
     }
 
     int x = 0;
-    int y = constants::rockblock::arg1_len + constants::rockblock::arg2_len;
+    int y = constants::camera::bytes_allocated_serial + constants::camera::bytes_allocated_fragment;
     while(x < constants::camera::content_length){
         sfr::rockblock::camera_report[y] = tempbuffer[x];
         y = y + 1;

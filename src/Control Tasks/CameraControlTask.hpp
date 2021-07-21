@@ -10,6 +10,8 @@ public:
     CameraControlTask(unsigned int offset);
     void execute();
     Adafruit_VC0706 adaCam;
+    File imgFile;
+    String filetocreate;
 };
 
 #endif

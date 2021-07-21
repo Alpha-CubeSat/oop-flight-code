@@ -30,8 +30,6 @@ namespace sfr
         uint8_t buffer[255] = {0};
         int current_serial = 0;
         int fragment_number = 0;
-        int max_fragments = 0;
-        int data_length = 0;
         int fragment_number_requested = 3;
         int serial_requested = 0;
         bool fragment_requested = false;

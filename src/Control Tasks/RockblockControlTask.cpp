@@ -177,6 +177,9 @@ void RockblockControlTask::dispatch_send_message(){
     for (size_t i=0; i < constants::rockblock::packet_size; ++i){
         if(sfr::rockblock::downlink_camera == false){
             #ifdef VERBOSE
+            if(sfr::rockblock::report[i] < 16){
+                Serial.print(0);
+            } 
             Serial.print(sfr::rockblock::report[i]);
             #endif
             sfr::rockblock::serial.write(sfr::rockblock::report[i]);

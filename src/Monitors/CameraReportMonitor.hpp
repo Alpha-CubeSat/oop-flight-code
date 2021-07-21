@@ -10,7 +10,7 @@ public:
     CameraReportMonitor(unsigned int offset);
     void execute();
     File imgFile;
-    void create_camera_report(uint8_t tempbuffer[constants::camera::content_length], int fragment_number, int serial_number);
+    void create_camera_report(uint8_t tempbuffer[constants::camera::content_length], int fragment_number, short serial_number);
     void add_possible_command();
 };
 #endif
