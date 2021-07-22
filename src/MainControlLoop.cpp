@@ -26,11 +26,6 @@ mission_manager(constants::timecontrol::mission_manager_offset)
 
 void MainControlLoop::execute()
 {
-    count = count + 1;
-    if(count == 10){
-        sfr::camera::take_photo = true;
-    }
-
     sfr::fault::fault_1 = 0;
     sfr::fault::fault_2 = 0;
     sfr::fault::fault_3 = 0;
