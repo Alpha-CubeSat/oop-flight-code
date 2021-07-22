@@ -53,21 +53,22 @@ namespace sfr
         extern uint8_t buffer[255];
         extern int current_serial;
         extern int fragment_number;
-        extern int max_fragments;
-        extern int data_length;
         extern int fragment_number_requested;
         extern int serial_requested;
         extern bool fragment_requested;
         extern int images_written;
+        extern int fragments_written;
         extern int image_lengths[255];
         extern bool report_ready;
         extern bool full_image_written;
         extern bool report_downlinked;
-        extern char filename[13];
+        extern char filename[15];
         extern uint16_t jpglen;
     }
     namespace rockblock
     {
+        extern int camera_commands[99][constants::rockblock::command_len];
+        extern int camera_max_fragments[99];
         extern bool downlink_camera;
         extern unsigned long last_downlink;
         extern unsigned long downlink_period;

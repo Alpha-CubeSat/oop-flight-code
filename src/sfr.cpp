@@ -24,31 +24,32 @@ namespace sfr
     namespace camera
     {
         bool take_photo = false;
-        bool turn_on = false;
+        bool turn_on = true;
         bool turn_off = false;
         bool powered = false;
         uint8_t buffer[255] = {0};
         int current_serial = 0;
         int fragment_number = 0;
-        int max_fragments = 0;
-        int data_length = 0;
         int fragment_number_requested = 3;
         int serial_requested = 0;
         bool fragment_requested = false;
         int images_written = 0;
+        int fragments_written = 0;
         int image_lengths[255];
         bool report_ready = false;
         bool full_image_written = false;
         bool report_downlinked = true;
-        char filename[13];
+        char filename[15];
         uint16_t jpglen = 0;
     }
     namespace rockblock
     {
+        int camera_commands[99][constants::rockblock::command_len] = {};
+        int camera_max_fragments[99] = {};
         bool downlink_camera = false;
         unsigned long last_downlink = 0;
-        unsigned long downlink_period = constants::rockblock::two_hours;
-        unsigned long camera_downlink_period = constants::rockblock::two_hours;
+        unsigned long downlink_period = 60000;
+        unsigned long camera_downlink_period = 0;
         rockblock_mode_type mode = rockblock_mode_type::send_at;
         bool waiting_message = false;
         char buffer[constants::rockblock::buffer_size] = {0};

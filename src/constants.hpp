@@ -408,7 +408,9 @@ namespace constants
         //Power Control Pin
         constexpr int power_on_pin = 24;
 
-        constexpr int content_length = 62;
+        constexpr int content_length = 64;
+        constexpr int bytes_allocated_serial = 2;
+        constexpr int bytes_allocated_fragment = 4;
         
     }
     namespace button

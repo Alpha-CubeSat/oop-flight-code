@@ -26,6 +26,7 @@ void CommandMonitor::execute(){
             dispatch_request_image_fragment();
         }
         else if(sfr::rockblock::f_opcode == get_decimal_opcode(constants::rockblock::camera_take_photo)){
+            
             dispatch_change_true_false(sfr::camera::take_photo);
         }
         else if(sfr::rockblock::f_opcode == get_decimal_opcode(constants::rockblock::temperature_mode)){
@@ -118,15 +119,24 @@ void CommandMonitor::dispatch_change_fault_mode(){
 }
 
 void CommandMonitor::dispatch_request_image_fragment(){
-    sfr::camera::fragment_requested = true;
-    sfr::camera::fragment_number_requested = sfr::rockblock::f_arg_2;
-    sfr::camera::serial_requested = sfr::rockblock::f_arg_1;
+    if(sfr::rockblock::f_arg_2 < sfr::rockblock::camera_max_fragments[sfr::rockblock::f_arg_1]){
+        sfr::camera::fragment_requested = true;
+        sfr::camera::fragment_number_requested = sfr::rockblock::f_arg_2;
+        sfr::camera::serial_requested = sfr::rockblock::f_arg_1;
+
+        #ifdef VERBOSE
+        Serial.print("Fragment requested: ");
+        Serial.println(sfr::camera::fragment_number_requested);
+        Serial.print("Serial requested: ");
+        Serial.println(sfr::camera::serial_requested);
+        #endif
+    }  
 }
 
 void CommandMonitor::dispatch_change_rockblock_downlink_period(){
     if(sfr::rockblock::f_arg_1 < constants::rockblock::max_downlink_period && sfr::rockblock::f_arg_1 > constants::rockblock::min_downlink_period){
         sfr::rockblock::downlink_period = sfr::rockblock::f_arg_1;
-    }
+    } 
 }
 
 void CommandMonitor::dispatch_change_burnwire_time() {
