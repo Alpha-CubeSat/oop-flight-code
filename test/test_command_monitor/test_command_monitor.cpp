@@ -322,22 +322,19 @@ void test_fault_other() {
 void test_img_frag() {
     CommandMonitor command_monitor(0);
 
-    // fragment request
+    // invalid fragment request
     sfr::rockblock::f_opcode = command_monitor.get_decimal_opcode(constants::rockblock::request_image_fragment);
     sfr::rockblock::f_arg_1 = 0;
     sfr::rockblock::f_arg_2 = 0;
     sfr::rockblock::waiting_command = true;
     command_monitor.execute();
-    TEST_ASSERT(sfr::camera::fragment_requested == true);
-    TEST_ASSERT(sfr::camera::serial_requested == 0);
-    TEST_ASSERT(sfr::camera::fragment_number_requested == 0);
-    
-    sfr::camera::fragment_requested = false;
+    TEST_ASSERT(sfr::camera::fragment_requested == false);
 
-    // serial request and fragment number request
+    // valid fragment request
     sfr::rockblock::f_opcode = command_monitor.get_decimal_opcode(constants::rockblock::request_image_fragment);
     sfr::rockblock::f_arg_1 = 1;
     sfr::rockblock::f_arg_2 = 1;
+    sfr::rockblock::camera_max_fragments[sfr::rockblock::f_arg_1] = 2;
     sfr::rockblock::waiting_command = true;
     command_monitor.execute();
     TEST_ASSERT(sfr::camera::fragment_requested == true);
