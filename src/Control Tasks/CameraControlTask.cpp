@@ -79,10 +79,18 @@ void CameraControlTask::execute()
 
             for(int i = 0; i < bytesToRead; i++){
                 if(buffer[i] < 16){
-                    imgFile.print(0,HEX);
+                    imgFile.print(0, HEX);
+                    #ifdef VERBOSE
+                    Serial.print(0, HEX);
+                    #endif
                 }
-                imgFile.print(buffer[i],HEX);
+                imgFile.print(buffer[i], HEX);
+                #ifdef VERBOSE
+                Serial.print(buffer[i],HEX);
+                #endif
             }
+
+            Serial.println("");
         
             sfr::camera::jpglen -= bytesToRead;
             imgFile.close();
