@@ -48,12 +48,12 @@ void CameraReportMonitor::create_camera_report(int fragment_number, short serial
     //parse hex stored as chars into actual hex
     uint8_t tempbuffer[constants::camera::content_length*2];
     uint8_t parsedbuffer[constants::camera::content_length];
-    for(int i = 0; i < sizeof(tempbuffer); i++){
+    for(size_t i = 0; i < sizeof(tempbuffer); i++){
         tempbuffer[i] = imgFile.read();
     }
     imgFile.read(tempbuffer, constants::camera::content_length);
     int x = 0;
-    for(int i = 0; i < sizeof(tempbuffer); i++){
+    for(size_t i = 0; i < sizeof(tempbuffer); i++){
         int byte_0;
         int byte_1;
         if(tempbuffer[i] <= 90 && tempbuffer[i] >= 65){
@@ -108,12 +108,12 @@ void CameraReportMonitor::add_possible_command(){
     uint32_t converted_serial =  __builtin_bswap32(sfr::camera::current_serial);
 
     //add opcode to possible commands
-    for(int i = 0; i < constants::rockblock::opcode_len; i++){
+    for(size_t i = 0; i < constants::rockblock::opcode_len; i++){
         sfr::rockblock::camera_commands[sfr::camera::current_serial][i] = constants::rockblock::request_image_fragment[i];
     }
 
     //add argument 1 to possible commands
-    for(int i = constants::rockblock::opcode_len; i < (constants::rockblock::arg1_len+constants::rockblock::opcode_len); i++){
+    for(size_t i = constants::rockblock::opcode_len; i < (constants::rockblock::arg1_len+constants::rockblock::opcode_len); i++){
         sfr::rockblock::camera_commands[sfr::camera::current_serial][i] = (converted_serial >> (8*i)) & 0xff;
     }
 }
