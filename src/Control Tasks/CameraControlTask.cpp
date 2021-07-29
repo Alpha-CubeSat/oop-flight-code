@@ -2,11 +2,7 @@
 
 CameraControlTask::CameraControlTask(unsigned int offset): TimedControlTask<void>(offset), adaCam(&Serial5)
 {
-    //Fault check for SD card
-    if (!SD.begin(254))
-    {
-        sfr::fault::fault_3 = sfr::fault::fault_3 | constants::fault::sd_card;
-    }
+    SD.begin(254);
     pinMode(constants::camera::power_on_pin, OUTPUT);
     digitalWrite(constants::camera::power_on_pin, LOW);  
 }
@@ -14,7 +10,6 @@ CameraControlTask::CameraControlTask(unsigned int offset): TimedControlTask<void
 void CameraControlTask::execute()
 {
     if (!SD.begin(254)) {
-        sfr::fault::fault_3 = sfr::fault::fault_3 | constants::fault::sd_card;
         Serial.println("SD CARD FAILED");
     } else{
         if (sfr::camera::take_photo && sfr::camera::powered) {
@@ -36,9 +31,7 @@ void CameraControlTask::execute()
         if (sfr::camera::turn_on) {
             Serial.println("turned on camera");
             digitalWrite(constants::camera::power_on_pin, HIGH);
-            if (!adaCam.begin()) {
-                sfr::fault::fault_3 = sfr::fault::fault_3 | constants::fault::camera_on_failed;
-            } else{
+            if (adaCam.begin()) {
                 adaCam.setImageSize(VC0706_160x120);
                 sfr::camera::powered = true;
                 sfr::camera::turn_on = false;
