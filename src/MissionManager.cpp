@@ -38,6 +38,9 @@ void MissionManager::dispatch_low_power(){
 }
 
 void MissionManager::dispatch_deployment(){
+    if(sfr::battery::voltage < 3.75 && sfr::fault::check_voltage){
+        transition_to_low_power();
+    }
     if(!sfr::button::pressed && !sfr::photoresistor::covered){
         sfr::camera::take_photo = true;
         sfr::camera::turn_on = true;
@@ -57,7 +60,7 @@ void MissionManager::transition_to_standby(){
 void MissionManager::transition_to_safe(){
     sfr::mission::mode = mission_mode_type::safe;
     sfr::acs::mode = acs_mode_type::simple;
-    sfr::rockblock::downlink_period = constants::rockblock::ten_minutes;
+    sfr::rockblock::downlink_period = constants::rockblock::two_hours;
     sfr::temperature::mode = temp_mode_type::active;
     sfr::fault::mode = fault_mode_type::inactive;
 }
@@ -72,8 +75,9 @@ void MissionManager::transition_to_low_power(){
 
 void MissionManager::transition_to_deployment(){
     sfr::mission::mode = mission_mode_type::deployment;
-    sfr::acs::mode = acs_mode_type::off;
+    sfr::acs::mode = acs_mode_type::simple;
     sfr::camera::powered = true;
+    sfr::rockblock::downlink_period = constants::rockblock::ten_minutes;
     sfr::temperature::mode = temp_mode_type::inactive;
 }
 

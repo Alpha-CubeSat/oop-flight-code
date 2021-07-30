@@ -124,6 +124,7 @@ namespace sfr
         extern std::deque<float> temp_c_buffer;
         extern float temp_c_average;
         extern temp_mode_type mode;
+        extern bool in_sun;
     }
     namespace current
     {

@@ -344,6 +344,7 @@ namespace constants
         constexpr int pin = 16;
         constexpr float min_temp_c;
         constexpr float max_temp_c;
+        constexpr float in_sun_val;
     }
     namespace current
     {

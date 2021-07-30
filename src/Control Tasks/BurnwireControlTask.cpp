@@ -26,7 +26,9 @@ void BurnwireControlTask::execute(){
                     if(millis()-sfr::burnwire::start_time >= (uint32_t) sfr::burnwire::armed_time){
                         transition_to_standby();
                     }
-                    if((sfr::burnwire::fire && sfr::current::in_sun && sfr::fault::check_solar_current) || (sfr::burnwire::fire && !sfr::fault::check_solar_current)){
+                    if((sfr::burnwire::fire && sfr::temperature::in_sun && sfr::fault::check_temp_c) 
+                    || (sfr::burnwire::fire && !sfr::fault::check_temp_c && sfr::fault::check_solar_current && sfr::current::in_sun)
+                    || (sfr::burnwire::fire && !sfr::fault::check_solar_current && !sfr::fault::check_temp_c)){
                         sfr::burnwire::mode = burnwire_mode_type::fire;
                         sfr::camera::turn_on = true;
                     }
