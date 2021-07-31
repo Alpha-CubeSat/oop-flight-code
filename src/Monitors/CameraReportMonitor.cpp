@@ -32,7 +32,7 @@ void CameraReportMonitor::execute(){
     }  
 }
 
-void CameraReportMonitor::create_camera_report(int fragment_number, short serial_number){
+void CameraReportMonitor::create_camera_report(int fragment_number, uint8_t serial_number){
     //open image file and read it for specified image/fragment
     String filename = "";
     if (serial_number < 10){
@@ -72,9 +72,9 @@ void CameraReportMonitor::create_camera_report(int fragment_number, short serial
     }
     imgFile.close();
 
+    sfr::rockblock::camera_report[0] = 42;
     //get each byte of serial number and add to camera report
-    sfr::rockblock::camera_report[0] = (serial_number & 255);
-    sfr::rockblock::camera_report[1] = ((serial_number >> 8) & 255);
+    sfr::rockblock::camera_report[1] = serial_number;
 
     //get each byte of fragment number
     std::vector<unsigned char> fragment(constants::camera::bytes_allocated_fragment);
@@ -84,7 +84,7 @@ void CameraReportMonitor::create_camera_report(int fragment_number, short serial
 
     //add fragment number to camera report
     size_t i = 0;
-    int a = constants::camera::bytes_allocated_serial;
+    int a = constants::camera::bytes_allocated_serial_opcode;
     while(i < constants::camera::bytes_allocated_fragment){
         sfr::rockblock::camera_report[a] = fragment[i];
         a = a + 1;
@@ -93,7 +93,7 @@ void CameraReportMonitor::create_camera_report(int fragment_number, short serial
 
     //add actual image content to camera report
     int z = 0;
-    int y = constants::camera::bytes_allocated_serial + constants::camera::bytes_allocated_fragment;
+    int y = constants::camera::bytes_allocated_serial_opcode + constants::camera::bytes_allocated_fragment;
     while(z < constants::camera::content_length){
         sfr::rockblock::camera_report[y] = parsedbuffer[z];
         y = y + 1;

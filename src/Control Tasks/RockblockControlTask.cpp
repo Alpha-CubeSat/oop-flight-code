@@ -180,7 +180,7 @@ void RockblockControlTask::dispatch_send_message(){
             if(sfr::rockblock::report[i] < 16){
                 Serial.print(0);
             } 
-            Serial.print(sfr::rockblock::report[i]);
+            Serial.print(sfr::rockblock::report[i], HEX);
             #endif
             sfr::rockblock::serial.write(sfr::rockblock::report[i]);
             checksum += (uint16_t) sfr::rockblock::report[i];

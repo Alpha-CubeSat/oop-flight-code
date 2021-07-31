@@ -23,6 +23,7 @@ namespace sfr
     }
     namespace camera
     {
+        bool photo_taken_sd_failed = false;
         bool take_photo = false;
         bool turn_on = true;
         bool turn_off = false;

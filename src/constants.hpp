@@ -410,7 +410,7 @@ namespace constants
         constexpr int power_on_pin = 24;
 
         constexpr int content_length = 64;
-        constexpr int bytes_allocated_serial = 2;
+        constexpr int bytes_allocated_serial_opcode = 2;
         constexpr int bytes_allocated_fragment = 4;
         
     }
