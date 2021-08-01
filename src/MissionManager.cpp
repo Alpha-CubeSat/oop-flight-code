@@ -76,7 +76,7 @@ void MissionManager::transition_to_low_power(){
 void MissionManager::transition_to_deployment(){
     sfr::mission::mode = mission_mode_type::deployment;
     sfr::acs::mode = acs_mode_type::simple;
-    sfr::camera::powered = true;
+    sfr::camera::turn_on = true;
     sfr::rockblock::downlink_period = constants::rockblock::ten_minutes;
     sfr::temperature::mode = temp_mode_type::inactive;
 }
