@@ -9,6 +9,7 @@ namespace sfr
     namespace mission
     {
         mission_mode_type mode = mission_mode_type::standby;
+        bool low_power_eligible = true;
     }
     namespace burnwire
     {

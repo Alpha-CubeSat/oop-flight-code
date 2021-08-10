@@ -32,6 +32,7 @@ namespace sfr
     namespace mission
     {
         extern mission_mode_type mode;
+        extern bool low_power_eligible;
     }
     namespace burnwire
     {

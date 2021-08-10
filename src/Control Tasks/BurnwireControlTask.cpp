@@ -8,6 +8,12 @@ BurnwireControlTask::BurnwireControlTask(unsigned int offset): TimedControlTask<
 void BurnwireControlTask::execute(){    
     burnwire_mode_type mode = sfr::burnwire::mode;
 
+    if(mode == burnwire_mode_type::delay || mode == burnwire_mode_type::burn){
+        sfr::mission::low_power_eligible = false;
+    } else{
+        sfr::mission::low_power_eligible = true;
+    }
+
     switch(mode){
         case burnwire_mode_type::standby:
             { 
