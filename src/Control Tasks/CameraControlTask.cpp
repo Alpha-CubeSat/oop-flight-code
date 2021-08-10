@@ -4,10 +4,16 @@ CameraControlTask::CameraControlTask(unsigned int offset): TimedControlTask<void
 {
     pinMode(constants::camera::power_on_pin, OUTPUT);
     digitalWrite(constants::camera::power_on_pin, LOW);  
+    digitalWrite(constants::camera::rx, LOW);
+    digitalWrite(constants::camera::tx, LOW);
 }
 
 void CameraControlTask::execute()
 {
+    if(sfr::camera::take_photo && sfr::camera::powered == false){
+        sfr::camera::turn_on = true;
+    }
+
     if (sfr::camera::take_photo && sfr::camera::powered) {
         if (!adaCam.takePicture()){
             Serial.println("Failed to snap!");
@@ -42,6 +48,10 @@ void CameraControlTask::execute()
         
     if (sfr::camera::turn_off && sfr::camera::powered == true) {
         digitalWrite(constants::camera::power_on_pin, LOW);
+        pinMode(constants::camera::rx, OUTPUT);
+        pinMode(constants::camera::tx, OUTPUT);
+        digitalWrite(constants::camera::rx, LOW);
+        digitalWrite(constants::camera::tx, LOW);
         sfr::camera::powered = false;
         sfr::camera::turn_off = false;
     }
