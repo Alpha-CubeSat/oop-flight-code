@@ -24,7 +24,7 @@ void MissionManager::execute(){
 }
 
 void MissionManager::dispatch_standby(){
-    if(sfr::battery::voltage < 3.75 && sfr::fault::check_voltage){
+    if(sfr::battery::voltage < 3.75 && sfr::fault::check_voltage && sfr::mission::low_power_eligible == true){
         transition_to_low_power();
     }
 }
@@ -32,7 +32,7 @@ void MissionManager::dispatch_standby(){
 void MissionManager::dispatch_safe(){}
 
 void MissionManager::dispatch_low_power(){
-    if(sfr::battery::voltage > 3.9 and sfr::fault::check_voltage){
+    if(sfr::battery::voltage > 3.9 and sfr::fault::check_voltage && sfr::mission::low_power_eligible == true){
         transition_to_standby();
     }    
 }
