@@ -34,7 +34,8 @@ class RockblockControlTask : public TimedControlTask<void>{
         void dispatch_await_flush();
         void dispatch_end_transmission();
         void transition_to(rockblock_mode_type new_mode);
-        bool valid_command();       
+        bool valid_command();      
+        void timed_out();
 };
 
 #endif

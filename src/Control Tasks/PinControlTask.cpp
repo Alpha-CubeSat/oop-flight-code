@@ -16,6 +16,8 @@ PinControlTask::PinControlTask(){
     pinMode(constants::acs::zout1, OUTPUT);
     pinMode(constants::acs::zout2, OUTPUT);
     pinMode(constants::camera::power_on_pin, OUTPUT);
+    pinMode(constants::camera::rx, OUTPUT);
+    pinMode(constants::camera::tx, OUTPUT);
     pinMode(constants::button::button_pin, INPUT);
     pinMode(constants::battery::voltage_value_pin, INPUT);
     pinMode(constants::acs::STBXYpin, OUTPUT);
