@@ -5,11 +5,8 @@ RockblockControlTask::RockblockControlTask(unsigned int offset): TimedControlTas
 }
 
 void RockblockControlTask::execute(){
-    if(sfr::rockblock::num_iter > constants::rockblock::max_iter){
-        transition_to(rockblock_mode_type::standby);
-    }
     rockblock_mode_type mode = sfr::rockblock::mode;
-    sfr::rockblock::num_iter++;
+    timed_out();
     switch(mode){
         case rockblock_mode_type::standby:
             dispatch_standby();
@@ -95,10 +92,27 @@ bool RockblockControlTask::check_ready(){
     }
 }
 
+void RockblockControlTask::timed_out(){
+    if(millis()-sfr::rockblock::start_time >= (uint32_t) sfr::rockblock::timeout){
+        if(sfr::rockblock::last_timed_out == false){
+            sfr::rockblock::last_downlink = millis();
+            if(sfr::rockblock::downlink_period > constants::rockblock::min_sleep_period){
+                digitalWrite(constants::rockblock::sleep_pin, LOW);
+            }
+            sfr::rockblock::downlink_camera = false;
+            transition_to(rockblock_mode_type::standby);
+        }
+        sfr::rockblock::last_timed_out = true;
+    } else{
+        sfr::rockblock::last_timed_out = false;
+    }
+}
+
 void RockblockControlTask::dispatch_standby(){
-    if(sfr::rockblock::waiting_message || check_ready()){
+    if(check_ready() || sfr::rockblock::waiting_message){
         transition_to(rockblock_mode_type::send_at);
         digitalWrite(constants::rockblock::sleep_pin, HIGH);
+        sfr::rockblock::start_time = millis();
     }
 }
 
@@ -416,7 +430,6 @@ void RockblockControlTask::dispatch_end_transmission(){
 
 void RockblockControlTask::transition_to(rockblock_mode_type new_mode){
     sfr::rockblock::mode = new_mode;
-    sfr::rockblock::num_iter = 0;
 }
 
 bool RockblockControlTask::valid_command(){

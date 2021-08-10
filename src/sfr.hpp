@@ -88,13 +88,15 @@ namespace sfr
         #else
         extern RockblockSimulator serial;
         #endif
-        extern size_t num_iter;
         extern bool flush_status;
         extern bool waiting_command;
         extern size_t conseq_reads;
         extern uint16_t f_opcode;
         extern uint32_t f_arg_1;
         extern uint32_t f_arg_2;
+        extern int timeout;
+        extern int start_time;
+        extern bool last_timed_out;
     }
     namespace imu
     {

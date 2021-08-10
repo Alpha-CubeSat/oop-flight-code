@@ -49,8 +49,8 @@ namespace sfr
         int camera_max_fragments[99] = {};
         bool downlink_camera = false;
         unsigned long last_downlink = 0;
-        unsigned long downlink_period = 60000;
-        unsigned long camera_downlink_period = 0;
+        unsigned long downlink_period = constants::rockblock::one_minute;
+        unsigned long camera_downlink_period = constants::rockblock::one_minute;
         rockblock_mode_type mode = rockblock_mode_type::send_at;
         bool waiting_message = false;
         char buffer[constants::rockblock::buffer_size] = {0};
@@ -65,13 +65,15 @@ namespace sfr
         #else
         RockblockSimulator serial;
         #endif
-        size_t num_iter = 0;
         bool flush_status = false;
         bool waiting_command = false;
         size_t conseq_reads = 0;
         uint16_t f_opcode = 0;
         uint32_t f_arg_1 = 0;
         uint32_t f_arg_2 = 0;
+        int timeout = 10 * constants::rockblock::one_minute;
+        int start_time = 0;
+        bool last_timed_out = false;
     }
     namespace imu
     {
