@@ -46,6 +46,7 @@ namespace sfr
     }
     namespace rockblock
     {
+        unsigned long last_communication = 0;
         bool last_downlink_normal = false;
         int camera_commands[99][constants::rockblock::command_len] = {};
         int camera_max_fragments[99] = {};
@@ -76,6 +77,7 @@ namespace sfr
         int timeout = 10 * constants::rockblock::one_minute;
         int start_time = 0;
         bool last_timed_out = false;
+        int num_downlinks = 0;
     }
     namespace imu
     {
@@ -123,11 +125,12 @@ namespace sfr
     }
     namespace acs
     {
-        acs_mode_type mode = acs_mode_type::simple;
+        acs_mode_type mode = acs_mode_type::off;
         int current1 = 0;
         int current2 = 0;
         int current3 = 0;
         simple_acs_type mag = simple_acs_type::x;
+        unsigned long max_no_communication = 0;
     }
     namespace battery
     {

@@ -70,6 +70,7 @@ namespace sfr
     }
     namespace rockblock
     {
+        extern unsigned long last_communication;
         extern bool last_downlink_normal;
         extern int camera_commands[99][constants::rockblock::command_len];
         extern int camera_max_fragments[99];
@@ -100,6 +101,7 @@ namespace sfr
         extern int timeout;
         extern int start_time;
         extern bool last_timed_out;
+        extern int num_downlinks;
     }
     namespace imu
     {
@@ -146,6 +148,7 @@ namespace sfr
         extern int current2;
         extern int current3;
         extern simple_acs_type mag;
+        extern unsigned long max_no_communication;
     }
     namespace battery
     {

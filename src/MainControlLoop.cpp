@@ -21,7 +21,8 @@ rockblock_control_task(constants::timecontrol::rockblock_control_task_offset),
 temperature_control_task(constants::timecontrol::temperature_control_task_offset),
 mission_manager(constants::timecontrol::mission_manager_offset)
 {
-    delay(1000);   
+    delay(1000);
+    MissionManager::transition_to_initialization();    
 }
 
 void MainControlLoop::execute()

@@ -6,6 +6,9 @@ RockblockControlTask::RockblockControlTask(unsigned int offset): TimedControlTas
 
 void RockblockControlTask::execute(){
     rockblock_mode_type mode = sfr::rockblock::mode;
+    if(sfr::rockblock::last_communication >= sfr::acs::max_no_communication && (int) sfr::rockblock::mode != (int) mission_mode_type::low_power){
+        sfr::acs::mode = acs_mode_type::simple;
+    }
     timed_out();
     switch(mode){
         case rockblock_mode_type::standby:
@@ -426,6 +429,7 @@ void RockblockControlTask::dispatch_await_flush() {
 
 void RockblockControlTask::dispatch_end_transmission(){
     sfr::rockblock::last_downlink = millis();
+    sfr::rockblock::last_communication = millis();
     if(sfr::rockblock::downlink_period > constants::rockblock::min_sleep_period){
         digitalWrite(constants::rockblock::sleep_pin, LOW);
     }
@@ -436,6 +440,7 @@ void RockblockControlTask::dispatch_end_transmission(){
         sfr::rockblock::last_downlink_normal = true;
     }
     sfr::rockblock::downlink_camera = false;
+    sfr::rockblock::num_downlinks = sfr::rockblock::num_downlinks + 1;
     transition_to(rockblock_mode_type::standby);
 }
 

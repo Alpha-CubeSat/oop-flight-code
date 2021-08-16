@@ -54,6 +54,8 @@ namespace constants
         constexpr size_t arg2_len = 4;
         constexpr size_t command_len = opcode_len + arg1_len + arg2_len;
         constexpr size_t max_conseq_read = 3;
+        
+        constexpr int num_initial_downlinks = 2;
 
         constexpr uint8_t mission_mode[opcode_len] =               {0x00,0x00};
         constexpr uint8_t burnwire_arm[opcode_len] =               {0x01,0x00};
