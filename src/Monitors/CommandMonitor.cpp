@@ -72,7 +72,10 @@ void CommandMonitor::execute(){
 }
 
 void CommandMonitor::dispatch_change_mission_mode(){
-    if(sfr::rockblock::f_arg_1 == get_decimal_arg(constants::rockblock::deployment)){
+    if(sfr::rockblock::f_arg_1 == get_decimal_arg(constants::rockblock::initialization)){
+        MissionManager::transition_to_initialization();
+    }
+    else if(sfr::rockblock::f_arg_1 == get_decimal_arg(constants::rockblock::deployment)){
         MissionManager::transition_to_deployment();
     }
     else if(sfr::rockblock::f_arg_1 == get_decimal_arg(constants::rockblock::standby)){

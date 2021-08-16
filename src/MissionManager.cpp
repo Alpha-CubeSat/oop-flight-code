@@ -8,6 +8,9 @@ void MissionManager::execute(){
     mission_mode_type mode = sfr::mission::mode;
 
     switch(mode){
+        case mission_mode_type::initialization:
+            dispatch_initialization();
+            break;
         case mission_mode_type::low_power:
             dispatch_low_power();
             break;
@@ -21,6 +24,12 @@ void MissionManager::execute(){
             dispatch_deployment();
             break;
     }
+}
+
+void MissionManager::dispatch_initialization(){
+    if(sfr::rockblock::num_downlinks >= constants::rockblock::num_initial_downlinks){
+        transition_to_standby();
+    } 
 }
 
 void MissionManager::dispatch_standby(){
@@ -47,6 +56,14 @@ void MissionManager::dispatch_deployment(){
         BurnwireControlTask::transition_to_standby();
         transition_to_standby();
     }
+}
+
+void MissionManager::transition_to_initialization(){
+    sfr::mission::mode = mission_mode_type::initialization;
+    sfr::fault::mode = fault_mode_type::active;
+    sfr::acs::mode = acs_mode_type::simple;
+    sfr::temperature::mode = temp_mode_type::active;
+    sfr::rockblock::downlink_period = constants::rockblock::ten_minutes;
 }
 
 void MissionManager::transition_to_standby(){
