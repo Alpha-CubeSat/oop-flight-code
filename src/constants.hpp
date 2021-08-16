@@ -48,7 +48,7 @@ namespace constants
         constexpr size_t packet_size = 70;
         constexpr size_t num_commas = 5;
         constexpr size_t max_iter = 200;
-        constexpr size_t num_commands = 38;
+        constexpr size_t num_commands = 39;
         constexpr size_t opcode_len = 2;
         constexpr size_t arg1_len = 4;
         constexpr size_t arg2_len = 4;
@@ -79,9 +79,10 @@ namespace constants
         constexpr uint8_t fault_check_solar_current[opcode_len] =  {0xF9,0xFF};
         constexpr uint8_t fault_check_voltage[opcode_len] =        {0xFA,0xFF};
 
+        constexpr uint8_t initialization[arg1_len] ={0x00,0x00,0x00,0x00};
         constexpr uint8_t low_power[arg1_len] =     {0x01,0x00,0x00,0x00};
-        constexpr uint8_t deployment[arg1_len]=     {0x00,0x00,0x00,0x00};
-        constexpr uint8_t standby[arg1_len] =       {0x02,0x00,0x00,0x00};
+        constexpr uint8_t deployment[arg1_len]=     {0x02,0x00,0x00,0x00};
+        constexpr uint8_t standby[arg1_len] =       {0x03,0x00,0x00,0x00};
         constexpr uint8_t safe[arg1_len] =          {0x03,0x00,0x00,0x00};
         constexpr uint8_t true_arg[arg1_len] =      {0x01,0x00,0x00,0x00};
         constexpr uint8_t false_arg[arg1_len] =     {0x00,0x00,0x00,0x00};
@@ -117,6 +118,12 @@ namespace constants
         constexpr uint8_t mission_mode_safe[command_len] = {
             mission_mode[0], mission_mode[1], 
             safe[0], safe[1], safe[2], safe[3],
+            no_arg_2[0], no_arg_2[1], no_arg_2[2], no_arg_2[3]
+        };
+
+        constexpr uint8_t mission_mode_initialization[command_len] = {
+            mission_mode[0], mission_mode[1], 
+            initialization[0], initialization[1], initialization[2], initialization[3],
             no_arg_2[0], no_arg_2[1], no_arg_2[2], no_arg_2[3]
         };
 
@@ -329,7 +336,8 @@ namespace constants
             {mission_mode_low_power[0], mission_mode_low_power[1], mission_mode_low_power[2], mission_mode_low_power[3], mission_mode_low_power[4], mission_mode_low_power[5], mission_mode_low_power[6], mission_mode_low_power[7], mission_mode_low_power[8], mission_mode_low_power[9]},
             {mission_mode_deployment[0], mission_mode_deployment[1], mission_mode_deployment[2], mission_mode_deployment[3], mission_mode_deployment[4], mission_mode_deployment[5],mission_mode_deployment[6], mission_mode_deployment[7], mission_mode_deployment[8], mission_mode_deployment[9]},
             {mission_mode_standby[0], mission_mode_standby[1], mission_mode_standby[2], mission_mode_standby[3], mission_mode_standby[4], mission_mode_standby[5], mission_mode_standby[6], mission_mode_standby[7], mission_mode_standby[8], mission_mode_standby[9]},
-            {mission_mode_safe[0], mission_mode_safe[1], mission_mode_safe[2], mission_mode_safe[3], mission_mode_safe[4], mission_mode_safe[5], mission_mode_safe[6], mission_mode_safe[7], mission_mode_safe[8], mission_mode_safe[9]},
+            {mission_mode_safe[0], mission_mode_safe[1], mission_mode_safe[2], mission_mode_safe[3], mission_mode_safe[4], mission_mode_safe[5], mission_mode_safe[6], mission_mode_safe[7], mission_mode_safe[8], mission_mode_safe[9]},          
+            {mission_mode_initialization[0], mission_mode_initialization[1], mission_mode_initialization[2], mission_mode_initialization[3], mission_mode_initialization[4], mission_mode_initialization[5], mission_mode_initialization[6], mission_mode_initialization[7], mission_mode_initialization[8], mission_mode_initialization[9]},
             {burnwire_arm_true[0], burnwire_arm_true[1], burnwire_arm_true[2], burnwire_arm_true[3], burnwire_arm_true[4], burnwire_arm_true[5], burnwire_arm_true[6], burnwire_arm_true[7], burnwire_arm_true[8], burnwire_arm_true[9]},
             {burnwire_arm_false[0], burnwire_arm_false[1], burnwire_arm_false[2], burnwire_arm_false[3], burnwire_arm_false[4], burnwire_arm_false[5], burnwire_arm_false[6], burnwire_arm_false[7], burnwire_arm_false[8], burnwire_arm_false[9]},
             {burnwire_fire_true[0], burnwire_fire_true[1], burnwire_fire_true[2], burnwire_fire_true[3], burnwire_fire_true[4], burnwire_fire_true[5], burnwire_fire_true[6], burnwire_fire_true[7], burnwire_fire_true[8], burnwire_fire_true[9]},
@@ -410,6 +418,12 @@ namespace constants
         constexpr int allow_measurement_pin = 36;
         constexpr int max_voltage = 5;
         constexpr int min_voltage = 3;
+        constexpr float voltage_ref = 3.3;
+        constexpr int resolution = 1023;
+        constexpr int r1 = 4700;
+        constexpr int r2 = 10000;
+
+
     }
     namespace fault
     {

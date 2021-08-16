@@ -5,7 +5,9 @@ BatteryMonitor::BatteryMonitor(unsigned int offset): TimedControlTask<void>(offs
 }
 
 void BatteryMonitor::execute(){
-    float val = analogRead(constants::battery::voltage_value_pin);
+    float val = analogRead(constants::battery::voltage_value_pin)*constants::battery::voltage_ref/constants::battery::resolution;
+    val = val*(constants::battery::r1+constants::battery::r2)/constants::battery::r2;
+
     sfr::battery::voltage_buffer.push_front(val);
     sfr::battery::voltage = val;
 
