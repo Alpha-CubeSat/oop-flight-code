@@ -48,7 +48,7 @@ namespace constants
         constexpr size_t packet_size = 70;
         constexpr size_t num_commas = 5;
         constexpr size_t max_iter = 200;
-        constexpr size_t num_commands = 35;
+        constexpr size_t num_commands = 38;
         constexpr size_t opcode_len = 2;
         constexpr size_t arg1_len = 4;
         constexpr size_t arg2_len = 4;
@@ -65,6 +65,7 @@ namespace constants
         constexpr uint8_t camera_take_photo[opcode_len] =          {0x07,0x00};
         constexpr uint8_t temperature_mode[opcode_len] =           {0x08,0x00};
         constexpr uint8_t acs_mode[opcode_len] =                   {0x09,0x00};
+        constexpr uint8_t change_simplified_acs[opcode_len] =      {0x0A,0x00};
         constexpr uint8_t fault_mode[opcode_len] =                 {0xF1,0xFF};
         constexpr uint8_t fault_check_mag_x[opcode_len] =          {0xF2,0xFF};
         constexpr uint8_t fault_check_mag_y[opcode_len] =          {0xF3,0xFF};
@@ -87,6 +88,9 @@ namespace constants
         constexpr uint8_t full[arg1_len] =          {0x02,0x00,0x00,0x00};
         constexpr uint8_t simple[arg1_len] =        {0x01,0x00,0x00,0x00};
         constexpr uint8_t off[arg1_len] =           {0x00,0x00,0x00,0x00};
+        constexpr uint8_t x[arg1_len] =             {0x00,0x00,0x00,0x00};
+        constexpr uint8_t y[arg1_len] =             {0x01,0x00,0x00,0x00};
+        constexpr uint8_t z[arg1_len] =             {0x02,0x00,0x00,0x00};
 
         constexpr uint8_t no_arg_2[arg2_len] =      {0x00,0x00,0x00,0x00};
 
@@ -301,6 +305,24 @@ namespace constants
             no_arg_2[0],  no_arg_2[1],  no_arg_2[2],  no_arg_2[3]
         };
 
+        constexpr uint8_t change_simplified_acs_x[command_len] = {
+            change_simplified_acs[0], change_simplified_acs[1], 
+            x[0], x[1], x[2], x[3],
+            no_arg_2[0],  no_arg_2[1],  no_arg_2[2],  no_arg_2[3]
+        };
+
+        constexpr uint8_t change_simplified_acs_y[command_len] = {
+            change_simplified_acs[0], change_simplified_acs[1], 
+            y[0], y[1], y[2], y[3],
+            no_arg_2[0],  no_arg_2[1],  no_arg_2[2],  no_arg_2[3]
+        };
+
+        constexpr uint8_t change_simplified_acs_z[command_len] = {
+            change_simplified_acs[0], change_simplified_acs[1], 
+            z[0], z[1], z[2], z[3],
+            no_arg_2[0],  no_arg_2[1],  no_arg_2[2],  no_arg_2[3]
+        };
+
         constexpr int known_commands[num_commands][command_len] = {
             {mission_mode_low_power[0], mission_mode_low_power[1], mission_mode_low_power[2], mission_mode_low_power[3], mission_mode_low_power[4], mission_mode_low_power[5], mission_mode_low_power[6], mission_mode_low_power[7], mission_mode_low_power[8], mission_mode_low_power[9]},
             {mission_mode_deployment[0], mission_mode_deployment[1], mission_mode_deployment[2], mission_mode_deployment[3], mission_mode_deployment[4], mission_mode_deployment[5],mission_mode_deployment[6], mission_mode_deployment[7], mission_mode_deployment[8], mission_mode_deployment[9]},
@@ -336,7 +358,10 @@ namespace constants
             {fault_check_solar_current_true[0], fault_check_solar_current_true[1], fault_check_solar_current_true[2], fault_check_solar_current_true[3], fault_check_solar_current_true[4], fault_check_solar_current_true[5], fault_check_solar_current_true[6], fault_check_solar_current_true[7], fault_check_solar_current_true[8], fault_check_solar_current_true[9]},
             {fault_check_solar_current_false[0], fault_check_solar_current_false[1], fault_check_solar_current_false[2], fault_check_solar_current_false[3], fault_check_solar_current_false[4], fault_check_solar_current_false[5], fault_check_solar_current_false[6], fault_check_solar_current_false[7], fault_check_solar_current_false[8], fault_check_solar_current_false[9]},
             {fault_check_voltage_true[0], fault_check_voltage_true[1], fault_check_voltage_true[2], fault_check_voltage_true[3], fault_check_voltage_true[4], fault_check_voltage_true[5], fault_check_voltage_true[6], fault_check_voltage_true[7], fault_check_voltage_true[8], fault_check_voltage_true[9]},
-            {fault_check_voltage_false[0], fault_check_voltage_false[1], fault_check_voltage_false[2], fault_check_voltage_false[3], fault_check_voltage_false[4], fault_check_voltage_false[5], fault_check_voltage_false[6], fault_check_voltage_false[7], fault_check_voltage_false[8], fault_check_voltage_false[9]}
+            {fault_check_voltage_false[0], fault_check_voltage_false[1], fault_check_voltage_false[2], fault_check_voltage_false[3], fault_check_voltage_false[4], fault_check_voltage_false[5], fault_check_voltage_false[6], fault_check_voltage_false[7], fault_check_voltage_false[8], fault_check_voltage_false[9]},
+            {change_simplified_acs_x[0], change_simplified_acs_x[1], change_simplified_acs_x[2], change_simplified_acs_x[3], change_simplified_acs_x[4], change_simplified_acs_x[5], change_simplified_acs_x[6], change_simplified_acs_x[7], change_simplified_acs_x[8], change_simplified_acs_x[9]},
+            {change_simplified_acs_y[0], change_simplified_acs_y[1], change_simplified_acs_y[2], change_simplified_acs_y[3], change_simplified_acs_y[4], change_simplified_acs_y[5], change_simplified_acs_y[6], change_simplified_acs_y[7], change_simplified_acs_y[8], change_simplified_acs_y[9]},
+            {change_simplified_acs_z[0], change_simplified_acs_z[1], change_simplified_acs_z[2], change_simplified_acs_z[3], change_simplified_acs_z[4], change_simplified_acs_z[5], change_simplified_acs_z[6], change_simplified_acs_z[7], change_simplified_acs_z[8], change_simplified_acs_z[9]}
         };
     }
     namespace temperature

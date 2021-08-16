@@ -8,6 +8,7 @@
 #include "Modes/burnwire_mode_type.enum"
 #include "Modes/temp_mode_type.enum"
 #include "Modes/fault_mode_type.enum"
+#include "Modes/simple_acs_type.enum"
 #include "Control Tasks/TimedControlTask.hpp"
 #include "Control Tasks/BurnwireControlTask.hpp"
 #include "RockblockSimulator.hpp"
@@ -69,6 +70,7 @@ namespace sfr
     }
     namespace rockblock
     {
+        extern bool last_downlink_normal;
         extern int camera_commands[99][constants::rockblock::command_len];
         extern int camera_max_fragments[99];
         extern bool downlink_camera;
@@ -143,6 +145,7 @@ namespace sfr
         extern int current1;
         extern int current2;
         extern int current3;
+        extern simple_acs_type mag;
     }
     namespace battery
     {

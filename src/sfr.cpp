@@ -46,6 +46,7 @@ namespace sfr
     }
     namespace rockblock
     {
+        bool last_downlink_normal = false;
         int camera_commands[99][constants::rockblock::command_len] = {};
         int camera_max_fragments[99] = {};
         bool downlink_camera = false;
@@ -122,10 +123,11 @@ namespace sfr
     }
     namespace acs
     {
-        acs_mode_type mode = acs_mode_type::full;
+        acs_mode_type mode = acs_mode_type::simple;
         int current1 = 0;
         int current2 = 0;
         int current3 = 0;
+        simple_acs_type mag = simple_acs_type::x;
     }
     namespace battery
     {

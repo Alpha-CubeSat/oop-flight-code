@@ -82,7 +82,13 @@ void RockblockControlTask::execute(){
 
 bool RockblockControlTask::check_ready(){
     if(millis() - sfr::rockblock::last_downlink >= sfr::rockblock::downlink_period){
-        sfr::rockblock::downlink_camera = false;
+        if(sfr::rockblock::downlink_period == sfr::rockblock::camera_downlink_period){
+            if(sfr::rockblock::last_downlink_normal == false){
+                sfr::rockblock::downlink_camera = false;
+            } else{
+                sfr::rockblock::downlink_camera = true;
+            }
+        }
         return true;
     } else if((millis() - sfr::rockblock::last_downlink >= sfr::rockblock::camera_downlink_period) && sfr::camera::report_ready == true){
         sfr::rockblock::downlink_camera = true;
@@ -424,7 +430,10 @@ void RockblockControlTask::dispatch_end_transmission(){
         digitalWrite(constants::rockblock::sleep_pin, LOW);
     }
     if(sfr::rockblock::downlink_camera == true){
+        sfr::rockblock::last_downlink_normal = false;
         sfr::camera::report_downlinked = true;
+    } else{
+        sfr::rockblock::last_downlink_normal = true;
     }
     sfr::rockblock::downlink_camera = false;
     transition_to(rockblock_mode_type::standby);
