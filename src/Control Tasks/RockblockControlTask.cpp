@@ -85,7 +85,7 @@ void RockblockControlTask::execute(){
 
 bool RockblockControlTask::check_ready(){
     if(millis() - sfr::rockblock::last_downlink >= sfr::rockblock::downlink_period){
-        if(sfr::rockblock::downlink_period == sfr::rockblock::camera_downlink_period){
+        if(sfr::rockblock::downlink_period == sfr::rockblock::camera_downlink_period && sfr::camera::report_ready == true){
             if(sfr::rockblock::last_downlink_normal == false){
                 sfr::rockblock::downlink_camera = false;
             } else{
@@ -195,6 +195,13 @@ void RockblockControlTask::dispatch_await_message_length(){
 }
 
 void RockblockControlTask::dispatch_send_message(){
+    if(sfr::camera::report_ready == true){
+        if(sfr::rockblock::last_downlink_normal == false){
+            sfr::rockblock::downlink_camera = false;
+        } else{
+            sfr::rockblock::downlink_camera = true;
+        }
+    } 
     uint16_t checksum = 0;
     #ifdef VERBOSE
     Serial.print("SENT: ");
@@ -284,8 +291,7 @@ void RockblockControlTask::dispatch_create_buffer(){
         }
         else{
             transition_to(rockblock_mode_type::process_mo_status);
-        }
-                    
+        }           
     }
 }
 
@@ -331,6 +337,7 @@ void RockblockControlTask::dispatch_process_mt_status(){
             break;
         case '1':
             Serial.println("SAT INFO: message retrieved");
+            downlinked_something();
             transition_to(rockblock_mode_type::read_message);
             break;
         case '0':
@@ -433,14 +440,7 @@ void RockblockControlTask::dispatch_end_transmission(){
     if(sfr::rockblock::downlink_period > constants::rockblock::min_sleep_period){
         digitalWrite(constants::rockblock::sleep_pin, LOW);
     }
-    if(sfr::rockblock::downlink_camera == true){
-        sfr::rockblock::last_downlink_normal = false;
-        sfr::camera::report_downlinked = true;
-    } else{
-        sfr::rockblock::last_downlink_normal = true;
-    }
-    sfr::rockblock::downlink_camera = false;
-    sfr::rockblock::num_downlinks = sfr::rockblock::num_downlinks + 1;
+    downlinked_something();
     transition_to(rockblock_mode_type::standby);
 }
 
@@ -523,4 +523,15 @@ bool RockblockControlTask::valid_command(){
     // Command neither standard or non-standard
     Serial.println("SAT CMD: command invalid");
     return false;
+}
+
+void RockblockControlTask::downlinked_something(){
+    if(sfr::rockblock::downlink_camera == true){
+        sfr::rockblock::last_downlink_normal = false;
+        sfr::camera::report_downlinked = true;
+    } else{
+        sfr::rockblock::last_downlink_normal = true;
+    }
+    sfr::rockblock::downlink_camera = false;
+    sfr::rockblock::num_downlinks = sfr::rockblock::num_downlinks + 1;
 }

@@ -36,6 +36,7 @@ class RockblockControlTask : public TimedControlTask<void>{
         void transition_to(rockblock_mode_type new_mode);
         bool valid_command();      
         void timed_out();
+        void downlinked_something();
 };
 
 #endif
