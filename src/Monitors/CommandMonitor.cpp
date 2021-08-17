@@ -67,6 +67,12 @@ void CommandMonitor::execute(){
         else if(sfr::rockblock::f_opcode == get_decimal_opcode(constants::rockblock::change_simplified_acs)){
             dispatch_change_simplified_acs();
         }
+        else if(sfr::rockblock::f_opcode == get_decimal_opcode(constants::rockblock::camera_turn_on)){
+            sfr::camera::turn_on = true;
+        }
+        else if(sfr::rockblock::f_opcode == get_decimal_opcode(constants::rockblock::camera_turn_off)){
+            sfr::camera::turn_off = true;
+        }
         sfr::rockblock::waiting_command = false;
     }
 }

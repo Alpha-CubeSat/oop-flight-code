@@ -52,7 +52,6 @@ void MissionManager::dispatch_deployment(){
     }
     if(!sfr::button::pressed && !sfr::photoresistor::covered){
         sfr::camera::take_photo = true;
-        sfr::camera::turn_on = true;
         BurnwireControlTask::transition_to_standby();
         transition_to_standby();
     }
@@ -91,9 +90,9 @@ void MissionManager::transition_to_low_power(){
 }
 
 void MissionManager::transition_to_deployment(){
+    sfr::camera::turn_off = true;
     sfr::mission::mode = mission_mode_type::deployment;
     sfr::acs::mode = acs_mode_type::simple;
-    sfr::camera::turn_on = true;
     sfr::rockblock::downlink_period = constants::rockblock::ten_minutes;
     sfr::temperature::mode = temp_mode_type::inactive;
 }

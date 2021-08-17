@@ -48,7 +48,7 @@ namespace constants
         constexpr size_t packet_size = 70;
         constexpr size_t num_commas = 5;
         constexpr size_t max_iter = 200;
-        constexpr size_t num_commands = 39;
+        constexpr size_t num_commands = 41;
         constexpr size_t opcode_len = 2;
         constexpr size_t arg1_len = 4;
         constexpr size_t arg2_len = 4;
@@ -68,6 +68,8 @@ namespace constants
         constexpr uint8_t temperature_mode[opcode_len] =           {0x08,0x00};
         constexpr uint8_t acs_mode[opcode_len] =                   {0x09,0x00};
         constexpr uint8_t change_simplified_acs[opcode_len] =      {0x0A,0x00};
+        constexpr uint8_t camera_turn_on[opcode_len] =             {0x0B,0x00};
+        constexpr uint8_t camera_turn_off[opcode_len] =            {0x0C,0x00};
         constexpr uint8_t fault_mode[opcode_len] =                 {0xF1,0xFF};
         constexpr uint8_t fault_check_mag_x[opcode_len] =          {0xF2,0xFF};
         constexpr uint8_t fault_check_mag_y[opcode_len] =          {0xF3,0xFF};
@@ -151,7 +153,6 @@ namespace constants
             no_arg_2[0],  no_arg_2[1],  no_arg_2[2],  no_arg_2[3]
         };    
  
-
         constexpr uint8_t camera_take_photo_true[command_len] = {
             camera_take_photo[0], camera_take_photo[1], 
             true_arg[0], true_arg[1], true_arg[2], true_arg[3],
@@ -332,6 +333,18 @@ namespace constants
             no_arg_2[0],  no_arg_2[1],  no_arg_2[2],  no_arg_2[3]
         };
 
+        constexpr uint8_t camera_turn_on_true[command_len] = {
+            camera_turn_on[0], camera_turn_on[1], 
+            true_arg[0], true_arg[1], true_arg[2], true_arg[3],
+            no_arg_2[0],  no_arg_2[1],  no_arg_2[2],  no_arg_2[3]
+        };
+
+        constexpr uint8_t camera_turn_off_true[command_len] = {
+            camera_turn_off[0], camera_turn_off[1], 
+            true_arg[0], true_arg[1], true_arg[2], true_arg[3],
+            no_arg_2[0],  no_arg_2[1],  no_arg_2[2],  no_arg_2[3]
+        };
+
         constexpr int known_commands[num_commands][command_len] = {
             {mission_mode_low_power[0], mission_mode_low_power[1], mission_mode_low_power[2], mission_mode_low_power[3], mission_mode_low_power[4], mission_mode_low_power[5], mission_mode_low_power[6], mission_mode_low_power[7], mission_mode_low_power[8], mission_mode_low_power[9]},
             {mission_mode_deployment[0], mission_mode_deployment[1], mission_mode_deployment[2], mission_mode_deployment[3], mission_mode_deployment[4], mission_mode_deployment[5],mission_mode_deployment[6], mission_mode_deployment[7], mission_mode_deployment[8], mission_mode_deployment[9]},
@@ -371,7 +384,9 @@ namespace constants
             {fault_check_voltage_false[0], fault_check_voltage_false[1], fault_check_voltage_false[2], fault_check_voltage_false[3], fault_check_voltage_false[4], fault_check_voltage_false[5], fault_check_voltage_false[6], fault_check_voltage_false[7], fault_check_voltage_false[8], fault_check_voltage_false[9]},
             {change_simplified_acs_x[0], change_simplified_acs_x[1], change_simplified_acs_x[2], change_simplified_acs_x[3], change_simplified_acs_x[4], change_simplified_acs_x[5], change_simplified_acs_x[6], change_simplified_acs_x[7], change_simplified_acs_x[8], change_simplified_acs_x[9]},
             {change_simplified_acs_y[0], change_simplified_acs_y[1], change_simplified_acs_y[2], change_simplified_acs_y[3], change_simplified_acs_y[4], change_simplified_acs_y[5], change_simplified_acs_y[6], change_simplified_acs_y[7], change_simplified_acs_y[8], change_simplified_acs_y[9]},
-            {change_simplified_acs_z[0], change_simplified_acs_z[1], change_simplified_acs_z[2], change_simplified_acs_z[3], change_simplified_acs_z[4], change_simplified_acs_z[5], change_simplified_acs_z[6], change_simplified_acs_z[7], change_simplified_acs_z[8], change_simplified_acs_z[9]}
+            {change_simplified_acs_z[0], change_simplified_acs_z[1], change_simplified_acs_z[2], change_simplified_acs_z[3], change_simplified_acs_z[4], change_simplified_acs_z[5], change_simplified_acs_z[6], change_simplified_acs_z[7], change_simplified_acs_z[8], change_simplified_acs_z[9]},
+            {camera_turn_on_true[0], camera_turn_on_true[1], camera_turn_on_true[2], camera_turn_on_true[3], camera_turn_on_true[4], camera_turn_on_true[5], camera_turn_on_true[6], camera_turn_on_true[7], camera_turn_on_true[8], camera_turn_on_true[9]},
+            {camera_turn_off_true[0], camera_turn_off_true[1], camera_turn_off_true[2], camera_turn_off_true[3], camera_turn_off_true[4], camera_turn_off_true[5], camera_turn_off_true[6], camera_turn_off_true[7], camera_turn_off_true[8], camera_turn_off_true[9]}
         };
     }
     namespace temperature
