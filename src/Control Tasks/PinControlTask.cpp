@@ -1,10 +1,11 @@
 #include "PinControlTask.hpp"
 
-PinControlTask::PinControlTask(){
+PinControlTask::PinControlTask()
+{
 
     //serial for rockblock?
-    //i2c for imu?
     //serial for camera?
+    //spi for imu?
 
     pinMode(constants::acs::xPWMpin, OUTPUT);
     pinMode(constants::acs::yPWMpin, OUTPUT);
@@ -30,9 +31,9 @@ PinControlTask::PinControlTask(){
     pinMode(constants::burnwire::second_pin, OUTPUT);
     pinMode(constants::rockblock::sleep_pin, OUTPUT);
 }
-        
 
-void PinControlTask::execute(){   
+void PinControlTask::execute()
+{
     digitalWrite(constants::acs::xPWMpin, LOW);
     digitalWrite(constants::acs::yPWMpin, LOW);
     digitalWrite(constants::acs::zPWMpin, LOW);

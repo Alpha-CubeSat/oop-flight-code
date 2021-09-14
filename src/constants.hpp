@@ -495,9 +495,8 @@ namespace constants
         constexpr float min_gyro_z = 0.0;
         constexpr float max_gyro_z = 0.0;
 
-        //TODO: When are these passed in to the driver?
-        constexpr int SCL = 19;
-        constexpr int SDA = 18;
+        constexpr int CSAG = 10;
+        constexpr int CSM = 9;
     }
     namespace timecontrol{
         // Environment-based initializations of the control loop time.
