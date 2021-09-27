@@ -14,6 +14,7 @@
 #include "RockblockSimulator.hpp"
 #include "constants.hpp"
 #include "MissionManager.hpp"
+#include "Pins.hpp"
 #include <SD.h>
 #include <Adafruit_VC0706.h>
 #include <StarshotACS0.h>
@@ -23,9 +24,14 @@
 #include <sstream>
 #include <deque>
 #include <numeric>
+#include <map>
 
 namespace sfr
 {
+    namespace pins
+    {
+        extern std::map<int, int> pinMap;
+    }
     namespace photoresistor
     {
         extern bool covered;
@@ -87,11 +93,11 @@ namespace sfr
         extern uint8_t opcode[2];
         extern uint8_t arg_1[4];
         extern uint8_t arg_2[4];
-        #ifndef SIMULATOR
+#ifndef SIMULATOR
         extern HardwareSerial serial;
-        #else
+#else
         extern RockblockSimulator serial;
-        #endif
+#endif
         extern bool flush_status;
         extern bool waiting_command;
         extern size_t conseq_reads;
@@ -111,7 +117,7 @@ namespace sfr
         extern float gyro_x;
         extern float gyro_y;
         extern float gyro_z;
-        
+
         extern std::deque<float> mag_x_buffer;
         extern std::deque<float> mag_y_buffer;
         extern std::deque<float> mag_z_buffer;
