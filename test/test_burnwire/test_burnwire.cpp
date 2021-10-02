@@ -359,9 +359,14 @@ void test_fire_burnwire_logic()
     sfr::current::in_sun = true;
     sfr::fault::check_temp_c = true;
     sfr::fault::check_solar_current = true;
+
+    sfr::mission::mode = mission_mode_type::deployment;
+    sfr::burnwire::arm = true;
+    sfr::camera::turn_on = false;
+    sfr::burnwire::mode = burnwire_mode_type::armed;
     burnwire_control_task.execute();
-    TEST_ASSERT_EQUAL(sfr::burnwire::mode, burnwire_mode_type::fire);
-    TEST_ASSERT_EQUAL(sfr::camera::turn_on, true);
+    TEST_ASSERT_EQUAL(burnwire_mode_type::fire, sfr::burnwire::mode);
+    TEST_ASSERT_EQUAL(true, sfr::camera::turn_on);
 
     // 11110
     sfr::burnwire::fire = true;
@@ -369,9 +374,14 @@ void test_fire_burnwire_logic()
     sfr::current::in_sun = true;
     sfr::fault::check_temp_c = true;
     sfr::fault::check_solar_current = false;
+
+    sfr::mission::mode = mission_mode_type::deployment;
+    sfr::burnwire::arm = true;
+    sfr::camera::turn_on = false;
+    sfr::burnwire::mode = burnwire_mode_type::armed;
     burnwire_control_task.execute();
-    TEST_ASSERT_EQUAL(sfr::burnwire::mode, burnwire_mode_type::fire);
-    TEST_ASSERT_EQUAL(sfr::camera::turn_on, true);
+    TEST_ASSERT_EQUAL(burnwire_mode_type::fire, sfr::burnwire::mode);
+    TEST_ASSERT_EQUAL(true, sfr::camera::turn_on);
 
     // 11101
     sfr::burnwire::fire = true;
@@ -379,9 +389,14 @@ void test_fire_burnwire_logic()
     sfr::current::in_sun = true;
     sfr::fault::check_temp_c = false;
     sfr::fault::check_solar_current = true;
+
+    sfr::mission::mode = mission_mode_type::deployment;
+    sfr::burnwire::arm = true;
+    sfr::camera::turn_on = false;
+    sfr::burnwire::mode = burnwire_mode_type::armed;
     burnwire_control_task.execute();
-    TEST_ASSERT_EQUAL(sfr::burnwire::mode, burnwire_mode_type::fire);
-    TEST_ASSERT_EQUAL(sfr::camera::turn_on, true);
+    TEST_ASSERT_EQUAL(burnwire_mode_type::fire, sfr::burnwire::mode);
+    TEST_ASSERT_EQUAL(true, sfr::camera::turn_on);
 
     // 11100
     sfr::burnwire::fire = true;
@@ -389,9 +404,14 @@ void test_fire_burnwire_logic()
     sfr::current::in_sun = true;
     sfr::fault::check_temp_c = false;
     sfr::fault::check_solar_current = false;
+
+    sfr::mission::mode = mission_mode_type::deployment;
+    sfr::burnwire::arm = true;
+    sfr::camera::turn_on = false;
+    sfr::burnwire::mode = burnwire_mode_type::armed;
     burnwire_control_task.execute();
-    TEST_ASSERT_EQUAL(sfr::burnwire::mode, burnwire_mode_type::fire);
-    TEST_ASSERT_EQUAL(sfr::camera::turn_on, true);
+    TEST_ASSERT_EQUAL(burnwire_mode_type::fire, sfr::burnwire::mode);
+    TEST_ASSERT_EQUAL(true, sfr::camera::turn_on);
 
     // 11011
     sfr::burnwire::fire = true;
@@ -399,9 +419,14 @@ void test_fire_burnwire_logic()
     sfr::current::in_sun = false;
     sfr::fault::check_temp_c = true;
     sfr::fault::check_solar_current = true;
+
+    sfr::mission::mode = mission_mode_type::deployment;
+    sfr::burnwire::arm = true;
+    sfr::camera::turn_on = false;
+    sfr::burnwire::mode = burnwire_mode_type::armed;
     burnwire_control_task.execute();
-    TEST_ASSERT_EQUAL(sfr::burnwire::mode, burnwire_mode_type::fire);
-    TEST_ASSERT_EQUAL(sfr::camera::turn_on, true);
+    TEST_ASSERT_EQUAL(burnwire_mode_type::fire, sfr::burnwire::mode);
+    TEST_ASSERT_EQUAL(true, sfr::camera::turn_on);
 
     // 11010
     sfr::burnwire::fire = true;
@@ -409,9 +434,14 @@ void test_fire_burnwire_logic()
     sfr::current::in_sun = false;
     sfr::fault::check_temp_c = true;
     sfr::fault::check_solar_current = false;
+
+    sfr::mission::mode = mission_mode_type::deployment;
+    sfr::burnwire::arm = true;
+    sfr::camera::turn_on = false;
+    sfr::burnwire::mode = burnwire_mode_type::armed;
     burnwire_control_task.execute();
-    TEST_ASSERT_EQUAL(sfr::burnwire::mode, burnwire_mode_type::fire);
-    TEST_ASSERT_EQUAL(sfr::camera::turn_on, true);
+    TEST_ASSERT_EQUAL(burnwire_mode_type::fire, sfr::burnwire::mode);
+    TEST_ASSERT_EQUAL(true, sfr::camera::turn_on);
 
     // 11001
     sfr::burnwire::fire = true;
@@ -419,11 +449,15 @@ void test_fire_burnwire_logic()
     sfr::current::in_sun = false;
     sfr::fault::check_temp_c = false;
     sfr::fault::check_solar_current = true;
+
     Pins::setPinState(constants::burnwire::first_pin, HIGH);
     Pins::setPinState(constants::burnwire::second_pin, HIGH);
+    sfr::mission::mode = mission_mode_type::deployment;
+    sfr::burnwire::arm = true;
+    sfr::burnwire::mode = burnwire_mode_type::armed;
     burnwire_control_task.execute();
-    TEST_ASSERT_EQUAL(Pins::getPinState(constants::burnwire::first_pin), LOW);
-    TEST_ASSERT_EQUAL(Pins::getPinState(constants::burnwire::second_pin), LOW);
+    TEST_ASSERT_EQUAL(LOW, Pins::getPinState(constants::burnwire::first_pin));
+    TEST_ASSERT_EQUAL(LOW, Pins::getPinState(constants::burnwire::second_pin));
 
     // 11000
     sfr::burnwire::fire = true;
@@ -431,9 +465,14 @@ void test_fire_burnwire_logic()
     sfr::current::in_sun = false;
     sfr::fault::check_temp_c = false;
     sfr::fault::check_solar_current = false;
+
+    sfr::mission::mode = mission_mode_type::deployment;
+    sfr::burnwire::arm = true;
+    sfr::camera::turn_on = false;
+    sfr::burnwire::mode = burnwire_mode_type::armed;
     burnwire_control_task.execute();
-    TEST_ASSERT_EQUAL(sfr::burnwire::mode, burnwire_mode_type::fire);
-    TEST_ASSERT_EQUAL(sfr::camera::turn_on, true);
+    TEST_ASSERT_EQUAL(burnwire_mode_type::fire, sfr::burnwire::mode);
+    TEST_ASSERT_EQUAL(true, sfr::camera::turn_on);
 
     // 10111
     sfr::burnwire::fire = true;
@@ -441,11 +480,15 @@ void test_fire_burnwire_logic()
     sfr::current::in_sun = true;
     sfr::fault::check_temp_c = true;
     sfr::fault::check_solar_current = true;
+
     Pins::setPinState(constants::burnwire::first_pin, HIGH);
     Pins::setPinState(constants::burnwire::second_pin, HIGH);
+    sfr::mission::mode = mission_mode_type::deployment;
+    sfr::burnwire::arm = true;
+    sfr::burnwire::mode = burnwire_mode_type::armed;
     burnwire_control_task.execute();
-    TEST_ASSERT_EQUAL(Pins::getPinState(constants::burnwire::first_pin), LOW);
-    TEST_ASSERT_EQUAL(Pins::getPinState(constants::burnwire::second_pin), LOW);
+    TEST_ASSERT_EQUAL(LOW, Pins::getPinState(constants::burnwire::first_pin));
+    TEST_ASSERT_EQUAL(LOW, Pins::getPinState(constants::burnwire::second_pin));
 
     // 10110
     sfr::burnwire::fire = true;
@@ -453,11 +496,15 @@ void test_fire_burnwire_logic()
     sfr::current::in_sun = true;
     sfr::fault::check_temp_c = true;
     sfr::fault::check_solar_current = false;
+
     Pins::setPinState(constants::burnwire::first_pin, HIGH);
     Pins::setPinState(constants::burnwire::second_pin, HIGH);
+    sfr::mission::mode = mission_mode_type::deployment;
+    sfr::burnwire::arm = true;
+    sfr::burnwire::mode = burnwire_mode_type::armed;
     burnwire_control_task.execute();
-    TEST_ASSERT_EQUAL(Pins::getPinState(constants::burnwire::first_pin), LOW);
-    TEST_ASSERT_EQUAL(Pins::getPinState(constants::burnwire::second_pin), LOW);
+    TEST_ASSERT_EQUAL(LOW, Pins::getPinState(constants::burnwire::first_pin));
+    TEST_ASSERT_EQUAL(LOW, Pins::getPinState(constants::burnwire::second_pin));
 
     // 10101
     sfr::burnwire::fire = true;
@@ -465,9 +512,15 @@ void test_fire_burnwire_logic()
     sfr::current::in_sun = true;
     sfr::fault::check_temp_c = false;
     sfr::fault::check_solar_current = true;
+
+    sfr::mission::mode = mission_mode_type::deployment;
+    sfr::burnwire::arm = true;
+    sfr::camera::turn_on = false;
+    sfr::burnwire::mode = burnwire_mode_type::armed;
     burnwire_control_task.execute();
-    TEST_ASSERT_EQUAL(sfr::burnwire::mode, burnwire_mode_type::fire);
-    TEST_ASSERT_EQUAL(sfr::camera::turn_on, true);
+    TEST_ASSERT_EQUAL(burnwire_mode_type::fire, sfr::burnwire::mode);
+    TEST_ASSERT_EQUAL(true, sfr::camera::turn_on);
+    ;
 
     // 10100
     sfr::burnwire::fire = true;
@@ -475,9 +528,14 @@ void test_fire_burnwire_logic()
     sfr::current::in_sun = true;
     sfr::fault::check_temp_c = false;
     sfr::fault::check_solar_current = false;
+
+    sfr::mission::mode = mission_mode_type::deployment;
+    sfr::burnwire::arm = true;
+    sfr::camera::turn_on = false;
+    sfr::burnwire::mode = burnwire_mode_type::armed;
     burnwire_control_task.execute();
-    TEST_ASSERT_EQUAL(sfr::burnwire::mode, burnwire_mode_type::fire);
-    TEST_ASSERT_EQUAL(sfr::camera::turn_on, true);
+    TEST_ASSERT_EQUAL(burnwire_mode_type::fire, sfr::burnwire::mode);
+    TEST_ASSERT_EQUAL(true, sfr::camera::turn_on);
 
     // 10011
     sfr::burnwire::fire = true;
@@ -485,11 +543,15 @@ void test_fire_burnwire_logic()
     sfr::current::in_sun = false;
     sfr::fault::check_temp_c = true;
     sfr::fault::check_solar_current = true;
+
     Pins::setPinState(constants::burnwire::first_pin, HIGH);
     Pins::setPinState(constants::burnwire::second_pin, HIGH);
+    sfr::mission::mode = mission_mode_type::deployment;
+    sfr::burnwire::arm = true;
+    sfr::burnwire::mode = burnwire_mode_type::armed;
     burnwire_control_task.execute();
-    TEST_ASSERT_EQUAL(Pins::getPinState(constants::burnwire::first_pin), LOW);
-    TEST_ASSERT_EQUAL(Pins::getPinState(constants::burnwire::second_pin), LOW);
+    TEST_ASSERT_EQUAL(LOW, Pins::getPinState(constants::burnwire::first_pin));
+    TEST_ASSERT_EQUAL(LOW, Pins::getPinState(constants::burnwire::second_pin));
 
     // 10010
     sfr::burnwire::fire = true;
@@ -497,11 +559,15 @@ void test_fire_burnwire_logic()
     sfr::current::in_sun = false;
     sfr::fault::check_temp_c = true;
     sfr::fault::check_solar_current = false;
+
     Pins::setPinState(constants::burnwire::first_pin, HIGH);
     Pins::setPinState(constants::burnwire::second_pin, HIGH);
+    sfr::mission::mode = mission_mode_type::deployment;
+    sfr::burnwire::arm = true;
+    sfr::burnwire::mode = burnwire_mode_type::armed;
     burnwire_control_task.execute();
-    TEST_ASSERT_EQUAL(Pins::getPinState(constants::burnwire::first_pin), LOW);
-    TEST_ASSERT_EQUAL(Pins::getPinState(constants::burnwire::second_pin), LOW);
+    TEST_ASSERT_EQUAL(LOW, Pins::getPinState(constants::burnwire::first_pin));
+    TEST_ASSERT_EQUAL(LOW, Pins::getPinState(constants::burnwire::second_pin));
 
     // 10001
     sfr::burnwire::fire = true;
@@ -509,11 +575,15 @@ void test_fire_burnwire_logic()
     sfr::current::in_sun = false;
     sfr::fault::check_temp_c = false;
     sfr::fault::check_solar_current = true;
+
     Pins::setPinState(constants::burnwire::first_pin, HIGH);
     Pins::setPinState(constants::burnwire::second_pin, HIGH);
+    sfr::mission::mode = mission_mode_type::deployment;
+    sfr::burnwire::arm = true;
+    sfr::burnwire::mode = burnwire_mode_type::armed;
     burnwire_control_task.execute();
-    TEST_ASSERT_EQUAL(Pins::getPinState(constants::burnwire::first_pin), LOW);
-    TEST_ASSERT_EQUAL(Pins::getPinState(constants::burnwire::second_pin), LOW);
+    TEST_ASSERT_EQUAL(LOW, Pins::getPinState(constants::burnwire::first_pin));
+    TEST_ASSERT_EQUAL(LOW, Pins::getPinState(constants::burnwire::second_pin));
 
     // 10000
     sfr::burnwire::fire = true;
@@ -521,9 +591,15 @@ void test_fire_burnwire_logic()
     sfr::current::in_sun = false;
     sfr::fault::check_temp_c = false;
     sfr::fault::check_solar_current = true;
+
+    Pins::setPinState(constants::burnwire::first_pin, HIGH);
+    Pins::setPinState(constants::burnwire::second_pin, HIGH);
+    sfr::mission::mode = mission_mode_type::deployment;
+    sfr::burnwire::arm = true;
+    sfr::burnwire::mode = burnwire_mode_type::armed;
     burnwire_control_task.execute();
-    TEST_ASSERT_EQUAL(sfr::burnwire::mode, burnwire_mode_type::fire);
-    TEST_ASSERT_EQUAL(sfr::camera::turn_on, true);
+    TEST_ASSERT_EQUAL(LOW, Pins::getPinState(constants::burnwire::first_pin));
+    TEST_ASSERT_EQUAL(LOW, Pins::getPinState(constants::burnwire::second_pin));
 
     // 01111
     sfr::burnwire::fire = false;
@@ -531,11 +607,15 @@ void test_fire_burnwire_logic()
     sfr::current::in_sun = true;
     sfr::fault::check_temp_c = true;
     sfr::fault::check_solar_current = true;
+
     Pins::setPinState(constants::burnwire::first_pin, HIGH);
     Pins::setPinState(constants::burnwire::second_pin, HIGH);
+    sfr::mission::mode = mission_mode_type::deployment;
+    sfr::burnwire::arm = true;
+    sfr::burnwire::mode = burnwire_mode_type::armed;
     burnwire_control_task.execute();
-    TEST_ASSERT_EQUAL(Pins::getPinState(constants::burnwire::first_pin), LOW);
-    TEST_ASSERT_EQUAL(Pins::getPinState(constants::burnwire::second_pin), LOW);
+    TEST_ASSERT_EQUAL(LOW, Pins::getPinState(constants::burnwire::first_pin));
+    TEST_ASSERT_EQUAL(LOW, Pins::getPinState(constants::burnwire::second_pin));
 
     // 01110
     sfr::burnwire::fire = false;
@@ -543,11 +623,15 @@ void test_fire_burnwire_logic()
     sfr::current::in_sun = true;
     sfr::fault::check_temp_c = true;
     sfr::fault::check_solar_current = false;
+
     Pins::setPinState(constants::burnwire::first_pin, HIGH);
     Pins::setPinState(constants::burnwire::second_pin, HIGH);
+    sfr::mission::mode = mission_mode_type::deployment;
+    sfr::burnwire::arm = true;
+    sfr::burnwire::mode = burnwire_mode_type::armed;
     burnwire_control_task.execute();
-    TEST_ASSERT_EQUAL(Pins::getPinState(constants::burnwire::first_pin), LOW);
-    TEST_ASSERT_EQUAL(Pins::getPinState(constants::burnwire::second_pin), LOW);
+    TEST_ASSERT_EQUAL(LOW, Pins::getPinState(constants::burnwire::first_pin));
+    TEST_ASSERT_EQUAL(LOW, Pins::getPinState(constants::burnwire::second_pin));
 
     // 01101
     sfr::burnwire::fire = false;
@@ -555,11 +639,15 @@ void test_fire_burnwire_logic()
     sfr::current::in_sun = true;
     sfr::fault::check_temp_c = false;
     sfr::fault::check_solar_current = true;
+
     Pins::setPinState(constants::burnwire::first_pin, HIGH);
     Pins::setPinState(constants::burnwire::second_pin, HIGH);
+    sfr::mission::mode = mission_mode_type::deployment;
+    sfr::burnwire::arm = true;
+    sfr::burnwire::mode = burnwire_mode_type::armed;
     burnwire_control_task.execute();
-    TEST_ASSERT_EQUAL(Pins::getPinState(constants::burnwire::first_pin), LOW);
-    TEST_ASSERT_EQUAL(Pins::getPinState(constants::burnwire::second_pin), LOW);
+    TEST_ASSERT_EQUAL(LOW, Pins::getPinState(constants::burnwire::first_pin));
+    TEST_ASSERT_EQUAL(LOW, Pins::getPinState(constants::burnwire::second_pin));
 
     // 01100
     sfr::burnwire::fire = false;
@@ -567,11 +655,15 @@ void test_fire_burnwire_logic()
     sfr::current::in_sun = true;
     sfr::fault::check_temp_c = false;
     sfr::fault::check_solar_current = false;
+
     Pins::setPinState(constants::burnwire::first_pin, HIGH);
     Pins::setPinState(constants::burnwire::second_pin, HIGH);
+    sfr::mission::mode = mission_mode_type::deployment;
+    sfr::burnwire::arm = true;
+    sfr::burnwire::mode = burnwire_mode_type::armed;
     burnwire_control_task.execute();
-    TEST_ASSERT_EQUAL(Pins::getPinState(constants::burnwire::first_pin), LOW);
-    TEST_ASSERT_EQUAL(Pins::getPinState(constants::burnwire::second_pin), LOW);
+    TEST_ASSERT_EQUAL(LOW, Pins::getPinState(constants::burnwire::first_pin));
+    TEST_ASSERT_EQUAL(LOW, Pins::getPinState(constants::burnwire::second_pin));
 
     // 01011
     sfr::burnwire::fire = false;
@@ -579,11 +671,15 @@ void test_fire_burnwire_logic()
     sfr::current::in_sun = false;
     sfr::fault::check_temp_c = true;
     sfr::fault::check_solar_current = true;
+
     Pins::setPinState(constants::burnwire::first_pin, HIGH);
     Pins::setPinState(constants::burnwire::second_pin, HIGH);
+    sfr::mission::mode = mission_mode_type::deployment;
+    sfr::burnwire::arm = true;
+    sfr::burnwire::mode = burnwire_mode_type::armed;
     burnwire_control_task.execute();
-    TEST_ASSERT_EQUAL(Pins::getPinState(constants::burnwire::first_pin), LOW);
-    TEST_ASSERT_EQUAL(Pins::getPinState(constants::burnwire::second_pin), LOW);
+    TEST_ASSERT_EQUAL(LOW, Pins::getPinState(constants::burnwire::first_pin));
+    TEST_ASSERT_EQUAL(LOW, Pins::getPinState(constants::burnwire::second_pin));
 
     // 01010
     sfr::burnwire::fire = false;
@@ -591,11 +687,15 @@ void test_fire_burnwire_logic()
     sfr::current::in_sun = false;
     sfr::fault::check_temp_c = true;
     sfr::fault::check_solar_current = false;
+
     Pins::setPinState(constants::burnwire::first_pin, HIGH);
     Pins::setPinState(constants::burnwire::second_pin, HIGH);
+    sfr::mission::mode = mission_mode_type::deployment;
+    sfr::burnwire::arm = true;
+    sfr::burnwire::mode = burnwire_mode_type::armed;
     burnwire_control_task.execute();
-    TEST_ASSERT_EQUAL(Pins::getPinState(constants::burnwire::first_pin), LOW);
-    TEST_ASSERT_EQUAL(Pins::getPinState(constants::burnwire::second_pin), LOW);
+    TEST_ASSERT_EQUAL(LOW, Pins::getPinState(constants::burnwire::first_pin));
+    TEST_ASSERT_EQUAL(LOW, Pins::getPinState(constants::burnwire::second_pin));
 
     // 01001
     sfr::burnwire::fire = false;
@@ -603,11 +703,15 @@ void test_fire_burnwire_logic()
     sfr::current::in_sun = false;
     sfr::fault::check_temp_c = false;
     sfr::fault::check_solar_current = true;
+
     Pins::setPinState(constants::burnwire::first_pin, HIGH);
     Pins::setPinState(constants::burnwire::second_pin, HIGH);
+    sfr::mission::mode = mission_mode_type::deployment;
+    sfr::burnwire::arm = true;
+    sfr::burnwire::mode = burnwire_mode_type::armed;
     burnwire_control_task.execute();
-    TEST_ASSERT_EQUAL(Pins::getPinState(constants::burnwire::first_pin), LOW);
-    TEST_ASSERT_EQUAL(Pins::getPinState(constants::burnwire::second_pin), LOW);
+    TEST_ASSERT_EQUAL(LOW, Pins::getPinState(constants::burnwire::first_pin));
+    TEST_ASSERT_EQUAL(LOW, Pins::getPinState(constants::burnwire::second_pin));
 
     // 01000
     sfr::burnwire::fire = false;
@@ -615,11 +719,15 @@ void test_fire_burnwire_logic()
     sfr::current::in_sun = false;
     sfr::fault::check_temp_c = false;
     sfr::fault::check_solar_current = false;
+
     Pins::setPinState(constants::burnwire::first_pin, HIGH);
     Pins::setPinState(constants::burnwire::second_pin, HIGH);
+    sfr::mission::mode = mission_mode_type::deployment;
+    sfr::burnwire::arm = true;
+    sfr::burnwire::mode = burnwire_mode_type::armed;
     burnwire_control_task.execute();
-    TEST_ASSERT_EQUAL(Pins::getPinState(constants::burnwire::first_pin), LOW);
-    TEST_ASSERT_EQUAL(Pins::getPinState(constants::burnwire::second_pin), LOW);
+    TEST_ASSERT_EQUAL(LOW, Pins::getPinState(constants::burnwire::first_pin));
+    TEST_ASSERT_EQUAL(LOW, Pins::getPinState(constants::burnwire::second_pin));
 
     // 00111
     sfr::burnwire::fire = false;
@@ -627,11 +735,15 @@ void test_fire_burnwire_logic()
     sfr::current::in_sun = true;
     sfr::fault::check_temp_c = true;
     sfr::fault::check_solar_current = true;
+
     Pins::setPinState(constants::burnwire::first_pin, HIGH);
     Pins::setPinState(constants::burnwire::second_pin, HIGH);
+    sfr::mission::mode = mission_mode_type::deployment;
+    sfr::burnwire::arm = true;
+    sfr::burnwire::mode = burnwire_mode_type::armed;
     burnwire_control_task.execute();
-    TEST_ASSERT_EQUAL(Pins::getPinState(constants::burnwire::first_pin), LOW);
-    TEST_ASSERT_EQUAL(Pins::getPinState(constants::burnwire::second_pin), LOW);
+    TEST_ASSERT_EQUAL(LOW, Pins::getPinState(constants::burnwire::first_pin));
+    TEST_ASSERT_EQUAL(LOW, Pins::getPinState(constants::burnwire::second_pin));
 
     // 00110
     sfr::burnwire::fire = false;
@@ -639,11 +751,15 @@ void test_fire_burnwire_logic()
     sfr::current::in_sun = true;
     sfr::fault::check_temp_c = true;
     sfr::fault::check_solar_current = false;
+
     Pins::setPinState(constants::burnwire::first_pin, HIGH);
     Pins::setPinState(constants::burnwire::second_pin, HIGH);
+    sfr::mission::mode = mission_mode_type::deployment;
+    sfr::burnwire::arm = true;
+    sfr::burnwire::mode = burnwire_mode_type::armed;
     burnwire_control_task.execute();
-    TEST_ASSERT_EQUAL(Pins::getPinState(constants::burnwire::first_pin), LOW);
-    TEST_ASSERT_EQUAL(Pins::getPinState(constants::burnwire::second_pin), LOW);
+    TEST_ASSERT_EQUAL(LOW, Pins::getPinState(constants::burnwire::first_pin));
+    TEST_ASSERT_EQUAL(LOW, Pins::getPinState(constants::burnwire::second_pin));
 
     // 00101
     sfr::burnwire::fire = false;
@@ -651,11 +767,15 @@ void test_fire_burnwire_logic()
     sfr::current::in_sun = true;
     sfr::fault::check_temp_c = false;
     sfr::fault::check_solar_current = true;
+
     Pins::setPinState(constants::burnwire::first_pin, HIGH);
     Pins::setPinState(constants::burnwire::second_pin, HIGH);
+    sfr::mission::mode = mission_mode_type::deployment;
+    sfr::burnwire::arm = true;
+    sfr::burnwire::mode = burnwire_mode_type::armed;
     burnwire_control_task.execute();
-    TEST_ASSERT_EQUAL(Pins::getPinState(constants::burnwire::first_pin), LOW);
-    TEST_ASSERT_EQUAL(Pins::getPinState(constants::burnwire::second_pin), LOW);
+    TEST_ASSERT_EQUAL(LOW, Pins::getPinState(constants::burnwire::first_pin));
+    TEST_ASSERT_EQUAL(LOW, Pins::getPinState(constants::burnwire::second_pin));
 
     // 00100
     sfr::burnwire::fire = false;
@@ -663,11 +783,15 @@ void test_fire_burnwire_logic()
     sfr::current::in_sun = true;
     sfr::fault::check_temp_c = false;
     sfr::fault::check_solar_current = false;
+
     Pins::setPinState(constants::burnwire::first_pin, HIGH);
     Pins::setPinState(constants::burnwire::second_pin, HIGH);
+    sfr::mission::mode = mission_mode_type::deployment;
+    sfr::burnwire::arm = true;
+    sfr::burnwire::mode = burnwire_mode_type::armed;
     burnwire_control_task.execute();
-    TEST_ASSERT_EQUAL(Pins::getPinState(constants::burnwire::first_pin), LOW);
-    TEST_ASSERT_EQUAL(Pins::getPinState(constants::burnwire::second_pin), LOW);
+    TEST_ASSERT_EQUAL(LOW, Pins::getPinState(constants::burnwire::first_pin));
+    TEST_ASSERT_EQUAL(LOW, Pins::getPinState(constants::burnwire::second_pin));
 
     // 00011
     sfr::burnwire::fire = false;
@@ -675,11 +799,15 @@ void test_fire_burnwire_logic()
     sfr::current::in_sun = false;
     sfr::fault::check_temp_c = true;
     sfr::fault::check_solar_current = true;
+
     Pins::setPinState(constants::burnwire::first_pin, HIGH);
     Pins::setPinState(constants::burnwire::second_pin, HIGH);
+    sfr::mission::mode = mission_mode_type::deployment;
+    sfr::burnwire::arm = true;
+    sfr::burnwire::mode = burnwire_mode_type::armed;
     burnwire_control_task.execute();
-    TEST_ASSERT_EQUAL(Pins::getPinState(constants::burnwire::first_pin), LOW);
-    TEST_ASSERT_EQUAL(Pins::getPinState(constants::burnwire::second_pin), LOW);
+    TEST_ASSERT_EQUAL(LOW, Pins::getPinState(constants::burnwire::first_pin));
+    TEST_ASSERT_EQUAL(LOW, Pins::getPinState(constants::burnwire::second_pin));
 
     // 00010
     sfr::burnwire::fire = false;
@@ -687,11 +815,15 @@ void test_fire_burnwire_logic()
     sfr::current::in_sun = false;
     sfr::fault::check_temp_c = true;
     sfr::fault::check_solar_current = false;
+
     Pins::setPinState(constants::burnwire::first_pin, HIGH);
     Pins::setPinState(constants::burnwire::second_pin, HIGH);
+    sfr::mission::mode = mission_mode_type::deployment;
+    sfr::burnwire::arm = true;
+    sfr::burnwire::mode = burnwire_mode_type::armed;
     burnwire_control_task.execute();
-    TEST_ASSERT_EQUAL(Pins::getPinState(constants::burnwire::first_pin), LOW);
-    TEST_ASSERT_EQUAL(Pins::getPinState(constants::burnwire::second_pin), LOW);
+    TEST_ASSERT_EQUAL(LOW, Pins::getPinState(constants::burnwire::first_pin));
+    TEST_ASSERT_EQUAL(LOW, Pins::getPinState(constants::burnwire::second_pin));
 
     // 00001
     sfr::burnwire::fire = false;
@@ -699,11 +831,15 @@ void test_fire_burnwire_logic()
     sfr::current::in_sun = false;
     sfr::fault::check_temp_c = false;
     sfr::fault::check_solar_current = true;
+
     Pins::setPinState(constants::burnwire::first_pin, HIGH);
     Pins::setPinState(constants::burnwire::second_pin, HIGH);
+    sfr::mission::mode = mission_mode_type::deployment;
+    sfr::burnwire::arm = true;
+    sfr::burnwire::mode = burnwire_mode_type::armed;
     burnwire_control_task.execute();
-    TEST_ASSERT_EQUAL(Pins::getPinState(constants::burnwire::first_pin), LOW);
-    TEST_ASSERT_EQUAL(Pins::getPinState(constants::burnwire::second_pin), LOW);
+    TEST_ASSERT_EQUAL(LOW, Pins::getPinState(constants::burnwire::first_pin));
+    TEST_ASSERT_EQUAL(LOW, Pins::getPinState(constants::burnwire::second_pin));
 
     // 00000
     sfr::burnwire::fire = false;
@@ -711,11 +847,15 @@ void test_fire_burnwire_logic()
     sfr::current::in_sun = false;
     sfr::fault::check_temp_c = false;
     sfr::fault::check_solar_current = false;
+
     Pins::setPinState(constants::burnwire::first_pin, HIGH);
     Pins::setPinState(constants::burnwire::second_pin, HIGH);
+    sfr::mission::mode = mission_mode_type::deployment;
+    sfr::burnwire::arm = true;
+    sfr::burnwire::mode = burnwire_mode_type::armed;
     burnwire_control_task.execute();
-    TEST_ASSERT_EQUAL(Pins::getPinState(constants::burnwire::first_pin), LOW);
-    TEST_ASSERT_EQUAL(Pins::getPinState(constants::burnwire::second_pin), LOW);
+    TEST_ASSERT_EQUAL(LOW, Pins::getPinState(constants::burnwire::first_pin));
+    TEST_ASSERT_EQUAL(LOW, Pins::getPinState(constants::burnwire::second_pin));
 }
 
 int test_burnwire()

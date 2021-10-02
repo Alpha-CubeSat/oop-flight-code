@@ -23,8 +23,10 @@ namespace sfr
             {constants::acs::STBXYpin, LOW},
             {constants::acs::STBZpin, LOW},
             {constants::battery::voltage_value_pin, LOW},
-            {constants::battery::allow_measurement_pin, LOW},
+            {constants::battery::allow_measurement_pin, HIGH},
             {constants::camera::power_on_pin, LOW},
+            {constants::camera::rx, LOW},
+            {constants::camera::tx, LOW},
             {constants::button::button_pin, LOW}};
     }
     namespace photoresistor
