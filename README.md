@@ -106,6 +106,49 @@ Constants contains values that will never be changed. This prevents "magic numbe
 | Temperature   | <table>  <thead>   <td>Read raw temperature sensor value (analog read).  </td> <tr>  <td>Convert from voltage to temperature.</td>   </tr> </tbody>  </table>                                                                                                                                                                                                                                                                                                                                                                         |
 
 
+**<center> Normal Report</center>**
+*Format for downlinked data.*
+
+| Index | Data                    | Min (if applicable) | Max (if applicable) |
+| ----- | ----------------------- | ------------------- | ------------------- |
+| 0     | 21 (normal report flag) | N/A                 | N/A                 |
+| 1     | photoresistor covered   |                     |                     |
+| 2     | button pressed          |                     |                     |
+| 3     | mission mode            |                     |                     |
+| 4     | burn wire fire          |                     |                     |
+| 5     | burn wire arm           |                     |                     |
+| 6     | burn wire time          | 0                   | 60000               |
+| 7     | burn wire armed time    | 0                   | 86400000            |
+| 8     | burn wire mode          |                     |                     |
+| 9     | burn wire attempts      |                     | 10                  |
+| 10    | downlink period         | 1000                | 172800000           |
+| 11    | waiting message         |                     |                     |
+| 12    | waiting command         |                     |                     |
+| 13    | mag\_x                  | 0.0                 | 0.0                 |
+| 14    | mag\_y                  | 0.0                 | 0.0                 |
+| 15    | mag\_z                  | 0.0                 | 0.0                 |
+| 16    | gyro\_x                 | 0.0                 | 0.0                 |
+| 17    | gryo\_y                 | 0.0                 | 0.0                 |
+| 18    | gyro\_z                 | 0.0                 | 0.0                 |
+| 19    | temperature             |                     | 200                 |
+| 20    | temperature mode        |                     |                     |
+| 21    | solar current           |                     | 500                 |
+| 22    | in sun                  |                     |                     |
+| 23    | acs mode                |                     |                     |
+| 24    | voltage                 | 3                   | 5                   |
+| 25    | fault mode              |                     |                     |
+| 26    | mag\_x fault check      |                     |                     |
+| 27    | mag\_y fault check      |                     |                     |
+| 28    | mag\_z fault check      |                     |                     |
+| 29    | gyro\_x fault check     |                     |                     |
+| 30    | gyro\_y fault check     |                     |                     |
+| 31    | gyro\_z fault check     |                     |                     |
+| 32    | temp fault check        |                     |                     |
+| 33    | voltage fault check     |                     |                     |
+| 34    | solar fault check       |                     |                     |
+| 35    | take photo              |                     |                     |
+| 36    | camera powered          |                     |                     |
+
 **<center> Tests</center>**
 
 |                   |                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
