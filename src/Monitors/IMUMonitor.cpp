@@ -114,6 +114,4 @@ void IMUMonitor::execute()
     sfr::imu::gyro_y_average = gyro_y_sum / sfr::imu::gyro_y_buffer.size();
     sfr::imu::gyro_z_average = gyro_z_sum / sfr::imu::gyro_z_buffer.size();
     uint32_t end = micros();
-    Serial.print("IMU_MON:");
-    Serial.println(end - begin);
 }
