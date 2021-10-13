@@ -9,6 +9,7 @@
 #include "Modes/temp_mode_type.enum"
 #include "Modes/fault_mode_type.enum"
 #include "Modes/simple_acs_type.enum"
+#include "Modes/sensor_mode_type.enum"
 #include "Control Tasks/TimedControlTask.hpp"
 #include "Control Tasks/BurnwireControlTask.hpp"
 #include "RockblockSimulator.hpp"
@@ -111,6 +112,7 @@ namespace sfr
     }
     namespace imu
     {
+        extern sensor_mode_type mode;
         extern float mag_x;
         extern float mag_y;
         extern float mag_z;

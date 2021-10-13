@@ -33,6 +33,8 @@ void MainControlLoop::execute()
 
     clock_manager.execute();
 
+    Serial.println("test");
+
     //acs_monitor.execute_on_time();
     battery_monitor.execute_on_time();
     button_monitor.execute_on_time();
