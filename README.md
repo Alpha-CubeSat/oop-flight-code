@@ -197,3 +197,112 @@ Constants contains values that will never be changed. This prevents "magic numbe
 ![Mission Manager](Mission_Manager.png)
 *CubeSat Hardware*
 ![CubeSat Hardware](CubeSat_Hardware.png)
+
+
+## Rockblock Simulator Documentation
+*Instructions:*
+
+- Pull oop-flight-code repo for latest changes
+- Select simulator environment for PlatformIO
+- Method 1: Hard Coded Commands (Easy)
+  a. Navigate to the constructor of RockblockSimulator.cpp
+    * RockblockSimulator()
+
+  b. Use insert function to pre-define uplink commands
+    * insert takes a 20 character command string (0 to 9, A to F)
+    * Ex: insert("01000100000000000000");
+    * See [Alpha Flight Software Requirements](https://docs.google.com/document/d/1ptnDQ-gUUakvWOwFNcF0xmj797aZi6SnsOH3ve5d3y4/edit) for valid commands
+
+  c. Deploy code
+
+  d. Open Serial Monitor
+
+- Method 2: Manual Commands (Medium)
+
+  a. Navigate to the constructor of RockblockSimulator.cpp
+    * RockblockSimulator()
+
+  b. Make sure there are no insert commands or that they are commented out
+
+  c. Deploy code
+
+  d. Open Serial Monitor
+
+  e. Type in 20 character command string and hit Enter
+    * Ex: 01000100000000000000 *Enter*
+    * If you do not see “SIM INSERT: <command>”, make sure your serial monitor is configured for Windows line endings (CRLF = \r\n)
+
+Method of Completion:
+- Class does not inherit TimedControlTask
+  * Could be done...would require more time to convert and need to look into how this would change the object definition (see sfr ifdef)
+
+- Whenever teensy/RockblockControlTask interacts with sfr::rockblock::serial through available(), read(), write(), or print()
+  * serial_check()
+    * Checks for new data over USB serial
+    * Inserts message (command) into MT queue if valid (20 chars + ENTER)
+    * Disregards control characters (\r, \n), consequence of using serial monitor
+  * serial_process()
+    * Looks through input send over pseudo-serial buffer
+    * If sequence ends in return (\r), process input
+    * See Commands and Responses section
+
+
+Tasks:
+- Send valid responses after any serial communication from the Teensy
+  * Rockblock only responds after seeing the return character (\r)
+- Keep track of all uplink and downlink messages
+  * “Manages” MO and MT cycle numbers, kind of irrelevant anyways
+- Provide an interface for submitting uplink (MT) messages
+  * Manually: (USB) serial monitor
+    * Type in 20 characters, hit enter
+  * Automatic:  provided function for unit testing
+    * RockblockSimulator::insert(const char* / std::string)
+  * Currently only supports ASCII version since we are not typing bytes, simulator checks for 20 characters so modifications would be needed for different size messages
+    * Ex: char[] = “0A0B0C0D0E0F01020304”
+- Provide an interface for receiving downlink (MO) messages
+  * Currently only visible in (USB) serial monitor
+
+TODO: 
+- Method for reading latest MO and/or all MO
+- Ability to change apparent signal strength (hardcoded to 5)
+- Unit tests for simulator (un/official?, discuss)
+
+Commands and Responses: 
+- AT
+  * respond OK
+- AT+CSQ
+  * respond +CSQ: $<signal>$
+- AT&K0
+  * No effect since no flow control exists anyways
+  * respond OK
+
+- AT+SBDWB=$<len>$
+  * Saves length
+  * Simulator ready to receive binary message
+  * respond READY
+
+- $<message><checksum>$
+  * Confirms checksum matches message
+  * If correct:
+    * Saves message into MO variable
+    * Returns 0 and OK
+
+  * If incorrect:
+    * Returns 2 and OK
+
+- AT+SBDIX
+  * check for MT message
+  * pop message (if exists) into MT variable
+  * calculate response codes
+  * respond +SBDIX: 
+    $<mo_status>, <momsn>, <mt_status>, <mtmsn>, <mt_len>, <mt_queue_len>$
+
+
+- AT+SBDRB
+  * calculates checksum from MT variable
+  * responds $<len><message><checksum>$ and OK
+- NOTE: specific line endings not listed, see code or 
+[Rockblock Response Data](https://docs.google.com/document/d/1zjzvoTFGdR7EM4JPAArA_4zN6ZmPXvaQXqtANdy8JDw/edit)
+
+
+
