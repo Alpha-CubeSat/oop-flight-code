@@ -482,18 +482,18 @@ namespace constants
         constexpr float eight_g = 8 * gravity;
 
         constexpr float min_mag_x = 0.0;
-        constexpr float max_mag_x = 0.0;
+        constexpr float max_mag_x = 100;
         constexpr float min_mag_y = 0.0;
-        constexpr float max_mag_y = 0.0;
-        constexpr float min_mag_z = 0.0;
-        constexpr float max_mag_z = 0.0;
+        constexpr float max_mag_y = 100;
+        constexpr float min_mag_z = -100;
+        constexpr float max_mag_z = 100;
 
         constexpr float min_gyro_x = 0.0;
-        constexpr float max_gyro_x = 0.0;
+        constexpr float max_gyro_x = 10;
         constexpr float min_gyro_y = 0.0;
-        constexpr float max_gyro_y = 0.0;
+        constexpr float max_gyro_y = 10;
         constexpr float min_gyro_z = 0.0;
-        constexpr float max_gyro_z = 0.0;
+        constexpr float max_gyro_z = 10;
 
         constexpr int CSAG = 10;
         constexpr int CSM = 9;

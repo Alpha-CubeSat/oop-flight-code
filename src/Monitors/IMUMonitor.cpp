@@ -4,7 +4,7 @@ IMUMonitor::IMUMonitor(unsigned int offset)
     : TimedControlTask<void>(offset)
 {
     imu = Adafruit_LSM9DS1(constants::imu::CSAG, constants::imu::CSM);
-    imu.begin();
+    sfr::imu::started = imu.begin();
     if (!imu.begin())
     {
         //sfr::rockblock::fault_report[constants::fault::imu_begin] = 1;
@@ -16,6 +16,9 @@ IMUMonitor::IMUMonitor(unsigned int offset)
 
 void IMUMonitor::execute()
 {
+    if(!sfr::imu::started){
+        Serial.print("didnt init");
+    }
     uint32_t begin = micros();
     sensors_event_t accel, mag, gyro, temp;
     imu.getEvent(&accel, &mag, &gyro, &temp);
@@ -47,6 +50,8 @@ void IMUMonitor::execute()
     // Get corrected IMU values
 
     imu.getEvent(&accel, &mag, &gyro, &temp);
+    Serial.print("mag: ");
+    Serial.println(mag.magnetic.x);
 
     // Save most recent readings
 

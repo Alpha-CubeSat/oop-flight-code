@@ -112,6 +112,8 @@ namespace sfr
     }
     namespace imu
     {
+        extern bool started;
+
         extern sensor_mode_type mode;
         extern float mag_x;
         extern float mag_y;

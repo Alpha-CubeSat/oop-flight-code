@@ -24,7 +24,7 @@ void FaultMonitor::execute(){
         if((sfr::imu::gyro_z > constants::imu::max_gyro_z || sfr::imu::gyro_z < constants::imu::min_gyro_z) && sfr::fault::check_gyro_z){
             sfr::fault::fault_1 = sfr::fault::fault_1 | constants::fault::gyro_z;
         }
-
+/*
         //FAULT_2
         if((sfr::temperature::temp_c > constants::temperature::max_temp_c || sfr::temperature::temp_c < constants::temperature::min_temp_c) && sfr::fault::check_temp_c){
             sfr::fault::fault_2 = sfr::fault::fault_2 | constants::fault::temp_c;
@@ -35,7 +35,7 @@ void FaultMonitor::execute(){
         if((sfr::battery::voltage >  constants::battery::max_voltage || sfr::battery::voltage < constants::battery::min_voltage) && sfr::fault::check_voltage){
             sfr::fault::fault_2 = sfr::fault::fault_2 | constants::fault::voltage;
         }
-
+*/
         if(sfr::fault::fault_1 > 0 || sfr::fault::fault_2 > 0 || sfr::fault::fault_3 > 0){
             MissionManager::transition_to_safe();
         }

@@ -33,8 +33,6 @@ void MainControlLoop::execute()
 
     clock_manager.execute();
 
-    Serial.println("test");
-
     //acs_monitor.execute_on_time();
     battery_monitor.execute_on_time();
     button_monitor.execute_on_time();
@@ -53,5 +51,40 @@ void MainControlLoop::execute()
     rockblock_control_task.execute_on_time();
     temperature_control_task.execute_on_time();
 
-    mission_manager.execute_on_time(); 
+    mission_manager.execute_on_time();
+
+    Serial.print("mag ");
+    Serial.print(sfr::imu::mag_x);
+    Serial.print(" ");
+    Serial.print(sfr::imu::mag_y);
+    Serial.print(" ");
+    Serial.println(sfr::imu::mag_z);
+
+    Serial.print("gyro ");
+    Serial.print(sfr::imu::gyro_x);
+    Serial.print(" ");
+    Serial.print(sfr::imu::gyro_y);
+    Serial.print(" ");
+    Serial.println(sfr::imu::gyro_z);
+
+    if(sfr::mission::mode == mission_mode_type::standby)
+        Serial.println("standby");
+    else if(sfr::mission::mode == mission_mode_type::safe)
+        Serial.println("safe");
+    else
+        Serial.println("none");
+
+/*
+    switch(sfr::mission::mode){
+        case mission_mode_type::deployment:
+            Serial.println("deploy");
+            break;
+        case mission_mode_type::standby:
+            Serial.println("standby");
+            break;
+        case mission_mode_type::safe:
+            Serial.println("safe");
+            break;
+    }
+*/
 }
