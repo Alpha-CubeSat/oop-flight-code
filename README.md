@@ -1,5 +1,6 @@
 # Alpha CubeSat Flight Code
 
+<!-- - [1. Getting Started] (1-Getting Started) -->
 ## Getting Started
 
 * Install [VSCode](https://code.visualstudio.com/download)
