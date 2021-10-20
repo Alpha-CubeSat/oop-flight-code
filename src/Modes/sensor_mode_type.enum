@@ -5,7 +5,7 @@ enum sensor_mode_type : unsigned char
 {
   normal = 0,
   abnormal,
-  flag
+  abandon
 };
 
 #endif

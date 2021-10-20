@@ -4,9 +4,9 @@ IMUMonitor::IMUMonitor(unsigned int offset)
     : TimedControlTask<void>(offset)
 {
     imu = Adafruit_LSM9DS1(constants::imu::CSAG, constants::imu::CSM);
-    sfr::imu::started = imu.begin();
     if (!imu.begin())
     {
+        Serial.println("Didn't Initialize");
         //sfr::rockblock::fault_report[constants::fault::imu_begin] = 1;
     }
     imu.setupAccel(imu.LSM9DS1_ACCELRANGE_2G);
@@ -16,9 +16,6 @@ IMUMonitor::IMUMonitor(unsigned int offset)
 
 void IMUMonitor::execute()
 {
-    if(!sfr::imu::started){
-        Serial.print("didnt init");
-    }
     uint32_t begin = micros();
     sensors_event_t accel, mag, gyro, temp;
     imu.getEvent(&accel, &mag, &gyro, &temp);
