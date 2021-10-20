@@ -33,7 +33,9 @@ void test_out_of_order_commands()
     burnwire_control_task.execute();
     TEST_ASSERT_EQUAL(burnwire_mode_type::armed, sfr::burnwire::mode);
 
-    sfr::current::in_sun = true;
+    sfr::burnwire::fire = true;
+    sfr::temperature::in_sun = true;
+    sfr::fault::check_temp_c = true;
     burnwire_control_task.execute();
     TEST_ASSERT_EQUAL(burnwire_mode_type::fire, sfr::burnwire::mode);
 
@@ -71,7 +73,8 @@ void test_max_attempts()
     TEST_ASSERT_EQUAL(burnwire_mode_type::armed, sfr::burnwire::mode);
 
     sfr::burnwire::fire = true;
-    sfr::current::in_sun = true;
+    sfr::temperature::in_sun = true;
+    sfr::fault::check_temp_c = true;
     burnwire_control_task.execute();
     TEST_ASSERT_EQUAL(burnwire_mode_type::fire, sfr::burnwire::mode);
 
@@ -122,7 +125,8 @@ void test_exit_deployment()
     TEST_ASSERT_EQUAL(burnwire_mode_type::armed, sfr::burnwire::mode);
 
     sfr::burnwire::fire = true;
-    sfr::current::in_sun = true;
+    sfr::temperature::in_sun = true;
+    sfr::fault::check_temp_c = true;
     burnwire_control_task.execute();
     TEST_ASSERT_EQUAL(burnwire_mode_type::fire, sfr::burnwire::mode);
 
@@ -136,7 +140,8 @@ void test_exit_deployment()
     TEST_ASSERT_EQUAL(burnwire_mode_type::armed, sfr::burnwire::mode);
 
     sfr::burnwire::fire = true;
-    sfr::current::in_sun = true;
+    sfr::temperature::in_sun = true;
+    sfr::fault::check_temp_c = true;
     burnwire_control_task.execute();
     TEST_ASSERT_EQUAL(burnwire_mode_type::fire, sfr::burnwire::mode);
 
@@ -154,7 +159,8 @@ void test_exit_deployment()
     TEST_ASSERT_EQUAL(burnwire_mode_type::armed, sfr::burnwire::mode);
 
     sfr::burnwire::fire = true;
-    sfr::current::in_sun = true;
+    sfr::temperature::in_sun = true;
+    sfr::fault::check_temp_c = true;
     burnwire_control_task.execute();
     TEST_ASSERT_EQUAL(burnwire_mode_type::fire, sfr::burnwire::mode);
 
@@ -190,7 +196,8 @@ void test_sensor()
     TEST_ASSERT_EQUAL(burnwire_mode_type::armed, sfr::burnwire::mode);
 
     sfr::burnwire::fire = true;
-    sfr::current::in_sun = true;
+    sfr::temperature::in_sun = true;
+    sfr::fault::check_temp_c = true;
     burnwire_control_task.execute();
     mission_manager.execute();
     TEST_ASSERT_EQUAL(burnwire_mode_type::fire, sfr::burnwire::mode);
@@ -233,7 +240,8 @@ void test_camera_max_attempts()
     TEST_ASSERT_EQUAL(burnwire_mode_type::armed, sfr::burnwire::mode);
 
     sfr::burnwire::fire = true;
-    sfr::current::in_sun = true;
+    sfr::temperature::in_sun = true;
+    sfr::fault::check_temp_c = true;
     burnwire_control_task.execute();
     TEST_ASSERT_EQUAL(burnwire_mode_type::fire, sfr::burnwire::mode);
 
@@ -272,7 +280,8 @@ void test_camera_some_attempts()
     TEST_ASSERT_EQUAL(burnwire_mode_type::armed, sfr::burnwire::mode);
 
     sfr::burnwire::fire = true;
-    sfr::current::in_sun = true;
+    sfr::temperature::in_sun = true;
+    sfr::fault::check_temp_c = true;
     burnwire_control_task.execute();
     TEST_ASSERT_EQUAL(burnwire_mode_type::fire, sfr::burnwire::mode);
 
@@ -314,7 +323,8 @@ void test_no_solar_current()
     TEST_ASSERT_EQUAL(burnwire_mode_type::armed, sfr::burnwire::mode);
 
     sfr::burnwire::fire = true;
-    sfr::current::in_sun = true;
+    sfr::temperature::in_sun = true;
+    sfr::fault::check_temp_c = true;
     burnwire_control_task.execute();
     TEST_ASSERT_EQUAL(burnwire_mode_type::fire, sfr::burnwire::mode);
 }
