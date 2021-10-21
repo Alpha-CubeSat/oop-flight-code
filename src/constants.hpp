@@ -9,13 +9,13 @@ namespace constants
     }
     namespace photoresistor
     {
-        constexpr int pin = 17;
+        constexpr int pin = 38;
         constexpr int light_val = 150;
     }
     namespace burnwire
     {
-        constexpr int first_pin = 37;
-        constexpr int second_pin = 35;
+        constexpr int first_pin = 14;
+        constexpr int second_pin = 15;
         constexpr int burn_wait = 1000;
         constexpr int max_attempts = 10;
         constexpr int camera_max_attempts = 50;
@@ -36,7 +36,7 @@ namespace constants
         constexpr unsigned long two_hours = 2 * one_hour;
         constexpr unsigned long two_days = 2 * one_day;
 
-        constexpr int sleep_pin = 38;
+        constexpr int sleep_pin = 19;
 
         constexpr int min_sleep_period = 2 * one_minute;
 
@@ -391,14 +391,14 @@ namespace constants
     }
     namespace temperature
     {
-        constexpr int pin = 16;
+        constexpr int pin = 39;
         constexpr float min_temp_c;
         constexpr float max_temp_c;
         constexpr float in_sun_val;
     }
     namespace current
     {
-        constexpr int pin = 15;
+        constexpr int pin = 22;
         // TODO: finalize min/max
         constexpr float min_solar_current = 0;
         constexpr float max_solar_current = 300;
@@ -411,21 +411,21 @@ namespace constants
     }
     namespace acs
     {
-        constexpr int xPWMpin = 2;
-        constexpr int yPWMpin = 3;
-        constexpr int zPWMpin = 4;
+        constexpr int xPWMpin = 10;
+        constexpr int yPWMpin = 6;
+        constexpr int zPWMpin = 30;
 
-        constexpr int yout1 = 5;
-        constexpr int yout2 = 6;
+        constexpr int yout1 = 8;
+        constexpr int yout2 = 7;
 
-        constexpr int xout1 = 7;
-        constexpr int xout2 = 8;
+        constexpr int xout1 = 25;
+        constexpr int xout2 = 24;
 
-        constexpr int zout1 = 9;
-        constexpr int zout2 = 10;
+        constexpr int zout1 = 28;
+        constexpr int zout2 = 29;
 
-        constexpr int STBXYpin = 21;
-        constexpr int STBZpin = 20;
+        constexpr int STBXYpin = 9;
+        constexpr int STBZpin = 27;
     }
     namespace battery
     {
@@ -462,7 +462,7 @@ namespace constants
     }
     namespace camera
     {
-        constexpr int power_on_pin = 24;
+        constexpr int power_on_pin = 31;
         constexpr int content_length = 64;
         constexpr int bytes_allocated_serial_opcode = 2;
         constexpr int bytes_allocated_fragment = 4;
@@ -472,7 +472,7 @@ namespace constants
     namespace button
     {
         //low when door is opened
-        constexpr int button_pin = 31;
+        constexpr int button_pin = 37;
     }
     namespace imu
     {
@@ -495,8 +495,8 @@ namespace constants
         constexpr float min_gyro_z = 0.0;
         constexpr float max_gyro_z = 0.0;
 
-        constexpr int CSAG = 10;
-        constexpr int CSM = 9;
+        constexpr int CSAG = 21;
+        constexpr int CSM = 20;
     }
     namespace timecontrol{
         // Environment-based initializations of the control loop time.
