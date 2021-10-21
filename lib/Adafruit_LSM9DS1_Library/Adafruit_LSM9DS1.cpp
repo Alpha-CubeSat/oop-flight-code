@@ -39,7 +39,6 @@ Adafruit_LSM9DS1::Adafruit_LSM9DS1( int32_t sensorID ) {
 
 Adafruit_LSM9DS1::Adafruit_LSM9DS1( TwoWire* wireBus, int32_t sensorID ) {
     initI2C(wireBus, sensorID);
-    
 }
 
 Adafruit_LSM9DS1::Adafruit_LSM9DS1(int8_t xgcs, int8_t mcs, int32_t sensorID ) {
@@ -119,14 +118,18 @@ bool Adafruit_LSM9DS1::begin()
     Serial.println(read8(MAGTYPE, i), HEX);
   }
   */
+  Serial.begin(9600);
+  while(!Serial);
 
   uint8_t id = read8(XGTYPE, LSM9DS1_REGISTER_WHO_AM_I_XG);
-  //Serial.print ("XG whoami: 0x"); Serial.println(id, HEX);
+  Serial.print ("XG whoami: 0x"); Serial.println(id, HEX);
+  Serial.print("Should be: 0x"); Serial.println(LSM9DS1_XG_ID, HEX);
   if (id != LSM9DS1_XG_ID)
     return false;
 
   id = read8(MAGTYPE, LSM9DS1_REGISTER_WHO_AM_I_M);
-  //Serial.print ("MAG whoami: 0x"); Serial.println(id, HEX);
+  Serial.print ("MAG whoami: 0x"); Serial.println(id, HEX);
+  Serial.print("Should be: 0x"); Serial.println(LSM9DS1_MAG_ID, HEX);
   if (id != LSM9DS1_MAG_ID)
     return false;
 
