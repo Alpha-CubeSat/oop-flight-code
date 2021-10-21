@@ -7,6 +7,7 @@ IMUMonitor::IMUMonitor(unsigned int offset)
     if (!imu.begin())
     {
         Serial.println("Didn't Initialize");
+        sfr::imu::check_sensor = false;
         //sfr::rockblock::fault_report[constants::fault::imu_begin] = 1;
     }
     imu.setupAccel(imu.LSM9DS1_ACCELRANGE_2G);
