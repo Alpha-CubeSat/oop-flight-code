@@ -2,6 +2,38 @@
 #include <MissionManager.hpp>
 #include "Monitors/FaultMonitor.hpp"
 
+void fault_monitor_test_helper_fault1();
+void fault_monitor_test_helper_fault2();
+/* 
+Helper test function for transition_to_standby
+*/
+void test_transition_to_standby_helper()
+{
+    //test transition_to_standby
+    TEST_ASSERT_EQUAL(mission_mode_type::standby, sfr::mission::mode);
+    TEST_ASSERT_EQUAL(fault_mode_type::active, sfr::fault::mode);
+    TEST_ASSERT_EQUAL(acs_mode_type::full, sfr::acs::mode);
+    TEST_ASSERT_EQUAL(temp_mode_type::active, sfr::temperature::mode);
+    TEST_ASSERT_EQUAL(constants::rockblock::ten_minutes, sfr::rockblock::downlink_period);
+
+    //test active fault_mode_type
+    fault_monitor_test_helper_fault1();
+    fault_monitor_test_helper_fault2();
+}
+
+/* 
+Helper test function for transition_to_safe
+*/
+void test_transition_to_safe_helper()
+{
+    //test transition_to_safe
+    TEST_ASSERT_EQUAL(mission_mode_type::safe, sfr::mission::mode);
+    TEST_ASSERT_EQUAL(acs_mode_type::simple, sfr::acs::mode);
+    TEST_ASSERT_EQUAL(constants::rockblock::two_hours, sfr::rockblock::downlink_period);
+    TEST_ASSERT_EQUAL(temp_mode_type::active, sfr::temperature::mode);
+    TEST_ASSERT_EQUAL(fault_mode_type::inactive, sfr::fault::mode);
+}
+
 /* 
 Helper test function for fault_monitor when fault_mode_type is active and when FAULT_1
 */
@@ -53,19 +85,6 @@ void fault_monitor_test_helper_fault2()
 }
 
 /* 
-Helper test function for transition_to_safe
-*/
-void test_transition_to_safe_helper()
-{
-    //test transition_to_safe
-    TEST_ASSERT_EQUAL(mission_mode_type::safe, sfr::mission::mode);
-    TEST_ASSERT_EQUAL(acs_mode_type::simple, sfr::acs::mode);
-    TEST_ASSERT_EQUAL(constants::rockblock::two_hours, sfr::rockblock::downlink_period);
-    TEST_ASSERT_EQUAL(temp_mode_type::active, sfr::temperature::mode);
-    TEST_ASSERT_EQUAL(fault_mode_type::inactive, sfr::fault::mode);
-}
-
-/* 
 Test a valid initialization
 */
 void test_valid_initialization()
@@ -84,23 +103,6 @@ void test_transition_to_initialization_helper()
     TEST_ASSERT_EQUAL(mission_mode_type::initialization, sfr::mission::mode);
     TEST_ASSERT_EQUAL(fault_mode_type::active, sfr::fault::mode);
     TEST_ASSERT_EQUAL(acs_mode_type::simple, sfr::acs::mode);
-    TEST_ASSERT_EQUAL(temp_mode_type::active, sfr::temperature::mode);
-    TEST_ASSERT_EQUAL(constants::rockblock::ten_minutes, sfr::rockblock::downlink_period);
-
-    //test active fault_mode_type
-    fault_monitor_test_helper_fault1();
-    fault_monitor_test_helper_fault2();
-}
-
-/* 
-Helper test function for transition_to_standby
-*/
-void test_transition_to_standby_helper()
-{
-    //test transition_to_standby
-    TEST_ASSERT_EQUAL(mission_mode_type::standby, sfr::mission::mode);
-    TEST_ASSERT_EQUAL(fault_mode_type::active, sfr::fault::mode);
-    TEST_ASSERT_EQUAL(acs_mode_type::full, sfr::acs::mode);
     TEST_ASSERT_EQUAL(temp_mode_type::active, sfr::temperature::mode);
     TEST_ASSERT_EQUAL(constants::rockblock::ten_minutes, sfr::rockblock::downlink_period);
 
