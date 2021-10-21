@@ -10,12 +10,13 @@ IMUMonitor::IMUMonitor(unsigned int offset)
     start = millis();
     imu = Adafruit_LSM9DS1(constants::imu::CSAG, constants::imu::CSM);
     stop = millis();
-    began = imu.begin();
-    // if (imu.begin())
-    // {
-    //     sfr::imu::check_sensor = false;
-    //     //sfr::rockblock::fault_report[constants::fault::imu_begin] = 1;
-    // }
+    if (!imu.begin())
+    {
+        began = 0;
+        sfr::imu::mode = sensor_mode_type::abnormal;
+        sfr::mission::mode = mission_mode_type::safe;
+        //sfr::rockblock::fault_report[constants::fault::imu_begin] = 1;
+    }
     imu.setupAccel(imu.LSM9DS1_ACCELRANGE_2G);
     imu.setupMag(imu.LSM9DS1_MAGGAIN_4GAUSS);
     imu.setupGyro(imu.LSM9DS1_GYROSCALE_245DPS);
@@ -23,6 +24,19 @@ IMUMonitor::IMUMonitor(unsigned int offset)
 
 void IMUMonitor::execute()
 {
+    switch(sfr::imu::mode){
+        case sensor_mode_type::normal:
+            Serial.println("imu is normal");
+            break;
+        case sensor_mode_type::abnormal:
+            Serial.println("imu is abnormal");
+            break;
+        case sensor_mode_type::abandon:
+            Serial.println("imu is abnormal");
+            break;
+    }
+
+
     uint32_t begin = micros();
     sensors_event_t accel, mag, gyro, temp;
     imu.getEvent(&accel, &mag, &gyro, &temp);
