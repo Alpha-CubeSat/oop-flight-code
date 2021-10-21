@@ -16,6 +16,9 @@ IMUMonitor::IMUMonitor(unsigned int offset)
         sfr::imu::mode = sensor_mode_type::abnormal;
         sfr::mission::mode = mission_mode_type::safe;
         //sfr::rockblock::fault_report[constants::fault::imu_begin] = 1;
+    } else {
+        began = 1;
+        sfr::imu::mode = sensor_mode_type::normal;
     }
     imu.setupAccel(imu.LSM9DS1_ACCELRANGE_2G);
     imu.setupMag(imu.LSM9DS1_MAGGAIN_4GAUSS);
@@ -30,6 +33,14 @@ void IMUMonitor::execute()
             break;
         case sensor_mode_type::abnormal:
             Serial.println("imu is abnormal");
+            Serial.println("Trying again...");
+            if(!imu.begin()){
+                delay(1000);
+                break;
+            } else {
+                began = 1;
+                sfr::imu::mode = sensor_mode_type::normal;
+            }
             break;
         case sensor_mode_type::abandon:
             Serial.println("imu is abnormal");
