@@ -33,6 +33,8 @@ void MainControlLoop::execute()
 
     clock_manager.execute();
 
+    MissionManager::transition_to_deployment();  
+
     //acs_monitor.execute_on_time();
     battery_monitor.execute_on_time();
     button_monitor.execute_on_time();
@@ -54,37 +56,27 @@ void MainControlLoop::execute()
     mission_manager.execute_on_time();
 
     Serial.print("mag ");
-    Serial.print(sfr::imu::mag_x);
+    Serial.print(sfr::imu::mag_x_average);
     Serial.print(" ");
-    Serial.print(sfr::imu::mag_y);
+    Serial.print(sfr::imu::mag_y_average);
     Serial.print(" ");
-    Serial.println(sfr::imu::mag_z);
+    Serial.println(sfr::imu::mag_z_average);
 
     Serial.print("gyro ");
-    Serial.print(sfr::imu::gyro_x);
+    Serial.print(sfr::imu::gyro_x_average);
     Serial.print(" ");
-    Serial.print(sfr::imu::gyro_y);
+    Serial.print(sfr::imu::gyro_y_average);
     Serial.print(" ");
-    Serial.println(sfr::imu::gyro_z);
+    Serial.println(sfr::imu::gyro_z_average);
 
     if(sfr::mission::mode == mission_mode_type::standby)
         Serial.println("standby");
     else if(sfr::mission::mode == mission_mode_type::safe)
         Serial.println("safe");
-    else
-        Serial.println("none");
-
-/*
-    switch(sfr::mission::mode){
-        case mission_mode_type::deployment:
-            Serial.println("deploy");
-            break;
-        case mission_mode_type::standby:
-            Serial.println("standby");
-            break;
-        case mission_mode_type::safe:
-            Serial.println("safe");
-            break;
-    }
-*/
+    else if(sfr::mission::mode == mission_mode_type::initialization)
+        Serial.println("initialization");
+    else if(sfr::mission::mode == mission_mode_type::low_power)
+        Serial.println("low_power");
+    else if(sfr::mission::mode == mission_mode_type::deployment)
+        Serial.println("deployment");
 }
