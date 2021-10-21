@@ -102,7 +102,7 @@ namespace sfr
         int timeout = 10 * constants::rockblock::one_minute;
         int start_time = 0;
         bool last_timed_out = false;
-        int num_downlinks = 0;
+        int num_downlinks = 2;
     }
     namespace imu
     {

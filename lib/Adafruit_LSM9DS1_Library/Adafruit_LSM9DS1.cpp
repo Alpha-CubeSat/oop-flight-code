@@ -39,6 +39,7 @@ Adafruit_LSM9DS1::Adafruit_LSM9DS1( int32_t sensorID ) {
 
 Adafruit_LSM9DS1::Adafruit_LSM9DS1( TwoWire* wireBus, int32_t sensorID ) {
     initI2C(wireBus, sensorID);
+    
 }
 
 Adafruit_LSM9DS1::Adafruit_LSM9DS1(int8_t xgcs, int8_t mcs, int32_t sensorID ) {

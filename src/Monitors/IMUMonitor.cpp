@@ -1,15 +1,21 @@
 #include "IMUMonitor.hpp"
 
+uint32_t start;
+uint32_t stop;
+bool began;
+
 IMUMonitor::IMUMonitor(unsigned int offset)
     : TimedControlTask<void>(offset)
 {
+    start = millis();
     imu = Adafruit_LSM9DS1(constants::imu::CSAG, constants::imu::CSM);
-    if (!imu.begin())
-    {
-        Serial.println("Didn't Initialize");
-        sfr::imu::check_sensor = false;
-        //sfr::rockblock::fault_report[constants::fault::imu_begin] = 1;
-    }
+    stop = millis();
+    began = imu.begin();
+    // if (imu.begin())
+    // {
+    //     sfr::imu::check_sensor = false;
+    //     //sfr::rockblock::fault_report[constants::fault::imu_begin] = 1;
+    // }
     imu.setupAccel(imu.LSM9DS1_ACCELRANGE_2G);
     imu.setupMag(imu.LSM9DS1_MAGGAIN_4GAUSS);
     imu.setupGyro(imu.LSM9DS1_GYROSCALE_245DPS);
@@ -48,8 +54,6 @@ void IMUMonitor::execute()
     // Get corrected IMU values
 
     imu.getEvent(&accel, &mag, &gyro, &temp);
-    Serial.print("mag: ");
-    Serial.println(mag.magnetic.x);
 
     // Save most recent readings
 
