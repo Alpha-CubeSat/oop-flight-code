@@ -243,30 +243,36 @@ void test_execute()
     // for constructor mission_manager
     test_transition_to_standby_helper();
     mission_manager.execute();
-    // fault_monitor_test_helper_fault1();
-    // fault_monitor_test_helper_fault2();
+    fault_monitor_test_helper_fault1();
+    fault_monitor_test_helper_fault2();
 
-    // //initialization mode now
-    // test_valid_dispatch_initialization();
+//     //initialization mode now
+//     test_valid_dispatch_initialization();
 
-    // // low_power mode now
-    // test_valid_dispatch_low_power();
+//     // low_power mode now
+//     test_valid_dispatch_low_power();
 
-    // // safe mode now
-    // test_valid_dispatch_safe();
+//     // safe mode now
+//     test_valid_dispatch_safe();
 
-    // //standby mode now
-    // test_valid_dispatch_standby();
+//     //standby mode now
+//     test_valid_dispatch_standby();
 
-    // //deployment mode now
-    // test_valid_dispatch_deployment_FirstIf();
-    // test_valid_dispatch_deployment_SecondIf();
+//     //deployment mode now
+//     test_valid_dispatch_deployment_FirstIf();
+//     test_valid_dispatch_deployment_SecondIf();
 }
 
 int test_mission_manager()
 {
     UNITY_BEGIN();
-    // RUN_TEST(test_valid_initialization);
+    RUN_TEST(test_valid_dispatch_initialization);
+    RUN_TEST(test_valid_dispatch_low_power);
+    RUN_TEST(test_valid_dispatch_safe);
+    RUN_TEST(test_valid_dispatch_standby);
+    RUN_TEST(test_valid_dispatch_deployment_FirstIf);
+    RUN_TEST(test_valid_dispatch_deployment_SecondIf);
+    // RUN_TEST();
     RUN_TEST(test_execute);
     return UNITY_END();
 }
