@@ -1,26 +1,7 @@
 #include "ACSControlTask.hpp"
 
 ACSControlTask::ACSControlTask(unsigned int offset) : TimedControlTask<void>(offset)
-{
-    //H-bridge standby pins
-    pinMode(constants::acs::STBXYpin, OUTPUT);
-    pinMode(constants::acs::STBZpin, OUTPUT);
-
-    //Pins for X-Torquer
-    pinMode(constants::acs::xPWMpin, OUTPUT);
-    pinMode(constants::acs::xout1, OUTPUT);
-    pinMode(constants::acs::xout2, OUTPUT);
-
-    //Pins for Y-Torquer
-    pinMode(constants::acs::yPWMpin, OUTPUT);
-    pinMode(constants::acs::yout1, OUTPUT);
-    pinMode(constants::acs::yout2, OUTPUT);
-
-    //Pins for Z-Torquer
-    pinMode(constants::acs::zPWMpin, OUTPUT);
-    pinMode(constants::acs::zout1, OUTPUT);
-    pinMode(constants::acs::zout2, OUTPUT);
-}
+{}
 
 void ACSControlTask::execute()
 {
