@@ -44,6 +44,8 @@ void PinControlTask::execute()
     Pins::setPinState(constants::acs::zout1, LOW);
     Pins::setPinState(constants::acs::zout2, LOW);
     Pins::setPinState(constants::camera::power_on_pin, LOW);
+    Pins::setPinState(constants::camera::rx, LOW);
+    Pins::setPinState(constants::camera::tx, LOW);
     Pins::setPinState(constants::acs::STBXYpin, LOW);
     Pins::setPinState(constants::acs::STBZpin, LOW);
     Pins::setPinState(constants::burnwire::first_pin, LOW);

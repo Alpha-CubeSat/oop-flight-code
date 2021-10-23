@@ -1,12 +1,6 @@
 #include "CameraControlTask.hpp"
 
-CameraControlTask::CameraControlTask(unsigned int offset): TimedControlTask<void>(offset), adaCam(&Serial5)
-{
-    pinMode(constants::camera::power_on_pin, OUTPUT);
-    Pins::setPinState(constants::camera::power_on_pin, LOW);  
-    Pins::setPinState(constants::camera::rx, LOW);
-    Pins::setPinState(constants::camera::tx, LOW);
-}
+CameraControlTask::CameraControlTask(unsigned int offset): TimedControlTask<void>(offset), adaCam(&Serial5){}
 
 void CameraControlTask::execute()
 {
