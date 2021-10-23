@@ -4,7 +4,7 @@
 
 void fault_monitor_test_helper_fault1();
 void fault_monitor_test_helper_fault2();
-/* 
+/*
 Helper test function for transition_to_standby
 */
 void test_transition_to_standby_helper()
@@ -21,7 +21,7 @@ void test_transition_to_standby_helper()
     fault_monitor_test_helper_fault2();
 }
 
-/* 
+/*
 Helper test function for transition_to_safe
 */
 void test_transition_to_safe_helper()
@@ -34,7 +34,7 @@ void test_transition_to_safe_helper()
     TEST_ASSERT_EQUAL(fault_mode_type::inactive, sfr::fault::mode);
 }
 
-/* 
+/*
 Helper test function for fault_monitor when fault_mode_type is active and when FAULT_1
 */
 void fault_monitor_test_helper_fault1()
@@ -65,7 +65,7 @@ void fault_monitor_test_helper_fault1()
     test_transition_to_safe_helper();
 }
 
-/* 
+/*
 Helper test function for fault_monitor when fault_mode_type is active and when FAULT_2
 */
 void fault_monitor_test_helper_fault2()
@@ -84,7 +84,7 @@ void fault_monitor_test_helper_fault2()
     test_transition_to_safe_helper();
 }
 
-/* 
+/*
 Test a valid initialization
 */
 void test_valid_initialization()
@@ -94,7 +94,7 @@ void test_valid_initialization()
     test_transition_to_standby_helper();
 }
 
-/* 
+/*
 Helper test function for transition_to_initialization
 */
 void test_transition_to_initialization_helper()
@@ -111,7 +111,7 @@ void test_transition_to_initialization_helper()
     fault_monitor_test_helper_fault2();
 }
 
-/* 
+/*
 Helper test function for transition_to_low_power
 */
 void test_transition_to_low_power_helper()
@@ -128,7 +128,7 @@ void test_transition_to_low_power_helper()
     fault_monitor_test_helper_fault2();
 }
 
-/* 
+/*
 Helper test function for transition_to_deployment
 */
 void test_transition_to_deployment_helper()
@@ -141,7 +141,7 @@ void test_transition_to_deployment_helper()
     TEST_ASSERT_EQUAL(temp_mode_type::inactive, sfr::temperature::mode);
 }
 
-/* 
+/*
 Test valid dispatch initialization
 */
 void test_valid_dispatch_initialization()
@@ -155,7 +155,7 @@ void test_valid_dispatch_initialization()
     test_transition_to_standby_helper();
 }
 
-/* 
+/*
 Test valid dispatch standby
 */
 void test_valid_dispatch_standby()
@@ -171,7 +171,7 @@ void test_valid_dispatch_standby()
     test_transition_to_low_power_helper();
 }
 
-/* 
+/*
 Test valid dispatch safe
 */
 void test_valid_dispatch_safe()
@@ -182,7 +182,7 @@ void test_valid_dispatch_safe()
     TEST_ASSERT_EQUAL(mission_mode_type::safe, sfr::mission::mode);
 }
 
-/* 
+/*
 Test valid dispatch low power
 */
 void test_valid_dispatch_low_power()
@@ -201,7 +201,7 @@ void test_valid_dispatch_low_power()
     test_transition_to_standby_helper();
 }
 
-/* 
+/*
 Test valid dispatch deployment
 */
 void test_valid_dispatch_deployment_FirstIf()
@@ -240,33 +240,33 @@ void test_execute()
     //test constructors
     MissionManager mission_manager(0);
     FaultMonitor fault_monitor(0);
-    //for constructor mission_manager
+    // for constructor mission_manager
     test_transition_to_standby_helper();
     mission_manager.execute();
-    fault_monitor_test_helper_fault1();
-    fault_monitor_test_helper_fault2();
+    // fault_monitor_test_helper_fault1();
+    // fault_monitor_test_helper_fault2();
 
-    //initialization mode now
-    test_valid_dispatch_initialization();
+    // //initialization mode now
+    // test_valid_dispatch_initialization();
 
-    // low_power mode now
-    test_valid_dispatch_low_power();
+    // // low_power mode now
+    // test_valid_dispatch_low_power();
 
-    // safe mode now
-    test_valid_dispatch_safe();
+    // // safe mode now
+    // test_valid_dispatch_safe();
 
-    //standby mode now
-    test_valid_dispatch_standby();
+    // //standby mode now
+    // test_valid_dispatch_standby();
 
-    //deployment mode now
-    test_valid_dispatch_deployment_FirstIf();
-    test_valid_dispatch_deployment_SecondIf();
+    // //deployment mode now
+    // test_valid_dispatch_deployment_FirstIf();
+    // test_valid_dispatch_deployment_SecondIf();
 }
 
 int test_mission_manager()
 {
     UNITY_BEGIN();
-    RUN_TEST(test_valid_initialization);
+    // RUN_TEST(test_valid_initialization);
     RUN_TEST(test_execute);
     return UNITY_END();
 }
@@ -287,3 +287,49 @@ void setup()
 
 void loop() {}
 #endif
+
+// #include <unity.h>
+// #include <MissionManager.hpp>
+// #include "Monitors/FaultMonitor.hpp"
+// void test_valid_initialization()
+// {
+//     MissionManager mission_manager(0);
+//     TEST_ASSERT_EQUAL(mission_mode_type::standby, sfr::mission::mode);
+// }
+
+// void test_execute()
+// {
+//     MissionManager mission_manager(0);
+//     FaultMonitor fault_monitor(0);
+//     TEST_ASSERT_EQUAL(mission_mode_type::standby, sfr::mission::mode);
+
+//     sfr::fault::fault_1 = sfr::fault::fault_1 | constants::fault::mag_x;
+//     mission_manager.execute();
+//     fault_monitor.execute();
+//     TEST_ASSERT_EQUAL(mission_mode_type::safe, sfr::mission::mode);
+// }
+
+// int test_mission_manager()
+// {
+//     UNITY_BEGIN();
+//     RUN_TEST(test_valid_initialization);
+//     RUN_TEST(test_execute);
+//     return UNITY_END();
+// }
+
+// #ifdef DESKTOP
+// int main()
+// {
+//     return test_mission_manager();
+// }
+// #else
+// #include <Arduino.h>
+// void setup()
+// {
+//     delay(2000);
+//     Serial.begin(9600);
+//     test_mission_manager();
+// }
+
+// void loop() {}
+// #endif
