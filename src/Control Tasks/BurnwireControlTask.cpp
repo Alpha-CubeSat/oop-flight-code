@@ -92,8 +92,8 @@ void BurnwireControlTask::execute()
             if (millis() - sfr::burnwire::start_time >= (uint32_t)sfr::burnwire::burn_time)
             {
                 sfr::burnwire::mode = burnwire_mode_type::delay;
-                digitalWrite(constants::burnwire::first_pin, LOW);
-                digitalWrite(constants::burnwire::second_pin, LOW);
+                Pins::setPinState(constants::burnwire::first_pin, LOW);
+                Pins::setPinState(constants::burnwire::second_pin, LOW);
                 sfr::burnwire::start_time = millis();
             }
             else
@@ -117,8 +117,8 @@ void BurnwireControlTask::execute()
             }
             else
             {
-                digitalWrite(constants::burnwire::first_pin, LOW);
-                digitalWrite(constants::burnwire::second_pin, LOW);
+                Pins::setPinState(constants::burnwire::first_pin, LOW);
+                Pins::setPinState(constants::burnwire::second_pin, LOW);
             }
         }
         else
@@ -144,13 +144,13 @@ void BurnwireControlTask::dispatch_burn()
     {
         if (sfr::burnwire::attempts % 2 == 0)
         {
-            digitalWrite(constants::burnwire::first_pin, HIGH);
-            digitalWrite(constants::burnwire::second_pin, LOW);
+            Pins::setPinState(constants::burnwire::first_pin, HIGH);
+            Pins::setPinState(constants::burnwire::second_pin, LOW);
         }
         else
         {
-            digitalWrite(constants::burnwire::first_pin, LOW);
-            digitalWrite(constants::burnwire::second_pin, HIGH);
+            Pins::setPinState(constants::burnwire::first_pin, LOW);
+            Pins::setPinState(constants::burnwire::second_pin, HIGH);
         }
         sfr::burnwire::attempts++;
     }
@@ -159,8 +159,8 @@ void BurnwireControlTask::dispatch_burn()
 void BurnwireControlTask::transition_to_standby()
 {
     sfr::burnwire::mode = burnwire_mode_type::standby;
-    digitalWrite(constants::burnwire::first_pin, LOW);
-    digitalWrite(constants::burnwire::second_pin, LOW);
+    Pins::setPinState(constants::burnwire::first_pin, LOW);
+    Pins::setPinState(constants::burnwire::second_pin, LOW);
     sfr::burnwire::fire = false;
     sfr::burnwire::arm = false;
     sfr::burnwire::attempts = 0;

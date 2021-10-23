@@ -8,12 +8,17 @@ PinControlTask pin_control_task;
 void setup(){
     //delay for 2 hours
     //delay(7200000);
-    pin_control_task.execute();  
+    //pin_control_task.execute();  
+    pinMode(14,OUTPUT);
+    Pins::setPinState(14,LOW);
     delay(2000);
+    Pins::setPinState(14,HIGH);
+    delay(500);
+    Pins::setPinState(14,LOW);
 }
 
 void loop(){
-    mcl.execute();
+    //mcl.execute();
 }
 #endif
 

@@ -3,7 +3,7 @@
 void Pins::setPinState(int pinName, int pinState)
 {
   sfr::pins::pinMap[pinName] = pinState;
-  digitalWrite(pinName, LOW);
+  digitalWrite(pinName, pinState);
 }
 
 int Pins::getPinState(int pinName)
