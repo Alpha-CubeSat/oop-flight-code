@@ -153,9 +153,9 @@ namespace sfr
     namespace acs
     {
         acs_mode_type mode = acs_mode_type::off;
-        int current1 = 0;
-        int current2 = 0;
-        int current3 = 0;
+        float current1 = 0;
+        float current2 = 0;
+        float current3 = 0;
         simple_acs_type mag = simple_acs_type::x;
         unsigned long max_no_communication = 0;
     }

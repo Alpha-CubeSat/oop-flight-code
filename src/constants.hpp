@@ -426,6 +426,10 @@ namespace constants
 
         constexpr int STBXYpin = 9;
         constexpr int STBZpin = 27;
+
+        constexpr int xtorqorder = 0;
+        constexpr int ytorqorder = 0;
+        constexpr int ztorqorder = 0;
     }
     namespace battery
     {
