@@ -449,6 +449,7 @@ namespace constants
         constexpr uint8_t gyro_x = 1 << 3;
         constexpr uint8_t gyro_y = 1 << 4;
         constexpr uint8_t gyro_z = 1 << 5;
+        constexpr uint8_t init = 1 << 6;
 
         //fault 2
         constexpr uint8_t temp_c = 1 << 1;

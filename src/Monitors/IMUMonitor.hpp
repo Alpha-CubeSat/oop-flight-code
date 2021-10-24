@@ -12,6 +12,10 @@ class IMUMonitor : public TimedControlTask<void>{
         IMUMonitor(unsigned int offset);
         void execute();
         Adafruit_LSM9DS1 imu;
+
+        static void transition_to_normal();
+        static void transition_to_abnormal();
+        static void transition_to_abandon();
 };
 
 #endif
