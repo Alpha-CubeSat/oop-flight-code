@@ -11,7 +11,9 @@ void ACSControlTask::execute()
 }
 
 int ACSControlTask::current2PWM(float current) {
-  // returns PWM value
+    if (int(633.5*pow(current,0.6043)+8.062) < 0) return 0;
+    else if (int(633.5*pow(current,0.6043)+8.062) > 255) return 255;
+    else return int(633.5*pow(current,0.6043)+8.062);
 }
 
 void ACSControlTask::ACSWrite(int torqorder,  float current,  int out1,  int out2, int PWMpin) {
