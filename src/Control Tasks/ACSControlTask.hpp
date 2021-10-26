@@ -10,7 +10,8 @@ public:
     void execute();
 
 private:
-    void ACSWrite(int torqorder, int current, int out1, int out2, int PWMpin);
+    void ACSWrite(int torqorder,  float current,  int out1,  int out2, int PWMpin);
+    int current2PWM(float current);
 };
 
 #endif

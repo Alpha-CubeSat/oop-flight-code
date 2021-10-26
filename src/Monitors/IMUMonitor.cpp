@@ -173,6 +173,7 @@ void IMUMonitor::transition_to_abnormal() {
     if(!began){
         sfr::fault::fault_1 = sfr::fault::fault_1 | constants::fault::init;
     }
+<<<<<<< HEAD
     sfr::fault::check_mag_x = false;
     sfr::fault::check_mag_y = false;
     sfr::fault::check_mag_z = false;
@@ -181,6 +182,45 @@ void IMUMonitor::transition_to_abnormal() {
     sfr::fault::check_gyro_z = false;
     sfr::fault::check_acc_x = false;
     sfr::fault::check_acc_y = false;
+=======
+    if (sfr::imu::gyro_y_buffer.size() > constants::sensor::collect)
+    {
+        sfr::imu::gyro_y_buffer.pop_back();
+    }
+    if (sfr::imu::gyro_z_buffer.size() > constants::sensor::collect)
+    {
+        sfr::imu::gyro_z_buffer.pop_back();
+    }
+
+    // Calculate sums
+
+    float mag_x_sum = std::accumulate(sfr::imu::mag_x_buffer.begin(), sfr::imu::mag_x_buffer.end(), 0.0);
+    float mag_y_sum = std::accumulate(sfr::imu::mag_y_buffer.begin(), sfr::imu::mag_y_buffer.end(), 0.0);
+    float mag_z_sum = std::accumulate(sfr::imu::mag_z_buffer.begin(), sfr::imu::mag_z_buffer.end(), 0.0);
+    float gyro_x_sum = std::accumulate(sfr::imu::gyro_x_buffer.begin(), sfr::imu::gyro_x_buffer.end(), 0.0);
+    float gyro_y_sum = std::accumulate(sfr::imu::gyro_y_buffer.begin(), sfr::imu::gyro_y_buffer.end(), 0.0);
+    float gyro_z_sum = std::accumulate(sfr::imu::gyro_z_buffer.begin(), sfr::imu::gyro_z_buffer.end(), 0.0);
+
+    // Calculate averages
+
+    sfr::imu::mag_x_average = mag_x_sum / sfr::imu::mag_x_buffer.size();
+    sfr::imu::mag_y_average = mag_y_sum / sfr::imu::mag_y_buffer.size();
+    sfr::imu::mag_z_average = mag_z_sum / sfr::imu::mag_z_buffer.size();
+
+    sfr::imu::gyro_x_average = gyro_x_sum / sfr::imu::gyro_x_buffer.size();
+    sfr::imu::gyro_y_average = gyro_y_sum / sfr::imu::gyro_y_buffer.size();
+    sfr::imu::gyro_z_average = gyro_z_sum / sfr::imu::gyro_z_buffer.size();
+
+    #ifdef VERBOSE
+    Serial.print("Mag: "); Serial.print(sfr::imu::mag_x_average); Serial.print(",");
+    Serial.print(sfr::imu::mag_y_average); Serial.print(",");
+    Serial.print(sfr::imu::mag_z_average); Serial.println(" Gauss");
+    Serial.print("Gyro: "); Serial.print(sfr::imu::gyro_x_average); Serial.print(",");
+    Serial.print(sfr::imu::gyro_y_average); Serial.print(",");
+    Serial.print(sfr::imu::gyro_z_average); Serial.println(" deg/s");
+    #endif
+    uint32_t end = micros();
+>>>>>>> main
 }
 
 void IMUMonitor::transition_to_abandon() {

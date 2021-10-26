@@ -23,8 +23,10 @@ namespace sfr
             {constants::acs::STBXYpin, LOW},
             {constants::acs::STBZpin, LOW},
             {constants::battery::voltage_value_pin, LOW},
-            {constants::battery::allow_measurement_pin, LOW},
+            {constants::battery::allow_measurement_pin, HIGH},
             {constants::camera::power_on_pin, LOW},
+            {constants::camera::rx, LOW},
+            {constants::camera::tx, LOW},
             {constants::button::button_pin, LOW}};
     }
     namespace photoresistor
@@ -154,9 +156,9 @@ namespace sfr
     namespace acs
     {
         acs_mode_type mode = acs_mode_type::off;
-        int current1 = 0;
-        int current2 = 0;
-        int current3 = 0;
+        float current1 = 0;
+        float current2 = 0;
+        float current3 = 0;
         simple_acs_type mag = simple_acs_type::x;
         unsigned long max_no_communication = 0;
     }

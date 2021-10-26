@@ -154,9 +154,9 @@ namespace sfr
     namespace acs
     {
         extern acs_mode_type mode;
-        extern int current1;
-        extern int current2;
-        extern int current3;
+        extern float current1;
+        extern float current2;
+        extern float current3;
         extern simple_acs_type mag;
         extern unsigned long max_no_communication;
     }
