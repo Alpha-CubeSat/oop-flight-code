@@ -122,14 +122,12 @@ bool Adafruit_LSM9DS1::begin()
   while(!Serial);
 
   uint8_t id = read8(XGTYPE, LSM9DS1_REGISTER_WHO_AM_I_XG);
-  Serial.print ("XG whoami: 0x"); Serial.println(id, HEX);
-  Serial.print("Should be: 0x"); Serial.println(LSM9DS1_XG_ID, HEX);
+  //Serial.print ("XG whoami: 0x"); Serial.println(id, HEX);
   if (id != LSM9DS1_XG_ID)
     return false;
 
   id = read8(MAGTYPE, LSM9DS1_REGISTER_WHO_AM_I_M);
-  Serial.print ("MAG whoami: 0x"); Serial.println(id, HEX);
-  Serial.print("Should be: 0x"); Serial.println(LSM9DS1_MAG_ID, HEX);
+  //Serial.print ("MAG whoami: 0x"); Serial.println(id, HEX);
   if (id != LSM9DS1_MAG_ID)
     return false;
 

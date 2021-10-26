@@ -33,6 +33,10 @@ void MainControlLoop::execute()
 
     clock_manager.execute();
 
+    Serial.print("IMU init: ");
+    began ? Serial.println("Success") : Serial.println("Failed");
+    Serial.print("Time taken: "); Serial.println(stop-start);
+
     //acs_monitor.execute_on_time();
     battery_monitor.execute_on_time();
     button_monitor.execute_on_time();

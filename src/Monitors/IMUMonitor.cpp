@@ -7,15 +7,16 @@ bool began;
 IMUMonitor::IMUMonitor(unsigned int offset)
     : TimedControlTask<void>(offset)
 {
-    start = millis();
     imu = Adafruit_LSM9DS1(constants::imu::CSAG, constants::imu::CSM);
-    stop = millis();
+    start = millis();
     if (!imu.begin())
     {
+        stop = millis();
         began = 0;
         transition_to_abnormal();
         //sfr::rockblock::fault_report[constants::fault::imu_begin] = 1;
     } else {
+        stop = millis();
         began = 1;
     }
     imu.setupAccel(imu.LSM9DS1_ACCELRANGE_2G);
@@ -29,10 +30,9 @@ void IMUMonitor::execute()
         sfr::imu::mode = sensor_mode_type::abandon;
     }
     // the constructor should be re-called if the check_sensor goes back to true?
-
     switch(sfr::imu::mode) {
         case sensor_mode_type::normal:
-            Serial.println("imu is normal");
+            Serial.println("IMU is normal");
             uint32_t begin = micros();
 
             sensors_event_t accel, mag, gyro, temp;
@@ -169,20 +169,14 @@ void IMUMonitor::transition_to_abnormal() {
     // updates imu mode to abnormal
     // triggers transition to safe mode by tripping fault
     // all check flags are false
+    Serial.print("IMU init: ");
+    began ? Serial.println("Success") : Serial.println("Failed");
+    Serial.print("Time taken: "); Serial.println(stop-start);
+
     sfr::imu::mode = sensor_mode_type::abnormal;
     if(!began){
         sfr::fault::fault_1 = sfr::fault::fault_1 | constants::fault::init;
     }
-<<<<<<< HEAD
-    sfr::fault::check_mag_x = false;
-    sfr::fault::check_mag_y = false;
-    sfr::fault::check_mag_z = false;
-    sfr::fault::check_gyro_x = false;
-    sfr::fault::check_gyro_y = false;
-    sfr::fault::check_gyro_z = false;
-    sfr::fault::check_acc_x = false;
-    sfr::fault::check_acc_y = false;
-=======
     if (sfr::imu::gyro_y_buffer.size() > constants::sensor::collect)
     {
         sfr::imu::gyro_y_buffer.pop_back();
@@ -220,7 +214,6 @@ void IMUMonitor::transition_to_abnormal() {
     Serial.print(sfr::imu::gyro_z_average); Serial.println(" deg/s");
     #endif
     uint32_t end = micros();
->>>>>>> main
 }
 
 void IMUMonitor::transition_to_abandon() {
