@@ -42,7 +42,6 @@ void IMUMonitor::execute()
     switch(mode) {
         case sensor_mode_type::normal:
             Serial.println("IMU is normal");
-            uint32_t begin = micros();
 
             sensors_event_t accel, mag, gyro, temp;
             imu.getEvent(&accel, &mag, &gyro, &temp);
@@ -140,7 +139,6 @@ void IMUMonitor::execute()
             sfr::imu::gyro_x_average = gyro_x_sum / sfr::imu::gyro_x_buffer.size();
             sfr::imu::gyro_y_average = gyro_y_sum / sfr::imu::gyro_y_buffer.size();
             sfr::imu::gyro_z_average = gyro_z_sum / sfr::imu::gyro_z_buffer.size();
-            uint32_t end = micros();
             break;
         case sensor_mode_type::abnormal:
             Serial.println("imu is abnormal");
