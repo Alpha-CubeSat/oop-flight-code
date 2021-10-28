@@ -27,10 +27,10 @@ IMUMonitor::IMUMonitor(unsigned int offset)
 
 void IMUMonitor::execute()
 {
-    if(sfr::imu::check_sensor == false){
-        sfr::imu::mode = sensor_mode_type::abandon;
+    if(check_sensor == false){
+        mode = sensor_mode_type::abandon;
     }
-    if(sfr::imu::check_sensor == true && sfr::imu::mode == sensor_mode_type::abandon){
+    if(check_sensor == true && mode == sensor_mode_type::abandon){
         if(!imu.begin()){
             delay(1000);
         } else {
@@ -39,7 +39,7 @@ void IMUMonitor::execute()
         }
     }
 
-    switch(sfr::imu::mode) {
+    switch(mode) {
         case sensor_mode_type::normal:
             Serial.println("IMU is normal");
             uint32_t begin = micros();
@@ -162,7 +162,7 @@ void IMUMonitor::execute()
 void IMUMonitor::transition_to_normal() {
     // updates imu mode to normal
     // all check flags are reset to true
-    sfr::imu::mode = sensor_mode_type::normal;
+    mode = sensor_mode_type::normal;
     // sfr::fault::fault1 = 0;
     sfr::fault::check_mag_x = true;
     sfr::fault::check_mag_y = true;
@@ -182,7 +182,7 @@ void IMUMonitor::transition_to_abnormal() {
     began ? Serial.println("Success") : Serial.println("Failed");
     Serial.print("Time taken: "); Serial.println(stop-start);
 
-    sfr::imu::mode = sensor_mode_type::abnormal;
+    mode = sensor_mode_type::abnormal;
     if(!began){
         sfr::fault::fault_1 = sfr::fault::fault_1 | constants::fault::init;
     }
