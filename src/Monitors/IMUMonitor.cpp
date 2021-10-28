@@ -1,5 +1,6 @@
 #include "IMUMonitor.hpp"
 
+// make sfr values?
 uint32_t start;
 uint32_t stop;
 bool began;
@@ -29,7 +30,15 @@ void IMUMonitor::execute()
     if(sfr::imu::check_sensor == false){
         sfr::imu::mode = sensor_mode_type::abandon;
     }
-    // the constructor should be re-called if the check_sensor goes back to true?
+    if(sfr::imu::check_sensor == true && sfr::imu::mode == sensor_mode_type::abandon){
+        if(!imu.begin()){
+            delay(1000);
+        } else {
+            began = 1;
+            transition_to_normal();
+        }
+    }
+
     switch(sfr::imu::mode) {
         case sensor_mode_type::normal:
             Serial.println("IMU is normal");
