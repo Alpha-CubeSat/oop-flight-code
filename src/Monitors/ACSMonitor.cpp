@@ -1,11 +1,13 @@
 #include "ACSMonitor.hpp"
 
-ACSMonitor::ACSMonitor(unsigned int offset): TimedControlTask<void>(offset){
+ACSMonitor::ACSMonitor(unsigned int offset) : TimedControlTask<void>(offset)
+{
     rtObj.initialize();
 }
 
-void ACSMonitor::execute(){
-    rtObj.rtU.angularvelocity[0] = sfr::imu::gyro_x * 3.14159 / 180.0; 
+void ACSMonitor::execute()
+{
+    rtObj.rtU.angularvelocity[0] = sfr::imu::gyro_x * 3.14159 / 180.0;
     rtObj.rtU.angularvelocity[1] = sfr::imu::gyro_y * 3.14159 / 180.0;
     rtObj.rtU.angularvelocity[2] = sfr::imu::gyro_z * 3.14159 / 180.0;
     rtObj.rtU.Bfield_body[0] = sfr::imu::mag_x;
@@ -39,5 +41,4 @@ void ACSMonitor::execute(){
             sfr::acs::current3 = 3;
             break;
     }*/
-
 }

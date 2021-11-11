@@ -4,14 +4,14 @@
 #include "sfr.hpp"
 #include "constants.hpp"
 #include "Control Tasks/TimedControlTask.hpp"
+#include "ControlTaskExecute.hpp"
 
+class TemperatureControlTask : public TimedControlTask<void>, public virtual ControlTaskExecute
+{
 
-class TemperatureControlTask: public TimedControlTask<void>{
-
-    public:
-        TemperatureControlTask(unsigned int offset);
-        void execute();
-       
+public:
+    TemperatureControlTask(unsigned int offset);
+    void execute();
 };
 
 #endif
