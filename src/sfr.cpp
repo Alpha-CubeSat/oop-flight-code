@@ -54,6 +54,7 @@ namespace sfr
         bool photo_taken_sd_failed = false;
         bool take_photo = false;
         bool turn_on = false;
+        uint8_t progress = 0;
         bool turn_off = false;
         bool powered = false;
         uint8_t buffer[255] = {0};

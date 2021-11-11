@@ -28,13 +28,21 @@ void CameraControlTask::execute()
         
     if (sfr::camera::turn_on == true && sfr::camera::powered == false) {
         Pins::setPinState(constants::camera::power_on_pin, HIGH);
-        if (adaCam.begin()) {
+        if (adaCam.begin(sfr::camera::progress)) {
+            sfr::camera::progress++;
+            if (sfr::camera::progress < 4) {
+                #ifdef VERBOSE
+                Serial.println("camera initialization in progress");
+                #endif
+            } 
+            else {
             #ifdef VERBOSE
             Serial.println("turned on camera");
             #endif
             adaCam.setImageSize(VC0706_160x120);
             sfr::camera::powered = true;
             sfr::camera::turn_on = false;
+            }
         }
     }
         

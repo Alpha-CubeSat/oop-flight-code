@@ -57,6 +57,7 @@ namespace sfr
         extern bool photo_taken_sd_failed;
         extern bool take_photo;
         extern bool turn_on;
+        extern uint8_t progress;
         extern bool turn_off;
         extern bool powered;
         extern uint8_t buffer[255];
