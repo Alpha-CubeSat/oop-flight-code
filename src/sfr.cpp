@@ -109,7 +109,9 @@ namespace sfr
     namespace imu
     {
         sensor_mode_type mode = sensor_mode_type::normal;
-        boolean check_sensor = true;
+        bool check_sensor = true;
+        int retry_attempts = 0;
+        int max_retry_attempts = 10;
 
         float mag_x = 0.0;
         float mag_y = 0.0;

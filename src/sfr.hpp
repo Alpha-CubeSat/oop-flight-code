@@ -114,6 +114,8 @@ namespace sfr
     {
         extern sensor_mode_type mode;
         extern bool check_sensor;
+        extern int retry_attempts;
+        extern int max_retry_attempts;
         
         extern float mag_x;
         extern float mag_y;

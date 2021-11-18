@@ -15,8 +15,12 @@ class IMUMonitor : public TimedControlTask<void>, public ISensorMonitor{
         Adafruit_LSM9DS1 imu;
 
         void transition_to_normal();
-        void transition_to_abnormal();
+        void transition_to_abnormal_init();
+        void transition_to_abnormal_readings();
+        void transition_to_retry();
         void transition_to_abandon();
+    private:
+        void capture_imu_values();
 };
 
 #endif

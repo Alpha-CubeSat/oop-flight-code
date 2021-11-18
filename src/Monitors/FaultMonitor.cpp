@@ -7,21 +7,27 @@ void FaultMonitor::execute(){
     if(sfr::fault::mode == fault_mode_type::active){
         //FAULT_1
         if((sfr::imu::mag_x > constants::imu::max_mag_x || sfr::imu::mag_x < constants::imu::min_mag_x) && sfr::fault::check_mag_x){
+            IMUMonitor::transition_to_abnormal_readings()
             sfr::fault::fault_1 = sfr::fault::fault_1 | constants::fault::mag_x;
         }
         if((sfr::imu::mag_y > constants::imu::max_mag_y || sfr::imu::mag_y < constants::imu::min_mag_y) && sfr::fault::check_mag_y){
+            IMUMonitor::transition_to_abnormal_readings()
             sfr::fault::fault_1 = sfr::fault::fault_1 | constants::fault::mag_y;
         }
         if((sfr::imu::mag_z > constants::imu::max_mag_z || sfr::imu::mag_z < constants::imu::min_mag_z) && sfr::fault::check_mag_z){
+            IMUMonitor::transition_to_abnormal_readings()
             sfr::fault::fault_1 = sfr::fault::fault_1 | constants::fault::mag_z;
         }
         if((sfr::imu::gyro_x > constants::imu::max_gyro_x || sfr::imu::gyro_x < constants::imu::min_gyro_x) && sfr::fault::check_gyro_x){
+            IMUMonitor::transition_to_abnormal_readings()
             sfr::fault::fault_1 = sfr::fault::fault_1 | constants::fault::gyro_x;
         }
         if((sfr::imu::gyro_y > constants::imu::max_gyro_y || sfr::imu::gyro_y < constants::imu::min_gyro_y) && sfr::fault::check_gyro_y){
+            IMUMonitor::transition_to_abnormal_readings()
             sfr::fault::fault_1 = sfr::fault::fault_1 | constants::fault::gyro_y;
         }
         if((sfr::imu::gyro_z > constants::imu::max_gyro_z || sfr::imu::gyro_z < constants::imu::min_gyro_z) && sfr::fault::check_gyro_z){
+            IMUMonitor::transition_to_abnormal_readings()
             sfr::fault::fault_1 = sfr::fault::fault_1 | constants::fault::gyro_z;
         }
 /*
