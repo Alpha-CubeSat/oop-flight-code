@@ -1,20 +1,12 @@
 #include "IMUMonitor.hpp"
 
-// make sfr values?
-uint32_t start;
-uint32_t stop;
-
 IMUMonitor::IMUMonitor(unsigned int offset)
     : TimedControlTask<void>(offset)
 {
     imu = Adafruit_LSM9DS1(constants::imu::CSAG, constants::imu::CSM);
-    start = millis();
     if (!imu.begin())
     {
-        stop = millis();
         transition_to_abnormal_init();
-    } else {
-        stop = millis();
     }
     imu.setupAccel(imu.LSM9DS1_ACCELRANGE_2G);
     imu.setupMag(imu.LSM9DS1_MAGGAIN_4GAUSS);

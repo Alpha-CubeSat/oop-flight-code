@@ -4,10 +4,6 @@
 #include "ISensorMonitor.hpp"
 #include "sfr.hpp"
 
-extern uint32_t start;
-extern uint32_t stop;
-extern bool began;
-
 class IMUMonitor : public TimedControlTask<void>, public ISensorMonitor{
     public:
         IMUMonitor(unsigned int offset);
