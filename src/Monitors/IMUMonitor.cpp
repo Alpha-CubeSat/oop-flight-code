@@ -17,6 +17,10 @@ void IMUMonitor::execute()
 {
     switch(sfr::imu::mode) {
         case sensor_mode_type::normal:
+            if(sfr::fault::fault_1 > 0){
+                transition_to_abnormal_readings();
+                break;
+            }
             Serial.println("IMU is in Normal Mode");
             capture_imu_values();
             break;
@@ -29,13 +33,16 @@ void IMUMonitor::execute()
             break;
         case sensor_mode_type::retry:
             Serial.println("IMU is in Retry Mode");
+            bool began = false;
             for(int retry_attempts=0; retry_attempts<sfr::imu::max_retry_attempts; retry_attempts++){
                 if(imu.begin()){
                     transition_to_normal();
+                    began = true;
                     break;
                 }
             }
-            transition_to_abnormal_init();
+            if(began==false)
+                transition_to_abnormal_init();
             break;
         case sensor_mode_type::abandon:
             Serial.println("IMU is in Abandon Mode");
