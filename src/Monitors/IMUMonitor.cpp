@@ -15,7 +15,7 @@ IMUMonitor::IMUMonitor(unsigned int offset)
 
 void IMUMonitor::execute()
 {
-    switch(mode) {
+    switch(sfr::imu::mode) {
         case sensor_mode_type::normal:
             Serial.println("IMU is in Normal Mode");
             capture_imu_values();
@@ -29,18 +29,16 @@ void IMUMonitor::execute()
             break;
         case sensor_mode_type::retry:
             Serial.println("IMU is in Retry Mode");
-            if(sfr::imu::retry_attempts < sfr::imu::max_retry_attempts){
-                if(!imu.begin()){
-                    sfr::imu::retry_attempts++;
-                } else {
+            for(int retry_attempts=0; retry_attempts<sfr::imu::max_retry_attempts; retry_attempts++){
+                if(imu.begin()){
                     transition_to_normal();
+                    break;
                 }
-            } else {
-                transition_to_abnormal_init();
             }
+            transition_to_abnormal_init();
             break;
         case sensor_mode_type::abandon:
-            Serial.println("IMU is in Abandon Mode")
+            Serial.println("IMU is in Abandon Mode");
             break;
     }
 }
@@ -149,8 +147,7 @@ void IMUMonitor::transition_to_normal() {
     // updates imu mode to normal
     // faults are cleared
     // all check flags are set to true
-    mode = sensor_mode_type::normal;
-    sfr::fault::fault1 = 0;
+    sfr::imu::mode = sensor_mode_type::normal;
     sfr::fault::check_mag_x = true;
     sfr::fault::check_mag_y = true;
     sfr::fault::check_mag_z = true;
@@ -165,7 +162,7 @@ void IMUMonitor::transition_to_abnormal_init() {
     // updates imu mode to abnormal_init
     // triggers transition to safe mode by tripping fault
     // all check flags are set to false
-    sfr::imu::mode = sensor_mode_type abnormal_init;
+    sfr::imu::mode = sensor_mode_type::abnormal_init;
     sfr::fault::fault_1 = sfr::fault::fault_1 | constants::fault::init;
     sfr::fault::check_mag_x = false;
     sfr::fault::check_mag_y = false;
@@ -181,19 +178,19 @@ void IMUMonitor::transition_to_abnormal_readings() {
     // updates imu mode to abnormal_readings
     // faults are tripped in FaultMonitor
     // all check flags are already true since mode abnormal_readings always follows mode normal
-    sfr::imu::mode = sensor_mode_type abnormal_readings;
+    sfr::imu::mode = sensor_mode_type::abnormal_readings;
 }
 
 void IMUMonitor::transition_to_retry() {
     // updates imu mode to retry
     // this mode will call either transition_to_normal or transition_to_abnormal_init, which will change flags
-    sfr::imu::mode = sensor_mode_type retry;
+    sfr::imu::mode = sensor_mode_type::retry;
 }
 
 void IMUMonitor::transition_to_abandon() {
     // updates imu mode to abandon
     // all check flags are set to false
-    sfr::imu::mode = sensor_mode_type abandon;
+    sfr::imu::mode = sensor_mode_type::abandon;
     sfr::fault::check_mag_x = false;
     sfr::fault::check_mag_y = false;
     sfr::fault::check_mag_z = false;
