@@ -442,16 +442,20 @@ void Adafruit_VC0706::sendCommand(uint8_t cmd, uint8_t args[], uint8_t argn,  ui
       switch (progress){
       case '0':
         hwSerial->print(0x56, BYTE);
+        Serial.println("writing 0x")
         break;
       case '1':
         hwSerial->print(serialNum, BYTE);
+        Serial.println("writing serialNum")
         break;
       case '2':
         hwSerial->print(cmd, BYTE);
+        Serial.println("writing cmd")
         break;
       case '3':
         for (uint8_t i=0; i<argn; i++) {
-          hwSerial->print(args[i], BYTE);
+          hwSerial->prinln(args[i], BYTE);
+          Serial.println("args")
           //Serial.print(" 0x");
           //Serial.print(args[i], HEX);
         }

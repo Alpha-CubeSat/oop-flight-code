@@ -52,4 +52,6 @@ void MainControlLoop::execute()
     temperature_control_task.execute_on_time();
 
     mission_manager.execute_on_time();
+    //Serial.println(sfr::camera::turn_on);
+   //Serial.println(sfr::camera::powered);
 }

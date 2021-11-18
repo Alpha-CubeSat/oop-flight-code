@@ -11,7 +11,7 @@ RockblockSimulator::RockblockSimulator() {
     flush_stage = 0;
     bin_transmit = 0;
     signal = 5;
-    // insert("00000000000000000000");
+    //insert("01000000000000000000");
     // insert("01000100000000000000");
     // insert("02000100000000000000");
 }
