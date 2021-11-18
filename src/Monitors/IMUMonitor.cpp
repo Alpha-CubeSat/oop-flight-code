@@ -15,35 +15,33 @@ IMUMonitor::IMUMonitor(unsigned int offset)
 
 void IMUMonitor::execute()
 {
-    if(sfr::imu::check_sensor == true){
-        switch(mode) {
-            case sensor_mode_type::normal:
-                Serial.println("IMU is in Normal Mode");
-                capture_imu_values();
-                break;
-            case sensor_mode_type::abnormal_init:
-                Serial.println("IMU is in Abnormal Initialization Mode");
-                break;
-            case sensor_mode_type::abnormal_readings:
-                Serial.println("IMU is in Abnormal");
-                capture_imu_values();
-                break;
-            case sensor_mode_type::retry:
-                Serial.println("IMU is in Retry Mode");
-                if(sfr::imu::retry_attempts < sfr::imu::max_retry_attempts){
-                    if(!imu.begin()){
-                        sfr::imu::retry_attempts++;
-                    } else {
-                        transition_to_normal();
-                    }
+    switch(mode) {
+        case sensor_mode_type::normal:
+            Serial.println("IMU is in Normal Mode");
+            capture_imu_values();
+            break;
+        case sensor_mode_type::abnormal_init:
+            Serial.println("IMU is in Abnormal Initialization Mode");
+            break;
+        case sensor_mode_type::abnormal_readings:
+            Serial.println("IMU is in Abnormal");
+            capture_imu_values();
+            break;
+        case sensor_mode_type::retry:
+            Serial.println("IMU is in Retry Mode");
+            if(sfr::imu::retry_attempts < sfr::imu::max_retry_attempts){
+                if(!imu.begin()){
+                    sfr::imu::retry_attempts++;
                 } else {
-                    transition_to_abnormal_init();
+                    transition_to_normal();
                 }
-                break;
-            case sensor_mode_type::abandon:
-                Serial.println("IMU is in Abandon Mode")
-                break;
-        }
+            } else {
+                transition_to_abnormal_init();
+            }
+            break;
+        case sensor_mode_type::abandon:
+            Serial.println("IMU is in Abandon Mode")
+            break;
     }
 }
 
