@@ -55,6 +55,8 @@ namespace sfr
         bool take_photo = false;
         bool turn_on = false;
         uint8_t progress = 0;
+        uint32_t start_time = 0;
+        bool init = true;
         bool turn_off = false;
         bool powered = false;
         uint8_t buffer[255] = {0};

@@ -49,9 +49,12 @@ void MainControlLoop::execute()
     burnwire_control_task.execute_on_time();
     camera_control_task.execute_on_time();
     rockblock_control_task.execute_on_time();
-    temperature_control_task.execute_on_time();
+    //temperature_control_task.execute_on_time();
 
     mission_manager.execute_on_time();
-    //Serial.println(sfr::camera::turn_on);
-   //Serial.println(sfr::camera::powered);
+    
+    Serial.println("powered: " + sfr::camera::powered);
+    if (millis() > 10000) {
+        sfr::camera::turn_on = true;
+    }
 }

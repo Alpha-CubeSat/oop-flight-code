@@ -383,8 +383,8 @@ boolean Adafruit_VC0706::runCommand(uint8_t cmd, uint8_t *args, uint8_t argn,
         return false;
       if (! verifyResponse(cmd))
         return false;
-      return true;
     }
+    return true;
   }
 }
 

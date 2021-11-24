@@ -58,6 +58,8 @@ namespace sfr
         extern bool take_photo;
         extern bool turn_on;
         extern uint8_t progress;
+        extern bool init;
+        extern uint32_t start_time;
         extern bool turn_off;
         extern bool powered;
         extern uint8_t buffer[255];
