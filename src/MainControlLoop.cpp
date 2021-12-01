@@ -53,8 +53,9 @@ void MainControlLoop::execute()
 
     mission_manager.execute_on_time();
     
-    Serial.println("powered: " + sfr::camera::powered);
-    if (millis() > 10000) {
-        sfr::camera::turn_on = true;
-    }
+    Serial.print("turn on: " );
+    Serial.println(sfr::camera::turn_on);
+    Serial.print("powered: ");
+    Serial.println(sfr::camera::powered);
+//measure time of init
 }

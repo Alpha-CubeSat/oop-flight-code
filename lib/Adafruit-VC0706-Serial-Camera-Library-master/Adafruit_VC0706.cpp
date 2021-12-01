@@ -380,6 +380,8 @@ boolean Adafruit_VC0706::runCommand(uint8_t cmd, uint8_t *args, uint8_t argn,
     sendCommand(cmd, args, argn, progress, init);
     if (progress == 3){ //Question: is this logic correct?
       if (readResponse(resplen, 200) != resplen) 
+        Serial.println(readResponse(resplen, 200));
+        Serial.println("arghhhh");
         return false;
       if (! verifyResponse(cmd))
         return false;
@@ -416,7 +418,8 @@ void Adafruit_VC0706::sendCommand(uint8_t cmd, uint8_t args[], uint8_t argn,  ui
     else
 #endif
   {
-#if ARDUINO >= 100
+/*#if ARDUINO >= 100
+  if (!init) {
     hwSerial->write((byte)0x56);
     hwSerial->write((byte)serialNum);
     hwSerial->write((byte)cmd);
@@ -426,6 +429,44 @@ void Adafruit_VC0706::sendCommand(uint8_t cmd, uint8_t args[], uint8_t argn,  ui
       //Serial.print(" 0x");
       //Serial.print(args[i], HEX);
     }
+  }
+  else { //resetting camera?
+    Serial.println(progress);
+    switch (progress){
+      case 0:
+        Serial.println("writing 0x");
+        hwSerial->write((byte)0x56);
+        Serial.println("writing 0x");
+        break;
+      case 1:
+        hwSerial->write((byte)serialNum);
+        Serial.println("writing serialNum");
+        break;
+      case 2:
+        hwSerial->write((byte)cmd);
+        Serial.println("writing cmd");
+        break;
+      case 3:
+        for (uint8_t i=0; i<argn; i++) {
+          hwSerial->write((byte)args[i]);
+          Serial.println("args");
+          //Serial.print(" 0x");
+          //Serial.print(args[i], HEX);
+        }
+        break;
+    }
+*/
+#if ARDUINO >= 100
+  hwSerial->write((byte)0x56);
+  hwSerial->write((byte)serialNum);
+  hwSerial->write((byte)cmd);
+
+  for (uint8_t i=0; i<argn; i++) {
+    hwSerial->write((byte)args[i]);
+    //Serial.print(" 0x");
+    //Serial.print(args[i], HEX);
+  }
+
 #else 
     if (!init) {
       hwSerial->write((byte)0x56);
@@ -493,7 +534,7 @@ uint8_t Adafruit_VC0706::readResponse(uint8_t numbytes, uint8_t timeout) {
   }
   //printBuff();
 //camerabuff[bufferLen] = 0;
-//Serial.println((char*)camerabuff);
+Serial.println((char*)camerabuff);
   return bufferLen;
 }
 

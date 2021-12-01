@@ -33,27 +33,34 @@ void CameraControlTask::execute()
             sfr::camera::init = false;
 
         }
-        if (millis() - sfr::camera::start_time >= 2500) {
+        if (millis() - sfr::camera::start_time >= 600) {
+            sfr::camera::progress = 3;
             if (adaCam.begin(sfr::camera::progress)) {
-                sfr::camera::progress++;
+                //sfr::camera::progress++;
+                sfr::camera::progress = 4;
                 if (sfr::camera::progress < 4) {
-                    #ifdef VERBOSE
                     Serial.println("camera initialization in progress");
+                    #ifdef VERBOSE
                     #endif
                 } 
                 else {
-                #ifdef VERBOSE
-                #endif
-                Serial.println("turned on camera");
-
-                adaCam.setImageSize(VC0706_160x120);
-                sfr::camera::powered = true;
-                sfr::camera::turn_on = false;
+                    #ifdef VERBOSE
+                    #endif
+                    Serial.println("turned on camera");
+                    delay(300);
+                    adaCam.setImageSize(VC0706_160x120);
+                    sfr::camera::powered = true;
+                    sfr::camera::turn_on = false;
+                    if (adaCam.getImageSize() == VC0706_160x120) {
+                        Serial.println("160x120"); 
+                        }
+                    else {
+                        Serial.println("failed to set resolution correctly");
+                    }
                 }
             }
-            else{
-
-            Serial.println("begin false");
+            else {
+                Serial.println("begin false");
             }
 
         }
