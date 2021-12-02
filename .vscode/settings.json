@@ -45,5 +45,6 @@
         "thread": "cpp",
         "deque": "cpp",
         "numeric": "cpp"
-    }
+    },
+    "C_Cpp.dimInactiveRegions": false
 }

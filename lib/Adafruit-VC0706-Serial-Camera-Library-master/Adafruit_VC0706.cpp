@@ -378,11 +378,10 @@ boolean Adafruit_VC0706::runCommand(uint8_t cmd, uint8_t *args, uint8_t argn,
   }
   else { //resetting camera?
     sendCommand(cmd, args, argn, progress, init);
-    if (progress == 3){ //Question: is this logic correct?
+    if (progress == 3){ 
       if (readResponse(resplen, 200) != resplen) 
-        Serial.println(readResponse(resplen, 200));
-        Serial.println("arghhhh");
         return false;
+        //Serial.println(readResponse(resplen, 200));
       if (! verifyResponse(cmd))
         return false;
     }
@@ -418,35 +417,34 @@ void Adafruit_VC0706::sendCommand(uint8_t cmd, uint8_t args[], uint8_t argn,  ui
     else
 #endif
   {
-/*#if ARDUINO >= 100
-  if (!init) {
-    hwSerial->write((byte)0x56);
-    hwSerial->write((byte)serialNum);
-    hwSerial->write((byte)cmd);
 
-    for (uint8_t i=0; i<argn; i++) {
-      hwSerial->write((byte)args[i]);
-      //Serial.print(" 0x");
-      //Serial.print(args[i], HEX);
+#if ARDUINO >= 100
+  if (!init) {
+      hwSerial->write((byte)0x56);
+      hwSerial->write((byte)serialNum);
+      hwSerial->write((byte)cmd);
+
+      for (uint8_t i=0; i<argn; i++) {
+        hwSerial->write((byte)args[i]);
+        //Serial.print(" 0x");
+        //Serial.print(args[i], HEX);
+      }
     }
-  }
-  else { //resetting camera?
-    Serial.println(progress);
-    switch (progress){
-      case 0:
-        Serial.println("writing 0x");
-        hwSerial->write((byte)0x56);
+    else { //resetting camera?
+      switch (progress){
+      case '0':
+        hwSerial->write(byte(0x56));
         Serial.println("writing 0x");
         break;
-      case 1:
+      case '1':
         hwSerial->write((byte)serialNum);
         Serial.println("writing serialNum");
         break;
-      case 2:
+      case '2':
         hwSerial->write((byte)cmd);
         Serial.println("writing cmd");
         break;
-      case 3:
+      case '3':
         for (uint8_t i=0; i<argn; i++) {
           hwSerial->write((byte)args[i]);
           Serial.println("args");
@@ -454,18 +452,8 @@ void Adafruit_VC0706::sendCommand(uint8_t cmd, uint8_t args[], uint8_t argn,  ui
           //Serial.print(args[i], HEX);
         }
         break;
+      }
     }
-*/
-#if ARDUINO >= 100
-  hwSerial->write((byte)0x56);
-  hwSerial->write((byte)serialNum);
-  hwSerial->write((byte)cmd);
-
-  for (uint8_t i=0; i<argn; i++) {
-    hwSerial->write((byte)args[i]);
-    //Serial.print(" 0x");
-    //Serial.print(args[i], HEX);
-  }
 
 #else 
     if (!init) {

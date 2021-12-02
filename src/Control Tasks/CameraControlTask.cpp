@@ -33,7 +33,7 @@ void CameraControlTask::execute()
             sfr::camera::init = false;
 
         }
-        if (millis() - sfr::camera::start_time >= 600) {
+        if (millis() - sfr::camera::start_time >= 60) {
             sfr::camera::progress = 3;
             if (adaCam.begin(sfr::camera::progress)) {
                 //sfr::camera::progress++;
