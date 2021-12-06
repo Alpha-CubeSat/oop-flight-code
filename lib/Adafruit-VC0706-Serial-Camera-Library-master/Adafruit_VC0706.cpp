@@ -364,9 +364,11 @@ uint8_t * Adafruit_VC0706::readPicture(uint8_t n) {
 
 boolean Adafruit_VC0706::runCommand(uint8_t cmd, uint8_t *args, uint8_t argn, 
 			   uint8_t resplen, uint8_t progress, boolean init, boolean flushflag) {
-  // flush out anything in the buffer?
-  if (flushflag) {
-    readResponse(100, 10); 
+  if (!init || progress == 0){
+    // flush out anything in the buffer?
+    if (flushflag) {
+      readResponse(100, 10); 
+    }
   }
   if (!init) { 
     sendCommand(cmd, args, argn);
@@ -379,9 +381,10 @@ boolean Adafruit_VC0706::runCommand(uint8_t cmd, uint8_t *args, uint8_t argn,
   else { //resetting camera?
     sendCommand(cmd, args, argn, progress, init);
     if (progress == 3){ 
-      if (readResponse(resplen, 200) != resplen) 
+      if (readResponse(resplen, 200) != resplen) {
+        Serial.println(readResponse(resplen, 200));
         return false;
-        //Serial.println(readResponse(resplen, 200));
+      }
       if (! verifyResponse(cmd))
         return false;
     }
@@ -393,6 +396,7 @@ void Adafruit_VC0706::sendCommand(uint8_t cmd, uint8_t args[], uint8_t argn,  ui
 #if not defined (_VARIANT_ARDUINO_DUE_X_) && not defined (_VARIANT_ARDUINO_ZERO_)
     if(swSerial) {
 #if ARDUINO >= 100
+
     swSerial->write((byte)0x56);
     swSerial->write((byte)serialNum);
     swSerial->write((byte)cmd);
@@ -432,64 +436,38 @@ void Adafruit_VC0706::sendCommand(uint8_t cmd, uint8_t args[], uint8_t argn,  ui
     }
     else { //resetting camera?
       switch (progress){
-      case '0':
-        hwSerial->write(byte(0x56));
-        Serial.println("writing 0x");
-        break;
-      case '1':
-        hwSerial->write((byte)serialNum);
-        Serial.println("writing serialNum");
-        break;
-      case '2':
-        hwSerial->write((byte)cmd);
-        Serial.println("writing cmd");
-        break;
-      case '3':
-        for (uint8_t i=0; i<argn; i++) {
-          hwSerial->write((byte)args[i]);
-          Serial.println("args");
-          //Serial.print(" 0x");
-          //Serial.print(args[i], HEX);
-        }
-        break;
+        case 0:
+          hwSerial->write(byte(0x56));
+          Serial.println("writing 0x");
+          break;
+        case 1:
+          hwSerial->write((byte)serialNum);
+          Serial.println("writing serialNum");
+          break;
+        case 2:
+          hwSerial->write((byte)cmd);
+          Serial.println("writing cmd");
+          break;
+        case 3:
+          for (uint8_t i=0; i<argn; i++) {
+            hwSerial->write((byte)args[i]);
+            Serial.println("args");
+            //Serial.print(" 0x");
+            //Serial.print(args[i], HEX);
+          }
+          break;
       }
     }
 
 #else 
-    if (!init) {
-      hwSerial->write((byte)0x56);
-      hwSerial->write((byte)serialNum);
-      hwSerial->write((byte)cmd);
+    hwSerial->print(0x56, BYTE);
+    hwSerial->print(serialNum, BYTE);
+    hwSerial->print(cmd, BYTE);
 
-      for (uint8_t i=0; i<argn; i++) {
-        hwSerial->write((byte)args[i]);
-        //Serial.print(" 0x");
-        //Serial.print(args[i], HEX);
-      }
-    }
-    else { //resetting camera?
-      switch (progress){
-      case '0':
-        hwSerial->print(0x56, BYTE);
-        Serial.println("writing 0x")
-        break;
-      case '1':
-        hwSerial->print(serialNum, BYTE);
-        Serial.println("writing serialNum")
-        break;
-      case '2':
-        hwSerial->print(cmd, BYTE);
-        Serial.println("writing cmd")
-        break;
-      case '3':
-        for (uint8_t i=0; i<argn; i++) {
-          hwSerial->prinln(args[i], BYTE);
-          Serial.println("args")
-          //Serial.print(" 0x");
-          //Serial.print(args[i], HEX);
-        }
-        break;
-      }
+    for (uint8_t i=0; i<argn; i++) {
+      hwSerial->print(args[i], BYTE);
+      //Serial.print(" 0x");
+      //Serial.print(args[i], HEX);
     }
 #endif
   }

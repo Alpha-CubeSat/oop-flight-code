@@ -34,10 +34,8 @@ void CameraControlTask::execute()
 
         }
         if (millis() - sfr::camera::start_time >= 60) {
-            sfr::camera::progress = 3;
             if (adaCam.begin(sfr::camera::progress)) {
-                //sfr::camera::progress++;
-                sfr::camera::progress = 4;
+                sfr::camera::progress++;
                 if (sfr::camera::progress < 4) {
                     Serial.println("camera initialization in progress");
                     #ifdef VERBOSE
