@@ -45,10 +45,11 @@ void CameraControlTask::execute()
                     #ifdef VERBOSE
                     #endif
                     Serial.println("turned on camera");
-                    delay(300);
+                    delay(100);
                     adaCam.setImageSize(VC0706_160x120);
                     sfr::camera::powered = true;
                     sfr::camera::turn_on = false;
+                    delay(200);
                     if (adaCam.getImageSize() == VC0706_160x120) {
                         Serial.println("160x120"); 
                         }

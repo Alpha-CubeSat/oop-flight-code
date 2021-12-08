@@ -366,8 +366,10 @@ boolean Adafruit_VC0706::runCommand(uint8_t cmd, uint8_t *args, uint8_t argn,
 			   uint8_t resplen, uint8_t progress, boolean init, boolean flushflag) {
   if (!init || progress == 0){
     // flush out anything in the buffer?
-    if (flushflag) {
-      readResponse(100, 10); 
+    if (progress == 0) {
+      if (flushflag) {
+        readResponse(100, 10); 
+      }
     }
   }
   if (!init) { 
@@ -383,7 +385,7 @@ boolean Adafruit_VC0706::runCommand(uint8_t cmd, uint8_t *args, uint8_t argn,
     if (progress == 3){ 
       if (readResponse(resplen, 200) != resplen) {
         Serial.println(readResponse(resplen, 200));
-        return false;
+        //return false;
       }
       if (! verifyResponse(cmd))
         return false;
