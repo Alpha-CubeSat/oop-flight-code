@@ -193,7 +193,6 @@ void test_valid_dispatch_low_power()
     //Fault Check
     fault_monitor_test_helper_fault1();
     fault_monitor_test_helper_fault2();
-    //ASSERT(sfr::battery::voltage > 3.9 and sfr::fault::check_voltage && sfr::mission::low_power_eligible == true);
     sfr::fault::fault_1 = 0;
     sfr::fault::fault_2 = 0;
     sfr::fault::fault_3 = 0;
@@ -253,22 +252,6 @@ void test_execute()
     mission_manager.execute();
     fault_monitor_test_helper_fault1();
     fault_monitor_test_helper_fault2();
-
-    //     //initialization mode now
-    //     test_valid_dispatch_initialization();
-
-    //     // low_power mode now
-    //     test_valid_dispatch_low_power();
-
-    //     // safe mode now
-    //     test_valid_dispatch_safe();
-
-    //     //standby mode now
-    //     test_valid_dispatch_standby();
-
-    //     //deployment mode now
-    //     test_valid_dispatch_deployment_FirstIf();
-    //     test_valid_dispatch_deployment_SecondIf();
 }
 
 int test_mission_manager()
