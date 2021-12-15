@@ -14,6 +14,10 @@ void TemperatureMonitor::execute(){
     }
     float sum = std::accumulate(sfr::temperature::temp_c_buffer.begin(), sfr::temperature::temp_c_buffer.end(), 0.0);
     sfr::temperature::temp_c_average = sum / sfr::temperature::temp_c_buffer.size();
-
+    #ifdef VERBOSE
+        Serial.print("Temp: ");
+        Serial.print(sfr::temperature::temp_c_average);
+        Serial.println(" C");
+    #endif
     sfr::temperature::in_sun = sfr::temperature::temp_c_average  >= constants::temperature::in_sun_val;
 }

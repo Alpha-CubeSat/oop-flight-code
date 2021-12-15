@@ -4,7 +4,9 @@
 #include "sfr.hpp"
 #include "ControlTaskExecute.hpp"
 
+TestMissionManager
 class BurnwireControlTask : public TimedControlTask<void>, public virtual ControlTaskExecute
+main
 {
 public:
     BurnwireControlTask(unsigned int offset);

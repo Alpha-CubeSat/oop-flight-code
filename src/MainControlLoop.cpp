@@ -51,5 +51,5 @@ void MainControlLoop::execute()
     rockblock_control_task.execute_on_time();
     temperature_control_task.execute_on_time();
 
-    mission_manager.execute_on_time(); 
+    mission_manager.execute_on_time();
 }

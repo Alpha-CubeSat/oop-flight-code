@@ -2,6 +2,33 @@
 
 namespace sfr
 {
+    namespace pins
+    {
+        std::map<int, int> pinMap = {
+            {constants::photoresistor::pin, LOW},
+            {constants::burnwire::first_pin, LOW},
+            {constants::burnwire::second_pin, LOW},
+            {constants::rockblock::sleep_pin, LOW},
+            {constants::temperature::pin, LOW},
+            {constants::current::pin, LOW},
+            {constants::acs::xPWMpin, LOW},
+            {constants::acs::yPWMpin, LOW},
+            {constants::acs::zPWMpin, LOW},
+            {constants::acs::yout1, LOW},
+            {constants::acs::yout2, LOW},
+            {constants::acs::xout1, LOW},
+            {constants::acs::xout2, LOW},
+            {constants::acs::zout1, LOW},
+            {constants::acs::zout2, LOW},
+            {constants::acs::STBXYpin, LOW},
+            {constants::acs::STBZpin, LOW},
+            {constants::battery::voltage_value_pin, LOW},
+            {constants::battery::allow_measurement_pin, HIGH},
+            {constants::camera::power_on_pin, LOW},
+            {constants::camera::rx, LOW},
+            {constants::camera::tx, LOW},
+            {constants::button::button_pin, LOW}};
+    }
     namespace photoresistor
     {
         bool covered = true;
@@ -63,11 +90,11 @@ namespace sfr
         uint8_t opcode[2] = {0};
         uint8_t arg_1[4] = {0};
         uint8_t arg_2[4] = {0};
-        #ifndef SIMULATOR
+#ifndef SIMULATOR
         HardwareSerial serial = Serial1;
-        #else
+#else
         RockblockSimulator serial;
-        #endif
+#endif
         bool flush_status = false;
         bool waiting_command = false;
         size_t conseq_reads = 0;
@@ -87,7 +114,7 @@ namespace sfr
         float gyro_x = 0.0;
         float gyro_y = 0.0;
         float gyro_z = 0.0;
-        
+
         std::deque<float> mag_x_buffer;
         std::deque<float> mag_y_buffer;
         std::deque<float> mag_z_buffer;
@@ -126,9 +153,9 @@ namespace sfr
     namespace acs
     {
         acs_mode_type mode = acs_mode_type::off;
-        int current1 = 0;
-        int current2 = 0;
-        int current3 = 0;
+        float current1 = 0;
+        float current2 = 0;
+        float current3 = 0;
         simple_acs_type mag = simple_acs_type::x;
         unsigned long max_no_communication = 0;
     }

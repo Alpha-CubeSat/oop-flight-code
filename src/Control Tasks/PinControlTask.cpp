@@ -34,20 +34,22 @@ PinControlTask::PinControlTask()
 
 void PinControlTask::execute()
 {
-    digitalWrite(constants::acs::xPWMpin, LOW);
-    digitalWrite(constants::acs::yPWMpin, LOW);
-    digitalWrite(constants::acs::zPWMpin, LOW);
-    digitalWrite(constants::acs::yout1, LOW);
-    digitalWrite(constants::acs::yout2, LOW);
-    digitalWrite(constants::acs::xout1, LOW);
-    digitalWrite(constants::acs::xout2, LOW);
-    digitalWrite(constants::acs::zout1, LOW);
-    digitalWrite(constants::acs::zout2, LOW);
-    digitalWrite(constants::camera::power_on_pin, LOW);
-    digitalWrite(constants::acs::STBXYpin, LOW);
-    digitalWrite(constants::acs::STBZpin, LOW);
-    digitalWrite(constants::burnwire::first_pin, LOW);
-    digitalWrite(constants::battery::allow_measurement_pin, HIGH);
-    digitalWrite(constants::burnwire::second_pin, LOW);
-    digitalWrite(constants::rockblock::sleep_pin, HIGH);
+    Pins::setPinState(constants::acs::xPWMpin, LOW);
+    Pins::setPinState(constants::acs::yPWMpin, LOW);
+    Pins::setPinState(constants::acs::zPWMpin, LOW);
+    Pins::setPinState(constants::acs::yout1, LOW);
+    Pins::setPinState(constants::acs::yout2, LOW);
+    Pins::setPinState(constants::acs::xout1, LOW);
+    Pins::setPinState(constants::acs::xout2, LOW);
+    Pins::setPinState(constants::acs::zout1, LOW);
+    Pins::setPinState(constants::acs::zout2, LOW);
+    Pins::setPinState(constants::camera::power_on_pin, LOW);
+    Pins::setPinState(constants::camera::rx, LOW);
+    Pins::setPinState(constants::camera::tx, LOW);
+    Pins::setPinState(constants::acs::STBXYpin, LOW);
+    Pins::setPinState(constants::acs::STBZpin, LOW);
+    Pins::setPinState(constants::burnwire::first_pin, LOW);
+    Pins::setPinState(constants::battery::allow_measurement_pin, HIGH);
+    Pins::setPinState(constants::burnwire::second_pin, LOW);
+    Pins::setPinState(constants::rockblock::sleep_pin, HIGH);
 }

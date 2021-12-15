@@ -1,12 +1,6 @@
 #include "CameraControlTask.hpp"
 
-CameraControlTask::CameraControlTask(unsigned int offset): TimedControlTask<void>(offset), adaCam(&Serial5)
-{
-    pinMode(constants::camera::power_on_pin, OUTPUT);
-    digitalWrite(constants::camera::power_on_pin, LOW);  
-    digitalWrite(constants::camera::rx, LOW);
-    digitalWrite(constants::camera::tx, LOW);
-}
+CameraControlTask::CameraControlTask(unsigned int offset): TimedControlTask<void>(offset), adaCam(&Serial5){}
 
 void CameraControlTask::execute()
 {
@@ -33,7 +27,7 @@ void CameraControlTask::execute()
     }
         
     if (sfr::camera::turn_on == true && sfr::camera::powered == false) {
-        digitalWrite(constants::camera::power_on_pin, HIGH);
+        Pins::setPinState(constants::camera::power_on_pin, HIGH);
         if (adaCam.begin()) {
             #ifdef VERBOSE
             Serial.println("turned on camera");
@@ -48,11 +42,11 @@ void CameraControlTask::execute()
         #ifdef VERBOSE
         Serial.println("turned off camera");
         #endif
-        digitalWrite(constants::camera::power_on_pin, LOW);
+        Pins::setPinState(constants::camera::power_on_pin, LOW);
         pinMode(constants::camera::rx, OUTPUT);
         pinMode(constants::camera::tx, OUTPUT);
-        digitalWrite(constants::camera::rx, LOW);
-        digitalWrite(constants::camera::tx, LOW);
+        Pins::setPinState(constants::camera::rx, LOW);
+        Pins::setPinState(constants::camera::tx, LOW);
         sfr::camera::powered = false;
         sfr::camera::turn_off = false;
     }
