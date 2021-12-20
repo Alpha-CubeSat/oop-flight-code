@@ -35,7 +35,7 @@ The CubeSat has 4 different modes with distinct entrance and exit conditions
 * Low Power
 * Deployment
 
-![mission modes](https://github.com/Alpha-CubeSat/oop-flight-code/blob/main/flight_code.png "mission modes")
+![mission modes](images/flight_code.png "mission modes")
 
 MissionManager sets which mode the CubeSat should be in based on these exit/entrance conditions.
 
@@ -193,11 +193,11 @@ Constants contains values that will never be changed. This prevents "magic numbe
 **<center> Relevant Documents</center>**
 *Rockblock Control Task (cut in ‘thirds’ for space) **needs to be updated with most recent drawio rev***
 
-![Rockblock Control Task](Rockblock_Control_Task.png)
+![Rockblock Control Task](images/Rockblock_Control_Task.png)
 *Mission Manager*
-![Mission Manager](Mission_Manager.png)
+![Mission Manager](images/Mission_Manager.png)
 *CubeSat Hardware*
-![CubeSat Hardware](CubeSat_Hardware.png)
+![CubeSat Hardware](images/CubeSat_Hardware.png)
 
 
 ## Rockblock Simulator Documentation
