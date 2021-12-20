@@ -28,9 +28,6 @@ void CommandMonitor::execute(){
         else if(sfr::rockblock::f_opcode == get_decimal_opcode(constants::rockblock::camera_take_photo)){
             dispatch_change_true_false(sfr::camera::take_photo);
         }
-        else if(sfr::rockblock::f_opcode == get_decimal_opcode(constants::rockblock::temperature_mode)){
-            dispatch_change_temperature_mode();
-        }
         else if(sfr::rockblock::f_opcode == get_decimal_opcode(constants::rockblock::acs_mode)){
             dispatch_change_acs_mode();
         }
@@ -99,14 +96,7 @@ void CommandMonitor::dispatch_change_true_false(bool& value){
     value = sfr::rockblock::f_arg_1;
 }
 
-void CommandMonitor::dispatch_change_temperature_mode(){
-    if(sfr::rockblock::f_arg_1 == get_decimal_arg(constants::rockblock::active)){
-        sfr::temperature::mode = temp_mode_type::active;
-    } 
-    else if(sfr::rockblock::f_arg_1 == get_decimal_arg(constants::rockblock::inactive)){
-        sfr::temperature::mode = temp_mode_type::inactive;
-    }
-}
+
 void CommandMonitor::dispatch_change_acs_mode(){
     if(sfr::rockblock::f_arg_1 == get_decimal_arg(constants::rockblock::full)){
         sfr::acs::mode = acs_mode_type::full;

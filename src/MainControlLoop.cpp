@@ -18,7 +18,6 @@ acs_control_task(constants::timecontrol::acs_control_task_offset),
 burnwire_control_task(constants::timecontrol::burnwire_control_task_offset),
 camera_control_task(constants::timecontrol::camera_control_task_offset),
 rockblock_control_task(constants::timecontrol::rockblock_control_task_offset),
-temperature_control_task(constants::timecontrol::temperature_control_task_offset),
 mission_manager(constants::timecontrol::mission_manager_offset)
 {
     delay(1000);
@@ -49,7 +48,6 @@ void MainControlLoop::execute()
     burnwire_control_task.execute_on_time();
     camera_control_task.execute_on_time();
     rockblock_control_task.execute_on_time();
-    temperature_control_task.execute_on_time();
 
     mission_manager.execute_on_time();
 }

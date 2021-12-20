@@ -18,7 +18,6 @@
 #include "Control Tasks/BurnwireControlTask.hpp"
 #include "Control Tasks/CameraControlTask.hpp"
 #include "Control Tasks/RockblockControlTask.hpp"
-#include "Control Tasks/TemperatureControlTask.hpp"
 
 class MainControlLoop : ControlTask<void>
 {
@@ -42,7 +41,6 @@ protected:
     BurnwireControlTask burnwire_control_task;
     CameraControlTask camera_control_task;
     RockblockControlTask rockblock_control_task;
-    TemperatureControlTask temperature_control_task;
 
     MissionManager mission_manager;
 

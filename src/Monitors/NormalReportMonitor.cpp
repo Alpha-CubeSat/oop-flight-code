@@ -40,7 +40,7 @@ void NormalReportMonitor::execute(){
     sfr::rockblock::report[17] = gyro_y;
     sfr::rockblock::report[18] = gyro_z;
     sfr::rockblock::report[19] = temp_c;
-    sfr::rockblock::report[20] = (uint8_t) sfr::temperature::mode;
+    //removed temperature mode type
     sfr::rockblock::report[21] = solar_current;
     sfr::rockblock::report[22] = sfr::current::in_sun;
     sfr::rockblock::report[23] = (uint8_t) sfr::acs::mode;

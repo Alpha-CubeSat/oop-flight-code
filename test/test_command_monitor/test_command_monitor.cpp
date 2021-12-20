@@ -120,23 +120,7 @@ void test_camera() {
     TEST_ASSERT(sfr::camera::take_photo == false);
 }
 
-void test_temp_mode() {
-    CommandMonitor command_monitor(0);
 
-    // temp mode = active
-    sfr::rockblock::f_opcode = command_monitor.get_decimal_opcode(constants::rockblock::temperature_mode);
-    sfr::rockblock::f_arg_1 = command_monitor.get_decimal_arg(constants::rockblock::active);
-    sfr::rockblock::waiting_command = true;
-    command_monitor.execute();
-    TEST_ASSERT(sfr::temperature::mode == temp_mode_type::active);
-
-    // temp mode = inactive
-    sfr::rockblock::f_opcode = command_monitor.get_decimal_opcode(constants::rockblock::temperature_mode);
-    sfr::rockblock::f_arg_1 = command_monitor.get_decimal_arg(constants::rockblock::inactive);
-    sfr::rockblock::waiting_command = true;
-    command_monitor.execute();
-    TEST_ASSERT(sfr::temperature::mode == temp_mode_type::inactive);
-}
 
 void test_acs_mode() {
     CommandMonitor command_monitor(0);
@@ -374,7 +358,6 @@ int test_command_monitor() {
     RUN_TEST(test_burnwire);
     RUN_TEST(test_burn_times);
     RUN_TEST(test_camera);
-    RUN_TEST(test_temp_mode);
     RUN_TEST(test_acs_mode);
     RUN_TEST(test_fault_mode);
     RUN_TEST(test_fault_mag);

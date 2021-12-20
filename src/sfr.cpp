@@ -140,7 +140,6 @@ namespace sfr
         float temp_c = 0.0;
         std::deque<float> temp_c_buffer;
         float temp_c_average = 0.0;
-        temp_mode_type mode = temp_mode_type::active;
         bool in_sun = false;
     }
     namespace current
