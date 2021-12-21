@@ -1,8 +1,11 @@
 #ifndef MAIN_CONTROL_LOOP_HPP_
 #define MAIN_CONTROL_LOOP_HPP_
 
-#include "sfr.hpp"
 #include "ClockManager.hpp"
+#include "Control Tasks/ACSControlTask.hpp"
+#include "Control Tasks/BurnwireControlTask.hpp"
+#include "Control Tasks/CameraControlTask.hpp"
+#include "Control Tasks/RockblockControlTask.hpp"
 #include "Monitors/ACSMonitor.hpp"
 #include "Monitors/BatteryMonitor.hpp"
 #include "Monitors/ButtonMonitor.hpp"
@@ -14,15 +17,11 @@
 #include "Monitors/NormalReportMonitor.hpp"
 #include "Monitors/PhotoresistorMonitor.hpp"
 #include "Monitors/TemperatureMonitor.hpp"
-#include "Control Tasks/ACSControlTask.hpp"
-#include "Control Tasks/BurnwireControlTask.hpp"
-#include "Control Tasks/CameraControlTask.hpp"
-#include "Control Tasks/RockblockControlTask.hpp"
+#include "sfr.hpp"
 
 class MainControlLoop : ControlTask<void>
 {
 protected:
-    
     ClockManager clock_manager;
 
     ACSMonitor acs_monitor;

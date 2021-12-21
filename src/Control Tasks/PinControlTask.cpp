@@ -3,9 +3,9 @@
 PinControlTask::PinControlTask()
 {
 
-    //serial for rockblock?
-    //serial for camera?
-    //spi for imu?
+    // serial for rockblock?
+    // serial for camera?
+    // spi for imu?
 
     pinMode(constants::acs::xPWMpin, OUTPUT);
     pinMode(constants::acs::yPWMpin, OUTPUT);

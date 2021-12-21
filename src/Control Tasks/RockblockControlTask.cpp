@@ -8,13 +8,11 @@ RockblockControlTask::RockblockControlTask(unsigned int offset) : TimedControlTa
 void RockblockControlTask::execute()
 {
     rockblock_mode_type mode = sfr::rockblock::mode;
-    if (sfr::rockblock::last_communication >= sfr::acs::max_no_communication && (int)sfr::rockblock::mode != (int)mission_mode_type::low_power)
-    {
+    if (sfr::rockblock::last_communication >= sfr::acs::max_no_communication && (int)sfr::rockblock::mode != (int)mission_mode_type::low_power) {
         sfr::acs::mode = acs_mode_type::simple;
     }
     timed_out();
-    switch (mode)
-    {
+    switch (mode) {
     case rockblock_mode_type::standby:
         dispatch_standby();
         break;
@@ -89,50 +87,36 @@ void RockblockControlTask::execute()
 
 bool RockblockControlTask::check_ready()
 {
-    if (millis() - sfr::rockblock::last_downlink >= sfr::rockblock::downlink_period)
-    {
-        if (sfr::rockblock::downlink_period == sfr::rockblock::camera_downlink_period && sfr::camera::report_ready == true)
-        {
-            if (sfr::rockblock::last_downlink_normal == false)
-            {
+    if (millis() - sfr::rockblock::last_downlink >= sfr::rockblock::downlink_period) {
+        if (sfr::rockblock::downlink_period == sfr::rockblock::camera_downlink_period && sfr::camera::report_ready == true) {
+            if (sfr::rockblock::last_downlink_normal == false) {
                 sfr::rockblock::downlink_camera = false;
-            }
-            else
-            {
+            } else {
                 sfr::rockblock::downlink_camera = true;
             }
         }
         return true;
-    }
-    else if ((millis() - sfr::rockblock::last_downlink >= sfr::rockblock::camera_downlink_period) && sfr::camera::report_ready == true)
-    {
+    } else if ((millis() - sfr::rockblock::last_downlink >= sfr::rockblock::camera_downlink_period) && sfr::camera::report_ready == true) {
         sfr::rockblock::downlink_camera = true;
         return true;
-    }
-    else
-    {
+    } else {
         return false;
     }
 }
 
 void RockblockControlTask::timed_out()
 {
-    if (millis() - sfr::rockblock::start_time >= (uint32_t)sfr::rockblock::timeout)
-    {
-        if (sfr::rockblock::last_timed_out == false)
-        {
+    if (millis() - sfr::rockblock::start_time >= (uint32_t)sfr::rockblock::timeout) {
+        if (sfr::rockblock::last_timed_out == false) {
             sfr::rockblock::last_downlink = millis();
-            if (sfr::rockblock::downlink_period > constants::rockblock::min_sleep_period)
-            {
+            if (sfr::rockblock::downlink_period > constants::rockblock::min_sleep_period) {
                 Pins::setPinState(constants::rockblock::sleep_pin, LOW);
             }
             sfr::rockblock::downlink_camera = false;
             transition_to(rockblock_mode_type::standby);
         }
         sfr::rockblock::last_timed_out = true;
-    }
-    else
-    {
+    } else {
         sfr::rockblock::last_timed_out = false;
     }
 }
@@ -140,8 +124,7 @@ void RockblockControlTask::timed_out()
 void RockblockControlTask::dispatch_standby()
 {
     sfr::mission::low_power_eligible = true;
-    if (check_ready() || sfr::rockblock::waiting_message)
-    {
+    if (check_ready() || sfr::rockblock::waiting_message) {
         sfr::mission::low_power_eligible = false;
         transition_to(rockblock_mode_type::send_at);
         Pins::setPinState(constants::rockblock::sleep_pin, HIGH);
@@ -161,8 +144,7 @@ void RockblockControlTask::dispatch_send_at()
 
 void RockblockControlTask::dispatch_await_at()
 {
-    if (sfr::rockblock::serial.read() == 'K')
-    {
+    if (sfr::rockblock::serial.read() == 'K') {
         Serial.println("SAT INFO: ok");
         transition_to(rockblock_mode_type::send_signal_strength);
     }
@@ -179,17 +161,13 @@ void RockblockControlTask::dispatch_send_signal_strength()
 
 void RockblockControlTask::dispatch_await_signal_strength()
 {
-    if (sfr::rockblock::serial.read() == ':')
-    {
+    if (sfr::rockblock::serial.read() == ':') {
         char signal = sfr::rockblock::serial.read();
         Serial.print("SAT INFO: signal level ");
         Serial.println(signal);
-        if (signal == '3' || signal == '4' || signal == '5')
-        {
+        if (signal == '3' || signal == '4' || signal == '5') {
             transition_to(rockblock_mode_type::send_flow_control);
-        }
-        else
-        {
+        } else {
             transition_to(rockblock_mode_type::send_signal_strength);
         }
     }
@@ -206,8 +184,7 @@ void RockblockControlTask::dispatch_send_flow_control()
 
 void RockblockControlTask::dispatch_await_flow_control()
 {
-    if (sfr::rockblock::serial.read() == 'K')
-    {
+    if (sfr::rockblock::serial.read() == 'K') {
         Serial.println("SAT INFO: ok");
         transition_to(rockblock_mode_type::send_message_length);
     }
@@ -224,8 +201,7 @@ void RockblockControlTask::dispatch_send_message_length()
 
 void RockblockControlTask::dispatch_await_message_length()
 {
-    if (sfr::rockblock::serial.read() == 'Y')
-    {
+    if (sfr::rockblock::serial.read() == 'Y') {
         Serial.println("SAT INFO: ready");
         transition_to(rockblock_mode_type::send_message);
     }
@@ -233,14 +209,10 @@ void RockblockControlTask::dispatch_await_message_length()
 
 void RockblockControlTask::dispatch_send_message()
 {
-    if (sfr::camera::report_ready == true)
-    {
-        if (sfr::rockblock::last_downlink_normal == false)
-        {
+    if (sfr::camera::report_ready == true) {
+        if (sfr::rockblock::last_downlink_normal == false) {
             sfr::rockblock::downlink_camera = false;
-        }
-        else
-        {
+        } else {
             sfr::rockblock::downlink_camera = true;
         }
     }
@@ -248,25 +220,19 @@ void RockblockControlTask::dispatch_send_message()
 #ifdef VERBOSE
     Serial.print("SENT: ");
 #endif
-    for (size_t i = 0; i < constants::rockblock::packet_size; ++i)
-    {
-        if (sfr::rockblock::downlink_camera == false)
-        {
+    for (size_t i = 0; i < constants::rockblock::packet_size; ++i) {
+        if (sfr::rockblock::downlink_camera == false) {
 #ifdef VERBOSE
-            if (sfr::rockblock::report[i] < 16)
-            {
+            if (sfr::rockblock::report[i] < 16) {
                 Serial.print(0);
             }
             Serial.print(sfr::rockblock::report[i], HEX);
 #endif
             sfr::rockblock::serial.write(sfr::rockblock::report[i]);
             checksum += (uint16_t)sfr::rockblock::report[i];
-        }
-        else
-        {
+        } else {
 #ifdef VERBOSE
-            if (sfr::rockblock::camera_report[i] < 16)
-            {
+            if (sfr::rockblock::camera_report[i] < 16) {
                 Serial.print(0);
             }
             Serial.print(sfr::rockblock::camera_report[i], HEX);
@@ -292,15 +258,11 @@ void RockblockControlTask::dispatch_send_message()
 void RockblockControlTask::dispatch_await_message()
 {
     char c = sfr::rockblock::serial.read();
-    if (c == '0' || c == '1' || c == '2' || c == '3')
-    {
-        if (c == '0')
-        {
+    if (c == '0' || c == '1' || c == '2' || c == '3') {
+        if (c == '0') {
             Serial.println("SAT INFO: report accepted");
             transition_to(rockblock_mode_type::send_response);
-        }
-        else
-        {
+        } else {
             transition_to(rockblock_mode_type::send_message);
         }
     }
@@ -317,27 +279,22 @@ void RockblockControlTask::dispatch_send_response()
 
 void RockblockControlTask::dispatch_create_buffer()
 {
-    if (sfr::rockblock::serial.read() == ':')
-    {
+    if (sfr::rockblock::serial.read() == ':') {
         // clear buffer to nulls
         memset(sfr::rockblock::buffer, '\0', constants::rockblock::buffer_size);
         // clear commas to -1
         memset(sfr::rockblock::commas, -1, constants::rockblock::num_commas);
         int buffer_iter = 0;
         int comma_iter = 0;
-        for (size_t i = 0; i < constants::rockblock::buffer_size; i++)
-        {
+        for (size_t i = 0; i < constants::rockblock::buffer_size; i++) {
             char c = sfr::rockblock::serial.read();
-            if (c == '\r')
-            {
+            if (c == '\r') {
                 break;
             }
-            if (c != ' ')
-            {
+            if (c != ' ') {
                 sfr::rockblock::buffer[buffer_iter] = c;
                 Serial.print(sfr::rockblock::buffer[buffer_iter]);
-                if (c == ',')
-                {
+                if (c == ',') {
                     sfr::rockblock::commas[comma_iter] = buffer_iter;
                     comma_iter++;
                 }
@@ -345,12 +302,9 @@ void RockblockControlTask::dispatch_create_buffer()
             }
         }
         Serial.println();
-        if (comma_iter != 5)
-        {
+        if (comma_iter != 5) {
             transition_to(rockblock_mode_type::send_response);
-        }
-        else
-        {
+        } else {
             transition_to(rockblock_mode_type::process_mo_status);
         }
     }
@@ -358,18 +312,13 @@ void RockblockControlTask::dispatch_create_buffer()
 
 void RockblockControlTask::dispatch_process_mo_status()
 {
-    if (sfr::rockblock::commas[0] > 1)
-    {
+    if (sfr::rockblock::commas[0] > 1) {
         Serial.println("SAT INFO: there is another character");
         transition_to(rockblock_mode_type::send_signal_strength_mo);
-    }
-    else if (sfr::rockblock::buffer[0] != '0' && sfr::rockblock::buffer[0] != '1' && sfr::rockblock::buffer[0] != '2')
-    {
+    } else if (sfr::rockblock::buffer[0] != '0' && sfr::rockblock::buffer[0] != '1' && sfr::rockblock::buffer[0] != '2') {
         Serial.println("SAT INFO: mo status is greater than 2");
         transition_to(rockblock_mode_type::send_response);
-    }
-    else
-    {
+    } else {
         transition_to(rockblock_mode_type::process_mt_status);
     }
 }
@@ -385,17 +334,13 @@ void RockblockControlTask::dispatch_send_signal_strength_mo()
 
 void RockblockControlTask::dispatch_await_signal_strength_mo()
 {
-    if (sfr::rockblock::serial.read() == ':')
-    {
+    if (sfr::rockblock::serial.read() == ':') {
         char signal = sfr::rockblock::serial.read();
         Serial.print("SAT INFO: signal level ");
         Serial.println(signal);
-        if (signal == '3' || signal == '4' || signal == '5')
-        {
+        if (signal == '3' || signal == '4' || signal == '5') {
             transition_to(rockblock_mode_type::send_response);
-        }
-        else
-        {
+        } else {
             transition_to(rockblock_mode_type::send_signal_strength_mo);
         }
     }
@@ -403,8 +348,7 @@ void RockblockControlTask::dispatch_await_signal_strength_mo()
 
 void RockblockControlTask::dispatch_process_mt_status()
 {
-    switch (sfr::rockblock::buffer[sfr::rockblock::commas[1] + 1])
-    {
+    switch (sfr::rockblock::buffer[sfr::rockblock::commas[1] + 1]) {
     case '2':
         Serial.println("SAT INFO: error during check");
         transition_to(rockblock_mode_type::send_response);
@@ -432,8 +376,7 @@ void RockblockControlTask::dispatch_read_message()
 
 void RockblockControlTask::dispatch_process_command()
 {
-    if (sfr::rockblock::serial.read() == 'B')
-    {
+    if (sfr::rockblock::serial.read() == 'B') {
         sfr::rockblock::serial.read();
         sfr::rockblock::serial.read();
         sfr::rockblock::serial.read();
@@ -442,22 +385,19 @@ void RockblockControlTask::dispatch_process_command()
         sfr::rockblock::serial.read();
 
         Serial.print("SAT CMD: ");
-        for (size_t o = 0; o < constants::rockblock::opcode_len; ++o)
-        {
+        for (size_t o = 0; o < constants::rockblock::opcode_len; ++o) {
             sfr::rockblock::opcode[o] = sfr::rockblock::serial.read();
             if (sfr::rockblock::opcode[o] < 0x10)
                 Serial.print(0, HEX);
             Serial.print(sfr::rockblock::opcode[o], HEX);
         }
-        for (size_t a1 = 0; a1 < constants::rockblock::arg1_len; ++a1)
-        {
+        for (size_t a1 = 0; a1 < constants::rockblock::arg1_len; ++a1) {
             sfr::rockblock::arg_1[a1] = sfr::rockblock::serial.read();
             if (sfr::rockblock::arg_1[a1] < 0x10)
                 Serial.print(0, HEX);
             Serial.print(sfr::rockblock::arg_1[a1], HEX);
         }
-        for (size_t a2 = 0; a2 < constants::rockblock::arg2_len; ++a2)
-        {
+        for (size_t a2 = 0; a2 < constants::rockblock::arg2_len; ++a2) {
             sfr::rockblock::arg_2[a2] = sfr::rockblock::serial.read();
             if (sfr::rockblock::arg_2[a2] < 0x10)
                 Serial.print(0, HEX);
@@ -465,16 +405,13 @@ void RockblockControlTask::dispatch_process_command()
         }
         Serial.println();
 
-        if (valid_command())
-        {
+        if (valid_command()) {
             sfr::rockblock::f_opcode = (sfr::rockblock::opcode[1] << 8) | (sfr::rockblock::opcode[0]);
             sfr::rockblock::f_arg_1 = (sfr::rockblock::arg_1[3] << 24) | (sfr::rockblock::arg_1[2] << 16) | (sfr::rockblock::arg_1[1] << 8) | (sfr::rockblock::arg_1[0]);
             sfr::rockblock::f_arg_2 = (sfr::rockblock::arg_2[3] << 24) | (sfr::rockblock::arg_2[2] << 16) | (sfr::rockblock::arg_2[1] << 8) | (sfr::rockblock::arg_2[0]);
 
             sfr::rockblock::waiting_command = true;
-        }
-        else if (sfr::rockblock::opcode[0] == 'F' && sfr::rockblock::opcode[1] == 'L')
-        {
+        } else if (sfr::rockblock::opcode[0] == 'F' && sfr::rockblock::opcode[1] == 'L') {
             Serial.println("SAT INFO: flush confirmed");
             sfr::rockblock::flush_status = false;
         }
@@ -495,16 +432,11 @@ void RockblockControlTask::dispatch_queue_check()
     bool cycle_boundary = sfr::rockblock::conseq_reads >= (constants::rockblock::max_conseq_read - 1);
     // check if enough messages are waiting
     bool queue_limit = queued > 1;
-    if (cycle_boundary && queue_limit && !sfr::rockblock::flush_status)
-    {
+    if (cycle_boundary && queue_limit && !sfr::rockblock::flush_status) {
         transition_to(rockblock_mode_type::send_flush);
-    }
-    else if (queued > 0)
-    {
+    } else if (queued > 0) {
         transition_to(rockblock_mode_type::send_message_length);
-    }
-    else
-    {
+    } else {
         transition_to(rockblock_mode_type::end_transmission);
     }
 }
@@ -520,8 +452,7 @@ void RockblockControlTask::dispatch_send_flush()
 
 void RockblockControlTask::dispatch_await_flush()
 {
-    if (sfr::rockblock::serial.read() == 'K')
-    {
+    if (sfr::rockblock::serial.read() == 'K') {
         sfr::rockblock::flush_status = true;
         Serial.println("SAT INFO: OK");
         transition_to(rockblock_mode_type::send_response);
@@ -532,8 +463,7 @@ void RockblockControlTask::dispatch_end_transmission()
 {
     sfr::rockblock::last_downlink = millis();
     sfr::rockblock::last_communication = millis();
-    if (sfr::rockblock::downlink_period > constants::rockblock::min_sleep_period)
-    {
+    if (sfr::rockblock::downlink_period > constants::rockblock::min_sleep_period) {
         Pins::setPinState(constants::rockblock::sleep_pin, LOW);
     }
     downlinked_something();
@@ -556,34 +486,25 @@ bool RockblockControlTask::valid_command()
     bool burnwire_timeout_opcode = true;
 
     // Check if opcode matches non-standard command (variable arg)
-    for (size_t o = 0; o < constants::rockblock::opcode_len; o++)
-    {
-        if (sfr::rockblock::opcode[o] != constants::rockblock::request_image_fragment[o])
-        {
+    for (size_t o = 0; o < constants::rockblock::opcode_len; o++) {
+        if (sfr::rockblock::opcode[o] != constants::rockblock::request_image_fragment[o]) {
             request_image_fragment_opcode = false;
         }
-        if (sfr::rockblock::opcode[o] != constants::rockblock::rockblock_downlink_period[o])
-        {
+        if (sfr::rockblock::opcode[o] != constants::rockblock::rockblock_downlink_period[o]) {
             rockblock_downlink_period_opcode = false;
         }
-        if (sfr::rockblock::opcode[o] != constants::rockblock::burnwire_time[o])
-        {
+        if (sfr::rockblock::opcode[o] != constants::rockblock::burnwire_time[o]) {
             burnwire_time_opcode = false;
         }
-        if (sfr::rockblock::opcode[o] != constants::rockblock::burnwire_timeout[o])
-        {
+        if (sfr::rockblock::opcode[o] != constants::rockblock::burnwire_timeout[o]) {
             burnwire_timeout_opcode = false;
         }
     }
 
-    if (request_image_fragment_opcode)
-    {
-        for (size_t c = 0; c < 99; c++)
-        {
-            for (size_t a1 = 0; a1 < constants::rockblock::arg1_len; a1++)
-            {
-                if (sfr::rockblock::arg_1[a1] != sfr::rockblock::camera_commands[c][a1 + constants::rockblock::opcode_len])
-                {
+    if (request_image_fragment_opcode) {
+        for (size_t c = 0; c < 99; c++) {
+            for (size_t a1 = 0; a1 < constants::rockblock::arg1_len; a1++) {
+                if (sfr::rockblock::arg_1[a1] != sfr::rockblock::camera_commands[c][a1 + constants::rockblock::opcode_len]) {
                     arg_1 = false;
                 }
             }
@@ -594,43 +515,34 @@ bool RockblockControlTask::valid_command()
                        (request_image_fragment_opcode && arg_1) ||
                        (burnwire_time_opcode) ||
                        (burnwire_timeout_opcode);
-    if (non_std_cmd)
-    {
+    if (non_std_cmd) {
         Serial.println("SAT CMD: command validated");
         return true;
     }
 
     // Loop over all standard commands
-    for (size_t c = 0; c < constants::rockblock::num_commands; c++)
-    {
+    for (size_t c = 0; c < constants::rockblock::num_commands; c++) {
         opcode = true;
         arg_1 = true;
         arg_2 = true;
 
-        for (size_t o = 0; o < constants::rockblock::opcode_len; o++)
-        {
-            if (sfr::rockblock::opcode[o] != constants::rockblock::known_commands[c][o])
-            {
+        for (size_t o = 0; o < constants::rockblock::opcode_len; o++) {
+            if (sfr::rockblock::opcode[o] != constants::rockblock::known_commands[c][o]) {
                 opcode = false;
             }
         }
-        for (size_t a1 = 0; a1 < constants::rockblock::arg1_len; a1++)
-        {
-            if (sfr::rockblock::arg_1[a1] != constants::rockblock::known_commands[c][a1 + constants::rockblock::opcode_len])
-            {
+        for (size_t a1 = 0; a1 < constants::rockblock::arg1_len; a1++) {
+            if (sfr::rockblock::arg_1[a1] != constants::rockblock::known_commands[c][a1 + constants::rockblock::opcode_len]) {
                 arg_1 = false;
             }
         }
-        for (size_t a2 = 0; a2 < constants::rockblock::arg2_len; a2++)
-        {
-            if (sfr::rockblock::arg_2[a2] != constants::rockblock::known_commands[c][a2 + constants::rockblock::opcode_len + constants::rockblock::arg1_len])
-            {
+        for (size_t a2 = 0; a2 < constants::rockblock::arg2_len; a2++) {
+            if (sfr::rockblock::arg_2[a2] != constants::rockblock::known_commands[c][a2 + constants::rockblock::opcode_len + constants::rockblock::arg1_len]) {
                 arg_2 = false;
             }
         }
 
-        if ((opcode && arg_1 && arg_2))
-        {
+        if ((opcode && arg_1 && arg_2)) {
             Serial.println("SAT CMD: command validated");
             return true;
         }
@@ -643,13 +555,10 @@ bool RockblockControlTask::valid_command()
 
 void RockblockControlTask::downlinked_something()
 {
-    if (sfr::rockblock::downlink_camera == true)
-    {
+    if (sfr::rockblock::downlink_camera == true) {
         sfr::rockblock::last_downlink_normal = false;
         sfr::camera::report_downlinked = true;
-    }
-    else
-    {
+    } else {
         sfr::rockblock::last_downlink_normal = true;
     }
     sfr::rockblock::downlink_camera = false;

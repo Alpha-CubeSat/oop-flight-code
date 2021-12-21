@@ -1,14 +1,16 @@
-#include <unity.h>
-#include <Monitors/CameraReportMonitor.hpp>
 #include <Control Tasks/CameraControlTask.hpp>
+#include <Monitors/CameraReportMonitor.hpp>
+#include <unity.h>
 
-void test_camera_valid_initialize(){
+void test_camera_valid_initialize()
+{
     CameraControlTask camera_control_task(0);
-    //TEST_ASSERT_EQUAL(false, sfr::camera::powered);
-    TEST_ASSERT_EQUAL(2,2);
+    // TEST_ASSERT_EQUAL(false, sfr::camera::powered);
+    TEST_ASSERT_EQUAL(2, 2);
 }
 
-void test_camera_power_on(){
+void test_camera_power_on()
+{
     CameraControlTask camera_control_task(0);
     TEST_ASSERT_EQUAL(false, sfr::camera::powered);
 
@@ -17,7 +19,8 @@ void test_camera_power_on(){
     TEST_ASSERT_EQUAL(true, sfr::camera::powered);
 }
 
-void test_camera_power_off(){
+void test_camera_power_off()
+{
     CameraControlTask camera_control_task(0);
     TEST_ASSERT_EQUAL(false, sfr::camera::powered);
 
@@ -31,7 +34,8 @@ void test_camera_power_off(){
     TEST_ASSERT_EQUAL(false, sfr::camera::powered);
 }
 
-void test_take_picture(){
+void test_take_picture()
+{
     CameraControlTask camera_control_task(0);
     TEST_ASSERT_EQUAL(false, sfr::camera::powered);
 
@@ -45,7 +49,8 @@ void test_take_picture(){
     TEST_ASSERT_EQUAL(1, sfr::camera::images_written);
 }
 
-void test_camera_report_prepare(){
+void test_camera_report_prepare()
+{
     CameraReportMonitor camera_report_monitor(0);
     sfr::camera::report_ready = true;
     camera_report_monitor.execute();
@@ -53,23 +58,26 @@ void test_camera_report_prepare(){
     TEST_ASSERT_EQUAL(sfr::camera::current_serial, sfr::camera::images_written);
 }
 
-int test_camera() {
+int test_camera()
+{
     UNITY_BEGIN();
     RUN_TEST(test_camera_valid_initialize);
-    //RUN_TEST(test_camera_power_on);
-    //RUN_TEST(test_camera_power_off);
-    //RUN_TEST(test_take_picture);
-    //RUN_TEST(test_camera_report_prepare);
+    // RUN_TEST(test_camera_power_on);
+    // RUN_TEST(test_camera_power_off);
+    // RUN_TEST(test_take_picture);
+    // RUN_TEST(test_camera_report_prepare);
     return UNITY_END();
 }
 
 #ifdef DESKTOP
-int main() {
+int main()
+{
     return test_camera();
 }
 #else
 #include <Arduino.h>
-void setup() {
+void setup()
+{
     delay(2000);
     Serial.begin(9600);
     test_camera();

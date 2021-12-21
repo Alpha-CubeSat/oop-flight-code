@@ -3,11 +3,12 @@
 
 #include "sfr.hpp"
 
-class ACSMonitor : public TimedControlTask<void>{
-    public:
-        ACSMonitor(unsigned int offset);
-        void execute();
-        StarshotACS0ModelClass rtObj;
+class ACSMonitor : public TimedControlTask<void>
+{
+public:
+    ACSMonitor(unsigned int offset);
+    void execute();
+    StarshotACS0ModelClass rtObj;
 };
 
 #endif
