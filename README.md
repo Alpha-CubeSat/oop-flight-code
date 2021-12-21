@@ -15,12 +15,24 @@
 * You can also use `pio run -e debug -t upload` to upload code with debugging print statements, or `pio run -e teensy35 -t upload` to upload code without debugging print statements.
 * Use `pio test` to run unit tests.
 * To view the serial monitor press the electrical cord icon.
+* Navigate to View -> Command Palette
+* Search "settings" and select Preferences: Open Settings (JSON)
+* Enter the following in the settings JSON and save 
+
+`
+{
+    "C_Cpp.clang_format_style": "file",
+    "editor.formatOnSave": true,
+}
+`
 
 ## Code Overview
 
 This code is structured based on [Lodestar](https://github.com/shihaocao/lodestar), a small scale electric demonstrator for the belly-flop and tail-sitting control algorithms necessary for SpaceX's Starship.
 
 Both ClockManager and TimedControlTask are from [PAN](https://github.com/pathfinder-for-autonomous-navigation).
+
+The clang-format file is from this [thread](https://stackoverflow.com/questions/45823734/visual-studio-code-formatting-for).
 
 ### main.cpp
 This file is comparable to a .ino file you would see in the Arduino IDE (notice setup and loop are exactly the same as they would be in an Arduino file). 
