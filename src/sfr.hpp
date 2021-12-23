@@ -57,11 +57,13 @@ namespace sfr
         extern bool photo_taken_sd_failed;
         extern bool take_photo;
         extern bool turn_on;
-        extern uint8_t progress;
-        extern bool init;
-        extern uint32_t start_time;
         extern bool turn_off;
         extern bool powered;
+        extern bool begun;
+        extern bool resolution_set;
+        extern uint8_t start_time;
+        extern uint8_t begin_time;
+        extern uint8_t resolution_set_time;
         extern uint8_t buffer[255];
         extern int current_serial;
         extern int fragment_number;

@@ -57,5 +57,4 @@ void MainControlLoop::execute()
     Serial.println(sfr::camera::turn_on);
     Serial.print("powered: ");
     Serial.println(sfr::camera::powered);
-//measure time of init
 }

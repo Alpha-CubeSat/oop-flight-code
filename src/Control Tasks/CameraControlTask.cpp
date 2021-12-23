@@ -27,41 +27,35 @@ void CameraControlTask::execute()
     }
         
     if (sfr::camera::turn_on == true && sfr::camera::powered == false) {
-        if (sfr::camera::init == true){
+        if (sfr::camera::start_time == 0){
             sfr::camera::start_time = millis();
             Pins::setPinState(constants::camera::power_on_pin, HIGH);
-            sfr::camera::init = false;
-
         }
-        if (millis() - sfr::camera::start_time >= 60) {
-            if (adaCam.begin(sfr::camera::progress)) {
-                sfr::camera::progress++;
-                if (sfr::camera::progress < 4) {
-                    Serial.println("camera initialization in progress");
-                    #ifdef VERBOSE
-                    #endif
-                } 
-                else {
-                    #ifdef VERBOSE
-                    #endif
-                    Serial.println("turned on camera");
-                    delay(100);
+        if (millis() - sfr::camera::start_time >= 100) { //need to determine this delay
+            if (!sfr::camera::begun) {
+                sfr::camera::begun = adaCam.begin();
+                #ifdef VERBOSE
+                Serial.println("turned on camera");
+                #endif
+                sfr::camera::begin_time = millis();
+            }
+            if (sfr::camera::begun && millis() - sfr::camera::begin_time > 100){
+                if (!sfr::camera::resolution_set){
                     adaCam.setImageSize(VC0706_160x120);
-                    sfr::camera::powered = true;
-                    sfr::camera::turn_on = false;
-                    delay(200);
-                    if (adaCam.getImageSize() == VC0706_160x120) {
-                        Serial.println("160x120"); 
-                        }
-                    else {
-                        Serial.println("failed to set resolution correctly");
-                    }
+                    sfr::camera::resolution_set = true;
+                    sfr::camera::resolution_set_time = millis();
+                    
                 }
+                if (sfr::camera::resolution_set && millis() - sfr::camera::resolution_set_time > 200){
+                    if (adaCam.getImageSize() == VC0706_160x120){
+                        #ifdef VERBOSE
+                        Serial.println("resolution set successfully")
+                        #endif
+                        sfr::camera::powered = true;
+                        sfr::camera::turn_on = false;
+                    }
+                }              
             }
-            else {
-                Serial.println("begin false");
-            }
-
         }
     }
         
