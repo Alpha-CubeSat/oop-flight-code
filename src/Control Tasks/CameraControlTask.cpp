@@ -49,7 +49,7 @@ void CameraControlTask::execute()
                 if (sfr::camera::resolution_set && millis() - sfr::camera::resolution_set_time > 200){
                     if (adaCam.getImageSize() == VC0706_160x120){
                         #ifdef VERBOSE
-                        Serial.println("resolution set successfully")
+                        Serial.println("resolution set successfully");
                         #endif
                         sfr::camera::powered = true;
                         sfr::camera::turn_on = false;
