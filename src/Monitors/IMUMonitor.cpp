@@ -5,9 +5,8 @@ IMUMonitor::IMUMonitor(unsigned int offset)
 {
     imu = Adafruit_LSM9DS1(constants::imu::CSAG, constants::imu::CSM);
     imu.begin();
-    if (!imu.begin())
-    {
-        //sfr::rockblock::fault_report[constants::fault::imu_begin] = 1;
+    if (!imu.begin()) {
+        // sfr::rockblock::fault_report[constants::fault::imu_begin] = 1;
     }
     imu.setupAccel(imu.LSM9DS1_ACCELRANGE_2G);
     imu.setupMag(imu.LSM9DS1_MAGGAIN_4GAUSS);
@@ -21,26 +20,21 @@ void IMUMonitor::execute()
     imu.getEvent(&accel, &mag, &gyro, &temp);
 
     imu.setupMag(imu.LSM9DS1_MAGGAIN_4GAUSS);
-    if (mag.magnetic.x > 4 || mag.magnetic.y > 4 || mag.magnetic.z > 4)
-    {
+    if (mag.magnetic.x > 4 || mag.magnetic.y > 4 || mag.magnetic.z > 4) {
         imu.setupMag(imu.LSM9DS1_MAGGAIN_8GAUSS);
     }
-    if (mag.magnetic.x > 8 || mag.magnetic.y > 8 || mag.magnetic.z > 8)
-    {
+    if (mag.magnetic.x > 8 || mag.magnetic.y > 8 || mag.magnetic.z > 8) {
         imu.setupMag(imu.LSM9DS1_MAGGAIN_12GAUSS);
     }
-    if (mag.magnetic.x > 12 || mag.magnetic.y > 12 || mag.magnetic.z > 12)
-    {
+    if (mag.magnetic.x > 12 || mag.magnetic.y > 12 || mag.magnetic.z > 12) {
         imu.setupMag(imu.LSM9DS1_MAGGAIN_16GAUSS);
     }
 
     imu.setupGyro(imu.LSM9DS1_GYROSCALE_245DPS);
-    if (gyro.gyro.x > 245 || gyro.gyro.y > 245 || gyro.gyro.z > 245)
-    {
+    if (gyro.gyro.x > 245 || gyro.gyro.y > 245 || gyro.gyro.z > 245) {
         imu.setupGyro(imu.LSM9DS1_GYROSCALE_500DPS);
     }
-    if (gyro.gyro.x > 500 || gyro.gyro.y > 500 || gyro.gyro.z > 500)
-    {
+    if (gyro.gyro.x > 500 || gyro.gyro.y > 500 || gyro.gyro.z > 500) {
         imu.setupGyro(imu.LSM9DS1_GYROSCALE_2000DPS);
     }
 
@@ -70,28 +64,22 @@ void IMUMonitor::execute()
 
     // Remove old readings
 
-    if (sfr::imu::mag_x_buffer.size() > constants::sensor::collect)
-    {
+    if (sfr::imu::mag_x_buffer.size() > constants::sensor::collect) {
         sfr::imu::mag_x_buffer.pop_back();
     }
-    if (sfr::imu::mag_y_buffer.size() > constants::sensor::collect)
-    {
+    if (sfr::imu::mag_y_buffer.size() > constants::sensor::collect) {
         sfr::imu::mag_y_buffer.pop_back();
     }
-    if (sfr::imu::mag_z_buffer.size() > constants::sensor::collect)
-    {
+    if (sfr::imu::mag_z_buffer.size() > constants::sensor::collect) {
         sfr::imu::mag_z_buffer.pop_back();
     }
-    if (sfr::imu::gyro_x_buffer.size() > constants::sensor::collect)
-    {
+    if (sfr::imu::gyro_x_buffer.size() > constants::sensor::collect) {
         sfr::imu::gyro_x_buffer.pop_back();
     }
-    if (sfr::imu::gyro_y_buffer.size() > constants::sensor::collect)
-    {
+    if (sfr::imu::gyro_y_buffer.size() > constants::sensor::collect) {
         sfr::imu::gyro_y_buffer.pop_back();
     }
-    if (sfr::imu::gyro_z_buffer.size() > constants::sensor::collect)
-    {
+    if (sfr::imu::gyro_z_buffer.size() > constants::sensor::collect) {
         sfr::imu::gyro_z_buffer.pop_back();
     }
 
@@ -114,13 +102,21 @@ void IMUMonitor::execute()
     sfr::imu::gyro_y_average = gyro_y_sum / sfr::imu::gyro_y_buffer.size();
     sfr::imu::gyro_z_average = gyro_z_sum / sfr::imu::gyro_z_buffer.size();
 
-    #ifdef VERBOSE
-    Serial.print("Mag: "); Serial.print(sfr::imu::mag_x_average); Serial.print(",");
-    Serial.print(sfr::imu::mag_y_average); Serial.print(",");
-    Serial.print(sfr::imu::mag_z_average); Serial.println(" Gauss");
-    Serial.print("Gyro: "); Serial.print(sfr::imu::gyro_x_average); Serial.print(",");
-    Serial.print(sfr::imu::gyro_y_average); Serial.print(",");
-    Serial.print(sfr::imu::gyro_z_average); Serial.println(" deg/s");
-    #endif
+#ifdef VERBOSE
+    Serial.print("Mag: ");
+    Serial.print(sfr::imu::mag_x_average);
+    Serial.print(",");
+    Serial.print(sfr::imu::mag_y_average);
+    Serial.print(",");
+    Serial.print(sfr::imu::mag_z_average);
+    Serial.println(" Gauss");
+    Serial.print("Gyro: ");
+    Serial.print(sfr::imu::gyro_x_average);
+    Serial.print(",");
+    Serial.print(sfr::imu::gyro_y_average);
+    Serial.print(",");
+    Serial.print(sfr::imu::gyro_z_average);
+    Serial.println(" deg/s");
+#endif
     uint32_t end = micros();
 }

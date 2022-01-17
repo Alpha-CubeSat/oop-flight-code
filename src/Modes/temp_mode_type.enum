@@ -1,8 +1,0 @@
-#ifndef temp_mode_type_enum_
-#define temp_mode_type_enum_
-
-enum class temp_mode_type: unsigned char {
-    inactive = 0,
-    active};
-
-#endif

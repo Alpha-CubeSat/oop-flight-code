@@ -6,7 +6,6 @@
 #include "Modes/acs_mode_type.enum"
 #include "Modes/rockblock_mode_type.enum"
 #include "Modes/burnwire_mode_type.enum"
-#include "Modes/temp_mode_type.enum"
 #include "Modes/fault_mode_type.enum"
 #include "Modes/simple_acs_type.enum"
 #include "Control Tasks/TimedControlTask.hpp"
@@ -142,7 +141,6 @@ namespace sfr
         extern float temp_c;
         extern std::deque<float> temp_c_buffer;
         extern float temp_c_average;
-        extern temp_mode_type mode;
         extern bool in_sun;
     }
     namespace current

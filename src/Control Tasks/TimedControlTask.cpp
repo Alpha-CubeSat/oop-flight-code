@@ -1,4 +1,4 @@
-//Taken from Cornell's PAN
+// Taken from Cornell's PAN
 
 #include "TimedControlTask.hpp"
 

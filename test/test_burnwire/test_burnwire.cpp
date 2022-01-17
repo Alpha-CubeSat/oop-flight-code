@@ -1,7 +1,7 @@
-#include <unity.h>
 #include "Control Tasks/BurnwireControlTask.hpp"
 #include "MissionManager.hpp"
 #include "sfr.hpp"
+#include <unity.h>
 
 void test_valid_initialization()
 {
@@ -44,8 +44,7 @@ void test_out_of_order_commands()
     burnwire_control_task.execute();
     TEST_ASSERT_EQUAL(burnwire_mode_type::burn, sfr::burnwire::mode);
 
-    for (int i = 0; i < constants::burnwire::max_attempts; ++i)
-    {
+    for (int i = 0; i < constants::burnwire::max_attempts; ++i) {
         delay(sfr::burnwire::burn_time);
         burnwire_control_task.execute();
         TEST_ASSERT_EQUAL(burnwire_mode_type::delay, sfr::burnwire::mode);
@@ -83,8 +82,7 @@ void test_max_attempts()
     burnwire_control_task.execute();
     TEST_ASSERT_EQUAL(burnwire_mode_type::burn, sfr::burnwire::mode);
 
-    for (int i = 0; i < constants::burnwire::max_attempts; ++i)
-    {
+    for (int i = 0; i < constants::burnwire::max_attempts; ++i) {
         delay(sfr::burnwire::burn_time);
         burnwire_control_task.execute();
         TEST_ASSERT_EQUAL(burnwire_mode_type::delay, sfr::burnwire::mode);
@@ -203,13 +201,12 @@ void test_sensor()
     burnwire_control_task.execute();
     mission_manager.execute();
     TEST_ASSERT_EQUAL(burnwire_mode_type::fire, sfr::burnwire::mode);
-    
+
     sfr::mission::mode = mission_mode_type::deployment;
     sfr::camera::powered = true;
     burnwire_control_task.execute();
     mission_manager.execute();
     TEST_ASSERT_EQUAL(burnwire_mode_type::burn, sfr::burnwire::mode);
-
 
     sfr::mission::mode = mission_mode_type::deployment;
     sfr::photoresistor::covered = false;
@@ -223,7 +220,7 @@ void test_sensor()
     burnwire_control_task.execute();
     mission_manager.execute();
     TEST_ASSERT_EQUAL(burnwire_mode_type::burn, sfr::burnwire::mode);
-    
+
     sfr::mission::mode = mission_mode_type::deployment;
     sfr::photoresistor::covered = false;
     sfr::button::pressed = false;
@@ -253,8 +250,7 @@ void test_camera_max_attempts()
     TEST_ASSERT_EQUAL(burnwire_mode_type::fire, sfr::burnwire::mode);
 
     sfr::camera::powered = false;
-    for (int i = 0; i < constants::burnwire::camera_max_attempts; ++i)
-    {
+    for (int i = 0; i < constants::burnwire::camera_max_attempts; ++i) {
         burnwire_control_task.execute();
         TEST_ASSERT_EQUAL(burnwire_mode_type::fire, sfr::burnwire::mode);
     }
@@ -293,8 +289,7 @@ void test_camera_some_attempts()
     TEST_ASSERT_EQUAL(burnwire_mode_type::fire, sfr::burnwire::mode);
 
     sfr::camera::powered = false;
-    for (int i = 0; i < constants::burnwire::camera_max_attempts / 2; ++i)
-    {
+    for (int i = 0; i < constants::burnwire::camera_max_attempts / 2; ++i) {
         burnwire_control_task.execute();
         TEST_ASSERT_EQUAL(burnwire_mode_type::fire, sfr::burnwire::mode);
     }
@@ -878,8 +873,8 @@ void test_fire_burnwire_logic()
 int test_burnwire()
 {
     UNITY_BEGIN();
-    //Timeout is long- change in constants for testing
-    //RUN_TEST(test_armed_timeout);
+    // Timeout is long- change in constants for testing
+    // RUN_TEST(test_armed_timeout);
     RUN_TEST(test_valid_initialization);
     RUN_TEST(test_no_solar_current);
     RUN_TEST(test_out_of_order_commands);

@@ -3,10 +3,11 @@
 
 #include "sfr.hpp"
 
-class PinControlTask{
-    public:
-        PinControlTask();
-        void execute();       
+class PinControlTask
+{
+public:
+    PinControlTask();
+    void execute();
 };
 
 #endif

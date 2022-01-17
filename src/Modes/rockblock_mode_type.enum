@@ -1,8 +1,9 @@
 #ifndef rockblock_mode_type_enum_
 #define rockblock_mode_type_enum_
 
-enum class rockblock_mode_type: unsigned char {
-    standby=0,
+enum class rockblock_mode_type : unsigned char
+{
+    standby = 0,
     send_at,
     await_at,
     send_signal_strength,
@@ -24,6 +25,7 @@ enum class rockblock_mode_type: unsigned char {
     queue_check,
     send_flush,
     await_flush,
-    end_transmission};
+    end_transmission
+};
 
 #endif
