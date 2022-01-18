@@ -42,7 +42,7 @@ namespace sfr {
         int start_time = 0;
         int camera_attempts = 0;
         int burn_time = 500;
-        int armed_time = constants::rockblock::two_days;
+        int armed_time = constants::time::two_days;
     } // namespace burnwire
     namespace camera {
         bool photo_taken_sd_failed = false;
@@ -94,7 +94,7 @@ namespace sfr {
         uint16_t f_opcode = 0;
         uint32_t f_arg_1 = 0;
         uint32_t f_arg_2 = 0;
-        int timeout = 10 * constants::rockblock::one_minute;
+        int timeout = 10 * constants::time::one_minute;
         int start_time = 0;
         bool last_timed_out = false;
         int num_downlinks = 0;
