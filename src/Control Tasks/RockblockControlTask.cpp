@@ -8,9 +8,9 @@ RockblockControlTask::RockblockControlTask(unsigned int offset) : TimedControlTa
 void RockblockControlTask::execute()
 {
     rockblock_mode_type mode = sfr::rockblock::mode;
-    if (sfr::rockblock::last_communication >= sfr::acs::max_no_communication && (int)sfr::rockblock::mode != (int)mission_mode_type::low_power) {
+    /*if (sfr::rockblock::last_communication >= sfr::acs::max_no_communication && (int)sfr::rockblock::mode != (int)mission_mode_type::low_power) {
         sfr::acs::mode = acs_mode_type::simple;
-    }
+    }*/
     timed_out();
     switch (mode) {
     case rockblock_mode_type::standby:
