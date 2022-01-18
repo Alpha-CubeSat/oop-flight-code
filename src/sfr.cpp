@@ -33,6 +33,8 @@ namespace sfr {
     namespace mission {
         mission_mode_type mode = mission_mode_type::boot;
         bool low_power_eligible = true;
+        unsigned long boot_start_test = 0;
+
     } // namespace mission
     namespace burnwire {
         bool fire = false;
