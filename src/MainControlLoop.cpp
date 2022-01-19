@@ -50,11 +50,4 @@ void MainControlLoop::execute()
     rockblock_control_task.execute_on_time();
 
     mission_manager.execute_on_time();
-
-    Serial.print("turn on: ");
-    Serial.println(sfr::camera::turn_on);
-    Serial.print("powered: ");
-    Serial.println(sfr::camera::powered);
-    Serial.print("take photo:");
-    Serial.println(sfr::camera::take_photo);
 }

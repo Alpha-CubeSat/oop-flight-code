@@ -41,7 +41,7 @@ void CameraControlTask::execute()
             }
             if (sfr::camera::begun && millis() - sfr::camera::begin_time >= 100) {
                 if (!sfr::camera::resolution_set) {
-                    adaCam.setImageSize(VC0706_160x120);
+                    adaCam.setImageSize(sfr::camera::set_res);
                     sfr::camera::resolution_set = true;
                     sfr::camera::resolution_set_time = millis();
 #ifdef VERBOSE
@@ -49,10 +49,11 @@ void CameraControlTask::execute()
 #endif
                 }
                 if (sfr::camera::resolution_set && (millis() - sfr::camera::resolution_set_time >= 200)) {
-                    if (adaCam.getImageSize() == VC0706_160x120) {
+                    uint8_t get_res = adaCam.getImageSize();
+                    if (get_res == sfr::camera::set_res) {
 #ifdef VERBOSE
-                        Serial.println("resolution fetched successfully");
-
+                        Serial.print("resolution fetched successfully: ");
+                        Serial.println(get_res);
 #endif
                         sfr::camera::start_time = 0;
                         sfr::camera::begin_time = 0;

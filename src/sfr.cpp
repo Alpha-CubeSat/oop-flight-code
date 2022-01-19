@@ -71,6 +71,7 @@ namespace sfr {
         bool report_downlinked = true;
         char filename[15];
         uint16_t jpglen = 0;
+        uint8_t set_res = VC0706_160x120;
     } // namespace camera
     namespace rockblock {
         unsigned long last_communication = 0;

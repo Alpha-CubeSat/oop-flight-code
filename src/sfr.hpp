@@ -71,6 +71,7 @@ namespace sfr {
         extern bool report_downlinked;
         extern char filename[15];
         extern uint16_t jpglen;
+        extern uint8_t set_res;
     } // namespace camera
     namespace rockblock {
         extern unsigned long last_communication;
