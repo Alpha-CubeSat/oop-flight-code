@@ -2,46 +2,41 @@
 #define SFR_HPP_
 
 #include "Arduino.h"
-#include "Modes/mission_mode_type.enum"
+#include "Control Tasks/BurnwireControlTask.hpp"
+#include "Control Tasks/TimedControlTask.hpp"
+#include "MissionManager.hpp"
 #include "Modes/acs_mode_type.enum"
-#include "Modes/rockblock_mode_type.enum"
 #include "Modes/burnwire_mode_type.enum"
 #include "Modes/fault_mode_type.enum"
+#include "Modes/mission_mode_type.enum"
+#include "Modes/rockblock_mode_type.enum"
 #include "Modes/simple_acs_type.enum"
-#include "Control Tasks/TimedControlTask.hpp"
-#include "Control Tasks/BurnwireControlTask.hpp"
+#include "Pins.hpp"
 #include "RockblockSimulator.hpp"
 #include "constants.hpp"
-#include "MissionManager.hpp"
-#include "Pins.hpp"
-#include <SD.h>
-#include <Adafruit_VC0706.h>
-#include <StarshotACS0.h>
 #include <Adafruit_LSM9DS1.h>
-#include <iostream>
-#include <string>
-#include <sstream>
+#include <Adafruit_VC0706.h>
+#include <SD.h>
+#include <StarshotACS0.h>
 #include <deque>
-#include <numeric>
+#include <iostream>
 #include <map>
+#include <numeric>
+#include <sstream>
+#include <string>
 
-namespace sfr
-{
-    namespace pins
-    {
+namespace sfr {
+    namespace pins {
         extern std::map<int, int> pinMap;
     }
-    namespace photoresistor
-    {
+    namespace photoresistor {
         extern bool covered;
     }
-    namespace mission
-    {
+    namespace mission {
         extern mission_mode_type mode;
         extern bool low_power_eligible;
-    }
-    namespace burnwire
-    {
+    } // namespace mission
+    namespace burnwire {
         extern bool fire;
         extern bool arm;
         extern burnwire_mode_type mode;
@@ -50,9 +45,8 @@ namespace sfr
         extern int camera_attempts;
         extern int burn_time;
         extern int armed_time;
-    }
-    namespace camera
-    {
+    } // namespace burnwire
+    namespace camera {
         extern bool photo_taken_sd_failed;
         extern bool take_photo;
         extern bool turn_on;
@@ -72,9 +66,8 @@ namespace sfr
         extern bool report_downlinked;
         extern char filename[15];
         extern uint16_t jpglen;
-    }
-    namespace rockblock
-    {
+    } // namespace camera
+    namespace rockblock {
         extern unsigned long last_communication;
         extern bool last_downlink_normal;
         extern int camera_commands[99][constants::rockblock::command_len];
@@ -107,9 +100,8 @@ namespace sfr
         extern int start_time;
         extern bool last_timed_out;
         extern int num_downlinks;
-    }
-    namespace imu
-    {
+    } // namespace rockblock
+    namespace imu {
         extern float mag_x;
         extern float mag_y;
         extern float mag_z;
@@ -130,45 +122,40 @@ namespace sfr
         extern float gyro_x_average;
         extern float gyro_y_average;
         extern float gyro_z_average;
-    }
-    namespace temperature
-    {
+    } // namespace imu
+    namespace temperature {
         extern float temp_c;
         extern std::deque<float> temp_c_buffer;
         extern float temp_c_average;
         extern bool in_sun;
-    }
-    namespace current
-    {
+    } // namespace temperature
+    namespace current {
         extern float solar_current;
         extern std::deque<float> solar_current_buffer;
         extern float solar_current_average;
         extern bool in_sun;
-    }
-    namespace acs
-    {
+    } // namespace current
+    namespace acs {
         extern acs_mode_type mode;
         extern float current1;
         extern float current2;
         extern float current3;
         extern simple_acs_type mag;
         extern unsigned long max_no_communication;
-    }
-    namespace battery
-    {
+    } // namespace acs
+    namespace battery {
         extern float voltage;
         extern std::deque<float> voltage_buffer;
         extern float voltage_average;
-    }
-    namespace fault
-    {
+    } // namespace battery
+    namespace fault {
         extern fault_mode_type mode;
 
         extern unsigned char fault_1;
         extern unsigned char fault_2;
         extern unsigned char fault_3;
 
-        //FAULT 1
+        // FAULT 1
         extern bool check_mag_x;
         extern bool check_mag_y;
         extern bool check_mag_z;
@@ -178,16 +165,15 @@ namespace sfr
         extern bool check_acc_x;
         extern bool check_acc_y;
 
-        //FAULT 2
+        // FAULT 2
         extern bool check_acc_z;
         extern bool check_temp_c;
         extern bool check_solar_current;
         extern bool check_voltage;
-    }
-    namespace button
-    {
+    } // namespace fault
+    namespace button {
         extern bool pressed;
     }
-};
+}; // namespace sfr
 
 #endif

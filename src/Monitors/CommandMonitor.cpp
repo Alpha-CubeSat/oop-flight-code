@@ -56,7 +56,7 @@ void CommandMonitor::execute()
 
 void CommandMonitor::dispatch_change_mission_mode()
 {
-    if (sfr::rockblock::f_arg_1 == get_decimal_arg(constants::rockblock::initialization)) {
+    /*if (sfr::rockblock::f_arg_1 == get_decimal_arg(constants::rockblock::initialization)) {
         MissionManager::transition_to_initialization();
     } else if (sfr::rockblock::f_arg_1 == get_decimal_arg(constants::rockblock::deployment)) {
         MissionManager::transition_to_deployment();
@@ -66,7 +66,7 @@ void CommandMonitor::dispatch_change_mission_mode()
         MissionManager::transition_to_safe();
     } else if (sfr::rockblock::f_arg_1 == get_decimal_arg(constants::rockblock::low_power)) {
         MissionManager::transition_to_low_power();
-    }
+    }*/
 }
 
 void CommandMonitor::dispatch_change_true_false(bool &value)
