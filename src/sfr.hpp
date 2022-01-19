@@ -52,7 +52,12 @@ namespace sfr {
         extern bool turn_on;
         extern bool turn_off;
         extern bool powered;
-        extern uint8_t buffer[255];
+        extern bool begun;
+        extern bool resolution_set;
+        extern uint64_t start_time;
+        extern uint64_t begin_time;
+        extern uint64_t resolution_set_time;
+        extern uint64_t buffer[255];
         extern int current_serial;
         extern int fragment_number;
         extern int fragment_number_requested;
@@ -66,6 +71,7 @@ namespace sfr {
         extern bool report_downlinked;
         extern char filename[15];
         extern uint16_t jpglen;
+        extern uint8_t set_res;
     } // namespace camera
     namespace rockblock {
         extern unsigned long last_communication;

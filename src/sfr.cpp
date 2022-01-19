@@ -52,7 +52,12 @@ namespace sfr {
         bool turn_on = false;
         bool turn_off = false;
         bool powered = false;
-        uint8_t buffer[255] = {0};
+        bool begun = false;
+        bool resolution_set = false;
+        uint64_t start_time = 0;
+        uint64_t begin_time = 0;
+        uint64_t resolution_set_time = 0;
+        uint64_t buffer[255] = {0};
         int current_serial = 0;
         int fragment_number = 0;
         int fragment_number_requested = 3;
@@ -66,6 +71,7 @@ namespace sfr {
         bool report_downlinked = true;
         char filename[15];
         uint16_t jpglen = 0;
+        uint8_t set_res = VC0706_160x120;
     } // namespace camera
     namespace rockblock {
         unsigned long last_communication = 0;

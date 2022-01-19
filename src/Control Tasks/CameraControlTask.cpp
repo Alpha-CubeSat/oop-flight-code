@@ -27,20 +27,50 @@ void CameraControlTask::execute()
     }
 
     if (sfr::camera::turn_on == true && sfr::camera::powered == false) {
-        Pins::setPinState(constants::camera::power_on_pin, HIGH);
-        if (adaCam.begin()) {
+        if (sfr::camera::start_time == 0) {
+            sfr::camera::start_time = millis();
+            Pins::setPinState(constants::camera::power_on_pin, HIGH);
+        }
+        if (millis() - sfr::camera::start_time >= 100) { //need to determine this delay
+            if (!sfr::camera::begun) {
+                sfr::camera::begun = adaCam.begin();
 #ifdef VERBOSE
-            Serial.println("turned on camera");
+                Serial.println("turned on camera");
 #endif
-            adaCam.setImageSize(VC0706_160x120);
-            sfr::camera::powered = true;
-            sfr::camera::turn_on = false;
+                sfr::camera::begin_time = millis();
+            }
+            if (sfr::camera::begun && millis() - sfr::camera::begin_time >= 100) {
+                if (!sfr::camera::resolution_set) {
+                    adaCam.setImageSize(sfr::camera::set_res);
+                    sfr::camera::resolution_set = true;
+                    sfr::camera::resolution_set_time = millis();
+#ifdef VERBOSE
+                    Serial.println("resolution commanded successfully");
+#endif
+                }
+                if (sfr::camera::resolution_set && (millis() - sfr::camera::resolution_set_time >= 200)) {
+                    uint8_t get_res = adaCam.getImageSize();
+                    if (get_res == sfr::camera::set_res) {
+#ifdef VERBOSE
+                        Serial.print("resolution fetched successfully: ");
+                        Serial.println(get_res);
+#endif
+                        sfr::camera::start_time = 0;
+                        sfr::camera::begin_time = 0;
+                        sfr::camera::resolution_set_time = 0;
+                        sfr::camera::begun = false;
+                        sfr::camera::resolution_set = false;
+                        sfr::camera::powered = true;
+                        sfr::camera::turn_on = false;
+                    }
+                }
+            }
         }
     }
 
     if (sfr::camera::turn_off == true && sfr::camera::powered == true) {
-#ifdef VERBOSE
         Serial.println("turned off camera");
+#ifdef VERBOSE
 #endif
         Pins::setPinState(constants::camera::power_on_pin, LOW);
         pinMode(constants::camera::rx, OUTPUT);
