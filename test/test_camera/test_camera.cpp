@@ -11,10 +11,24 @@ void test_camera_valid_initialize()
 
 void test_camera_power_on()
 {
+    sfr::camera::start_time = 0;
+    sfr::camera::begin_time = 0;
+    sfr::camera::resolution_set_time = 0;
+    sfr::camera::begun = false;
+    sfr::camera::resolution_set = false;
+    sfr::camera::powered = false;
+    sfr::camera::turn_on = false;
     CameraControlTask camera_control_task(0);
     TEST_ASSERT_EQUAL(false, sfr::camera::powered);
-
     sfr::camera::turn_on = true;
+    camera_control_task.execute();
+    delay(100);
+    camera_control_task.execute();
+    TEST_ASSERT_EQUAL(true, sfr::camera::begun);
+    delay(100);
+    camera_control_task.execute();
+    TEST_ASSERT_EQUAL(true, sfr::camera::resolution_set);
+    delay(200);
     camera_control_task.execute();
     TEST_ASSERT_EQUAL(true, sfr::camera::powered);
 }
@@ -62,7 +76,7 @@ int test_camera()
 {
     UNITY_BEGIN();
     RUN_TEST(test_camera_valid_initialize);
-    // RUN_TEST(test_camera_power_on);
+    RUN_TEST(test_camera_power_on);
     // RUN_TEST(test_camera_power_off);
     // RUN_TEST(test_take_picture);
     // RUN_TEST(test_camera_report_prepare);

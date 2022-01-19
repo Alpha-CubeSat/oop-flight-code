@@ -1,9 +1,7 @@
 #include "sfr.hpp"
 
-namespace sfr
-{
-    namespace pins
-    {
+namespace sfr {
+    namespace pins {
         std::map<int, int> pinMap = {
             {constants::photoresistor::pin, LOW},
             {constants::burnwire::first_pin, LOW},
@@ -29,17 +27,14 @@ namespace sfr
             {constants::camera::tx, LOW},
             {constants::button::button_pin, LOW}};
     }
-    namespace photoresistor
-    {
+    namespace photoresistor {
         bool covered = true;
     }
-    namespace mission
-    {
+    namespace mission {
         mission_mode_type mode = mission_mode_type::standby;
         bool low_power_eligible = true;
-    }
-    namespace burnwire
-    {
+    } // namespace mission
+    namespace burnwire {
         bool fire = false;
         bool arm = false;
         burnwire_mode_type mode = burnwire_mode_type::standby;
@@ -48,9 +43,8 @@ namespace sfr
         int camera_attempts = 0;
         int burn_time = 500;
         int armed_time = constants::rockblock::two_days;
-    }
-    namespace camera
-    {
+    } // namespace burnwire
+    namespace camera {
         bool photo_taken_sd_failed = false;
         bool take_photo = false;
         bool turn_on = false;
@@ -58,10 +52,10 @@ namespace sfr
         bool powered = false;
         bool begun = false;
         bool resolution_set = false;
-        uint8_t start_time = 0;
-        uint8_t begin_time = 0;
-        uint8_t resolution_set_time = 0;
-        uint8_t buffer[255] = {0};
+        uint64_t start_time = 0;
+        uint64_t begin_time = 0;
+        uint64_t resolution_set_time = 0;
+        uint64_t buffer[255] = {0};
         int current_serial = 0;
         int fragment_number = 0;
         int fragment_number_requested = 3;
@@ -75,9 +69,8 @@ namespace sfr
         bool report_downlinked = true;
         char filename[15];
         uint16_t jpglen = 0;
-    }
-    namespace rockblock
-    {
+    } // namespace camera
+    namespace rockblock {
         unsigned long last_communication = 0;
         bool last_downlink_normal = false;
         int camera_commands[99][constants::rockblock::command_len] = {};
@@ -110,9 +103,8 @@ namespace sfr
         int start_time = 0;
         bool last_timed_out = false;
         int num_downlinks = 0;
-    }
-    namespace imu
-    {
+    } // namespace rockblock
+    namespace imu {
         float mag_x = 0.0;
         float mag_y = 0.0;
         float mag_z = 0.0;
@@ -139,38 +131,33 @@ namespace sfr
         float acc_x_average = 0.0;
         float acc_y_average = 0.0;
         float acc_z_average = 0.0;
-    }
-    namespace temperature
-    {
+    } // namespace imu
+    namespace temperature {
         float temp_c = 0.0;
         std::deque<float> temp_c_buffer;
         float temp_c_average = 0.0;
         bool in_sun = false;
-    }
-    namespace current
-    {
+    } // namespace temperature
+    namespace current {
         float solar_current = 0.0;
         std::deque<float> solar_current_buffer;
         float solar_current_average = 0.0;
         bool in_sun = false;
-    }
-    namespace acs
-    {
+    } // namespace current
+    namespace acs {
         acs_mode_type mode = acs_mode_type::off;
         float current1 = 0;
         float current2 = 0;
         float current3 = 0;
         simple_acs_type mag = simple_acs_type::x;
         unsigned long max_no_communication = 0;
-    }
-    namespace battery
-    {
+    } // namespace acs
+    namespace battery {
         float voltage = 0.0;
         std::deque<float> voltage_buffer;
         float voltage_average = 0.0;
-    }
-    namespace fault
-    {
+    } // namespace battery
+    namespace fault {
         fault_mode_type mode = fault_mode_type::active;
 
         unsigned char fault_1 = 0;
@@ -192,9 +179,8 @@ namespace sfr
         bool check_temp_c = true;
         bool check_solar_current = true;
         bool check_voltage = true;
-    }
-    namespace button
-    {
+    } // namespace fault
+    namespace button {
         bool pressed = true;
     }
-}
+} // namespace sfr

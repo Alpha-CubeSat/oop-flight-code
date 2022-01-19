@@ -55,4 +55,6 @@ void MainControlLoop::execute()
     Serial.println(sfr::camera::turn_on);
     Serial.print("powered: ");
     Serial.println(sfr::camera::powered);
+    Serial.print("take photo:");
+    Serial.println(sfr::camera::take_photo);
 }
