@@ -2,6 +2,17 @@
 #define CONSTANTS_HPP_
 
 namespace constants {
+    namespace time {
+        constexpr unsigned long one_second = 1000;
+        constexpr unsigned long one_minute = 60 * one_second;
+        constexpr unsigned long one_hour = 60 * one_minute;
+        constexpr unsigned long one_day = 24 * one_hour;
+
+        constexpr unsigned long half_second = one_second / 2;
+        constexpr unsigned long ten_minutes = 10 * one_minute;
+        constexpr unsigned long two_hours = 2 * one_hour;
+        constexpr unsigned long two_days = 2 * one_day;
+    } // namespace time
     namespace sensor {
         constexpr int collect = 3;
     }
@@ -20,23 +31,15 @@ namespace constants {
         constexpr int min_armed_time = 0;
         constexpr int max_armed_time = 86400000;
     } // namespace burnwire
-    namespace rockblock {
-        constexpr unsigned long one_second = 1000;
-        constexpr unsigned long one_minute = 60 * one_second;
-        constexpr unsigned long one_hour = 60 * one_minute;
-        constexpr unsigned long one_day = 24 * one_hour;
 
-        constexpr unsigned long half_second = one_second / 2;
-        constexpr unsigned long ten_minutes = 10 * one_minute;
-        constexpr unsigned long two_hours = 2 * one_hour;
-        constexpr unsigned long two_days = 2 * one_day;
+    namespace rockblock {
 
         constexpr int sleep_pin = 19;
 
-        constexpr int min_sleep_period = 2 * one_minute;
+        constexpr int min_sleep_period = 2 * time::one_minute;
 
-        constexpr int min_downlink_period = one_second;
-        constexpr int max_downlink_period = two_days;
+        constexpr int min_downlink_period = time::one_second;
+        constexpr int max_downlink_period = time::two_days;
 
         constexpr int baud = 19200;
         constexpr size_t buffer_size = 63;

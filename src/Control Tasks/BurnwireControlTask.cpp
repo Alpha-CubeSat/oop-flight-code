@@ -14,7 +14,7 @@ void BurnwireControlTask::execute()
 
     switch (mode) {
     case burnwire_mode_type::standby: {
-        if (sfr::burnwire::arm && sfr::mission::mode == mission_mode_type::deployment) {
+        if (sfr::burnwire::arm && sfr::mission::mode == mission_mode_type::mand_burns) {
             sfr::burnwire::mode = burnwire_mode_type::armed;
             sfr::burnwire::start_time = millis();
             sfr::burnwire::fire = false;
@@ -24,7 +24,7 @@ void BurnwireControlTask::execute()
         break;
     }
     case burnwire_mode_type::armed: {
-        if (sfr::mission::mode == mission_mode_type::deployment) {
+        if (sfr::mission::mode == mission_mode_type::mand_burns) {
             if (millis() - sfr::burnwire::start_time >= (uint32_t)sfr::burnwire::armed_time) {
                 transition_to_standby();
             }
@@ -43,7 +43,7 @@ void BurnwireControlTask::execute()
         break;
     }
     case burnwire_mode_type::fire: {
-        if (sfr::mission::mode == mission_mode_type::deployment) {
+        if (sfr::mission::mode == mission_mode_type::mand_burns) {
             if (sfr::camera::powered) {
                 dispatch_burn();
             } else if (sfr::burnwire::camera_attempts >= constants::burnwire::camera_max_attempts) {
@@ -57,7 +57,7 @@ void BurnwireControlTask::execute()
         break;
     }
     case burnwire_mode_type::burn: {
-        if (sfr::mission::mode == mission_mode_type::deployment) {
+        if (sfr::mission::mode == mission_mode_type::mand_burns) {
             if (millis() - sfr::burnwire::start_time >= (uint32_t)sfr::burnwire::burn_time) {
                 sfr::burnwire::mode = burnwire_mode_type::delay;
                 Pins::setPinState(constants::burnwire::first_pin, LOW);
@@ -72,7 +72,7 @@ void BurnwireControlTask::execute()
         break;
     }
     case burnwire_mode_type::delay: {
-        if (sfr::mission::mode == mission_mode_type::deployment) {
+        if (sfr::mission::mode == mission_mode_type::mand_burns) {
             if (millis() - sfr::burnwire::start_time >= constants::burnwire::burn_wait) {
                 dispatch_burn();
             } else {

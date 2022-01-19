@@ -31,8 +31,10 @@ namespace sfr {
         bool covered = true;
     }
     namespace mission {
-        mission_mode_type mode = mission_mode_type::standby;
+        mission_mode_type mode = mission_mode_type::boot;
         bool low_power_eligible = true;
+        unsigned long boot_start_test = 0;
+
     } // namespace mission
     namespace burnwire {
         bool fire = false;
@@ -42,7 +44,7 @@ namespace sfr {
         int start_time = 0;
         int camera_attempts = 0;
         int burn_time = 500;
-        int armed_time = constants::rockblock::two_days;
+        int armed_time = constants::time::two_days;
     } // namespace burnwire
     namespace camera {
         bool photo_taken_sd_failed = false;
@@ -99,7 +101,7 @@ namespace sfr {
         uint16_t f_opcode = 0;
         uint32_t f_arg_1 = 0;
         uint32_t f_arg_2 = 0;
-        int timeout = 10 * constants::rockblock::one_minute;
+        int timeout = 10 * constants::time::one_minute;
         int start_time = 0;
         bool last_timed_out = false;
         int num_downlinks = 0;
@@ -164,7 +166,7 @@ namespace sfr {
         unsigned char fault_2 = 0;
         unsigned char fault_3 = 0;
 
-        //FAULT 1
+        // FAULT 1
         bool check_mag_x = true;
         bool check_mag_y = true;
         bool check_mag_z = true;
@@ -174,7 +176,7 @@ namespace sfr {
         bool check_acc_x = true;
         bool check_acc_y = true;
 
-        //FAULT 2
+        // FAULT 2
         bool check_acc_z = true;
         bool check_temp_c = true;
         bool check_solar_current = true;

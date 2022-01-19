@@ -37,8 +37,8 @@ void FaultMonitor::execute()
             sfr::fault::fault_2 = sfr::fault::fault_2 | constants::fault::voltage;
         }
 
-        if (sfr::fault::fault_1 > 0 || sfr::fault::fault_2 > 0 || sfr::fault::fault_3 > 0) {
+        /*if (sfr::fault::fault_1 > 0 || sfr::fault::fault_2 > 0 || sfr::fault::fault_3 > 0) {
             MissionManager::transition_to_safe();
-        }
+        }*/
     }
 }

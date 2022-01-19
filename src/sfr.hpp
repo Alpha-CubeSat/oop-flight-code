@@ -2,9 +2,8 @@
 #define SFR_HPP_
 
 #include "Arduino.h"
-#include "Control Tasks/TimedControlTask.hpp"
-
 #include "Control Tasks/BurnwireControlTask.hpp"
+#include "Control Tasks/TimedControlTask.hpp"
 #include "MissionManager.hpp"
 #include "Modes/acs_mode_type.enum"
 #include "Modes/burnwire_mode_type.enum"
@@ -161,7 +160,7 @@ namespace sfr {
         extern unsigned char fault_2;
         extern unsigned char fault_3;
 
-        //FAULT 1
+        // FAULT 1
         extern bool check_mag_x;
         extern bool check_mag_y;
         extern bool check_mag_z;
@@ -171,7 +170,7 @@ namespace sfr {
         extern bool check_acc_x;
         extern bool check_acc_y;
 
-        //FAULT 2
+        // FAULT 2
         extern bool check_acc_z;
         extern bool check_temp_c;
         extern bool check_solar_current;
