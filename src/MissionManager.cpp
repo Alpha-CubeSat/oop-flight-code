@@ -1,4 +1,5 @@
 #include "MissionManager.hpp"
+#include <ctime>
 
 MissionManager::MissionManager(unsigned int offset) : TimedControlTask<void>(offset)
 {
@@ -310,8 +311,49 @@ void MissionManager::transition_to_mand_burns() {}
  * Exit Conditions:
  * Settings:
  */
+void expand_buffer(int old_size, char *buffer)
+{
+    char *expanded_buffer = new char[old_size * 2];
+    for (unsigned int i = 0; i < old_size; ++i) {
+        expanded_buffer[i] = buffer[i];
+    }
+    delete[] buffer;
+    buffer = expanded_buffer;
+}
+void MissionManager::dispatch_reg_burns()
+{
 
-void MissionManager::dispatch_reg_burns() {}
+    // const clock_t begin_time = clock();
+    // float timespan =  float(clock() - begin_time) / CLOCKS_PER_SEC;
+    // std::string timestamp;
+    // std::stringstream ss;
+    // ss << clock();
+    // ss >> timestamp;
+
+    // creating buffer
+    int buffer_curr_size = 5 * 100;
+    char *buffer = new char[buffer_curr_size];
+    int buffer_idx_tracker = 0;
+    //section to make sure transition_to_photo() has been called and excuted successfully
+    boolean trans_to_photo = false;
+    printf("%s\n", (transition_to_photo(), "transition_to_photo() was called."));
+    trans_to_photo = true;
+    // mission mode transitions to take photo
+    if (trans_to_photo) {
+        // create and downlink the imu data
+        buffer[buffer_curr_size++] = clock(); //place holder for identifier
+        buffer[buffer_curr_size++] = clock();
+        buffer[buffer_curr_size++] = 'take photo'; //need to be changed to imu mode
+        buffer[buffer_curr_size++] = sfr::imu::gyro_x;
+        buffer[buffer_curr_size++] = sfr::imu::gyro_y;
+        buffer[buffer_curr_size++] = sfr::imu::gyro_z;
+        //if should be checked after every append, unless know the format of downlink report. e.g. how would identifier goes
+        if (buffer_idx_tracker == buffer_curr_size - 1) {
+            expand_buffer(buffer_curr_size, buffer);
+            buffer_curr_size *= 2;
+        }
+    }
+}
 void MissionManager::transition_to_reg_burns() {}
 
 /*

@@ -4,6 +4,8 @@
 #include "Control Tasks/TimedControlTask.hpp"
 #include "constants.hpp"
 #include "sfr.hpp"
+#include <fstream>
+#include <iostream>
 
 class MissionManager : public TimedControlTask<void>
 {
