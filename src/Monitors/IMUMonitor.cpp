@@ -1,5 +1,17 @@
 #include "IMUMonitor.hpp"
 
+// NOTES:
+// changes in this file
+// added an init fault constant for camera
+// added CameraMonitor.cpp
+//     if we want to go this route, we would have to add it to main control loop and find offset value
+//     may be easier to just include mode transitions in camera control task (eliminates the need for virtual classes)
+
+// CLARIFICATIONS:
+// change the init fault to be fault monitor?
+// different sensor mode enumeration for camera?
+// what is the condition for dispatch?
+
 IMUMonitor::IMUMonitor(unsigned int offset)
     : TimedControlTask<void>(offset)
 {
@@ -8,6 +20,10 @@ IMUMonitor::IMUMonitor(unsigned int offset)
     {
         transition_to_abnormal_init();
     }
+    else
+    {
+        transition_to_normal();
+    }
     imu.setupAccel(imu.LSM9DS1_ACCELRANGE_2G);
     imu.setupMag(imu.LSM9DS1_MAGGAIN_4GAUSS);
     imu.setupGyro(imu.LSM9DS1_GYROSCALE_245DPS);
@@ -15,42 +31,35 @@ IMUMonitor::IMUMonitor(unsigned int offset)
 
 void IMUMonitor::execute()
 {
-    switch(sfr::imu::mode) {
-        case sensor_mode_type::normal:
-            if(sfr::fault::fault_1 > 0){
-                transition_to_abnormal_readings();
+    switch (sfr::imu::mode)
+    {
+    case sensor_mode_type::normal:
+        Serial.println("IMU is in Normal Mode");
+        capture_imu_values();
+        break;
+    case sensor_mode_type::abnormal_init:
+        Serial.println("IMU is in Abnormal Initialization Mode");
+        break;
+    case sensor_mode_type::retry:
+        Serial.println("IMU is in Retry Mode");
+        bool began = false;
+        for (int retry_attempts = 0; retry_attempts < sfr::imu::max_retry_attempts; retry_attempts++)
+        {
+            if (imu.begin())
+            {
+                transition_to_normal();
+                began = true;
                 break;
             }
-            Serial.println("IMU is in Normal Mode");
-            capture_imu_values();
-            break;
-        case sensor_mode_type::abnormal_init:
-            Serial.println("IMU is in Abnormal Initialization Mode");
-            break;
-        case sensor_mode_type::abnormal_readings:
-            Serial.println("IMU is in Abnormal");
-            capture_imu_values();
-            break;
-        case sensor_mode_type::retry:
-            Serial.println("IMU is in Retry Mode");
-            bool began = false;
-            for(int retry_attempts=0; retry_attempts<sfr::imu::max_retry_attempts; retry_attempts++){
-                if(imu.begin()){
-                    transition_to_normal();
-                    began = true;
-                    break;
-                }
-            }
-            if(began==false)
-                transition_to_abnormal_init();
-            break;
-        case sensor_mode_type::abandon:
-            Serial.println("IMU is in Abandon Mode");
-            break;
+        }
+        if (began == false)
+            transition_to_abnormal_init();
+        break;
     }
 }
 
-void IMUMonitor::capture_imu_values() {
+void IMUMonitor::capture_imu_values()
+{
     sensors_event_t accel, mag, gyro, temp;
     imu.getEvent(&accel, &mag, &gyro, &temp);
 
@@ -121,7 +130,7 @@ void IMUMonitor::capture_imu_values() {
         sfr::imu::gyro_x_buffer.pop_back();
     }
     if (sfr::imu::gyro_y_buffer.size() > constants::sensor::collect)
-    {   
+    {
         sfr::imu::gyro_y_buffer.pop_back();
     }
     if (sfr::imu::gyro_z_buffer.size() > constants::sensor::collect)
@@ -147,10 +156,10 @@ void IMUMonitor::capture_imu_values() {
     sfr::imu::gyro_x_average = gyro_x_sum / sfr::imu::gyro_x_buffer.size();
     sfr::imu::gyro_y_average = gyro_y_sum / sfr::imu::gyro_y_buffer.size();
     sfr::imu::gyro_z_average = gyro_z_sum / sfr::imu::gyro_z_buffer.size();
-
 }
 
-void IMUMonitor::transition_to_normal() {
+void IMUMonitor::transition_to_normal()
+{
     // updates imu mode to normal
     // faults are cleared
     // all check flags are set to true
@@ -165,12 +174,13 @@ void IMUMonitor::transition_to_normal() {
     sfr::fault::check_acc_y = true;
 }
 
-void IMUMonitor::transition_to_abnormal_init() {
+void IMUMonitor::transition_to_abnormal_init()
+{
     // updates imu mode to abnormal_init
-    // triggers transition to safe mode by tripping fault
+    // trips fault
     // all check flags are set to false
     sfr::imu::mode = sensor_mode_type::abnormal_init;
-    sfr::fault::fault_1 = sfr::fault::fault_1 | constants::fault::init;
+    sfr::fault::fault_1 = sfr::fault::fault_1 | constants::fault::imu_init;
     sfr::fault::check_mag_x = false;
     sfr::fault::check_mag_y = false;
     sfr::fault::check_mag_z = false;
@@ -181,29 +191,10 @@ void IMUMonitor::transition_to_abnormal_init() {
     sfr::fault::check_acc_y = false;
 }
 
-void IMUMonitor::transition_to_abnormal_readings() {
-    // updates imu mode to abnormal_readings
-    // faults are tripped in FaultMonitor
-    // all check flags are already true since mode abnormal_readings always follows mode normal
-    sfr::imu::mode = sensor_mode_type::abnormal_readings;
-}
-
-void IMUMonitor::transition_to_retry() {
+void IMUMonitor::transition_to_retry()
+{
     // updates imu mode to retry
-    // this mode will call either transition_to_normal or transition_to_abnormal_init, which will change flags
+    // this mode will call either transition_to_normal or transition_to_abnormal_init, which will flip flags
+    // called when command to retry processes
     sfr::imu::mode = sensor_mode_type::retry;
-}
-
-void IMUMonitor::transition_to_abandon() {
-    // updates imu mode to abandon
-    // all check flags are set to false
-    sfr::imu::mode = sensor_mode_type::abandon;
-    sfr::fault::check_mag_x = false;
-    sfr::fault::check_mag_y = false;
-    sfr::fault::check_mag_z = false;
-    sfr::fault::check_gyro_x = false;
-    sfr::fault::check_gyro_y = false;
-    sfr::fault::check_gyro_z = false;
-    sfr::fault::check_acc_x = false;
-    sfr::fault::check_acc_y = false;
 }

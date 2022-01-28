@@ -453,7 +453,7 @@ namespace constants
         constexpr uint8_t gyro_x = 1 << 3;
         constexpr uint8_t gyro_y = 1 << 4;
         constexpr uint8_t gyro_z = 1 << 5;
-        constexpr uint8_t init = 1 << 6;
+        constexpr uint8_t imu_init = 1 << 6;
 
         //fault 2
         constexpr uint8_t temp_c = 1 << 1;
@@ -464,6 +464,7 @@ namespace constants
         constexpr uint8_t burn_wire = 1 << 0;
         constexpr uint8_t sd_card = 1 << 1;
         constexpr uint8_t camera_on_failed = 1 << 2;
+        constexpr uint8_t camera_init 1 << 3;
     }
     namespace camera
     {

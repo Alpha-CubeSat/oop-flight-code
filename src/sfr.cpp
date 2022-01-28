@@ -51,6 +51,9 @@ namespace sfr
     }
     namespace camera
     {
+        sensor_mode_type mode = sensor_mode_type::normal;
+        int max_retry_attempts = 3;
+
         bool photo_taken_sd_failed = false;
         bool take_photo = false;
         bool turn_on = false;
