@@ -22,12 +22,17 @@ void test_execute()
 void test_dlink_imu_data()
 {
     MissionManager mission_manager(0);
+    FaultMonitor fault_monitor(0);
+    sfr::mission::mode = mission_mode_type::reg_burns;
+    fault_monitor.execute();
+    mission_manager.execute();
 }
 int test_mission_manager()
 {
     UNITY_BEGIN();
-    RUN_TEST(test_valid_initialization);
-    RUN_TEST(test_execute);
+    // RUN_TEST(test_valid_initialization);
+    // RUN_TEST(test_execute);
+    RUN_TEST(test_dlink_imu_data);
     return UNITY_END();
 }
 

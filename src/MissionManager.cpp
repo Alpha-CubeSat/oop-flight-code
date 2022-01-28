@@ -316,6 +316,7 @@ void MissionManager::transition_to_mand_burns() {}
 
 void MissionManager::dispatch_reg_burns()
 {
+    printf("%s\n", "enter dispatch reg burns.");
     //creating buffer
     std::deque<std::experimental::any> buffer_general;
     //section to make sure transition_to_photo() has been called and excuted successfully
