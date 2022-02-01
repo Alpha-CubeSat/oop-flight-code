@@ -52,11 +52,9 @@ namespace sfr {
         bool turn_on = false;
         bool turn_off = false;
         bool powered = false;
-        bool begun = false;
-        bool resolution_set = false;
-        uint64_t start_time = 0;
-        uint64_t begin_time = 0;
-        uint64_t resolution_set_time = 0;
+        uint8_t start_progress = 0;
+        uint64_t step_time = 0;
+        uint64_t wait_count = 0;
         uint64_t buffer[255] = {0};
         int current_serial = 0;
         int fragment_number = 0;
@@ -166,6 +164,7 @@ namespace sfr {
         unsigned char fault_1 = 0;
         unsigned char fault_2 = 0;
         unsigned char fault_3 = 0;
+        unsigned char fault_4 = 0;
 
         // FAULT 1
         bool check_mag_x = true;

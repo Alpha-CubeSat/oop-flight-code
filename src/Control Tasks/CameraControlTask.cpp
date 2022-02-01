@@ -25,46 +25,51 @@ void CameraControlTask::execute()
             sfr::camera::photo_taken_sd_failed = false;
         }
     }
-
     if (sfr::camera::turn_on == true && sfr::camera::powered == false) {
-        if (sfr::camera::start_time == 0) {
-            sfr::camera::start_time = millis();
-            Pins::setPinState(constants::camera::power_on_pin, HIGH);
+        sfr::camera::wait_count++;
+        if (sfr::camera::wait_count > 50) {
+            sfr::camera::turn_on = false;
+            sfr::fault::fault_3 = sfr::fault::fault_3 | constants::fault::camera_on_failed;
+            Serial.print("Camera intialization failed at step ");
+            Serial.println(sfr::camera::start_progress);
         }
-        if (millis() - sfr::camera::start_time >= 100) { //need to determine this delay
-            if (!sfr::camera::begun) {
-                sfr::camera::begun = adaCam.begin();
-#ifdef VERBOSE
-                Serial.println("turned on camera");
-#endif
-                sfr::camera::begin_time = millis();
+        switch (sfr::camera::start_progress) {
+        case 0: //step 0 - setting power
+            sfr::camera::step_time = millis();
+            Pins::setPinState(constants::camera::power_on_pin, HIGH);
+            sfr::camera::start_progress++;
+            break;
+        case 1:                                             //step 1 - call begin method
+            if (millis() - sfr::camera::step_time >= 100) { //need to determine this delay
+                if (adaCam.begin()) {
+                    Serial.println("turned on camera");
+                    sfr::camera::step_time = millis();
+                    sfr::camera::start_progress++;
+                }
             }
-            if (sfr::camera::begun && millis() - sfr::camera::begin_time >= 100) {
-                if (!sfr::camera::resolution_set) {
-                    adaCam.setImageSize(sfr::camera::set_res);
-                    sfr::camera::resolution_set = true;
-                    sfr::camera::resolution_set_time = millis();
-#ifdef VERBOSE
+            break;
+        case 2: //step 2  - set resolution
+            if (millis() - sfr::camera::step_time >= 500) {
+                if (adaCam.setImageSize(sfr::camera::set_res)) {
                     Serial.println("resolution commanded successfully");
-#endif
+                    sfr::camera::step_time = millis();
+                    sfr::camera::start_progress++;
                 }
-                if (sfr::camera::resolution_set && (millis() - sfr::camera::resolution_set_time >= 200)) {
-                    uint8_t get_res = adaCam.getImageSize();
-                    if (get_res == sfr::camera::set_res) {
-#ifdef VERBOSE
-                        Serial.print("resolution fetched successfully: ");
-                        Serial.println(get_res);
-#endif
-                        sfr::camera::start_time = 0;
-                        sfr::camera::begin_time = 0;
-                        sfr::camera::resolution_set_time = 0;
-                        sfr::camera::begun = false;
-                        sfr::camera::resolution_set = false;
-                        sfr::camera::powered = true;
-                        sfr::camera::turn_on = false;
-                    }
+            } else {
+            }
+            break;
+        case 3: //step 3 - get resolution
+            if (millis() - sfr::camera::step_time >= 200) {
+                uint8_t get_res = adaCam.getImageSize();
+                if (get_res == sfr::camera::set_res) {
+                    Serial.print("resolution fetched successfully: ");
+                    Serial.println(get_res);
+                    sfr::camera::step_time = 0;
+                    sfr::camera::powered = true;
+                    sfr::camera::turn_on = false;
                 }
             }
+            break;
         }
     }
 

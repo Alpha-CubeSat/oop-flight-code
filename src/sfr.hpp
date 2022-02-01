@@ -52,11 +52,9 @@ namespace sfr {
         extern bool turn_on;
         extern bool turn_off;
         extern bool powered;
-        extern bool begun;
-        extern bool resolution_set;
-        extern uint64_t start_time;
-        extern uint64_t begin_time;
-        extern uint64_t resolution_set_time;
+        extern uint8_t start_progress;
+        extern uint64_t step_time;
+        extern uint64_t wait_count;
         extern uint64_t buffer[255];
         extern int current_serial;
         extern int fragment_number;
@@ -160,6 +158,7 @@ namespace sfr {
         extern unsigned char fault_1;
         extern unsigned char fault_2;
         extern unsigned char fault_3;
+        extern unsigned char fault_4;
 
         // FAULT 1
         extern bool check_mag_x;
