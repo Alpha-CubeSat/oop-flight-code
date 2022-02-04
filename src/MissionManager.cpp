@@ -321,7 +321,7 @@ void MissionManager::dispatch_reg_burns()
     std::deque<std::experimental::any> buffer_general;
     //section to make sure transition_to_photo() has been called and excuted successfully
     boolean trans_to_photo = false;
-    printf("%s\n", (transition_to_photo(), "transition_to_photo() was called."));
+    Serial.printf("%s\n", (transition_to_photo(), "transition_to_photo() was called."));
     // mission mode transitions to take photo
     trans_to_photo = true;
     buffer_general.push_back("id"); // place holder for pushing back id
