@@ -125,6 +125,10 @@ namespace sfr {
         std::deque<float> acc_y_buffer;
         std::deque<float> acc_z_buffer;
 
+        std::deque<float> gyro_x_dlink_buffer;
+        std::deque<float> gyro_y_dlink_buffer;
+        std::deque<float> gyro_z_dlink_buffer;
+
         float mag_x_average = 0.0;
         float mag_y_average = 0.0;
         float mag_z_average = 0.0;
