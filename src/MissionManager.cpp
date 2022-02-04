@@ -316,25 +316,6 @@ void MissionManager::transition_to_mand_burns() {}
 
 void MissionManager::dispatch_reg_burns()
 {
-    printf("%s\n", "enter dispatch reg burns.");
-    //creating buffer
-    std::deque<std::experimental::any> buffer_general;
-    //section to make sure transition_to_photo() has been called and excuted successfully
-    boolean trans_to_photo = false;
-    Serial.printf("%s\n", (transition_to_photo(), "transition_to_photo() was called."));
-    // mission mode transitions to take photo
-    trans_to_photo = true;
-    buffer_general.push_back("id"); // place holder for pushing back id
-    if (trans_to_photo) {
-        auto curr_t = std::chrono::system_clock::now();
-        std::time_t curr_time = std::chrono::system_clock::to_time_t(curr_t);
-        buffer_general.push_back(std::ctime(&curr_time));
-        buffer_general.push_back(sfr::mission::mode);
-        //  downlink the imu gyro data
-        buffer_general.push_back(sfr::imu::gyro_x);
-        buffer_general.push_back(sfr::imu::gyro_y);
-        buffer_general.push_back(sfr::imu::gyro_z);
-    }
 }
 void MissionManager::transition_to_reg_burns() {}
 
