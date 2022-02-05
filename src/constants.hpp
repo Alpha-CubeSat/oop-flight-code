@@ -13,6 +13,10 @@ namespace constants {
         constexpr unsigned long two_hours = 2 * one_hour;
         constexpr unsigned long two_days = 2 * one_day;
     } // namespace time
+    namespace mission {
+        // TODO
+        constexpr unsigned long max_boot_time = time::two_hours;
+    } // namespace mission
     namespace sensor {
         constexpr int collect = 3;
     }
@@ -395,25 +399,26 @@ namespace constants {
         constexpr int r2 = 10000;
 
     } // namespace battery
-    namespace fault {
-        // fault 1
+    namespace fault_imu {
         constexpr uint8_t mag_x = 1 << 0;
         constexpr uint8_t mag_y = 1 << 1;
         constexpr uint8_t mag_z = 1 << 2;
         constexpr uint8_t gyro_x = 1 << 3;
         constexpr uint8_t gyro_y = 1 << 4;
         constexpr uint8_t gyro_z = 1 << 5;
-
-        // fault 2
+    } // namespace fault_imu
+    namespace fault_misc_sensors {
         constexpr uint8_t temp_c = 1 << 1;
         constexpr uint8_t solar_current = 1 << 2;
         constexpr uint8_t voltage = 1 << 3;
 
-        // fault 3
+    } // namespace fault_misc_sensors
+    namespace fault_actions {
         constexpr uint8_t burn_wire = 1 << 0;
         constexpr uint8_t sd_card = 1 << 1;
         constexpr uint8_t camera_on_failed = 1 << 2;
-    } // namespace fault
+
+    } // namespace fault_actions
     namespace camera {
         constexpr int power_on_pin = 31;
         constexpr int content_length = 64;

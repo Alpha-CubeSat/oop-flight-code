@@ -33,7 +33,7 @@ namespace sfr {
     namespace mission {
         mission_mode_type mode = mission_mode_type::boot;
         bool low_power_eligible = true;
-        unsigned long boot_start_test = 0;
+        unsigned long boot_start = 0.0;
 
     } // namespace mission
     namespace burnwire {
@@ -68,7 +68,7 @@ namespace sfr {
         uint16_t jpglen = 0;
     } // namespace camera
     namespace rockblock {
-        unsigned long last_communication = 0;
+        int num_failures = 0;
         bool last_downlink_normal = false;
         int camera_commands[99][constants::rockblock::command_len] = {};
         int camera_max_fragments[99] = {};
@@ -153,15 +153,16 @@ namespace sfr {
         float voltage = 0.0;
         std::deque<float> voltage_buffer;
         float voltage_average = 0.0;
+        float min_battery = 3.75;
+        float acceptable_battery = 3.9;
     } // namespace battery
     namespace fault {
         fault_mode_type mode = fault_mode_type::active;
 
-        unsigned char fault_1 = 0;
-        unsigned char fault_2 = 0;
-        unsigned char fault_3 = 0;
+        unsigned char fault_imu = 0;
+        unsigned char fault_misc_sensors = 0;
+        unsigned char fault_actions = 0;
 
-        // FAULT 1
         bool check_mag_x = true;
         bool check_mag_y = true;
         bool check_mag_z = true;
@@ -171,7 +172,6 @@ namespace sfr {
         bool check_acc_x = true;
         bool check_acc_y = true;
 
-        // FAULT 2
         bool check_acc_z = true;
         bool check_temp_c = true;
         bool check_solar_current = true;

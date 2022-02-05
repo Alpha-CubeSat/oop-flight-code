@@ -35,6 +35,7 @@ namespace sfr {
     namespace mission {
         extern mission_mode_type mode;
         extern bool low_power_eligible;
+        extern unsigned long boot_start;
     } // namespace mission
     namespace burnwire {
         extern bool fire;
@@ -68,7 +69,7 @@ namespace sfr {
         extern uint16_t jpglen;
     } // namespace camera
     namespace rockblock {
-        extern unsigned long last_communication;
+        extern int num_failures;
         extern bool last_downlink_normal;
         extern int camera_commands[99][constants::rockblock::command_len];
         extern int camera_max_fragments[99];
@@ -147,13 +148,15 @@ namespace sfr {
         extern float voltage;
         extern std::deque<float> voltage_buffer;
         extern float voltage_average;
+        extern float min_battery;
+        extern float acceptable_battery;
     } // namespace battery
     namespace fault {
         extern fault_mode_type mode;
 
-        extern unsigned char fault_1;
-        extern unsigned char fault_2;
-        extern unsigned char fault_3;
+        extern unsigned char fault_imu;
+        extern unsigned char fault_misc_sensors;
+        extern unsigned char fault_actions;
 
         // FAULT 1
         extern bool check_mag_x;

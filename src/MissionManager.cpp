@@ -79,6 +79,25 @@ void MissionManager::execute()
     }
 }
 
+void MissionManager::check_entrance_lp(mission_mode_type lp_mode)
+{
+    if (sfr::battery::voltage_average <= sfr::battery::min_battery || !sfr::fault::check_voltage) {
+        sfr::mission::mode = lp_mode;
+    }
+}
+
+void MissionManager::check_exit_lp(mission_mode_type reg_mode)
+{
+    if (sfr::battery::voltage_average >= sfr::battery::acceptable_battery && sfr::fault::check_voltage) {
+        sfr::mission::mode = reg_mode;
+    }
+}
+
+/*void MissionManager::voltage_sensor_fail()
+{
+    return (sfr::fault::fault_misc_sensors & (1 << (constants::fault_misc_sensors::voltage - 1)));
+}*/
+
 // Initialization
 
 /*
@@ -90,9 +109,10 @@ void MissionManager::execute()
 
 void MissionManager::dispatch_boot()
 {
-    /*if (millis() - sfr::mission::boot_start >= constants::mission::max_boot_time) {
+    if (millis() - sfr::mission::boot_start >= constants::mission::max_boot_time) {
         sfr::mission::mode = mission_mode_type::alive_signal;
-    }*/
+        transition_to_alive_signal();
+    }
 }
 void MissionManager::transition_to_boot() {}
 
@@ -108,9 +128,9 @@ void MissionManager::transition_to_boot() {}
 
 void MissionManager::dispatch_alive_signal()
 {
-    /*if (sfr::battery::voltage_average <= sfr::battery::lower_bound) {
+    if (sfr::battery::voltage_average <= sfr::battery::min_battery) {
         sfr::mission::mode = mission_mode_type::lp_alive_signal;
-    }*/
+    }
 }
 void MissionManager::transition_to_alive_signal() {}
 
@@ -293,7 +313,12 @@ void MissionManager::transition_to_volt_fail_in_sun() {}
  * Settings:
  */
 
-void MissionManager::dispatch_boot_cam() {}
+void MissionManager::dispatch_boot_cam()
+{
+
+    // step 1 power camera via sfr
+    // step 2 wait x control cycles too see if its powered
+}
 void MissionManager::transition_to_boot_cam() {}
 
 /*

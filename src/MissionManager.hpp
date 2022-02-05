@@ -2,6 +2,7 @@
 #define MISSION_MANAGER_HPP_
 
 #include "Control Tasks/TimedControlTask.hpp"
+#include "Modes/mission_mode_type.enum"
 #include "constants.hpp"
 #include "sfr.hpp"
 
@@ -67,6 +68,9 @@ public:
     static void transition_to_mand_burns();
     static void transition_to_reg_burns();
     static void transition_to_photo();
+
+    void check_entrance_lp(mission_mode_type lp_mode);
+    void check_exit_lp(mission_mode_type reg_mode);
 };
 
 #endif
