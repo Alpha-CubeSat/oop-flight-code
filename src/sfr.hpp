@@ -137,7 +137,8 @@ namespace sfr {
         extern float gyro_y_average;
         extern float gyro_z_average;
 
-        imu_downlink_type imu_dlink_magid_type;
+        extern imu_downlink_type imu_dlink_magid_type;
+        extern float report[constants::sensor::collect * 5];
     } // namespace imu
     namespace temperature {
         extern float temp_c;

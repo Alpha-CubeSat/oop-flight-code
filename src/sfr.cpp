@@ -142,6 +142,7 @@ namespace sfr {
         float acc_z_average = 0.0;
 
         imu_downlink_type imu_dlink_magid_type = imu_downlink_type::GAUSS_8;
+        float report[constants::sensor::collect * 5];
     } // namespace imu
     namespace temperature {
         float temp_c = 0.0;
