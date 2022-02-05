@@ -48,7 +48,7 @@ void IMUDownlink::execute()
         sfr::imu::gyro_x_buffer.push_front(gyro.gyro.x);
         sfr::imu::gyro_y_buffer.push_front(gyro.gyro.y);
         sfr::imu::gyro_z_buffer.push_front(gyro.gyro.z);
-        sfr::imu::imu_dlink_time_buffer.push_front((time_t)micros());
+        sfr::imu::imu_dlink_time_buffer.push_front(millis());
 
         // Remove old readings
 
