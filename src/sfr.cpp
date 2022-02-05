@@ -124,8 +124,12 @@ namespace sfr {
         std::deque<float> acc_x_buffer;
         std::deque<float> acc_y_buffer;
         std::deque<float> acc_z_buffer;
-
-        std::deque<std::experimental::any, time_t> gyro_dlink_buffer;
+        // std::deque<std::experimental::any, time_t> imu_dlink_buffer;
+        std::deque<float> imu_dlink_gyro_x_buffer;
+        std::deque<float> imu_dlink_gyro_y_buffer;
+        std::deque<float> imu_dlink_gyro_z_buffer;
+        std::deque<time_t> imu_dlink_time_buffer;
+        std::deque<imu_downlink_type> imu_dlink_magid_buffer;
 
         float mag_x_average = 0.0;
         float mag_y_average = 0.0;
@@ -136,6 +140,8 @@ namespace sfr {
         float acc_x_average = 0.0;
         float acc_y_average = 0.0;
         float acc_z_average = 0.0;
+
+        imu_downlink_type imu_dlink_magid_type = imu_downlink_type::GAUSS_8;
     } // namespace imu
     namespace temperature {
         float temp_c = 0.0;
