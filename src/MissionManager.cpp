@@ -1,7 +1,4 @@
 #include "MissionManager.hpp"
-#include <chrono>
-#include <ctime>
-#include <experimental/any>
 
 MissionManager::MissionManager(unsigned int offset) : TimedControlTask<void>(offset)
 {
