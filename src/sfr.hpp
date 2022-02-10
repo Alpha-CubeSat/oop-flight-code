@@ -20,7 +20,6 @@
 #include <SD.h>
 #include <StarshotACS0.h>
 #include <deque>
-// #include <experimental/any>
 #include <iostream>
 #include <map>
 #include <numeric>
@@ -138,7 +137,9 @@ namespace sfr {
         extern float gyro_z_average;
 
         extern imu_downlink_type imu_dlink_magid_type;
-        extern float report[constants::sensor::collect * 5];
+        extern const int imu_downlink_buffer_max_size;
+        extern const int imu_downlink_report_size;
+        extern float report[];
     } // namespace imu
     namespace temperature {
         extern float temp_c;

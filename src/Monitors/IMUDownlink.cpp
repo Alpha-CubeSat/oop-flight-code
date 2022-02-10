@@ -5,15 +5,12 @@ IMUDownlink::IMUDownlink(unsigned int offset)
 {
     imu = Adafruit_LSM9DS1(constants::imu::CSAG, constants::imu::CSM);
     imu.begin();
-    //if(!imu.begin()) then...
-    imu.readGyro();
-    imu.readMag();
+    // if(!imu.begin()) then...
 }
 
 void IMUDownlink::execute()
 {
     if (sfr::mission::mode == mission_mode_type::mand_burns || sfr::mission::mode == mission_mode_type::reg_burns) {
-        uint32_t begin = micros();
         sensors_event_t accel, mag, gyro, temp;
         imu.getEvent(&accel, &mag, &gyro, &temp);
 
@@ -35,39 +32,30 @@ void IMUDownlink::execute()
 
         imu.getEvent(&accel, &mag, &gyro, &temp);
 
-        // !!!!!!if(imu sample == true) { add values to buffer}
-        // boolean trans_to_photo = false;
-        // // need to be replaced by another conditional value
-        // Serial.printf("%s\n", (MissionManager.transition_to_photo(), "transition_to_photo() was called."));
-        // // mission mode transitions to take photo
-        // trans_to_photo = true;
-
         // Add reading to imu downlink buffer
 
         sfr::imu::imu_dlink_magid_buffer.push_front(sfr::imu::imu_dlink_magid_type);
-        sfr::imu::gyro_x_buffer.push_front(gyro.gyro.x);
-        sfr::imu::gyro_y_buffer.push_front(gyro.gyro.y);
-        sfr::imu::gyro_z_buffer.push_front(gyro.gyro.z);
+        sfr::imu::gyro_x_buffer.push_front(sfr::imu::gyro_x);
+        sfr::imu::gyro_y_buffer.push_front(sfr::imu::gyro_y);
+        sfr::imu::gyro_z_buffer.push_front(sfr::imu::gyro_z);
         sfr::imu::imu_dlink_time_buffer.push_front(millis());
 
         // Remove old readings
 
-        if (sfr::imu::imu_dlink_magid_buffer.size() > constants::sensor::collect) {
+        if (sfr::imu::imu_dlink_magid_buffer.size() > sfr::imu::imu_downlink_buffer_max_size) {
             sfr::imu::imu_dlink_magid_buffer.pop_back();
         }
-        if (sfr::imu::gyro_x_buffer.size() > constants::sensor::collect) {
+        if (sfr::imu::gyro_x_buffer.size() > sfr::imu::imu_downlink_buffer_max_size) {
             sfr::imu::gyro_x_buffer.pop_back();
         }
-        if (sfr::imu::gyro_y_buffer.size() > constants::sensor::collect) {
+        if (sfr::imu::gyro_y_buffer.size() > sfr::imu::imu_downlink_buffer_max_size) {
             sfr::imu::gyro_y_buffer.pop_back();
         }
-        if (sfr::imu::gyro_z_buffer.size() > constants::sensor::collect) {
+        if (sfr::imu::gyro_z_buffer.size() > sfr::imu::imu_downlink_buffer_max_size) {
             sfr::imu::gyro_z_buffer.pop_back();
         }
-        if (sfr::imu::imu_dlink_time_buffer.size() > constants::sensor::collect) {
+        if (sfr::imu::imu_dlink_time_buffer.size() > sfr::imu::imu_downlink_buffer_max_size) {
             sfr::imu::imu_dlink_time_buffer.pop_back();
         }
-
-        uint32_t end = micros();
     }
 }
