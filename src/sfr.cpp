@@ -141,10 +141,10 @@ namespace sfr {
         float acc_y_average = 0.0;
         float acc_z_average = 0.0;
 
-        imu_downlink_type imu_dlink_magid_type = imu_downlink_type::GAUSS_8;
+        imu_downlink_type imu_dlink_magid = imu_downlink_type::GAUSS_8;
         const int imu_downlink_buffer_max_size = constants::sensor::collect; // not determined yet
         const int imu_downlink_report_size = constants::sensor::collect * 5;
-        float report[imu_downlink_report_size];
+        uint8_t report[imu_downlink_report_size];
     } // namespace imu
     namespace temperature {
         float temp_c = 0.0;

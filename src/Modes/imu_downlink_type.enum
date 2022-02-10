@@ -3,7 +3,7 @@
 
 enum class imu_downlink_type : unsigned char
 {
-    GAUSS_8,
+    GAUSS_8 = 0,
     GAUSS_12,
     GAUSS_16
 };

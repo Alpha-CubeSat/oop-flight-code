@@ -136,10 +136,10 @@ namespace sfr {
         extern float gyro_y_average;
         extern float gyro_z_average;
 
-        extern imu_downlink_type imu_dlink_magid_type;
+        extern imu_downlink_type imu_dlink_magid;
         extern const int imu_downlink_buffer_max_size;
         extern const int imu_downlink_report_size;
-        extern float report[];
+        extern uint8_t report[];
     } // namespace imu
     namespace temperature {
         extern float temp_c;

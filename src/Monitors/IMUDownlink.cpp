@@ -17,14 +17,14 @@ void IMUDownlink::execute()
         imu.readMag();
 
         if (mag.magnetic.x > 4 || mag.magnetic.y > 4 || mag.magnetic.z > 4) {
-            sfr::imu::imu_dlink_magid_type = imu_downlink_type::GAUSS_8;
+            sfr::imu::imu_dlink_magid = imu_downlink_type::GAUSS_8;
         }
         if (mag.magnetic.x > 8 || mag.magnetic.y > 8 || mag.magnetic.z > 8) {
             imu_downlink_type::GAUSS_8;
-            sfr::imu::imu_dlink_magid_type = imu_downlink_type::GAUSS_12;
+            sfr::imu::imu_dlink_magid = imu_downlink_type::GAUSS_12;
         }
         if (mag.magnetic.x > 12 || mag.magnetic.y > 12 || mag.magnetic.z > 12) {
-            sfr::imu::imu_dlink_magid_type = imu_downlink_type::GAUSS_16;
+            sfr::imu::imu_dlink_magid = imu_downlink_type::GAUSS_16;
         }
 
         // Get corrected IMU values
@@ -34,7 +34,7 @@ void IMUDownlink::execute()
 
         // Add reading to imu downlink buffer
 
-        sfr::imu::imu_dlink_magid_buffer.push_front(sfr::imu::imu_dlink_magid_type);
+        sfr::imu::imu_dlink_magid_buffer.push_front(sfr::imu::imu_dlink_magid);
         sfr::imu::gyro_x_buffer.push_front(sfr::imu::gyro_x);
         sfr::imu::gyro_y_buffer.push_front(sfr::imu::gyro_y);
         sfr::imu::gyro_z_buffer.push_front(sfr::imu::gyro_z);
