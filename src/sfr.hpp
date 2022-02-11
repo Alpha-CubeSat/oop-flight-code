@@ -8,6 +8,7 @@
 #include "Modes/acs_mode_type.enum"
 #include "Modes/burnwire_mode_type.enum"
 #include "Modes/fault_mode_type.enum"
+#include "Modes/imu_downlink_type.enum"
 #include "Modes/mission_mode_type.enum"
 #include "Modes/rockblock_mode_type.enum"
 #include "Modes/simple_acs_type.enum"
@@ -121,6 +122,12 @@ namespace sfr {
         extern std::deque<float> gyro_x_buffer;
         extern std::deque<float> gyro_y_buffer;
         extern std::deque<float> gyro_z_buffer;
+        // std::deque<std::experimental::any, time_t> imu_dlink_buffer;
+        extern std::deque<float> imu_dlink_gyro_x_buffer;
+        extern std::deque<float> imu_dlink_gyro_y_buffer;
+        extern std::deque<float> imu_dlink_gyro_z_buffer;
+        extern std::deque<time_t> imu_dlink_time_buffer;
+        extern std::deque<imu_downlink_type> imu_dlink_magid_buffer;
 
         extern float mag_x_average;
         extern float mag_y_average;
@@ -128,6 +135,12 @@ namespace sfr {
         extern float gyro_x_average;
         extern float gyro_y_average;
         extern float gyro_z_average;
+
+        extern bool imu_dlink_report_ready;
+        extern imu_downlink_type imu_dlink_magid;
+        extern const int imu_downlink_buffer_max_size;
+        extern const int imu_downlink_report_size;
+        extern uint8_t report[];
     } // namespace imu
     namespace temperature {
         extern float temp_c;

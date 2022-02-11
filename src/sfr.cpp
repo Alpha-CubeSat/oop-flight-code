@@ -124,6 +124,12 @@ namespace sfr {
         std::deque<float> acc_x_buffer;
         std::deque<float> acc_y_buffer;
         std::deque<float> acc_z_buffer;
+        // std::deque<std::experimental::any, time_t> imu_dlink_buffer;
+        std::deque<float> imu_dlink_gyro_x_buffer;
+        std::deque<float> imu_dlink_gyro_y_buffer;
+        std::deque<float> imu_dlink_gyro_z_buffer;
+        std::deque<time_t> imu_dlink_time_buffer;
+        std::deque<imu_downlink_type> imu_dlink_magid_buffer;
 
         float mag_x_average = 0.0;
         float mag_y_average = 0.0;
@@ -134,6 +140,12 @@ namespace sfr {
         float acc_x_average = 0.0;
         float acc_y_average = 0.0;
         float acc_z_average = 0.0;
+
+        bool imu_dlink_report_ready = false;
+        imu_downlink_type imu_dlink_magid = imu_downlink_type::GAUSS_8;
+        const int imu_downlink_buffer_max_size = constants::sensor::collect; // not determined yet
+        const int imu_downlink_report_size = constants::sensor::collect * 5;
+        uint8_t report[imu_downlink_report_size];
     } // namespace imu
     namespace temperature {
         float temp_c = 0.0;

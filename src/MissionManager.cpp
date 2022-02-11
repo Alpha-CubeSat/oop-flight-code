@@ -311,7 +311,9 @@ void MissionManager::transition_to_mand_burns() {}
  * Settings:
  */
 
-void MissionManager::dispatch_reg_burns() {}
+void MissionManager::dispatch_reg_burns()
+{
+}
 void MissionManager::transition_to_reg_burns() {}
 
 /*
