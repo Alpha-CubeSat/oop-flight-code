@@ -49,7 +49,13 @@ void MainControlLoop::execute()
     burnwire_control_task.execute_on_time();
     camera_control_task.execute_on_time();
     rockblock_control_task.execute_on_time();
-    temperature_control_task.execute_on_time();
+    //temperature_control_task.execute_on_time();
 
     mission_manager.execute_on_time();
+    
+    Serial.print("turn on: " );
+    Serial.println(sfr::camera::turn_on);
+    Serial.print("powered: ");
+    Serial.println(sfr::camera::powered);
+//measure time of init
 }

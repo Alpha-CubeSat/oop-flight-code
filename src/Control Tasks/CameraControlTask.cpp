@@ -47,75 +47,74 @@ void CameraControlTask::execute()
             transition_to_abnormal_init();
         }
     }
-}
 
-if (sfr::camera::turn_off == true && sfr::camera::powered == true)
-{
+    if (sfr::camera::turn_off == true && sfr::camera::powered == true)
+    {
 #ifdef VERBOSE
-    Serial.println("turned off camera");
+        Serial.println("turned off camera");
 #endif
-    Pins::setPinState(constants::camera::power_on_pin, LOW);
-    pinMode(constants::camera::rx, OUTPUT);
-    pinMode(constants::camera::tx, OUTPUT);
-    Pins::setPinState(constants::camera::rx, LOW);
-    Pins::setPinState(constants::camera::tx, LOW);
-    sfr::camera::powered = false;
-    sfr::camera::turn_off = false;
-}
-
-if (sfr::camera::jpglen > 0 && sfr::camera::photo_taken_sd_failed == false)
-{
-    filetocreate = "";
-    if (sfr::camera::images_written < 10)
-    {
-        filetocreate += "0";
+        Pins::setPinState(constants::camera::power_on_pin, LOW);
+        pinMode(constants::camera::rx, OUTPUT);
+        pinMode(constants::camera::tx, OUTPUT);
+        Pins::setPinState(constants::camera::rx, LOW);
+        Pins::setPinState(constants::camera::tx, LOW);
+        sfr::camera::powered = false;
+        sfr::camera::turn_off = false;
     }
-    filetocreate += String(sfr::camera::images_written);
-    sfr::camera::image_lengths[sfr::camera::images_written] = sfr::camera::jpglen;
 
-    if (sfr::camera::fragments_written < 10)
+    if (sfr::camera::jpglen > 0 && sfr::camera::photo_taken_sd_failed == false)
     {
-        filetocreate += "0";
-    }
-    filetocreate += String(sfr::camera::fragments_written) + ".jpg";
-    strcpy(sfr::camera::filename, filetocreate.c_str());
-
-    imgFile = SD.open(sfr::camera::filename, FILE_WRITE);
-
-    uint8_t *buffer;
-    uint8_t bytesToRead = min(constants::camera::content_length, sfr::camera::jpglen);
-    buffer = adaCam.readPicture(bytesToRead);
-
-    for (int i = 0; i < bytesToRead; i++)
-    {
-        if (buffer[i] < 16)
+        filetocreate = "";
+        if (sfr::camera::images_written < 10)
         {
-            imgFile.print(0, HEX);
+            filetocreate += "0";
+        }
+        filetocreate += String(sfr::camera::images_written);
+        sfr::camera::image_lengths[sfr::camera::images_written] = sfr::camera::jpglen;
+
+        if (sfr::camera::fragments_written < 10)
+        {
+            filetocreate += "0";
+        }
+        filetocreate += String(sfr::camera::fragments_written) + ".jpg";
+        strcpy(sfr::camera::filename, filetocreate.c_str());
+
+        imgFile = SD.open(sfr::camera::filename, FILE_WRITE);
+
+        uint8_t *buffer;
+        uint8_t bytesToRead = min(constants::camera::content_length, sfr::camera::jpglen);
+        buffer = adaCam.readPicture(bytesToRead);
+
+        for (int i = 0; i < bytesToRead; i++)
+        {
+            if (buffer[i] < 16)
+            {
+                imgFile.print(0, HEX);
 #ifdef VERBOSE
-            Serial.print(0, HEX);
+                Serial.print(0, HEX);
+#endif
+            }
+            imgFile.print(buffer[i], HEX);
+#ifdef VERBOSE
+            Serial.print(buffer[i], HEX);
 #endif
         }
-        imgFile.print(buffer[i], HEX);
-#ifdef VERBOSE
-        Serial.print(buffer[i], HEX);
-#endif
-    }
 
-    Serial.println("");
+        Serial.println("");
 
-    sfr::camera::jpglen -= bytesToRead;
-    imgFile.close();
-    sfr::camera::fragments_written++;
-    if (sfr::camera::jpglen == 0)
-    {
-        sfr::rockblock::camera_max_fragments[sfr::camera::images_written] = sfr::camera::fragments_written;
-        sfr::camera::images_written++;
-        Serial.println("Done writing file");
+        sfr::camera::jpglen -= bytesToRead;
+        imgFile.close();
+        sfr::camera::fragments_written++;
+        if (sfr::camera::jpglen == 0)
+        {
+            sfr::rockblock::camera_max_fragments[sfr::camera::images_written] = sfr::camera::fragments_written;
+            sfr::camera::images_written++;
+            Serial.println("Done writing file");
+        }
     }
 }
-}
 
-CameraControlTask::camera_init()
+void CameraControlTask::camera_init()
 {
     if (sfr::camera::init_mode == camera_init_mode_type::awaiting)
     {
@@ -177,7 +176,6 @@ CameraControlTask::camera_init()
     case 4: // completed initialization
         sfr::camera::init_mode = camera_init_mode_type::complete;
     }
-}
 }
 
 void CameraControlTask::transition_to_normal()
