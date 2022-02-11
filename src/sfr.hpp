@@ -36,6 +36,7 @@ namespace sfr {
         extern mission_mode_type mode;
         extern bool low_power_eligible;
         extern unsigned long boot_start;
+        extern unsigned long max_boot_time;
     } // namespace mission
     namespace burnwire {
         extern bool fire;

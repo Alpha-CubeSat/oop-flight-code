@@ -34,6 +34,7 @@ namespace sfr {
         mission_mode_type mode = mission_mode_type::boot;
         bool low_power_eligible = true;
         unsigned long boot_start = 0.0;
+        unsigned long max_boot_time = constants::time::two_hours;
 
     } // namespace mission
     namespace burnwire {

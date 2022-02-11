@@ -13,10 +13,6 @@ namespace constants {
         constexpr unsigned long two_hours = 2 * one_hour;
         constexpr unsigned long two_days = 2 * one_day;
     } // namespace time
-    namespace mission {
-        // TODO
-        constexpr unsigned long max_boot_time = time::two_hours;
-    } // namespace mission
     namespace sensor {
         constexpr int collect = 3;
     }

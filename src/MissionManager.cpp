@@ -109,8 +109,8 @@ void MissionManager::check_exit_lp(mission_mode_type reg_mode)
 
 void MissionManager::dispatch_boot()
 {
-    if (millis() - sfr::mission::boot_start >= constants::mission::max_boot_time) {
-        sfr::mission::mode = mission_mode_type::alive_signal;
+    if (millis() - sfr::mission::boot_start >= sfr::mission::max_boot_time) {
+
         transition_to_alive_signal();
     }
 }
@@ -132,7 +132,10 @@ void MissionManager::dispatch_alive_signal()
         sfr::mission::mode = mission_mode_type::lp_alive_signal;
     }
 }
-void MissionManager::transition_to_alive_signal() {}
+void MissionManager::transition_to_alive_signal()
+{
+    sfr::mission::mode = mission_mode_type::alive_signal;
+}
 
 /*
  * Low Power Alive Signal
