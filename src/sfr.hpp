@@ -136,6 +136,7 @@ namespace sfr {
         extern float gyro_y_average;
         extern float gyro_z_average;
 
+        extern bool imu_dlink_report_ready;
         extern imu_downlink_type imu_dlink_magid;
         extern const int imu_downlink_buffer_max_size;
         extern const int imu_downlink_report_size;

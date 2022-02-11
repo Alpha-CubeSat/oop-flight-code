@@ -141,6 +141,7 @@ namespace sfr {
         float acc_y_average = 0.0;
         float acc_z_average = 0.0;
 
+        bool imu_dlink_report_ready = false;
         imu_downlink_type imu_dlink_magid = imu_downlink_type::GAUSS_8;
         const int imu_downlink_buffer_max_size = constants::sensor::collect; // not determined yet
         const int imu_downlink_report_size = constants::sensor::collect * 5;

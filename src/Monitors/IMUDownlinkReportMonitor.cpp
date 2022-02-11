@@ -10,7 +10,8 @@ void IMUDownlinkReportMonitor::execute()
     IMUDownlink imu_dlink = IMUDownlink(offset_copy);
     imu_dlink.execute();
 
-    for (int idx = 0; idx < constants::sensor::collect; ++idx) {
+    int buffer_size = sfr::imu::imu_dlink_magid_buffer.size();
+    for (int idx = 0; idx < buffer_size; ++idx) {
         // get the magid value from buffer and write to the imu downlink report
         uint8_t magid_value = (uint8_t)sfr::imu::imu_dlink_magid_buffer.back();
         sfr::imu::imu_dlink_magid_buffer.pop_back();
@@ -40,4 +41,5 @@ void IMUDownlinkReportMonitor::execute()
         sfr::imu::imu_dlink_time_buffer.pop_back();
         sfr::imu::report[idx++] = time_value;
     }
+    sfr::imu::imu_dlink_report_ready = true;
 }
