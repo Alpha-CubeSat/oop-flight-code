@@ -52,13 +52,17 @@ namespace sfr
     namespace camera
     {
         sensor_mode_type mode = sensor_mode_type::normal;
-        int max_retry_attempts = 3;
-
+        camera_init_mode_type init_mode = camera_init_mode_type::awaiting;
         bool photo_taken_sd_failed = false;
         bool take_photo = false;
         bool turn_on = false;
         bool turn_off = false;
         bool powered = false;
+        uint8_t start_progress = 0;
+        uint64_t start_time = 0;
+        uint64_t step_time = 0;
+        uint64_t init_timeout = 120000;
+        uint64_t wait_count = 0;
         uint8_t buffer[255] = {0};
         int current_serial = 0;
         int fragment_number = 0;
@@ -73,6 +77,7 @@ namespace sfr
         bool report_downlinked = true;
         char filename[15];
         uint16_t jpglen = 0;
+        uint8_t set_res = VC0706_160x120;
     }
     namespace rockblock
     {
@@ -112,7 +117,6 @@ namespace sfr
     namespace imu
     {
         sensor_mode_type mode = sensor_mode_type::normal;
-        int max_retry_attempts = 3;
 
         float mag_x = 0.0;
         float mag_y = 0.0;
@@ -179,7 +183,7 @@ namespace sfr
         unsigned char fault_2 = 0;
         unsigned char fault_3 = 0;
 
-        //FAULT 1
+        // FAULT 1
         bool check_mag_x = true;
         bool check_mag_y = true;
         bool check_mag_z = true;
@@ -189,7 +193,7 @@ namespace sfr
         bool check_acc_x = true;
         bool check_acc_y = true;
 
-        //FAULT 2
+        // FAULT 2
         bool check_acc_z = true;
         bool check_temp_c = true;
         bool check_solar_current = true;

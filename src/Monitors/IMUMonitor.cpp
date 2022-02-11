@@ -1,16 +1,8 @@
 #include "IMUMonitor.hpp"
 
-// NOTES:
-// changes in this file
-// added an init fault constant for camera
-// added CameraMonitor.cpp
-//     if we want to go this route, we would have to add it to main control loop and find offset value
-//     may be easier to just include mode transitions in camera control task (eliminates the need for virtual classes)
-
-// CLARIFICATIONS:
-// change the init fault to be fault monitor?
-// different sensor mode enumeration for camera?
-// what is the condition for dispatch?
+// eliminate virtual classes and camera monitor.cpp
+// adapt to new initialization process
+// if in case 2 for two minutes, it has failed initialization
 
 IMUMonitor::IMUMonitor(unsigned int offset)
     : TimedControlTask<void>(offset)
@@ -43,14 +35,10 @@ void IMUMonitor::execute()
     case sensor_mode_type::retry:
         Serial.println("IMU is in Retry Mode");
         bool began = false;
-        for (int retry_attempts = 0; retry_attempts < sfr::imu::max_retry_attempts; retry_attempts++)
+        if (imu.begin())
         {
-            if (imu.begin())
-            {
-                transition_to_normal();
-                began = true;
-                break;
-            }
+            transition_to_normal();
+            began = true;
         }
         if (began == false)
             transition_to_abnormal_init();

@@ -6,6 +6,7 @@
 #include "Modes/acs_mode_type.enum"
 #include "Modes/rockblock_mode_type.enum"
 #include "Modes/burnwire_mode_type.enum"
+#include "Modes/camera_init_mode_type.enum"
 #include "Modes/temp_mode_type.enum"
 #include "Modes/fault_mode_type.enum"
 #include "Modes/simple_acs_type.enum"
@@ -55,11 +56,20 @@ namespace sfr
     }
     namespace camera
     {
+        sensor_mode_type mode;
+        camera_init_mode_type init_mode;
+        int max_retry_attempts;
+        int retry_attempts;
         extern bool photo_taken_sd_failed;
         extern bool take_photo;
         extern bool turn_on;
         extern bool turn_off;
         extern bool powered;
+        uint8_t start_progress;
+        uint64_t start_time;
+        uint64_t step_time;
+        uint64_t init_timeout;
+        uint64_t wait_count;
         extern uint8_t buffer[255];
         extern int current_serial;
         extern int fragment_number;
@@ -74,6 +84,7 @@ namespace sfr
         extern bool report_downlinked;
         extern char filename[15];
         extern uint16_t jpglen;
+        uint8_t set_res;
     }
     namespace rockblock
     {
@@ -114,7 +125,7 @@ namespace sfr
     {
         extern sensor_mode_type mode;
         extern int max_retry_attempts;
-        
+
         extern float mag_x;
         extern float mag_y;
         extern float mag_z;
@@ -174,7 +185,7 @@ namespace sfr
         extern unsigned char fault_2;
         extern unsigned char fault_3;
 
-        //FAULT 1
+        // FAULT 1
         extern bool check_mag_x;
         extern bool check_mag_y;
         extern bool check_mag_z;
@@ -184,7 +195,7 @@ namespace sfr
         extern bool check_acc_x;
         extern bool check_acc_y;
 
-        //FAULT 2
+        // FAULT 2
         extern bool check_acc_z;
         extern bool check_temp_c;
         extern bool check_solar_current;

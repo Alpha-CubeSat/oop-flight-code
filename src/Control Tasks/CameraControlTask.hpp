@@ -2,7 +2,6 @@
 #define CAMERA_CONTROL_TASK_HPP_
 
 #include "sfr.hpp"
-#include "../Monitors/CameraMonitor.hpp"
 
 class CameraControlTask : public TimedControlTask<void>
 {
@@ -13,10 +12,12 @@ public:
     Adafruit_VC0706 adaCam;
     File imgFile;
     String filetocreate;
-    // private:
-    //     void transition_to_normal();
-    //     void transition_to_abnormal_init();
-    //     void transition_to_retry();
+
+private:
+    void camera_init();
+    void transition_to_normal();
+    void transition_to_abnormal_init();
+    void transition_to_retry();
 };
 
 #endif
