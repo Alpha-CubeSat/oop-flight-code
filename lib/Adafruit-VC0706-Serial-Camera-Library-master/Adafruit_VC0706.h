@@ -1,31 +1,26 @@
 /*************************************************** 
   This is a library for the Adafruit TTL JPEG Camera (VC0706 chipset)
-
   Pick one up today in the adafruit shop!
   ------> http://www.adafruit.com/products/397
-
   These displays use Serial to communicate, 2 pins are required to interface
-
   Adafruit invests time and resources providing this open source code, 
   please support Adafruit and open-source hardware by purchasing 
   products from Adafruit!
-
   Written by Limor Fried/Ladyada for Adafruit Industries.  
   BSD license, all text above must be included in any redistribution
  ****************************************************/
 
-
 #if ARDUINO >= 100
- #include "Arduino.h"
- #if not defined (_VARIANT_ARDUINO_DUE_X_) && not defined (_VARIANT_ARDUINO_ZERO_)
-  #include <SoftwareSerial.h>
- #endif
+#include "Arduino.h"
+#if not defined(_VARIANT_ARDUINO_DUE_X_) && not defined(_VARIANT_ARDUINO_ZERO_)
+#include <SoftwareSerial.h>
+#endif
 #else
- #include "WProgram.h"
- #include "NewSoftSerial.h"
+#include "WProgram.h"
+#include "NewSoftSerial.h"
 #endif
 
-#define VC0706_RESET  0x26
+#define VC0706_RESET 0x26
 #define VC0706_GEN_VERSION 0x11
 #define VC0706_SET_PORT 0x24
 #define VC0706_READ_FBUF 0x32
@@ -62,19 +57,19 @@
 #define CAMERABUFFSIZ 100
 #define CAMERADELAY 10
 
-
-class Adafruit_VC0706 {
- public:
-#if not defined (_VARIANT_ARDUINO_DUE_X_) && not defined (_VARIANT_ARDUINO_ZERO_)
-  #if ARDUINO >= 100
-    Adafruit_VC0706(SoftwareSerial *ser); // Constructor when using SoftwareSerial
-  #else
-    Adafruit_VC0706(NewSoftSerial  *ser); // Constructor when using NewSoftSerial
-  #endif
+class Adafruit_VC0706
+{
+public:
+#if not defined(_VARIANT_ARDUINO_DUE_X_) && not defined(_VARIANT_ARDUINO_ZERO_)
+#if ARDUINO >= 100
+  Adafruit_VC0706(SoftwareSerial *ser); // Constructor when using SoftwareSerial
+#else
+  Adafruit_VC0706(NewSoftSerial *ser); // Constructor when using NewSoftSerial
+#endif
 #endif
   Adafruit_VC0706(HardwareSerial *ser); // Constructor when using HardwareSerial
-  boolean begin(uint8_t progress, uint16_t baud = 38400);
-  boolean reset(uint8_t progress);
+  boolean begin(uint16_t baud = 38400);
+  boolean reset(void);
   boolean TVon(void);
   boolean TVoff(void);
   boolean takePicture(void);
@@ -95,36 +90,36 @@ class Adafruit_VC0706 {
   boolean cameraFrameBuffCtrl(uint8_t command);
   uint8_t getCompression();
   boolean setCompression(uint8_t c);
-  
+
   boolean getPTZ(uint16_t &w, uint16_t &h, uint16_t &wz, uint16_t &hz, uint16_t &pan, uint16_t &tilt);
   boolean setPTZ(uint16_t wz, uint16_t hz, uint16_t pan, uint16_t tilt);
 
   void OSD(uint8_t x, uint8_t y, char *s); // isnt supported by the chip :(
 
-char* setBaud9600();
-char* setBaud19200();
-char* setBaud38400();
-char* setBaud57600();
-char* setBaud115200();
-  
- private:
-  uint8_t  serialNum;
-  uint8_t  camerabuff[CAMERABUFFSIZ+1];
-  uint8_t  bufferLen;
+  char *setBaud9600();
+  char *setBaud19200();
+  char *setBaud38400();
+  char *setBaud57600();
+  char *setBaud115200();
+
+private:
+  uint8_t serialNum;
+  uint8_t camerabuff[CAMERABUFFSIZ + 1];
+  uint8_t bufferLen;
   uint16_t frameptr;
 
-#if not defined (_VARIANT_ARDUINO_DUE_X_) && not defined (_VARIANT_ARDUINO_ZERO_)
-  #if ARDUINO >= 100
-    SoftwareSerial *swSerial;
-  #else
-    NewSoftSerial  *swSerial;
-  #endif
+#if not defined(_VARIANT_ARDUINO_DUE_X_) && not defined(_VARIANT_ARDUINO_ZERO_)
+#if ARDUINO >= 100
+  SoftwareSerial *swSerial;
+#else
+  NewSoftSerial *swSerial;
+#endif
 #endif
   HardwareSerial *hwSerial;
 
   void common_init(void);
-  boolean runCommand(uint8_t cmd, uint8_t args[], uint8_t argn, uint8_t resp, uint8_t progess = 0, boolean init = false, boolean flushflag = true); 
-  void sendCommand(uint8_t cmd, uint8_t args[], uint8_t argn, uint8_t progess = 0, boolean init = false); 
+  boolean runCommand(uint8_t cmd, uint8_t args[], uint8_t argn, uint8_t resp, boolean flushflag = true);
+  void sendCommand(uint8_t cmd, uint8_t args[], uint8_t argn);
   uint8_t readResponse(uint8_t numbytes, uint8_t timeout);
   boolean verifyResponse(uint8_t command);
   void printBuff(void);
