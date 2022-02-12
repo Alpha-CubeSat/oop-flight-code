@@ -62,10 +62,9 @@ namespace sfr
         bool turn_off = false;
         bool powered = false;
         uint8_t start_progress = 0;
-        uint64_t start_time = 0;
+        uint64_t init_start_time = 0;
         uint64_t step_time = 0;
         uint64_t init_timeout = 120000;
-        uint64_t wait_count = 0;
         uint8_t buffer[255] = {0};
         int current_serial = 0;
         int fragment_number = 0;

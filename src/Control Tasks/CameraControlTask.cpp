@@ -118,11 +118,11 @@ void CameraControlTask::camera_init()
 {
     if (sfr::camera::init_mode == camera_init_mode_type::awaiting)
     {
-        sfr::camera::start_time = millis();
+        sfr::camera::init_start_time = millis();
     }
-    if (sfr::camera::init_mode == camera_init_mode_type::in_progress && millis() - sfr::camera::start_time > sfr::camera::init_timeout)
+    if (sfr::camera::init_mode == camera_init_mode_type::in_progress && millis() - sfr::camera::init_start_time > sfr::camera::init_timeout)
     {
-        sfr::camera::init_mode == camera_init_mode_type::failed;
+        sfr::camera::init_mode = camera_init_mode_type::failed;
         Serial.print("Camera intialization failed at step ");
         Serial.println(sfr::camera::start_progress);
     }

@@ -56,10 +56,8 @@ namespace sfr
     }
     namespace camera
     {
-        sensor_mode_type mode;
-        camera_init_mode_type init_mode;
-        int max_retry_attempts;
-        int retry_attempts;
+        extern sensor_mode_type mode;
+        extern camera_init_mode_type init_mode;
         extern bool photo_taken_sd_failed;
         extern bool take_photo;
         extern bool turn_on;
@@ -68,11 +66,10 @@ namespace sfr
         extern uint32_t start_time;
         extern bool turn_off;
         extern bool powered;
-        uint8_t start_progress;
-        uint64_t start_time;
-        uint64_t step_time;
-        uint64_t init_timeout;
-        uint64_t wait_count;
+        extern uint8_t start_progress;
+        extern uint64_t init_start_time;
+        extern uint64_t step_time;
+        extern uint64_t init_timeout;
         extern uint8_t buffer[255];
         extern int current_serial;
         extern int fragment_number;
@@ -87,7 +84,7 @@ namespace sfr
         extern bool report_downlinked;
         extern char filename[15];
         extern uint16_t jpglen;
-        uint8_t set_res;
+        extern uint8_t set_res;
     }
     namespace rockblock
     {
@@ -127,7 +124,6 @@ namespace sfr
     namespace imu
     {
         extern sensor_mode_type mode;
-        extern int max_retry_attempts;
 
         extern float mag_x;
         extern float mag_y;

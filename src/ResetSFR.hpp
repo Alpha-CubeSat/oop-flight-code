@@ -8,9 +8,10 @@ class ResetSFR
 public:
   static void capture_default_sfr();
   static void restore_default_sfr();
+
 private:
-// need a pinMap reset? If yes, we can just call PinControlTask::execute().
-// pins are being updated in the switch cases in each control task anyway
+  // need a pinMap reset? If yes, we can just call PinControlTask::execute().
+  // pins are being updated in the switch cases in each control task anyway
   static bool photoresistor_covered;
 
   static mission_mode_type mission_mode;
@@ -58,8 +59,8 @@ private:
   static uint8_t rockblock_opcode[2];
   static uint8_t rockblock_arg_1[4];
   static uint8_t rockblock_arg_2[4];
-  static HardwareSerial serial;
-  static RockblockSimulator serial;
+  static HardwareSerial rockblock_hardware_serial;
+  static RockblockSimulator rockblock_rs_serial;
   static bool rockblock_flush_status;
   static bool rockblock_waiting_command;
   static size_t rockblock_conseq_reads;
@@ -118,17 +119,6 @@ private:
   static unsigned char fault_fault_1;
   static unsigned char fault_fault_2;
   static unsigned char fault_fault_3;
-
-
-
-
-
-
-
-
-
-
-
 };
 
 #endif
