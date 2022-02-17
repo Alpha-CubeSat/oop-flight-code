@@ -8,15 +8,12 @@
 #include "Modes/acs_mode_type.enum"
 #include "Modes/burnwire_mode_type.enum"
 #include "Modes/camera_init_mode_type.enum"
-#include "Modes/temp_mode_type.enum"
 #include "Modes/fault_mode_type.enum"
 #include "Modes/imu_downlink_type.enum"
 #include "Modes/mission_mode_type.enum"
 #include "Modes/rockblock_mode_type.enum"
-#include "Modes/simple_acs_type.enum"
 #include "Modes/sensor_mode_type.enum"
-#include "Control Tasks/TimedControlTask.hpp"
-#include "Control Tasks/BurnwireControlTask.hpp"
+#include "Modes/simple_acs_type.enum"
 #include "Pins.hpp"
 #include "RockblockSimulator.hpp"
 #include "constants.hpp"
@@ -52,8 +49,7 @@ namespace sfr {
         extern int burn_time;
         extern int armed_time;
     } // namespace burnwire
-    namespace camera
-    {
+    namespace camera {
         extern sensor_mode_type mode;
         extern bool photo_taken_sd_failed;
         extern bool take_photo;
@@ -66,8 +62,7 @@ namespace sfr {
         extern uint64_t init_start_time;
         extern uint64_t init_timeout;
 
-        extern uint8_t buffer[255];
-
+        extern uint64_t buffer[255];
         extern int current_serial;
         extern int fragment_number;
         extern int fragment_number_requested;
@@ -83,8 +78,7 @@ namespace sfr {
         extern uint16_t jpglen;
         extern uint8_t set_res;
     } // namespace camera
-    namespace rockblock
-    {
+    namespace rockblock {
         extern unsigned long last_communication;
         extern bool last_downlink_normal;
         extern int camera_commands[99][constants::rockblock::command_len];
@@ -118,8 +112,7 @@ namespace sfr {
         extern bool last_timed_out;
         extern int num_downlinks;
     } // namespace rockblock
-    namespace imu
-    {
+    namespace imu {
         extern sensor_mode_type mode;
 
         extern float mag_x;

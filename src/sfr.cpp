@@ -43,10 +43,9 @@ namespace sfr {
         int start_time = 0;
         int camera_attempts = 0;
         int burn_time = 500;
-        int armed_time = constants::rockblock::two_days;
+        int armed_time = constants::time::two_days;
     } // namespace burnwire
-    namespace camera
-    {
+    namespace camera {
         sensor_mode_type mode = sensor_mode_type::normal;
         bool photo_taken_sd_failed = false;
         bool take_photo = false;
@@ -110,8 +109,7 @@ namespace sfr {
         bool last_timed_out = false;
         int num_downlinks = 2;
     } // namespace rockblock
-    namespace imu
-    {
+    namespace imu {
         sensor_mode_type mode = sensor_mode_type::normal;
 
         float mag_x = 0.0;
