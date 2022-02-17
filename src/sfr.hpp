@@ -5,6 +5,7 @@
 #include "Control Tasks/BurnwireControlTask.hpp"
 #include "Control Tasks/EEPROMControlTask.hpp"
 #include "Control Tasks/TimedControlTask.hpp"
+#include "Control Tasks/EEPROMControlTask.hpp"
 #include "MissionManager.hpp"
 #include "MissionMode.hpp"
 #include "Modes/burnwire_mode_type.enum"
@@ -332,6 +333,7 @@ namespace sfr {
         extern bool pressed;
     }
     namespace EEPROM {
+<<<<<<< HEAD
         extern int time_of_last_write;
         extern int write_step_time;
         extern int alloted_time;
@@ -339,5 +341,12 @@ namespace sfr {
         extern bool alloted_time_passed;
     } // namespace EEPROM
 };    // namespace sfr
+=======
+        extern uint8_t curr_time;
+        extern uint8_t start_time;
+        extern bool two_hours_passed;
+    }
+}; // namespace sfr
+>>>>>>> 6709f1c (I guess i never pushed, sorry!)
 
 #endif

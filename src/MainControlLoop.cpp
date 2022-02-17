@@ -32,15 +32,14 @@ MainControlLoop::MainControlLoop()
 
 void MainControlLoop::execute()
 {
-    delay(200);
+    sfr::EEPROM::time_of_last_write = millis();
+    delay(200); // To prolong the speed of the main control loop to ensure correct RockBlock reads. Can reduce in the future.
     faults::fault_1 = 0;
     faults::fault_2 = 0;
     faults::fault_3 = 0;
 
     clock_manager.execute();
-
     mission_manager.execute_on_time();
-
     acs_monitor.execute_on_time();
     battery_monitor.execute_on_time();
     button_monitor.execute_on_time();
