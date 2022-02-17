@@ -44,6 +44,8 @@
         "iostream": "cpp",
         "thread": "cpp",
         "deque": "cpp",
-        "numeric": "cpp"
-    }
+        "numeric": "cpp",
+        "any": "cpp"
+    },
+    "C_Cpp.dimInactiveRegions": false
 }

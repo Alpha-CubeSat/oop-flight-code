@@ -26,10 +26,10 @@ namespace sfr {
             {constants::camera::rx, LOW},
             {constants::camera::tx, LOW},
             {constants::button::button_pin, LOW}};
-    }
+    } // namespace pins
     namespace photoresistor {
         bool covered = true;
-    }
+    } // namespace photoresistor
     namespace mission {
         mission_mode_type mode = mission_mode_type::boot;
         bool low_power_eligible = true;
@@ -48,12 +48,20 @@ namespace sfr {
         int armed_time = constants::time::two_days;
     } // namespace burnwire
     namespace camera {
+        sensor_mode_type mode = sensor_mode_type::normal;
         bool photo_taken_sd_failed = false;
         bool take_photo = false;
         bool turn_on = false;
         bool turn_off = false;
         bool powered = false;
-        uint8_t buffer[255] = {0};
+
+        // Initialization
+        camera_init_mode_type init_mode = camera_init_mode_type::awaiting;
+        uint8_t start_progress = 0;
+        uint64_t init_start_time = 0;
+        uint64_t init_timeout = 120000;
+
+        uint64_t buffer[255] = {0};
         int current_serial = 0;
         int fragment_number = 0;
         int fragment_number_requested = 3;
@@ -67,6 +75,7 @@ namespace sfr {
         bool report_downlinked = true;
         char filename[15];
         uint16_t jpglen = 0;
+        uint8_t set_res = VC0706_160x120;
     } // namespace camera
     namespace rockblock {
         int num_failures = 0;
@@ -100,9 +109,11 @@ namespace sfr {
         int timeout = 10 * constants::time::one_minute;
         int start_time = 0;
         bool last_timed_out = false;
-        int num_downlinks = 0;
+        int num_downlinks = 2;
     } // namespace rockblock
     namespace imu {
+        sensor_mode_type mode = sensor_mode_type::normal;
+
         float mag_x = 0.0;
         float mag_y = 0.0;
         float mag_z = 0.0;
@@ -119,6 +130,12 @@ namespace sfr {
         std::deque<float> acc_x_buffer;
         std::deque<float> acc_y_buffer;
         std::deque<float> acc_z_buffer;
+        // std::deque<std::experimental::any, time_t> imu_dlink_buffer;
+        std::deque<float> imu_dlink_gyro_x_buffer;
+        std::deque<float> imu_dlink_gyro_y_buffer;
+        std::deque<float> imu_dlink_gyro_z_buffer;
+        std::deque<time_t> imu_dlink_time_buffer;
+        std::deque<imu_downlink_type> imu_dlink_magid_buffer;
 
         float mag_x_average = 0.0;
         float mag_y_average = 0.0;
@@ -129,6 +146,12 @@ namespace sfr {
         float acc_x_average = 0.0;
         float acc_y_average = 0.0;
         float acc_z_average = 0.0;
+
+        bool imu_dlink_report_ready = false;
+        imu_downlink_type imu_dlink_magid = imu_downlink_type::GAUSS_8;
+        const int imu_downlink_buffer_max_size = constants::sensor::collect; // not determined yet
+        const int imu_downlink_report_size = constants::sensor::collect * 5;
+        uint8_t report[imu_downlink_report_size];
     } // namespace imu
     namespace temperature {
         float temp_c = 0.0;

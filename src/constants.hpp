@@ -31,8 +31,11 @@ namespace constants {
         constexpr int min_armed_time = 0;
         constexpr int max_armed_time = 86400000;
     } // namespace burnwire
-
     namespace rockblock {
+        constexpr unsigned long one_second = 1000;
+        constexpr unsigned long one_minute = 60 * one_second;
+        constexpr unsigned long one_hour = 60 * one_minute;
+        constexpr unsigned long one_day = 24 * one_hour;
 
         constexpr int sleep_pin = 19;
 
@@ -393,7 +396,6 @@ namespace constants {
         constexpr int resolution = 1023;
         constexpr int r1 = 4700;
         constexpr int r2 = 10000;
-
     } // namespace battery
     namespace fault_imu {
         constexpr uint8_t mag_x = 1 << 0;
@@ -420,8 +422,8 @@ namespace constants {
         constexpr int content_length = 64;
         constexpr int bytes_allocated_serial_opcode = 2;
         constexpr int bytes_allocated_fragment = 4;
-        constexpr int tx = 35;
-        constexpr int rx = 34;
+        constexpr int tx = 34;
+        constexpr int rx = 33;
     } // namespace camera
     namespace button {
         // low when door is opened
@@ -434,18 +436,18 @@ namespace constants {
         constexpr float eight_g = 8 * gravity;
 
         constexpr float min_mag_x = 0.0;
-        constexpr float max_mag_x = 0.0;
+        constexpr float max_mag_x = 100;
         constexpr float min_mag_y = 0.0;
-        constexpr float max_mag_y = 0.0;
-        constexpr float min_mag_z = 0.0;
-        constexpr float max_mag_z = 0.0;
+        constexpr float max_mag_y = 100;
+        constexpr float min_mag_z = -100;
+        constexpr float max_mag_z = 100;
 
         constexpr float min_gyro_x = 0.0;
-        constexpr float max_gyro_x = 0.0;
+        constexpr float max_gyro_x = 10;
         constexpr float min_gyro_y = 0.0;
-        constexpr float max_gyro_y = 0.0;
+        constexpr float max_gyro_y = 10;
         constexpr float min_gyro_z = 0.0;
-        constexpr float max_gyro_z = 0.0;
+        constexpr float max_gyro_z = 10;
 
         constexpr int CSAG = 21;
         constexpr int CSM = 20;
@@ -476,7 +478,7 @@ namespace constants {
         static constexpr unsigned int burnwire_control_task_offset = acs_control_task_offset + 0; // to be determined
         static constexpr unsigned int camera_control_task_offset = burnwire_control_task_offset + 20;
         static constexpr unsigned int rockblock_control_task_offset = camera_control_task_offset + 230000;
-
+        static constexpr unsigned int temperature_control_task_offset = rockblock_control_task_offset + 1000;
         static constexpr unsigned int mission_manager_offset = rockblock_control_task_offset + 20;
     } // namespace timecontrol
 };    // namespace constants
