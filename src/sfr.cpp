@@ -186,4 +186,9 @@ namespace sfr {
     namespace button {
         bool pressed = true;
     }
+    namespace EEPROM {
+        uint8_t curr_time = 0;
+        uint8_t start_time = 0;
+        bool two_hours_passed = false;
+    }
 } // namespace sfr

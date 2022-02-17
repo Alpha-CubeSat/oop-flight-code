@@ -4,6 +4,7 @@
 #include "Arduino.h"
 #include "Control Tasks/BurnwireControlTask.hpp"
 #include "Control Tasks/TimedControlTask.hpp"
+#include "Control Tasks/EEPROMControlTask.hpp"
 #include "MissionManager.hpp"
 #include "Modes/acs_mode_type.enum"
 #include "Modes/burnwire_mode_type.enum"
@@ -179,6 +180,11 @@ namespace sfr {
     } // namespace fault
     namespace button {
         extern bool pressed;
+    }
+    namespace EEPROM {
+        extern uint8_t curr_time;
+        extern uint8_t start_time;
+        extern bool two_hours_passed;
     }
 }; // namespace sfr
 

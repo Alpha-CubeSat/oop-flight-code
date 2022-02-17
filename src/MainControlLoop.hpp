@@ -40,6 +40,7 @@ protected:
     BurnwireControlTask burnwire_control_task;
     CameraControlTask camera_control_task;
     RockblockControlTask rockblock_control_task;
+    EEPROMControlTask eeprom_control_task;
 
     MissionManager mission_manager;
 

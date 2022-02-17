@@ -18,6 +18,7 @@ MainControlLoop::MainControlLoop()
       burnwire_control_task(constants::timecontrol::burnwire_control_task_offset),
       camera_control_task(constants::timecontrol::camera_control_task_offset),
       rockblock_control_task(constants::timecontrol::rockblock_control_task_offset),
+      eeprom_control_task(),
       mission_manager(constants::timecontrol::mission_manager_offset)
 {
     delay(1000);
@@ -26,6 +27,8 @@ MainControlLoop::MainControlLoop()
 
 void MainControlLoop::execute()
 {
+    sfr::EEPROM::start_time = millis();
+
     sfr::fault::fault_1 = 0;
     sfr::fault::fault_2 = 0;
     sfr::fault::fault_3 = 0;
@@ -48,6 +51,9 @@ void MainControlLoop::execute()
     burnwire_control_task.execute_on_time();
     camera_control_task.execute_on_time();
     rockblock_control_task.execute_on_time();
+    eeprom_control_task.execute();
+
+    Serial.println(EEPROM.read(0));
 
     mission_manager.execute_on_time();
 }
