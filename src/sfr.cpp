@@ -52,19 +52,18 @@ namespace sfr
     namespace camera
     {
         sensor_mode_type mode = sensor_mode_type::normal;
-        camera_init_mode_type init_mode = camera_init_mode_type::awaiting;
         bool photo_taken_sd_failed = false;
         bool take_photo = false;
         bool turn_on = false;
-        uint8_t progress = 0;
-        uint32_t start_time = 0;
-        bool init = true;
         bool turn_off = false;
         bool powered = false;
+
+        // Initialization
+        camera_init_mode_type init_mode = camera_init_mode_type::awaiting;
         uint8_t start_progress = 0;
         uint64_t init_start_time = 0;
-        uint64_t step_time = 0;
         uint64_t init_timeout = 120000;
+
         uint8_t buffer[255] = {0};
         int current_serial = 0;
         int fragment_number = 0;
