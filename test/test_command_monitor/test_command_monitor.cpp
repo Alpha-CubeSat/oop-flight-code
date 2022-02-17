@@ -1,12 +1,14 @@
-#include <unity.h>
 #include <Monitors/CommandMonitor.hpp>
+#include <unity.h>
 
-void test_initialize() {
+void test_initialize()
+{
     CommandMonitor command_monitor(0);
     TEST_ASSERT_EQUAL(0, 0);
 }
 
-void test_mission() {
+void test_mission()
+{
     CommandMonitor command_monitor(0);
 
     // mission mode = deployment
@@ -38,7 +40,8 @@ void test_mission() {
     TEST_ASSERT(sfr::mission::mode == mission_mode_type::low_power);
 }
 
-void test_burnwire() {
+void test_burnwire()
+{
     CommandMonitor command_monitor(0);
 
     // burnwire arm = on
@@ -70,7 +73,8 @@ void test_burnwire() {
     TEST_ASSERT(sfr::burnwire::fire == false);
 }
 
-void test_burn_times() {
+void test_burn_times()
+{
     CommandMonitor command_monitor(0);
 
     // burn time > max burn time
@@ -102,7 +106,8 @@ void test_burn_times() {
     TEST_ASSERT(sfr::burnwire::armed_time == constants::rockblock::one_hour);
 }
 
-void test_camera() {
+void test_camera()
+{
     CommandMonitor command_monitor(0);
 
     // take photo = true
@@ -120,25 +125,8 @@ void test_camera() {
     TEST_ASSERT(sfr::camera::take_photo == false);
 }
 
-void test_temp_mode() {
-    CommandMonitor command_monitor(0);
-
-    // temp mode = active
-    sfr::rockblock::f_opcode = command_monitor.get_decimal_opcode(constants::rockblock::temperature_mode);
-    sfr::rockblock::f_arg_1 = command_monitor.get_decimal_arg(constants::rockblock::active);
-    sfr::rockblock::waiting_command = true;
-    command_monitor.execute();
-    TEST_ASSERT(sfr::temperature::mode == temp_mode_type::active);
-
-    // temp mode = inactive
-    sfr::rockblock::f_opcode = command_monitor.get_decimal_opcode(constants::rockblock::temperature_mode);
-    sfr::rockblock::f_arg_1 = command_monitor.get_decimal_arg(constants::rockblock::inactive);
-    sfr::rockblock::waiting_command = true;
-    command_monitor.execute();
-    TEST_ASSERT(sfr::temperature::mode == temp_mode_type::inactive);
-}
-
-void test_acs_mode() {
+void test_acs_mode()
+{
     CommandMonitor command_monitor(0);
 
     // acs mode = full
@@ -163,7 +151,8 @@ void test_acs_mode() {
     TEST_ASSERT(sfr::acs::mode == acs_mode_type::off);
 }
 
-void test_fault_mode() {
+void test_fault_mode()
+{
     CommandMonitor command_monitor(0);
 
     // faul mode = active
@@ -181,7 +170,8 @@ void test_fault_mode() {
     TEST_ASSERT(sfr::fault::mode == fault_mode_type::inactive);
 }
 
-void test_fault_mag() {
+void test_fault_mag()
+{
     CommandMonitor command_monitor(0);
 
     // check mag x = true
@@ -218,7 +208,7 @@ void test_fault_mag() {
     sfr::rockblock::waiting_command = true;
     command_monitor.execute();
     TEST_ASSERT(sfr::fault::check_mag_z == true);
-    
+
     // check mag z = false
     sfr::rockblock::f_opcode = command_monitor.get_decimal_opcode(constants::rockblock::fault_check_mag_z);
     sfr::rockblock::f_arg_1 = command_monitor.get_decimal_opcode(constants::rockblock::false_arg);
@@ -227,7 +217,8 @@ void test_fault_mag() {
     TEST_ASSERT(sfr::fault::check_mag_z == false);
 }
 
-void test_fault_gyro() {
+void test_fault_gyro()
+{
     CommandMonitor command_monitor(0);
 
     // check gryo x = true
@@ -273,7 +264,8 @@ void test_fault_gyro() {
     TEST_ASSERT(sfr::fault::check_gyro_z == false);
 }
 
-void test_fault_other() {
+void test_fault_other()
+{
     CommandMonitor command_monitor(0);
 
     // check temp = true
@@ -319,7 +311,8 @@ void test_fault_other() {
     TEST_ASSERT(sfr::fault::check_voltage == false);
 }
 
-void test_img_frag() {
+void test_img_frag()
+{
     CommandMonitor command_monitor(0);
 
     // invalid fragment request
@@ -342,7 +335,8 @@ void test_img_frag() {
     TEST_ASSERT(sfr::camera::fragment_number_requested == 1);
 }
 
-void test_down_period() {
+void test_down_period()
+{
     CommandMonitor command_monitor(0);
 
     // downlink period too low (500 ms)
@@ -367,14 +361,14 @@ void test_down_period() {
     TEST_ASSERT(sfr::rockblock::downlink_period == constants::rockblock::two_hours / 2);
 }
 
-int test_command_monitor() {
+int test_command_monitor()
+{
     UNITY_BEGIN();
     RUN_TEST(test_initialize);
     RUN_TEST(test_mission);
     RUN_TEST(test_burnwire);
     RUN_TEST(test_burn_times);
     RUN_TEST(test_camera);
-    RUN_TEST(test_temp_mode);
     RUN_TEST(test_acs_mode);
     RUN_TEST(test_fault_mode);
     RUN_TEST(test_fault_mag);
@@ -386,12 +380,14 @@ int test_command_monitor() {
 }
 
 #ifdef DESKTOP
-int main() {
+int main()
+{
     return test_simulator();
 }
 #else
 #include <Arduino.h>
-void setup() {
+void setup()
+{
     delay(2000);
     Serial.begin(9600);
     test_command_monitor();

@@ -1,9 +1,7 @@
 #include "sfr.hpp"
 
-namespace sfr
-{
-    namespace pins
-    {
+namespace sfr {
+    namespace pins {
         std::map<int, int> pinMap = {
             {constants::photoresistor::pin, LOW},
             {constants::burnwire::first_pin, LOW},
@@ -28,18 +26,16 @@ namespace sfr
             {constants::camera::rx, LOW},
             {constants::camera::tx, LOW},
             {constants::button::button_pin, LOW}};
-    }
-    namespace photoresistor
-    {
+    } // namespace pins
+    namespace photoresistor {
         bool covered = true;
-    }
-    namespace mission
-    {
-        mission_mode_type mode = mission_mode_type::standby;
+    } // namespace photoresistor
+    namespace mission {
+        mission_mode_type mode = mission_mode_type::boot;
         bool low_power_eligible = true;
-    }
-    namespace burnwire
-    {
+        unsigned long boot_start_test = 0;
+    } // namespace mission
+    namespace burnwire {
         bool fire = false;
         bool arm = false;
         burnwire_mode_type mode = burnwire_mode_type::standby;
@@ -48,7 +44,7 @@ namespace sfr
         int camera_attempts = 0;
         int burn_time = 500;
         int armed_time = constants::rockblock::two_days;
-    }
+    } // namespace burnwire
     namespace camera
     {
         sensor_mode_type mode = sensor_mode_type::normal;
@@ -64,7 +60,7 @@ namespace sfr
         uint64_t init_start_time = 0;
         uint64_t init_timeout = 120000;
 
-        uint8_t buffer[255] = {0};
+        uint64_t buffer[255] = {0};
         int current_serial = 0;
         int fragment_number = 0;
         int fragment_number_requested = 3;
@@ -79,9 +75,8 @@ namespace sfr
         char filename[15];
         uint16_t jpglen = 0;
         uint8_t set_res = VC0706_160x120;
-    }
-    namespace rockblock
-    {
+    } // namespace camera
+    namespace rockblock {
         unsigned long last_communication = 0;
         bool last_downlink_normal = false;
         int camera_commands[99][constants::rockblock::command_len] = {};
@@ -110,11 +105,11 @@ namespace sfr
         uint16_t f_opcode = 0;
         uint32_t f_arg_1 = 0;
         uint32_t f_arg_2 = 0;
-        int timeout = 10 * constants::rockblock::one_minute;
+        int timeout = 10 * constants::time::one_minute;
         int start_time = 0;
         bool last_timed_out = false;
         int num_downlinks = 2;
-    }
+    } // namespace rockblock
     namespace imu
     {
         sensor_mode_type mode = sensor_mode_type::normal;
@@ -135,6 +130,12 @@ namespace sfr
         std::deque<float> acc_x_buffer;
         std::deque<float> acc_y_buffer;
         std::deque<float> acc_z_buffer;
+        // std::deque<std::experimental::any, time_t> imu_dlink_buffer;
+        std::deque<float> imu_dlink_gyro_x_buffer;
+        std::deque<float> imu_dlink_gyro_y_buffer;
+        std::deque<float> imu_dlink_gyro_z_buffer;
+        std::deque<time_t> imu_dlink_time_buffer;
+        std::deque<imu_downlink_type> imu_dlink_magid_buffer;
 
         float mag_x_average = 0.0;
         float mag_y_average = 0.0;
@@ -145,39 +146,39 @@ namespace sfr
         float acc_x_average = 0.0;
         float acc_y_average = 0.0;
         float acc_z_average = 0.0;
-    }
-    namespace temperature
-    {
+
+        bool imu_dlink_report_ready = false;
+        imu_downlink_type imu_dlink_magid = imu_downlink_type::GAUSS_8;
+        const int imu_downlink_buffer_max_size = constants::sensor::collect; // not determined yet
+        const int imu_downlink_report_size = constants::sensor::collect * 5;
+        uint8_t report[imu_downlink_report_size];
+    } // namespace imu
+    namespace temperature {
         float temp_c = 0.0;
         std::deque<float> temp_c_buffer;
         float temp_c_average = 0.0;
-        temp_mode_type mode = temp_mode_type::active;
         bool in_sun = false;
-    }
-    namespace current
-    {
+    } // namespace temperature
+    namespace current {
         float solar_current = 0.0;
         std::deque<float> solar_current_buffer;
         float solar_current_average = 0.0;
         bool in_sun = false;
-    }
-    namespace acs
-    {
+    } // namespace current
+    namespace acs {
         acs_mode_type mode = acs_mode_type::off;
         float current1 = 0;
         float current2 = 0;
         float current3 = 0;
         simple_acs_type mag = simple_acs_type::x;
         unsigned long max_no_communication = 0;
-    }
-    namespace battery
-    {
+    } // namespace acs
+    namespace battery {
         float voltage = 0.0;
         std::deque<float> voltage_buffer;
         float voltage_average = 0.0;
-    }
-    namespace fault
-    {
+    } // namespace battery
+    namespace fault {
         fault_mode_type mode = fault_mode_type::active;
 
         unsigned char fault_1 = 0;
@@ -199,9 +200,8 @@ namespace sfr
         bool check_temp_c = true;
         bool check_solar_current = true;
         bool check_voltage = true;
-    }
-    namespace button
-    {
+    } // namespace fault
+    namespace button {
         bool pressed = true;
     }
-}
+} // namespace sfr

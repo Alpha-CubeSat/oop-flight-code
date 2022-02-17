@@ -15,12 +15,24 @@
 * You can also use `pio run -e debug -t upload` to upload code with debugging print statements, or `pio run -e teensy35 -t upload` to upload code without debugging print statements.
 * Use `pio test` to run unit tests.
 * To view the serial monitor press the electrical cord icon.
+* Navigate to View -> Command Palette
+* Search "settings" and select Preferences: Open Settings (JSON)
+* Enter the following in the settings JSON and save 
+
+`
+{
+    "C_Cpp.clang_format_style": "file",
+    "editor.formatOnSave": true,
+}
+`
 
 ## Code Overview
 
 This code is structured based on [Lodestar](https://github.com/shihaocao/lodestar), a small scale electric demonstrator for the belly-flop and tail-sitting control algorithms necessary for SpaceX's Starship.
 
 Both ClockManager and TimedControlTask are from [PAN](https://github.com/pathfinder-for-autonomous-navigation).
+
+The clang-format file is from this [thread](https://stackoverflow.com/questions/45823734/visual-studio-code-formatting-for).
 
 ### main.cpp
 This file is comparable to a .ino file you would see in the Arduino IDE (notice setup and loop are exactly the same as they would be in an Arduino file). 
@@ -35,7 +47,7 @@ The CubeSat has 4 different modes with distinct entrance and exit conditions
 * Low Power
 * Deployment
 
-![mission modes](https://github.com/Alpha-CubeSat/oop-flight-code/blob/main/flight_code.png "mission modes")
+![mission modes](images/flight_code.png "mission modes")
 
 MissionManager sets which mode the CubeSat should be in based on these exit/entrance conditions.
 
@@ -193,11 +205,11 @@ Constants contains values that will never be changed. This prevents "magic numbe
 **<center> Relevant Documents</center>**
 *Rockblock Control Task (cut in ‘thirds’ for space) **needs to be updated with most recent drawio rev***
 
-![Rockblock Control Task](Rockblock_Control_Task.png)
+![Rockblock Control Task](images/Rockblock_Control_Task.png)
 *Mission Manager*
-![Mission Manager](Mission_Manager.png)
+![Mission Manager](images/Mission_Manager.png)
 *CubeSat Hardware*
-![CubeSat Hardware](CubeSat_Hardware.png)
+![CubeSat Hardware](images/CubeSat_Hardware.png)
 
 
 ## Rockblock Simulator Documentation

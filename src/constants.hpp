@@ -1,19 +1,26 @@
 #ifndef CONSTANTS_HPP_
 #define CONSTANTS_HPP_
 
-namespace constants
-{
-    namespace sensor
-    {
+namespace constants {
+    namespace time {
+        constexpr unsigned long one_second = 1000;
+        constexpr unsigned long one_minute = 60 * one_second;
+        constexpr unsigned long one_hour = 60 * one_minute;
+        constexpr unsigned long one_day = 24 * one_hour;
+
+        constexpr unsigned long half_second = one_second / 2;
+        constexpr unsigned long ten_minutes = 10 * one_minute;
+        constexpr unsigned long two_hours = 2 * one_hour;
+        constexpr unsigned long two_days = 2 * one_day;
+    } // namespace time
+    namespace sensor {
         constexpr int collect = 3;
     }
-    namespace photoresistor
-    {
+    namespace photoresistor {
         constexpr int pin = 38;
         constexpr int light_val = 150;
-    }
-    namespace burnwire
-    {
+    } // namespace photoresistor
+    namespace burnwire {
         constexpr int first_pin = 14;
         constexpr int second_pin = 15;
         constexpr int burn_wait = 1000;
@@ -31,17 +38,12 @@ namespace constants
         constexpr unsigned long one_hour = 60 * one_minute;
         constexpr unsigned long one_day = 24 * one_hour;
 
-        constexpr unsigned long half_second = one_second / 2;
-        constexpr unsigned long ten_minutes = 10 * one_minute;
-        constexpr unsigned long two_hours = 2 * one_hour;
-        constexpr unsigned long two_days = 2 * one_day;
-
         constexpr int sleep_pin = 19;
 
-        constexpr int min_sleep_period = 2 * one_minute;
+        constexpr int min_sleep_period = 2 * time::one_minute;
 
-        constexpr int min_downlink_period = one_second;
-        constexpr int max_downlink_period = two_days;
+        constexpr int min_downlink_period = time::one_second;
+        constexpr int max_downlink_period = time::two_days;
 
         constexpr int baud = 19200;
         constexpr size_t buffer_size = 63;
@@ -353,9 +355,8 @@ namespace constants
         constexpr float min_temp_c;
         constexpr float max_temp_c;
         constexpr float in_sun_val;
-    }
-    namespace current
-    {
+    } // namespace temperature
+    namespace current {
         constexpr int pin = 22;
         // TODO: finalize min/max
         constexpr float min_solar_current = 0;
@@ -366,9 +367,8 @@ namespace constants
         constexpr int resolution = 1024;
         constexpr float load = 30;   // load resister value (kOhm)
         constexpr float shunt = 0.1; // shunt resistor value (Ohm)
-    }
-    namespace acs
-    {
+    }                                // namespace current
+    namespace acs {
         constexpr int xPWMpin = 10;
         constexpr int yPWMpin = 6;
         constexpr int zPWMpin = 30;
@@ -388,9 +388,8 @@ namespace constants
         constexpr int xtorqorder = 0;
         constexpr int ytorqorder = 0;
         constexpr int ztorqorder = 0;
-    }
-    namespace battery
-    {
+    } // namespace acs
+    namespace battery {
         constexpr int voltage_value_pin = 32;
         constexpr int allow_measurement_pin = 36;
         constexpr int max_voltage = 5;
@@ -399,8 +398,7 @@ namespace constants
         constexpr int resolution = 1023;
         constexpr int r1 = 4700;
         constexpr int r2 = 10000;
-
-    }
+    } // namespace battery
     namespace fault
     {
         // fault 1
@@ -421,9 +419,8 @@ namespace constants
         constexpr uint8_t burn_wire = 1 << 0;
         constexpr uint8_t sd_card = 1 << 1;
         constexpr uint8_t camera_on_failed = 1 << 2;
-    }
-    namespace camera
-    {
+    } // namespace fault
+    namespace camera {
         constexpr int power_on_pin = 31;
         constexpr int content_length = 64;
         constexpr int bytes_allocated_serial_opcode = 2;
@@ -435,9 +432,8 @@ namespace constants
     {
         // low when door is opened
         constexpr int button_pin = 37;
-    }
-    namespace imu
-    {
+    } // namespace button
+    namespace imu {
         constexpr float gravity = 9.80665;
         constexpr float two_g = 2 * gravity;
         constexpr float four_g = 4 * gravity;
@@ -488,9 +484,8 @@ namespace constants
         static constexpr unsigned int camera_control_task_offset = burnwire_control_task_offset + 20;
         static constexpr unsigned int rockblock_control_task_offset = camera_control_task_offset + 230000;
         static constexpr unsigned int temperature_control_task_offset = rockblock_control_task_offset + 1000;
-
-        static constexpr unsigned int mission_manager_offset = temperature_control_task_offset + 20;
-    }
-};
+        static constexpr unsigned int mission_manager_offset = rockblock_control_task_offset + 20;
+    } // namespace timecontrol
+};    // namespace constants
 
 #endif

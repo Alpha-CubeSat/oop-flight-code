@@ -1,15 +1,16 @@
-//Taken from Cornell's PAN
+// Taken from Cornell's PAN
 
 #ifndef CLOCK_MANAGER_HPP_
 #define CLOCK_MANAGER_HPP_
 
 #include "sfr.hpp"
 
-class ClockManager : public TimedControlTask<void> {
-   public:
+class ClockManager : public TimedControlTask<void>
+{
+public:
     /**
      * @brief Construct a new Clock Manager
-     * 
+     *
      * @param control_cycle_size Control cycle time, in nanoseconds if on desktop,
      * and in microseconds if on Teensy.
      */
@@ -18,8 +19,8 @@ class ClockManager : public TimedControlTask<void> {
     /**
      * @brief Increments the control cycle count and sets the control cycle
      * start time.
-     * 
-     * Also ensures that the control cycle count can only be incremented 
+     *
+     * Also ensures that the control cycle count can only be incremented
      * at least control_cycle_size microseconds after the last execution
      * of this function. Since this task is the first to run in any control
      * cycle, it therefore ensures that the control cycle stays within its
@@ -27,7 +28,7 @@ class ClockManager : public TimedControlTask<void> {
      */
     void execute() override;
 
-   private:
+private:
     /**
      * @brief If no control cycle has ended yet, this is set to false.
      * Otherwise true.
@@ -49,7 +50,7 @@ class ClockManager : public TimedControlTask<void> {
      */
     sys_time_t initial_start_cycling_time;
 
-   public:
+public:
     /**
      * @brief Convert a control cycle number to the system time
      */

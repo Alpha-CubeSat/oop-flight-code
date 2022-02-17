@@ -3,10 +3,11 @@
 
 #include "sfr.hpp"
 
-class CurrentMonitor : public TimedControlTask<void>{
-    public:
-        CurrentMonitor(unsigned int offset);
-        void execute();
+class CurrentMonitor : public TimedControlTask<void>
+{
+public:
+    CurrentMonitor(unsigned int offset);
+    void execute();
 };
 
 #endif

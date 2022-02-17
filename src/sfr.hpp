@@ -2,49 +2,47 @@
 #define SFR_HPP_
 
 #include "Arduino.h"
-#include "Modes/mission_mode_type.enum"
+#include "Control Tasks/BurnwireControlTask.hpp"
+#include "Control Tasks/TimedControlTask.hpp"
+#include "MissionManager.hpp"
 #include "Modes/acs_mode_type.enum"
-#include "Modes/rockblock_mode_type.enum"
 #include "Modes/burnwire_mode_type.enum"
 #include "Modes/camera_init_mode_type.enum"
 #include "Modes/temp_mode_type.enum"
 #include "Modes/fault_mode_type.enum"
+#include "Modes/imu_downlink_type.enum"
+#include "Modes/mission_mode_type.enum"
+#include "Modes/rockblock_mode_type.enum"
 #include "Modes/simple_acs_type.enum"
 #include "Modes/sensor_mode_type.enum"
 #include "Control Tasks/TimedControlTask.hpp"
 #include "Control Tasks/BurnwireControlTask.hpp"
+#include "Pins.hpp"
 #include "RockblockSimulator.hpp"
 #include "constants.hpp"
-#include "MissionManager.hpp"
-#include "Pins.hpp"
-#include <SD.h>
-#include <Adafruit_VC0706.h>
-#include <StarshotACS0.h>
 #include <Adafruit_LSM9DS1.h>
-#include <iostream>
-#include <string>
-#include <sstream>
+#include <Adafruit_VC0706.h>
+#include <SD.h>
+#include <StarshotACS0.h>
 #include <deque>
-#include <numeric>
+#include <iostream>
 #include <map>
+#include <numeric>
+#include <sstream>
+#include <string>
 
-namespace sfr
-{
-    namespace pins
-    {
+namespace sfr {
+    namespace pins {
         extern std::map<int, int> pinMap;
-    }
-    namespace photoresistor
-    {
+    } // namespace pins
+    namespace photoresistor {
         extern bool covered;
-    }
-    namespace mission
-    {
+    } // namespace photoresistor
+    namespace mission {
         extern mission_mode_type mode;
         extern bool low_power_eligible;
-    }
-    namespace burnwire
-    {
+    } // namespace mission
+    namespace burnwire {
         extern bool fire;
         extern bool arm;
         extern burnwire_mode_type mode;
@@ -53,23 +51,23 @@ namespace sfr
         extern int camera_attempts;
         extern int burn_time;
         extern int armed_time;
-    }
+    } // namespace burnwire
     namespace camera
     {
         extern sensor_mode_type mode;
-        extern camera_init_mode_type init_mode;
         extern bool photo_taken_sd_failed;
         extern bool take_photo;
         extern bool turn_on;
         extern bool turn_off;
         extern bool powered;
 
-        extern uint8_t progress;
+        extern camera_init_mode_type init_mode;
         extern uint8_t start_progress;
         extern uint64_t init_start_time;
         extern uint64_t init_timeout;
 
         extern uint8_t buffer[255];
+
         extern int current_serial;
         extern int fragment_number;
         extern int fragment_number_requested;
@@ -84,7 +82,7 @@ namespace sfr
         extern char filename[15];
         extern uint16_t jpglen;
         extern uint8_t set_res;
-    }
+    } // namespace camera
     namespace rockblock
     {
         extern unsigned long last_communication;
@@ -119,7 +117,7 @@ namespace sfr
         extern int start_time;
         extern bool last_timed_out;
         extern int num_downlinks;
-    }
+    } // namespace rockblock
     namespace imu
     {
         extern sensor_mode_type mode;
@@ -137,6 +135,12 @@ namespace sfr
         extern std::deque<float> gyro_x_buffer;
         extern std::deque<float> gyro_y_buffer;
         extern std::deque<float> gyro_z_buffer;
+        // std::deque<std::experimental::any, time_t> imu_dlink_buffer;
+        extern std::deque<float> imu_dlink_gyro_x_buffer;
+        extern std::deque<float> imu_dlink_gyro_y_buffer;
+        extern std::deque<float> imu_dlink_gyro_z_buffer;
+        extern std::deque<time_t> imu_dlink_time_buffer;
+        extern std::deque<imu_downlink_type> imu_dlink_magid_buffer;
 
         extern float mag_x_average;
         extern float mag_y_average;
@@ -144,39 +148,39 @@ namespace sfr
         extern float gyro_x_average;
         extern float gyro_y_average;
         extern float gyro_z_average;
-    }
-    namespace temperature
-    {
+
+        extern bool imu_dlink_report_ready;
+        extern imu_downlink_type imu_dlink_magid;
+        extern const int imu_downlink_buffer_max_size;
+        extern const int imu_downlink_report_size;
+        extern uint8_t report[];
+    } // namespace imu
+    namespace temperature {
         extern float temp_c;
         extern std::deque<float> temp_c_buffer;
         extern float temp_c_average;
-        extern temp_mode_type mode;
         extern bool in_sun;
-    }
-    namespace current
-    {
+    } // namespace temperature
+    namespace current {
         extern float solar_current;
         extern std::deque<float> solar_current_buffer;
         extern float solar_current_average;
         extern bool in_sun;
-    }
-    namespace acs
-    {
+    } // namespace current
+    namespace acs {
         extern acs_mode_type mode;
         extern float current1;
         extern float current2;
         extern float current3;
         extern simple_acs_type mag;
         extern unsigned long max_no_communication;
-    }
-    namespace battery
-    {
+    } // namespace acs
+    namespace battery {
         extern float voltage;
         extern std::deque<float> voltage_buffer;
         extern float voltage_average;
-    }
-    namespace fault
-    {
+    } // namespace battery
+    namespace fault {
         extern fault_mode_type mode;
 
         extern unsigned char fault_1;
@@ -198,11 +202,10 @@ namespace sfr
         extern bool check_temp_c;
         extern bool check_solar_current;
         extern bool check_voltage;
-    }
-    namespace button
-    {
+    } // namespace fault
+    namespace button {
         extern bool pressed;
     }
-};
+}; // namespace sfr
 
 #endif
