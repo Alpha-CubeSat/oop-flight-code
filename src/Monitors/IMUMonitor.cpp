@@ -9,12 +9,9 @@ IMUMonitor::IMUMonitor(unsigned int offset)
 {
     imu = Adafruit_LSM9DS1(constants::imu::CSAG, constants::imu::CSM);
 
-    if (!imu.begin())
-    {
+    if (!imu.begin()) {
         transition_to_abnormal_init();
-    }
-    else
-    {
+    } else {
         transition_to_normal();
     }
     imu.setupAccel(imu.LSM9DS1_ACCELRANGE_2G);
@@ -24,8 +21,7 @@ IMUMonitor::IMUMonitor(unsigned int offset)
 
 void IMUMonitor::execute()
 {
-    switch (sfr::imu::mode)
-    {
+    switch (sfr::imu::mode) {
     case sensor_mode_type::normal:
         Serial.println("IMU is in Normal Mode");
         capture_imu_values();
@@ -36,8 +32,7 @@ void IMUMonitor::execute()
     case sensor_mode_type::retry:
         Serial.println("IMU is in Retry Mode");
         bool began = false;
-        if (imu.begin())
-        {
+        if (imu.begin()) {
             transition_to_normal();
             began = true;
         }
@@ -158,7 +153,7 @@ void IMUMonitor::transition_to_abnormal_init()
     // trips fault
     // all check flags are set to false
     sfr::imu::mode = sensor_mode_type::abnormal_init;
-    sfr::fault::fault_1 = sfr::fault::fault_1 | constants::fault::imu_init;
+    // sfr::fault::fault_1 = sfr::fault::fault_1 | constants::fault::imu_init;
     sfr::fault::check_mag_x = false;
     sfr::fault::check_mag_y = false;
     sfr::fault::check_mag_z = false;
