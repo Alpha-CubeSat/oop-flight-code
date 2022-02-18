@@ -19,6 +19,7 @@
 #include <Adafruit_VC0706.h>
 #include <SD.h>
 #include <StarshotACS0.h>
+#include <cmath>
 #include <deque>
 #include <iostream>
 #include <map>

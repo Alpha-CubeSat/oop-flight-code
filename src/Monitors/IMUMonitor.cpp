@@ -20,21 +20,21 @@ void IMUMonitor::execute()
     imu.getEvent(&accel, &mag, &gyro, &temp);
 
     imu.setupMag(imu.LSM9DS1_MAGGAIN_4GAUSS);
-    if (mag.magnetic.x > 4 || mag.magnetic.y > 4 || mag.magnetic.z > 4) {
+    if (abs(mag.magnetic.x) > 4 || abs(mag.magnetic.y) > 4 || abs(mag.magnetic.z) > 4) {
         imu.setupMag(imu.LSM9DS1_MAGGAIN_8GAUSS);
     }
-    if (mag.magnetic.x > 8 || mag.magnetic.y > 8 || mag.magnetic.z > 8) {
+    if (abs(mag.magnetic.x) > 8 || abs(mag.magnetic.y) > 8 || abs(mag.magnetic.z) > 8) {
         imu.setupMag(imu.LSM9DS1_MAGGAIN_12GAUSS);
     }
-    if (mag.magnetic.x > 12 || mag.magnetic.y > 12 || mag.magnetic.z > 12) {
+    if (abs(mag.magnetic.x) > 12 || abs(mag.magnetic.y) > 12 || abs(mag.magnetic.z) > 12) {
         imu.setupMag(imu.LSM9DS1_MAGGAIN_16GAUSS);
     }
 
     imu.setupGyro(imu.LSM9DS1_GYROSCALE_245DPS);
-    if (gyro.gyro.x > 245 || gyro.gyro.y > 245 || gyro.gyro.z > 245) {
+    if (abs(gyro.gyro.x) > 245 || abs(gyro.gyro.y) > 245 || abs(gyro.gyro.z) > 245) {
         imu.setupGyro(imu.LSM9DS1_GYROSCALE_500DPS);
     }
-    if (gyro.gyro.x > 500 || gyro.gyro.y > 500 || gyro.gyro.z > 500) {
+    if (abs(gyro.gyro.x) > 500 || abs(gyro.gyro.y) > 500 || abs(gyro.gyro.z) > 500) {
         imu.setupGyro(imu.LSM9DS1_GYROSCALE_2000DPS);
     }
 
