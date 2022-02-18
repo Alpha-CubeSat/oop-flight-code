@@ -146,6 +146,12 @@ namespace sfr {
         const int imu_downlink_buffer_max_size = constants::sensor::collect; // not determined yet
         const int imu_downlink_report_size = constants::sensor::collect * 5;
         uint8_t report[imu_downlink_report_size];
+
+        const int mag_8GAUSS_min = 4;
+        const int mag_12GAUSS_min = 8;
+        const int mag_16GAUSS_min = 12;
+        const int gyro_500DPS_min = 245;
+        const int gyro_2000DPS_min = 500;
     } // namespace imu
     namespace temperature {
         float temp_c = 0.0;

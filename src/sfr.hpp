@@ -142,6 +142,12 @@ namespace sfr {
         extern const int imu_downlink_buffer_max_size;
         extern const int imu_downlink_report_size;
         extern uint8_t report[];
+
+        extern const int mag_8GAUSS_min;
+        extern const int mag_12GAUSS_min;
+        extern const int mag_16GAUSS_min;
+        extern const int gyro_500DPS_min;
+        extern const int gyro_2000DPS_min;
     } // namespace imu
     namespace temperature {
         extern float temp_c;
