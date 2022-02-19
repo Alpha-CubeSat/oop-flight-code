@@ -425,7 +425,7 @@ namespace constants {
         constexpr int content_length = 64;
         constexpr int bytes_allocated_serial_opcode = 2;
         constexpr int bytes_allocated_fragment = 4;
-        constexpr int tx = 35;
+        constexpr int tx = 33;
         constexpr int rx = 34;
     }
     namespace button

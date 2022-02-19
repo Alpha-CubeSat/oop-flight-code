@@ -114,25 +114,23 @@ void CameraControlTask::camera_init()
         switch (sfr::camera::start_progress) {
         case 0: // step 0 - setting power
             Pins::setPinState(constants::camera::power_on_pin, HIGH);
-            //Serial5.setRX(constants::camera::rx);
-            //Serial5.setRX(constants::camera::tx);
             sfr::camera::start_progress++;
             break;
         case 1:                                           // step 1 - call begin method
-            if (millis() - sfr::camera::step_time >= 100) //need to determine this delay
+            if (millis() - sfr::camera::step_time >= sfr::camera::begin_delay) //need to determine this delay
             {
                 if (adaCam.begin()) {
                     Serial.println("powered on camera");
                     sfr::camera::step_time = millis();
                     sfr::camera::start_progress++;
                 } else {
-                    Serial.println("failed");
+                    Serial.println("not receiving serial response");
                 }
                 //
             }
             break;
         case 2: // step 2  - set resolution
-            if (millis() - sfr::camera::step_time >= 500) {
+            if (millis() - sfr::camera::step_time >= sfr::camera::resolution_set_delay) {
                 if (adaCam.setImageSize(sfr::camera::set_res)) {
                     Serial.println("resolution commanded successfully");
                     sfr::camera::step_time = millis();
@@ -141,20 +139,20 @@ void CameraControlTask::camera_init()
             }
             break;
         case 3: // step 3 - get resolution
-            if (millis() - sfr::camera::step_time >= 200) {
+            if (millis() - sfr::camera::step_time >= sfr::camera::resolution_set_delay) {
                 uint8_t get_res = adaCam.getImageSize();
                 if (get_res == sfr::camera::set_res) {
                     Serial.print("resolution fetched successfully: ");
                     Serial.println(get_res);
                     sfr::camera::step_time = millis();
-                    sfr::camera::powered = true;
-                    sfr::camera::turn_on = false;
                     sfr::camera::start_progress++;
                 }
             }
             break;
         case 4: // completed initialization
             sfr::camera::init_mode = camera_init_mode_type::complete;
+            sfr::camera::turn_on = false;
+            sfr::camera::powered = true;
         }
     }
 }
@@ -164,7 +162,7 @@ void CameraControlTask::transition_to_normal()
     // updates camera mode to normal
     sfr::camera::mode = sensor_mode_type::normal;
 #ifdef VERBOSE
-    Serial.println("turned on camera");
+    Serial.println("camera initialization successful");
 #endif
 }
 
@@ -173,7 +171,7 @@ void CameraControlTask::transition_to_abnormal_init()
     // updates camera mode to abnormal_init
     // trips fault
     sfr::camera::mode = sensor_mode_type::abnormal_init;
-    sfr::fault::fault_3 = sfr::fault::fault_1 | constants::fault::camera_on_failed;
+    sfr::fault::fault_3 = sfr::fault::fault_3 | constants::fault::camera_on_failed;
     Pins::setPinState(constants::camera::power_on_pin, LOW);
     pinMode(constants::camera::rx, OUTPUT);
     pinMode(constants::camera::tx, OUTPUT);
@@ -181,7 +179,7 @@ void CameraControlTask::transition_to_abnormal_init()
     Pins::setPinState(constants::camera::tx, LOW);
     sfr::camera::powered = false;
     sfr::camera::turn_off = false;
-
+    sfr::camera::turn_on = false;
     sfr::camera::init_mode = camera_init_mode_type::awaiting;
     sfr::camera::start_progress = 0;
 }
