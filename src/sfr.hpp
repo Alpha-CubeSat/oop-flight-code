@@ -59,6 +59,7 @@ namespace sfr {
 
         extern camera_init_mode_type init_mode;
         extern uint8_t start_progress;
+        extern uint64_t step_time;
         extern uint64_t init_start_time;
         extern uint64_t init_timeout;
 

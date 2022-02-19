@@ -39,7 +39,7 @@ void MainControlLoop::execute()
     command_monitor.execute_on_time();
     current_monitor.execute_on_time();
     fault_monitor.execute_on_time();
-    imu_monitor.execute_on_time();
+    //imu_monitor.execute_on_time();
     normal_report_monitor.execute_on_time();
     photoresistor_monitor.execute_on_time();
     temperature_monitor.execute_on_time();
@@ -50,4 +50,9 @@ void MainControlLoop::execute()
     rockblock_control_task.execute_on_time();
 
     mission_manager.execute_on_time();
+
+    Serial.print("turn on: ");
+    Serial.println(sfr::camera::turn_on);
+    Serial.print("powered: ");
+    Serial.println(sfr::camera::powered);
 }

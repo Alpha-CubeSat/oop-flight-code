@@ -4,52 +4,39 @@ CameraControlTask::CameraControlTask(unsigned int offset) : TimedControlTask<voi
 
 void CameraControlTask::execute()
 {
-    if (sfr::camera::take_photo == true && sfr::camera::powered == true)
-    {
-        if (!adaCam.takePicture())
-        {
+    if (sfr::camera::take_photo == true && sfr::camera::powered == true) {
+        if (!adaCam.takePicture()) {
             Serial.println("Failed to snap!");
-        }
-        else
-        {
+        } else {
             Serial.println("Picture taken!");
             sfr::camera::jpglen = adaCam.frameLength();
             Serial.println("Camera frame length: " + String(sfr::camera::jpglen));
-            if (sfr::camera::jpglen > 0)
-            {
+            if (sfr::camera::jpglen > 0) {
                 sfr::camera::take_photo = false;
                 sfr::camera::photo_taken_sd_failed = true;
             }
         }
     }
 
-    if (sfr::camera::photo_taken_sd_failed == true)
-    {
-        if (!SD.begin(254))
-        {
+    if (sfr::camera::photo_taken_sd_failed == true) {
+        if (!SD.begin(254)) {
             Serial.println("SD CARD FAILED");
-        }
-        else
-        {
+        } else {
             sfr::camera::photo_taken_sd_failed = false;
         }
     }
 
-    if (sfr::camera::turn_on == true && sfr::camera::powered == false)
-    {
+    if (sfr::camera::turn_on == true && sfr::camera::powered == false) {
         camera_init();
-        if (sfr::camera::init_mode == camera_init_mode_type::complete)
-        {
+        if (sfr::camera::init_mode == camera_init_mode_type::complete) {
             transition_to_normal();
         }
-        if (sfr::camera::init_mode == camera_init_mode_type::failed)
-        {
+        if (sfr::camera::init_mode == camera_init_mode_type::failed) {
             transition_to_abnormal_init();
         }
     }
 
-    if (sfr::camera::turn_off == true && sfr::camera::powered == true)
-    {
+    if (sfr::camera::turn_off == true && sfr::camera::powered == true) {
 #ifdef VERBOSE
         Serial.println("turned off camera");
 #endif
@@ -62,18 +49,15 @@ void CameraControlTask::execute()
         sfr::camera::turn_off = false;
     }
 
-    if (sfr::camera::jpglen > 0 && sfr::camera::photo_taken_sd_failed == false)
-    {
+    if (sfr::camera::jpglen > 0 && sfr::camera::photo_taken_sd_failed == false) {
         filetocreate = "";
-        if (sfr::camera::images_written < 10)
-        {
+        if (sfr::camera::images_written < 10) {
             filetocreate += "0";
         }
         filetocreate += String(sfr::camera::images_written);
         sfr::camera::image_lengths[sfr::camera::images_written] = sfr::camera::jpglen;
 
-        if (sfr::camera::fragments_written < 10)
-        {
+        if (sfr::camera::fragments_written < 10) {
             filetocreate += "0";
         }
         filetocreate += String(sfr::camera::fragments_written) + ".jpg";
@@ -85,10 +69,8 @@ void CameraControlTask::execute()
         uint8_t bytesToRead = min(constants::camera::content_length, sfr::camera::jpglen);
         buffer = adaCam.readPicture(bytesToRead);
 
-        for (int i = 0; i < bytesToRead; i++)
-        {
-            if (buffer[i] < 16)
-            {
+        for (int i = 0; i < bytesToRead; i++) {
+            if (buffer[i] < 16) {
                 imgFile.print(0, HEX);
 #ifdef VERBOSE
                 Serial.print(0, HEX);
@@ -105,8 +87,7 @@ void CameraControlTask::execute()
         sfr::camera::jpglen -= bytesToRead;
         imgFile.close();
         sfr::camera::fragments_written++;
-        if (sfr::camera::jpglen == 0)
-        {
+        if (sfr::camera::jpglen == 0) {
             sfr::rockblock::camera_max_fragments[sfr::camera::images_written] = sfr::camera::fragments_written;
             sfr::camera::images_written++;
             Serial.println("Done writing file");
@@ -116,53 +97,60 @@ void CameraControlTask::execute()
 
 void CameraControlTask::camera_init()
 {
-    if (sfr::camera::init_mode == camera_init_mode_type::awaiting)
-    {
+    if (sfr::camera::init_mode == camera_init_mode_type::awaiting) {
         // Called camera_init function and initialization process has not yet started
         sfr::camera::init_start_time = millis();
+        sfr::camera::step_time = millis();
         sfr::camera::init_mode = camera_init_mode_type::in_progress;
     }
-    if (sfr::camera::init_mode == camera_init_mode_type::in_progress && (millis() - sfr::camera::init_start_time) > sfr::camera::init_timeout)
-    {
+    if (sfr::camera::init_mode == camera_init_mode_type::in_progress && ((millis() - sfr::camera::init_start_time) > sfr::camera::init_timeout)) {
         // Camera initalization process is in progress but has exceeded timeout duration
         sfr::camera::init_mode = camera_init_mode_type::failed;
-        Serial.print("Camera intialization failed at step ");
+        Serial.print("Camera intialization failed at step: ");
         Serial.println(sfr::camera::start_progress);
     }
 
-    if (sfr::camera::init_mode == camera_init_mode_type::in_progress)
-    {
-        switch (sfr::camera::start_progress)
-        {
+    else if (sfr::camera::init_mode == camera_init_mode_type::in_progress) {
+        switch (sfr::camera::start_progress) {
         case 0: // step 0 - setting power
             Pins::setPinState(constants::camera::power_on_pin, HIGH);
-            Serial5.setRX(constants::camera::rx);
-            Serial5.setRX(constants::camera::tx);
+            //Serial5.setRX(constants::camera::rx);
+            //Serial5.setRX(constants::camera::tx);
             sfr::camera::start_progress++;
             break;
-        case 1: // step 1 - call begin method
-            if (adaCam.begin())
+        case 1:                                           // step 1 - call begin method
+            if (millis() - sfr::camera::step_time >= 100) //need to determine this delay
             {
-                Serial.println("turned on camera");
-                sfr::camera::start_progress++;
+                if (adaCam.begin()) {
+                    Serial.println("powered on camera");
+                    sfr::camera::step_time = millis();
+                    sfr::camera::start_progress++;
+                } else {
+                    Serial.println("failed");
+                }
+                //
             }
             break;
         case 2: // step 2  - set resolution
-            if (adaCam.setImageSize(sfr::camera::set_res))
-            {
-                Serial.println("resolution commanded successfully");
-                sfr::camera::start_progress++;
+            if (millis() - sfr::camera::step_time >= 500) {
+                if (adaCam.setImageSize(sfr::camera::set_res)) {
+                    Serial.println("resolution commanded successfully");
+                    sfr::camera::step_time = millis();
+                    sfr::camera::start_progress++;
+                }
             }
             break;
         case 3: // step 3 - get resolution
-            uint8_t get_res = adaCam.getImageSize();
-            if (get_res == sfr::camera::set_res)
-            {
-                Serial.print("resolution fetched successfully: ");
-                Serial.println(get_res);
-                sfr::camera::powered = true;
-                sfr::camera::turn_on = false;
-                sfr::camera::start_progress++;
+            if (millis() - sfr::camera::step_time >= 200) {
+                uint8_t get_res = adaCam.getImageSize();
+                if (get_res == sfr::camera::set_res) {
+                    Serial.print("resolution fetched successfully: ");
+                    Serial.println(get_res);
+                    sfr::camera::step_time = millis();
+                    sfr::camera::powered = true;
+                    sfr::camera::turn_on = false;
+                    sfr::camera::start_progress++;
+                }
             }
             break;
         case 4: // completed initialization
