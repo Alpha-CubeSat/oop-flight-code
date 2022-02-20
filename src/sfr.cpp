@@ -56,8 +56,12 @@ namespace sfr {
         // Initialization
         camera_init_mode_type init_mode = camera_init_mode_type::awaiting;
         uint8_t start_progress = 0;
+        uint64_t step_time = 0;
         uint64_t init_start_time = 0;
-        uint64_t init_timeout = 120000;
+        uint64_t init_timeout = 12000;
+        uint8_t begin_delay = 100;
+        uint8_t resolution_set_delay = 500;
+        uint8_t resolution_get_delay = 200;
 
         uint64_t buffer[255] = {0};
         int current_serial = 0;
