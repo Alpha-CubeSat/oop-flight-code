@@ -50,19 +50,30 @@ bool check_is_flag()
     return false;
 }
 
-// set the kth bit
-int *flip_flag(auto flag)
+void flip_flag(auto flag)
 {
-    int bits[8];
-    for (int i = 0; i != 8; i++) {
-        bits[i] = (flag & (1 << i)) != 0;
+    flag = (unsigned char)flag;
+    if (flag != 0) {
+        for (int i = 0; i < 8; i++) {
+            flag &= ~(1 << i);
+        }
+    } else {
+        for (int i = 0; i < 8; i++) {
+            flag = (1 << i) | flag;
+        }
     }
-    return bits;
-    // for (int i = 0; i < 8; i++) {
-    //     (n >> (k - 1)) & 1
-    // }
 }
 
 void flip_fault(auto fault)
 {
+    fault = (unsigned char)fault;
+    if (fault != 0) {
+        for (int i = 0; i < 8; i++) {
+            fault &= ~(1 << i);
+        }
+    } else {
+        for (int i = 0; i < 8; i++) {
+            fault = (1 << i) | fault;
+        }
+    }
 }
