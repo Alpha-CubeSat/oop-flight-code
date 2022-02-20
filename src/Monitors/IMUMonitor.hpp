@@ -9,6 +9,13 @@ public:
     IMUMonitor(unsigned int offset);
     void execute();
     Adafruit_LSM9DS1 imu;
+
+    void transition_to_normal();
+    void transition_to_abnormal_init();
+    void transition_to_retry();
+
+private:
+    void capture_imu_values();
 };
 
 #endif

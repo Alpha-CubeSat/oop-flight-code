@@ -8,10 +8,12 @@
 #include "Modes/acs_mode_type.enum"
 #include "Modes/burnwire_mode_type.enum"
 #include "Modes/fault_check_type.enum"
+#include "Modes/camera_init_mode_type.enum"
 #include "Modes/fault_mode_type.enum"
 #include "Modes/imu_downlink_type.enum"
 #include "Modes/mission_mode_type.enum"
 #include "Modes/rockblock_mode_type.enum"
+#include "Modes/sensor_mode_type.enum"
 #include "Modes/simple_acs_type.enum"
 #include "Pins.hpp"
 #include "RockblockSimulator.hpp"
@@ -31,10 +33,10 @@
 namespace sfr {
     namespace pins {
         extern std::map<int, int> pinMap;
-    }
+    } // namespace pins
     namespace photoresistor {
         extern bool covered;
-    }
+    } // namespace photoresistor
     namespace mission {
         extern mission_mode_type mode;
         extern bool low_power_eligible;
@@ -50,16 +52,18 @@ namespace sfr {
         extern int armed_time;
     } // namespace burnwire
     namespace camera {
+        extern sensor_mode_type mode;
         extern bool photo_taken_sd_failed;
         extern bool take_photo;
         extern bool turn_on;
         extern bool turn_off;
         extern bool powered;
-        extern bool begun;
-        extern bool resolution_set;
-        extern uint64_t start_time;
-        extern uint64_t begin_time;
-        extern uint64_t resolution_set_time;
+
+        extern camera_init_mode_type init_mode;
+        extern uint8_t start_progress;
+        extern uint64_t init_start_time;
+        extern uint64_t init_timeout;
+
         extern uint64_t buffer[255];
         extern int current_serial;
         extern int fragment_number;
@@ -111,6 +115,8 @@ namespace sfr {
         extern int num_downlinks;
     } // namespace rockblock
     namespace imu {
+        extern sensor_mode_type mode;
+
         extern float mag_x;
         extern float mag_y;
         extern float mag_z;
