@@ -7,6 +7,7 @@
 #include "MissionManager.hpp"
 #include "Modes/acs_mode_type.enum"
 #include "Modes/burnwire_mode_type.enum"
+#include "Modes/fault_check_type.enum"
 #include "Modes/fault_mode_type.enum"
 #include "Modes/imu_downlink_type.enum"
 #include "Modes/mission_mode_type.enum"
