@@ -1,0 +1,26 @@
+#ifndef fault_index_type_enum_
+#define fault_index_type_enum_
+
+enum class fault_index_type : unsigned char
+{
+    // FAULT1
+    mag_x = 1,
+    mag_y = 2,
+    mag_z = 3,
+    gyro_x = 4,
+    gyro_y = 5,
+    gyro_z = 6,
+
+    // FAULT2
+    temp_c = 11,
+    solar_current = 12,
+    voltage = 13,
+
+    // FAULT3
+    burn_wire = 21,
+    sd_card = 22,
+    camera_on_failed = 23
+
+};
+
+#endif

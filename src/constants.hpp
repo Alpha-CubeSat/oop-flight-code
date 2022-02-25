@@ -423,7 +423,7 @@ namespace constants {
         constexpr int rx = 33;
     } // namespace camera
     namespace button {
-        //low when door is opened
+        // low when door is opened
         constexpr int button_pin = 37;
     } // namespace button
     namespace imu {
