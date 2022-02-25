@@ -1,6 +1,6 @@
 #include "SensorReading.hpp"
 
-SensorReading::SensorReading(float x, unsigned char fault)
+SensorReading::SensorReading(float x, bool fault)
 {
     value = x;
     fault_status = fault;
