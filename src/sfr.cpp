@@ -184,6 +184,27 @@ namespace sfr {
         unsigned char fault_1 = 0;
         unsigned char fault_2 = 0;
         unsigned char fault_3 = 0;
+
+        // FAULT 1
+        bool check_mag_x = true;
+        bool check_mag_y = true;
+        bool check_mag_z = true;
+        bool check_gyro_x = true;
+        bool check_gyro_y = true;
+        bool check_gyro_z = true;
+        bool check_acc_x = true;
+        bool check_acc_y = true;
+
+        // FAULT 2
+        bool check_acc_z = true;
+        bool check_temp_c = true;
+        bool check_solar_current = true;
+        bool check_voltage = true;
+
+        // FAULT 3
+        bool check_burn_wire = true;
+        bool check_sd_card = true;
+        bool check_camera_on_failed = true;
     } // namespace fault
     namespace button {
         bool pressed = true;
