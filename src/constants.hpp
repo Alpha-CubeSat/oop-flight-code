@@ -30,9 +30,8 @@ namespace constants {
         constexpr int max_burnwire_time = 60000;
         constexpr int min_armed_time = 0;
         constexpr int max_armed_time = 86400000;
-    }
-    namespace rockblock
-    {
+    } // namespace burnwire
+    namespace rockblock {
         constexpr unsigned long one_second = 1000;
         constexpr unsigned long one_minute = 60 * one_second;
         constexpr unsigned long one_hour = 60 * one_minute;
@@ -348,9 +347,8 @@ namespace constants {
             {change_simplified_acs_z[0], change_simplified_acs_z[1], change_simplified_acs_z[2], change_simplified_acs_z[3], change_simplified_acs_z[4], change_simplified_acs_z[5], change_simplified_acs_z[6], change_simplified_acs_z[7], change_simplified_acs_z[8], change_simplified_acs_z[9]},
             {camera_turn_on_true[0], camera_turn_on_true[1], camera_turn_on_true[2], camera_turn_on_true[3], camera_turn_on_true[4], camera_turn_on_true[5], camera_turn_on_true[6], camera_turn_on_true[7], camera_turn_on_true[8], camera_turn_on_true[9]},
             {camera_turn_off_true[0], camera_turn_off_true[1], camera_turn_off_true[2], camera_turn_off_true[3], camera_turn_off_true[4], camera_turn_off_true[5], camera_turn_off_true[6], camera_turn_off_true[7], camera_turn_off_true[8], camera_turn_off_true[9]}};
-    }
-    namespace temperature
-    {
+    } // namespace rockblock
+    namespace temperature {
         constexpr int pin = 39;
         constexpr float min_temp_c;
         constexpr float max_temp_c;
@@ -399,8 +397,7 @@ namespace constants {
         constexpr int r1 = 4700;
         constexpr int r2 = 10000;
     } // namespace battery
-    namespace fault
-    {
+    namespace fault {
         // fault 1
         constexpr uint8_t mag_x = 1 << 0;
         constexpr uint8_t mag_y = 1 << 1;
@@ -427,10 +424,10 @@ namespace constants {
         constexpr int content_length = 64;
         constexpr int bytes_allocated_serial_opcode = 2;
         constexpr int bytes_allocated_fragment = 4;
-    } // namespace camera
-    namespace button {
         constexpr int tx = 33;
         constexpr int rx = 34;
+    } // namespace camera
+    namespace button {
         // low when door is opened
         constexpr int button_pin = 37;
     } // namespace button
@@ -456,9 +453,8 @@ namespace constants {
 
         constexpr int CSAG = 21;
         constexpr int CSM = 20;
-    }
-    namespace timecontrol
-    {
+    } // namespace imu
+    namespace timecontrol {
         // Environment-based initializations of the control loop time.
         // control_cycle_time is the value actually used for timing. The
         // other constants are just informational.
