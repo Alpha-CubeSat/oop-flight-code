@@ -30,9 +30,13 @@ namespace constants {
         constexpr int max_burnwire_time = 60000;
         constexpr int min_armed_time = 0;
         constexpr int max_armed_time = 86400000;
-    } // namespace burnwire
-
-    namespace rockblock {
+    }
+    namespace rockblock
+    {
+        constexpr unsigned long one_second = 1000;
+        constexpr unsigned long one_minute = 60 * one_second;
+        constexpr unsigned long one_hour = 60 * one_minute;
+        constexpr unsigned long one_day = 24 * one_hour;
 
         constexpr int sleep_pin = 19;
 
@@ -344,8 +348,9 @@ namespace constants {
             {change_simplified_acs_z[0], change_simplified_acs_z[1], change_simplified_acs_z[2], change_simplified_acs_z[3], change_simplified_acs_z[4], change_simplified_acs_z[5], change_simplified_acs_z[6], change_simplified_acs_z[7], change_simplified_acs_z[8], change_simplified_acs_z[9]},
             {camera_turn_on_true[0], camera_turn_on_true[1], camera_turn_on_true[2], camera_turn_on_true[3], camera_turn_on_true[4], camera_turn_on_true[5], camera_turn_on_true[6], camera_turn_on_true[7], camera_turn_on_true[8], camera_turn_on_true[9]},
             {camera_turn_off_true[0], camera_turn_off_true[1], camera_turn_off_true[2], camera_turn_off_true[3], camera_turn_off_true[4], camera_turn_off_true[5], camera_turn_off_true[6], camera_turn_off_true[7], camera_turn_off_true[8], camera_turn_off_true[9]}};
-    } // namespace rockblock
-    namespace temperature {
+    }
+    namespace temperature
+    {
         constexpr int pin = 39;
         constexpr float min_temp_c;
         constexpr float max_temp_c;
@@ -393,9 +398,9 @@ namespace constants {
         constexpr int resolution = 1023;
         constexpr int r1 = 4700;
         constexpr int r2 = 10000;
-
     } // namespace battery
-    namespace fault {
+    namespace fault
+    {
         // fault 1
         constexpr uint8_t mag_x = 1 << 0;
         constexpr uint8_t mag_y = 1 << 1;
@@ -405,6 +410,7 @@ namespace constants {
         constexpr uint8_t gyro_z = 1 << 5;
         constexpr uint8_t acc_x = 1 << 6;
         constexpr uint8_t acc_y = 1 << 7;
+        constexpr uint8_t imu_init = 1 << 6;
 
         // fault 2
         constexpr uint8_t temp_c = 1 << 0;
@@ -421,10 +427,10 @@ namespace constants {
         constexpr int content_length = 64;
         constexpr int bytes_allocated_serial_opcode = 2;
         constexpr int bytes_allocated_fragment = 4;
-        constexpr int tx = 34;
-        constexpr int rx = 33;
     } // namespace camera
     namespace button {
+        constexpr int tx = 33;
+        constexpr int rx = 34;
         // low when door is opened
         constexpr int button_pin = 37;
     } // namespace button
@@ -435,23 +441,24 @@ namespace constants {
         constexpr float eight_g = 8 * gravity;
 
         constexpr float min_mag_x = 0.0;
-        constexpr float max_mag_x = 0.0;
+        constexpr float max_mag_x = 100;
         constexpr float min_mag_y = 0.0;
-        constexpr float max_mag_y = 0.0;
-        constexpr float min_mag_z = 0.0;
-        constexpr float max_mag_z = 0.0;
+        constexpr float max_mag_y = 100;
+        constexpr float min_mag_z = -100;
+        constexpr float max_mag_z = 100;
 
         constexpr float min_gyro_x = 0.0;
-        constexpr float max_gyro_x = 0.0;
+        constexpr float max_gyro_x = 10;
         constexpr float min_gyro_y = 0.0;
-        constexpr float max_gyro_y = 0.0;
+        constexpr float max_gyro_y = 10;
         constexpr float min_gyro_z = 0.0;
-        constexpr float max_gyro_z = 0.0;
+        constexpr float max_gyro_z = 10;
 
         constexpr int CSAG = 21;
         constexpr int CSM = 20;
-    } // namespace imu
-    namespace timecontrol {
+    }
+    namespace timecontrol
+    {
         // Environment-based initializations of the control loop time.
         // control_cycle_time is the value actually used for timing. The
         // other constants are just informational.
@@ -477,7 +484,7 @@ namespace constants {
         static constexpr unsigned int burnwire_control_task_offset = acs_control_task_offset + 0; // to be determined
         static constexpr unsigned int camera_control_task_offset = burnwire_control_task_offset + 20;
         static constexpr unsigned int rockblock_control_task_offset = camera_control_task_offset + 230000;
-
+        static constexpr unsigned int temperature_control_task_offset = rockblock_control_task_offset + 1000;
         static constexpr unsigned int mission_manager_offset = rockblock_control_task_offset + 20;
     } // namespace timecontrol
 };    // namespace constants

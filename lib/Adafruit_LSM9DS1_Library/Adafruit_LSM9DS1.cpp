@@ -118,6 +118,8 @@ bool Adafruit_LSM9DS1::begin()
     Serial.println(read8(MAGTYPE, i), HEX);
   }
   */
+  Serial.begin(9600);
+  while(!Serial);
 
   uint8_t id = read8(XGTYPE, LSM9DS1_REGISTER_WHO_AM_I_XG);
   //Serial.print ("XG whoami: 0x"); Serial.println(id, HEX);

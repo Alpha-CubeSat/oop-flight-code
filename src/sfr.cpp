@@ -26,15 +26,14 @@ namespace sfr {
             {constants::camera::rx, LOW},
             {constants::camera::tx, LOW},
             {constants::button::button_pin, LOW}};
-    }
+    } // namespace pins
     namespace photoresistor {
         bool covered = true;
-    }
+    } // namespace photoresistor
     namespace mission {
         mission_mode_type mode = mission_mode_type::boot;
         bool low_power_eligible = true;
         unsigned long boot_start_test = 0;
-
     } // namespace mission
     namespace burnwire {
         bool fire = false;
@@ -47,16 +46,23 @@ namespace sfr {
         int armed_time = constants::time::two_days;
     } // namespace burnwire
     namespace camera {
+        sensor_mode_type mode = sensor_mode_type::normal;
         bool photo_taken_sd_failed = false;
         bool take_photo = false;
         bool turn_on = false;
         bool turn_off = false;
         bool powered = false;
-        bool begun = false;
-        bool resolution_set = false;
-        uint64_t start_time = 0;
-        uint64_t begin_time = 0;
-        uint64_t resolution_set_time = 0;
+
+        // Initialization
+        camera_init_mode_type init_mode = camera_init_mode_type::awaiting;
+        uint8_t start_progress = 0;
+        uint64_t step_time = 0;
+        uint64_t init_start_time = 0;
+        uint64_t init_timeout = 12000;
+        uint8_t begin_delay = 100;
+        uint8_t resolution_set_delay = 500;
+        uint8_t resolution_get_delay = 200;
+
         uint64_t buffer[255] = {0};
         int current_serial = 0;
         int fragment_number = 0;
@@ -105,9 +111,11 @@ namespace sfr {
         int timeout = 10 * constants::time::one_minute;
         int start_time = 0;
         bool last_timed_out = false;
-        int num_downlinks = 0;
+        int num_downlinks = 2;
     } // namespace rockblock
     namespace imu {
+        sensor_mode_type mode = sensor_mode_type::normal;
+
         float mag_x = 0.0;
         float mag_y = 0.0;
         float mag_z = 0.0;
