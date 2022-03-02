@@ -26,9 +26,9 @@ MainControlLoop::MainControlLoop()
 
 void MainControlLoop::execute()
 {
-    sfr::fault::fault_imu = 0;
-    sfr::fault::fault_misc_sensors = 0;
-    sfr::fault::fault_actions = 0;
+    sfr::fault::fault_1 = 0;
+    sfr::fault::fault_2 = 0;
+    sfr::fault::fault_3 = 0;
 
     clock_manager.execute();
 
@@ -39,7 +39,7 @@ void MainControlLoop::execute()
     command_monitor.execute_on_time();
     current_monitor.execute_on_time();
     fault_monitor.execute_on_time();
-    //imu_monitor.execute_on_time();
+    // imu_monitor.execute_on_time();
     normal_report_monitor.execute_on_time();
     photoresistor_monitor.execute_on_time();
     temperature_monitor.execute_on_time();

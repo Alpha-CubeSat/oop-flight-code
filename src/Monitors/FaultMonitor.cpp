@@ -5,7 +5,7 @@ FaultMonitor::FaultMonitor(unsigned int offset) : TimedControlTask<void>(offset)
 void FaultMonitor::execute()
 {
 
-    if (sfr::fault::mode == fault_mode_type::active) {
+    /*if (sfr::fault::mode == fault_mode_type::active) {
         if ((sfr::imu::mag_x > constants::imu::max_mag_x || sfr::imu::mag_x < constants::imu::min_mag_x) && sfr::fault::check_mag_x) {
             sfr::fault::fault_imu = sfr::fault::fault_imu | constants::fault_imu::mag_x;
         }
@@ -34,5 +34,5 @@ void FaultMonitor::execute()
         if ((sfr::battery::voltage > constants::battery::max_voltage || sfr::battery::voltage < constants::battery::min_voltage) && sfr::fault::check_voltage) {
             sfr::fault::fault_misc_sensors = sfr::fault::fault_misc_sensors | constants::fault_misc_sensors::voltage;
         }
-    }
+    }*/
 }

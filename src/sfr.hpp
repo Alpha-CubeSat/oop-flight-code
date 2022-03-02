@@ -192,9 +192,9 @@ namespace sfr {
     namespace fault {
         extern fault_mode_type mode;
 
-        extern unsigned char fault_imu;
-        extern unsigned char fault_misc_sensors;
-        extern unsigned char fault_actions;
+        extern unsigned char fault_1;
+        extern unsigned char fault_2;
+        extern unsigned char fault_3;
 
         // FAULT 1
         extern bool check_mag_x;

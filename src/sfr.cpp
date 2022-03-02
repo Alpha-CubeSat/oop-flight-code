@@ -193,10 +193,11 @@ namespace sfr {
     namespace fault {
         fault_mode_type mode = fault_mode_type::active;
 
-        unsigned char fault_imu = 0;
-        unsigned char fault_misc_sensors = 0;
-        unsigned char fault_actions = 0;
+        unsigned char fault_1 = 0;
+        unsigned char fault_2 = 0;
+        unsigned char fault_3 = 0;
 
+        // FAULT 1
         bool check_mag_x = true;
         bool check_mag_y = true;
         bool check_mag_z = true;
@@ -206,6 +207,7 @@ namespace sfr {
         bool check_acc_x = true;
         bool check_acc_y = true;
 
+        // FAULT 2
         bool check_acc_z = true;
         bool check_temp_c = true;
         bool check_solar_current = true;

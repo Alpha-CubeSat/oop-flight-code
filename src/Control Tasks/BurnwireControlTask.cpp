@@ -94,7 +94,7 @@ void BurnwireControlTask::dispatch_burn()
     sfr::burnwire::start_time = millis();
     if (sfr::burnwire::attempts > constants::burnwire::max_attempts) {
         transition_to_standby();
-        sfr::fault::fault_actions = sfr::fault::fault_actions | constants::fault_actions::burn_wire;
+        // sfr::fault::fault_actions = sfr::fault::fault_actions | constants::fault::burn_wire;
     } else {
         if (sfr::burnwire::attempts % 2 == 0) {
             Pins::setPinState(constants::burnwire::first_pin, HIGH);
