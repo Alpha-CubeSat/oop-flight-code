@@ -8,6 +8,7 @@
 #include "Modes/acs_mode_type.enum"
 #include "Modes/burnwire_mode_type.enum"
 #include "Modes/camera_init_mode_type.enum"
+#include "Modes/fault_index_type.enum"
 #include "Modes/fault_mode_type.enum"
 #include "Modes/imu_downlink_type.enum"
 #include "Modes/mission_mode_type.enum"
@@ -21,6 +22,7 @@
 #include <Adafruit_VC0706.h>
 #include <SD.h>
 #include <StarshotACS0.h>
+#include <cmath>
 #include <deque>
 #include <iostream>
 #include <map>
@@ -61,8 +63,12 @@ namespace sfr {
 
         extern camera_init_mode_type init_mode;
         extern uint8_t start_progress;
+        extern uint64_t step_time;
         extern uint64_t init_start_time;
         extern uint64_t init_timeout;
+        extern uint8_t begin_delay;
+        extern uint8_t resolution_set_delay;
+        extern uint8_t resolution_get_delay;
 
         extern uint64_t buffer[255];
         extern int current_serial;
@@ -149,6 +155,12 @@ namespace sfr {
         extern const int imu_downlink_buffer_max_size;
         extern const int imu_downlink_report_size;
         extern uint8_t report[];
+
+        extern const int mag_8GAUSS_min;
+        extern const int mag_12GAUSS_min;
+        extern const int mag_16GAUSS_min;
+        extern const int gyro_500DPS_min;
+        extern const int gyro_2000DPS_min;
     } // namespace imu
     namespace temperature {
         extern float temp_c;
@@ -199,6 +211,11 @@ namespace sfr {
         extern bool check_temp_c;
         extern bool check_solar_current;
         extern bool check_voltage;
+
+        // FAULT 3
+        extern bool check_burn_wire;
+        extern bool check_sd_card;
+        extern bool check_camera_on_failed;
     } // namespace fault
     namespace button {
         extern bool pressed;

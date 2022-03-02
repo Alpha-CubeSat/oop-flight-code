@@ -397,26 +397,28 @@ namespace constants {
         constexpr int r1 = 4700;
         constexpr int r2 = 10000;
     } // namespace battery
-    namespace fault_imu {
+    namespace fault {
+        // fault 1
         constexpr uint8_t mag_x = 1 << 0;
         constexpr uint8_t mag_y = 1 << 1;
         constexpr uint8_t mag_z = 1 << 2;
         constexpr uint8_t gyro_x = 1 << 3;
         constexpr uint8_t gyro_y = 1 << 4;
         constexpr uint8_t gyro_z = 1 << 5;
-    } // namespace fault_imu
-    namespace fault_misc_sensors {
-        constexpr uint8_t temp_c = 1 << 1;
-        constexpr uint8_t solar_current = 1 << 2;
-        constexpr uint8_t voltage = 1 << 3;
+        constexpr uint8_t acc_x = 1 << 6;
+        constexpr uint8_t acc_y = 1 << 7;
+        constexpr uint8_t imu_init = 1 << 6;
 
-    } // namespace fault_misc_sensors
-    namespace fault_actions {
+        // fault 2
+        constexpr uint8_t temp_c = 1 << 0;
+        constexpr uint8_t solar_current = 1 << 1;
+        constexpr uint8_t voltage = 1 << 2;
+
+        // fault 3
         constexpr uint8_t burn_wire = 1 << 0;
         constexpr uint8_t sd_card = 1 << 1;
         constexpr uint8_t camera_on_failed = 1 << 2;
-
-    } // namespace fault_actions
+    } // namespace fault
     namespace camera {
         constexpr int power_on_pin = 31;
         constexpr int content_length = 64;

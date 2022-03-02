@@ -58,8 +58,12 @@ namespace sfr {
         // Initialization
         camera_init_mode_type init_mode = camera_init_mode_type::awaiting;
         uint8_t start_progress = 0;
+        uint64_t step_time = 0;
         uint64_t init_start_time = 0;
-        uint64_t init_timeout = 120000;
+        uint64_t init_timeout = 12000;
+        uint8_t begin_delay = 100;
+        uint8_t resolution_set_delay = 500;
+        uint8_t resolution_get_delay = 200;
 
         uint64_t buffer[255] = {0};
         int current_serial = 0;
@@ -152,6 +156,12 @@ namespace sfr {
         const int imu_downlink_buffer_max_size = constants::sensor::collect; // not determined yet
         const int imu_downlink_report_size = constants::sensor::collect * 5;
         uint8_t report[imu_downlink_report_size];
+
+        const int mag_8GAUSS_min = 4;
+        const int mag_12GAUSS_min = 8;
+        const int mag_16GAUSS_min = 12;
+        const int gyro_500DPS_min = 245;
+        const int gyro_2000DPS_min = 500;
     } // namespace imu
     namespace temperature {
         float temp_c = 0.0;
@@ -200,6 +210,11 @@ namespace sfr {
         bool check_temp_c = true;
         bool check_solar_current = true;
         bool check_voltage = true;
+
+        // FAULT 3
+        bool check_burn_wire = true;
+        bool check_sd_card = true;
+        bool check_camera_on_failed = true;
     } // namespace fault
     namespace button {
         bool pressed = true;

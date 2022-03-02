@@ -100,12 +100,13 @@ void CameraControlTask::camera_init()
     if (sfr::camera::init_mode == camera_init_mode_type::awaiting) {
         // Called camera_init function and initialization process has not yet started
         sfr::camera::init_start_time = millis();
+        sfr::camera::step_time = millis();
         sfr::camera::init_mode = camera_init_mode_type::in_progress;
     }
     if (sfr::camera::init_mode == camera_init_mode_type::in_progress && (millis() - sfr::camera::init_start_time) > sfr::camera::init_timeout) {
         // Camera initalization process is in progress but has exceeded timeout duration
         sfr::camera::init_mode = camera_init_mode_type::failed;
-        Serial.print("Camera intialization failed at step ");
+        Serial.print("Camera intialization failed at step: ");
         Serial.println(sfr::camera::start_progress);
     }
 
@@ -113,8 +114,6 @@ void CameraControlTask::camera_init()
         switch (sfr::camera::start_progress) {
         case 0: // step 0 - setting power
             Pins::setPinState(constants::camera::power_on_pin, HIGH);
-            Serial5.setRX(constants::camera::rx);
-            Serial5.setRX(constants::camera::tx);
             sfr::camera::start_progress++;
             break;
         case 1: // step 1 - call begin method
@@ -141,6 +140,8 @@ void CameraControlTask::camera_init()
             break;
         case 4: // completed initialization
             sfr::camera::init_mode = camera_init_mode_type::complete;
+            sfr::camera::turn_on = false;
+            sfr::camera::powered = true;
         }
     }
 }
@@ -150,7 +151,7 @@ void CameraControlTask::transition_to_normal()
     // updates camera mode to normal
     sfr::camera::mode = sensor_mode_type::normal;
 #ifdef VERBOSE
-    Serial.println("turned on camera");
+    Serial.println("camera initialization successful");
 #endif
 }
 
@@ -167,7 +168,7 @@ void CameraControlTask::transition_to_abnormal_init()
     Pins::setPinState(constants::camera::tx, LOW);
     sfr::camera::powered = false;
     sfr::camera::turn_off = false;
-
+    sfr::camera::turn_on = false;
     sfr::camera::init_mode = camera_init_mode_type::awaiting;
     sfr::camera::start_progress = 0;
 }
