@@ -1,4 +1,5 @@
 #include "MissionMode.hpp"
+#include "sfr.hpp"
 
 void Boot::dispatch()
 {
@@ -9,7 +10,10 @@ void Boot::dispatch()
 
 void Boot::transition_to() {}
 
-void AliveSignal::dispatch() {}
+void AliveSignal::dispatch()
+{
+    // check_entrance_lp(lowPowerAliveSignal);
+}
 
 void AliveSignal::transition_to() {}
 

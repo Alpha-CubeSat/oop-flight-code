@@ -30,10 +30,6 @@
 #include <sstream>
 #include <string>
 
-struct MissionMode;
-struct Boot;
-struct AliveSignal;
-
 namespace sfr {
 
     namespace pins {

@@ -1,8 +1,6 @@
 #ifndef MISSION_MODE_HPP_
 #define MISSION_MODE_HPP_
 
-#include "sfr.hpp"
-
 class MissionMode
 {
 
@@ -31,6 +29,17 @@ public:
     int id()
     {
         return 1;
+    }
+};
+
+class LowPowerAliveSignal : public MissionMode
+{
+public:
+    void dispatch();
+    void transition_to();
+    int id()
+    {
+        return 2;
     }
 };
 
