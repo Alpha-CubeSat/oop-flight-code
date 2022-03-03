@@ -4,18 +4,18 @@
 void test_valid_initialization()
 {
     MissionManager mission_manager(0);
-    TEST_ASSERT_EQUAL(mission_mode_type::boot, sfr::mission::mode);
+    TEST_ASSERT_EQUAL(boot.id(), sfr::mission::current_mode.id());
 }
 
 void test_exit_boot()
 {
     MissionManager mission_manager(0);
-    TEST_ASSERT_EQUAL(mission_mode_type::boot, sfr::mission::mode);
+    TEST_ASSERT_EQUAL(boot.id(), sfr::mission::current_mode.id());
     sfr::mission::max_boot_time = 5;
     delay(1);
-    TEST_ASSERT_EQUAL(mission_mode_type::boot, sfr::mission::mode);
+    TEST_ASSERT_EQUAL(boot.id(), sfr::mission::current_mode.id());
     delay(50);
-    TEST_ASSERT_EQUAL(mission_mode_type::alive_signal, sfr::mission::mode);
+    TEST_ASSERT_EQUAL(aliveSignal.id(), sfr::mission::current_mode.id());
 }
 
 int test_mission_manager()

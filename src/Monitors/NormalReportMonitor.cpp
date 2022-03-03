@@ -4,7 +4,7 @@ NormalReportMonitor::NormalReportMonitor(unsigned int offset) : TimedControlTask
 
 void NormalReportMonitor::execute()
 {
-    uint8_t mag_x = map(sfr::imu::mag_x_average, constants::imu::min_mag_x, constants::imu::max_mag_x, 0, 255);
+    /*uint8_t mag_x = map(sfr::imu::mag_x_average, constants::imu::min_mag_x, constants::imu::max_mag_x, 0, 255);
     uint8_t mag_y = map(sfr::imu::mag_y_average, constants::imu::min_mag_y, constants::imu::max_mag_y, 0, 255);
     uint8_t mag_z = map(sfr::imu::mag_z_average, constants::imu::min_mag_z, constants::imu::max_mag_z, 0, 255);
 
@@ -57,5 +57,5 @@ void NormalReportMonitor::execute()
     sfr::rockblock::report[33] = sfr::fault::check_voltage;
     sfr::rockblock::report[34] = sfr::fault::check_solar_current;
     sfr::rockblock::report[35] = sfr::camera::take_photo;
-    sfr::rockblock::report[36] = sfr::camera::powered;
+    sfr::rockblock::report[36] = sfr::camera::powered;*/
 }

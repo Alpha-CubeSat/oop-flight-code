@@ -5,13 +5,13 @@
 #include "Control Tasks/BurnwireControlTask.hpp"
 #include "Control Tasks/TimedControlTask.hpp"
 #include "MissionManager.hpp"
+#include "MissionMode.hpp"
 #include "Modes/acs_mode_type.enum"
 #include "Modes/burnwire_mode_type.enum"
 #include "Modes/camera_init_mode_type.enum"
 #include "Modes/fault_index_type.enum"
 #include "Modes/fault_mode_type.enum"
 #include "Modes/imu_downlink_type.enum"
-#include "Modes/mission_mode_type.enum"
 #include "Modes/rockblock_mode_type.enum"
 #include "Modes/sensor_mode_type.enum"
 #include "Modes/simple_acs_type.enum"
@@ -30,7 +30,12 @@
 #include <sstream>
 #include <string>
 
+struct MissionMode;
+struct Boot;
+struct AliveSignal;
+
 namespace sfr {
+
     namespace pins {
         extern std::map<int, int> pinMap;
     } // namespace pins
@@ -38,7 +43,10 @@ namespace sfr {
         extern bool covered;
     } // namespace photoresistor
     namespace mission {
-        extern mission_mode_type mode;
+        extern Boot boot;
+        extern AliveSignal aliveSignal;
+        extern MissionMode current_mode;
+        extern MissionMode previous_mode;
         extern bool low_power_eligible;
         extern unsigned long boot_start;
         extern unsigned long max_boot_time;
