@@ -80,21 +80,29 @@ namespace sfr {
         uint8_t set_res = VC0706_160x120;
     } // namespace camera
     namespace rockblock {
+        // Report Types
+        report_type downlink_report_type = report_type::normal_report;
+        bool rockblock_ready_status = false;
+
+        // Time Parameters
         unsigned long last_communication = 0;
-        bool last_downlink_normal = false;
-        int camera_commands[99][constants::rockblock::command_len] = {};
-        int camera_max_fragments[99] = {};
-        bool downlink_camera = false;
         unsigned long last_downlink = 0;
         unsigned long downlink_period = 0;
-        unsigned long camera_downlink_period = 0;
+
         rockblock_mode_type mode = rockblock_mode_type::send_at;
         bool waiting_message = false;
-        char buffer[constants::rockblock::buffer_size] = {0};
-        uint8_t report[constants::rockblock::packet_size] = {0};
+
+        // Report Data
+        uint8_t downlink_report[constants::rockblock::packet_size] = {0};
+        uint8_t normal_report[constants::rockblock::packet_size] = {0};
         uint8_t camera_report[constants::rockblock::packet_size] = {0};
-        uint8_t imu_downlink_report[constants::rockblock::packet_size] = {0};
+        uint8_t imu_report[constants::rockblock::packet_size] = {0};
+
+        int camera_max_fragments[99] = {};
+        char buffer[constants::rockblock::buffer_size] = {0};
         int commas[constants::rockblock::num_commas] = {0};
+        int camera_commands[99][constants::rockblock::command_len] = {};
+
         uint8_t opcode[2] = {0};
         uint8_t arg_1[4] = {0};
         uint8_t arg_2[4] = {0};
