@@ -47,7 +47,6 @@ protected:
     MissionManager mission_manager;
 
 public:
-    IMUMonitor imu_monitor;
     MainControlLoop();
     void execute() override;
 };
