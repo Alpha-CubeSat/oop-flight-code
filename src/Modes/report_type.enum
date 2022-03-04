@@ -1,0 +1,11 @@
+#ifndef report_type_enum_
+#define report_type_enum_
+
+enum class report_type : unsigned char
+{
+    normal_report = 0,
+    imu_report,
+    camera_report
+};
+
+#endif

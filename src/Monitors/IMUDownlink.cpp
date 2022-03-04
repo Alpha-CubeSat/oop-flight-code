@@ -20,7 +20,6 @@ void IMUDownlink::execute()
             sfr::imu::imu_dlink_magid = imu_downlink_type::GAUSS_8;
         }
         if (mag.magnetic.x > 8 || mag.magnetic.y > 8 || mag.magnetic.z > 8) {
-            imu_downlink_type::GAUSS_8;
             sfr::imu::imu_dlink_magid = imu_downlink_type::GAUSS_12;
         }
         if (mag.magnetic.x > 12 || mag.magnetic.y > 12 || mag.magnetic.z > 12) {
