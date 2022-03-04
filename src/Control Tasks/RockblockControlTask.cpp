@@ -355,7 +355,7 @@ void RockblockControlTask::dispatch_process_mt_status()
         break;
     case '1':
         Serial.println("SAT INFO: message retrieved");
-        downlinked_something();
+        update_sfr_after_downlink();
         transition_to(rockblock_mode_type::read_message);
         break;
     case '0':
@@ -466,7 +466,7 @@ void RockblockControlTask::dispatch_end_transmission()
     if (sfr::rockblock::downlink_period > constants::rockblock::min_sleep_period) {
         Pins::setPinState(constants::rockblock::sleep_pin, LOW);
     }
-    downlinked_something();
+    update_sfr_after_downlink();
     transition_to(rockblock_mode_type::standby);
 }
 
@@ -553,7 +553,7 @@ bool RockblockControlTask::valid_command()
     return false;
 }
 
-void RockblockControlTask::downlinked_something()
+void RockblockControlTask::update_sfr_after_downlink()
 {
     if (sfr::rockblock::downlink_camera == true) {
         sfr::rockblock::last_downlink_normal = false;
