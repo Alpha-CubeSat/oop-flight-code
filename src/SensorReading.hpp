@@ -1,5 +1,5 @@
-// #ifndef SENSOR_READING_HPP_
-// #define SENSOR_READING_HPP_
+#ifndef SENSORREADING_H_
+#define SENSORREADING_H_
 
 #include "sfr.hpp"
 #include <map>
@@ -20,4 +20,4 @@ public:
     void set_invalid();                                     // Set the fault flag of a SensorReading object to 0
 };
 
-// #endif
+#endif
