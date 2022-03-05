@@ -29,8 +29,8 @@ void BurnwireControlTask::execute()
                 transition_to_standby();
             }
             if ((sfr::burnwire::fire && sfr::temperature::in_sun && sfr::temperature::temp_c_average->is_valid()) ||
-                (sfr::burnwire::fire && sfr::temperature::temp_c_average->is_invalid() && sfr::current::solar_current_average->is_valid() && sfr::current::in_sun) ||
-                (sfr::burnwire::fire && sfr::current::solar_current_average->is_invalid() && sfr::temperature::temp_c_average->is_invalid())) {
+                (sfr::burnwire::fire && !sfr::temperature::temp_c_average->is_valid() && sfr::current::solar_current_average->is_valid() && sfr::current::in_sun) ||
+                (sfr::burnwire::fire && !sfr::current::solar_current_average->is_valid() && !sfr::temperature::temp_c_average->is_valid())) {
                 sfr::burnwire::mode = burnwire_mode_type::fire;
                 sfr::camera::turn_on = true;
             } else {
