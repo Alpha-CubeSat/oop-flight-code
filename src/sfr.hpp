@@ -17,6 +17,7 @@
 #include "Modes/simple_acs_type.enum"
 #include "Pins.hpp"
 #include "RockblockSimulator.hpp"
+#include "SensorReading.hpp"
 #include "constants.hpp"
 #include <Adafruit_LSM9DS1.h>
 #include <Adafruit_VC0706.h>
