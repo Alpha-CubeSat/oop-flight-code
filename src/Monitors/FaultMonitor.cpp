@@ -36,9 +36,5 @@ void FaultMonitor::execute()
         if ((sfr::battery::voltage > constants::battery::max_voltage || sfr::battery::voltage < constants::battery::min_voltage) && sfr::battery::voltage_average->is_valid()) {
             sfr::battery::voltage_average->set_invalid();
         }
-
-        /*if (sfr::fault::fault_1 > 0 || sfr::fault::fault_2 > 0 || sfr::fault::fault_3 > 0) {
-            MissionManager::transition_to_safe();
-        }*/
     }
 }
