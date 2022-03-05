@@ -4,18 +4,22 @@
 void test_valid_initialization()
 {
     MissionManager mission_manager(0);
-    TEST_ASSERT_EQUAL(boot.id(), sfr::mission::current_mode.id());
+    mission_manager.execute();
+    TEST_ASSERT_EQUAL(sfr::mission::boot->id(), sfr::mission::current_mode->id());
 }
 
 void test_exit_boot()
 {
     MissionManager mission_manager(0);
-    TEST_ASSERT_EQUAL(boot.id(), sfr::mission::current_mode.id());
-    sfr::mission::max_boot_time = 5;
-    delay(1);
-    TEST_ASSERT_EQUAL(boot.id(), sfr::mission::current_mode.id());
-    delay(50);
-    TEST_ASSERT_EQUAL(aliveSignal.id(), sfr::mission::current_mode.id());
+
+    mission_manager.execute();
+    TEST_ASSERT_EQUAL(sfr::mission::boot->id(), sfr::mission::current_mode->id());
+
+    sfr::mission::max_boot_time = 500;
+    delay(sfr::mission::max_boot_time);
+    mission_manager.execute();
+    Serial.println(sfr::mission::current_mode->id());
+    TEST_ASSERT_EQUAL(sfr::mission::aliveSignal->id(), sfr::mission::current_mode->id());
 }
 
 int test_mission_manager()

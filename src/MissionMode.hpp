@@ -32,7 +32,7 @@ public:
     }
 };
 
-class LowPowerAliveSignal : public MissionMode
+/*class LowPowerAliveSignal : public MissionMode
 {
 public:
     void dispatch();
@@ -43,7 +43,7 @@ public:
     }
 };
 
-/*class DetumbleSpin : public MissionMode
+class DetumbleSpin : public MissionMode
 {
 public:
     void dispatch() {}
@@ -251,5 +251,8 @@ public:
         return 21;
     }
 };*/
+
+void check_entrance_lp(MissionMode *lp_mode);
+void check_exit_lp(MissionMode *reg_mode);
 
 #endif

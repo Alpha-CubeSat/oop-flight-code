@@ -32,10 +32,15 @@ namespace sfr {
         bool covered = true;
     } // namespace photoresistor
     namespace mission {
-        Boot boot;
-        AliveSignal aliveSignal;
-        MissionMode current_mode = boot;
-        MissionMode previous_mode = boot;
+        Boot boot_class;
+        AliveSignal aliveSignal_class;
+
+        MissionMode *boot = &boot_class;
+        MissionMode *aliveSignal = &aliveSignal_class;
+
+        MissionMode *current_mode = boot;
+        MissionMode *previous_mode = boot;
+
         bool low_power_eligible = true;
         unsigned long boot_start = 0.0;
         unsigned long max_boot_time = constants::time::two_hours;

@@ -39,10 +39,12 @@ namespace sfr {
         extern bool covered;
     } // namespace photoresistor
     namespace mission {
-        extern Boot boot;
-        extern AliveSignal aliveSignal;
-        extern MissionMode current_mode;
-        extern MissionMode previous_mode;
+        extern MissionMode *boot;
+        extern MissionMode *aliveSignal;
+        // extern MissionMode *lowPowerAliveSignal;
+
+        extern MissionMode *current_mode;
+        extern MissionMode *previous_mode;
         extern bool low_power_eligible;
         extern unsigned long boot_start;
         extern unsigned long max_boot_time;
