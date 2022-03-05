@@ -153,7 +153,7 @@ void IMUMonitor::transition_to_abnormal_init()
     // trips fault
     // all check flags are set to false
     sfr::imu::mode = sensor_mode_type::abnormal_init;
-    sfr::fault::fault_1 = sfr::fault::fault_1 | constants::fault::imu_init;
+    // sfr::fault::fault_1 = sfr::fault::fault_1 | constants::fault::imu_init;
     sfr::imu::mag_x_average->set_invalid();
     sfr::imu::mag_y_average->set_invalid();
     sfr::imu::mag_z_average->set_invalid();

@@ -1,7 +1,9 @@
 #ifndef _SENSORREADING_HPP_
 #define _SENSORREADING_HPP_
 
-#include "sfr.hpp"
+#include "Faults.hpp"
+#include "Modes/fault_index_type.enum"
+#include "constants.hpp"
 #include <map>
 
 class SensorReading
