@@ -139,21 +139,13 @@ namespace sfr {
         std::deque<time_t> imu_dlink_time_buffer;
         std::deque<imu_downlink_type> imu_dlink_magid_buffer;
 
-        // float mag_x_average = 0.0;
         SensorReading *mag_x_average = new SensorReading(fault_index_type::mag_x, 0.0, false);
-        float mag_y_average = 0.0;
         SensorReading *mag_y_average = new SensorReading(fault_index_type::mag_y, 0.0, false);
-        float mag_z_average = 0.0;
         SensorReading *mag_z_average = new SensorReading(fault_index_type::mag_z, 0.0, false);
-        float gyro_x_average = 0.0;
         SensorReading *gyro_x_average = new SensorReading(fault_index_type::gyro_x, 0.0, false);
-        float gyro_y_average = 0.0;
         SensorReading *gyro_y_average = new SensorReading(fault_index_type::gyro_y, 0.0, false);
-        float gyro_z_average = 0.0;
         SensorReading *gyro_z_average = new SensorReading(fault_index_type::gyro_z, 0.0, false);
-        float acc_x_average = 0.0;
         SensorReading *acc_x_average = new SensorReading(fault_index_type::acc_x, 0.0, false);
-        float acc_y_average = 0.0;
         SensorReading *acc_y_average = new SensorReading(fault_index_type::acc_y, 0.0, false);
 
         bool imu_dlink_report_ready = false;
@@ -171,14 +163,12 @@ namespace sfr {
     namespace temperature {
         float temp_c = 0.0;
         std::deque<float> temp_c_buffer;
-        float temp_c_average = 0.0;
         SensorReading *temp_c_average = new SensorReading(fault_index_type::temp_c, 0.0, false);
         bool in_sun = false;
     } // namespace temperature
     namespace current {
         float solar_current = 0.0;
         std::deque<float> solar_current_buffer;
-        float solar_current_average = 0.0;
         SensorReading *solar_current_average = new SensorReading(fault_index_type::solar_current, 0.0, false);
         bool in_sun = false;
     } // namespace current
@@ -193,7 +183,6 @@ namespace sfr {
     namespace battery {
         float voltage = 0.0;
         std::deque<float> voltage_buffer;
-        float voltage_average = 0.0;
         SensorReading *voltage_average = new SensorReading(fault_index_type::voltage, 0.0, false);
     } // namespace battery
     namespace fault {

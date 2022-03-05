@@ -144,13 +144,13 @@ namespace sfr {
 
         // extern float mag_x_average;
         extern SensorReading *mag_x_average;
-        extern float mag_y_average;
-        extern float mag_z_average;
-        extern float gyro_x_average;
-        extern float gyro_y_average;
-        extern float gyro_z_average;
-        extern float acc_x_average;
-        extern float acc_y_average;
+        extern SensorReading *mag_y_average;
+        extern SensorReading *mag_z_average;
+        extern SensorReading *gyro_x_average;
+        extern SensorReading *gyro_y_average;
+        extern SensorReading *gyro_z_average;
+        extern SensorReading *acc_x_average;
+        extern SensorReading *acc_y_average;
 
         extern bool imu_dlink_report_ready;
         extern imu_downlink_type imu_dlink_magid;
@@ -167,13 +167,13 @@ namespace sfr {
     namespace temperature {
         extern float temp_c;
         extern std::deque<float> temp_c_buffer;
-        extern float temp_c_average;
+        extern SensorReading *temp_c_average;
         extern bool in_sun;
     } // namespace temperature
     namespace current {
         extern float solar_current;
         extern std::deque<float> solar_current_buffer;
-        extern float solar_current_average;
+        extern SensorReading *solar_current_average;
         extern bool in_sun;
     } // namespace current
     namespace acs {
@@ -187,7 +187,7 @@ namespace sfr {
     namespace battery {
         extern float voltage;
         extern std::deque<float> voltage_buffer;
-        extern float voltage_average;
+        extern SensorReading *voltage_average;
     } // namespace battery
     namespace fault {
         extern fault_mode_type mode;
