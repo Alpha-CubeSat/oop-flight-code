@@ -172,12 +172,14 @@ namespace sfr {
         float temp_c = 0.0;
         std::deque<float> temp_c_buffer;
         float temp_c_average = 0.0;
+        SensorReading *temp_c_average = new SensorReading(fault_index_type::temp_c, 0.0, false);
         bool in_sun = false;
     } // namespace temperature
     namespace current {
         float solar_current = 0.0;
         std::deque<float> solar_current_buffer;
         float solar_current_average = 0.0;
+        SensorReading *solar_current_average = new SensorReading(fault_index_type::solar_current, 0.0, false);
         bool in_sun = false;
     } // namespace current
     namespace acs {
@@ -192,6 +194,7 @@ namespace sfr {
         float voltage = 0.0;
         std::deque<float> voltage_buffer;
         float voltage_average = 0.0;
+        SensorReading *voltage_average = new SensorReading(fault_index_type::voltage, 0.0, false);
     } // namespace battery
     namespace fault {
         fault_mode_type mode = fault_mode_type::active;
