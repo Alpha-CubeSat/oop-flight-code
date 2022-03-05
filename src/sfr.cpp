@@ -144,12 +144,17 @@ namespace sfr {
         float mag_y_average = 0.0;
         SensorReading *mag_y_average = new SensorReading(fault_index_type::mag_y, 0.0, false);
         float mag_z_average = 0.0;
+        SensorReading *mag_z_average = new SensorReading(fault_index_type::mag_z, 0.0, false);
         float gyro_x_average = 0.0;
+        SensorReading *gyro_x_average = new SensorReading(fault_index_type::gyro_x, 0.0, false);
         float gyro_y_average = 0.0;
+        SensorReading *gyro_y_average = new SensorReading(fault_index_type::gyro_y, 0.0, false);
         float gyro_z_average = 0.0;
+        SensorReading *gyro_z_average = new SensorReading(fault_index_type::gyro_z, 0.0, false);
         float acc_x_average = 0.0;
+        SensorReading *acc_x_average = new SensorReading(fault_index_type::acc_x, 0.0, false);
         float acc_y_average = 0.0;
-        float acc_z_average = 0.0;
+        SensorReading *acc_y_average = new SensorReading(fault_index_type::acc_y, 0.0, false);
 
         bool imu_dlink_report_ready = false;
         imu_downlink_type imu_dlink_magid = imu_downlink_type::GAUSS_8;
