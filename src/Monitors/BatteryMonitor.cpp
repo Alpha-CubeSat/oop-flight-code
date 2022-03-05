@@ -20,7 +20,7 @@ void BatteryMonitor::execute()
     sfr::battery::voltage_average->set_value(sum / sfr::battery::voltage_buffer.size());
 #ifdef VERBOSE
     Serial.print("Batt Voltage: ");
-    Serial.print(sfr::battery::voltage_average);
+    Serial.print(sfr::battery::voltage_average->get_value());
     Serial.println(" V");
 #endif
 }
