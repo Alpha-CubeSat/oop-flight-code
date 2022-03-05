@@ -18,7 +18,7 @@ void TemperatureMonitor::execute()
     sfr::temperature::temp_c_average->set_value(sum / sfr::temperature::temp_c_buffer.size());
 #ifdef VERBOSE
     Serial.print("Temp: ");
-    Serial.print(sfr::temperature::temp_c_average);
+    Serial.print(sfr::temperature::temp_c_average->get_value());
     Serial.println(" C");
 #endif
     sfr::temperature::in_sun = sfr::temperature::temp_c_average->get_value() >= constants::temperature::in_sun_val;
