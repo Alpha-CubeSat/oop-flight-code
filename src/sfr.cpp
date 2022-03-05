@@ -139,7 +139,7 @@ namespace sfr {
         std::deque<time_t> imu_dlink_time_buffer;
         std::deque<imu_downlink_type> imu_dlink_magid_buffer;
 
-        float mag_x_average = 0.0;
+        // float mag_x_average = 0.0;
         SensorReading *mag_x_average = new SensorReading(fault_index_type::mag_x, 0.0, false);
         float mag_y_average = 0.0;
         SensorReading *mag_y_average = new SensorReading(fault_index_type::mag_y, 0.0, false);
