@@ -1,5 +1,5 @@
-#ifndef SENSORREADING_H_
-#define SENSORREADING_H_
+#ifndef _SENSORREADING_HPP_
+#define _SENSORREADING_HPP_
 
 #include "sfr.hpp"
 #include <map>
