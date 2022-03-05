@@ -2,6 +2,7 @@
 // #define SENSOR_READING_HPP_
 
 #include "sfr.hpp"
+#include <map>
 
 class SensorReading
 {

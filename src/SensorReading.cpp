@@ -1,6 +1,4 @@
 #include "SensorReading.hpp"
-#include "Modes/fault_index_type.enum"
-#include <map>
 
 std::map<fault_index_type, int> map_to_reg = {
     {fault_index_type::mag_x, 1},
