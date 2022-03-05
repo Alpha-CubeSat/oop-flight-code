@@ -9,12 +9,9 @@ IMUMonitor::IMUMonitor(unsigned int offset)
 {
     imu = Adafruit_LSM9DS1(constants::imu::CSAG, constants::imu::CSM);
 
-    if (!imu.begin())
-    {
+    if (!imu.begin()) {
         transition_to_abnormal_init();
-    }
-    else
-    {
+    } else {
         transition_to_normal();
     }
     imu.setupAccel(imu.LSM9DS1_ACCELRANGE_2G);
@@ -24,8 +21,7 @@ IMUMonitor::IMUMonitor(unsigned int offset)
 
 void IMUMonitor::execute()
 {
-    switch (sfr::imu::mode)
-    {
+    switch (sfr::imu::mode) {
     case sensor_mode_type::normal:
         Serial.println("IMU is in Normal Mode");
         capture_imu_values();
@@ -36,8 +32,7 @@ void IMUMonitor::execute()
     case sensor_mode_type::retry:
         Serial.println("IMU is in Retry Mode");
         bool began = false;
-        if (imu.begin())
-        {
+        if (imu.begin()) {
             transition_to_normal();
             began = true;
         }
@@ -127,13 +122,13 @@ void IMUMonitor::capture_imu_values()
 
     // Calculate averages
 
-    sfr::imu::mag_x_average = mag_x_sum / sfr::imu::mag_x_buffer.size();
-    sfr::imu::mag_y_average = mag_y_sum / sfr::imu::mag_y_buffer.size();
-    sfr::imu::mag_z_average = mag_z_sum / sfr::imu::mag_z_buffer.size();
+    sfr::imu::mag_x_average->set_value(mag_x_sum / sfr::imu::mag_x_buffer.size());
+    sfr::imu::mag_y_average->set_value(mag_y_sum / sfr::imu::mag_y_buffer.size());
+    sfr::imu::mag_z_average->set_value(mag_z_sum / sfr::imu::mag_z_buffer.size());
 
-    sfr::imu::gyro_x_average = gyro_x_sum / sfr::imu::gyro_x_buffer.size();
-    sfr::imu::gyro_y_average = gyro_y_sum / sfr::imu::gyro_y_buffer.size();
-    sfr::imu::gyro_z_average = gyro_z_sum / sfr::imu::gyro_z_buffer.size();
+    sfr::imu::gyro_x_average->set_value(gyro_x_sum / sfr::imu::gyro_x_buffer.size());
+    sfr::imu::gyro_y_average->set_value(gyro_y_sum / sfr::imu::gyro_y_buffer.size());
+    sfr::imu::gyro_z_average->set_value(gyro_z_sum / sfr::imu::gyro_z_buffer.size());
 }
 
 void IMUMonitor::transition_to_normal()
@@ -142,14 +137,14 @@ void IMUMonitor::transition_to_normal()
     // faults are cleared
     // all check flags are set to true
     sfr::imu::mode = sensor_mode_type::normal;
-    sfr::fault::check_mag_x = true;
-    sfr::fault::check_mag_y = true;
-    sfr::fault::check_mag_z = true;
-    sfr::fault::check_gyro_x = true;
-    sfr::fault::check_gyro_y = true;
-    sfr::fault::check_gyro_z = true;
-    sfr::fault::check_acc_x = true;
-    sfr::fault::check_acc_y = true;
+    sfr::imu::mag_x_average->set_valid();
+    sfr::imu::mag_y_average->set_valid();
+    sfr::imu::mag_z_average->set_valid();
+    sfr::imu::gyro_x_average->set_valid();
+    sfr::imu::gyro_y_average->set_valid();
+    sfr::imu::gyro_z_average->set_valid();
+    sfr::imu::acc_x_average->set_valid();
+    sfr::imu::acc_y_average->set_valid();
 }
 
 void IMUMonitor::transition_to_abnormal_init()
@@ -159,14 +154,14 @@ void IMUMonitor::transition_to_abnormal_init()
     // all check flags are set to false
     sfr::imu::mode = sensor_mode_type::abnormal_init;
     sfr::fault::fault_1 = sfr::fault::fault_1 | constants::fault::imu_init;
-    sfr::fault::check_mag_x = false;
-    sfr::fault::check_mag_y = false;
-    sfr::fault::check_mag_z = false;
-    sfr::fault::check_gyro_x = false;
-    sfr::fault::check_gyro_y = false;
-    sfr::fault::check_gyro_z = false;
-    sfr::fault::check_acc_x = false;
-    sfr::fault::check_acc_y = false;
+    sfr::imu::mag_x_average->set_invalid();
+    sfr::imu::mag_y_average->set_invalid();
+    sfr::imu::mag_z_average->set_invalid();
+    sfr::imu::gyro_x_average->set_invalid();
+    sfr::imu::gyro_y_average->set_invalid();
+    sfr::imu::gyro_z_average->set_invalid();
+    sfr::imu::acc_x_average->set_invalid();
+    sfr::imu::acc_y_average->set_invalid();
 }
 
 void IMUMonitor::transition_to_retry()
