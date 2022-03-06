@@ -6,6 +6,7 @@
 #include "Control Tasks/BurnwireControlTask.hpp"
 #include "Control Tasks/CameraControlTask.hpp"
 #include "Control Tasks/RockblockControlTask.hpp"
+#include "Faults.hpp"
 #include "Monitors/ACSMonitor.hpp"
 #include "Monitors/BatteryMonitor.hpp"
 #include "Monitors/ButtonMonitor.hpp"
@@ -31,7 +32,7 @@ protected:
     CommandMonitor command_monitor;
     CurrentMonitor current_monitor;
     FaultMonitor fault_monitor;
-    //IMUMonitor imu_monitor;
+    // IMUMonitor imu_monitor;
     NormalReportMonitor normal_report_monitor;
     PhotoresistorMonitor photoresistor_monitor;
     TemperatureMonitor temperature_monitor;

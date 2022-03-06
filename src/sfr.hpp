@@ -17,6 +17,7 @@
 #include "Modes/simple_acs_type.enum"
 #include "Pins.hpp"
 #include "RockblockSimulator.hpp"
+#include "SensorReading.hpp"
 #include "constants.hpp"
 #include <Adafruit_LSM9DS1.h>
 #include <Adafruit_VC0706.h>
@@ -141,12 +142,15 @@ namespace sfr {
         extern std::deque<time_t> imu_dlink_time_buffer;
         extern std::deque<imu_downlink_type> imu_dlink_magid_buffer;
 
-        extern float mag_x_average;
-        extern float mag_y_average;
-        extern float mag_z_average;
-        extern float gyro_x_average;
-        extern float gyro_y_average;
-        extern float gyro_z_average;
+        // extern float mag_x_average;
+        extern SensorReading *mag_x_average;
+        extern SensorReading *mag_y_average;
+        extern SensorReading *mag_z_average;
+        extern SensorReading *gyro_x_average;
+        extern SensorReading *gyro_y_average;
+        extern SensorReading *gyro_z_average;
+        extern SensorReading *acc_x_average;
+        extern SensorReading *acc_y_average;
 
         extern bool imu_dlink_report_ready;
         extern imu_downlink_type imu_dlink_magid;
@@ -163,13 +167,13 @@ namespace sfr {
     namespace temperature {
         extern float temp_c;
         extern std::deque<float> temp_c_buffer;
-        extern float temp_c_average;
+        extern SensorReading *temp_c_average;
         extern bool in_sun;
     } // namespace temperature
     namespace current {
         extern float solar_current;
         extern std::deque<float> solar_current_buffer;
-        extern float solar_current_average;
+        extern SensorReading *solar_current_average;
         extern bool in_sun;
     } // namespace current
     namespace acs {
@@ -183,7 +187,7 @@ namespace sfr {
     namespace battery {
         extern float voltage;
         extern std::deque<float> voltage_buffer;
-        extern float voltage_average;
+        extern SensorReading *voltage_average;
     } // namespace battery
     namespace fault {
         extern fault_mode_type mode;
@@ -192,26 +196,26 @@ namespace sfr {
         extern unsigned char fault_2;
         extern unsigned char fault_3;
 
-        // FAULT 1
-        extern bool check_mag_x;
-        extern bool check_mag_y;
-        extern bool check_mag_z;
-        extern bool check_gyro_x;
-        extern bool check_gyro_y;
-        extern bool check_gyro_z;
-        extern bool check_acc_x;
-        extern bool check_acc_y;
+        // // FAULT 1
+        // extern bool check_mag_x;
+        // extern bool check_mag_y;
+        // extern bool check_mag_z;
+        // extern bool check_gyro_x;
+        // extern bool check_gyro_y;
+        // extern bool check_gyro_z;
+        // extern bool check_acc_x;
+        // extern bool check_acc_y;
 
-        // FAULT 2
-        extern bool check_acc_z;
-        extern bool check_temp_c;
-        extern bool check_solar_current;
-        extern bool check_voltage;
+        // // FAULT 2
+        // extern bool check_acc_z;
+        // extern bool check_temp_c;
+        // extern bool check_solar_current;
+        // extern bool check_voltage;
 
-        // FAULT 3
-        extern bool check_burn_wire;
-        extern bool check_sd_card;
-        extern bool check_camera_on_failed;
+        // // FAULT 3
+        // extern bool check_burn_wire;
+        // extern bool check_sd_card;
+        // extern bool check_camera_on_failed;
     } // namespace fault
     namespace button {
         extern bool pressed;

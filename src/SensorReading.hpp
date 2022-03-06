@@ -1,7 +1,10 @@
-// #ifndef SENSOR_READING_HPP_
-// #define SENSOR_READING_HPP_
+#ifndef _SENSORREADING_HPP_
+#define _SENSORREADING_HPP_
 
-#include "sfr.hpp"
+#include "Faults.hpp"
+#include "Modes/fault_index_type.enum"
+#include "constants.hpp"
+#include <map>
 
 class SensorReading
 {
@@ -19,4 +22,4 @@ public:
     void set_invalid();                                     // Set the fault flag of a SensorReading object to 0
 };
 
-// #endif
+#endif

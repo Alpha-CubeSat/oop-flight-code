@@ -139,15 +139,14 @@ namespace sfr {
         std::deque<time_t> imu_dlink_time_buffer;
         std::deque<imu_downlink_type> imu_dlink_magid_buffer;
 
-        float mag_x_average = 0.0;
-        float mag_y_average = 0.0;
-        float mag_z_average = 0.0;
-        float gyro_x_average = 0.0;
-        float gyro_y_average = 0.0;
-        float gyro_z_average = 0.0;
-        float acc_x_average = 0.0;
-        float acc_y_average = 0.0;
-        float acc_z_average = 0.0;
+        SensorReading *mag_x_average = new SensorReading(fault_index_type::mag_x, 0.0, false);
+        SensorReading *mag_y_average = new SensorReading(fault_index_type::mag_y, 0.0, false);
+        SensorReading *mag_z_average = new SensorReading(fault_index_type::mag_z, 0.0, false);
+        SensorReading *gyro_x_average = new SensorReading(fault_index_type::gyro_x, 0.0, false);
+        SensorReading *gyro_y_average = new SensorReading(fault_index_type::gyro_y, 0.0, false);
+        SensorReading *gyro_z_average = new SensorReading(fault_index_type::gyro_z, 0.0, false);
+        SensorReading *acc_x_average = new SensorReading(fault_index_type::acc_x, 0.0, false);
+        SensorReading *acc_y_average = new SensorReading(fault_index_type::acc_y, 0.0, false);
 
         bool imu_dlink_report_ready = false;
         imu_downlink_type imu_dlink_magid = imu_downlink_type::GAUSS_8;
@@ -164,13 +163,13 @@ namespace sfr {
     namespace temperature {
         float temp_c = 0.0;
         std::deque<float> temp_c_buffer;
-        float temp_c_average = 0.0;
+        SensorReading *temp_c_average = new SensorReading(fault_index_type::temp_c, 0.0, false);
         bool in_sun = false;
     } // namespace temperature
     namespace current {
         float solar_current = 0.0;
         std::deque<float> solar_current_buffer;
-        float solar_current_average = 0.0;
+        SensorReading *solar_current_average = new SensorReading(fault_index_type::solar_current, 0.0, false);
         bool in_sun = false;
     } // namespace current
     namespace acs {
@@ -184,7 +183,7 @@ namespace sfr {
     namespace battery {
         float voltage = 0.0;
         std::deque<float> voltage_buffer;
-        float voltage_average = 0.0;
+        SensorReading *voltage_average = new SensorReading(fault_index_type::voltage, 0.0, false);
     } // namespace battery
     namespace fault {
         fault_mode_type mode = fault_mode_type::active;
@@ -193,26 +192,26 @@ namespace sfr {
         unsigned char fault_2 = 0;
         unsigned char fault_3 = 0;
 
-        // FAULT 1
-        bool check_mag_x = true;
-        bool check_mag_y = true;
-        bool check_mag_z = true;
-        bool check_gyro_x = true;
-        bool check_gyro_y = true;
-        bool check_gyro_z = true;
-        bool check_acc_x = true;
-        bool check_acc_y = true;
+        // // FAULT 1
+        // bool check_mag_x = true;
+        // bool check_mag_y = true;
+        // bool check_mag_z = true;
+        // bool check_gyro_x = true;
+        // bool check_gyro_y = true;
+        // bool check_gyro_z = true;
+        // bool check_acc_x = true;
+        // bool check_acc_y = true;
 
-        // FAULT 2
-        bool check_acc_z = true;
-        bool check_temp_c = true;
-        bool check_solar_current = true;
-        bool check_voltage = true;
+        // // FAULT 2
+        // bool check_acc_z = true;
+        // bool check_temp_c = true;
+        // bool check_solar_current = true;
+        // bool check_voltage = true;
 
-        // FAULT 3
-        bool check_burn_wire = true;
-        bool check_sd_card = true;
-        bool check_camera_on_failed = true;
+        // // FAULT 3
+        // bool check_burn_wire = true;
+        // bool check_sd_card = true;
+        // bool check_camera_on_failed = true;
     } // namespace fault
     namespace button {
         bool pressed = true;
