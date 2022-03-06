@@ -453,6 +453,9 @@ namespace constants {
 
         constexpr int CSAG = 21;
         constexpr int CSM = 20;
+
+        constexpr int downlink_buffer_max_size = constants::sensor::collect;
+        constexpr int downlink_report_size = constants::sensor::collect * 5;
     } // namespace imu
     namespace timecontrol {
         // Environment-based initializations of the control loop time.

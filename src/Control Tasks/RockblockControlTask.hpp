@@ -11,7 +11,6 @@ public:
 
 private:
     void handle_command(int opcode, int argument);
-    bool check_ready();
     void dispatch_standby();
     void dispatch_send_at();
     void dispatch_await_at();
@@ -37,7 +36,7 @@ private:
     void dispatch_end_transmission();
     void transition_to(rockblock_mode_type new_mode);
     bool valid_command();
-    void timed_out();
+    void check_timeout();
     void update_sfr_after_downlink();
 };
 

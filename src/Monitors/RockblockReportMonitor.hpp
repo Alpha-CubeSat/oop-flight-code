@@ -8,7 +8,7 @@ class RockblockReportMonitor : public TimedControlTask<void>
 public:
     RockblockReportMonitor(unsigned int offset);
     void execute();
-    void update_ready_status();
+    void standby_update_downlink_report_type();
 };
 
 #endif

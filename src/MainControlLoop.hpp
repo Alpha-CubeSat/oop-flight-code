@@ -13,7 +13,7 @@
 #include "Monitors/CommandMonitor.hpp"
 #include "Monitors/CurrentMonitor.hpp"
 #include "Monitors/FaultMonitor.hpp"
-#include "Monitors/IMUMonitor.hpp"
+#include "Monitors/IMUDownlinkReportMonitor.hpp"
 #include "Monitors/NormalReportMonitor.hpp"
 #include "Monitors/PhotoresistorMonitor.hpp"
 #include "Monitors/TemperatureMonitor.hpp"
@@ -31,7 +31,7 @@ protected:
     CommandMonitor command_monitor;
     CurrentMonitor current_monitor;
     FaultMonitor fault_monitor;
-    //IMUMonitor imu_monitor;
+    IMUDownlinkReportMonitor imu_monitor;
     NormalReportMonitor normal_report_monitor;
     PhotoresistorMonitor photoresistor_monitor;
     TemperatureMonitor temperature_monitor;
@@ -44,7 +44,6 @@ protected:
     MissionManager mission_manager;
 
 public:
-    IMUMonitor imu_monitor;
     MainControlLoop();
     void execute() override;
 };
