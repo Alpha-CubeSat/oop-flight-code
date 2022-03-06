@@ -453,6 +453,9 @@ namespace constants {
 
         constexpr int CSAG = 21;
         constexpr int CSM = 20;
+
+        constexpr int downlink_buffer_max_size = constants::sensor::collect;
+        constexpr int downlink_report_size = constants::sensor::collect * 5;
     } // namespace imu
     namespace timecontrol {
         // Environment-based initializations of the control loop time.
@@ -474,6 +477,7 @@ namespace constants {
         static constexpr unsigned int imu_monitor_offset = fault_monitor_offset + 30;
         static constexpr unsigned int normal_report_monitor_offset = imu_monitor_offset + 9000;
         static constexpr unsigned int photoresistor_monitor_offset = normal_report_monitor_offset + 30;
+        static constexpr unsigned int rockblock_report_monitor_offset = camera_control_task_offset + 230000;
         static constexpr unsigned int temperature_monitor_offset = photoresistor_monitor_offset + 30;
 
         static constexpr unsigned int acs_control_task_offset = temperature_monitor_offset + 40;

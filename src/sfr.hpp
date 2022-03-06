@@ -12,6 +12,7 @@
 #include "Modes/fault_mode_type.enum"
 #include "Modes/imu_downlink_type.enum"
 #include "Modes/mission_mode_type.enum"
+#include "Modes/report_type.enum"
 #include "Modes/rockblock_mode_type.enum"
 #include "Modes/sensor_mode_type.enum"
 #include "Modes/simple_acs_type.enum"
@@ -85,20 +86,21 @@ namespace sfr {
         extern uint8_t set_res;
     } // namespace camera
     namespace rockblock {
+        extern report_type downlink_report_type;
+        extern bool rockblock_ready_status;
         extern unsigned long last_communication;
-        extern bool last_downlink_normal;
-        extern int camera_commands[99][constants::rockblock::command_len];
-        extern int camera_max_fragments[99];
-        extern bool downlink_camera;
         extern unsigned long last_downlink;
         extern unsigned long downlink_period;
-        extern unsigned long camera_downlink_period;
         extern rockblock_mode_type mode;
         extern bool waiting_message;
-        extern char buffer[constants::rockblock::buffer_size];
-        extern uint8_t report[constants::rockblock::packet_size];
+        extern uint8_t downlink_report[constants::rockblock::packet_size];
+        extern uint8_t normal_report[constants::rockblock::packet_size];
         extern uint8_t camera_report[constants::rockblock::packet_size];
+        extern uint8_t imu_report[constants::rockblock::packet_size];
+        extern int camera_max_fragments[99];
+        extern char buffer[constants::rockblock::buffer_size];
         extern int commas[constants::rockblock::num_commas];
+        extern int camera_commands[99][constants::rockblock::command_len];
         extern uint8_t opcode[2];
         extern uint8_t arg_1[4];
         extern uint8_t arg_2[4];
@@ -134,6 +136,9 @@ namespace sfr {
         extern std::deque<float> gyro_x_buffer;
         extern std::deque<float> gyro_y_buffer;
         extern std::deque<float> gyro_z_buffer;
+        extern std::deque<float> acc_x_buffer;
+        extern std::deque<float> acc_y_buffer;
+        extern std::deque<float> acc_z_buffer;
         // std::deque<std::experimental::any, time_t> imu_dlink_buffer;
         extern std::deque<float> imu_dlink_gyro_x_buffer;
         extern std::deque<float> imu_dlink_gyro_y_buffer;
@@ -147,12 +152,12 @@ namespace sfr {
         extern float gyro_x_average;
         extern float gyro_y_average;
         extern float gyro_z_average;
+        extern float acc_x_average;
+        extern float acc_y_average;
+        extern float acc_z_average;
 
-        extern bool imu_dlink_report_ready;
+        extern bool report_ready;
         extern imu_downlink_type imu_dlink_magid;
-        extern const int imu_downlink_buffer_max_size;
-        extern const int imu_downlink_report_size;
-        extern uint8_t report[];
 
         extern const int mag_8GAUSS_min;
         extern const int mag_12GAUSS_min;
