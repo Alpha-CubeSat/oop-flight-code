@@ -185,7 +185,7 @@ void RockblockControlTask::dispatch_send_flow_control()
 void RockblockControlTask::dispatch_await_flow_control()
 {
     if (sfr::rockblock::serial.read() == 'K') {
-        Serial.println("SAT INFO: ok");
+        // Serial.println("SAT INFO: ok");
         transition_to(rockblock_mode_type::send_message_length);
     }
 }

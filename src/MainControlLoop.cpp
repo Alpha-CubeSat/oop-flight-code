@@ -39,7 +39,7 @@ void MainControlLoop::execute()
     command_monitor.execute_on_time();
     current_monitor.execute_on_time();
     fault_monitor.execute_on_time();
-    //imu_monitor.execute_on_time();
+    // imu_monitor.execute_on_time();
     normal_report_monitor.execute_on_time();
     photoresistor_monitor.execute_on_time();
     temperature_monitor.execute_on_time();

@@ -12,11 +12,11 @@ RockblockSimulator::RockblockSimulator()
     flush_stage = 0;
     bin_transmit = 0;
     signal = 5;
-    //insert("0B000100000000000000");
-    //insert("07000100000000000000");
-    //insert("01000000000000000000");
-    // insert("01000100000000000000");
-    // insert("02000100000000000000");
+    insert("0B000100000000000000");
+    // insert("07000100000000000000");
+    // insert("01000000000000000000");
+    //  insert("01000100000000000000");
+    //  insert("02000100000000000000");
 }
 
 void RockblockSimulator::begin(uint32_t baud)
@@ -154,7 +154,7 @@ void RockblockSimulator::serial_process()
         std::string tmp = input;
         std::replace(tmp.begin(), tmp.end(), '\r', 'r');
         std::replace(tmp.begin(), tmp.end(), '\n', 'n');
-        Serial.print("SIM RECEIVE: ");
+        // Serial.print("SIM RECEIVE: ");
         if (tmp.length() > 50) {
             Serial.println("<data>");
         } else {
@@ -267,7 +267,7 @@ void RockblockSimulator::serial_process()
         tmp = output;
         std::replace(tmp.begin(), tmp.end(), '\r', 'r');
         std::replace(tmp.begin(), tmp.end(), '\n', 'n');
-        Serial.print("SIM REPLY: ");
+        // Serial.print("SIM REPLY: ");
         Serial.println(tmp.c_str());
 
         std::reverse(output.begin(), output.end()); // reverse string for proper extraction

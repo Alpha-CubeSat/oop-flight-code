@@ -72,14 +72,15 @@ void CameraControlTask::execute()
         for (int i = 0; i < bytesToRead; i++) {
             if (buffer[i] < 16) {
                 imgFile.print(0, HEX);
-#ifdef VERBOSE
                 Serial.print(0, HEX);
+
+#ifdef VERBOSE
 #endif
             }
             imgFile.print(buffer[i], HEX);
 #ifdef VERBOSE
-            Serial.print(buffer[i], HEX);
 #endif
+            Serial.print(buffer[i], HEX);
         }
 
         Serial.println("");
@@ -116,8 +117,8 @@ void CameraControlTask::camera_init()
             Pins::setPinState(constants::camera::power_on_pin, HIGH);
             sfr::camera::start_progress++;
             break;
-        case 1:                                           // step 1 - call begin method
-            if (millis() - sfr::camera::step_time >= sfr::camera::begin_delay) //need to determine this delay
+        case 1:                                                                // step 1 - call begin method
+            if (millis() - sfr::camera::step_time >= sfr::camera::begin_delay) // need to determine this delay
             {
                 if (adaCam.begin()) {
                     Serial.println("powered on camera");
@@ -126,7 +127,6 @@ void CameraControlTask::camera_init()
                 } else {
                     Serial.println("not receiving serial response");
                 }
-                //
             }
             break;
         case 2: // step 2  - set resolution
