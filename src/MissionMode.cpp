@@ -1,6 +1,7 @@
 #include "MissionMode.hpp"
 #include "sfr.hpp"
 
+void Boot::transition_to() {}
 void Boot::dispatch()
 {
     if (millis() - sfr::mission::boot_start >= sfr::mission::max_boot_time) {
@@ -8,18 +9,35 @@ void Boot::dispatch()
     }
 }
 
-void Boot::transition_to() {}
-
+void AliveSignal::transition_to() {}
 void AliveSignal::dispatch()
 {
     check_entrance_lp(sfr::mission::lowPowerAliveSignal);
+    if (sfr::rockblock::num_failures >= sfr::rockblock::max_failures) {
+        sfr::mission::current_mode = sfr::mission::detumbleSpin;
+    }
 }
 
-void AliveSignal::transition_to() {}
+void LowPowerAliveSignal::transition_to()
+{
+    check_exit_lp(sfr::mission::aliveSignal);
+}
+void LowPowerAliveSignal::dispatch() {}
+
+void DetumbleSpin::transition_to() {}
+void DetumbleSpin::dispatch()
+{
+    check_entrance_lp(sfr::mission::lowPowerDetumbleSpin);
+}
+
+void LowPowerDetumbleSpin::transition_to() {}
+void LowPowerDetumbleSpin::dispatch()
+{
+    check_exit_lp(sfr::mission::detumbleSpin);
+}
 
 void check_entrance_lp(MissionMode *lp_mode)
 {
-    // TODO and or check for voltage
     if (!sfr::battery::voltage_average->is_valid() || sfr::battery::voltage_average->get_value() <= sfr::battery::min_battery) {
         sfr::mission::current_mode = lp_mode;
     }

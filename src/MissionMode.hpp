@@ -3,11 +3,10 @@
 
 class MissionMode
 {
-
 public:
-    virtual void transition_to() {}
-    virtual void dispatch() {}
-    virtual int id() {}
+    virtual void transition_to();
+    virtual void dispatch();
+    virtual int id();
 };
 
 class Boot : public MissionMode
@@ -35,8 +34,8 @@ public:
 class LowPowerAliveSignal : public MissionMode
 {
 public:
-    void dispatch() {}
-    void transition_to() {}
+    void dispatch();
+    void transition_to();
     int id()
     {
         return 2;
@@ -46,19 +45,19 @@ public:
 class DetumbleSpin : public MissionMode
 {
 public:
-    void dispatch() {}
-    void transition_to() {}
+    void dispatch();
+    void transition_to();
     int id()
     {
         return 3;
     }
 };
 
-/*class LowPowerDetumbleSpin : public MissionMode
+class LowPowerDetumbleSpin : public MissionMode
 {
 public:
-    void dispatch() {}
-    void transition_to() {}
+    void dispatch();
+    void transition_to();
     int id()
     {
         return 4;
@@ -68,8 +67,8 @@ public:
 class Normal : public MissionMode
 {
 public:
-    void dispatch() {}
-    void transition_to() {}
+    void dispatch();
+    void transition_to();
     int id()
     {
         return 5;
@@ -79,8 +78,8 @@ public:
 class Transmit : public MissionMode
 {
 public:
-    void dispatch() {}
-    void transition_to() {}
+    void dispatch();
+    void transition_to();
     int id()
     {
         return 6;
@@ -90,8 +89,8 @@ public:
 class LowPower : public MissionMode
 {
 public:
-    void dispatch() {}
-    void transition_to() {}
+    void dispatch();
+    void transition_to();
     int id()
     {
         return 7;
@@ -101,8 +100,8 @@ public:
 class NormalDeployment : public MissionMode
 {
 public:
-    void dispatch() {}
-    void transition_to() {}
+    void dispatch();
+    void transition_to();
     int id()
     {
         return 8;
@@ -112,8 +111,8 @@ public:
 class TransmitDeployment : public MissionMode
 {
 public:
-    void dispatch() {}
-    void transition_to() {}
+    void dispatch();
+    void transition_to();
     int id()
     {
         return 9;
@@ -123,8 +122,8 @@ public:
 class LowPowerDeployment : public MissionMode
 {
 public:
-    void dispatch() {}
-    void transition_to() {}
+    void dispatch();
+    void transition_to();
     int id()
     {
         return 10;
@@ -134,8 +133,8 @@ public:
 class NormalArmed : public MissionMode
 {
 public:
-    void dispatch() {}
-    void transition_to() {}
+    void dispatch();
+    void transition_to();
     int id()
     {
         return 11;
@@ -145,8 +144,8 @@ public:
 class TransmitArmed : public MissionMode
 {
 public:
-    void dispatch() {}
-    void transition_to() {}
+    void dispatch();
+    void transition_to();
     int id()
     {
         return 12;
@@ -156,8 +155,8 @@ public:
 class LowPowerArmed : public MissionMode
 {
 public:
-    void dispatch() {}
-    void transition_to() {}
+    void dispatch();
+    void transition_to();
     int id()
     {
         return 13;
@@ -167,8 +166,8 @@ public:
 class NormalInSun : public MissionMode
 {
 public:
-    void dispatch() {}
-    void transition_to() {}
+    void dispatch();
+    void transition_to();
     int id()
     {
         return 14;
@@ -178,8 +177,8 @@ public:
 class TransmitInSun : public MissionMode
 {
 public:
-    void dispatch() {}
-    void transition_to() {}
+    void dispatch();
+    void transition_to();
     int id()
     {
         return 15;
@@ -189,8 +188,8 @@ public:
 class LowPowerInSun : public MissionMode
 {
 public:
-    void dispatch() {}
-    void transition_to() {}
+    void dispatch();
+    void transition_to();
     int id()
     {
         return 16;
@@ -200,8 +199,8 @@ public:
 class VoltageFailureInSun : public MissionMode
 {
 public:
-    void dispatch() {}
-    void transition_to() {}
+    void dispatch();
+    void transition_to();
     int id()
     {
         return 17;
@@ -211,8 +210,8 @@ public:
 class BootCamera : public MissionMode
 {
 public:
-    void dispatch() {}
-    void transition_to() {}
+    void dispatch();
+    void transition_to();
     int id()
     {
         return 18;
@@ -222,8 +221,8 @@ public:
 class MandatoryBurns : public MissionMode
 {
 public:
-    void dispatch() {}
-    void transition_to() {}
+    void dispatch();
+    void transition_to();
     int id()
     {
         return 19;
@@ -233,8 +232,8 @@ public:
 class RegularBurns : public MissionMode
 {
 public:
-    void dispatch() {}
-    void transition_to() {}
+    void dispatch();
+    void transition_to();
     int id()
     {
         return 20;
@@ -244,13 +243,13 @@ public:
 class Photo : public MissionMode
 {
 public:
-    void dispatch() {}
-    void transition_to() {}
+    void dispatch();
+    void transition_to();
     int id()
     {
         return 21;
     }
-};*/
+};
 
 void check_entrance_lp(MissionMode *lp_mode);
 void check_exit_lp(MissionMode *reg_mode);

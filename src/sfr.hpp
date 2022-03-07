@@ -44,6 +44,24 @@ namespace sfr {
         extern MissionMode *aliveSignal;
         extern MissionMode *lowPowerAliveSignal;
         extern MissionMode *detumbleSpin;
+        extern MissionMode *lowPowerDetumbleSpin;
+        extern MissionMode *normal;
+        extern MissionMode *transmit;
+        extern MissionMode *lowPower;
+        extern MissionMode *normalDeployment;
+        extern MissionMode *transmitDeployment;
+        extern MissionMode *lowPowerDeployment;
+        extern MissionMode *normalArmed;
+        extern MissionMode *transmitArmed;
+        extern MissionMode *lowPowerArmed;
+        extern MissionMode *normalInSun;
+        extern MissionMode *transmitInSun;
+        extern MissionMode *lowPowerInSun;
+        extern MissionMode *voltageFailureInSun;
+        extern MissionMode *bootCamera;
+        extern MissionMode *mandatoryBurns;
+        extern MissionMode *regularBurns;
+        extern MissionMode *photo;
 
         extern MissionMode *current_mode;
         extern MissionMode *previous_mode;
@@ -94,7 +112,9 @@ namespace sfr {
         extern uint8_t set_res;
     } // namespace camera
     namespace rockblock {
+        // TODO
         extern int num_failures;
+        extern int max_failures;
         extern bool last_downlink_normal;
         extern int camera_commands[99][constants::rockblock::command_len];
         extern int camera_max_fragments[99];
