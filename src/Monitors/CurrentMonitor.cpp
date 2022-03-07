@@ -18,11 +18,11 @@ void CurrentMonitor::execute()
         sfr::current::solar_current_buffer.pop_back();
     }
     float sum = std::accumulate(sfr::current::solar_current_buffer.begin(), sfr::current::solar_current_buffer.end(), (float)0.0);
-    sfr::current::solar_current_average = sum / sfr::current::solar_current_buffer.size();
+    sfr::current::solar_current_average->set_value(sum / sfr::current::solar_current_buffer.size());
 #ifdef VERBOSE
     Serial.print("Currrent: ");
-    Serial.print(sfr::current::solar_current_average);
+    Serial.print(sfr::current::solar_current_average->get_value());
     Serial.println(" mA");
 #endif
-    sfr::current::in_sun = sfr::current::solar_current_average >= constants::current::in_sun_val;
+    sfr::current::in_sun = sfr::current::solar_current_average->get_value() >= constants::current::in_sun_val;
 }

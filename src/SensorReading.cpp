@@ -1,6 +1,4 @@
 #include "SensorReading.hpp"
-#include "Modes/fault_index_type.enum"
-#include <map>
 
 std::map<fault_index_type, int> map_to_reg = {
     {fault_index_type::mag_x, 1},
@@ -66,11 +64,11 @@ void SensorReading::set_valid()
 {
     this->fault_status = false; // set the fault status to false (no fault)
     if (map_to_reg[this->type] == 1) {
-        sfr::fault::fault_1 &= ~map_to_mask[this->type];
+        faults::fault_1 &= ~map_to_mask[this->type];
     } else if (map_to_reg[this->type] == 1) {
-        sfr::fault::fault_2 &= ~map_to_mask[this->type];
+        faults::fault_2 &= ~map_to_mask[this->type];
     } else {
-        sfr::fault::fault_3 &= ~map_to_mask[this->type];
+        faults::fault_3 &= ~map_to_mask[this->type];
     } // clear the flag in the corresponding fault register
 } // mutator for fault status
 
@@ -78,10 +76,10 @@ void SensorReading::set_invalid()
 {
     this->fault_status = true; // set the fault status to true
     if (map_to_reg[this->type] == 1) {
-        sfr::fault::fault_1 |= map_to_mask[this->type];
+        faults::fault_1 |= map_to_mask[this->type];
     } else if (map_to_reg[this->type] == 1) {
-        sfr::fault::fault_2 |= map_to_mask[this->type];
+        faults::fault_2 |= map_to_mask[this->type];
     } else {
-        sfr::fault::fault_3 |= map_to_mask[this->type];
+        faults::fault_3 |= map_to_mask[this->type];
     } // set the flag in the corresponding fault register
 } // mutator for fault status

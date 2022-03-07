@@ -26,9 +26,9 @@ MainControlLoop::MainControlLoop()
 
 void MainControlLoop::execute()
 {
-    sfr::fault::fault_1 = 0;
-    sfr::fault::fault_2 = 0;
-    sfr::fault::fault_3 = 0;
+    faults::fault_1 = 0;
+    faults::fault_2 = 0;
+    faults::fault_3 = 0;
 
     clock_manager.execute();
 

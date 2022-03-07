@@ -1,6 +1,9 @@
 #ifndef CONSTANTS_HPP_
 #define CONSTANTS_HPP_
 
+#include <cstddef>
+#include <stdint.h>
+
 namespace constants {
     namespace time {
         constexpr unsigned long one_second = 1000;

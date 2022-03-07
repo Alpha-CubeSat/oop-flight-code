@@ -45,7 +45,8 @@
         "thread": "cpp",
         "deque": "cpp",
         "numeric": "cpp",
-        "any": "cpp"
+        "any": "cpp",
+        "map": "cpp"
     },
     "C_Cpp.dimInactiveRegions": false
 }

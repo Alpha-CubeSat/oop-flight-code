@@ -20,14 +20,14 @@ void AliveSignal::transition_to() {}
 void check_entrance_lp(MissionMode *lp_mode)
 {
     // TODO and or check for voltage
-    if (sfr::battery::voltage_average <= sfr::battery::min_battery) {
+    if (!sfr::battery::voltage_average->is_valid() || sfr::battery::voltage_average->get_value() <= sfr::battery::min_battery) {
         sfr::mission::current_mode = lp_mode;
     }
 }
 
 void check_exit_lp(MissionMode *reg_mode)
 {
-    if (sfr::battery::voltage_average >= sfr::battery::acceptable_battery && sfr::fault::check_voltage) {
+    if (sfr::battery::voltage_average->is_valid() && sfr::battery::voltage_average->get_value() >= sfr::battery::acceptable_battery) {
         sfr::mission::current_mode = reg_mode;
     }
 }
