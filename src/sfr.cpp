@@ -34,14 +34,17 @@ namespace sfr {
     namespace mission {
         Boot boot_class;
         AliveSignal aliveSignal_class;
+        LowPowerAliveSignal lowPowerAliveSignal_class;
+        DetumbleSpin detumbleSpin_class;
 
         MissionMode *boot = &boot_class;
         MissionMode *aliveSignal = &aliveSignal_class;
+        MissionMode *lowPowerAliveSignal = &lowPowerAliveSignal_class;
+        MissionMode *detumbleSpin = &detumbleSpin_class;
 
         MissionMode *current_mode = boot;
         MissionMode *previous_mode = boot;
 
-        bool low_power_eligible = true;
         unsigned long boot_start = 0.0;
         unsigned long max_boot_time = constants::time::two_hours;
 

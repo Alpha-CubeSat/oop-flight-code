@@ -10,6 +10,7 @@ void test_valid_initialization()
 
 void test_exit_boot()
 {
+    // after max boot time, transition to aliveSignal
     MissionManager mission_manager(0);
 
     mission_manager.execute();
@@ -20,6 +21,14 @@ void test_exit_boot()
     mission_manager.execute();
     Serial.println(sfr::mission::current_mode->id());
     TEST_ASSERT_EQUAL(sfr::mission::aliveSignal->id(), sfr::mission::current_mode->id());
+}
+
+void test_exit_alive_signal()
+{
+    MissionManager mission_manager(0);
+
+    mission_manager.execute();
+    TEST_ASSERT_EQUAL(sfr::mission::boot->id(), sfr::mission::current_mode->id());
 }
 
 int test_mission_manager()

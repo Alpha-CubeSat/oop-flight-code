@@ -12,7 +12,7 @@ void Boot::transition_to() {}
 
 void AliveSignal::dispatch()
 {
-    // check_entrance_lp(sfr::mission::lowPowerAliveSignal);
+    check_entrance_lp(sfr::mission::lowPowerAliveSignal);
 }
 
 void AliveSignal::transition_to() {}

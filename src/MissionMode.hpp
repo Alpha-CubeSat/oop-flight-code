@@ -32,11 +32,11 @@ public:
     }
 };
 
-/*class LowPowerAliveSignal : public MissionMode
+class LowPowerAliveSignal : public MissionMode
 {
 public:
-    void dispatch();
-    void transition_to();
+    void dispatch() {}
+    void transition_to() {}
     int id()
     {
         return 2;
@@ -54,7 +54,7 @@ public:
     }
 };
 
-class LowPowerDetumbleSpin : public MissionMode
+/*class LowPowerDetumbleSpin : public MissionMode
 {
 public:
     void dispatch() {}
