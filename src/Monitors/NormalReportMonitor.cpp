@@ -66,5 +66,7 @@ void NormalReportMonitor::execute()
         commands_received.pop();
         index++;
     } // Writes opcodes to normal report; two indexes constitute one opcode since each opcode is 2-byte
+    std::queue<uint8_t> empty;
+    std::swap(commands_received, empty); // Clear the queue after each normal report is generated
     sfr::rockblock::report[index] = constants::rockblock::end_of_downlink_flag;
 }
