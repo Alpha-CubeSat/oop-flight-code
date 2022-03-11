@@ -477,12 +477,12 @@ namespace constants {
         static constexpr unsigned int imu_monitor_offset = fault_monitor_offset + 30;
         static constexpr unsigned int normal_report_monitor_offset = imu_monitor_offset + 9000;
         static constexpr unsigned int photoresistor_monitor_offset = normal_report_monitor_offset + 30;
-        static constexpr unsigned int rockblock_report_monitor_offset = camera_control_task_offset + 230000;
         static constexpr unsigned int temperature_monitor_offset = photoresistor_monitor_offset + 30;
 
         static constexpr unsigned int acs_control_task_offset = temperature_monitor_offset + 40;
         static constexpr unsigned int burnwire_control_task_offset = acs_control_task_offset + 0; // to be determined
         static constexpr unsigned int camera_control_task_offset = burnwire_control_task_offset + 20;
+        static constexpr unsigned int rockblock_report_monitor_offset = camera_control_task_offset + 230000;
         static constexpr unsigned int rockblock_control_task_offset = camera_control_task_offset + 230000;
         static constexpr unsigned int temperature_control_task_offset = rockblock_control_task_offset + 1000;
         static constexpr unsigned int mission_manager_offset = rockblock_control_task_offset + 20;
