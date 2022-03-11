@@ -7,7 +7,7 @@
 class NormalReportMonitor : public TimedControlTask<void>
 {
 public:
-    static std::queue<uint8_t> commands_received;
+    static std::queue<uint8_t> commands_received; // Queue to hold commands received since last report
 
     NormalReportMonitor(unsigned int offset);
     void execute();
