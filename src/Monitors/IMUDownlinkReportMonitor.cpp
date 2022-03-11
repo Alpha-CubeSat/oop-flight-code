@@ -35,7 +35,7 @@ void IMUDownlinkReportMonitor::create_imu_downlink_report(int fragment_number)
     }
     filename += String(fragment_number) + "_IMUDlink" + ".txt";
 
-    sfr::rockblock::imu_downlink_report[0] = 43; //?????????
+    sfr::rockblock::imu_downlink_report[0] = 88; //?????????
 
     // get each byte of fragment number
     std::vector<unsigned char> fragment(constants::imu::bytes_allocated_fragment);
