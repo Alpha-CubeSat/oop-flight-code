@@ -38,7 +38,6 @@ void IMUDownlink::execute()
         sfr::imu::gyro_x_buffer.push_front(sfr::imu::gyro_x);
         sfr::imu::gyro_y_buffer.push_front(sfr::imu::gyro_y);
         sfr::imu::gyro_z_buffer.push_front(sfr::imu::gyro_z);
-        sfr::imu::imu_dlink_time_buffer.push_front(millis());
 
         // Remove old readings
 
@@ -53,9 +52,6 @@ void IMUDownlink::execute()
         }
         if (sfr::imu::gyro_z_buffer.size() > sfr::imu::imu_downlink_buffer_max_size) {
             sfr::imu::gyro_z_buffer.pop_back();
-        }
-        if (sfr::imu::imu_dlink_time_buffer.size() > sfr::imu::imu_downlink_buffer_max_size) {
-            sfr::imu::imu_dlink_time_buffer.pop_back();
         }
     }
 }

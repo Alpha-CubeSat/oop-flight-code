@@ -35,11 +35,6 @@ void IMUDownlinkReportMonitor::execute()
         // test_only uint8_t gyro_z = map(sfr::imu::gyro_z_average->get_value(), constants::imu::min_gyro_z, constants::imu::max_gyro_z, 0, 255);
         sfr::imu::imu_dlink_gyro_z_buffer.pop_back();
         sfr::imu::report[idx++] = gyro_z;
-
-        // get the time stamp value from buffer and write to the imu downlink report
-        uint8_t time_value = (uint8_t)sfr::imu::imu_dlink_time_buffer.back();
-        sfr::imu::imu_dlink_time_buffer.pop_back();
-        sfr::imu::report[idx++] = time_value;
     }
     sfr::imu::imu_dlink_report_ready = true;
 }
