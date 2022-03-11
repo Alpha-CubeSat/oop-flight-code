@@ -12,13 +12,12 @@ void IMUDownlinkReportMonitor::execute()
 
     // Get a requested fragment
     if (sfr::imu::report_downlinked == true && sfr::imu::fragment_requested == true) {
-        create_imu_downlink_report(sfr::imu::fragment_number_requested);
-        sfr::imu::fragment_requested = false;
 #ifdef VERBOSE
         Serial.println("Report monitor started");
         Serial.println("Current fragment: " + String(sfr::imu::fragment_number));
 #endif
-        create_imu_downlink_report(sfr::imu::fragment_number);
+        create_imu_downlink_report(sfr::imu::fragment_number_requested);
+        sfr::imu::fragment_requested = false;
         sfr::imu::fragment_number++;
     }
 
@@ -53,30 +52,29 @@ void IMUDownlinkReportMonitor::create_imu_downlink_report(int fragment_number)
         i = i + 1;
     }
 
-    int report_idx = 1;
     // add actual image content to imu downlink report
     int buffer_size = sfr::imu::imu_dlink_magid_buffer.size();
     for (int idx = 0; idx < buffer_size; ++idx) {
         // get the magid value from buffer and write to the imu downlink report
         uint8_t magid_value = (uint8_t)sfr::imu::imu_dlink_magid_buffer.back();
         sfr::imu::imu_dlink_magid_buffer.pop_back();
-        sfr::rockblock::imu_downlink_report[report_idx++] = magid_value;
+        sfr::rockblock::imu_downlink_report[a++] = magid_value;
 
         // get the gyro values from buffer and write to the imu downlink report
         float gyro_x_value = sfr::imu::imu_dlink_gyro_x_buffer.back();
         uint8_t gyro_x = map(gyro_x_value, constants::imu::min_gyro_x, constants::imu::max_gyro_x, 0, 255);
         sfr::imu::imu_dlink_gyro_x_buffer.pop_back();
-        sfr::rockblock::imu_downlink_report[report_idx++] = gyro_x;
+        sfr::rockblock::imu_downlink_report[a++] = gyro_x;
 
         float gyro_y_value = sfr::imu::imu_dlink_gyro_y_buffer.back();
         uint8_t gyro_y = map(gyro_y_value, constants::imu::min_gyro_y, constants::imu::max_gyro_y, 0, 255);
         sfr::imu::imu_dlink_gyro_y_buffer.pop_back();
-        sfr::rockblock::imu_downlink_report[report_idx++] = gyro_y;
+        sfr::rockblock::imu_downlink_report[a++] = gyro_y;
 
         float gyro_z_value = sfr::imu::imu_dlink_gyro_z_buffer.back();
         uint8_t gyro_z = map(gyro_z_value, constants::imu::min_gyro_z, constants::imu::max_gyro_z, 0, 255);
         sfr::imu::imu_dlink_gyro_z_buffer.pop_back();
-        sfr::rockblock::imu_downlink_report[report_idx++] = gyro_z;
+        sfr::rockblock::imu_downlink_report[a++] = gyro_z;
     }
     sfr::imu::imu_dlink_report_ready = true;
     sfr::imu::report_downlinked = false;
