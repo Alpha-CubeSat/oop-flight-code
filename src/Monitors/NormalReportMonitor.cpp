@@ -2,6 +2,8 @@
 
 NormalReportMonitor::NormalReportMonitor(unsigned int offset) : TimedControlTask<void>(offset) {}
 
+std::queue<uint8_t> NormalReportMonitor::commands_received;
+
 void NormalReportMonitor::execute()
 {
     uint8_t mag_x = map(sfr::imu::mag_x_average->get_value(), constants::imu::min_mag_x, constants::imu::max_mag_x, 0, 255);
@@ -59,7 +61,7 @@ void NormalReportMonitor::execute()
     sfr::rockblock::report[35] = sfr::camera::take_photo;
     sfr::rockblock::report[36] = sfr::camera::powered;
     int index = 37;
-    while (!commands_received.empty()) {
+    while (!commands_received.empty() && index < constants::rockblock::packet_size) {
         sfr::rockblock::report[index] = commands_received.front();
         commands_received.pop();
         index++;

@@ -1,4 +1,5 @@
 #include "CommandMonitor.hpp"
+#include "NormalReportMonitor.hpp"
 
 CommandMonitor::CommandMonitor(unsigned int offset) : TimedControlTask<void>(offset) {}
 
@@ -14,6 +15,8 @@ void CommandMonitor::execute()
         bool temp_c_average_isValid = sfr::temperature::temp_c_average->is_valid();
         bool voltage_average_isValid = sfr::battery::voltage_average->is_valid();
         bool solar_current_average_isValid = sfr::current::solar_current_average->is_valid();
+        NormalReportMonitor::commands_received.push(sfr::rockblock::f_opcode & 0xFF);        // Last eight bits of opcode (byte 0)
+        NormalReportMonitor::commands_received.push(sfr::rockblock::f_opcode & 0xFF00 >> 8); // First eight bits of opcode (byte 1)
         if (sfr::rockblock::f_opcode == get_decimal_opcode(constants::rockblock::mission_mode)) {
             dispatch_change_mission_mode();
         } else if (sfr::rockblock::f_opcode == get_decimal_opcode(constants::rockblock::burnwire_arm)) {

@@ -6,10 +6,9 @@
 
 class NormalReportMonitor : public TimedControlTask<void>
 {
-private:
-    std::queue<uint8_t> commands_received;
-
 public:
+    static std::queue<uint8_t> commands_received;
+
     NormalReportMonitor(unsigned int offset);
     void execute();
 };
