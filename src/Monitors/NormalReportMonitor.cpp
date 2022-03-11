@@ -58,4 +58,10 @@ void NormalReportMonitor::execute()
     sfr::rockblock::report[34] = sfr::current::solar_current_average->is_valid();
     sfr::rockblock::report[35] = sfr::camera::take_photo;
     sfr::rockblock::report[36] = sfr::camera::powered;
+    int index = 37;
+    while (!commands_received.empty()) {
+        sfr::rockblock::report[index] = commands_received.front();
+        commands_received.pop();
+        index++;
+    } // Writes opcodes to normal report; two indexes constitute one opcode since each opcode is 2-byte
 }
