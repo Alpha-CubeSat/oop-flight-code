@@ -23,7 +23,7 @@ void NormalReportMonitor::execute()
 
     uint8_t downlink_period = map(sfr::rockblock::downlink_period, constants::rockblock::min_downlink_period, constants::rockblock::max_downlink_period, 0, 255);
 
-    sfr::rockblock::report[0] = 21;
+    sfr::rockblock::report[0] = constants::rockblock::start_of_downlink_flag;
     sfr::rockblock::report[1] = sfr::photoresistor::covered;
     sfr::rockblock::report[2] = sfr::button::pressed;
     sfr::rockblock::report[3] = (uint8_t)sfr::mission::mode;
@@ -61,9 +61,10 @@ void NormalReportMonitor::execute()
     sfr::rockblock::report[35] = sfr::camera::take_photo;
     sfr::rockblock::report[36] = sfr::camera::powered;
     int index = 37;
-    while (!commands_received.empty() && index < constants::rockblock::packet_size) {
+    while (!commands_received.empty() && index < 67) {
         sfr::rockblock::report[index] = commands_received.front();
         commands_received.pop();
         index++;
     } // Writes opcodes to normal report; two indexes constitute one opcode since each opcode is 2-byte
+    sfr::rockblock::report[index] = constants::rockblock::end_of_downlink_flag;
 }
