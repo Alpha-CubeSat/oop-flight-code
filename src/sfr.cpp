@@ -93,10 +93,13 @@ namespace sfr {
         char buffer[constants::rockblock::buffer_size] = {0};
         uint8_t report[constants::rockblock::packet_size] = {0};
         uint8_t camera_report[constants::rockblock::packet_size] = {0};
+        uint8_t imu_downlink_report[constants::rockblock::packet_size] = {0};
         int commas[constants::rockblock::num_commas] = {0};
         uint8_t opcode[2] = {0};
         uint8_t arg_1[4] = {0};
         uint8_t arg_2[4] = {0};
+
+        int imu_max_fragments = 10;
 #ifndef SIMULATOR
         HardwareSerial serial = Serial1;
 #else
@@ -147,11 +150,18 @@ namespace sfr {
         SensorReading *acc_x_average = new SensorReading(fault_index_type::acc_x, 0.0, false);
         SensorReading *acc_y_average = new SensorReading(fault_index_type::acc_y, 0.0, false);
 
-        bool imu_dlink_report_ready = false;
         imu_downlink_type imu_dlink_magid = imu_downlink_type::GAUSS_8;
         const int imu_downlink_buffer_max_size = constants::sensor::collect; // not determined yet
         const int imu_downlink_report_size = constants::sensor::collect * 5;
-        uint8_t report[imu_downlink_report_size];
+        uint8_t imu_downlink_report[imu_downlink_report_size];
+
+        int fragment_number = 0;
+        int fragment_number_requested = 1;
+        bool fragment_requested = false;
+        int fragments_written = 0;
+        bool imu_dlink_report_ready = false;
+        bool report_downlinked = true;
+        char filename[15];
 
         const int mag_8GAUSS_min = 4;
         const int mag_12GAUSS_min = 8;

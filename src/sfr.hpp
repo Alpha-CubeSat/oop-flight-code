@@ -99,10 +99,12 @@ namespace sfr {
         extern char buffer[constants::rockblock::buffer_size];
         extern uint8_t report[constants::rockblock::packet_size];
         extern uint8_t camera_report[constants::rockblock::packet_size];
+        extern uint8_t imu_downlink_report[constants::rockblock::packet_size];
         extern int commas[constants::rockblock::num_commas];
         extern uint8_t opcode[2];
         extern uint8_t arg_1[4];
         extern uint8_t arg_2[4];
+        extern int imu_max_fragments;
 #ifndef SIMULATOR
         extern HardwareSerial serial;
 #else
@@ -151,11 +153,17 @@ namespace sfr {
         extern SensorReading *acc_x_average;
         extern SensorReading *acc_y_average;
 
-        extern bool imu_dlink_report_ready;
         extern imu_downlink_type imu_dlink_magid;
         extern const int imu_downlink_buffer_max_size;
-        extern const int imu_downlink_report_size;
-        extern uint8_t report[];
+        // extern const int imu_downlink_report_size;
+
+        extern int fragment_number;
+        extern int fragment_number_requested;
+        extern bool fragment_requested;
+        extern int fragments_written;
+        extern bool imu_dlink_report_ready;
+        extern bool report_downlinked;
+        extern char filename[15];
 
         extern const int mag_8GAUSS_min;
         extern const int mag_12GAUSS_min;
