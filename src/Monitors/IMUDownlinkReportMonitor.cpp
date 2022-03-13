@@ -82,7 +82,7 @@ void IMUDownlinkReportMonitor::create_imu_downlink_report(int fragment_number)
         }
         // end marker
         if (idx == buffer_size - 1) {
-            sfr::rockblock::imu_downlink_report[a] = 'FFD9';
+            sfr::rockblock::imu_downlink_report[a] = 'FFFF';
         }
     }
     sfr::imu::imu_dlink_report_ready = true;
