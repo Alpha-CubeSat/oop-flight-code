@@ -139,7 +139,6 @@ namespace sfr {
         std::deque<float> imu_dlink_gyro_x_buffer;
         std::deque<float> imu_dlink_gyro_y_buffer;
         std::deque<float> imu_dlink_gyro_z_buffer;
-        std::deque<imu_downlink_type> imu_dlink_magid_buffer;
 
         SensorReading *mag_x_average = new SensorReading(fault_index_type::mag_x, 0.0, false);
         SensorReading *mag_y_average = new SensorReading(fault_index_type::mag_y, 0.0, false);

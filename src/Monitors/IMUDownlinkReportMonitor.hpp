@@ -3,6 +3,7 @@
 
 #include "IMUDownlink.hpp"
 #include "sfr.hpp"
+#include <cassert>
 #include <vector>
 
 class IMUDownlinkReportMonitor : public TimedControlTask<void>

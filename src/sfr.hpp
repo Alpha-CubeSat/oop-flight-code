@@ -141,7 +141,6 @@ namespace sfr {
         extern std::deque<float> imu_dlink_gyro_x_buffer;
         extern std::deque<float> imu_dlink_gyro_y_buffer;
         extern std::deque<float> imu_dlink_gyro_z_buffer;
-        extern std::deque<imu_downlink_type> imu_dlink_magid_buffer;
 
         // extern float mag_x_average;
         extern SensorReading *mag_x_average;
