@@ -177,6 +177,9 @@ namespace sfr {
         float current1 = 0;
         float current2 = 0;
         float current3 = 0;
+        float sfr1 = 0;
+        float sfr2 = 0;
+        float sfr3 = 0;
         simple_acs_type mag = simple_acs_type::x;
         unsigned long max_no_communication = 0;
     } // namespace acs
