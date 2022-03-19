@@ -61,9 +61,11 @@ void NormalReportMonitor::execute()
     sfr::rockblock::report.push_back(sfr::current::solar_current_average->is_valid());
     sfr::rockblock::report.push_back(sfr::camera::take_photo);
     sfr::rockblock::report.push_back(sfr::camera::powered);
-    while (!commands_received.empty() && sfr::rockblock::report.size() < 68) {
+    int i = 0;
+    while (!commands_received.empty() && i < 30) {
         sfr::rockblock::report.push_back(commands_received.front());
         commands_received.pop();
+        ++i;
     } // Writes opcodes to normal report; two indices constitute one opcode since each opcode is 2-byte
     std::queue<uint8_t> empty;
     std::swap(commands_received, empty); // Clear the queue after each normal report is generated
