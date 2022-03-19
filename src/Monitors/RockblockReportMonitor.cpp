@@ -26,12 +26,8 @@ void RockblockReportMonitor::execute()
         break;
 
     case report_type::imu_report:
-        for (int i = 0; i < constants::imu::downlink_report_size; i++) {
+        for (int i = 0; i < constants::rockblock::packet_size; i++) {
             sfr::rockblock::downlink_report[i] = sfr::rockblock::imu_report[i];
-        }
-
-        for (int i = constants::imu::downlink_report_size; i < constants::rockblock::packet_size; i++) {
-            sfr::rockblock::downlink_report[i] = 0;
         }
         break;
     }
