@@ -7,10 +7,16 @@ IMUDownlinkReportMonitor::IMUDownlinkReportMonitor(unsigned int offset) : TimedC
 
 void IMUDownlinkReportMonitor::execute()
 {
+    time_t start, end;
+
+    time(&start);
+
+    // Calculating total time taken by the program.
+    double time_taken = double(end - start);
     IMUDownlink imu_dlink = IMUDownlink(offset_copy);
     imu_dlink.execute();
 
-        // Get a requested fragment
+    // Get a requested fragment
     if (sfr::imu::report_downlinked == true && sfr::imu::fragment_requested == true) {
 #ifdef VERBOSE
         Serial.println("Report monitor started");
@@ -23,6 +29,12 @@ void IMUDownlinkReportMonitor::execute()
     if (sfr::imu::fragment_number == sfr::rockblock::imu_max_fragments) {
         sfr::imu::imu_dlink_report_ready = false;
         sfr::imu::fragment_number = 0;
+    }
+
+    time(&end);
+    double imu_downlink_time_taken = double(end - start);
+    if (imu_downlink_time_taken < constants::rockblock::min_downlink_period || imu_downlink_time_taken > constants::rockblock::max_downlink_period) {
+        Serial.printf("time_limit_exceeded");
     }
 }
 
