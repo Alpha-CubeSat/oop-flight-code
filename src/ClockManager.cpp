@@ -10,7 +10,6 @@ ClockManager::ClockManager(const unsigned int _control_cycle_size) : TimedContro
 
 void ClockManager::execute()
 {
-    Serial.println("executing");
     unsigned int dt = 0;
     /*if (has_executed) {
         sys_time_t earliest_start_time = TimedControlTaskBase::control_cycle_start_time + control_cycle_size;
