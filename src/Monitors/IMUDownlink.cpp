@@ -20,7 +20,6 @@ void IMUDownlink::execute()
             sfr::imu::imu_dlink_magid = imu_downlink_type::GAUSS_8;
         }
         if (mag.magnetic.x > 8 || mag.magnetic.y > 8 || mag.magnetic.z > 8) {
-            imu_downlink_type::GAUSS_8;
             sfr::imu::imu_dlink_magid = imu_downlink_type::GAUSS_12;
         }
         if (mag.magnetic.x > 12 || mag.magnetic.y > 12 || mag.magnetic.z > 12) {
@@ -34,20 +33,20 @@ void IMUDownlink::execute()
 
         // Add reading to imu downlink buffer
 
-        sfr::imu::gyro_x_buffer.push_front(sfr::imu::gyro_x);
-        sfr::imu::gyro_y_buffer.push_front(sfr::imu::gyro_y);
-        sfr::imu::gyro_z_buffer.push_front(sfr::imu::gyro_z);
+        sfr::imu::imu_dlink_gyro_x_buffer.push_front(sfr::imu::gyro_x);
+        sfr::imu::imu_dlink_gyro_y_buffer.push_front(sfr::imu::gyro_y);
+        sfr::imu::imu_dlink_gyro_z_buffer.push_front(sfr::imu::gyro_z);
 
         // Remove old readings
 
-        if (sfr::imu::gyro_x_buffer.size() > sfr::imu::imu_downlink_buffer_max_size) {
-            sfr::imu::gyro_x_buffer.pop_back();
+        while (sfr::imu::imu_dlink_gyro_x_buffer.size() > sfr::imu::imu_downlink_buffer_max_size) {
+            sfr::imu::imu_dlink_gyro_x_buffer.pop_back();
         }
-        if (sfr::imu::gyro_y_buffer.size() > sfr::imu::imu_downlink_buffer_max_size) {
-            sfr::imu::gyro_y_buffer.pop_back();
+        while (sfr::imu::imu_dlink_gyro_y_buffer.size() > sfr::imu::imu_downlink_buffer_max_size) {
+            sfr::imu::imu_dlink_gyro_y_buffer.pop_back();
         }
-        if (sfr::imu::gyro_z_buffer.size() > sfr::imu::imu_downlink_buffer_max_size) {
-            sfr::imu::gyro_z_buffer.pop_back();
+        while (sfr::imu::imu_dlink_gyro_z_buffer.size() > sfr::imu::imu_downlink_buffer_max_size) {
+            sfr::imu::imu_dlink_gyro_z_buffer.pop_back();
         }
     }
 }

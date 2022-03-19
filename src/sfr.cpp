@@ -155,7 +155,6 @@ namespace sfr {
         uint8_t imu_downlink_report[imu_downlink_report_size];
 
         int fragment_number = 0;
-        int fragment_number_requested = 1;
         bool fragment_requested = false;
         int fragments_written = 0;
         bool imu_dlink_report_ready = false;

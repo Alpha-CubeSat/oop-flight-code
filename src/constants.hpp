@@ -454,7 +454,7 @@ namespace constants {
         constexpr float min_gyro_z = 0.0;
         constexpr float max_gyro_z = 10;
 
-        constexpr int bytes_allocated_fragment = 4;
+        constexpr int bytes_allocated_fragment = 1;
         constexpr int bytes_allocated_serial_opcode = 2;
 
         constexpr int CSAG = 21;
@@ -470,7 +470,7 @@ namespace constants {
 
         // number being added is the time length of the previous function
         // battery monitor takes max 60 us, so button monitor will start 60us after
-        static constexpr unsigned int acs_monitor_offset = 0;                          // time starts at 0
+        static constexpr unsigned int acs_monitor_offset = 0;     // time starts at 0
         static constexpr unsigned int battery_monitor_offset = 0; // to be determined
         static constexpr unsigned int button_monitor_offset = 0;
         static constexpr unsigned int camera_report_monitor_offset = 0;
@@ -483,7 +483,7 @@ namespace constants {
         static constexpr unsigned int temperature_monitor_offset = 0;
 
         static constexpr unsigned int acs_control_task_offset = 0;
-        static constexpr unsigned int burnwire_control_task_offset = 0; 
+        static constexpr unsigned int burnwire_control_task_offset = 0;
         static constexpr unsigned int camera_control_task_offset = 0;
         static constexpr unsigned int rockblock_control_task_offset = 0;
         static constexpr unsigned int temperature_control_task_offset = 0;
