@@ -23,6 +23,7 @@ void NormalReportMonitor::execute()
 
     uint8_t downlink_period = map(sfr::rockblock::downlink_period, constants::rockblock::min_downlink_period, constants::rockblock::max_downlink_period, 0, 255);
 
+    sfr::rockblock::report.clear();
     sfr::rockblock::report.push_back(constants::rockblock::start_of_normal_downlink_flag);
     sfr::rockblock::report.push_back(sfr::photoresistor::covered);
     sfr::rockblock::report.push_back(sfr::button::pressed);
