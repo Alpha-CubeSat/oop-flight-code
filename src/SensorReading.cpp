@@ -52,7 +52,7 @@ float SensorReading::get_value()
 
 bool SensorReading::is_valid()
 {
-    return fault_status;
+    return !fault_status;
 } // accesser for fault
 
 void SensorReading::set_value(float x)
