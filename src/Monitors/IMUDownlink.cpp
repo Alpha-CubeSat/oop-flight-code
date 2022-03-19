@@ -42,10 +42,10 @@ void IMUDownlink::execute()
         if (sfr::imu::gyro_x_buffer.size() > sfr::imu::imu_downlink_buffer_max_size) {
             sfr::imu::gyro_x_buffer.pop_back();
         }
-        if (sfr::imu::gyro_y_buffer.size() > sfr::imu::imu_downlink_buffer_max_size) {
+        if (sfr::imu::gyro_y_buffer.size() > constants::imu::downlink_buffer_max_size) {
             sfr::imu::gyro_y_buffer.pop_back();
         }
-        if (sfr::imu::gyro_z_buffer.size() > sfr::imu::imu_downlink_buffer_max_size) {
+        if (sfr::imu::gyro_z_buffer.size() > constants::imu::downlink_buffer_max_size) {
             sfr::imu::gyro_z_buffer.pop_back();
         }
     }
