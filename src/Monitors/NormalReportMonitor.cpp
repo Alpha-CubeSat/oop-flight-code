@@ -23,7 +23,7 @@ void NormalReportMonitor::execute()
 
     uint8_t downlink_period = map(sfr::rockblock::downlink_period, constants::rockblock::min_downlink_period, constants::rockblock::max_downlink_period, 0, 255);
 
-    sfr::rockblock::report[0] = constants::rockblock::start_of_downlink_flag;
+    sfr::rockblock::report[0] = constants::rockblock::start_of_normal_downlink_flag;
     sfr::rockblock::report[1] = sfr::photoresistor::covered;
     sfr::rockblock::report[2] = sfr::button::pressed;
     sfr::rockblock::report[3] = (uint8_t)sfr::mission::mode;
@@ -68,5 +68,5 @@ void NormalReportMonitor::execute()
     } // Writes opcodes to normal report; two indices constitute one opcode since each opcode is 2-byte
     std::queue<uint8_t> empty;
     std::swap(commands_received, empty); // Clear the queue after each normal report is generated
-    sfr::rockblock::report[index] = constants::rockblock::end_of_downlink_flag;
+    sfr::rockblock::report[index] = constants::rockblock::end_of_normal_downlink_flag;
 }
