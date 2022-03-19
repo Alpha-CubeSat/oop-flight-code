@@ -22,7 +22,6 @@ void setup() {
     delay(5000);
     Serial.begin(9600);
     delay(5000);
-    Serial.println("Hello");
     test_pio_test();
 }
 
