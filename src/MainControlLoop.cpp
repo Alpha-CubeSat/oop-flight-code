@@ -10,6 +10,7 @@ MainControlLoop::MainControlLoop()
       command_monitor(constants::timecontrol::command_monitor_offset),
       current_monitor(constants::timecontrol::current_monitor_offset),
       fault_monitor(constants::timecontrol::fault_monitor_offset),
+      imu_monitor(constants::timecontrol::imu_monitor_offset),
       normal_report_monitor(constants::timecontrol::normal_report_monitor_offset),
       photoresistor_monitor(constants::timecontrol::photoresistor_monitor_offset),
       rockblock_report_monitor(constants::timecontrol::rockblock_report_monitor_offset),
