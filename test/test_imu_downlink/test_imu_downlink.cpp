@@ -102,15 +102,15 @@ void test_IMUDownlink_report_execute()
 
     TEST_ASSERT_EQUAL(false, sfr::imu::fragment_requested);
     TEST_ASSERT_EQUAL(8, sfr::imu::fragment_number);
-    TEST_ASSERT_EQUAL(70, sizeof(sfr::rockblock::imu_downlink_report));
+    TEST_ASSERT_EQUAL(70, sizeof(sfr::rockblock::imu_report));
     TEST_ASSERT_EQUAL(true, sfr::imu::imu_dlink_report_ready);
     TEST_ASSERT_EQUAL(false, sfr::imu::report_downlinked);
-    TEST_ASSERT_EQUAL(88, sfr::rockblock::imu_downlink_report[0]);
-    TEST_ASSERT_EQUAL(7, sfr::rockblock::imu_downlink_report[1]);
+    TEST_ASSERT_EQUAL(88, sfr::rockblock::imu_report[0]);
+    TEST_ASSERT_EQUAL(7, sfr::rockblock::imu_report[1]);
     for (int i = 2; i < 2 + sfr::imu::imu_dlink_gyro_x_buffer.size() * 3; i += 3) {
-        TEST_ASSERT_EQUAL(gyro_x, sfr::rockblock::imu_downlink_report[i]);
-        TEST_ASSERT_EQUAL(gyro_y, sfr::rockblock::imu_downlink_report[i + 1]);
-        TEST_ASSERT_EQUAL(gyro_z, sfr::rockblock::imu_downlink_report[i + 2]);
+        TEST_ASSERT_EQUAL(gyro_x, sfr::rockblock::imu_report[i]);
+        TEST_ASSERT_EQUAL(gyro_y, sfr::rockblock::imu_report[i + 1]);
+        TEST_ASSERT_EQUAL(gyro_z, sfr::rockblock::imu_report[i + 2]);
     }
 
     // test when fragment number has exceeded the limit
@@ -122,15 +122,15 @@ void test_IMUDownlink_report_execute()
 
     TEST_ASSERT_EQUAL(false, sfr::imu::fragment_requested);
     TEST_ASSERT_EQUAL(0, sfr::imu::fragment_number);
-    TEST_ASSERT_EQUAL(70, sizeof(sfr::rockblock::imu_downlink_report));
+    TEST_ASSERT_EQUAL(70, sizeof(sfr::rockblock::imu_report));
     TEST_ASSERT_EQUAL(false, sfr::imu::imu_dlink_report_ready);
     TEST_ASSERT_EQUAL(false, sfr::imu::report_downlinked);
-    TEST_ASSERT_EQUAL(88, sfr::rockblock::imu_downlink_report[0]);
-    TEST_ASSERT_EQUAL(sfr::rockblock::imu_max_fragments - 1, sfr::rockblock::imu_downlink_report[1]);
+    TEST_ASSERT_EQUAL(88, sfr::rockblock::imu_report[0]);
+    TEST_ASSERT_EQUAL(sfr::rockblock::imu_max_fragments - 1, sfr::rockblock::imu_report[1]);
     for (int i = 2; i < 2 + sfr::imu::imu_dlink_gyro_x_buffer.size() * 3; i += 3) {
-        TEST_ASSERT_EQUAL(gyro_x, sfr::rockblock::imu_downlink_report[i]);
-        TEST_ASSERT_EQUAL(gyro_y, sfr::rockblock::imu_downlink_report[i + 1]);
-        TEST_ASSERT_EQUAL(gyro_z, sfr::rockblock::imu_downlink_report[i + 2]);
+        TEST_ASSERT_EQUAL(gyro_x, sfr::rockblock::imu_report[i]);
+        TEST_ASSERT_EQUAL(gyro_y, sfr::rockblock::imu_report[i + 1]);
+        TEST_ASSERT_EQUAL(gyro_z, sfr::rockblock::imu_report[i + 2]);
     }
 }
 
