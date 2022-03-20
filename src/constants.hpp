@@ -454,6 +454,9 @@ namespace constants {
         constexpr float min_gyro_z = 0.0;
         constexpr float max_gyro_z = 10;
 
+        constexpr float min_temp;
+        constexpr float max_temp;
+
         constexpr int CSAG = 21;
         constexpr int CSM = 20;
     } // namespace imu

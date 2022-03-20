@@ -12,6 +12,7 @@ enum class fault_index_type : unsigned char
     gyro_z,
     acc_x,
     acc_y,
+    imu_temp,
 
     // FAULT2
     temp_c,

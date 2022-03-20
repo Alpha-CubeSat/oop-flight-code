@@ -76,9 +76,12 @@ void IMUMonitor::capture_imu_values()
     sfr::imu::mag_y = mag.magnetic.y;
     sfr::imu::mag_z = mag.magnetic.z;
 
+
     sfr::imu::gyro_x = gyro.gyro.x;
     sfr::imu::gyro_y = gyro.gyro.y;
     sfr::imu::gyro_z = gyro.gyro.z;
+
+    sfr::imu::temp = imu.temperature;
 
     // Add reading to buffer
 
@@ -89,6 +92,8 @@ void IMUMonitor::capture_imu_values()
     sfr::imu::gyro_x_buffer.push_front(gyro.gyro.x);
     sfr::imu::gyro_y_buffer.push_front(gyro.gyro.y);
     sfr::imu::gyro_z_buffer.push_front(gyro.gyro.z);
+
+    sfr::imu::temp_buffer.push_front(imu.temperature);
 
     // Remove old readings
 
@@ -110,7 +115,9 @@ void IMUMonitor::capture_imu_values()
     if (sfr::imu::gyro_z_buffer.size() > constants::sensor::collect) {
         sfr::imu::gyro_z_buffer.pop_back();
     }
-
+    if (sfr::imu::temp_buffer.size() > constants::sensor::collect) {
+        sfr::imu::temp_buffer.pop_back();
+    }
     // Calculate sums
 
     float mag_x_sum = std::accumulate(sfr::imu::mag_x_buffer.begin(), sfr::imu::mag_x_buffer.end(), 0.0);
@@ -119,6 +126,7 @@ void IMUMonitor::capture_imu_values()
     float gyro_x_sum = std::accumulate(sfr::imu::gyro_x_buffer.begin(), sfr::imu::gyro_x_buffer.end(), 0.0);
     float gyro_y_sum = std::accumulate(sfr::imu::gyro_y_buffer.begin(), sfr::imu::gyro_y_buffer.end(), 0.0);
     float gyro_z_sum = std::accumulate(sfr::imu::gyro_z_buffer.begin(), sfr::imu::gyro_z_buffer.end(), 0.0);
+    float temp_sum = std::accumulate(sfr::imu::temp_buffer.begin(), sfr::imu::temp_buffer.end(), 0.0);
 
     // Calculate averages
 
@@ -129,6 +137,8 @@ void IMUMonitor::capture_imu_values()
     sfr::imu::gyro_x_average->set_value(gyro_x_sum / sfr::imu::gyro_x_buffer.size());
     sfr::imu::gyro_y_average->set_value(gyro_y_sum / sfr::imu::gyro_y_buffer.size());
     sfr::imu::gyro_z_average->set_value(gyro_z_sum / sfr::imu::gyro_z_buffer.size());
+    sfr::imu::temp_average->set_value(temp_sum / sfr::imu::temp_buffer.size());
+
 }
 
 void IMUMonitor::transition_to_normal()
@@ -145,6 +155,7 @@ void IMUMonitor::transition_to_normal()
     sfr::imu::gyro_z_average->set_valid();
     sfr::imu::acc_x_average->set_valid();
     sfr::imu::acc_y_average->set_valid();
+    sfr::imu::temp_average->set_valid();
 }
 
 void IMUMonitor::transition_to_abnormal_init()
@@ -162,6 +173,7 @@ void IMUMonitor::transition_to_abnormal_init()
     sfr::imu::gyro_z_average->set_invalid();
     sfr::imu::acc_x_average->set_invalid();
     sfr::imu::acc_y_average->set_invalid();
+    sfr::imu::temp_average->set_invalid();
 }
 
 void IMUMonitor::transition_to_retry()

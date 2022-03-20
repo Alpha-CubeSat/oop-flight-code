@@ -128,6 +128,7 @@ namespace sfr {
         extern float gyro_x;
         extern float gyro_y;
         extern float gyro_z;
+        extern float temp;
 
         extern std::deque<float> mag_x_buffer;
         extern std::deque<float> mag_y_buffer;
@@ -135,6 +136,7 @@ namespace sfr {
         extern std::deque<float> gyro_x_buffer;
         extern std::deque<float> gyro_y_buffer;
         extern std::deque<float> gyro_z_buffer;
+        extern std::deque<float> temp_buffer;
         // std::deque<std::experimental::any, time_t> imu_dlink_buffer;
         extern std::deque<float> imu_dlink_gyro_x_buffer;
         extern std::deque<float> imu_dlink_gyro_y_buffer;
@@ -151,6 +153,7 @@ namespace sfr {
         extern SensorReading *gyro_z_average;
         extern SensorReading *acc_x_average;
         extern SensorReading *acc_y_average;
+        extern SensorReading *temp_average;
 
         extern bool imu_dlink_report_ready;
         extern imu_downlink_type imu_dlink_magid;

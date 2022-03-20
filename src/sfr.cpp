@@ -122,6 +122,7 @@ namespace sfr {
         float gyro_x = 0.0;
         float gyro_y = 0.0;
         float gyro_z = 0.0;
+        float temp = 0.0;
 
         std::deque<float> mag_x_buffer;
         std::deque<float> mag_y_buffer;
@@ -132,6 +133,7 @@ namespace sfr {
         std::deque<float> acc_x_buffer;
         std::deque<float> acc_y_buffer;
         std::deque<float> acc_z_buffer;
+        std::deque<float> temp_buffer;
         // std::deque<std::experimental::any, time_t> imu_dlink_buffer;
         std::deque<float> imu_dlink_gyro_x_buffer;
         std::deque<float> imu_dlink_gyro_y_buffer;
@@ -147,6 +149,7 @@ namespace sfr {
         SensorReading *gyro_z_average = new SensorReading(fault_index_type::gyro_z, 0.0, false);
         SensorReading *acc_x_average = new SensorReading(fault_index_type::acc_x, 0.0, false);
         SensorReading *acc_y_average = new SensorReading(fault_index_type::acc_y, 0.0, false);
+        SensorReading *temp_average = new SensorReading(fault_index_type::imu_temp, 0.0, false);
 
         bool imu_dlink_report_ready = false;
         imu_downlink_type imu_dlink_magid = imu_downlink_type::GAUSS_8;

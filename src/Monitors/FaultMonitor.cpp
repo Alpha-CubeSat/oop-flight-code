@@ -25,7 +25,10 @@ void FaultMonitor::execute()
         if ((sfr::imu::gyro_z > constants::imu::max_gyro_z || sfr::imu::gyro_z < constants::imu::min_gyro_z) && sfr::imu::gyro_z_average->is_valid()) {
             sfr::imu::gyro_x_average->set_invalid();
         }
-
+        if ((sfr::imu::temp > constants::imu::max_temp || sfr::imu::temp < constants::imu::min_temp) && sfr::imu::temp_average->is_valid()) {
+            sfr::imu::temp_average->set_invalid();
+        }
+        
         // FAULT_2
         if ((sfr::temperature::temp_c > constants::temperature::max_temp_c || sfr::temperature::temp_c < constants::temperature::min_temp_c) && sfr::temperature::temp_c_average->is_valid()) {
             sfr::temperature::temp_c_average->set_invalid();
