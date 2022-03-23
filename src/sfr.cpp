@@ -142,7 +142,7 @@ namespace sfr {
         rockblock_mode_type mode = rockblock_mode_type::send_at;
         bool waiting_message = false;
         char buffer[constants::rockblock::buffer_size] = {0};
-        uint8_t report[constants::rockblock::packet_size] = {0};
+        std::deque<uint8_t> report;
         uint8_t camera_report[constants::rockblock::packet_size] = {0};
         int commas[constants::rockblock::num_commas] = {0};
         uint8_t opcode[2] = {0};
