@@ -27,7 +27,7 @@ void NormalReportMonitor::execute()
     sfr::rockblock::report.push_back(constants::rockblock::start_of_normal_downlink_flag);
     sfr::rockblock::report.push_back(sfr::photoresistor::covered);
     sfr::rockblock::report.push_back(sfr::button::pressed);
-    sfr::rockblock::report.push_back((uint8_t)sfr::mission::current_mode);
+    sfr::rockblock::report.push_back(sfr::mission::current_mode->id());
     sfr::rockblock::report.push_back(sfr::burnwire::fire);
     sfr::rockblock::report.push_back(sfr::burnwire::arm);
     sfr::rockblock::report.push_back(sfr::burnwire::burn_time);
