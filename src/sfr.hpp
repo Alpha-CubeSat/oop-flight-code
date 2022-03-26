@@ -169,6 +169,13 @@ namespace sfr {
         extern const int mag_16GAUSS_min;
         extern const int gyro_500DPS_min;
         extern const int gyro_2000DPS_min;
+
+        extern bool imu_downlink_start_flag;
+        extern int imu_downlink_start_time;
+        extern bool imu_downlink_fragment_start_flag;
+        extern int imu_downlink_fragment_start_time;
+        extern const int imu_downlink_fragment_max_execution_time;
+        extern const int imu_downlink_fragment_min_execution_time;
     } // namespace imu
     namespace temperature {
         extern float temp_c;

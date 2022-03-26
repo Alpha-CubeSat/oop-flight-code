@@ -7,12 +7,7 @@ IMUDownlinkReportMonitor::IMUDownlinkReportMonitor(unsigned int offset) : TimedC
 
 void IMUDownlinkReportMonitor::execute()
 {
-    // time_t start, end;
-
-    // time(&start);
-
     // Calculating total time taken by the program.
-    // double time_taken = double(end - start);
     IMUDownlink imu_dlink = IMUDownlink(offset_copy);
     imu_dlink.execute();
 
@@ -30,17 +25,12 @@ void IMUDownlinkReportMonitor::execute()
         sfr::imu::imu_dlink_report_ready = false;
         sfr::imu::fragment_number = 0;
     }
-
-    // time(&end);
-    // double imu_downlink_time_taken = double(end - start);
-    // if (imu_downlink_time_taken < constants::rockblock::min_downlink_period || imu_downlink_time_taken > constants::rockblock::max_downlink_period) {
-    //     Serial.printf("time_limit_exceeded");
-    // }
 }
 
 void IMUDownlinkReportMonitor::create_imu_downlink_report(int fragment_number)
 {
 
+    sfr::imu::imu_downlink_fragment_start_time = millis();
     sfr::rockblock::imu_downlink_report[0] = 88;
 
     // get each byte of fragment number
@@ -100,4 +90,10 @@ void IMUDownlinkReportMonitor::create_imu_downlink_report(int fragment_number)
     }
     sfr::imu::imu_dlink_report_ready = true;
     sfr::imu::report_downlinked = false;
+    unsigned long imu_downlink_fragment_time_taken = millis() - sfr::imu::imu_downlink_fragment_start_time;
+    if (imu_downlink_fragment_time_taken < sfr::imu::imu_downlink_fragment_min_execution_time) {
+        delay(sfr::imu::imu_downlink_fragment_min_execution_time - imu_downlink_fragment_time_taken);
+    } else if (imu_downlink_fragment_time_taken > sfr::imu::imu_downlink_fragment_max_execution_time) {
+        Serial.printf("execution time exceded");
+    }
 }

@@ -48,5 +48,9 @@ void IMUDownlink::execute()
         while (sfr::imu::imu_dlink_gyro_z_buffer.size() > sfr::imu::imu_downlink_buffer_max_size) {
             sfr::imu::imu_dlink_gyro_z_buffer.pop_back();
         }
+        unsigned long imu_downlink_time_taken = millis() - sfr::imu::imu_downlink_start_time;
+        if (imu_downlink_time_taken < constants::rockblock::min_downlink_period || imu_downlink_time_taken > constants::rockblock::max_downlink_period) {
+            Serial.printf("IMU Downlink time execution time not expected");
+        }
     }
 }

@@ -166,6 +166,14 @@ namespace sfr {
         const int mag_16GAUSS_min = 12;
         const int gyro_500DPS_min = 245;
         const int gyro_2000DPS_min = 500;
+
+        bool imu_downlink_start_flag = false; // when finish take photo mode, imu_downlink_start_flag should be true and start downlinking. when finish 1 chunk of downlinking this flag will be set back to false
+        int imu_downlink_start_time = 0;      // this acts as a global variable, will be reset whenever a completely new imu downlink period start. should be set to mills() in Mission Manager
+        bool imu_downlink_fragment_start_flag = false;
+        int imu_downlink_fragment_start_time = 0;
+        const int imu_downlink_fragment_max_execution_time = 2 * constants::time::one_second;
+        const int imu_downlink_fragment_min_execution_time = constants::time::one_second;
+
     } // namespace imu
     namespace temperature {
         float temp_c = 0.0;
