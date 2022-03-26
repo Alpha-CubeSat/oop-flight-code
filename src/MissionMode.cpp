@@ -12,10 +12,8 @@ void Boot::dispatch()
 void AliveSignal::transition_to() {}
 void AliveSignal::dispatch()
 {
-    Serial.println("running this");
     check_entrance_lp(sfr::mission::lowPowerAliveSignal);
     if (sfr::rockblock::num_failures >= sfr::rockblock::max_failures) {
-        Serial.println("ran this");
         sfr::mission::current_mode = sfr::mission::detumbleSpin;
     }
 }
@@ -24,7 +22,9 @@ void LowPowerAliveSignal::transition_to()
 {
     check_exit_lp(sfr::mission::aliveSignal);
 }
-void LowPowerAliveSignal::dispatch() {}
+void LowPowerAliveSignal::dispatch() {
+    check_exit_lp(sfr::mission::aliveSignal);
+}
 
 void DetumbleSpin::transition_to() {}
 void DetumbleSpin::dispatch()
@@ -40,10 +40,7 @@ void LowPowerDetumbleSpin::dispatch()
 
 void check_entrance_lp(MissionMode *lp_mode)
 {
-    Serial.println(sfr::battery::voltage_average->is_valid());
-    Serial.println(sfr::battery::voltage_average->get_value() <= sfr::battery::min_battery);
     if (!sfr::battery::voltage_average->is_valid() || sfr::battery::voltage_average->get_value() <= sfr::battery::min_battery) {
-        Serial.println("set to low power mode");
         sfr::mission::current_mode = lp_mode;
     }
 }

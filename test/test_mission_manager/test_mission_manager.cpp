@@ -41,6 +41,56 @@ void test_exit_alive_signal()
     sfr::battery::voltage_average->set_invalid();
     mission_manager.execute();
     TEST_ASSERT_EQUAL(sfr::mission::lowPowerAliveSignal->id(), sfr::mission::current_mode->id());
+
+    reset(mission_manager, sfr::mission::aliveSignal);
+
+    // exit if battery voltage is too low
+    sfr::battery::voltage_average->set_value(sfr::battery::min_battery-.1);
+    mission_manager.execute();
+    TEST_ASSERT_EQUAL(sfr::mission::lowPowerAliveSignal->id(), sfr::mission::current_mode->id());
+
+    reset(mission_manager, sfr::mission::aliveSignal);
+
+    // exit if battery voltage is too low and voltage sensor fails
+    sfr::battery::voltage_average->set_invalid();
+    sfr::battery::voltage_average->set_value(sfr::battery::min_battery-.1);
+    mission_manager.execute();
+    TEST_ASSERT_EQUAL(sfr::mission::lowPowerAliveSignal->id(), sfr::mission::current_mode->id());
+}
+
+
+void test_exit_low_power_alive_signal()
+{
+    MissionManager mission_manager(0);
+    reset(mission_manager, sfr::mission::lowPowerAliveSignal);
+
+    // exit if voltage sensor resolves itself
+    sfr::battery::voltage_average->set_valid();
+    mission_manager.execute();
+    TEST_ASSERT_EQUAL(sfr::mission::aliveSignal->id(), sfr::mission::current_mode->id());
+
+    reset(mission_manager, sfr::mission::lowPowerAliveSignal);
+
+    // exit if battery voltage is high enough
+    sfr::battery::voltage_average->set_value(sfr::battery::acceptable_battery+.1);
+    mission_manager.execute();
+    TEST_ASSERT_EQUAL(sfr::mission::aliveSignal->id(), sfr::mission::current_mode->id());
+
+    reset(mission_manager, sfr::mission::lowPowerAliveSignal);
+
+    // don't exit if voltage sensor resolves itself but battery voltage does not
+    sfr::battery::voltage_average->set_valid();
+    sfr::battery::voltage_average->set_value(sfr::battery::min_battery-.1);
+    mission_manager.execute();
+    TEST_ASSERT_EQUAL(sfr::mission::lowPowerAliveSignal->id(), sfr::mission::current_mode->id());
+
+    reset(mission_manager, sfr::mission::lowPowerAliveSignal);
+
+    // don't exit if voltage sensor resolves itself but battery voltage does not
+    sfr::battery::voltage_average->set_invalid();
+    sfr::battery::voltage_average->set_value(sfr::battery::acceptable_battery+.1);
+    mission_manager.execute();
+    TEST_ASSERT_EQUAL(sfr::mission::lowPowerAliveSignal->id(), sfr::mission::current_mode->id());
 }
 
 int test_mission_manager()
@@ -49,6 +99,7 @@ int test_mission_manager()
     RUN_TEST(test_valid_initialization);
     RUN_TEST(test_exit_boot);
     RUN_TEST(test_exit_alive_signal);
+    RUN_TEST(test_exit_low_power_alive_signal);
     return UNITY_END();
 }
 
