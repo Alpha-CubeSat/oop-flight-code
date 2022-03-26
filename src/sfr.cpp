@@ -1,7 +1,17 @@
 #include "sfr.hpp"
 
 namespace sfr {
-
+    namespace detumble {
+        float start_time = 0;
+        float max_time = constants::time::two_hours;
+        //TODO
+        float stable_gyro_z = 3;
+    }
+    namespace aliveSignal{
+        int num_downlink_failures = 0;
+        int max_downlink_failures = 5;
+        bool downlinked = false;
+    }
     namespace pins {
         std::map<int, int> pinMap = {
             {constants::photoresistor::pin, LOW},
@@ -130,8 +140,6 @@ namespace sfr {
         uint8_t set_res = VC0706_160x120;
     } // namespace camera
     namespace rockblock {
-        int num_failures = 0;
-        int max_failures = 5;
         bool last_downlink_normal = false;
         int camera_commands[99][constants::rockblock::command_len] = {};
         int camera_max_fragments[99] = {};
@@ -223,6 +231,7 @@ namespace sfr {
         SensorReading *solar_current_average = new SensorReading(fault_index_type::solar_current, 0.0, false);
         bool in_sun = false;
     } // namespace current
+    
     namespace acs {
         acs_mode_type mode = acs_mode_type::off;
         float current1 = 0;

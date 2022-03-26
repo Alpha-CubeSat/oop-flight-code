@@ -32,7 +32,16 @@
 #include <string>
 
 namespace sfr {
-
+     namespace detumble {
+        extern float start_time; 
+        extern float max_time;
+        extern float stable_gyro_z; 
+    }
+    namespace aliveSignal{
+        extern int num_downlink_failures;
+        extern int max_downlink_failures;
+        extern bool downlinked;
+    }
     namespace pins {
         extern std::map<int, int> pinMap;
     } // namespace pins
@@ -112,9 +121,6 @@ namespace sfr {
         extern uint8_t set_res;
     } // namespace camera
     namespace rockblock {
-        // TODO
-        extern int num_failures;
-        extern int max_failures;
         extern bool last_downlink_normal;
         extern int camera_commands[99][constants::rockblock::command_len];
         extern int camera_max_fragments[99];

@@ -251,7 +251,9 @@ public:
     }
 };
 
-void check_entrance_lp(MissionMode *lp_mode);
-void check_exit_lp(MissionMode *reg_mode);
+void exit_signal_phase(MissionMode *mode);
+void exit_detumble_phase(MissionMode *mode);
+void enter_lp(MissionMode *lp_mode);
+void exit_lp(MissionMode *reg_mode);
 
 #endif
