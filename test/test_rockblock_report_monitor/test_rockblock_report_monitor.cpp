@@ -6,17 +6,21 @@ void test_rockblock_report_monitor_schedule()
     RockblockReportMonitor rockblock_report_monitor(0);
     // Testing for Rockblock Report Type Switching
     sfr::rockblock::mode = rockblock_mode_type::standby;
+
     sfr::imu::imu_dlink_report_ready = true;
     rockblock_report_monitor.execute();
     TEST_ASSERT_EQUAL(report_type::imu_report, sfr::rockblock::downlink_report_type);
     TEST_ASSERT_TRUE(sfr::rockblock::rockblock_ready_status == true);
+
     sfr::imu::imu_dlink_report_ready = false;
     rockblock_report_monitor.execute();
     TEST_ASSERT_EQUAL(report_type::normal_report, sfr::rockblock::downlink_report_type);
     TEST_ASSERT_TRUE(sfr::rockblock::rockblock_ready_status == true);
+
     rockblock_report_monitor.execute();
     TEST_ASSERT_EQUAL(report_type::normal_report, sfr::rockblock::downlink_report_type);
     TEST_ASSERT_TRUE(sfr::rockblock::rockblock_ready_status == true);
+
     sfr::camera::report_ready = true;
     TEST_ASSERT_EQUAL(report_type::normal_report, sfr::rockblock::downlink_report_type);
     TEST_ASSERT_TRUE(sfr::rockblock::rockblock_ready_status == true);
@@ -29,6 +33,15 @@ void test_rockblock_report_monitor_schedule()
     rockblock_report_monitor.execute();
     for (int i = 0; i < constants::rockblock::packet_size; i++) {
         TEST_ASSERT_EQUAL(sfr::rockblock::downlink_report[i], sfr::rockblock::imu_report[i]);
+    }
+
+    for (int i = 0; i < constants::rockblock::packet_size; i++) {
+        sfr::rockblock::normal_report[i] = 1;
+    }
+    sfr::imu::imu_dlink_report_ready = false;
+    rockblock_report_monitor.execute();
+    for (int i = 0; i < constants::rockblock::packet_size; i++) {
+        TEST_ASSERT_EQUAL(sfr::rockblock::downlink_report[i], sfr::rockblock::normal_report[i]);
     }
 }
 

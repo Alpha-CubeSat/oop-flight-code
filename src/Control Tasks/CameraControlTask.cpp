@@ -116,8 +116,8 @@ void CameraControlTask::camera_init()
             Pins::setPinState(constants::camera::power_on_pin, HIGH);
             sfr::camera::start_progress++;
             break;
-        case 1:                                           // step 1 - call begin method
-            if (millis() - sfr::camera::step_time >= sfr::camera::begin_delay) //need to determine this delay
+        case 1:                                                                // step 1 - call begin method
+            if (millis() - sfr::camera::step_time >= sfr::camera::begin_delay) // need to determine this delay
             {
                 if (adaCam.begin()) {
                     Serial.println("powered on camera");
