@@ -60,8 +60,12 @@ namespace constants {
         constexpr size_t max_conseq_read = 3;
 
         constexpr int num_initial_downlinks = 2;
-        constexpr uint8_t start_of_normal_downlink_flag = 254;
-        constexpr uint8_t end_of_normal_downlink_flag = 255;
+        constexpr uint8_t start_of_normal_downlink_flag = 253;
+        constexpr uint8_t end_of_normal_downlink_flag1 = 254;
+        constexpr uint8_t end_of_normal_downlink_flag2 = 255;
+
+        constexpr uint8_t end_of_camera_downlink_flag1 = 251;
+        constexpr uint8_t end_of_camera_downlink_flag2 = 252;
 
         constexpr uint8_t mission_mode[opcode_len] = {0x00, 0x00};
         constexpr uint8_t burnwire_arm[opcode_len] = {0x01, 0x00};
