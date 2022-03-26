@@ -101,6 +101,15 @@ void RockblockControlTask::check_timeout()
 void RockblockControlTask::dispatch_standby()
 {
     sfr::mission::low_power_eligible = true;
+
+#ifdef VERBOSE
+    if (sfr::rockblock::rockblock_ready_status) {
+        Serial.print("Rockblock Ready to Downlink\n");
+    } else {
+        Serial.print("Rockblock Not Ready to Downlink\n");
+    }
+#endif
+
     if (sfr::rockblock::rockblock_ready_status || sfr::rockblock::waiting_message) {
         sfr::mission::low_power_eligible = false;
         transition_to(rockblock_mode_type::send_at);
@@ -187,6 +196,19 @@ void RockblockControlTask::dispatch_await_message_length()
 void RockblockControlTask::dispatch_send_message()
 {
     uint16_t checksum = 0;
+#ifdef VERBOSE
+    switch (sfr::rockblock::downlink_report_type) {
+    case report_type::camera_report:
+        Serial.print("Camera Report Downlinking\n");
+        break;
+    case report_type::imu_report:
+        Serial.print("IMU Report Downlinking\n");
+        break;
+    case report_type::normal_report:
+        Serial.print("Normal Report Downlinking\n");
+        break;
+    }
+#endif
 #ifdef VERBOSE
     Serial.print("SENT: ");
 #endif
