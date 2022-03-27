@@ -124,7 +124,7 @@ Constants contains values that will never be changed. This prevents "magic numbe
 
 | Index              | Data                    | Min (if applicable) | Max (if applicable) |
 | ------------------ | ----------------------- | ------------------- | ------------------- |
-| 0                  | FD (253 in decimal)     | N/A                 | N/A                 |
+| 0                  | 253 (normel report flag)| N/A                 | N/A                 |
 | 1                  | photoresistor covered   |                     |                     |
 | 2                  | button pressed          |                     |                     |
 | 3                  | mission mode            |                     |                     |
@@ -162,8 +162,8 @@ Constants contains values that will never be changed. This prevents "magic numbe
 | 35                 | take photo              |                     |                     |
 | 36                 | camera powered          |                     |                     |
 | ...                | opcodes of received commands|                     |                     |
-| report.size() - 2  | FE (254 in decimal)     |                     |                     |
-| report.size() - 2  | FF (255 in decimal)     |                     |                     |
+| report.size() - 2  | 254 (end flag 1)        |                     |                     |
+| report.size() - 2  | 255 (end flag 2)        |                     |                     |
 
 **<center> Tests</center>**
 
