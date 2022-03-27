@@ -163,6 +163,7 @@ namespace sfr {
         extern bool imu_dlink_report_ready;
         extern bool report_downlinked;
         extern char filename[15];
+        extern bool fragment_ready_start;
 
         extern const int mag_8GAUSS_min;
         extern const int mag_12GAUSS_min;

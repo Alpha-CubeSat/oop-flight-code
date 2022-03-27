@@ -160,6 +160,7 @@ namespace sfr {
         bool imu_dlink_report_ready = false;
         bool report_downlinked = true;
         char filename[15];
+        bool fragment_ready_start = false;
 
         const int mag_8GAUSS_min = 4;
         const int mag_12GAUSS_min = 8;

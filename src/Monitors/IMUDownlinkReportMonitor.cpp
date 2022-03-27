@@ -12,7 +12,7 @@ void IMUDownlinkReportMonitor::execute()
     imu_dlink.execute();
 
     // Get a requested fragment
-    if (sfr::imu::report_downlinked == true && sfr::imu::fragment_requested == true) {
+    if (sfr::imu::report_downlinked == true && sfr::imu::fragment_requested == true && sfr::imu::fragment_ready_start == true) {
 #ifdef VERBOSE
         Serial.println("Report monitor started");
         Serial.println("Current fragment: " + String(sfr::imu::fragment_number));
@@ -95,5 +95,6 @@ void IMUDownlinkReportMonitor::create_imu_downlink_report(int fragment_number)
         delay(sfr::imu::imu_downlink_fragment_min_execution_time - imu_downlink_fragment_time_taken);
     } else if (imu_downlink_fragment_time_taken > sfr::imu::imu_downlink_fragment_max_execution_time) {
         Serial.printf("execution time exceded");
+        // cycle calculation should be resolved in ground station
     }
 }
