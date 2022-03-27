@@ -97,8 +97,6 @@ void CameraReportMonitor::create_camera_report(int fragment_number, uint8_t seri
         sfr::rockblock::camera_report.push_back(parsedbuffer[z]);
         z = z + 1;
     }
-    sfr::rockblock::camera_report.push_back(constants::rockblock::end_of_camera_downlink_flag1);
-    sfr::rockblock::camera_report.push_back(constants::rockblock::end_of_camera_downlink_flag2);
     sfr::camera::report_ready = true;
     sfr::camera::report_downlinked = false;
 }
