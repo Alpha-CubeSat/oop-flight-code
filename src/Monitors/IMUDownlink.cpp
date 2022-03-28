@@ -10,7 +10,7 @@ IMUDownlink::IMUDownlink(unsigned int offset)
 
 void IMUDownlink::execute()
 {
-    if (sfr::mission::mode == mission_mode_type::mand_burns || sfr::mission::mode == mission_mode_type::reg_burns) {
+    /*if (sfr::mission::mode == mission_mode_type::mand_burns || sfr::mission::mode == mission_mode_type::reg_burns) {
         sensors_event_t accel, mag, gyro, temp;
         imu.getEvent(&accel, &mag, &gyro, &temp);
 
@@ -57,5 +57,5 @@ void IMUDownlink::execute()
         if (sfr::imu::imu_dlink_time_buffer.size() > sfr::imu::imu_downlink_buffer_max_size) {
             sfr::imu::imu_dlink_time_buffer.pop_back();
         }
-    }
+    }*/
 }

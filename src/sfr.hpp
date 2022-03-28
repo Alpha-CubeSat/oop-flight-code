@@ -5,13 +5,13 @@
 #include "Control Tasks/BurnwireControlTask.hpp"
 #include "Control Tasks/TimedControlTask.hpp"
 #include "MissionManager.hpp"
+#include "MissionMode.hpp"
 #include "Modes/acs_mode_type.enum"
 #include "Modes/burnwire_mode_type.enum"
 #include "Modes/camera_init_mode_type.enum"
 #include "Modes/fault_index_type.enum"
 #include "Modes/fault_mode_type.enum"
 #include "Modes/imu_downlink_type.enum"
-#include "Modes/mission_mode_type.enum"
 #include "Modes/rockblock_mode_type.enum"
 #include "Modes/sensor_mode_type.enum"
 #include "Modes/simple_acs_type.enum"
@@ -32,6 +32,16 @@
 #include <string>
 
 namespace sfr {
+     namespace detumble {
+        extern float start_time; 
+        extern float max_time;
+        extern float stable_gyro_z; 
+    }
+    namespace aliveSignal{
+        extern int num_downlink_failures;
+        extern int max_downlink_failures;
+        extern bool downlinked;
+    }
     namespace pins {
         extern std::map<int, int> pinMap;
     } // namespace pins
@@ -39,8 +49,33 @@ namespace sfr {
         extern bool covered;
     } // namespace photoresistor
     namespace mission {
-        extern mission_mode_type mode;
-        extern bool low_power_eligible;
+        extern MissionMode *boot;
+        extern MissionMode *aliveSignal;
+        extern MissionMode *lowPowerAliveSignal;
+        extern MissionMode *detumbleSpin;
+        extern MissionMode *lowPowerDetumbleSpin;
+        extern MissionMode *normal;
+        extern MissionMode *transmit;
+        extern MissionMode *lowPower;
+        extern MissionMode *normalDeployment;
+        extern MissionMode *transmitDeployment;
+        extern MissionMode *lowPowerDeployment;
+        extern MissionMode *normalArmed;
+        extern MissionMode *transmitArmed;
+        extern MissionMode *lowPowerArmed;
+        extern MissionMode *normalInSun;
+        extern MissionMode *transmitInSun;
+        extern MissionMode *lowPowerInSun;
+        extern MissionMode *voltageFailureInSun;
+        extern MissionMode *bootCamera;
+        extern MissionMode *mandatoryBurns;
+        extern MissionMode *regularBurns;
+        extern MissionMode *photo;
+
+        extern MissionMode *current_mode;
+        extern MissionMode *previous_mode;
+        extern unsigned long boot_start;
+        extern unsigned long max_boot_time;
     } // namespace mission
     namespace burnwire {
         extern bool fire;
@@ -86,7 +121,6 @@ namespace sfr {
         extern uint8_t set_res;
     } // namespace camera
     namespace rockblock {
-        extern unsigned long last_communication;
         extern bool last_downlink_normal;
         extern int camera_commands[99][constants::rockblock::command_len];
         extern int camera_max_fragments[99];
@@ -188,6 +222,8 @@ namespace sfr {
         extern float voltage;
         extern std::deque<float> voltage_buffer;
         extern SensorReading *voltage_average;
+        extern float acceptable_battery;
+        extern float min_battery;
     } // namespace battery
     namespace fault {
         extern fault_mode_type mode;

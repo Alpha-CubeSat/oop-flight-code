@@ -429,8 +429,8 @@ namespace constants {
         constexpr int content_length = 64;
         constexpr int bytes_allocated_serial_opcode = 2;
         constexpr int bytes_allocated_fragment = 4;
-        constexpr int tx = 33;
-        constexpr int rx = 34;
+        constexpr int tx = 34;
+        constexpr int rx = 33;
     } // namespace camera
     namespace button {
         // low when door is opened

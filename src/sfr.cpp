@@ -1,6 +1,17 @@
 #include "sfr.hpp"
 
 namespace sfr {
+    namespace detumble {
+        float start_time = 0;
+        float max_time = constants::time::two_hours;
+        //TODO
+        float stable_gyro_z = 3;
+    }
+    namespace aliveSignal{
+        int num_downlink_failures = 0;
+        int max_downlink_failures = 5;
+        bool downlinked = false;
+    }
     namespace pins {
         std::map<int, int> pinMap = {
             {constants::photoresistor::pin, LOW},
@@ -31,9 +42,58 @@ namespace sfr {
         bool covered = true;
     } // namespace photoresistor
     namespace mission {
-        mission_mode_type mode = mission_mode_type::boot;
-        bool low_power_eligible = true;
-        unsigned long boot_start_test = 0;
+        Boot boot_class;
+        AliveSignal aliveSignal_class;
+        LowPowerAliveSignal lowPowerAliveSignal_class;
+        DetumbleSpin detumbleSpin_class;
+        LowPowerDetumbleSpin lowPowerDetumbleSpin_class;
+        Normal normal_class;
+        Transmit transmit_class;
+        LowPower lowPower_class;
+        NormalDeployment normalDeployment_class;
+        TransmitDeployment transmitDeployment_class;
+        LowPowerDeployment lowPowerDeployment_class;
+        NormalArmed normalArmed_class;
+        TransmitArmed transmitArmed_class;
+        LowPowerArmed lowPowerArmed_class;
+        NormalInSun normalInSun_class;
+        TransmitInSun transmitInSun_class;
+        LowPowerInSun lowPowerInSun_class;
+        VoltageFailureInSun voltageFailureInSun_class;
+        BootCamera bootCamera_class;
+        MandatoryBurns mandatoryBurns_class;
+        RegularBurns regularBurns_class;
+        Photo photo_class;
+
+        MissionMode *boot = &boot_class;
+        MissionMode *aliveSignal = &aliveSignal_class;
+        MissionMode *lowPowerAliveSignal = &lowPowerAliveSignal_class;
+        MissionMode *detumbleSpin = &detumbleSpin_class;
+        MissionMode *lowPowerDetumbleSpin = &lowPowerDetumbleSpin_class;
+        MissionMode *normal = &normal_class;
+        MissionMode *transmit = &transmit_class;
+        MissionMode *lowPower = &lowPower_class;
+        MissionMode *normalDeployment = &normalDeployment_class;
+        MissionMode *transmitDeployment = &transmitDeployment_class;
+        MissionMode *lowPowerDeployment = &lowPowerDeployment_class;
+        MissionMode *normalArmed = &normalArmed_class;
+        MissionMode *transmitArmed = &transmitArmed_class;
+        MissionMode *lowPowerArmed = &lowPowerArmed_class;
+        MissionMode *normalInSun = &normalInSun_class;
+        MissionMode *transmitInSun = &transmitInSun_class;
+        MissionMode *lowPowerInSun = &lowPowerInSun_class;
+        MissionMode *voltageFailureInSun = &voltageFailureInSun_class;
+        MissionMode *bootCamera = &bootCamera_class;
+        MissionMode *mandatoryBurns = &mandatoryBurns_class;
+        MissionMode *regularBurns = &regularBurns_class;
+        MissionMode *photo = &photo_class;
+
+        MissionMode *current_mode = boot;
+        MissionMode *previous_mode = boot;
+
+        unsigned long boot_start = 0.0;
+        unsigned long max_boot_time = constants::time::two_hours;
+
     } // namespace mission
     namespace burnwire {
         bool fire = false;
@@ -80,7 +140,6 @@ namespace sfr {
         uint8_t set_res = VC0706_160x120;
     } // namespace camera
     namespace rockblock {
-        unsigned long last_communication = 0;
         bool last_downlink_normal = false;
         int camera_commands[99][constants::rockblock::command_len] = {};
         int camera_max_fragments[99] = {};
@@ -172,6 +231,7 @@ namespace sfr {
         SensorReading *solar_current_average = new SensorReading(fault_index_type::solar_current, 0.0, false);
         bool in_sun = false;
     } // namespace current
+    
     namespace acs {
         acs_mode_type mode = acs_mode_type::off;
         float current1 = 0;
@@ -184,6 +244,9 @@ namespace sfr {
         float voltage = 0.0;
         std::deque<float> voltage_buffer;
         SensorReading *voltage_average = new SensorReading(fault_index_type::voltage, 0.0, false);
+        // TODO
+        float acceptable_battery;
+        float min_battery;
     } // namespace battery
     namespace fault {
         fault_mode_type mode = fault_mode_type::active;
