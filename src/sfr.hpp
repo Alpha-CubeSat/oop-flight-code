@@ -132,7 +132,8 @@ namespace sfr {
         extern bool waiting_message;
         extern char buffer[constants::rockblock::buffer_size];
         extern std::deque<uint8_t> report;
-        extern uint8_t camera_report[constants::rockblock::packet_size];
+        extern std::deque<uint8_t> camera_report;
+        // extern uint8_t camera_report[constants::rockblock::packet_size];
         extern int commas[constants::rockblock::num_commas];
         extern uint8_t opcode[2];
         extern uint8_t arg_1[4];

@@ -151,7 +151,8 @@ namespace sfr {
         bool waiting_message = false;
         char buffer[constants::rockblock::buffer_size] = {0};
         std::deque<uint8_t> report;
-        uint8_t camera_report[constants::rockblock::packet_size] = {0};
+        std::deque<uint8_t> camera_report;
+        // uint8_t camera_report[constants::rockblock::packet_size] = {0};
         int commas[constants::rockblock::num_commas] = {0};
         uint8_t opcode[2] = {0};
         uint8_t arg_1[4] = {0};

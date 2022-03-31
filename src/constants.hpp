@@ -60,8 +60,9 @@ namespace constants {
         constexpr size_t max_conseq_read = 3;
 
         constexpr int num_initial_downlinks = 2;
-        constexpr uint8_t start_of_normal_downlink_flag = 21;
-        constexpr uint8_t end_of_normal_downlink_flag = 22;
+        constexpr uint8_t start_of_normal_downlink_flag = 253;
+        constexpr uint8_t end_of_normal_downlink_flag1 = 254;
+        constexpr uint8_t end_of_normal_downlink_flag2 = 255;
 
         constexpr uint8_t mission_mode[opcode_len] = {0x00, 0x00};
         constexpr uint8_t burnwire_arm[opcode_len] = {0x01, 0x00};
@@ -469,7 +470,7 @@ namespace constants {
 
         // number being added is the time length of the previous function
         // battery monitor takes max 60 us, so button monitor will start 60us after
-        static constexpr unsigned int acs_monitor_offset = 0;                          // time starts at 0
+        static constexpr unsigned int acs_monitor_offset = 0;     // time starts at 0
         static constexpr unsigned int battery_monitor_offset = 0; // to be determined
         static constexpr unsigned int button_monitor_offset = 0;
         static constexpr unsigned int camera_report_monitor_offset = 0;
@@ -482,7 +483,7 @@ namespace constants {
         static constexpr unsigned int temperature_monitor_offset = 0;
 
         static constexpr unsigned int acs_control_task_offset = 0;
-        static constexpr unsigned int burnwire_control_task_offset = 0; 
+        static constexpr unsigned int burnwire_control_task_offset = 0;
         static constexpr unsigned int camera_control_task_offset = 0;
         static constexpr unsigned int rockblock_control_task_offset = 0;
         static constexpr unsigned int temperature_control_task_offset = 0;
