@@ -32,7 +32,7 @@ protected:
     CommandMonitor command_monitor;
     CurrentMonitor current_monitor;
     FaultMonitor fault_monitor;
-    //IMUMonitor imu_monitor;
+    IMUMonitor imu_monitor;
     NormalReportMonitor normal_report_monitor;
     PhotoresistorMonitor photoresistor_monitor;
     TemperatureMonitor temperature_monitor;
