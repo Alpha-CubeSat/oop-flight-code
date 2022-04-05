@@ -2,6 +2,8 @@
 
 NormalReportMonitor::NormalReportMonitor(unsigned int offset) : TimedControlTask<void>(offset) {}
 
+std::queue<uint8_t> NormalReportMonitor::commands_received;
+
 void NormalReportMonitor::execute()
 {
     uint8_t mag_x = map(sfr::imu::mag_x_average->get_value(), constants::imu::min_mag_x, constants::imu::max_mag_x, 0, 255);
@@ -21,41 +23,52 @@ void NormalReportMonitor::execute()
 
     uint8_t downlink_period = map(sfr::rockblock::downlink_period, constants::rockblock::min_downlink_period, constants::rockblock::max_downlink_period, 0, 255);
 
-    sfr::rockblock::normal_report[0] = 21;
-    sfr::rockblock::normal_report[1] = sfr::photoresistor::covered;
-    sfr::rockblock::normal_report[2] = sfr::button::pressed;
-    sfr::rockblock::normal_report[3] = (uint8_t)sfr::mission::mode;
-    sfr::rockblock::normal_report[4] = sfr::burnwire::fire;
-    sfr::rockblock::normal_report[5] = sfr::burnwire::arm;
-    sfr::rockblock::normal_report[6] = sfr::burnwire::burn_time;
-    sfr::rockblock::normal_report[7] = sfr::burnwire::armed_time;
-    sfr::rockblock::normal_report[8] = (uint8_t)sfr::burnwire::mode;
-    sfr::rockblock::normal_report[9] = sfr::burnwire::attempts;
-    sfr::rockblock::normal_report[10] = downlink_period;
-    sfr::rockblock::normal_report[11] = sfr::rockblock::waiting_message;
-    sfr::rockblock::normal_report[12] = sfr::rockblock::waiting_command;
-    sfr::rockblock::normal_report[13] = mag_x;
-    sfr::rockblock::normal_report[14] = mag_y;
-    sfr::rockblock::normal_report[15] = mag_z;
-    sfr::rockblock::normal_report[16] = gyro_x;
-    sfr::rockblock::normal_report[17] = gyro_y;
-    sfr::rockblock::normal_report[18] = gyro_z;
-    sfr::rockblock::normal_report[19] = temp_c;
+    sfr::rockblock::normal_report.clear();
+    sfr::rockblock::normal_report.push_back(constants::rockblock::start_of_normal_downlink_flag);
+    sfr::rockblock::normal_report.push_back(sfr::photoresistor::covered);
+    sfr::rockblock::normal_report.push_back(sfr::button::pressed);
+    sfr::rockblock::normal_report.push_back(sfr::mission::current_mode->id());
+    sfr::rockblock::normal_report.push_back(sfr::burnwire::fire);
+    sfr::rockblock::normal_report.push_back(sfr::burnwire::arm);
+    sfr::rockblock::normal_report.push_back(sfr::burnwire::burn_time);
+    sfr::rockblock::normal_report.push_back(sfr::burnwire::armed_time);
+    sfr::rockblock::normal_report.push_back((uint8_t)sfr::burnwire::mode);
+    sfr::rockblock::normal_report.push_back(sfr::burnwire::attempts);
+    sfr::rockblock::normal_report.push_back(downlink_period);
+    sfr::rockblock::normal_report.push_back(sfr::rockblock::waiting_message);
+    sfr::rockblock::normal_report.push_back(sfr::rockblock::waiting_command);
+    sfr::rockblock::normal_report.push_back(mag_x);
+    sfr::rockblock::normal_report.push_back(mag_y);
+    sfr::rockblock::normal_report.push_back(mag_z);
+    sfr::rockblock::normal_report.push_back(gyro_x);
+    sfr::rockblock::normal_report.push_back(gyro_y);
+    sfr::rockblock::normal_report.push_back(gyro_z);
+    sfr::rockblock::normal_report.push_back(temp_c);
     // removed temperature mode type
-    sfr::rockblock::normal_report[21] = solar_current;
-    sfr::rockblock::normal_report[22] = sfr::current::in_sun;
-    sfr::rockblock::normal_report[23] = (uint8_t)sfr::acs::mode;
-    sfr::rockblock::normal_report[24] = voltage;
-    sfr::rockblock::normal_report[25] = (uint8_t)sfr::fault::mode;
-    sfr::rockblock::normal_report[26] = sfr::imu::mag_x_average->is_valid();
-    sfr::rockblock::normal_report[27] = sfr::imu::mag_y_average->is_valid();
-    sfr::rockblock::normal_report[28] = sfr::imu::mag_z_average->is_valid();
-    sfr::rockblock::normal_report[29] = sfr::imu::gyro_x_average->is_valid();
-    sfr::rockblock::normal_report[30] = sfr::imu::gyro_y_average->is_valid();
-    sfr::rockblock::normal_report[31] = sfr::imu::gyro_z_average->is_valid();
-    sfr::rockblock::normal_report[32] = sfr::temperature::temp_c_average->is_valid();
-    sfr::rockblock::normal_report[33] = sfr::battery::voltage_average->is_valid();
-    sfr::rockblock::normal_report[34] = sfr::current::solar_current_average->is_valid();
-    sfr::rockblock::normal_report[35] = sfr::camera::take_photo;
-    sfr::rockblock::normal_report[36] = sfr::camera::powered;
+    sfr::rockblock::normal_report.push_back(solar_current);
+    sfr::rockblock::normal_report.push_back(sfr::current::in_sun);
+    sfr::rockblock::normal_report.push_back((uint8_t)sfr::acs::mode);
+    sfr::rockblock::normal_report.push_back(voltage);
+    sfr::rockblock::normal_report.push_back((uint8_t)sfr::fault::mode);
+    sfr::rockblock::normal_report.push_back(sfr::imu::mag_x_average->is_valid());
+    sfr::rockblock::normal_report.push_back(sfr::imu::mag_y_average->is_valid());
+    sfr::rockblock::normal_report.push_back(sfr::imu::mag_z_average->is_valid());
+    sfr::rockblock::normal_report.push_back(sfr::imu::gyro_x_average->is_valid());
+    sfr::rockblock::normal_report.push_back(sfr::imu::gyro_y_average->is_valid());
+    sfr::rockblock::normal_report.push_back(sfr::imu::gyro_z_average->is_valid());
+    sfr::rockblock::normal_report.push_back(sfr::temperature::temp_c_average->is_valid());
+    sfr::rockblock::normal_report.push_back(sfr::battery::voltage_average->is_valid());
+    sfr::rockblock::normal_report.push_back(sfr::current::solar_current_average->is_valid());
+    sfr::rockblock::normal_report.push_back(sfr::camera::take_photo);
+    sfr::rockblock::normal_report.push_back(sfr::camera::powered);
+    int i = 0;
+    while (!commands_received.empty() && i < 30) {
+        sfr::rockblock::normal_report.push_back(commands_received.front());
+        commands_received.pop();
+        ++i;
+    } // Writes opcodes to normal report; two indices constitute one opcode since each opcode is 2-byte
+    std::queue<uint8_t> empty;
+    std::swap(commands_received, empty); // Clear the queue after each normal report is generated
+    sfr::rockblock::normal_report.push_back(constants::rockblock::end_of_normal_downlink_flag1);
+    sfr::rockblock::normal_report.push_back(constants::rockblock::end_of_normal_downlink_flag2);
 }

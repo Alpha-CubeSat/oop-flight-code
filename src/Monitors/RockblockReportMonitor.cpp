@@ -14,20 +14,23 @@ void RockblockReportMonitor::execute()
 
     switch (sfr::rockblock::downlink_report_type) {
     case report_type::camera_report:
-        for (int i = 0; i < constants::rockblock::packet_size; i++) {
-            sfr::rockblock::downlink_report[i] = sfr::rockblock::camera_report[i];
+        sfr::rockblock::downlink_report.clear();
+        for (auto &data : sfr::rockblock::camera_report) {
+            sfr::rockblock::downlink_report.push_back(data);
         }
         break;
 
     case report_type::normal_report:
-        for (int i = 0; i < constants::rockblock::packet_size; i++) {
-            sfr::rockblock::downlink_report[i] = sfr::rockblock::normal_report[i];
+        sfr::rockblock::downlink_report.clear();
+        for (auto &data : sfr::rockblock::normal_report) {
+            sfr::rockblock::downlink_report.push_back(data);
         }
         break;
 
     case report_type::imu_report:
+        sfr::rockblock::downlink_report.clear();
         for (int i = 0; i < constants::rockblock::packet_size; i++) {
-            sfr::rockblock::downlink_report[i] = sfr::rockblock::imu_report[i];
+            sfr::rockblock::downlink_report.push_back(sfr::rockblock::imu_report[i]);
         }
         break;
     }

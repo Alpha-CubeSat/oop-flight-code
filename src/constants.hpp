@@ -60,6 +60,9 @@ namespace constants {
         constexpr size_t max_conseq_read = 3;
 
         constexpr int num_initial_downlinks = 2;
+        constexpr uint8_t start_of_normal_downlink_flag = 253;
+        constexpr uint8_t end_of_normal_downlink_flag1 = 254;
+        constexpr uint8_t end_of_normal_downlink_flag2 = 255;
 
         constexpr uint8_t mission_mode[opcode_len] = {0x00, 0x00};
         constexpr uint8_t burnwire_arm[opcode_len] = {0x01, 0x00};
@@ -427,8 +430,8 @@ namespace constants {
         constexpr int content_length = 64;
         constexpr int bytes_allocated_serial_opcode = 2;
         constexpr int bytes_allocated_fragment = 4;
-        constexpr int tx = 33;
-        constexpr int rx = 34;
+        constexpr int tx = 34;
+        constexpr int rx = 33;
     } // namespace camera
     namespace button {
         // low when door is opened

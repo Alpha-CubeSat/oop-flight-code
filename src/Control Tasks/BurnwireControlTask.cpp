@@ -4,7 +4,7 @@ BurnwireControlTask::BurnwireControlTask(unsigned int offset) : TimedControlTask
 
 void BurnwireControlTask::execute()
 {
-    burnwire_mode_type mode = sfr::burnwire::mode;
+    /*burnwire_mode_type mode = sfr::burnwire::mode;
 
     if (mode == burnwire_mode_type::delay || mode == burnwire_mode_type::burn) {
         sfr::mission::low_power_eligible = false;
@@ -84,7 +84,7 @@ void BurnwireControlTask::execute()
         }
         break;
     }
-    }
+    }*/
 }
 
 void BurnwireControlTask::dispatch_burn()
@@ -94,7 +94,7 @@ void BurnwireControlTask::dispatch_burn()
     sfr::burnwire::start_time = millis();
     if (sfr::burnwire::attempts > constants::burnwire::max_attempts) {
         transition_to_standby();
-        sfr::fault::fault_3 = sfr::fault::fault_3 | constants::fault::burn_wire;
+        // sfr::fault::fault_actions = sfr::fault::fault_actions | constants::fault::burn_wire;
     } else {
         if (sfr::burnwire::attempts % 2 == 0) {
             Pins::setPinState(constants::burnwire::first_pin, HIGH);

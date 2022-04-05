@@ -9,6 +9,7 @@ void RockblockControlTask::execute()
 {
     check_timeout();
     rockblock_mode_type mode = sfr::rockblock::mode;
+    Serial.printf("Current rockblock mode: %d\n", mode);
     switch (mode) {
     case rockblock_mode_type::standby:
         dispatch_standby();
@@ -100,8 +101,6 @@ void RockblockControlTask::check_timeout()
 
 void RockblockControlTask::dispatch_standby()
 {
-    sfr::mission::low_power_eligible = true;
-
 #ifdef VERBOSE
     if (sfr::rockblock::rockblock_ready_status) {
         Serial.print("Rockblock Ready to Downlink\n");
@@ -111,7 +110,6 @@ void RockblockControlTask::dispatch_standby()
 #endif
 
     if (sfr::rockblock::rockblock_ready_status || sfr::rockblock::waiting_message) {
-        sfr::mission::low_power_eligible = false;
         transition_to(rockblock_mode_type::send_at);
         Pins::setPinState(constants::rockblock::sleep_pin, HIGH);
         sfr::rockblock::start_time = millis();
@@ -212,16 +210,17 @@ void RockblockControlTask::dispatch_send_message()
 #ifdef VERBOSE
     Serial.print("SENT: ");
 #endif
-    for (size_t i = 0; i < constants::rockblock::packet_size; ++i) {
+    for (auto &data : sfr::rockblock::downlink_report) {
 #ifdef VERBOSE
-        if (sfr::rockblock::downlink_report[i] < 16) {
+        if (data < 16) {
             Serial.print(0);
         }
-        Serial.print(sfr::rockblock::downlink_report[i], HEX);
+        Serial.print(data, HEX);
 #endif
-        sfr::rockblock::serial.write(sfr::rockblock::downlink_report[i]);
-        checksum += (uint16_t)sfr::rockblock::downlink_report[i];
+        sfr::rockblock::serial.write(data);
+        checksum += (uint16_t)data;
     }
+
 #ifdef VERBOSE
     Serial.println();
     Serial.print("SENT: ");
@@ -443,7 +442,6 @@ void RockblockControlTask::dispatch_await_flush()
 void RockblockControlTask::dispatch_end_transmission()
 {
     sfr::rockblock::last_downlink = millis();
-    sfr::rockblock::last_communication = millis();
     if (sfr::rockblock::downlink_period > constants::rockblock::min_sleep_period) {
         Pins::setPinState(constants::rockblock::sleep_pin, LOW);
     }

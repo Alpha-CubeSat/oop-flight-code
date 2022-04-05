@@ -35,14 +35,16 @@ void test_rockblock_report_monitor_schedule()
         TEST_ASSERT_EQUAL(sfr::rockblock::downlink_report[i], sfr::rockblock::imu_report[i]);
     }
 
+    sfr::rockblock::normal_report.clear();
     for (int i = 0; i < constants::rockblock::packet_size; i++) {
-        sfr::rockblock::normal_report[i] = 1;
+        sfr::rockblock::normal_report.push_back(2);
     }
     sfr::imu::imu_dlink_report_ready = false;
     rockblock_report_monitor.execute();
     for (int i = 0; i < constants::rockblock::packet_size; i++) {
         TEST_ASSERT_EQUAL(sfr::rockblock::downlink_report[i], sfr::rockblock::normal_report[i]);
     }
+    TEST_ASSERT_EQUAL(sfr::rockblock::downlink_report.size(), sfr::rockblock::normal_report.size());
 }
 
 int test_rockblock_report_monitor()
