@@ -9,7 +9,9 @@ void RockblockControlTask::execute()
 {
     check_timeout();
     rockblock_mode_type mode = sfr::rockblock::mode;
+#ifdef VERBOSE
     Serial.printf("Current rockblock mode: %d\n", mode);
+#endif
     switch (mode) {
     case rockblock_mode_type::standby:
         dispatch_standby();
