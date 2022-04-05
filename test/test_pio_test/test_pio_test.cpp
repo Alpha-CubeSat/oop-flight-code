@@ -18,7 +18,8 @@ int main()
 }
 #else
 #include <Arduino.h>
-void setup() {
+void setup()
+{
     delay(5000);
     Serial.begin(9600);
     delay(5000);

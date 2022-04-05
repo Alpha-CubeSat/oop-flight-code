@@ -4,14 +4,14 @@ namespace sfr {
     namespace detumble {
         float start_time = 0;
         float max_time = constants::time::two_hours;
-        //TODO
+        // TODO
         float stable_gyro_z = 3;
-    }
-    namespace aliveSignal{
+    } // namespace detumble
+    namespace aliveSignal {
         int num_downlink_failures = 0;
         int max_downlink_failures = 5;
         bool downlinked = false;
-    }
+    } // namespace aliveSignal
     namespace pins {
         std::map<int, int> pinMap = {
             {constants::photoresistor::pin, LOW},
@@ -140,23 +140,31 @@ namespace sfr {
         uint8_t set_res = VC0706_160x120;
     } // namespace camera
     namespace rockblock {
-        bool last_downlink_normal = false;
-        int camera_commands[99][constants::rockblock::command_len] = {};
-        int camera_max_fragments[99] = {};
-        bool downlink_camera = false;
+        report_type downlink_report_type = report_type::normal_report;
+        bool rockblock_ready_status = false;
+        rockblock_mode_type mode = rockblock_mode_type::send_at;
+
+        unsigned long last_communication = 0;
         unsigned long last_downlink = 0;
         unsigned long downlink_period = 0;
-        unsigned long camera_downlink_period = 0;
-        rockblock_mode_type mode = rockblock_mode_type::send_at;
+
         bool waiting_message = false;
-        char buffer[constants::rockblock::buffer_size] = {0};
-        std::deque<uint8_t> report;
+
+        std::deque<uint8_t> downlink_report;
+        std::deque<uint8_t> normal_report;
         std::deque<uint8_t> camera_report;
-        // uint8_t camera_report[constants::rockblock::packet_size] = {0};
+        uint8_t imu_report[constants::rockblock::packet_size] = {0};
+
+        char buffer[constants::rockblock::buffer_size] = {0};
+        int camera_commands[99][constants::rockblock::command_len] = {};
+        int camera_max_fragments[99] = {};
         int commas[constants::rockblock::num_commas] = {0};
+
         uint8_t opcode[2] = {0};
         uint8_t arg_1[4] = {0};
         uint8_t arg_2[4] = {0};
+
+        int imu_max_fragments = 10;
 #ifndef SIMULATOR
         HardwareSerial serial = Serial1;
 #else
@@ -196,8 +204,6 @@ namespace sfr {
         std::deque<float> imu_dlink_gyro_x_buffer;
         std::deque<float> imu_dlink_gyro_y_buffer;
         std::deque<float> imu_dlink_gyro_z_buffer;
-        std::deque<time_t> imu_dlink_time_buffer;
-        std::deque<imu_downlink_type> imu_dlink_magid_buffer;
 
         SensorReading *mag_x_average = new SensorReading(fault_index_type::mag_x, 0.0, false);
         SensorReading *mag_y_average = new SensorReading(fault_index_type::mag_y, 0.0, false);
@@ -208,11 +214,17 @@ namespace sfr {
         SensorReading *acc_x_average = new SensorReading(fault_index_type::acc_x, 0.0, false);
         SensorReading *acc_y_average = new SensorReading(fault_index_type::acc_y, 0.0, false);
 
-        bool imu_dlink_report_ready = false;
         imu_downlink_type imu_dlink_magid = imu_downlink_type::GAUSS_8;
         const int imu_downlink_buffer_max_size = constants::sensor::collect; // not determined yet
         const int imu_downlink_report_size = constants::sensor::collect * 5;
-        uint8_t report[imu_downlink_report_size];
+        uint8_t imu_downlink_report[imu_downlink_report_size];
+
+        int fragment_number = 0;
+        bool fragment_requested = false;
+        int fragments_written = 0;
+        bool imu_dlink_report_ready = false;
+        bool report_downlinked = true;
+        char filename[15];
 
         const int mag_8GAUSS_min = 4;
         const int mag_12GAUSS_min = 8;
@@ -232,7 +244,7 @@ namespace sfr {
         SensorReading *solar_current_average = new SensorReading(fault_index_type::solar_current, 0.0, false);
         bool in_sun = false;
     } // namespace current
-    
+
     namespace acs {
         acs_mode_type mode = acs_mode_type::off;
         float current1 = 0;

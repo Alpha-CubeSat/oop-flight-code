@@ -457,6 +457,9 @@ namespace constants {
         constexpr float min_gyro_z = 0.0;
         constexpr float max_gyro_z = 10;
 
+        constexpr int bytes_allocated_fragment = 1;
+        constexpr int bytes_allocated_serial_opcode = 2;
+
         constexpr int CSAG = 21;
         constexpr int CSM = 20;
     } // namespace imu
@@ -486,6 +489,7 @@ namespace constants {
         static constexpr unsigned int burnwire_control_task_offset = 0;
         static constexpr unsigned int camera_control_task_offset = 0;
         static constexpr unsigned int rockblock_control_task_offset = 0;
+        static constexpr unsigned int rockblock_report_monitor_offset = 0;
         static constexpr unsigned int temperature_control_task_offset = 0;
         static constexpr unsigned int mission_manager_offset = 0;
     } // namespace timecontrol

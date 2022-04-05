@@ -12,6 +12,7 @@
 #include "Modes/fault_index_type.enum"
 #include "Modes/fault_mode_type.enum"
 #include "Modes/imu_downlink_type.enum"
+#include "Modes/report_type.enum"
 #include "Modes/rockblock_mode_type.enum"
 #include "Modes/sensor_mode_type.enum"
 #include "Modes/simple_acs_type.enum"
@@ -32,16 +33,16 @@
 #include <string>
 
 namespace sfr {
-     namespace detumble {
-        extern float start_time; 
+    namespace detumble {
+        extern float start_time;
         extern float max_time;
-        extern float stable_gyro_z; 
-    }
-    namespace aliveSignal{
+        extern float stable_gyro_z;
+    } // namespace detumble
+    namespace aliveSignal {
         extern int num_downlink_failures;
         extern int max_downlink_failures;
         extern bool downlinked;
-    }
+    } // namespace aliveSignal
     namespace pins {
         extern std::map<int, int> pinMap;
     } // namespace pins
@@ -121,23 +122,34 @@ namespace sfr {
         extern uint8_t set_res;
     } // namespace camera
     namespace rockblock {
-        extern bool last_downlink_normal;
-        extern int camera_commands[99][constants::rockblock::command_len];
-        extern int camera_max_fragments[99];
-        extern bool downlink_camera;
+        // Report Types
+        extern report_type downlink_report_type;
+        extern bool rockblock_ready_status;
+        extern rockblock_mode_type mode;
+
+        // Time Parameters
+        extern unsigned long last_communication;
         extern unsigned long last_downlink;
         extern unsigned long downlink_period;
-        extern unsigned long camera_downlink_period;
-        extern rockblock_mode_type mode;
+
         extern bool waiting_message;
-        extern char buffer[constants::rockblock::buffer_size];
-        extern std::deque<uint8_t> report;
+
+        // Report Data
+        extern std::deque<uint8_t> downlink_report;
+        extern std::deque<uint8_t> normal_report;
         extern std::deque<uint8_t> camera_report;
-        // extern uint8_t camera_report[constants::rockblock::packet_size];
+        extern uint8_t imu_report[constants::rockblock::packet_size];
+
+        extern char buffer[constants::rockblock::buffer_size];
+        extern int camera_commands[99][constants::rockblock::command_len];
+        extern int camera_max_fragments[99];
         extern int commas[constants::rockblock::num_commas];
+
         extern uint8_t opcode[2];
         extern uint8_t arg_1[4];
         extern uint8_t arg_2[4];
+
+        extern int imu_max_fragments;
 #ifndef SIMULATOR
         extern HardwareSerial serial;
 #else
@@ -170,12 +182,13 @@ namespace sfr {
         extern std::deque<float> gyro_x_buffer;
         extern std::deque<float> gyro_y_buffer;
         extern std::deque<float> gyro_z_buffer;
+        extern std::deque<float> acc_x_buffer;
+        extern std::deque<float> acc_y_buffer;
+        extern std::deque<float> acc_z_buffer;
         // std::deque<std::experimental::any, time_t> imu_dlink_buffer;
         extern std::deque<float> imu_dlink_gyro_x_buffer;
         extern std::deque<float> imu_dlink_gyro_y_buffer;
         extern std::deque<float> imu_dlink_gyro_z_buffer;
-        extern std::deque<time_t> imu_dlink_time_buffer;
-        extern std::deque<imu_downlink_type> imu_dlink_magid_buffer;
 
         // extern float mag_x_average;
         extern SensorReading *mag_x_average;
@@ -187,11 +200,17 @@ namespace sfr {
         extern SensorReading *acc_x_average;
         extern SensorReading *acc_y_average;
 
-        extern bool imu_dlink_report_ready;
         extern imu_downlink_type imu_dlink_magid;
         extern const int imu_downlink_buffer_max_size;
-        extern const int imu_downlink_report_size;
-        extern uint8_t report[];
+        // extern const int imu_downlink_report_size;
+
+        extern int fragment_number;
+        extern int fragment_number_requested;
+        extern bool fragment_requested;
+        extern int fragments_written;
+        extern bool imu_dlink_report_ready;
+        extern bool report_downlinked;
+        extern char filename[15];
 
         extern const int mag_8GAUSS_min;
         extern const int mag_12GAUSS_min;
