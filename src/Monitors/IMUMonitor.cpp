@@ -19,8 +19,8 @@ IMUMonitor::IMUMonitor(unsigned int offset)
     imu.setupGyro(imu.LSM9DS1_GYROSCALE_245DPS);
 
     SD.begin(254);
-    imgFile = SD.open("imu log", FILE_WRITE);
-    imgFile.println("mag_x,mag_y,mag_z");
+    imuFile = SD.open("imu log", FILE_WRITE);
+    imuFile.println("time,mag_x,mag_y,mag_z");
 }
 
 void IMUMonitor::execute()
@@ -85,12 +85,14 @@ void IMUMonitor::capture_imu_values()
     sfr::imu::gyro_z = gyro.gyro.z;
 
     // write mag values to SD card in csv format
-    imgFile.print(String(sfr::imu::mag_x) + ",");
-    imgFile.print(String(sfr::imu::mag_y) + ",");
-    imgFile.println(String(sfr::imu::mag_z));
+
+    imuFile.print(String(millis()) + ",");
+    imuFile.print(String(sfr::imu::mag_x) + ",");
+    imuFile.print(String(sfr::imu::mag_y) + ",");
+    imuFile.println(String(sfr::imu::mag_z));
 
     if (millis() % 15000) { // saves written data to SD card every 15 seconds
-        imgFile.flush();
+        imuFile.flush();
     }
 
     // Add reading to buffer
