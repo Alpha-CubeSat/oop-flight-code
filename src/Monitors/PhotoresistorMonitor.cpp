@@ -4,13 +4,13 @@ PhotoresistorMonitor::PhotoresistorMonitor(unsigned int offset) : TimedControlTa
 
 void PhotoresistorMonitor::execute()
 {
-    int val = analogRead(constants::photoresistor::pin);
+    sfr::photoresistor::val = analogRead(constants::photoresistor::pin);
 #ifdef VERBOSE
     Serial.print("Photoresistor: ");
-    Serial.print(val);
+    Serial.print(sfr::photoresistor::val);
     Serial.println(" (0-1023 scale)");
 #endif
-    if (val > constants::photoresistor::light_val) {
+    if (sfr::photoresistor::val > constants::photoresistor::light_val) {
         sfr::photoresistor::covered = false;
     } else {
         sfr::photoresistor::covered = true;
