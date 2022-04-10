@@ -39,6 +39,7 @@ namespace sfr {
             {constants::button::button_pin, LOW}};
     } // namespace pins
     namespace photoresistor {
+        int val = 0;
         bool covered = true;
     } // namespace photoresistor
     namespace mission {

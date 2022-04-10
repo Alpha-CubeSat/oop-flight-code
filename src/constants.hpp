@@ -22,6 +22,8 @@ namespace constants {
     namespace photoresistor {
         constexpr int pin = 38;
         constexpr int light_val = 150;
+        constexpr int min_val = 0;
+        constexpr int max_val = 1023;
     } // namespace photoresistor
     namespace burnwire {
         constexpr int first_pin = 14;

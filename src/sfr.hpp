@@ -47,6 +47,7 @@ namespace sfr {
         extern std::map<int, int> pinMap;
     } // namespace pins
     namespace photoresistor {
+        extern int val;
         extern bool covered;
     } // namespace photoresistor
     namespace mission {
