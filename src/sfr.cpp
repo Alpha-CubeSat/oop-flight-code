@@ -1,6 +1,19 @@
 #include "sfr.hpp"
 
 namespace sfr {
+    namespace boot {
+        unsigned long start_time = 0.0;
+        unsigned long max_time = constants::time::two_hours;
+    }
+    namespace simple {
+        float max_time = 5*constants::time::one_minute;
+    }
+    namespace point {
+        float max_time = 5*constants::time::one_minute;
+    }
+    namespace normal {
+        float start_time = 0;
+    }
     namespace detumble {
         float start_time = 0;
         float max_time = constants::time::two_hours;
@@ -91,10 +104,6 @@ namespace sfr {
 
         MissionMode *current_mode = boot;
         MissionMode *previous_mode = boot;
-
-        unsigned long boot_start = 0.0;
-        unsigned long max_boot_time = constants::time::two_hours;
-
     } // namespace mission
     namespace burnwire {
         bool fire = false;
@@ -248,7 +257,16 @@ namespace sfr {
     } // namespace current
 
     namespace acs {
-        acs_mode_type mode = acs_mode_type::off;
+        Simple simple_class;
+        Point point_class;
+        Off off_class;
+
+        ACSMode *simple = &simple_class;
+        ACSMode *point = &point_class;
+        ACSMode *off = &off_class;
+
+        ACSMode *current_mode = off;
+
         float current1 = 0;
         float current2 = 0;
         float current3 = 0;

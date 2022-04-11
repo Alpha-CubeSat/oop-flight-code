@@ -50,7 +50,7 @@ void NormalReportMonitor::execute()
     // removed temperature mode type
     sfr::rockblock::normal_report.push_back(solar_current);
     sfr::rockblock::normal_report.push_back(sfr::current::in_sun);
-    sfr::rockblock::normal_report.push_back((uint8_t)sfr::acs::mode);
+    sfr::rockblock::normal_report.push_back(sfr::acs::current_mode->id());
     sfr::rockblock::normal_report.push_back(voltage);
     sfr::rockblock::normal_report.push_back((uint8_t)sfr::fault::mode);
     sfr::rockblock::normal_report.push_back(sfr::imu::mag_x_average->is_valid());

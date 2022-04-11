@@ -210,6 +210,15 @@ void test_exit_low_power_detumble_spin()
     test_exit_detumble_phase(mission_manager, true);
 }
 
+void test_exit_normal()
+{
+    MissionManager mission_manager(0);
+    reset_normal(mission_manager, sfr::mission::normal);
+
+    test_enter_lp(mission_manager, sfr::mission::lowPower, sfr::mission::normal);
+
+}
+
 int test_mission_manager()
 {
     UNITY_BEGIN();

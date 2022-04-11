@@ -4,7 +4,7 @@
 void Boot::transition_to() {}
 void Boot::dispatch()
 {
-    if (millis() - sfr::mission::boot_start >= sfr::mission::max_boot_time) {
+    if (millis() - sfr::boot::start_time >= sfr::boot::max_time) {
         sfr::mission::current_mode = sfr::mission::aliveSignal;
     }
 }
@@ -36,7 +36,9 @@ void LowPowerDetumbleSpin::dispatch()
     exit_detumble_phase(sfr::mission::lowPower);
 }
 
-void Normal::transition_to() {}
+void Normal::transition_to() {
+    sfr::normal::start_time = millis();
+}
 void Normal::dispatch(){
 
 }
@@ -71,5 +73,15 @@ void exit_lp(MissionMode *reg_mode)
         sfr::mission::current_mode = reg_mode;
     }
 }
+
+/*void exit_acs()
+{
+    (millis()-sfr::normal::start_time >= sfr::mission::current_acs_mode->max_time() ){
+        sfr::mission::current_mode = 
+    }
+
+
+}*/
+
 
 
