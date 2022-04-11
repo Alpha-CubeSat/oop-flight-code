@@ -17,6 +17,7 @@ IMUMonitor::IMUMonitor(unsigned int offset)
         imu.setupMag(imu.LSM9DS1_MAGGAIN_4GAUSS);
         imu.setupGyro(imu.LSM9DS1_GYROSCALE_245DPS);
     }
+    sfr::imu::mode = sensor_mode_type::init; // This is already done in sfr.cpp but included for clarity
 }
 
 void IMUMonitor::execute()
