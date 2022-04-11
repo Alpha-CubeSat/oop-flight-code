@@ -1,0 +1,11 @@
+#ifndef imu_downlink_type_enum_
+#define imu_downlink_type_enum_
+
+enum class imu_downlink_type : unsigned char
+{
+    GAUSS_8 = 0,
+    GAUSS_12,
+    GAUSS_16
+};
+
+#endif

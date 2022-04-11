@@ -12,6 +12,12 @@ public:
     Adafruit_VC0706 adaCam;
     File imgFile;
     String filetocreate;
+
+private:
+    void camera_init();
+    void transition_to_normal();
+    void transition_to_abnormal_init();
+    void transition_to_retry();
 };
 
 #endif
