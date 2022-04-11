@@ -72,11 +72,11 @@ void CameraControlTask::execute()
         for (int i = 0; i < bytesToRead; i++) {
             if (buffer[i] < 16) {
                 imgFile.print(0, HEX);
-
 #ifdef VERBOSE
-            imgFile.print(buffer[i], HEX);
+                Serial.print(0, HEX);
 #endif
             }
+            imgFile.print(buffer[i], HEX);
 #ifdef VERBOSE
             Serial.print(buffer[i], HEX);
 #endif
