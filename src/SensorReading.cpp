@@ -65,7 +65,7 @@ void SensorReading::set_valid()
     this->fault_status = false; // set the fault status to false (no fault)
     if (map_to_reg[this->type] == 1) {
         faults::fault_1 &= ~map_to_mask[this->type];
-    } else if (map_to_reg[this->type] == 1) {
+    } else if (map_to_reg[this->type] == 2) {
         faults::fault_2 &= ~map_to_mask[this->type];
     } else {
         faults::fault_3 &= ~map_to_mask[this->type];
@@ -77,7 +77,7 @@ void SensorReading::set_invalid()
     this->fault_status = true; // set the fault status to true
     if (map_to_reg[this->type] == 1) {
         faults::fault_1 |= map_to_mask[this->type];
-    } else if (map_to_reg[this->type] == 1) {
+    } else if (map_to_reg[this->type] == 2) {
         faults::fault_2 |= map_to_mask[this->type];
     } else {
         faults::fault_3 |= map_to_mask[this->type];

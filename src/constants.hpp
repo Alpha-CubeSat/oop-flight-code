@@ -18,7 +18,7 @@ namespace constants {
     } // namespace time
     namespace sensor {
         constexpr int collect = 3;
-    }
+    } // namespace sensor
     namespace photoresistor {
         constexpr int pin = 38;
         constexpr int light_val = 150;
@@ -358,9 +358,9 @@ namespace constants {
     } // namespace rockblock
     namespace temperature {
         constexpr int pin = 39;
-        constexpr float min_temp_c;
-        constexpr float max_temp_c;
-        constexpr float in_sun_val;
+        constexpr float min_temp_c = -25;
+        constexpr float max_temp_c = 65;
+        constexpr float in_sun_val = 40;
     } // namespace temperature
     namespace current {
         constexpr int pin = 22;
