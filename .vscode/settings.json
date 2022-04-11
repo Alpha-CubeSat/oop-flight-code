@@ -50,5 +50,6 @@
         "cstddef": "cpp",
         "string": "cpp"
     },
-    "C_Cpp.dimInactiveRegions": false
+    "C_Cpp.dimInactiveRegions": false,
+    "C_Cpp.formatting": "clangFormat"
 }

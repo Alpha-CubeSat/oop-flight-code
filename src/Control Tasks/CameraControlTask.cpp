@@ -160,7 +160,6 @@ void CameraControlTask::transition_to_abnormal_init()
     // updates camera mode to abnormal_init
     // trips fault
     sfr::camera::mode = sensor_mode_type::abnormal_init;
-    // sfr::fault::fault_3 = sfr::fault::fault_1 | constants::fault::camera_on_failed;
     Pins::setPinState(constants::camera::power_on_pin, LOW);
     pinMode(constants::camera::rx, OUTPUT);
     pinMode(constants::camera::tx, OUTPUT);

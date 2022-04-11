@@ -3,9 +3,10 @@
 
 enum sensor_mode_type : unsigned char
 {
-  normal = 0,
-  abnormal_init,
-  retry
+    init = 0,
+    normal,
+    abnormal_init,
+    retry
 };
 
 #endif

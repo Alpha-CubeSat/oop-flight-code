@@ -169,6 +169,7 @@ namespace sfr {
     } // namespace rockblock
     namespace imu {
         extern sensor_mode_type mode;
+        extern bool successful_init;
 
         extern float mag_x;
         extern float mag_y;
@@ -249,9 +250,9 @@ namespace sfr {
     namespace fault {
         extern fault_mode_type mode;
 
-        extern unsigned char fault_1;
-        extern unsigned char fault_2;
-        extern unsigned char fault_3;
+        // extern unsigned char fault_1;
+        // extern unsigned char fault_2;
+        // extern unsigned char fault_3;
 
         // // FAULT 1
         // extern bool check_mag_x;
