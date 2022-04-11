@@ -7,9 +7,12 @@
 #include "MissionManager.hpp"
 #include "Modes/acs_mode_type.enum"
 #include "Modes/burnwire_mode_type.enum"
+#include "Modes/camera_init_mode_type.enum"
 #include "Modes/fault_mode_type.enum"
+#include "Modes/imu_downlink_type.enum"
 #include "Modes/mission_mode_type.enum"
 #include "Modes/rockblock_mode_type.enum"
+#include "Modes/sensor_mode_type.enum"
 #include "Modes/simple_acs_type.enum"
 #include "Pins.hpp"
 #include "RockblockSimulator.hpp"
@@ -28,10 +31,10 @@
 namespace sfr {
     namespace pins {
         extern std::map<int, int> pinMap;
-    }
+    } // namespace pins
     namespace photoresistor {
         extern bool covered;
-    }
+    } // namespace photoresistor
     namespace mission {
         extern mission_mode_type mode;
         extern bool low_power_eligible;
@@ -47,14 +50,22 @@ namespace sfr {
         extern int armed_time;
     } // namespace burnwire
     namespace camera {
+        extern sensor_mode_type mode;
         extern bool photo_taken_sd_failed;
         extern bool take_photo;
         extern bool turn_on;
         extern bool turn_off;
         extern bool powered;
+
+        extern camera_init_mode_type init_mode;
         extern uint8_t start_progress;
         extern uint64_t step_time;
-        extern uint64_t wait_count;
+        extern uint64_t init_start_time;
+        extern uint64_t init_timeout;
+        extern uint8_t begin_delay;
+        extern uint8_t resolution_set_delay;
+        extern uint8_t resolution_get_delay;
+
         extern uint64_t buffer[255];
         extern int current_serial;
         extern int fragment_number;
@@ -106,6 +117,8 @@ namespace sfr {
         extern int num_downlinks;
     } // namespace rockblock
     namespace imu {
+        extern sensor_mode_type mode;
+
         extern float mag_x;
         extern float mag_y;
         extern float mag_z;
@@ -119,6 +132,12 @@ namespace sfr {
         extern std::deque<float> gyro_x_buffer;
         extern std::deque<float> gyro_y_buffer;
         extern std::deque<float> gyro_z_buffer;
+        // std::deque<std::experimental::any, time_t> imu_dlink_buffer;
+        extern std::deque<float> imu_dlink_gyro_x_buffer;
+        extern std::deque<float> imu_dlink_gyro_y_buffer;
+        extern std::deque<float> imu_dlink_gyro_z_buffer;
+        extern std::deque<time_t> imu_dlink_time_buffer;
+        extern std::deque<imu_downlink_type> imu_dlink_magid_buffer;
 
         extern float mag_x_average;
         extern float mag_y_average;
@@ -126,6 +145,12 @@ namespace sfr {
         extern float gyro_x_average;
         extern float gyro_y_average;
         extern float gyro_z_average;
+
+        extern bool imu_dlink_report_ready;
+        extern imu_downlink_type imu_dlink_magid;
+        extern const int imu_downlink_buffer_max_size;
+        extern const int imu_downlink_report_size;
+        extern uint8_t report[];
     } // namespace imu
     namespace temperature {
         extern float temp_c;
@@ -158,7 +183,6 @@ namespace sfr {
         extern unsigned char fault_1;
         extern unsigned char fault_2;
         extern unsigned char fault_3;
-        extern unsigned char fault_4;
 
         // FAULT 1
         extern bool check_mag_x;

@@ -31,15 +31,6 @@ void test_camera_power_on()
     delay(200);
     camera_control_task.execute();
     TEST_ASSERT_EQUAL(true, sfr::camera::powered);
-
-    //test fault trip
-    /*
-    while (sfr::camera::turn_on == true) {
-        camera_control_task.execute();
-        delay(100);
-    }
-    TEST_ASSERT_EQUAL(4, sfr::fault::fault_3);
-*/
 }
 
 void test_camera_power_off()

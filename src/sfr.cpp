@@ -47,14 +47,23 @@ namespace sfr {
         int armed_time = constants::time::two_days;
     } // namespace burnwire
     namespace camera {
+        sensor_mode_type mode = sensor_mode_type::normal;
         bool photo_taken_sd_failed = false;
         bool take_photo = false;
         bool turn_on = false;
         bool turn_off = false;
         bool powered = false;
+
+        // Initialization
+        camera_init_mode_type init_mode = camera_init_mode_type::awaiting;
         uint8_t start_progress = 0;
         uint64_t step_time = 0;
-        uint64_t wait_count = 0;
+        uint64_t init_start_time = 0;
+        uint64_t init_timeout = 12000;
+        uint8_t begin_delay = 100;
+        uint8_t resolution_set_delay = 500;
+        uint8_t resolution_get_delay = 200;
+
         uint64_t buffer[255] = {0};
         int current_serial = 0;
         int fragment_number = 0;
