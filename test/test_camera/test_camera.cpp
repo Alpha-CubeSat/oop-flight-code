@@ -11,7 +11,7 @@ void test_camera_valid_initialize()
 
 void test_camera_power_on()
 {
-    
+
     CameraControlTask camera_control_task(0);
     TEST_ASSERT_EQUAL(false, sfr::camera::powered);
     TEST_ASSERT_EQUAL(camera_init_mode_type::awaiting, sfr::camera::init_mode);
@@ -34,7 +34,7 @@ void test_camera_power_on()
     TEST_ASSERT_EQUAL(camera_init_mode_type::complete, sfr::camera::init_mode);
     TEST_ASSERT_EQUAL(false, sfr::camera::turn_on);
     TEST_ASSERT_EQUAL(true, sfr::camera::powered);
-    TEST_ASSERT_EQUAL( sensor_mode_type::normal, sfr::camera::mode);
+    TEST_ASSERT_EQUAL(sensor_mode_type::normal, sfr::camera::mode);
 }
 
 void test_camera_power_off()
@@ -81,9 +81,9 @@ int test_camera()
     UNITY_BEGIN();
     RUN_TEST(test_camera_valid_initialize);
     RUN_TEST(test_camera_power_on);
-    // RUN_TEST(test_camera_power_off);
-    // RUN_TEST(test_take_picture);
-    // RUN_TEST(test_camera_report_prepare);
+    RUN_TEST(test_camera_power_off);
+    RUN_TEST(test_take_picture);
+    RUN_TEST(test_camera_report_prepare);
     return UNITY_END();
 }
 
