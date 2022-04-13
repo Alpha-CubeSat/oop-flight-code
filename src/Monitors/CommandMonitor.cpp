@@ -1,10 +1,22 @@
 #include "CommandMonitor.hpp"
+#include "NormalReportMonitor.hpp"
 
 CommandMonitor::CommandMonitor(unsigned int offset) : TimedControlTask<void>(offset) {}
 
 void CommandMonitor::execute()
 {
     if (sfr::rockblock::waiting_command) {
+        bool mag_x_average_isValid = sfr::imu::mag_x_average->is_valid();
+        bool mag_y_average_isValid = sfr::imu::mag_y_average->is_valid();
+        bool mag_z_average_isValid = sfr::imu::mag_z_average->is_valid();
+        bool gyro_x_average_isValid = sfr::imu::gyro_x_average->is_valid();
+        bool gyro_y_average_isValid = sfr::imu::gyro_y_average->is_valid();
+        bool gyro_z_average_isValid = sfr::imu::gyro_z_average->is_valid();
+        bool temp_c_average_isValid = sfr::temperature::temp_c_average->is_valid();
+        bool voltage_average_isValid = sfr::battery::voltage_average->is_valid();
+        bool solar_current_average_isValid = sfr::current::solar_current_average->is_valid();
+        NormalReportMonitor::commands_received.push(sfr::rockblock::f_opcode & 0xFF);          // Add byte 0 of opcode to the queue
+        NormalReportMonitor::commands_received.push((sfr::rockblock::f_opcode & 0xFF00) >> 8); // Add byte 1 of opcode to the queue
         if (sfr::rockblock::f_opcode == get_decimal_opcode(constants::rockblock::mission_mode)) {
             dispatch_change_mission_mode();
         } else if (sfr::rockblock::f_opcode == get_decimal_opcode(constants::rockblock::burnwire_arm)) {
@@ -26,23 +38,23 @@ void CommandMonitor::execute()
         } else if (sfr::rockblock::f_opcode == get_decimal_opcode(constants::rockblock::fault_mode)) {
             dispatch_change_fault_mode();
         } else if (sfr::rockblock::f_opcode == get_decimal_opcode(constants::rockblock::fault_check_mag_x)) {
-            dispatch_change_true_false(sfr::fault::check_mag_x);
+            dispatch_change_true_false(mag_x_average_isValid);
         } else if (sfr::rockblock::f_opcode == get_decimal_opcode(constants::rockblock::fault_check_mag_y)) {
-            dispatch_change_true_false(sfr::fault::check_mag_y);
+            dispatch_change_true_false(mag_y_average_isValid);
         } else if (sfr::rockblock::f_opcode == get_decimal_opcode(constants::rockblock::fault_check_mag_z)) {
-            dispatch_change_true_false(sfr::fault::check_mag_z);
+            dispatch_change_true_false(mag_z_average_isValid);
         } else if (sfr::rockblock::f_opcode == get_decimal_opcode(constants::rockblock::fault_check_gyro_x)) {
-            dispatch_change_true_false(sfr::fault::check_gyro_x);
+            dispatch_change_true_false(gyro_x_average_isValid);
         } else if (sfr::rockblock::f_opcode == get_decimal_opcode(constants::rockblock::fault_check_gyro_y)) {
-            dispatch_change_true_false(sfr::fault::check_gyro_y);
+            dispatch_change_true_false(gyro_y_average_isValid);
         } else if (sfr::rockblock::f_opcode == get_decimal_opcode(constants::rockblock::fault_check_gyro_z)) {
-            dispatch_change_true_false(sfr::fault::check_gyro_z);
+            dispatch_change_true_false(gyro_z_average_isValid);
         } else if (sfr::rockblock::f_opcode == get_decimal_opcode(constants::rockblock::fault_check_temp_c)) {
-            dispatch_change_true_false(sfr::fault::check_temp_c);
+            dispatch_change_true_false(temp_c_average_isValid);
         } else if (sfr::rockblock::f_opcode == get_decimal_opcode(constants::rockblock::fault_check_solar_current)) {
-            dispatch_change_true_false(sfr::fault::check_solar_current);
+            dispatch_change_true_false(voltage_average_isValid);
         } else if (sfr::rockblock::f_opcode == get_decimal_opcode(constants::rockblock::fault_check_voltage)) {
-            dispatch_change_true_false(sfr::fault::check_voltage);
+            dispatch_change_true_false(solar_current_average_isValid);
         } else if (sfr::rockblock::f_opcode == get_decimal_opcode(constants::rockblock::change_simplified_acs)) {
             dispatch_change_simplified_acs();
         } else if (sfr::rockblock::f_opcode == get_decimal_opcode(constants::rockblock::camera_turn_on)) {

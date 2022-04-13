@@ -13,6 +13,7 @@ MainControlLoop::MainControlLoop()
       imu_monitor(constants::timecontrol::imu_monitor_offset),
       normal_report_monitor(constants::timecontrol::normal_report_monitor_offset),
       photoresistor_monitor(constants::timecontrol::photoresistor_monitor_offset),
+      rockblock_report_monitor(constants::timecontrol::rockblock_report_monitor_offset),
       temperature_monitor(constants::timecontrol::temperature_monitor_offset),
       acs_control_task(constants::timecontrol::acs_control_task_offset),
       burnwire_control_task(constants::timecontrol::burnwire_control_task_offset),
@@ -21,18 +22,20 @@ MainControlLoop::MainControlLoop()
       mission_manager(constants::timecontrol::mission_manager_offset)
 {
     delay(1000);
-    MissionManager::transition_to_boot();
+    sfr::mission::boot->transition_to();
 }
 
 void MainControlLoop::execute()
 {
-    sfr::fault::fault_1 = 0;
-    sfr::fault::fault_2 = 0;
-    sfr::fault::fault_3 = 0;
+    faults::fault_1 = 0;
+    faults::fault_2 = 0;
+    faults::fault_3 = 0;
 
     clock_manager.execute();
 
-    // acs_monitor.execute_on_time();
+    mission_manager.execute_on_time();
+
+    acs_monitor.execute_on_time();
     battery_monitor.execute_on_time();
     button_monitor.execute_on_time();
     camera_report_monitor.execute_on_time();
@@ -42,12 +45,11 @@ void MainControlLoop::execute()
     imu_monitor.execute_on_time();
     normal_report_monitor.execute_on_time();
     photoresistor_monitor.execute_on_time();
+    rockblock_report_monitor.execute_on_time();
     temperature_monitor.execute_on_time();
 
-    // acs_control_task.execute_on_time();
+    acs_control_task.execute_on_time();
     burnwire_control_task.execute_on_time();
     camera_control_task.execute_on_time();
     rockblock_control_task.execute_on_time();
-
-    mission_manager.execute_on_time();
 }

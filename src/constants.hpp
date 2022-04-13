@@ -1,6 +1,9 @@
 #ifndef CONSTANTS_HPP_
 #define CONSTANTS_HPP_
 
+#include <cstddef>
+#include <stdint.h>
+
 namespace constants {
     namespace time {
         constexpr unsigned long one_second = 1000;
@@ -15,10 +18,12 @@ namespace constants {
     } // namespace time
     namespace sensor {
         constexpr int collect = 3;
-    }
+    } // namespace sensor
     namespace photoresistor {
         constexpr int pin = 38;
         constexpr int light_val = 150;
+        constexpr int min_val = 0;
+        constexpr int max_val = 1023;
     } // namespace photoresistor
     namespace burnwire {
         constexpr int first_pin = 14;
@@ -31,8 +36,11 @@ namespace constants {
         constexpr int min_armed_time = 0;
         constexpr int max_armed_time = 86400000;
     } // namespace burnwire
-
     namespace rockblock {
+        constexpr unsigned long one_second = 1000;
+        constexpr unsigned long one_minute = 60 * one_second;
+        constexpr unsigned long one_hour = 60 * one_minute;
+        constexpr unsigned long one_day = 24 * one_hour;
 
         constexpr int sleep_pin = 19;
 
@@ -54,6 +62,9 @@ namespace constants {
         constexpr size_t max_conseq_read = 3;
 
         constexpr int num_initial_downlinks = 2;
+        constexpr uint8_t start_of_normal_downlink_flag = 253;
+        constexpr uint8_t end_of_normal_downlink_flag1 = 254;
+        constexpr uint8_t end_of_normal_downlink_flag2 = 255;
 
         constexpr uint8_t mission_mode[opcode_len] = {0x00, 0x00};
         constexpr uint8_t burnwire_arm[opcode_len] = {0x01, 0x00};
@@ -347,9 +358,9 @@ namespace constants {
     } // namespace rockblock
     namespace temperature {
         constexpr int pin = 39;
-        constexpr float min_temp_c;
-        constexpr float max_temp_c;
-        constexpr float in_sun_val;
+        constexpr float min_temp_c = -25;
+        constexpr float max_temp_c = 65;
+        constexpr float in_sun_val = 40;
     } // namespace temperature
     namespace current {
         constexpr int pin = 22;
@@ -393,7 +404,6 @@ namespace constants {
         constexpr int resolution = 1023;
         constexpr int r1 = 4700;
         constexpr int r2 = 10000;
-
     } // namespace battery
     namespace fault {
         // fault 1
@@ -403,11 +413,14 @@ namespace constants {
         constexpr uint8_t gyro_x = 1 << 3;
         constexpr uint8_t gyro_y = 1 << 4;
         constexpr uint8_t gyro_z = 1 << 5;
+        constexpr uint8_t acc_x = 1 << 6;
+        constexpr uint8_t acc_y = 1 << 7;
+        constexpr uint8_t imu_init = 1 << 6;
 
         // fault 2
-        constexpr uint8_t temp_c = 1 << 1;
-        constexpr uint8_t solar_current = 1 << 2;
-        constexpr uint8_t voltage = 1 << 3;
+        constexpr uint8_t temp_c = 1 << 0;
+        constexpr uint8_t solar_current = 1 << 1;
+        constexpr uint8_t voltage = 1 << 2;
 
         // fault 3
         constexpr uint8_t burn_wire = 1 << 0;
@@ -423,7 +436,7 @@ namespace constants {
         constexpr int rx = 33;
     } // namespace camera
     namespace button {
-        //low when door is opened
+        // low when door is opened
         constexpr int button_pin = 37;
     } // namespace button
     namespace imu {
@@ -433,18 +446,21 @@ namespace constants {
         constexpr float eight_g = 8 * gravity;
 
         constexpr float min_mag_x = 0.0;
-        constexpr float max_mag_x = 0.0;
+        constexpr float max_mag_x = 100;
         constexpr float min_mag_y = 0.0;
-        constexpr float max_mag_y = 0.0;
-        constexpr float min_mag_z = 0.0;
-        constexpr float max_mag_z = 0.0;
+        constexpr float max_mag_y = 100;
+        constexpr float min_mag_z = -100;
+        constexpr float max_mag_z = 100;
 
         constexpr float min_gyro_x = 0.0;
-        constexpr float max_gyro_x = 0.0;
+        constexpr float max_gyro_x = 10;
         constexpr float min_gyro_y = 0.0;
-        constexpr float max_gyro_y = 0.0;
+        constexpr float max_gyro_y = 10;
         constexpr float min_gyro_z = 0.0;
-        constexpr float max_gyro_z = 0.0;
+        constexpr float max_gyro_z = 10;
+
+        constexpr int bytes_allocated_fragment = 1;
+        constexpr int bytes_allocated_serial_opcode = 2;
 
         constexpr int CSAG = 21;
         constexpr int CSM = 20;
@@ -459,24 +475,25 @@ namespace constants {
 
         // number being added is the time length of the previous function
         // battery monitor takes max 60 us, so button monitor will start 60us after
-        static constexpr unsigned int acs_monitor_offset = 0;                          // time starts at 0
-        static constexpr unsigned int battery_monitor_offset = acs_monitor_offset + 0; // to be determined
-        static constexpr unsigned int button_monitor_offset = battery_monitor_offset + 60;
-        static constexpr unsigned int camera_report_monitor_offset = button_monitor_offset + 10;
-        static constexpr unsigned int command_monitor_offset = camera_report_monitor_offset + 20;
-        static constexpr unsigned int current_monitor_offset = command_monitor_offset + 20;
-        static constexpr unsigned int fault_monitor_offset = current_monitor_offset + 50;
-        static constexpr unsigned int imu_monitor_offset = fault_monitor_offset + 30;
-        static constexpr unsigned int normal_report_monitor_offset = imu_monitor_offset + 9000;
-        static constexpr unsigned int photoresistor_monitor_offset = normal_report_monitor_offset + 30;
-        static constexpr unsigned int temperature_monitor_offset = photoresistor_monitor_offset + 30;
+        static constexpr unsigned int acs_monitor_offset = 0;     // time starts at 0
+        static constexpr unsigned int battery_monitor_offset = 0; // to be determined
+        static constexpr unsigned int button_monitor_offset = 0;
+        static constexpr unsigned int camera_report_monitor_offset = 0;
+        static constexpr unsigned int command_monitor_offset = 0;
+        static constexpr unsigned int current_monitor_offset = 0;
+        static constexpr unsigned int fault_monitor_offset = 0;
+        static constexpr unsigned int imu_monitor_offset = 0;
+        static constexpr unsigned int normal_report_monitor_offset = 0;
+        static constexpr unsigned int photoresistor_monitor_offset = 0;
+        static constexpr unsigned int temperature_monitor_offset = 0;
 
-        static constexpr unsigned int acs_control_task_offset = temperature_monitor_offset + 40;
-        static constexpr unsigned int burnwire_control_task_offset = acs_control_task_offset + 0; // to be determined
-        static constexpr unsigned int camera_control_task_offset = burnwire_control_task_offset + 20;
-        static constexpr unsigned int rockblock_control_task_offset = camera_control_task_offset + 230000;
-
-        static constexpr unsigned int mission_manager_offset = rockblock_control_task_offset + 20;
+        static constexpr unsigned int acs_control_task_offset = 0;
+        static constexpr unsigned int burnwire_control_task_offset = 0;
+        static constexpr unsigned int camera_control_task_offset = 0;
+        static constexpr unsigned int rockblock_control_task_offset = 0;
+        static constexpr unsigned int rockblock_report_monitor_offset = 0;
+        static constexpr unsigned int temperature_control_task_offset = 0;
+        static constexpr unsigned int mission_manager_offset = 0;
     } // namespace timecontrol
 };    // namespace constants
 

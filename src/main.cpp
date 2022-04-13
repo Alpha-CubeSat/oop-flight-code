@@ -5,10 +5,13 @@ MainControlLoop mcl;
 PinControlTask pin_control_task;
 
 #ifndef UNIT_TEST
+
 void setup()
 {
     // delay for 2 hours
     // delay(7200000);
+    Serial.begin(9600);
+    delay(5000);
     pin_control_task.execute();
 }
 

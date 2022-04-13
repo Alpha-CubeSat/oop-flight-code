@@ -110,7 +110,7 @@ void CameraControlTask::camera_init()
         Serial.println(sfr::camera::start_progress);
     }
 
-    else if (sfr::camera::init_mode == camera_init_mode_type::in_progress) {
+    if (sfr::camera::init_mode == camera_init_mode_type::in_progress) {
         switch (sfr::camera::start_progress) {
         case 0: // step 0 - setting power
             Pins::setPinState(constants::camera::power_on_pin, HIGH);
@@ -170,7 +170,6 @@ void CameraControlTask::transition_to_abnormal_init()
     // updates camera mode to abnormal_init
     // trips fault
     sfr::camera::mode = sensor_mode_type::abnormal_init;
-    sfr::fault::fault_3 = sfr::fault::fault_3 | constants::fault::camera_on_failed;
     Pins::setPinState(constants::camera::power_on_pin, LOW);
     pinMode(constants::camera::rx, OUTPUT);
     pinMode(constants::camera::tx, OUTPUT);

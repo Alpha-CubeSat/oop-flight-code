@@ -11,11 +11,10 @@ ClockManager::ClockManager(const unsigned int _control_cycle_size) : TimedContro
 void ClockManager::execute()
 {
     unsigned int dt = 0;
-    if (has_executed) {
-        sys_time_t earliest_start_time =
-            TimedControlTaskBase::control_cycle_start_time + control_cycle_size;
+    /*if (has_executed) {
+        sys_time_t earliest_start_time = TimedControlTaskBase::control_cycle_start_time + control_cycle_size;
         dt = wait_until_time(earliest_start_time);
-    }
+    }*/
     has_executed = true;
     TimedControlTaskBase::control_cycle_start_time = get_system_time();
     control_cycle_count++;

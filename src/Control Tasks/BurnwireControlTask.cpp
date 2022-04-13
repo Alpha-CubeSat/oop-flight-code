@@ -4,7 +4,7 @@ BurnwireControlTask::BurnwireControlTask(unsigned int offset) : TimedControlTask
 
 void BurnwireControlTask::execute()
 {
-    burnwire_mode_type mode = sfr::burnwire::mode;
+    /*burnwire_mode_type mode = sfr::burnwire::mode;
 
     if (mode == burnwire_mode_type::delay || mode == burnwire_mode_type::burn) {
         sfr::mission::low_power_eligible = false;
@@ -28,9 +28,9 @@ void BurnwireControlTask::execute()
             if (millis() - sfr::burnwire::start_time >= (uint32_t)sfr::burnwire::armed_time) {
                 transition_to_standby();
             }
-            if ((sfr::burnwire::fire && sfr::temperature::in_sun && sfr::fault::check_temp_c) ||
-                (sfr::burnwire::fire && !sfr::fault::check_temp_c && sfr::fault::check_solar_current && sfr::current::in_sun) ||
-                (sfr::burnwire::fire && !sfr::fault::check_solar_current && !sfr::fault::check_temp_c)) {
+            if ((sfr::burnwire::fire && sfr::temperature::in_sun && sfr::temperature::temp_c_average->is_valid()) ||
+                (sfr::burnwire::fire && !sfr::temperature::temp_c_average->is_valid() && sfr::current::solar_current_average->is_valid() && sfr::current::in_sun) ||
+                (sfr::burnwire::fire && !sfr::current::solar_current_average->is_valid() && !sfr::temperature::temp_c_average->is_valid())) {
                 sfr::burnwire::mode = burnwire_mode_type::fire;
                 sfr::camera::turn_on = true;
             } else {
@@ -84,7 +84,7 @@ void BurnwireControlTask::execute()
         }
         break;
     }
-    }
+    }*/
 }
 
 void BurnwireControlTask::dispatch_burn()
@@ -94,7 +94,6 @@ void BurnwireControlTask::dispatch_burn()
     sfr::burnwire::start_time = millis();
     if (sfr::burnwire::attempts > constants::burnwire::max_attempts) {
         transition_to_standby();
-        sfr::fault::fault_3 = sfr::fault::fault_3 | constants::fault::burn_wire;
     } else {
         if (sfr::burnwire::attempts % 2 == 0) {
             Pins::setPinState(constants::burnwire::first_pin, HIGH);
