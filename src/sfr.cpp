@@ -2,7 +2,6 @@
 
 namespace sfr {
     namespace boot {
-        unsigned long start_time = 0.0;
         unsigned long max_time = constants::time::two_hours;
     }
     namespace simple {
@@ -10,9 +9,6 @@ namespace sfr {
     }
     namespace point {
         float max_time = 5*constants::time::one_minute;
-    }
-    namespace normal {
-        float start_time = 0;
     }
     namespace detumble {
         float start_time = 0;

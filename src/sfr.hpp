@@ -34,7 +34,6 @@
 
 namespace sfr {
     namespace boot {
-        extern unsigned long start_time;
         extern unsigned long max_time;
     }
     namespace simple {
@@ -42,9 +41,6 @@ namespace sfr {
     }
     namespace point {
         extern float max_time;
-    }
-    namespace normal {
-        extern float start_time;
     }
     namespace detumble {
         extern float start_time;

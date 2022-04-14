@@ -4,10 +4,9 @@
 void Boot::transition_to() {}
 void Boot::dispatch()
 {
-    if (millis() - sfr::boot::start_time >= sfr::boot::max_time) {
-        sfr::mission::current_mode = sfr::mission::aliveSignal;
-    }
+    timed_out(sfr::mission::aliveSignal);
 }
+
 
 void AliveSignal::transition_to() {}
 void AliveSignal::dispatch()
@@ -37,14 +36,90 @@ void LowPowerDetumbleSpin::dispatch()
 }
 
 void Normal::transition_to() {
-    sfr::normal::start_time = millis();
+    sfr::mission::normal->set_start_time(millis());
 }
 void Normal::dispatch(){
-
+    exit_acs(sfr::mission::transmit);
+    enter_lp(sfr::mission::lowPower);
 }
 
 void LowPower::transition_to() {}
 void LowPower::dispatch(){
+
+}
+
+void Transmit::transition_to() {}
+void Transmit::dispatch(){
+
+}
+
+void NormalDeployment::transition_to() {}
+void NormalDeployment::dispatch(){
+
+}
+
+void TransmitDeployment::transition_to() {}
+void TransmitDeployment::dispatch(){
+
+}
+
+void LowPowerDeployment::transition_to() {}
+void LowPowerDeployment::dispatch(){
+
+}
+
+void NormalArmed::transition_to() {}
+void NormalArmed::dispatch(){
+
+}
+
+void TransmitArmed::transition_to() {}
+void TransmitArmed::dispatch(){
+
+}
+
+void LowPowerArmed::transition_to() {}
+void LowPowerArmed::dispatch(){
+
+}
+
+void NormalInSun::transition_to() {}
+void NormalInSun::dispatch(){
+
+}
+
+void TransmitInSun::transition_to() {}
+void TransmitInSun::dispatch(){
+
+}
+
+void LowPowerInSun::transition_to() {}
+void LowPowerInSun::dispatch(){
+
+}
+
+void VoltageFailureInSun::transition_to() {}
+void VoltageFailureInSun::dispatch(){
+
+}
+
+void BootCamera::transition_to() {}
+void BootCamera::dispatch(){
+
+}
+
+void MandatoryBurns::transition_to() {}
+void MandatoryBurns::dispatch(){
+
+}
+
+void RegularBurns::transition_to() {}
+void RegularBurns::dispatch(){
+
+}
+
+void Photo::transition_to() {}
+void Photo::dispatch(){
 
 }
 
@@ -74,14 +149,17 @@ void exit_lp(MissionMode *reg_mode)
     }
 }
 
-/*void exit_acs()
+void exit_acs(MissionMode *transmit_mode)
 {
-    (millis()-sfr::normal::start_time >= sfr::mission::current_acs_mode->max_time() ){
-        sfr::mission::current_mode = 
-    }
+    timed_out(transmit_mode);
+}
 
-
-}*/
+void timed_out(MissionMode *next_mode)
+{
+    /*if (millis() - sfr::mission::current_mode->start_time >= sfr::mission::current_mode->max_time()) {
+        sfr::mission::current_mode = next_mode;
+    }*/
+}
 
 
 

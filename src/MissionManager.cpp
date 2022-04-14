@@ -7,7 +7,7 @@ MissionManager::MissionManager(unsigned int offset) : TimedControlTask<void>(off
 
 void MissionManager::execute()
 {
-    if (sfr::mission::previous_mode->id() != sfr::mission::current_mode->id()) {
+    if (sfr::mission::previous_mode->id != sfr::mission::current_mode->id) {
         sfr::mission::current_mode->transition_to();
     }
 

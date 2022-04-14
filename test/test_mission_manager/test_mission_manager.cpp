@@ -8,7 +8,7 @@ void reset(){
     sfr::aliveSignal::downlinked = false;
     sfr::detumble::start_time = millis();
     sfr::detumble::max_time = constants::time::two_hours;
-    sfr::mission::max_boot_time = constants::time::two_days;
+    sfr::boot::max_time = constants::time::two_days;
     sfr::battery::voltage_average->set_value(sfr::battery::acceptable_battery+.1);
 }
 
@@ -155,6 +155,14 @@ void test_exit_detumble_phase(MissionManager mission_manager, bool lp){
 
 }
 
+test_exit_acs(MissionMode *normal_mode){
+    sfr::normal::start_time = millis();
+    sfr::detumble::max_time = 5;
+    delay(5);
+    mission_manager.execute();
+    TEST_ASSERT_EQUAL(nextMode->id(), sfr::mission::current_mode->id());
+}
+
 void test_valid_initialization()
 {
     MissionManager mission_manager(0);
@@ -168,8 +176,8 @@ void test_exit_boot()
     reset_normal(mission_manager, sfr::mission::boot);
 
     // after max boot time, transition to aliveSignal
-    sfr::mission::max_boot_time = 500;
-    delay(sfr::mission::max_boot_time);
+    sfr::boot::max_time = 500;
+    delay(sfr::boot::max_time);
     mission_manager.execute();
     TEST_ASSERT_EQUAL(sfr::mission::aliveSignal->id(), sfr::mission::current_mode->id());
 }
@@ -216,6 +224,7 @@ void test_exit_normal()
     reset_normal(mission_manager, sfr::mission::normal);
 
     test_enter_lp(mission_manager, sfr::mission::lowPower, sfr::mission::normal);
+    test_exits_acs()
 
 }
 

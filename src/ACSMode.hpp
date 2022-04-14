@@ -6,45 +6,33 @@
 class ACSMode
 {
 public:
-    virtual float max_time();
-    virtual int id();
+    int id;
+    float max_time;
+    void set_max_time(float new_max_time){
+        max_time = new_max_time;
+    }
 };
 
 class Simple : public ACSMode
 {
 public:
-    float max_time(){
-        //return sfr::simple::max_time;
-        return 0;
-    }
-    int id(){
-        return 2;
-    }
+    float max_time = 0;
+    int id = 2;
     
 };
 
 class Point : public ACSMode
 {
 public:
-    float max_time(){
-        //return sfr::point::max_time;
-        return 0;
-    }
-    int id(){
-        return 1;
-    }
+    float max_time = 0;
+    int id = 1;
 };
 
 class Off : public ACSMode
 {
 public:
-    float max_time(){
-        //return sfr::point::max_time;
-        return 0;
-    }
-    int id(){
-        return 0;
-    }
+    float max_time = 0;
+    int id = 0;
 };
 
 #endif
