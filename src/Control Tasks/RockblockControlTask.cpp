@@ -178,10 +178,14 @@ void RockblockControlTask::dispatch_await_flow_control()
 
 void RockblockControlTask::dispatch_send_message_length()
 {
+    std::stringstream ss;
+    ss << sizeof(sfr::rockblock::downlink_report);
+    std::string s = ss.str();
+    std::string message_length = "AT+SBDWB=" + s + "\r";
 #ifdef VERBOSE
-    Serial.println("SENT: AT+SBDWB=70r");
+    Serial.println(("SENT: AT+SBDWB=" + s + "r").c_str());
 #endif
-    sfr::rockblock::serial.print("AT+SBDWB=70\r");
+    sfr::rockblock::serial.print(message_length.c_str());
     transition_to(rockblock_mode_type::await_message_length);
 }
 

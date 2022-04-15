@@ -266,6 +266,9 @@ namespace sfr {
         float current1 = 0;
         float current2 = 0;
         float current3 = 0;
+        float pwm1 = 0;
+        float pwm2 = 0;
+        float pwm3 = 0;
         simple_acs_type mag = simple_acs_type::x;
         unsigned long max_no_communication = 0;
     } // namespace acs

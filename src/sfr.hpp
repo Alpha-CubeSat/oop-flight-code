@@ -249,6 +249,9 @@ namespace sfr {
         extern float current1;
         extern float current2;
         extern float current3;
+        extern float pwm1;
+        extern float pwm2;
+        extern float pwm3;
         extern simple_acs_type mag;
         extern unsigned long max_no_communication;
     } // namespace acs
