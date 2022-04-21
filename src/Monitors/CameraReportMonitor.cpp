@@ -82,13 +82,7 @@ void CameraReportMonitor::create_camera_report(int fragment_number, uint8_t seri
     std::vector<unsigned char> fragment(constants::camera::bytes_allocated_fragment);
     for (size_t i = 0; i < constants::camera::bytes_allocated_fragment; i++) {
         fragment[3 - i] = (fragment_number >> (i * 8));
-    }
-
-    // add fragment number to camera report
-    size_t i = 0;
-    while (i < constants::camera::bytes_allocated_fragment) {
         sfr::rockblock::camera_report.push_back(fragment[i]);
-        i = i + 1;
     }
 
     // add actual image content to camera report
