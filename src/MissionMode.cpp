@@ -4,7 +4,7 @@
 void Boot::transition_to() {}
 void Boot::dispatch()
 {
-    timed_out(sfr::mission::aliveSignal);
+    timed_out(sfr::mission::aliveSignal, sfr::aliveSignal::max_time);
 }
 
 
@@ -149,16 +149,17 @@ void exit_lp(MissionMode *reg_mode)
     }
 }
 
-void exit_acs(MissionMode *transmit_mode)
+void exit_acs(MissionMode *transmit_mode, MissionMode *lp_mode, float max_time)
 {
-    timed_out(transmit_mode);
+    timed_out(transmit_mode, max_time);
+    enter_lp(lp_mode);
 }
 
-void timed_out(MissionMode *next_mode)
+void timed_out(MissionMode *next_mode, float max_time)
 {
-    /*if (millis() - sfr::mission::current_mode->start_time >= sfr::mission::current_mode->max_time()) {
+    if (millis() - sfr::mission::current_mode->start_time >= max_time) {
         sfr::mission::current_mode = next_mode;
-    }*/
+    }
 }
 
 
