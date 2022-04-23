@@ -27,6 +27,7 @@ MainControlLoop::MainControlLoop()
 
 void MainControlLoop::execute()
 {
+    delay(200);
     faults::fault_1 = 0;
     faults::fault_2 = 0;
     faults::fault_3 = 0;
