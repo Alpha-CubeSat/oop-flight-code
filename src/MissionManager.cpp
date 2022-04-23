@@ -2,7 +2,7 @@
 
 MissionManager::MissionManager(unsigned int offset) : TimedControlTask<void>(offset)
 {
-    sfr::mission::boot->transition_to();
+    boot_initialization();
 }
 
 void MissionManager::execute()

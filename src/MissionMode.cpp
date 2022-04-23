@@ -1,6 +1,8 @@
 #include "MissionMode.hpp"
 #include "sfr.hpp"
 
+void boot_initialization(){}
+
 void Boot::transition_to() {}
 void Boot::dispatch()
 {

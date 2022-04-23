@@ -22,12 +22,11 @@ MainControlLoop::MainControlLoop()
       mission_manager(constants::timecontrol::mission_manager_offset)
 {
     delay(1000);
-    sfr::mission::boot->transition_to();
+    boot_initialization();
 }
 
 void MainControlLoop::execute()
 {
-    Serial.println("hello");
     delay(200);
     faults::fault_1 = 0;
     faults::fault_2 = 0;

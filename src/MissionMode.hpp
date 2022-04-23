@@ -19,6 +19,7 @@ public:
     void transition_to();
     void dispatch();
     int id = 0;
+    float start_time = 0;
 };
 
 class AliveSignal : public MissionMode
@@ -183,5 +184,7 @@ void exit_detumble_phase(MissionMode *mode);
 void enter_lp(MissionMode *lp_mode);
 void exit_lp(MissionMode *reg_mode);
 void timed_out(MissionMode *next_mode, float max_time);
+
+void boot_initialization();
 
 #endif
