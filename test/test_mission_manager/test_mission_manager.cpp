@@ -155,11 +155,23 @@ void test_exit_detumble_phase(MissionManager mission_manager, bool lp){
 
 }
 
-void test_exits_acs(MissionMode *normal_mode, MissionManager mission_manager){
-    /*sfr::mission::normal->set_start_time(millis());
+void test_exit_acs(MissionManager mission_manager, MissionMode *transmitMode, MissionMode *normalMode){
+    reset_normal(mission_manager, normalMode);
+
+    // do not exit if acs on time has not been reached
+    sfr::acs::on_time = constants::time::one_hour;
+    normalMode->set_start_time(millis());
     delay(5);
     mission_manager.execute();
-    TEST_ASSERT_EQUAL(nextMode->id, sfr::mission::current_mode->id);*/
+    TEST_ASSERT_EQUAL(normalMode->id, sfr::mission::current_mode->id);
+
+    reset_normal(mission_manager, normalMode);
+    // exit if acs on time has been reached
+    sfr::acs::on_time = 5;
+    normalMode->set_start_time(millis());
+    delay(5);
+    mission_manager.execute();
+    TEST_ASSERT_EQUAL(transmitMode->id, sfr::mission::current_mode->id);
 }
 
 void test_valid_initialization()
@@ -223,7 +235,7 @@ void test_exit_normal()
     reset_normal(mission_manager, sfr::mission::normal);
 
     test_enter_lp(mission_manager, sfr::mission::lowPower, sfr::mission::normal);
-    //test_exits_acs()
+    test_exit_acs(mission_manager, sfr::mission::transmit, sfr::mission::normal);
 
 }
 
@@ -236,6 +248,7 @@ int test_mission_manager()
     RUN_TEST(test_exit_low_power_alive_signal);
     RUN_TEST(test_exit_detumble_spin);
     RUN_TEST(test_exit_low_power_detumble_spin);
+    RUN_TEST(test_exit_normal);
     return UNITY_END();
 }
 

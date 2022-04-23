@@ -11,6 +11,9 @@ public:
     void set_start_time(float new_start_time){
         start_time = new_start_time;
     }
+    void set_id(int new_id){
+        id = new_id;
+    }
 };
 
 class Boot : public MissionMode
@@ -18,8 +21,6 @@ class Boot : public MissionMode
 public:
     void transition_to();
     void dispatch();
-    int id = 0;
-    float start_time = 0;
 };
 
 class AliveSignal : public MissionMode
@@ -27,7 +28,6 @@ class AliveSignal : public MissionMode
 public:
     void dispatch();
     void transition_to();
-    int id = 1;
 };
 
 class LowPowerAliveSignal : public MissionMode
@@ -35,7 +35,6 @@ class LowPowerAliveSignal : public MissionMode
 public:
     void dispatch();
     void transition_to();
-    int id = 2;
 };
 
 class DetumbleSpin : public MissionMode
@@ -43,7 +42,6 @@ class DetumbleSpin : public MissionMode
 public:
     void dispatch();
     void transition_to();
-    int id = 3;
 };
 
 class LowPowerDetumbleSpin : public MissionMode
@@ -51,7 +49,6 @@ class LowPowerDetumbleSpin : public MissionMode
 public:
     void dispatch();
     void transition_to();
-    int id = 4;
 };
 
 class Normal : public MissionMode
@@ -59,7 +56,6 @@ class Normal : public MissionMode
 public:
     void dispatch();
     void transition_to();
-    int id = 5;
 };
 
 class Transmit : public MissionMode
@@ -67,7 +63,6 @@ class Transmit : public MissionMode
 public:
     void dispatch();
     void transition_to();
-    int id = 6;
 };
 
 class LowPower : public MissionMode
@@ -75,7 +70,6 @@ class LowPower : public MissionMode
 public:
     void dispatch();
     void transition_to();
-    int id = 7;
 };
 
 class NormalDeployment : public MissionMode
@@ -83,7 +77,6 @@ class NormalDeployment : public MissionMode
 public:
     void dispatch();
     void transition_to();
-    int id = 8;
 };
 
 class TransmitDeployment : public MissionMode
@@ -91,7 +84,6 @@ class TransmitDeployment : public MissionMode
 public:
     void dispatch();
     void transition_to();
-    int id = 9;
 };
 
 class LowPowerDeployment : public MissionMode
@@ -99,7 +91,6 @@ class LowPowerDeployment : public MissionMode
 public:
     void dispatch();
     void transition_to();
-    int id = 10;
 };
 
 class NormalArmed : public MissionMode
