@@ -1,7 +1,8 @@
 #include "Control Tasks/PinControlTask.hpp"
-#include "MainControlLoop.hpp"
+//#include "MainControlLoop.hpp"
+#include "Arduino.h"
 
-MainControlLoop mcl;
+//MainControlLoop mcl;
 PinControlTask pin_control_task;
 
 #ifndef UNIT_TEST
@@ -17,6 +18,7 @@ void setup()
 
 void loop()
 {
-    mcl.execute();
+    Serial.println("test");
+    //mcl.execute();
 }
 #endif

@@ -18,7 +18,7 @@ void reset_normal(MissionManager mission_manager, MissionMode *mode)
     sfr::mission::current_mode = mode;
     sfr::battery::voltage_average->set_valid();
     mission_manager.execute();
-    TEST_ASSERT_EQUAL(mode->id(), sfr::mission::current_mode->id());
+    TEST_ASSERT_EQUAL(mode->id, sfr::mission::current_mode->id);
 }
 
 void reset_lp(MissionManager mission_manager, MissionMode *mode)
@@ -27,7 +27,7 @@ void reset_lp(MissionManager mission_manager, MissionMode *mode)
     sfr::mission::current_mode = mode;
     sfr::battery::voltage_average->set_invalid();
     mission_manager.execute();
-    TEST_ASSERT_EQUAL(mode->id(), sfr::mission::current_mode->id());
+    TEST_ASSERT_EQUAL(mode->id, sfr::mission::current_mode->id);
 }
 
 void conditional_reset(MissionManager mission_manager, MissionMode *lpMode, MissionMode *normalMode, bool lp){
@@ -44,7 +44,7 @@ void test_exit_lp(MissionManager mission_manager, MissionMode *lpMode, MissionMo
     // exit if voltage sensor resolves itself
     sfr::battery::voltage_average->set_valid();
     mission_manager.execute();
-    TEST_ASSERT_EQUAL(normalMode->id(), sfr::mission::current_mode->id());
+    TEST_ASSERT_EQUAL(normalMode->id, sfr::mission::current_mode->id);
 
     reset_lp(mission_manager, lpMode);
 
@@ -52,7 +52,7 @@ void test_exit_lp(MissionManager mission_manager, MissionMode *lpMode, MissionMo
     sfr::battery::voltage_average->set_value(sfr::battery::acceptable_battery+.1);
     sfr::battery::voltage_average->set_valid();
     mission_manager.execute();
-    TEST_ASSERT_EQUAL(normalMode->id(), sfr::mission::current_mode->id());
+    TEST_ASSERT_EQUAL(normalMode->id, sfr::mission::current_mode->id);
 
     reset_lp(mission_manager, lpMode);
 
@@ -60,7 +60,7 @@ void test_exit_lp(MissionManager mission_manager, MissionMode *lpMode, MissionMo
     sfr::battery::voltage_average->set_valid();
     sfr::battery::voltage_average->set_value(sfr::battery::min_battery-.1);
     mission_manager.execute();
-    TEST_ASSERT_EQUAL(lpMode->id(), sfr::mission::current_mode->id());
+    TEST_ASSERT_EQUAL(lpMode->id, sfr::mission::current_mode->id);
 
     reset_lp(mission_manager, lpMode);
 
@@ -68,7 +68,7 @@ void test_exit_lp(MissionManager mission_manager, MissionMode *lpMode, MissionMo
     sfr::battery::voltage_average->set_invalid();
     sfr::battery::voltage_average->set_value(sfr::battery::acceptable_battery+.1);
     mission_manager.execute();
-    TEST_ASSERT_EQUAL(lpMode->id(), sfr::mission::current_mode->id());
+    TEST_ASSERT_EQUAL(lpMode->id, sfr::mission::current_mode->id);
 }
 
 void test_enter_lp(MissionManager mission_manager, MissionMode *lpMode, MissionMode *normalMode){
@@ -77,14 +77,14 @@ void test_enter_lp(MissionManager mission_manager, MissionMode *lpMode, MissionM
     // exit if voltage sensor fails
     sfr::battery::voltage_average->set_invalid();
     mission_manager.execute();
-    TEST_ASSERT_EQUAL(lpMode->id(), sfr::mission::current_mode->id());
+    TEST_ASSERT_EQUAL(lpMode->id, sfr::mission::current_mode->id);
 
     reset_normal(mission_manager, normalMode);
 
     // exit if battery voltage is too low
     sfr::battery::voltage_average->set_value(sfr::battery::min_battery-.1);
     mission_manager.execute();
-    TEST_ASSERT_EQUAL(lpMode->id(), sfr::mission::current_mode->id());
+    TEST_ASSERT_EQUAL(lpMode->id, sfr::mission::current_mode->id);
 
     reset_normal(mission_manager, normalMode);
 
@@ -92,7 +92,7 @@ void test_enter_lp(MissionManager mission_manager, MissionMode *lpMode, MissionM
     sfr::battery::voltage_average->set_invalid();
     sfr::battery::voltage_average->set_value(sfr::battery::min_battery-.1);
     mission_manager.execute();
-    TEST_ASSERT_EQUAL(lpMode->id(), sfr::mission::current_mode->id());
+    TEST_ASSERT_EQUAL(lpMode->id, sfr::mission::current_mode->id);
 }
 
 void test_exit_signal_phase(MissionManager mission_manager, bool lp){
@@ -114,7 +114,7 @@ void test_exit_signal_phase(MissionManager mission_manager, bool lp){
     // exit if downlinked
     sfr::aliveSignal::downlinked = true;
     mission_manager.execute();
-    TEST_ASSERT_EQUAL(nextMode->id(), sfr::mission::current_mode->id());
+    TEST_ASSERT_EQUAL(nextMode->id, sfr::mission::current_mode->id);
 
     sfr::aliveSignal::downlinked = false;
     conditional_reset(mission_manager, sfr::mission::lowPowerAliveSignal, sfr::mission::aliveSignal, lp);
@@ -122,7 +122,7 @@ void test_exit_signal_phase(MissionManager mission_manager, bool lp){
     //exit if reached max number of failed downlinks
     sfr::aliveSignal::num_downlink_failures = sfr::aliveSignal::max_downlink_failures;
     mission_manager.execute();
-    TEST_ASSERT_EQUAL(nextMode->id(), sfr::mission::current_mode->id());
+    TEST_ASSERT_EQUAL(nextMode->id, sfr::mission::current_mode->id);
 
 }
 
@@ -144,30 +144,29 @@ void test_exit_detumble_phase(MissionManager mission_manager, bool lp){
     sfr::detumble::max_time = 5;
     delay(5);
     mission_manager.execute();
-    TEST_ASSERT_EQUAL(nextMode->id(), sfr::mission::current_mode->id());
+    TEST_ASSERT_EQUAL(nextMode->id, sfr::mission::current_mode->id);
 
     conditional_reset(mission_manager, sfr::mission::lowPowerDetumbleSpin, sfr::mission::detumbleSpin, lp);
 
     //exit if imu determines stable
     sfr::imu::gyro_z_average->set_value(sfr::detumble::stable_gyro_z);
     mission_manager.execute();
-    TEST_ASSERT_EQUAL(nextMode->id(), sfr::mission::current_mode->id());
+    TEST_ASSERT_EQUAL(nextMode->id, sfr::mission::current_mode->id);
 
 }
 
-test_exit_acs(MissionMode *normal_mode){
-    sfr::normal::start_time = millis();
-    sfr::detumble::max_time = 5;
+void test_exits_acs(MissionMode *normal_mode, MissionManager mission_manager){
+    /*sfr::mission::normal->set_start_time(millis());
     delay(5);
     mission_manager.execute();
-    TEST_ASSERT_EQUAL(nextMode->id(), sfr::mission::current_mode->id());
+    TEST_ASSERT_EQUAL(nextMode->id, sfr::mission::current_mode->id);*/
 }
 
 void test_valid_initialization()
 {
     MissionManager mission_manager(0);
     mission_manager.execute();
-    TEST_ASSERT_EQUAL(sfr::mission::boot->id(), sfr::mission::current_mode->id());
+    TEST_ASSERT_EQUAL(sfr::mission::boot->id, sfr::mission::current_mode->id);
 }
 
 void test_exit_boot()
@@ -179,7 +178,7 @@ void test_exit_boot()
     sfr::boot::max_time = 500;
     delay(sfr::boot::max_time);
     mission_manager.execute();
-    TEST_ASSERT_EQUAL(sfr::mission::aliveSignal->id(), sfr::mission::current_mode->id());
+    TEST_ASSERT_EQUAL(sfr::mission::aliveSignal->id, sfr::mission::current_mode->id);
 }
 
 void test_exit_alive_signal()
@@ -224,7 +223,7 @@ void test_exit_normal()
     reset_normal(mission_manager, sfr::mission::normal);
 
     test_enter_lp(mission_manager, sfr::mission::lowPower, sfr::mission::normal);
-    test_exits_acs()
+    //test_exits_acs()
 
 }
 

@@ -39,7 +39,7 @@ void Normal::transition_to() {
     sfr::mission::normal->set_start_time(millis());
 }
 void Normal::dispatch(){
-    exit_acs(sfr::mission::transmit);
+    timed_out(sfr::mission::transmit, sfr::acs::on_time);
     enter_lp(sfr::mission::lowPower);
 }
 
@@ -147,12 +147,6 @@ void exit_lp(MissionMode *reg_mode)
     if (sfr::battery::voltage_average->is_valid() && sfr::battery::voltage_average->get_value() >= sfr::battery::acceptable_battery) {
         sfr::mission::current_mode = reg_mode;
     }
-}
-
-void exit_acs(MissionMode *transmit_mode, MissionMode *lp_mode, float max_time)
-{
-    timed_out(transmit_mode, max_time);
-    enter_lp(lp_mode);
 }
 
 void timed_out(MissionMode *next_mode, float max_time)

@@ -20,6 +20,7 @@ namespace sfr {
         int num_downlink_failures = 0;
         int max_downlink_failures = 5;
         bool downlinked = false;
+        float max_time = constants::time::two_hours;
     } // namespace aliveSignal
     namespace pins {
         std::map<int, int> pinMap = {
@@ -271,6 +272,9 @@ namespace sfr {
         float pwm3 = 0;
         simple_acs_type mag = simple_acs_type::x;
         unsigned long max_no_communication = 0;
+
+        float on_time = 5 * constants::time::one_minute;
+        float off_time = 5 * constants::time::one_minute;
     } // namespace acs
     namespace battery {
         float voltage = 0.0;

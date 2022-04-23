@@ -51,6 +51,7 @@ namespace sfr {
         extern int num_downlink_failures;
         extern int max_downlink_failures;
         extern bool downlinked;
+        extern float max_time;
     } // namespace aliveSignal
     namespace pins {
         extern std::map<int, int> pinMap;
@@ -254,6 +255,8 @@ namespace sfr {
         extern float pwm3;
         extern simple_acs_type mag;
         extern unsigned long max_no_communication;
+        extern float on_time;
+        extern float off_time;
     } // namespace acs
     namespace battery {
         extern float voltage;

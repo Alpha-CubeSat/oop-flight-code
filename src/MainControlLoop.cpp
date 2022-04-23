@@ -27,6 +27,7 @@ MainControlLoop::MainControlLoop()
 
 void MainControlLoop::execute()
 {
+    Serial.println("hello");
     delay(200);
     faults::fault_1 = 0;
     faults::fault_2 = 0;
