@@ -25,8 +25,8 @@ void buffer_size_back_to_zero()
 void test_IMUDownlink_execute_mandburns()
 {
     buffer_size_back_to_zero();
-    sfr::mission::mode = mission_mode_type::mand_burns;
-    TEST_ASSERT_EQUAL(sfr::mission::mode, mission_mode_type::mand_burns);
+    sfr::mission::current_mode == sfr::mission::mandatoryBurns;
+    TEST_ASSERT_EQUAL(sfr::mission::current_mode, sfr::mission::mandatoryBurns);
     IMUDownlink imu_downlink(0);
     imu_downlink.execute();
 
@@ -40,7 +40,7 @@ void test_IMUDownlink_execute_mandburns()
 void test_IMUDownlink_execute_regburns()
 {
     buffer_size_back_to_zero();
-    sfr::mission::mode = mission_mode_type::reg_burns;
+    sfr::mission::current_mode == sfr::mission::regularBurns;
     IMUDownlink imu_downlink(0);
     imu_downlink.execute();
 
@@ -60,8 +60,8 @@ void test_IMUDownlink_buffer_size()
         sfr::imu::imu_dlink_gyro_y_buffer.push_front(sfr::imu::gyro_y);
         sfr::imu::imu_dlink_gyro_z_buffer.push_front(sfr::imu::gyro_z);
     }
-    sfr::mission::mode = mission_mode_type::reg_burns;
-    TEST_ASSERT_EQUAL(sfr::mission::mode, mission_mode_type::reg_burns);
+    sfr::mission::current_mode == sfr::mission::regularBurns;
+    TEST_ASSERT_EQUAL(sfr::mission::current_mode, sfr::mission::regularBurns);
     IMUDownlink imu_downlink(0);
     imu_downlink.execute();
     TEST_ASSERT_EQUAL(sfr::imu::imu_downlink_buffer_max_size, sfr::imu::imu_dlink_gyro_x_buffer.size());
