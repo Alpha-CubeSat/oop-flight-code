@@ -36,6 +36,10 @@ void IMUDownlink::execute()
         //         Serial.println("adding to buffer gyro_z_val: " + String(sfr::imu::gyro_z));
         // #endif
 
+        sfr::imu::gyro_x = sfr::imu::gyro_x_value->get_value();
+        sfr::imu::gyro_y = sfr::imu::gyro_y_value->get_value();
+        sfr::imu::gyro_z = sfr::imu::gyro_z_value->get_value();
+
         // Add reading to imu downlink buffer
         sfr::imu::imu_dlink_gyro_x_buffer.push_front(sfr::imu::gyro_x);
         sfr::imu::imu_dlink_gyro_y_buffer.push_front(sfr::imu::gyro_y);

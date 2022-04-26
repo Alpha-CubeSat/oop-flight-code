@@ -130,12 +130,9 @@ void IMUMonitor::capture_imu_values()
     sfr::imu::mag_y = mag.magnetic.y;
     sfr::imu::mag_z = mag.magnetic.z;
 
-    // sfr::imu::gyro_x = gyro.gyro.x;
-    // sfr::imu::gyro_y = gyro.gyro.y;
-    // sfr::imu::gyro_z = gyro.gyro.z;
-    sfr::imu::gyro_x = sfr::imu::gyro_x_value->get_value();
-    sfr::imu::gyro_y = sfr::imu::gyro_y_value->get_value();
-    sfr::imu::gyro_z = sfr::imu::gyro_z_value->get_value();
+    sfr::imu::gyro_x = gyro.gyro.x;
+    sfr::imu::gyro_y = gyro.gyro.y;
+    sfr::imu::gyro_z = gyro.gyro.z;
 
 #ifdef VERBOSE_IMUM
     Serial.println("gyro_x_val: " + String(sfr::imu::gyro_x));
