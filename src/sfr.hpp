@@ -78,6 +78,8 @@ namespace sfr {
         extern MissionMode *previous_mode;
         extern unsigned long boot_start;
         extern unsigned long max_boot_time;
+
+        extern bool deployed;
     } // namespace mission
     namespace burnwire {
         extern bool fire;
@@ -139,18 +141,23 @@ namespace sfr {
         extern std::deque<uint8_t> downlink_report;
         extern std::deque<uint8_t> normal_report;
         extern std::deque<uint8_t> camera_report;
-        extern uint8_t imu_report[constants::rockblock::packet_size];
+        // extern uint8_t imu_report[constants::rockblock::packet_size];
+        extern std::deque<uint8_t> imu_report;
 
         extern char buffer[constants::rockblock::buffer_size];
         extern int camera_commands[99][constants::rockblock::command_len];
         extern int camera_max_fragments[99];
         extern int commas[constants::rockblock::num_commas];
 
+        extern int imu_downlink_max_fragments[99];
+
         extern uint8_t opcode[2];
         extern uint8_t arg_1[4];
         extern uint8_t arg_2[4];
 
         extern int imu_max_fragments;
+        extern float imudownlink_start_time;
+        extern bool imu_downlink_on;
 #ifndef SIMULATOR
         extern HardwareSerial serial;
 #else
@@ -191,6 +198,9 @@ namespace sfr {
         extern std::deque<float> imu_dlink_gyro_x_buffer;
         extern std::deque<float> imu_dlink_gyro_y_buffer;
         extern std::deque<float> imu_dlink_gyro_z_buffer;
+        // extern std::deque<SensorReading> imu_dlink_gyro_x_buffer;
+        // extern std::deque<SensorReading> imu_dlink_gyro_y_buffer;
+        // extern std::deque<SensorReading> imu_dlink_gyro_z_buffer;
 
         // extern float mag_x_average;
         extern SensorReading *mag_x_average;
@@ -202,23 +212,40 @@ namespace sfr {
         extern SensorReading *acc_x_average;
         extern SensorReading *acc_y_average;
 
-        extern imu_downlink_type imu_dlink_magid;
+        extern SensorReading *gyro_x_value;
+        extern SensorReading *gyro_y_value;
+        extern SensorReading *gyro_z_value;
+
+        extern imu_downlink_type imu_dlink_mode;
         extern const int imu_downlink_buffer_max_size;
         // extern const int imu_downlink_report_size;
 
         extern int fragment_number;
-        extern int fragment_number_requested;
         extern bool fragment_requested;
         extern int fragments_written;
+        extern int fragment_number_requested;
         extern bool imu_dlink_report_ready;
         extern bool report_downlinked;
-        extern char filename[15];
 
+        extern const int mag_4GAUSS_min;
         extern const int mag_8GAUSS_min;
         extern const int mag_12GAUSS_min;
         extern const int mag_16GAUSS_min;
+        extern const int gyro_245DPS_min;
         extern const int gyro_500DPS_min;
         extern const int gyro_2000DPS_min;
+        extern const int mag_4GAUSS_max;
+        extern const int mag_8GAUSS_max;
+        extern const int mag_12GAUSS_max;
+        extern const int mag_16GAUSS_max;
+        extern const int gyro_245DPS_max;
+        extern const int gyro_500DPS_max;
+        extern const int gyro_2000DPS_max;
+
+        extern int gyro_min;
+        extern int gyro_max;
+        extern int mag_min;
+        extern int mag_max;
     } // namespace imu
     namespace temperature {
         extern float temp_c;

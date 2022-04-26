@@ -9,7 +9,7 @@ void RockblockControlTask::execute()
 {
     check_timeout();
     rockblock_mode_type mode = sfr::rockblock::mode;
-#ifdef VERBOSE
+#ifdef VERBOSE_IMUD // fujia
     Serial.printf("Current rockblock mode: %d\n", mode);
 #endif
     switch (mode) {
@@ -345,6 +345,10 @@ void RockblockControlTask::dispatch_process_mt_status()
             sfr::camera::report_downlinked = true;
             sfr::rockblock::camera_report.clear();
         }
+        if (sfr::rockblock::downlink_report_type == report_type::imu_report) {
+            sfr::camera::report_downlinked = true;
+            sfr::rockblock::imu_report.clear();
+        }
         sfr::rockblock::num_downlinks = sfr::rockblock::num_downlinks + 1;
         transition_to(rockblock_mode_type::read_message);
         break;
@@ -475,6 +479,7 @@ bool RockblockControlTask::valid_command()
     bool arg_2 = true;
     bool rockblock_downlink_period_opcode = true;
     bool request_image_fragment_opcode = true;
+    bool request_imu_downlink_fragment_opcode = true;
     bool burnwire_time_opcode = true;
     bool burnwire_timeout_opcode = true;
 

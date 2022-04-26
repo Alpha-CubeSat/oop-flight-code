@@ -28,9 +28,17 @@ void RockblockReportMonitor::execute()
         break;
 
     case report_type::imu_report:
+#ifdef VERBOSE_IMUD
+        Serial.println("IMU Downlink Report monitor started");
+        Serial.println("Current serial: " + String(sfr::camera::current_serial));
+        Serial.println("Current fragment: " + String(sfr::camera::fragment_number));
+#endif
         sfr::rockblock::downlink_report.clear();
-        for (int i = 0; i < constants::rockblock::packet_size; i++) {
-            sfr::rockblock::downlink_report.push_back(sfr::rockblock::imu_report[i]);
+        // for (int i = 0; i < constants::rockblock::packet_size; i++) {
+        //     sfr::rockblock::downlink_report.push_back(sfr::rockblock::imu_report[i]);
+        // }
+        for (auto &data : sfr::rockblock::imu_report) {
+            sfr::rockblock::imu_report.push_back(data);
         }
         break;
     }

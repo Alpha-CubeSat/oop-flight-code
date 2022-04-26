@@ -95,6 +95,8 @@ namespace sfr {
         unsigned long boot_start = 0.0;
         unsigned long max_boot_time = constants::time::two_hours;
 
+        bool deployed = false;
+
     } // namespace mission
     namespace burnwire {
         bool fire = false;
@@ -154,18 +156,24 @@ namespace sfr {
         std::deque<uint8_t> downlink_report;
         std::deque<uint8_t> normal_report;
         std::deque<uint8_t> camera_report;
-        uint8_t imu_report[constants::rockblock::packet_size] = {0};
+        // uint8_t imu_report[constants::rockblock::packet_size] = {0};
+        std::deque<uint8_t> imu_report;
 
         char buffer[constants::rockblock::buffer_size] = {0};
         int camera_commands[99][constants::rockblock::command_len] = {};
         int camera_max_fragments[99] = {};
         int commas[constants::rockblock::num_commas] = {0};
 
+        int imu_downlink_max_fragments[99] = {};
+
         uint8_t opcode[2] = {0};
         uint8_t arg_1[4] = {0};
         uint8_t arg_2[4] = {0};
 
         int imu_max_fragments = 10;
+
+        float imudownlink_start_time = 0.0;
+        bool imu_downlink_on = true;
 #ifndef SIMULATOR
         HardwareSerial serial = Serial1;
 #else
@@ -207,6 +215,10 @@ namespace sfr {
         std::deque<float> imu_dlink_gyro_y_buffer;
         std::deque<float> imu_dlink_gyro_z_buffer;
 
+        // std::deque<SensorReading> imu_dlink_gyro_x_buffer;
+        // std::deque<SensorReading> imu_dlink_gyro_y_buffer;
+        // std::deque<SensorReading> imu_dlink_gyro_z_buffer;
+
         SensorReading *mag_x_average = new SensorReading(fault_index_type::mag_x, 0.0, false);
         SensorReading *mag_y_average = new SensorReading(fault_index_type::mag_y, 0.0, false);
         SensorReading *mag_z_average = new SensorReading(fault_index_type::mag_z, 0.0, false);
@@ -216,23 +228,39 @@ namespace sfr {
         SensorReading *acc_x_average = new SensorReading(fault_index_type::acc_x, 0.0, false);
         SensorReading *acc_y_average = new SensorReading(fault_index_type::acc_y, 0.0, false);
 
-        imu_downlink_type imu_dlink_magid = imu_downlink_type::GAUSS_8;
-        const int imu_downlink_buffer_max_size = constants::sensor::collect; // not determined yet
-        const int imu_downlink_report_size = constants::sensor::collect * 5;
-        uint8_t imu_downlink_report[imu_downlink_report_size];
+        SensorReading *gyro_x_value = new SensorReading(fault_index_type::gyro_x, 0.0, false);
+        SensorReading *gyro_y_value = new SensorReading(fault_index_type::gyro_y, 0.0, false);
+        SensorReading *gyro_z_value = new SensorReading(fault_index_type::gyro_z, 0.0, false);
+
+        imu_downlink_type imu_dlink_mode = imu_downlink_type::DPS_245;
+        const int imu_downlink_buffer_max_size = 70; // not determined yet
 
         int fragment_number = 0;
         bool fragment_requested = false;
         int fragments_written = 0;
+        int fragment_number_requested = 3;
         bool imu_dlink_report_ready = false;
         bool report_downlinked = true;
-        char filename[15];
 
-        const int mag_8GAUSS_min = 4;
-        const int mag_12GAUSS_min = 8;
-        const int mag_16GAUSS_min = 12;
-        const int gyro_500DPS_min = 245;
-        const int gyro_2000DPS_min = 500;
+        const int mag_4GAUSS_min = -4;
+        const int mag_8GAUSS_min = -8;
+        const int mag_12GAUSS_min = -12;
+        const int mag_16GAUSS_min = -16;
+        const int gyro_245DPS_min = -245;
+        const int gyro_500DPS_min = -500;
+        const int gyro_2000DPS_min = -2000;
+        const int mag_4GAUSS_max = 4;
+        const int mag_8GAUSS_max = 8;
+        const int mag_12GAUSS_max = 12;
+        const int mag_16GAUSS_max = 16;
+        const int gyro_245DPS_max = 245;
+        const int gyro_500DPS_max = 500;
+        const int gyro_2000DPS_max = 2000;
+
+        int gyro_min = gyro_245DPS_min;
+        int gyro_max = gyro_245DPS_max;
+        int mag_min = mag_4GAUSS_min;
+        int mag_max = mag_4GAUSS_max;
     } // namespace imu
     namespace temperature {
         float temp_c = 0.0;

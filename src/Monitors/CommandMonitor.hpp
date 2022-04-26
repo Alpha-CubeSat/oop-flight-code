@@ -14,6 +14,7 @@ public:
     void dispatch_change_acs_mode();
     void dispatch_change_fault_mode();
     void dispatch_request_image_fragment();
+    void dispatch_request_imu_downlink_fragment();
     void dispatch_change_rockblock_downlink_period();
     void dispatch_change_burnwire_time();
     void dispatch_change_burnwire_timeout();
