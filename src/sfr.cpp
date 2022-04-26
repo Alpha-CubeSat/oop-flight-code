@@ -173,6 +173,8 @@ namespace sfr {
         int imu_max_fragments = 10;
 
         float imudownlink_start_time = 0.0;
+        float imudownlink_remain_time = constants::time::one_minute;
+        bool imu_first_start = true;
         bool imu_downlink_on = true;
 #ifndef SIMULATOR
         HardwareSerial serial = Serial1;
@@ -233,7 +235,7 @@ namespace sfr {
         SensorReading *gyro_z_value = new SensorReading(fault_index_type::gyro_z, 0.0, false);
 
         imu_downlink_type imu_dlink_mode = imu_downlink_type::DPS_245;
-        const int imu_downlink_buffer_max_size = 70; // not determined yet
+        const int imu_downlink_buffer_max_size = 16000; // not determined yet
 
         int fragment_number = 0;
         bool fragment_requested = false;
@@ -241,6 +243,7 @@ namespace sfr {
         int fragment_number_requested = 3;
         bool imu_dlink_report_ready = false;
         bool report_downlinked = true;
+        bool data_downlinked = false;
 
         const int mag_4GAUSS_min = -4;
         const int mag_8GAUSS_min = -8;
@@ -261,6 +264,7 @@ namespace sfr {
         int gyro_max = gyro_245DPS_max;
         int mag_min = mag_4GAUSS_min;
         int mag_max = mag_4GAUSS_max;
+
     } // namespace imu
     namespace temperature {
         float temp_c = 0.0;

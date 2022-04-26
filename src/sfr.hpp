@@ -156,7 +156,10 @@ namespace sfr {
         extern uint8_t arg_2[4];
 
         extern int imu_max_fragments;
+
         extern float imudownlink_start_time;
+        extern float imudownlink_remain_time;
+        extern bool imu_first_start;
         extern bool imu_downlink_on;
 #ifndef SIMULATOR
         extern HardwareSerial serial;
@@ -226,6 +229,7 @@ namespace sfr {
         extern int fragment_number_requested;
         extern bool imu_dlink_report_ready;
         extern bool report_downlinked;
+        extern bool data_downlinked;
 
         extern const int mag_4GAUSS_min;
         extern const int mag_8GAUSS_min;

@@ -22,7 +22,10 @@ IMUMonitor::IMUMonitor(unsigned int offset)
 
 void IMUMonitor::execute()
 {
-#ifdef VERBOSE // fujia
+// #ifdef VERBOSE_IMUM
+//     Serial.println("imu monitor start");
+// #endif
+#ifdef VERBOSE
     Serial.println("imu mode is " + String(sfr::imu::mode));
 #endif
 
@@ -39,7 +42,7 @@ void IMUMonitor::execute()
         }
         break;
     case sensor_mode_type::normal:
-#ifdef VERBOSE // fujia
+#ifdef VERBOSE
         Serial.println("IMU is in Normal Mode");
 #endif
         capture_imu_values();
@@ -63,6 +66,9 @@ void IMUMonitor::execute()
         }
         break;
     }
+    // #ifdef VERBOSE_IMUM
+    //     Serial.println("imu monitor end");
+    // #endif
 }
 
 bool check_repeated_values(std::deque<float> buffer)
@@ -89,35 +95,35 @@ void IMUMonitor::capture_imu_values()
     imu.setupMag(imu.LSM9DS1_MAGGAIN_4GAUSS);
     if (abs(mag.magnetic.x) > sfr::imu::mag_8GAUSS_min || abs(mag.magnetic.y) > sfr::imu::mag_8GAUSS_min || abs(mag.magnetic.z) > sfr::imu::mag_8GAUSS_min) {
         imu.setupMag(imu.LSM9DS1_MAGGAIN_8GAUSS);
-        sfr::imu::imu_dlink_mode = imu_downlink_type::GAUSS_8;
-        sfr::imu::mag_min = sfr::imu::mag_8GAUSS_min;
-        sfr::imu::mag_max = sfr::imu::mag_8GAUSS_max;
+        // sfr::imu::imu_dlink_mode = imu_downlink_type::GAUSS_8;
+        // sfr::imu::mag_min = sfr::imu::mag_8GAUSS_min;
+        // sfr::imu::mag_max = sfr::imu::mag_8GAUSS_max;
     }
     if (abs(mag.magnetic.x) > sfr::imu::mag_12GAUSS_min || abs(mag.magnetic.y) > sfr::imu::mag_12GAUSS_min || abs(mag.magnetic.z) > sfr::imu::mag_12GAUSS_min) {
         imu.setupMag(imu.LSM9DS1_MAGGAIN_12GAUSS);
-        sfr::imu::imu_dlink_mode = imu_downlink_type::GAUSS_12;
-        sfr::imu::mag_min = sfr::imu::mag_12GAUSS_min;
-        sfr::imu::mag_max = sfr::imu::mag_12GAUSS_max;
+        // sfr::imu::imu_dlink_mode = imu_downlink_type::GAUSS_12;
+        // sfr::imu::mag_min = sfr::imu::mag_12GAUSS_min;
+        // sfr::imu::mag_max = sfr::imu::mag_12GAUSS_max;
     }
     if (abs(mag.magnetic.x) > sfr::imu::mag_16GAUSS_min || abs(mag.magnetic.y) > sfr::imu::mag_16GAUSS_min || abs(mag.magnetic.z) > sfr::imu::mag_16GAUSS_min) {
         imu.setupMag(imu.LSM9DS1_MAGGAIN_16GAUSS);
-        sfr::imu::imu_dlink_mode = imu_downlink_type::GAUSS_16;
-        sfr::imu::mag_min = sfr::imu::mag_16GAUSS_min;
-        sfr::imu::mag_max = sfr::imu::mag_16GAUSS_max;
+        // sfr::imu::imu_dlink_mode = imu_downlink_type::GAUSS_16;
+        // sfr::imu::mag_min = sfr::imu::mag_16GAUSS_min;
+        // sfr::imu::mag_max = sfr::imu::mag_16GAUSS_max;
     }
 
     imu.setupGyro(imu.LSM9DS1_GYROSCALE_245DPS);
     if (abs(gyro.gyro.x) > sfr::imu::gyro_500DPS_min || abs(gyro.gyro.y) > sfr::imu::gyro_500DPS_min || abs(gyro.gyro.z) > sfr::imu::gyro_500DPS_min) {
         imu.setupGyro(imu.LSM9DS1_GYROSCALE_500DPS);
-        sfr::imu::imu_dlink_mode = imu_downlink_type::DPS_500;
-        sfr::imu::gyro_min = sfr::imu::gyro_500DPS_min;
-        sfr::imu::gyro_max = sfr::imu::gyro_500DPS_max;
+        // sfr::imu::imu_dlink_mode = imu_downlink_type::DPS_500;
+        // sfr::imu::gyro_min = sfr::imu::gyro_500DPS_min;
+        // sfr::imu::gyro_max = sfr::imu::gyro_500DPS_max;
     }
     if (abs(gyro.gyro.x) > sfr::imu::gyro_2000DPS_min || abs(gyro.gyro.y) > sfr::imu::gyro_2000DPS_min || abs(gyro.gyro.z) > sfr::imu::gyro_2000DPS_min) {
         imu.setupGyro(imu.LSM9DS1_GYROSCALE_2000DPS);
-        sfr::imu::imu_dlink_mode = imu_downlink_type::DPS_2000;
-        sfr::imu::gyro_min = sfr::imu::gyro_2000DPS_min;
-        sfr::imu::gyro_max = sfr::imu::gyro_2000DPS_max;
+        // sfr::imu::imu_dlink_mode = imu_downlink_type::DPS_2000;
+        // sfr::imu::gyro_min = sfr::imu::gyro_2000DPS_min;
+        // sfr::imu::gyro_max = sfr::imu::gyro_2000DPS_max;
     }
 
     // Get corrected IMU values
@@ -134,11 +140,15 @@ void IMUMonitor::capture_imu_values()
     sfr::imu::gyro_y = gyro.gyro.y;
     sfr::imu::gyro_z = gyro.gyro.z;
 
-#ifdef VERBOSE_IMUM
-    Serial.println("gyro_x_val: " + String(sfr::imu::gyro_x));
-    Serial.println("gyro_y_val: " + String(sfr::imu::gyro_y));
-    Serial.println("gyro_z_val: " + String(sfr::imu::gyro_z));
-#endif
+    sfr::imu::gyro_x_value->set_value(sfr::imu::gyro_x);
+    sfr::imu::gyro_y_value->set_value(sfr::imu::gyro_y);
+    sfr::imu::gyro_z_value->set_value(sfr::imu::gyro_z);
+
+    // #ifdef VERBOSE_IMUM
+    //     Serial.println("gyro_x_val: " + String(sfr::imu::gyro_x));
+    //     Serial.println("gyro_y_val: " + String(sfr::imu::gyro_y));
+    //     Serial.println("gyro_z_val: " + String(sfr::imu::gyro_z));
+    // #endif
 
     // Add reading to buffer
 
