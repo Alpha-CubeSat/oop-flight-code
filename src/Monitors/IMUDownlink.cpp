@@ -56,7 +56,7 @@ void IMUDownlink::execute()
         Serial.println(String(millis() - sfr::rockblock::imudownlink_start_time));
 
 #endif
-        if (millis() - sfr::rockblock::imudownlink_start_time > 2 * constants::time::one_second) {
+        if (millis() - sfr::rockblock::imudownlink_start_time > constants::time::one_minute) {
             sfr::rockblock::imu_downlink_on = false;
         }
     }
