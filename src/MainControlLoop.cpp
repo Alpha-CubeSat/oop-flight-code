@@ -38,25 +38,25 @@ void MainControlLoop::execute()
 
     // mission_manager.execute_on_time();
 
-    // acs_monitor.execute_on_time();
-    // battery_monitor.execute_on_time();
-    // button_monitor.execute_on_time();
-    // camera_report_monitor.execute_on_time();
-    // command_monitor.execute_on_time();
-    // current_monitor.execute_on_time();
-    // fault_monitor.execute_on_time();
+    acs_monitor.execute_on_time();
+    battery_monitor.execute_on_time();
+    button_monitor.execute_on_time();
+    camera_report_monitor.execute_on_time();
+    command_monitor.execute_on_time();
+    current_monitor.execute_on_time();
+    fault_monitor.execute_on_time();
     imu_monitor.execute_on_time();
     imu_downlink.execute_on_time();
-    // normal_report_monitor.execute_on_time();
+    normal_report_monitor.execute_on_time();
     imudownlink_report_monitor.execute_on_time();
-    // photoresistor_monitor.execute_on_time();
-    // rockblock_report_monitor.execute_on_time();
-    // temperature_monitor.execute_on_time();
+    photoresistor_monitor.execute_on_time();
+    rockblock_report_monitor.execute_on_time();
+    temperature_monitor.execute_on_time();
 
-    // acs_control_task.execute_on_time();
-    // burnwire_control_task.execute_on_time();
-    // camera_control_task.execute_on_time();
-    // rockblock_control_task.execute_on_time();
+    acs_control_task.execute_on_time();
+    burnwire_control_task.execute_on_time();
+    camera_control_task.execute_on_time();
+    rockblock_control_task.execute_on_time();
 #ifdef VERBOSE // fujia
     Serial.println("end of main control loop execute");
 #endif

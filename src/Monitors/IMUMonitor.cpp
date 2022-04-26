@@ -39,7 +39,7 @@ void IMUMonitor::execute()
         }
         break;
     case sensor_mode_type::normal:
-#ifdef VERBOSE
+#ifdef VERBOSE // fujia
         Serial.println("IMU is in Normal Mode");
 #endif
         capture_imu_values();
