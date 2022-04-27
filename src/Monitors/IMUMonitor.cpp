@@ -66,9 +66,6 @@ void IMUMonitor::execute()
         }
         break;
     }
-    // #ifdef VERBOSE_IMUM
-    //     Serial.println("imu monitor end");
-    // #endif
 }
 
 bool check_repeated_values(std::deque<float> buffer)
@@ -143,12 +140,6 @@ void IMUMonitor::capture_imu_values()
     sfr::imu::gyro_x_value->set_value(sfr::imu::gyro_x);
     sfr::imu::gyro_y_value->set_value(sfr::imu::gyro_y);
     sfr::imu::gyro_z_value->set_value(sfr::imu::gyro_z);
-
-    // #ifdef VERBOSE_IMUM
-    //     Serial.println("gyro_x_val: " + String(sfr::imu::gyro_x));
-    //     Serial.println("gyro_y_val: " + String(sfr::imu::gyro_y));
-    //     Serial.println("gyro_z_val: " + String(sfr::imu::gyro_z));
-    // #endif
 
     // Add reading to buffer
 

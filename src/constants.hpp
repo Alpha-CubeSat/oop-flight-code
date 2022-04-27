@@ -79,7 +79,7 @@ namespace constants {
         constexpr uint8_t change_simplified_acs[opcode_len] = {0x0A, 0x00};
         constexpr uint8_t camera_turn_on[opcode_len] = {0x0B, 0x00};
         constexpr uint8_t camera_turn_off[opcode_len] = {0x0C, 0x00};
-        constexpr uint8_t request_imu_downlink_fragment[opcode_len] = {0x0D, 0x00};
+        constexpr uint8_t request_imu_downlink_fragment[opcode_len] = {0x0D, 0x00}; // change
         constexpr uint8_t fault_mode[opcode_len] = {0xF1, 0xFF};
         constexpr uint8_t fault_check_mag_x[opcode_len] = {0xF2, 0xFF};
         constexpr uint8_t fault_check_mag_y[opcode_len] = {0xF3, 0xFF};
@@ -460,7 +460,7 @@ namespace constants {
         constexpr float min_gyro_z = 0.0;
         constexpr float max_gyro_z = 10;
 
-        constexpr int bytes_allocated_fragment = 1;
+        constexpr int bytes_allocated_fragment = 3;
         constexpr int bytes_allocated_serial_opcode = 2;
 
         constexpr int CSAG = 21;

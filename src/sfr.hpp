@@ -250,6 +250,9 @@ namespace sfr {
         extern int gyro_max;
         extern int mag_min;
         extern int mag_max;
+
+        extern bool start_timing_deployed;
+        extern float start_time_deployed;
     } // namespace imu
     namespace temperature {
         extern float temp_c;

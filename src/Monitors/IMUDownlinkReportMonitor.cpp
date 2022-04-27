@@ -3,33 +3,44 @@ IMUDownlinkReportMonitor::IMUDownlinkReportMonitor(unsigned int offset) : TimedC
 
 void IMUDownlinkReportMonitor::execute()
 {
+    if (sfr::imu::fragment_number_requested < sfr::rockblock::imu_max_fragments) {
+        sfr::imu::fragment_requested = true;
+        sfr::imu::fragment_number_requested++;
+    }
+
     IMUDownlink imu_dlink = IMUDownlink(constants::timecontrol::imu_downlink_offset);
     imu_dlink.execute();
     // Get a requested fragment
     // if (sfr::imu::report_downlinked == true && sfr::imu::fragment_requested == true && sfr::rockblock::imu_first_start != false) {}
-    if (sfr::rockblock::imu_first_start == false && sfr::imu::data_downlinked == true) {
+    // #ifdef VERBOSE_IMUMM
+    //     Serial.println("sfr::imu::report_downlinked: " + String(sfr::imu::report_downlinked));
+    //     Serial.println("sfr::imu::fragment_requested: " + String(sfr::imu::fragment_requested));
+    //     Serial.println("sfr::imu::data_downlinked: " + String(sfr::imu::data_downlinked));
+    //     Serial.println("sfr::rockblock::imu_first_start: " + String(sfr::rockblock::imu_first_start));
+
+    // #endif
+    if (sfr::rockblock::imu_first_start == false && sfr::imu::data_downlinked == true && sfr::imu::report_downlinked == true && sfr::imu::fragment_requested == true) {
+#ifdef VERBOSE_IMUMM
+        Serial.println("start creating imu downlink report");
+
+#endif
         create_imu_downlink_report(sfr::imu::fragment_number);
         sfr::imu::fragment_requested = false;
         sfr::imu::fragment_number++;
-        // }
         if (sfr::imu::fragment_number == sfr::rockblock::imu_max_fragments) {
             sfr::imu::imu_dlink_report_ready = false;
             sfr::imu::fragment_number = 0;
         }
     }
-
-    // #ifdef VERBOSE_IMUD
-    //     Serial.println("imu_dlink_report_ready: " + String(sfr::imu::imu_dlink_report_ready));
-    // #endif
 }
 
 void IMUDownlinkReportMonitor::create_imu_downlink_report(int fragment_number)
 {
-
-    // sfr::rockblock::imu_report[0] = 88;
     sfr::rockblock::imu_report.push_back(88);
-#ifdef VERBOSE_IMUD
-    Serial.print(String(88) + " ");
+#ifdef VERBOSE_IMUF
+    // Serial.print(String(88) + " ");
+    Serial.print(88, HEX);
+    Serial.print(" ");
 #endif
 
     // get each byte of fragment number
@@ -48,11 +59,19 @@ void IMUDownlinkReportMonitor::create_imu_downlink_report(int fragment_number)
     // #endif
     // }
 
-    sfr::rockblock::imu_report.push_back(fragment_number);
-#ifdef VERBOSE_IMUD
-    Serial.print(String(fragment_number));
+    // get each byte of fragment number
+    std::vector<unsigned char> fragment(constants::imu::bytes_allocated_fragment);
+    for (size_t i = 0; i < constants::imu::bytes_allocated_fragment; i++) {
+        fragment[2 - i] = (fragment_number >> (i * 8));
+        sfr::rockblock::imu_report.push_back(fragment[i]);
+    }
+    // sfr::rockblock::imu_report.push_back(fragment_number);
+    // #ifdef VERBOSE_IMUF
+    //     // Serial.print(String(fragment_number));
+    //     Serial.print(fragment_number, HEX);
+    //     Serial.print(" ");
 
-#endif
+    // #endif
 
     // check for the three buffer sizes
     assert(sfr::imu::imu_dlink_gyro_x_buffer.size() == sfr::imu::imu_dlink_gyro_y_buffer.size());
@@ -70,56 +89,54 @@ void IMUDownlinkReportMonitor::create_imu_downlink_report(int fragment_number)
         }
 
         else {
-
             // get the gyro values from buffer and write to the imu downlink report
             float gyro_x_value = sfr::imu::imu_dlink_gyro_x_buffer.back();
             uint8_t gyro_x = map(gyro_x_value, sfr::imu::gyro_min, sfr::imu::gyro_max, 0, 255);
             sfr::imu::imu_dlink_gyro_x_buffer.pop_back();
-            // sfr::rockblock::imu_report[a++] = gyro_x;
             sfr::rockblock::imu_report.push_back(gyro_x);
             size_limit--;
-#ifdef VERBOSE_IMUF
-            Serial.println("gyro_x_value = " + String(gyro_x_value));
-
-#endif
 
             float gyro_y_value = sfr::imu::imu_dlink_gyro_y_buffer.back();
             uint8_t gyro_y = map(gyro_y_value, sfr::imu::gyro_min, sfr::imu::gyro_max, 0, 255);
             sfr::imu::imu_dlink_gyro_y_buffer.pop_back();
             sfr::rockblock::imu_report.push_back(gyro_y);
             size_limit--;
-#ifdef VERBOSE_IMUF
-            Serial.println("gyro_y_value = " + String(gyro_y_value));
-
-#endif
 
             float gyro_z_value = sfr::imu::imu_dlink_gyro_z_buffer.back();
             uint8_t gyro_z = map(gyro_z_value, sfr::imu::gyro_min, sfr::imu::gyro_max, 0, 255);
             sfr::imu::imu_dlink_gyro_z_buffer.pop_back();
             sfr::rockblock::imu_report.push_back(gyro_z);
             size_limit--;
-#ifdef VERBOSE_IMUF
-            Serial.println("gyro_z_value = " + String(gyro_z_value));
 
-#endif
-#ifdef VERBOSE_IMUD
-            Serial.print(" " + String(gyro_x) + " " + String(gyro_y) + " " + String(gyro_z));
+#ifdef VERBOSE_IMUF
+            // Serial.print(" " + String(gyro_x) + " " + String(gyro_y) + " " + String(gyro_z));
+            Serial.print(gyro_x, HEX);
+            Serial.print(" ");
+            Serial.print(gyro_x, HEX);
+            Serial.print(" ");
+            Serial.print(gyro_x, HEX);
+            Serial.print(" ");
 
 #endif
         }
         // end marker
         if (idx == buffer_size - 1) {
             sfr::rockblock::imu_report.push_back(0xFF);
-#ifdef VERBOSE_IMUD
-            Serial.print(" " + String(0xFF));
-
+#ifdef VERBOSE_IMUF
+            // Serial.print(" " + String(0xFF));
+            Serial.print(0xFF, HEX);
+            Serial.print(" ");
 #endif
         }
-#ifdef VERBOSE_IMUD
-        Serial.println(" ");
+#ifdef VERBOSE_IMUF
+        // Serial.println(" ");
 
 #endif
     }
+#ifdef VERBOSE_IMUMM
+    Serial.println("sfr::imu::imu_dlink_report_ready");
+
+#endif
     sfr::imu::imu_dlink_report_ready = true;
     sfr::imu::report_downlinked = false;
 }

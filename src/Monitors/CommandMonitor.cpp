@@ -126,15 +126,19 @@ void CommandMonitor::dispatch_request_image_fragment()
 
 void CommandMonitor::dispatch_request_imu_downlink_fragment()
 {
-    if (sfr::rockblock::f_arg_2 < sfr::rockblock::imu_downlink_max_fragments[sfr::rockblock::f_arg_1]) {
-        sfr::camera::fragment_requested = true;
-        sfr::camera::fragment_number_requested = sfr::rockblock::f_arg_2;
+    // if (sfr::rockblock::f_arg_2 < sfr::rockblock::imu_downlink_max_fragments[sfr::rockblock::f_arg_1]) {
+    //     sfr::imu::fragment_requested = true;
+    //     sfr::imu::fragment_number_requested = sfr::rockblock::f_arg_2;
+    // }
+    if (sfr::imu::fragment_number_requested < sfr::rockblock::imu_max_fragments) {
+        sfr::imu::fragment_requested = true;
+        sfr::imu::fragment_number_requested++;
+    }
 
 #ifdef VERBOSE
-        Serial.print("Fragment requested: ");
-        Serial.println(sfr::camera::fragment_number_requested);
+    Serial.print("Fragment requested: ");
+    Serial.println(sfr::imu::fragment_number_requested);
 #endif
-    }
 }
 
 void CommandMonitor::dispatch_change_rockblock_downlink_period()

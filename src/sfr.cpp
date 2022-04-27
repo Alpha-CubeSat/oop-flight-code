@@ -170,7 +170,7 @@ namespace sfr {
         uint8_t arg_1[4] = {0};
         uint8_t arg_2[4] = {0};
 
-        int imu_max_fragments = 10;
+        int imu_max_fragments = 16;
 
         float imudownlink_start_time = 0.0;
         float imudownlink_remain_time = constants::time::one_minute;
@@ -265,6 +265,8 @@ namespace sfr {
         int mag_min = mag_4GAUSS_min;
         int mag_max = mag_4GAUSS_max;
 
+        bool start_timing_deployed = false;
+        float start_time_deployed = 0.0;
     } // namespace imu
     namespace temperature {
         float temp_c = 0.0;
