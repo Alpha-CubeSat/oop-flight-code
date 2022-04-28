@@ -22,7 +22,7 @@ MainControlLoop::MainControlLoop()
       mission_manager(constants::timecontrol::mission_manager_offset)
 {
     delay(1000);
-    sfr::mission::boot->transition_to();
+    boot_initialization();
 }
 
 void MainControlLoop::execute()

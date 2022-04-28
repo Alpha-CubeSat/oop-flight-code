@@ -1,13 +1,14 @@
 #include "MissionMode.hpp"
 #include "sfr.hpp"
 
+void boot_initialization(){}
+
 void Boot::transition_to() {}
 void Boot::dispatch()
 {
-    if (millis() - sfr::mission::boot_start >= sfr::mission::max_boot_time) {
-        sfr::mission::current_mode = sfr::mission::aliveSignal;
-    }
+    timed_out(sfr::mission::aliveSignal, sfr::boot::max_time);
 }
+
 
 void AliveSignal::transition_to() {}
 void AliveSignal::dispatch()
@@ -36,13 +37,97 @@ void LowPowerDetumbleSpin::dispatch()
     exit_detumble_phase(sfr::mission::lowPower);
 }
 
-void Normal::transition_to() {}
+void Normal::transition_to() {
+    sfr::mission::normal->set_start_time(millis());
+}
 void Normal::dispatch(){
-
+    timed_out(sfr::mission::transmit, sfr::acs::on_time);
+    enter_lp(sfr::mission::lowPower);
 }
 
 void LowPower::transition_to() {}
 void LowPower::dispatch(){
+    if(sfr::mission::previous_mode->id == sfr::mission::transmit->id){
+        exit_lp(sfr::mission::transmit);
+    } else{
+        exit_lp(sfr::mission::normal);
+    }
+    
+
+}
+
+void Transmit::transition_to() {}
+void Transmit::dispatch(){
+
+}
+
+void NormalDeployment::transition_to() {}
+void NormalDeployment::dispatch(){
+
+}
+
+void TransmitDeployment::transition_to() {}
+void TransmitDeployment::dispatch(){
+
+}
+
+void LowPowerDeployment::transition_to() {}
+void LowPowerDeployment::dispatch(){
+
+}
+
+void NormalArmed::transition_to() {}
+void NormalArmed::dispatch(){
+
+}
+
+void TransmitArmed::transition_to() {}
+void TransmitArmed::dispatch(){
+
+}
+
+void LowPowerArmed::transition_to() {}
+void LowPowerArmed::dispatch(){
+
+}
+
+void NormalInSun::transition_to() {}
+void NormalInSun::dispatch(){
+
+}
+
+void TransmitInSun::transition_to() {}
+void TransmitInSun::dispatch(){
+
+}
+
+void LowPowerInSun::transition_to() {}
+void LowPowerInSun::dispatch(){
+
+}
+
+void VoltageFailureInSun::transition_to() {}
+void VoltageFailureInSun::dispatch(){
+
+}
+
+void BootCamera::transition_to() {}
+void BootCamera::dispatch(){
+
+}
+
+void MandatoryBurns::transition_to() {}
+void MandatoryBurns::dispatch(){
+
+}
+
+void RegularBurns::transition_to() {}
+void RegularBurns::dispatch(){
+
+}
+
+void Photo::transition_to() {}
+void Photo::dispatch(){
 
 }
 
@@ -71,5 +156,13 @@ void exit_lp(MissionMode *reg_mode)
         sfr::mission::current_mode = reg_mode;
     }
 }
+
+void timed_out(MissionMode *next_mode, float max_time)
+{
+    if (millis() - sfr::mission::current_mode->start_time >= max_time) {
+        sfr::mission::current_mode = next_mode;
+    }
+}
+
 
 
