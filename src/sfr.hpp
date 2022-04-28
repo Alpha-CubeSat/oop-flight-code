@@ -82,6 +82,7 @@ namespace sfr {
         extern bool possible_to_deploy;
         extern bool deployed;
         extern float time_deployed;
+        extern bool already_deployed;
     } // namespace mission
     namespace burnwire {
         extern bool fire;
@@ -189,7 +190,7 @@ namespace sfr {
         extern float gyro_x;
         extern float gyro_y;
         extern float gyro_z;
-        
+
         extern std::deque<float> mag_x_buffer;
         extern std::deque<float> mag_y_buffer;
         extern std::deque<float> mag_z_buffer;

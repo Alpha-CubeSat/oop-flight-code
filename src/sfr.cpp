@@ -98,6 +98,7 @@ namespace sfr {
         bool deployed;
 
         float time_deployed;
+        bool already_deployed = false;
 
     } // namespace mission
     namespace burnwire {
@@ -204,7 +205,6 @@ namespace sfr {
         float gyro_x = 0.0;
         float gyro_y = 0.0;
         float gyro_z = 0.0;
-
 
         std::deque<float> mag_x_buffer;
         std::deque<float> mag_y_buffer;
