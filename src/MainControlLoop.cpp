@@ -25,6 +25,7 @@ MainControlLoop::MainControlLoop()
 {
     delay(1000);
     sfr::mission::boot->transition_to();
+    sfr::imu::start_time_deployed = millis();
 }
 
 void MainControlLoop::execute()
@@ -33,11 +34,6 @@ void MainControlLoop::execute()
     faults::fault_1 = 0;
     faults::fault_2 = 0;
     faults::fault_3 = 0;
-
-    if (sfr::imu::start_timing_deployed == false) {
-        sfr::imu::start_timing_deployed = true;
-        sfr::imu::start_time_deployed = millis();
-    }
 
     clock_manager.execute();
 

@@ -94,8 +94,7 @@ namespace sfr {
 
         unsigned long boot_start = 0.0;
         unsigned long max_boot_time = constants::time::two_hours;
-
-        bool deployed = false;
+        bool possible_deploy = false;
 
     } // namespace mission
     namespace burnwire {

@@ -79,7 +79,7 @@ namespace sfr {
         extern unsigned long boot_start;
         extern unsigned long max_boot_time;
 
-        extern bool deployed;
+        extern bool possible_deployed;
     } // namespace mission
     namespace burnwire {
         extern bool fire;
