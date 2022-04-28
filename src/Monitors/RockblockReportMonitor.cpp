@@ -10,6 +10,8 @@ void RockblockReportMonitor::execute()
     case rockblock_mode_type::standby:
         schedule_report();
         break;
+    default:
+        break;
     }
 
     switch (sfr::rockblock::downlink_report_type) {

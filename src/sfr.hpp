@@ -1,12 +1,12 @@
 #ifndef SFR_HPP_
 #define SFR_HPP_
 
+#include "ACSMode.hpp"
 #include "Arduino.h"
 #include "Control Tasks/BurnwireControlTask.hpp"
 #include "Control Tasks/TimedControlTask.hpp"
 #include "MissionManager.hpp"
 #include "MissionMode.hpp"
-#include "Modes/acs_mode_type.enum"
 #include "Modes/burnwire_mode_type.enum"
 #include "Modes/camera_init_mode_type.enum"
 #include "Modes/fault_index_type.enum"
@@ -29,10 +29,20 @@
 #include <iostream>
 #include <map>
 #include <numeric>
+#include <queue>
 #include <sstream>
 #include <string>
 
 namespace sfr {
+    namespace boot {
+        extern unsigned long max_time;
+    }
+    namespace simple {
+        extern float max_time;
+    }
+    namespace point {
+        extern float max_time;
+    }
     namespace detumble {
         extern float start_time;
         extern float max_time;
@@ -42,6 +52,7 @@ namespace sfr {
         extern int num_downlink_failures;
         extern int max_downlink_failures;
         extern bool downlinked;
+        extern float max_time;
     } // namespace aliveSignal
     namespace pins {
         extern std::map<int, int> pinMap;
@@ -83,6 +94,8 @@ namespace sfr {
         extern bool deployed;
         extern float time_deployed;
         extern bool already_deployed;
+
+        extern std::queue<int> mode_history;
     } // namespace mission
     namespace burnwire {
         extern bool fire;
@@ -246,7 +259,12 @@ namespace sfr {
         extern bool in_sun;
     } // namespace current
     namespace acs {
-        extern acs_mode_type mode;
+        extern ACSMode *simple;
+        extern ACSMode *point;
+        extern ACSMode *off;
+
+        extern ACSMode *current_mode;
+
         extern float current1;
         extern float current2;
         extern float current3;
@@ -255,6 +273,8 @@ namespace sfr {
         extern float pwm3;
         extern simple_acs_type mag;
         extern unsigned long max_no_communication;
+        extern float on_time;
+        extern float off_time;
     } // namespace acs
     namespace battery {
         extern float voltage;

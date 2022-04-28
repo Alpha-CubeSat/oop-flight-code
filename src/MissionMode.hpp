@@ -6,7 +6,14 @@ class MissionMode
 public:
     virtual void transition_to();
     virtual void dispatch();
-    virtual int id();
+    int id;
+    float start_time;
+    void set_start_time(float new_start_time){
+        start_time = new_start_time;
+    }
+    void set_id(int new_id){
+        id = new_id;
+    }
 };
 
 class Boot : public MissionMode
@@ -14,10 +21,6 @@ class Boot : public MissionMode
 public:
     void transition_to();
     void dispatch();
-    int id()
-    {
-        return 0;
-    }
 };
 
 class AliveSignal : public MissionMode
@@ -25,10 +28,6 @@ class AliveSignal : public MissionMode
 public:
     void dispatch();
     void transition_to();
-    int id()
-    {
-        return 1;
-    }
 };
 
 class LowPowerAliveSignal : public MissionMode
@@ -36,10 +35,6 @@ class LowPowerAliveSignal : public MissionMode
 public:
     void dispatch();
     void transition_to();
-    int id()
-    {
-        return 2;
-    }
 };
 
 class DetumbleSpin : public MissionMode
@@ -47,10 +42,6 @@ class DetumbleSpin : public MissionMode
 public:
     void dispatch();
     void transition_to();
-    int id()
-    {
-        return 3;
-    }
 };
 
 class LowPowerDetumbleSpin : public MissionMode
@@ -58,10 +49,6 @@ class LowPowerDetumbleSpin : public MissionMode
 public:
     void dispatch();
     void transition_to();
-    int id()
-    {
-        return 4;
-    }
 };
 
 class Normal : public MissionMode
@@ -69,10 +56,6 @@ class Normal : public MissionMode
 public:
     void dispatch();
     void transition_to();
-    int id()
-    {
-        return 5;
-    }
 };
 
 class Transmit : public MissionMode
@@ -80,10 +63,6 @@ class Transmit : public MissionMode
 public:
     void dispatch();
     void transition_to();
-    int id()
-    {
-        return 6;
-    }
 };
 
 class LowPower : public MissionMode
@@ -91,10 +70,6 @@ class LowPower : public MissionMode
 public:
     void dispatch();
     void transition_to();
-    int id()
-    {
-        return 7;
-    }
 };
 
 class NormalDeployment : public MissionMode
@@ -102,10 +77,6 @@ class NormalDeployment : public MissionMode
 public:
     void dispatch();
     void transition_to();
-    int id()
-    {
-        return 8;
-    }
 };
 
 class TransmitDeployment : public MissionMode
@@ -113,10 +84,6 @@ class TransmitDeployment : public MissionMode
 public:
     void dispatch();
     void transition_to();
-    int id()
-    {
-        return 9;
-    }
 };
 
 class LowPowerDeployment : public MissionMode
@@ -124,10 +91,6 @@ class LowPowerDeployment : public MissionMode
 public:
     void dispatch();
     void transition_to();
-    int id()
-    {
-        return 10;
-    }
 };
 
 class NormalArmed : public MissionMode
@@ -135,10 +98,6 @@ class NormalArmed : public MissionMode
 public:
     void dispatch();
     void transition_to();
-    int id()
-    {
-        return 11;
-    }
 };
 
 class TransmitArmed : public MissionMode
@@ -146,10 +105,6 @@ class TransmitArmed : public MissionMode
 public:
     void dispatch();
     void transition_to();
-    int id()
-    {
-        return 12;
-    }
 };
 
 class LowPowerArmed : public MissionMode
@@ -157,10 +112,6 @@ class LowPowerArmed : public MissionMode
 public:
     void dispatch();
     void transition_to();
-    int id()
-    {
-        return 13;
-    }
 };
 
 class NormalInSun : public MissionMode
@@ -168,10 +119,6 @@ class NormalInSun : public MissionMode
 public:
     void dispatch();
     void transition_to();
-    int id()
-    {
-        return 14;
-    }
 };
 
 class TransmitInSun : public MissionMode
@@ -179,10 +126,6 @@ class TransmitInSun : public MissionMode
 public:
     void dispatch();
     void transition_to();
-    int id()
-    {
-        return 15;
-    }
 };
 
 class LowPowerInSun : public MissionMode
@@ -190,10 +133,6 @@ class LowPowerInSun : public MissionMode
 public:
     void dispatch();
     void transition_to();
-    int id()
-    {
-        return 16;
-    }
 };
 
 class VoltageFailureInSun : public MissionMode
@@ -201,10 +140,6 @@ class VoltageFailureInSun : public MissionMode
 public:
     void dispatch();
     void transition_to();
-    int id()
-    {
-        return 17;
-    }
 };
 
 class BootCamera : public MissionMode
@@ -212,10 +147,6 @@ class BootCamera : public MissionMode
 public:
     void dispatch();
     void transition_to();
-    int id()
-    {
-        return 18;
-    }
 };
 
 class MandatoryBurns : public MissionMode
@@ -223,10 +154,6 @@ class MandatoryBurns : public MissionMode
 public:
     void dispatch();
     void transition_to();
-    int id()
-    {
-        return 19;
-    }
 };
 
 class RegularBurns : public MissionMode
@@ -234,10 +161,6 @@ class RegularBurns : public MissionMode
 public:
     void dispatch();
     void transition_to();
-    int id()
-    {
-        return 20;
-    }
 };
 
 class Photo : public MissionMode
@@ -245,15 +168,14 @@ class Photo : public MissionMode
 public:
     void dispatch();
     void transition_to();
-    int id()
-    {
-        return 21;
-    }
 };
 
 void exit_signal_phase(MissionMode *mode);
 void exit_detumble_phase(MissionMode *mode);
 void enter_lp(MissionMode *lp_mode);
 void exit_lp(MissionMode *reg_mode);
+void timed_out(MissionMode *next_mode, float max_time);
+
+void boot_initialization();
 
 #endif
