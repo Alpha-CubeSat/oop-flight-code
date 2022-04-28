@@ -38,10 +38,8 @@ void IMUDownlinkReportMonitor::create_imu_downlink_report(int fragment_number)
 
     sfr::rockblock::imu_report.push_back(sfr::imu::fragment_number);
     int pop_size = sfr::imu::content_length;
-    bool end_marker = false;
     if (sfr::imu::content_length > sfr::imu::imu_dlink.size()) {
         pop_size = sfr::imu::imu_dlink.size();
-        end_marker = true;
     }
 
     // add actual gyro content to imu report
@@ -50,9 +48,6 @@ void IMUDownlinkReportMonitor::create_imu_downlink_report(int fragment_number)
         sfr::rockblock::imu_report.push_back(sfr::imu::imu_dlink.back());
         sfr::imu::imu_dlink.pop_back();
         z = z + 1;
-    }
-    if (end_marker) {
-        sfr::rockblock::imu_report.push_back(0xFD);
     }
     sfr::imu::report_ready = true;
     sfr::imu::report_downlinked = false;
