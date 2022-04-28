@@ -10,7 +10,7 @@ IMUDownlink::IMUDownlink(unsigned int offset)
 void IMUDownlink::execute()
 {
     // if (sfr::mission::current_mode == sfr::mission::mandatoryBurns || sfr::mission::current_mode == sfr::mission::regularBurns) {
-    if (millis() - sfr::imu::start_time_deployed > 60 * constants::time::one_second) {
+    if (millis() - sfr::imu::start_time_deployed > 10 * constants::time::one_second) {
         sfr::mission::deployed = true;
     }
     if (sfr::mission::deployed == true) {
@@ -31,7 +31,7 @@ void IMUDownlink::execute()
             sfr::imu::imu_dlink_gyro_y_buffer.push_front(sfr::imu::gyro_y);
             sfr::imu::imu_dlink_gyro_z_buffer.push_front(sfr::imu::gyro_z);
 
-            if (millis() - sfr::rockblock::imudownlink_start_time > 60 * constants::time::one_second) {
+            if (millis() - sfr::rockblock::imudownlink_start_time > 20 * constants::time::one_second) {
                 sfr::rockblock::imu_downlink_on = false;
                 sfr::imu::data_downlinked = true;
             }

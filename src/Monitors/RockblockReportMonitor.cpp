@@ -33,6 +33,9 @@ void RockblockReportMonitor::execute()
         //     sfr::rockblock::downlink_report.push_back(sfr::rockblock::imu_report[i]);
         // }
         for (auto &data : sfr::rockblock::imu_report) {
+#ifdef VERBOSE_IMUP
+            Serial.print("data from imu_downlink_report: " + String(data));
+#endif
             sfr::rockblock::downlink_report.push_back(data);
         }
         break;

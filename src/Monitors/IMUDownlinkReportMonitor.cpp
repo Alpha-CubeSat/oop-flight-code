@@ -10,15 +10,15 @@ void IMUDownlinkReportMonitor::execute()
 
     IMUDownlink imu_dlink = IMUDownlink(constants::timecontrol::imu_downlink_offset);
     imu_dlink.execute();
-    // Get a requested fragment
-    // if (sfr::imu::report_downlinked == true && sfr::imu::fragment_requested == true && sfr::rockblock::imu_first_start != false) {}
-    // #ifdef VERBOSE_IMUMM
-    //     Serial.println("sfr::imu::report_downlinked: " + String(sfr::imu::report_downlinked));
-    //     Serial.println("sfr::imu::fragment_requested: " + String(sfr::imu::fragment_requested));
-    //     Serial.println("sfr::imu::data_downlinked: " + String(sfr::imu::data_downlinked));
-    //     Serial.println("sfr::rockblock::imu_first_start: " + String(sfr::rockblock::imu_first_start));
+// Get a requested fragment
+// if (sfr::imu::report_downlinked == true && sfr::imu::fragment_requested == true && sfr::rockblock::imu_first_start != false) {}
+#ifdef VERBOSE_IMUP
+    Serial.println("sfr::imu::report_downlinked: " + String(sfr::imu::report_downlinked));
+    Serial.println("sfr::imu::fragment_requested: " + String(sfr::imu::fragment_requested));
+    Serial.println("sfr::imu::data_downlinked: " + String(sfr::imu::data_downlinked));
+    Serial.println("sfr::rockblock::imu_first_start: " + String(sfr::rockblock::imu_first_start));
 
-    // #endif
+#endif
     if (sfr::rockblock::imu_first_start == false && sfr::imu::data_downlinked == true && sfr::imu::report_downlinked == true && sfr::imu::fragment_requested == true) {
 #ifdef VERBOSE_IMUMM
         Serial.println("start creating imu downlink report");
@@ -28,6 +28,7 @@ void IMUDownlinkReportMonitor::execute()
         sfr::imu::fragment_requested = false;
         sfr::imu::fragment_number++;
         if (sfr::imu::fragment_number == sfr::rockblock::imu_max_fragments) {
+            sfr::imu::fragment_requested == false; // delete
             sfr::imu::imu_dlink_report_ready = false;
             sfr::imu::fragment_number = 0;
         }
@@ -60,25 +61,25 @@ void IMUDownlinkReportMonitor::create_imu_downlink_report(int fragment_number)
     // }
 
     // get each byte of fragment number
-    std::vector<unsigned char> fragment(constants::imu::bytes_allocated_fragment);
-    for (size_t i = 0; i < constants::imu::bytes_allocated_fragment; i++) {
-        fragment[2 - i] = (fragment_number >> (i * 8));
-        sfr::rockblock::imu_report.push_back(fragment[i]);
-    }
-    // sfr::rockblock::imu_report.push_back(fragment_number);
-    // #ifdef VERBOSE_IMUF
-    //     // Serial.print(String(fragment_number));
-    //     Serial.print(fragment_number, HEX);
-    //     Serial.print(" ");
+    // std::vector<unsigned char> fragment(constants::imu::bytes_allocated_fragment);
+    // for (size_t i = 0; i < constants::imu::bytes_allocated_fragment; i++) {
+    //     fragment[2 - i] = (fragment_number >> (i * 8));
+    //     sfr::rockblock::imu_report.push_back(fragment[i]);
+    // }
+    sfr::rockblock::imu_report.push_back(fragment_number);
+#ifdef VERBOSE_IMUP
+    // Serial.print(String(fragment_number));
+    Serial.print(fragment_number, HEX);
+    Serial.print(" ");
 
-    // #endif
+#endif
 
     // check for the three buffer sizes
     assert(sfr::imu::imu_dlink_gyro_x_buffer.size() == sfr::imu::imu_dlink_gyro_y_buffer.size());
     assert(sfr::imu::imu_dlink_gyro_x_buffer.size() == sfr::imu::imu_dlink_gyro_z_buffer.size());
 
     // keep track of the byte got from the buffer
-    int size_limit = 64;
+    int size_limit = 68;
     // add actual image content to imu downlink report
     int buffer_size = sfr::imu::imu_dlink_gyro_x_buffer.size();
 

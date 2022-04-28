@@ -170,7 +170,7 @@ namespace sfr {
         uint8_t arg_1[4] = {0};
         uint8_t arg_2[4] = {0};
 
-        int imu_max_fragments = 16;
+        int imu_max_fragments = 256;
 
         float imudownlink_start_time = 0.0;
         float imudownlink_remain_time = constants::time::one_minute;
