@@ -30,6 +30,20 @@ void reset_lp(MissionManager mission_manager, MissionMode *mode)
     TEST_ASSERT_EQUAL(mode->id, sfr::mission::current_mode->id);
 }
 
+void reset_transmit(MissionManager mission_manager, MissionMode *transmitMode){
+    reset();
+    sfr::mission::current_mode = transmitMode;
+    sfr::battery::voltage_average->set_valid();
+    mission_manager.execute();
+    TEST_ASSERT_EQUAL(transmitMode->id, sfr::mission::current_mode->id);
+
+    sfr::aliveSignal::max_time = 500;
+    delay(sfr::aliveSignal::max_time);
+    mission_manager.execute();
+    TEST_ASSERT_EQUAL(transmitMode->id, sfr::mission::previous_mode->id);
+    TEST_ASSERT_EQUAL(transmitMode->id, sfr::mission::current_mode->id);   
+}
+
 void conditional_reset(MissionManager mission_manager, MissionMode *lpMode, MissionMode *normalMode, bool lp){
     if(lp){
         reset_lp(mission_manager, lpMode);
@@ -38,8 +52,29 @@ void conditional_reset(MissionManager mission_manager, MissionMode *lpMode, Miss
     }
 }
 
+void test_acs_duty_cycle(MissionManager mission_manager, MissionMode *currentMode, MissionMode *nextMode){
+    reset_normal(mission_manager, currentMode);
+
+    // do not exit if acs if time has not been reached
+    sfr::acs::on_time = constants::time::one_hour;
+    currentMode->set_start_time(millis());
+    delay(5);
+    mission_manager.execute();
+    TEST_ASSERT_EQUAL(currentMode->id, sfr::mission::current_mode->id);
+
+    reset_normal(mission_manager, currentMode);
+    
+    // exit if time has been reached
+    sfr::acs::on_time = 5;
+    currentMode->set_start_time(millis());
+    delay(sfr::acs::on_time);
+    mission_manager.execute();
+    TEST_ASSERT_EQUAL(nextMode->id, sfr::mission::current_mode->id);
+}
+
 void test_exit_lp(MissionManager mission_manager, MissionMode *lpMode, MissionMode *normalMode){
-    reset_normal(mission_manager, normalMode);
+    //reset_normal(mission_manager, normalMode);
+    reset_transmit(mission_manager, sfr::mission::transmit);
 
     // exit if voltage sensor resolves itself
     sfr::battery::voltage_average->set_valid();
@@ -123,7 +158,6 @@ void test_exit_signal_phase(MissionManager mission_manager, bool lp){
     sfr::aliveSignal::num_downlink_failures = sfr::aliveSignal::max_downlink_failures;
     mission_manager.execute();
     TEST_ASSERT_EQUAL(nextMode->id, sfr::mission::current_mode->id);
-
 }
 
 void test_exit_detumble_phase(MissionManager mission_manager, bool lp){
@@ -158,20 +192,7 @@ void test_exit_detumble_phase(MissionManager mission_manager, bool lp){
 void test_exit_acs(MissionManager mission_manager, MissionMode *transmitMode, MissionMode *normalMode){
     reset_normal(mission_manager, normalMode);
 
-    // do not exit if acs on time has not been reached
-    sfr::acs::on_time = constants::time::one_hour;
-    normalMode->set_start_time(millis());
-    delay(5);
-    mission_manager.execute();
-    TEST_ASSERT_EQUAL(normalMode->id, sfr::mission::current_mode->id);
-
-    reset_normal(mission_manager, normalMode);
-    // exit if acs on time has been reached
-    sfr::acs::on_time = 5;
-    normalMode->set_start_time(millis());
-    delay(5);
-    mission_manager.execute();
-    TEST_ASSERT_EQUAL(transmitMode->id, sfr::mission::current_mode->id);
+    test_acs_duty_cycle(mission_manager, normalMode, transmitMode);
 }
 
 void test_valid_initialization()
@@ -199,6 +220,12 @@ void test_exit_alive_signal()
 
     test_enter_lp(mission_manager, sfr::mission::lowPowerAliveSignal, sfr::mission::aliveSignal);
     test_exit_signal_phase(mission_manager, false);
+
+    // after max alive signal time, transition to detumble
+    sfr::aliveSignal::max_time = 500;
+    delay(sfr::aliveSignal::max_time);
+    mission_manager.execute();
+    TEST_ASSERT_EQUAL(sfr::mission::detumbleSpin->id, sfr::mission::current_mode->id);
 }
 
 
@@ -208,6 +235,13 @@ void test_exit_low_power_alive_signal()
 
     test_exit_lp(mission_manager, sfr::mission::lowPowerAliveSignal, sfr::mission::aliveSignal);
     test_exit_signal_phase(mission_manager, true);
+
+     // after max alive signal time, transition to low power detumble
+    /*sfr::aliveSignal::max_time = 500;
+    delay(sfr::aliveSignal::max_time);
+    mission_manager.execute();
+    TEST_ASSERT_EQUAL(sfr::mission::lowPowerDetumbleSpin->id, sfr::mission::current_mode->id);*/
+    reset_transmit(mission_manager, sfr::mission::transmit);
 }
 
 
@@ -239,6 +273,24 @@ void test_exit_normal()
 
 }
 
+void test_exit_low_power(){
+    MissionManager mission_manager(0);
+
+    test_exit_lp(mission_manager, sfr::mission::lowPower, sfr::mission::normal);
+
+    //if entered low power mode from transmit mode go back to transmit mode
+    reset_normal(mission_manager, sfr::mission::transmit);
+    test_exit_lp(mission_manager, sfr::mission::lowPower, sfr::mission::transmit);
+
+}
+
+void test_exit_transmit(){
+    MissionManager mission_manager(0);
+
+    test_enter_lp(mission_manager, sfr::mission::lowPower, sfr::mission::transmit);
+    test_acs_duty_cycle(mission_manager, sfr::mission::transmit, sfr::mission::normal);
+}
+
 int test_mission_manager()
 {
     UNITY_BEGIN();
@@ -249,6 +301,8 @@ int test_mission_manager()
     RUN_TEST(test_exit_detumble_spin);
     RUN_TEST(test_exit_low_power_detumble_spin);
     RUN_TEST(test_exit_normal);
+    RUN_TEST(test_exit_low_power);
+    RUN_TEST(test_exit_transmit);
     return UNITY_END();
 }
 

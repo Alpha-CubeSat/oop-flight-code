@@ -26,6 +26,7 @@
 #include <StarshotACS0.h>
 #include <cmath>
 #include <deque>
+#include <queue>
 #include <iostream>
 #include <map>
 #include <numeric>
@@ -86,6 +87,8 @@ namespace sfr {
 
         extern MissionMode *current_mode;
         extern MissionMode *previous_mode;
+
+         extern std::queue<int> mode_history;
     } // namespace mission
     namespace burnwire {
         extern bool fire;

@@ -101,6 +101,8 @@ namespace sfr {
 
         MissionMode *current_mode = boot;
         MissionMode *previous_mode = boot;
+
+        std::queue<int> mode_history;
     } // namespace mission
     namespace burnwire {
         bool fire = false;

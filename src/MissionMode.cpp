@@ -6,7 +6,7 @@ void boot_initialization(){}
 void Boot::transition_to() {}
 void Boot::dispatch()
 {
-    timed_out(sfr::mission::aliveSignal, sfr::aliveSignal::max_time);
+    timed_out(sfr::mission::aliveSignal, sfr::boot::max_time);
 }
 
 
@@ -47,6 +47,12 @@ void Normal::dispatch(){
 
 void LowPower::transition_to() {}
 void LowPower::dispatch(){
+    if(sfr::mission::previous_mode->id == sfr::mission::transmit->id){
+        exit_lp(sfr::mission::transmit);
+    } else{
+        exit_lp(sfr::mission::normal);
+    }
+    
 
 }
 
