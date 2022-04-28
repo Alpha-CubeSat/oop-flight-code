@@ -1,5 +1,7 @@
 #include "MainControlLoop.hpp"
 
+int start;
+
 MainControlLoop::MainControlLoop()
     : ControlTask<void>(),
       clock_manager(constants::timecontrol::control_cycle_time),
@@ -13,6 +15,7 @@ MainControlLoop::MainControlLoop()
       normal_report_monitor(constants::timecontrol::normal_report_monitor_offset),
       imu_monitor(constants::timecontrol::imu_monitor_offset),
       imudownlink_report_monitor(constants::timecontrol::imudownlink_report_monitor_offset),
+      imu_downlink(constants::timecontrol::imudownlink_report_monitor_offset),
       photoresistor_monitor(constants::timecontrol::photoresistor_monitor_offset),
       rockblock_report_monitor(constants::timecontrol::rockblock_report_monitor_offset),
       temperature_monitor(constants::timecontrol::temperature_monitor_offset),
@@ -25,11 +28,19 @@ MainControlLoop::MainControlLoop()
 {
     delay(1000);
     sfr::mission::boot->transition_to();
-    sfr::imu::start_time_deployed = millis();
+
+    //Has entered mandatory burn mode
+    sfr::mission::possible_to_deploy = true;
+    start = millis();
 }
 
 void MainControlLoop::execute()
 {
+    // simulating that there should be 30 seconds of data sampling between the start of the deployment sequence and the actual deployment
+    if(millis() - start > 30 * constants::time::one_second){
+        sfr::mission::deployed = true;
+    }
+    
     delay(200);
     faults::fault_1 = 0;
     faults::fault_2 = 0;
@@ -47,6 +58,7 @@ void MainControlLoop::execute()
     current_monitor.execute_on_time();
     fault_monitor.execute_on_time();
     imu_monitor.execute_on_time();
+    imu_downlink.execute_on_time();
     imudownlink_report_monitor.execute_on_time();
     normal_report_monitor.execute_on_time();
     photoresistor_monitor.execute_on_time();

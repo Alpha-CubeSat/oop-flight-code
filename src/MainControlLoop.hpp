@@ -35,6 +35,7 @@ protected:
     CurrentMonitor current_monitor;
     FaultMonitor fault_monitor;
     IMUMonitor imu_monitor;
+    IMUDownlink imu_downlink;
     NormalReportMonitor normal_report_monitor;
     IMUDownlinkReportMonitor imudownlink_report_monitor;
     PhotoresistorMonitor photoresistor_monitor;

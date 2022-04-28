@@ -79,7 +79,9 @@ namespace sfr {
         extern unsigned long boot_start;
         extern unsigned long max_boot_time;
 
-        extern bool possible_deployed;
+        extern bool possible_to_deploy;
+        extern bool deployed;
+        extern float time_deployed;
     } // namespace mission
     namespace burnwire {
         extern bool fire;
@@ -187,7 +189,7 @@ namespace sfr {
         extern float gyro_x;
         extern float gyro_y;
         extern float gyro_z;
-
+        
         extern std::deque<float> mag_x_buffer;
         extern std::deque<float> mag_y_buffer;
         extern std::deque<float> mag_z_buffer;
@@ -197,15 +199,8 @@ namespace sfr {
         extern std::deque<float> acc_x_buffer;
         extern std::deque<float> acc_y_buffer;
         extern std::deque<float> acc_z_buffer;
-        // std::deque<std::experimental::any, time_t> imu_dlink_buffer;
-        extern std::deque<float> imu_dlink_gyro_x_buffer;
-        extern std::deque<float> imu_dlink_gyro_y_buffer;
-        extern std::deque<float> imu_dlink_gyro_z_buffer;
-        // extern std::deque<SensorReading> imu_dlink_gyro_x_buffer;
-        // extern std::deque<SensorReading> imu_dlink_gyro_y_buffer;
-        // extern std::deque<SensorReading> imu_dlink_gyro_z_buffer;
+        extern std::deque<uint8_t> imu_dlink;
 
-        // extern float mag_x_average;
         extern SensorReading *mag_x_average;
         extern SensorReading *mag_y_average;
         extern SensorReading *mag_z_average;
@@ -220,39 +215,22 @@ namespace sfr {
         extern SensorReading *gyro_z_value;
 
         extern imu_downlink_type imu_dlink_mode;
-        extern const int imu_downlink_buffer_max_size;
-        // extern const int imu_downlink_report_size;
 
-        extern int fragment_number;
-        extern bool fragment_requested;
-        extern int fragments_written;
-        extern int fragment_number_requested;
-        extern bool imu_dlink_report_ready;
-        extern bool report_downlinked;
-        extern bool data_downlinked;
-
-        extern const int mag_4GAUSS_min;
-        extern const int mag_8GAUSS_min;
-        extern const int mag_12GAUSS_min;
-        extern const int mag_16GAUSS_min;
-        extern const int gyro_245DPS_min;
-        extern const int gyro_500DPS_min;
-        extern const int gyro_2000DPS_min;
-        extern const int mag_4GAUSS_max;
-        extern const int mag_8GAUSS_max;
-        extern const int mag_12GAUSS_max;
-        extern const int mag_16GAUSS_max;
-        extern const int gyro_245DPS_max;
-        extern const int gyro_500DPS_max;
-        extern const int gyro_2000DPS_max;
-
+        extern uint8_t fragment_number;
+        extern uint8_t current_sample;
+        extern bool sample_gyro;
         extern int gyro_min;
         extern int gyro_max;
         extern int mag_min;
         extern int mag_max;
-
         extern bool start_timing_deployed;
         extern float start_time_deployed;
+        extern bool report_ready;
+        extern bool report_downlinked;
+        extern bool report_written;
+        extern bool full_report_written;
+        extern int max_fragments;
+        extern int content_length;
     } // namespace imu
     namespace temperature {
         extern float temp_c;

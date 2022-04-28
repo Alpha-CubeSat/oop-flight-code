@@ -3,34 +3,38 @@
 IMUDownlink::IMUDownlink(unsigned int offset)
     : TimedControlTask<void>(offset)
 {
-    imu = Adafruit_LSM9DS1(constants::imu::CSAG, constants::imu::CSM);
-    imu.begin();
 }
 
 void IMUDownlink::execute()
 {
-    // if (sfr::mission::current_mode == sfr::mission::mandatoryBurns || sfr::mission::current_mode == sfr::mission::regularBurns) {
-    if (millis() - sfr::imu::start_time_deployed > 10 * constants::time::one_second) {
-        sfr::rockblock::imu_downlink_on = true;
-        if (sfr::rockblock::imu_first_start == true) {
-            sfr::rockblock::imu_first_start = false;
-            sfr::rockblock::imudownlink_start_time = millis();
-        }
+    if (sfr::imu::sample_gyro){
 
-        if (sfr::rockblock::imu_downlink_on == true) {
-            sfr::imu::gyro_x = sfr::imu::gyro_x_value->get_value();
-            sfr::imu::gyro_y = sfr::imu::gyro_y_value->get_value();
-            sfr::imu::gyro_z = sfr::imu::gyro_z_value->get_value();
+        // Add reading to imu downlink buffer
 
-            // Add reading to imu downlink buffer
-            sfr::imu::imu_dlink_gyro_x_buffer.push_front(sfr::imu::gyro_x);
-            sfr::imu::imu_dlink_gyro_y_buffer.push_front(sfr::imu::gyro_y);
-            sfr::imu::imu_dlink_gyro_z_buffer.push_front(sfr::imu::gyro_z);
+        uint8_t gyro_x = map(sfr::imu::gyro_x_value->get_value(), sfr::imu::gyro_min, sfr::imu::gyro_max, 0, 255);
+        uint8_t gyro_y = map(sfr::imu::gyro_y_value->get_value(), sfr::imu::gyro_min, sfr::imu::gyro_max, 0, 255);
+        uint8_t gyro_z = map(sfr::imu::gyro_z_value->get_value(), sfr::imu::gyro_min, sfr::imu::gyro_max, 0, 255);
 
-            if (millis() - sfr::rockblock::imudownlink_start_time > 20 * constants::time::one_second) {
-                sfr::rockblock::imu_downlink_on = false;
-                sfr::imu::data_downlinked = true;
-            }
-        }
+        sfr::imu::imu_dlink.push_front(sfr::imu::current_sample);
+        sfr::imu::imu_dlink.push_front(gyro_x);
+        sfr::imu::imu_dlink.push_front(gyro_y);
+        sfr::imu::imu_dlink.push_front(gyro_z);
+
+        sfr::imu::current_sample++;
     }
+
+    if(sfr::mission::possible_to_deploy){
+        sfr::imu::sample_gyro = true;
+    }
+
+    // need to be stored in sfr later (time to record imu data after deployment)
+    if(millis() - sfr::mission::time_deployed > 10 * constants::time::one_second){
+        sfr::imu::sample_gyro = false;
+        sfr::imu::report_written = true;
+    } else if(sfr::mission::deployed){
+        sfr::mission::time_deployed = millis();
+        sfr::mission::possible_to_deploy = false;
+        sfr::imu::sample_gyro = true;
+    }
+
 }

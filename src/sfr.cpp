@@ -94,7 +94,10 @@ namespace sfr {
 
         unsigned long boot_start = 0.0;
         unsigned long max_boot_time = constants::time::two_hours;
-        bool possible_deploy = false;
+        bool possible_to_deploy = false;
+        bool deployed;
+
+        float time_deployed;
 
     } // namespace mission
     namespace burnwire {
@@ -202,6 +205,7 @@ namespace sfr {
         float gyro_y = 0.0;
         float gyro_z = 0.0;
 
+
         std::deque<float> mag_x_buffer;
         std::deque<float> mag_y_buffer;
         std::deque<float> mag_z_buffer;
@@ -211,14 +215,7 @@ namespace sfr {
         std::deque<float> acc_x_buffer;
         std::deque<float> acc_y_buffer;
         std::deque<float> acc_z_buffer;
-        // std::deque<std::experimental::any, time_t> imu_dlink_buffer;
-        std::deque<float> imu_dlink_gyro_x_buffer;
-        std::deque<float> imu_dlink_gyro_y_buffer;
-        std::deque<float> imu_dlink_gyro_z_buffer;
-
-        // std::deque<SensorReading> imu_dlink_gyro_x_buffer;
-        // std::deque<SensorReading> imu_dlink_gyro_y_buffer;
-        // std::deque<SensorReading> imu_dlink_gyro_z_buffer;
+        std::deque<uint8_t> imu_dlink;
 
         SensorReading *mag_x_average = new SensorReading(fault_index_type::mag_x, 0.0, false);
         SensorReading *mag_y_average = new SensorReading(fault_index_type::mag_y, 0.0, false);
@@ -233,39 +230,24 @@ namespace sfr {
         SensorReading *gyro_y_value = new SensorReading(fault_index_type::gyro_y, 0.0, false);
         SensorReading *gyro_z_value = new SensorReading(fault_index_type::gyro_z, 0.0, false);
 
-        imu_downlink_type imu_dlink_mode = imu_downlink_type::DPS_245;
-        const int imu_downlink_buffer_max_size = 16000; // not determined yet
-
-        int fragment_number = 0;
-        bool fragment_requested = false;
-        int fragments_written = 0;
-        int fragment_number_requested = 3;
-        bool imu_dlink_report_ready = false;
-        bool report_downlinked = true;
-        bool data_downlinked = false;
-
-        const int mag_4GAUSS_min = -4;
-        const int mag_8GAUSS_min = -8;
-        const int mag_12GAUSS_min = -12;
-        const int mag_16GAUSS_min = -16;
-        const int gyro_245DPS_min = -245;
-        const int gyro_500DPS_min = -500;
-        const int gyro_2000DPS_min = -2000;
-        const int mag_4GAUSS_max = 4;
-        const int mag_8GAUSS_max = 8;
-        const int mag_12GAUSS_max = 12;
-        const int mag_16GAUSS_max = 16;
-        const int gyro_245DPS_max = 245;
-        const int gyro_500DPS_max = 500;
-        const int gyro_2000DPS_max = 2000;
-
-        int gyro_min = gyro_245DPS_min;
-        int gyro_max = gyro_245DPS_max;
-        int mag_min = mag_4GAUSS_min;
-        int mag_max = mag_4GAUSS_max;
+        // check with Josh
+        int gyro_min = -245;
+        int gyro_max = 245;
+        int mag_min = -8;
+        int mag_max = 8;
 
         bool start_timing_deployed = false;
         float start_time_deployed = 0.0;
+        uint8_t current_sample = 0;
+        bool sample_gyro = false;
+        uint8_t fragment_number = 0;
+        bool report_ready = false;
+        bool report_downlinked = true;
+        bool report_written = false;
+        bool full_report_written = false;
+        int max_fragments = 256;
+        int content_length = 68;
+
     } // namespace imu
     namespace temperature {
         float temp_c = 0.0;

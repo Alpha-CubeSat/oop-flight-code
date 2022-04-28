@@ -89,43 +89,8 @@ void IMUMonitor::capture_imu_values()
     sensors_event_t accel, mag, gyro, temp;
     imu.getEvent(&accel, &mag, &gyro, &temp);
 
-    imu.setupMag(imu.LSM9DS1_MAGGAIN_4GAUSS);
-    if (abs(mag.magnetic.x) > sfr::imu::mag_8GAUSS_min || abs(mag.magnetic.y) > sfr::imu::mag_8GAUSS_min || abs(mag.magnetic.z) > sfr::imu::mag_8GAUSS_min) {
-        imu.setupMag(imu.LSM9DS1_MAGGAIN_8GAUSS);
-        // sfr::imu::imu_dlink_mode = imu_downlink_type::GAUSS_8;
-        // sfr::imu::mag_min = sfr::imu::mag_8GAUSS_min;
-        // sfr::imu::mag_max = sfr::imu::mag_8GAUSS_max;
-    }
-    if (abs(mag.magnetic.x) > sfr::imu::mag_12GAUSS_min || abs(mag.magnetic.y) > sfr::imu::mag_12GAUSS_min || abs(mag.magnetic.z) > sfr::imu::mag_12GAUSS_min) {
-        imu.setupMag(imu.LSM9DS1_MAGGAIN_12GAUSS);
-        // sfr::imu::imu_dlink_mode = imu_downlink_type::GAUSS_12;
-        // sfr::imu::mag_min = sfr::imu::mag_12GAUSS_min;
-        // sfr::imu::mag_max = sfr::imu::mag_12GAUSS_max;
-    }
-    if (abs(mag.magnetic.x) > sfr::imu::mag_16GAUSS_min || abs(mag.magnetic.y) > sfr::imu::mag_16GAUSS_min || abs(mag.magnetic.z) > sfr::imu::mag_16GAUSS_min) {
-        imu.setupMag(imu.LSM9DS1_MAGGAIN_16GAUSS);
-        // sfr::imu::imu_dlink_mode = imu_downlink_type::GAUSS_16;
-        // sfr::imu::mag_min = sfr::imu::mag_16GAUSS_min;
-        // sfr::imu::mag_max = sfr::imu::mag_16GAUSS_max;
-    }
-
+    imu.setupMag(imu.LSM9DS1_MAGGAIN_8GAUSS);
     imu.setupGyro(imu.LSM9DS1_GYROSCALE_245DPS);
-    if (abs(gyro.gyro.x) > sfr::imu::gyro_500DPS_min || abs(gyro.gyro.y) > sfr::imu::gyro_500DPS_min || abs(gyro.gyro.z) > sfr::imu::gyro_500DPS_min) {
-        imu.setupGyro(imu.LSM9DS1_GYROSCALE_500DPS);
-        // sfr::imu::imu_dlink_mode = imu_downlink_type::DPS_500;
-        // sfr::imu::gyro_min = sfr::imu::gyro_500DPS_min;
-        // sfr::imu::gyro_max = sfr::imu::gyro_500DPS_max;
-    }
-    if (abs(gyro.gyro.x) > sfr::imu::gyro_2000DPS_min || abs(gyro.gyro.y) > sfr::imu::gyro_2000DPS_min || abs(gyro.gyro.z) > sfr::imu::gyro_2000DPS_min) {
-        imu.setupGyro(imu.LSM9DS1_GYROSCALE_2000DPS);
-        // sfr::imu::imu_dlink_mode = imu_downlink_type::DPS_2000;
-        // sfr::imu::gyro_min = sfr::imu::gyro_2000DPS_min;
-        // sfr::imu::gyro_max = sfr::imu::gyro_2000DPS_max;
-    }
-
-    // Get corrected IMU values
-
-    imu.getEvent(&accel, &mag, &gyro, &temp);
 
     // Save most recent readings
 

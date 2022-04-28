@@ -130,7 +130,7 @@ void CommandMonitor::dispatch_request_imu_downlink_fragment()
     //     sfr::imu::fragment_requested = true;
     //     sfr::imu::fragment_number_requested = sfr::rockblock::f_arg_2;
     // }
-    if (sfr::imu::fragment_number_requested < sfr::rockblock::imu_max_fragments) {
+    /*if (sfr::imu::fragment_number_requested < sfr::rockblock::imu_max_fragments) {
         sfr::imu::fragment_requested = true;
         sfr::imu::fragment_number_requested++;
     }
@@ -138,7 +138,7 @@ void CommandMonitor::dispatch_request_imu_downlink_fragment()
 #ifdef VERBOSE
     Serial.print("Fragment requested: ");
     Serial.println(sfr::imu::fragment_number_requested);
-#endif
+#endif*/
 }
 
 void CommandMonitor::dispatch_change_rockblock_downlink_period()
