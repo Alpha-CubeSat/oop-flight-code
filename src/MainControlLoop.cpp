@@ -27,6 +27,8 @@ MainControlLoop::MainControlLoop()
 
 {
     delay(1000);
+    // Has entered mandatory burn mode, should be deleted later
+    sfr::mission::current_mode == sfr::mission::mandatoryBurns;
     // Has entered mandatory burn mode
     //  sfr::mission::possible_to_deploy = true;
     boot_initialization();

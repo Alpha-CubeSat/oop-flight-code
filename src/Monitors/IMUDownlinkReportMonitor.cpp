@@ -3,7 +3,7 @@ IMUDownlinkReportMonitor::IMUDownlinkReportMonitor(unsigned int offset) : TimedC
 
 void IMUDownlinkReportMonitor::execute()
 {
-    Serial.println("imu_dlink size is " + String(sfr::imu::imu_dlink.size()));
+    // Serial.println("imu_dlink size is " + String(sfr::imu::imu_dlink.size()));
     // Serial.println("Current fragment: " + String(sfr::imu::fragment_number));
     // Serial.println("sfr::imu::report_downlinked: " + String(sfr::imu::report_downlinked));
     // Serial.println("sfr::imu::report_written: " + String(sfr::imu::report_written));
