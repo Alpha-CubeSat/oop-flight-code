@@ -18,6 +18,7 @@ void IMUDownlinkReportMonitor::execute()
         }
         create_imu_downlink_report(sfr::imu::fragment_number);
         if (sfr::imu::imu_dlink.size() == 0) {
+            sfr::imu::report_ready = false;
             // TODO
             // add_possible_command();
         } else {
