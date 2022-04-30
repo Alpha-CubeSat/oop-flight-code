@@ -375,37 +375,60 @@ void RockblockControlTask::dispatch_process_command()
         sfr::rockblock::serial.read();
         sfr::rockblock::serial.read();
 
-        Serial.print("SAT CMD: ");
-        for (size_t o = 0; o < constants::rockblock::opcode_len; ++o) {
-            sfr::rockblock::opcode[o] = sfr::rockblock::serial.read();
-            if (sfr::rockblock::opcode[o] < 0x10)
-                Serial.print(0, HEX);
-            Serial.print(sfr::rockblock::opcode[o], HEX);
-        }
-        for (size_t a1 = 0; a1 < constants::rockblock::arg1_len; ++a1) {
-            sfr::rockblock::arg_1[a1] = sfr::rockblock::serial.read();
-            if (sfr::rockblock::arg_1[a1] < 0x10)
-                Serial.print(0, HEX);
-            Serial.print(sfr::rockblock::arg_1[a1], HEX);
-        }
-        for (size_t a2 = 0; a2 < constants::rockblock::arg2_len; ++a2) {
-            sfr::rockblock::arg_2[a2] = sfr::rockblock::serial.read();
-            if (sfr::rockblock::arg_2[a2] < 0x10)
-                Serial.print(0, HEX);
-            Serial.print(sfr::rockblock::arg_2[a2], HEX);
-        }
-        Serial.println();
+        while (1) {
+            uint8_t look_ahead = sfr::rockblock::serial.read(); // Peek
+            if (look_ahead == constants::rockblock::end_of_command_upload_flag) {
+                break; // Exit command read loop
+            }
+            Serial.print("SAT CMD");
+            // Instantiate a new unprocessed raw command
+            RawRockblockCommand new_raw_command;
+            sfr::rockblock::raw_commands.push_back(new_raw_command);
+            sfr::rockblock::raw_commands.back().opcode[0] = look_ahead;
 
-        if (valid_command()) {
-            sfr::rockblock::f_opcode = (sfr::rockblock::opcode[1] << 8) | (sfr::rockblock::opcode[0]);
-            sfr::rockblock::f_arg_1 = (sfr::rockblock::arg_1[3] << 24) | (sfr::rockblock::arg_1[2] << 16) | (sfr::rockblock::arg_1[1] << 8) | (sfr::rockblock::arg_1[0]);
-            sfr::rockblock::f_arg_2 = (sfr::rockblock::arg_2[3] << 24) | (sfr::rockblock::arg_2[2] << 16) | (sfr::rockblock::arg_2[1] << 8) | (sfr::rockblock::arg_2[0]);
+            if (look_ahead < 0x10)
+                Serial.print(0, HEX);
+            Serial.print(look_ahead, HEX);
+            // Already read first first opcode index; start at second index
+            for (size_t o = 1; o < constants::rockblock::opcode_len; ++o) {
+                sfr::rockblock::raw_commands.back().opcode[o] = sfr::rockblock::serial.read();
+                if (sfr::rockblock::raw_commands.back().opcode[o] < 0x10)
+                    Serial.print(0, HEX);
+                Serial.print(sfr::rockblock::raw_commands.back().opcode[o], HEX);
+            }
+            for (size_t a1 = 0; a1 < constants::rockblock::arg1_len; ++a1) {
+                sfr::rockblock::raw_commands.back().arg_1[a1] = sfr::rockblock::serial.read();
+                if (sfr::rockblock::raw_commands.back().arg_1[a1] < 0x10)
+                    Serial.print(0, HEX);
+                Serial.print(sfr::rockblock::raw_commands.back().arg_1[a1], HEX);
+            }
+            for (size_t a2 = 0; a2 < constants::rockblock::arg2_len; ++a2) {
+                sfr::rockblock::raw_commands.back().arg_2[a2] = sfr::rockblock::serial.read();
+                if (sfr::rockblock::raw_commands.back().arg_2[a2] < 0x10)
+                    Serial.print(0, HEX);
+                Serial.print(sfr::rockblock::raw_commands.back().arg_2[a2], HEX);
+            }
 
-            sfr::rockblock::waiting_command = true;
-        } else if (sfr::rockblock::opcode[0] == 'F' && sfr::rockblock::opcode[1] == 'L') {
-            Serial.println("SAT INFO: flush confirmed");
-            sfr::rockblock::flush_status = false;
+            Serial.println();
+
+            if (check_valid_command(sfr::rockblock::raw_commands.back())) {
+                uint16_t f_opcode = sfr::rockblock::raw_commands.back().get_f_opcode();
+                uint32_t f_arg_1 = sfr::rockblock::raw_commands.back().get_f_arg_1();
+                uint32_t f_arg_2 = sfr::rockblock::raw_commands.back().get_f_arg_2();
+                RockblockCommand new_command = RockblockCommand(f_opcode, f_arg_1, f_arg_2);
+                sfr::rockblock::processed_commands.push_back(new_command);
+                sfr::rockblock::waiting_command = true;
+            } else if (sfr::rockblock::raw_commands.back().opcode[0] == 'F' && sfr::rockblock::raw_commands.back().opcode[1] == 'L') {
+                Serial.println("SAT INFO: flush confirmed");
+                sfr::rockblock::flush_status = false;
+            }
         }
+
+        // Clear the raw command buffer
+        while (!sfr::rockblock::raw_commands.empty()) {
+            sfr::rockblock::raw_commands.pop_back();
+        }
+
         sfr::rockblock::conseq_reads++;
         transition_to(rockblock_mode_type::queue_check);
     }
@@ -469,7 +492,7 @@ void RockblockControlTask::transition_to(rockblock_mode_type new_mode)
     sfr::rockblock::mode = new_mode;
 }
 
-bool RockblockControlTask::valid_command()
+bool RockblockControlTask::check_valid_command(RawRockblockCommand raw_command)
 {
     bool opcode = false;
     bool arg_1 = true;
@@ -481,16 +504,16 @@ bool RockblockControlTask::valid_command()
 
     // Check if opcode matches non-standard command (variable arg)
     for (size_t o = 0; o < constants::rockblock::opcode_len; o++) {
-        if (sfr::rockblock::opcode[o] != constants::rockblock::request_image_fragment[o]) {
+        if (raw_command.opcode[o] != constants::rockblock::request_image_fragment[o]) {
             request_image_fragment_opcode = false;
         }
-        if (sfr::rockblock::opcode[o] != constants::rockblock::rockblock_downlink_period[o]) {
+        if (raw_command.opcode[o] != constants::rockblock::rockblock_downlink_period[o]) {
             rockblock_downlink_period_opcode = false;
         }
-        if (sfr::rockblock::opcode[o] != constants::rockblock::burnwire_time[o]) {
+        if (raw_command.opcode[o] != constants::rockblock::burnwire_time[o]) {
             burnwire_time_opcode = false;
         }
-        if (sfr::rockblock::opcode[o] != constants::rockblock::burnwire_timeout[o]) {
+        if (raw_command.opcode[o] != constants::rockblock::burnwire_timeout[o]) {
             burnwire_timeout_opcode = false;
         }
     }
@@ -498,7 +521,7 @@ bool RockblockControlTask::valid_command()
     if (request_image_fragment_opcode) {
         for (size_t c = 0; c < 99; c++) {
             for (size_t a1 = 0; a1 < constants::rockblock::arg1_len; a1++) {
-                if (sfr::rockblock::arg_1[a1] != sfr::rockblock::camera_commands[c][a1 + constants::rockblock::opcode_len]) {
+                if (raw_command.arg_1[a1] != sfr::rockblock::camera_commands[c][a1 + constants::rockblock::opcode_len]) {
                     arg_1 = false;
                 }
             }
@@ -518,17 +541,17 @@ bool RockblockControlTask::valid_command()
         arg_2 = true;
 
         for (size_t o = 0; o < constants::rockblock::opcode_len; o++) {
-            if (sfr::rockblock::opcode[o] != constants::rockblock::known_commands[c][o]) {
+            if (raw_command.opcode[o] != constants::rockblock::known_commands[c][o]) {
                 opcode = false;
             }
         }
         for (size_t a1 = 0; a1 < constants::rockblock::arg1_len; a1++) {
-            if (sfr::rockblock::arg_1[a1] != constants::rockblock::known_commands[c][a1 + constants::rockblock::opcode_len]) {
+            if (raw_command.arg_1[a1] != constants::rockblock::known_commands[c][a1 + constants::rockblock::opcode_len]) {
                 arg_1 = false;
             }
         }
         for (size_t a2 = 0; a2 < constants::rockblock::arg2_len; a2++) {
-            if (sfr::rockblock::arg_2[a2] != constants::rockblock::known_commands[c][a2 + constants::rockblock::opcode_len + constants::rockblock::arg1_len]) {
+            if (raw_command.arg_2[a2] != constants::rockblock::known_commands[c][a2 + constants::rockblock::opcode_len + constants::rockblock::arg1_len]) {
                 arg_2 = false;
             }
         }

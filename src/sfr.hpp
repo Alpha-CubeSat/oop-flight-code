@@ -17,6 +17,7 @@
 #include "Modes/sensor_mode_type.enum"
 #include "Modes/simple_acs_type.enum"
 #include "Pins.hpp"
+#include "RockblockCommand.hpp"
 #include "RockblockSimulator.hpp"
 #include "SensorReading.hpp"
 #include "constants.hpp"
@@ -157,6 +158,7 @@ namespace sfr {
         extern int camera_max_fragments[99];
         extern int commas[constants::rockblock::num_commas];
 
+        extern std::deque<RawRockblockCommand> raw_commands;
         extern uint8_t opcode[2];
         extern uint8_t arg_1[4];
         extern uint8_t arg_2[4];
@@ -170,6 +172,7 @@ namespace sfr {
         extern bool flush_status;
         extern bool waiting_command;
         extern size_t conseq_reads;
+        extern std::deque<RockblockCommand> processed_commands;
         extern uint16_t f_opcode;
         extern uint32_t f_arg_1;
         extern uint32_t f_arg_2;
