@@ -3,8 +3,7 @@
 
 #include "sfr.hpp"
 
-class TemperatureMonitor : public TimedControlTask<void>
-{
+class TemperatureMonitor : public TimedControlTask<void> {
 public:
     TemperatureMonitor(unsigned int offset);
     void execute();

@@ -36,8 +36,7 @@ typedef unsigned int systime_duration_t;
  * @brief Timing values and functions that are shared across all timed control tasks,
  * irrespective of return type.
  */
-class TimedControlTaskBase
-{
+class TimedControlTaskBase {
 protected:
     /**
      * @brief The time at which the current control cycle started.
@@ -67,7 +66,7 @@ public:
      * @param delta
      * @return systime_duration_t
      */
-    static unsigned int duration_to_us(const systime_duration_t &delta)
+    static unsigned int duration_to_us(const systime_duration_t& delta)
     {
 #ifdef DESKTOP
         return std::chrono::duration_cast<std::chrono::microseconds>(delta).count();
@@ -91,7 +90,7 @@ public:
 #endif
     }
 
-    static void wait_duration(const unsigned int &delta_t)
+    static void wait_duration(const unsigned int& delta_t)
     {
         const sys_time_t start = get_system_time();
         // Wait until execution time
@@ -103,14 +102,13 @@ public:
     }
 };
 template <typename T>
-class ControlTask
-{
+class ControlTask {
 public:
     /**
      * @brief Construct a new Control ControlTaskBase object
      *
      */
-    ControlTask() {}
+    ControlTask() { }
 
     /**
      * @brief Run main method of control ControlTaskBase.
@@ -124,8 +122,7 @@ public:
  * @tparam T Return type of control task.
  */
 template <typename T>
-class TimedControlTask : public ControlTask<T>, public TimedControlTaskBase
-{
+class TimedControlTask : public ControlTask<T>, public TimedControlTaskBase {
 private:
     /**
      * @brief The start time of this control task, relative
@@ -143,8 +140,7 @@ public:
      */
     T execute_on_time()
     {
-        sys_time_t earliest_start_time =
-            TimedControlTaskBase::control_cycle_start_time + offset;
+        sys_time_t earliest_start_time = TimedControlTaskBase::control_cycle_start_time + offset;
         wait_until_time(earliest_start_time);
         // Serial.print("Executing");
         // Serial.print(" offset: ");
@@ -161,7 +157,7 @@ public:
      *
      * @param time Time until which the system should pause.
      */
-    sys_time_t wait_until_time(const sys_time_t &time)
+    sys_time_t wait_until_time(const sys_time_t& time)
     {
         // Compute timing statistics and publish them to state fields
         const signed int delta_t = (signed int)duration_to_us(time - get_system_time());
@@ -177,7 +173,9 @@ public:
      * @param offset Time offset of start of this task from the beginning of a
      *               control cycle, in microseconds.
      */
-    TimedControlTask(const unsigned int _offset) : ControlTask<T>(), offset(us_to_duration(_offset + 1))
+    TimedControlTask(const unsigned int _offset)
+        : ControlTask<T>()
+        , offset(us_to_duration(_offset + 1))
     {
     }
 };

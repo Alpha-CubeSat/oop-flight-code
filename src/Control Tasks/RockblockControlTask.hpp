@@ -3,8 +3,7 @@
 
 #include "sfr.hpp"
 
-class RockblockControlTask : public TimedControlTask<void>
-{
+class RockblockControlTask : public TimedControlTask<void> {
 public:
     RockblockControlTask(unsigned int offset);
     void execute();

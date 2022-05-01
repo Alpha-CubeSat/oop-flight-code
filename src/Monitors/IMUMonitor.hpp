@@ -3,8 +3,7 @@
 
 #include "sfr.hpp"
 
-class IMUMonitor : public TimedControlTask<void>
-{
+class IMUMonitor : public TimedControlTask<void> {
 public:
     IMUMonitor(unsigned int offset);
     void execute();

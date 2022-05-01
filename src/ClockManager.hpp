@@ -5,8 +5,7 @@
 
 #include "sfr.hpp"
 
-class ClockManager : public TimedControlTask<void>
-{
+class ClockManager : public TimedControlTask<void> {
 public:
     /**
      * @brief Construct a new Clock Manager

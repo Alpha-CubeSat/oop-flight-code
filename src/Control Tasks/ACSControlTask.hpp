@@ -3,8 +3,7 @@
 
 #include "sfr.hpp"
 
-class ACSControlTask : public TimedControlTask<void>
-{
+class ACSControlTask : public TimedControlTask<void> {
 public:
     ACSControlTask(unsigned int offset);
     void execute();

@@ -21,8 +21,7 @@
 #include "Monitors/TemperatureMonitor.hpp"
 #include "sfr.hpp"
 
-class MainControlLoop : ControlTask<void>
-{
+class MainControlLoop : ControlTask<void> {
 protected:
     ClockManager clock_manager;
 

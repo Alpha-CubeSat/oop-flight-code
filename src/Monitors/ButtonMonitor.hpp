@@ -3,8 +3,7 @@
 
 #include "sfr.hpp"
 
-class ButtonMonitor : public TimedControlTask<void>
-{
+class ButtonMonitor : public TimedControlTask<void> {
 public:
     ButtonMonitor(unsigned int offset);
     void execute();

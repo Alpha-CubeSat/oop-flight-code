@@ -4,8 +4,7 @@
 #include "sfr.hpp"
 #include <vector>
 
-class CameraReportMonitor : public TimedControlTask<void>
-{
+class CameraReportMonitor : public TimedControlTask<void> {
 public:
     CameraReportMonitor(unsigned int offset);
     void execute();

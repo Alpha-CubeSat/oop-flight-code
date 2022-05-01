@@ -8,16 +8,15 @@
 #include <sstream>
 #include <string>
 
-class RockblockSimulator
-{
+class RockblockSimulator {
 public:
     RockblockSimulator();
     void begin(uint32_t baud);
     int available();
     size_t write(uint8_t c);
-    size_t print(const char *s);
+    size_t print(const char* s);
     int read();
-    void insert(const char *s);
+    void insert(const char* s);
     std::string latest_downlink();
     std::deque<std::string> all_downlinks();
     bool set_signal(uint8_t signal);

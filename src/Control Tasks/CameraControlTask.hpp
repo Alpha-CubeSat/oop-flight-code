@@ -3,8 +3,7 @@
 
 #include "sfr.hpp"
 
-class CameraControlTask : public TimedControlTask<void>
-{
+class CameraControlTask : public TimedControlTask<void> {
 
 public:
     CameraControlTask(unsigned int offset);

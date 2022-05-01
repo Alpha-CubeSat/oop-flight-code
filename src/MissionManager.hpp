@@ -6,8 +6,7 @@
 #include "constants.hpp"
 #include "sfr.hpp"
 
-class MissionManager : public TimedControlTask<void>
-{
+class MissionManager : public TimedControlTask<void> {
 public:
     MissionManager(unsigned int offset);
     void execute();

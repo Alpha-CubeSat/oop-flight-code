@@ -1,6 +1,9 @@
 #include "NormalReportMonitor.hpp"
 
-NormalReportMonitor::NormalReportMonitor(unsigned int offset) : TimedControlTask<void>(offset) {}
+NormalReportMonitor::NormalReportMonitor(unsigned int offset)
+    : TimedControlTask<void>(offset)
+{
+}
 
 std::queue<uint8_t> NormalReportMonitor::commands_received;
 

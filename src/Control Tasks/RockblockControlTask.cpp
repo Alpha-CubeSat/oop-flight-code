@@ -1,6 +1,7 @@
 #include "RockblockControlTask.hpp"
 
-RockblockControlTask::RockblockControlTask(unsigned int offset) : TimedControlTask<void>(offset)
+RockblockControlTask::RockblockControlTask(unsigned int offset)
+    : TimedControlTask<void>(offset)
 {
     sfr::rockblock::serial.begin(constants::rockblock::baud);
 }
@@ -216,7 +217,7 @@ void RockblockControlTask::dispatch_send_message()
 #ifdef VERBOSE
     Serial.print("SENT: ");
 #endif
-    for (auto &data : sfr::rockblock::downlink_report) {
+    for (auto& data : sfr::rockblock::downlink_report) {
 #ifdef VERBOSE
         if (data < 16) {
             Serial.print(0);
@@ -409,7 +410,7 @@ void RockblockControlTask::dispatch_process_command()
 void RockblockControlTask::dispatch_queue_check()
 {
     size_t idx = sfr::rockblock::commas[4] + 1;
-    char *ptr = sfr::rockblock::buffer + idx;
+    char* ptr = sfr::rockblock::buffer + idx;
     int queued = strtol(ptr, nullptr, 10);
     Serial.print("SAT INFO: ");
     Serial.print(queued);
@@ -496,10 +497,7 @@ bool RockblockControlTask::valid_command()
         }
     }
 
-    bool non_std_cmd = (rockblock_downlink_period_opcode && arg_2) ||
-                       (request_image_fragment_opcode && arg_1) ||
-                       (burnwire_time_opcode) ||
-                       (burnwire_timeout_opcode);
+    bool non_std_cmd = (rockblock_downlink_period_opcode && arg_2) || (request_image_fragment_opcode && arg_1) || (burnwire_time_opcode) || (burnwire_timeout_opcode);
     if (non_std_cmd) {
         Serial.println("SAT CMD: command validated");
         return true;

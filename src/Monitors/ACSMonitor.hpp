@@ -3,8 +3,7 @@
 
 #include "sfr.hpp"
 
-class ACSMonitor : public TimedControlTask<void>
-{
+class ACSMonitor : public TimedControlTask<void> {
 public:
     ACSMonitor(unsigned int offset);
     void execute();
