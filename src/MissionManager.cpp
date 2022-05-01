@@ -1,6 +1,7 @@
 #include "MissionManager.hpp"
 
-MissionManager::MissionManager(unsigned int offset) : TimedControlTask<void>(offset)
+MissionManager::MissionManager(unsigned int offset)
+    : TimedControlTask<void>(offset)
 {
     sfr::mission::boot->transition_to();
 }

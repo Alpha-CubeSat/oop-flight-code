@@ -2,8 +2,9 @@
 
 #include "ClockManager.hpp"
 
-ClockManager::ClockManager(const unsigned int _control_cycle_size) : TimedControlTask<void>(0),
-                                                                     control_cycle_size(_control_cycle_size)
+ClockManager::ClockManager(const unsigned int _control_cycle_size)
+    : TimedControlTask<void>(0)
+    , control_cycle_size(_control_cycle_size)
 {
     initial_start_cycling_time = get_system_time();
 }
