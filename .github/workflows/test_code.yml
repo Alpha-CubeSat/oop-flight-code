@@ -42,4 +42,3 @@ jobs:
         source: './src'
         extensions: 'hpp,cpp'
         clangFormatVersion: 13
-        style: chromium
