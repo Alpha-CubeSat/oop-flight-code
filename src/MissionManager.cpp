@@ -32,7 +32,7 @@ void MissionManager::execute()
 {
     if (sfr::mission::previous_mode->id != sfr::mission::current_mode->id) {
         sfr::mission::current_mode->transition_to();
-        sfr::mission::mode_history.push(sfr::mission::current_mode->id); 
+        sfr::mission::mode_history.push(sfr::mission::current_mode->id);
     }
 
     sfr::mission::current_mode->dispatch();

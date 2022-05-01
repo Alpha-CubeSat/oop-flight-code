@@ -8,10 +8,12 @@ public:
     virtual void dispatch();
     int id;
     float start_time;
-    void set_start_time(float new_start_time){
+    void set_start_time(float new_start_time)
+    {
         start_time = new_start_time;
     }
-    void set_id(int new_id){
+    void set_id(int new_id)
+    {
         id = new_id;
     }
 };
