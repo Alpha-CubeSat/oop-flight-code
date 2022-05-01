@@ -60,10 +60,11 @@ void test_normal_report_with_more_than_15_commands()
         sfr::rockblock::processed_commands.push_back(command);
     }
     sfr::rockblock::waiting_command = true;
+    command_monitor.execute();
     normal_report_monitor.execute();
     for (int i = 0; i < 15; i++) {
-        TEST_ASSERT_EQUAL(constants::rockblock::burnwire_arm[0], sfr::rockblock::normal_report[36 + (i * 2)]);
-        TEST_ASSERT_EQUAL(constants::rockblock::burnwire_arm[1], sfr::rockblock::normal_report[36 + (i * 2) + 1]);
+        TEST_ASSERT_EQUAL(constants::rockblock::burnwire_arm[0], sfr::rockblock::normal_report[38 + (i * 2)]);
+        TEST_ASSERT_EQUAL(constants::rockblock::burnwire_arm[1], sfr::rockblock::normal_report[38 + (i * 2) + 1]);
     }
     TEST_ASSERT_EQUAL(constants::rockblock::end_of_normal_downlink_flag1, sfr::rockblock::normal_report[62]);
     TEST_ASSERT_EQUAL(constants::rockblock::end_of_normal_downlink_flag2, sfr::rockblock::normal_report[63]);
