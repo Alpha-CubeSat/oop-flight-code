@@ -1,6 +1,15 @@
 #include "sfr.hpp"
 
 namespace sfr {
+    namespace boot {
+        unsigned long max_time = constants::time::two_hours;
+    }
+    namespace simple {
+        float max_time = 5*constants::time::one_minute;
+    }
+    namespace point {
+        float max_time = 5*constants::time::one_minute;
+    }
     namespace detumble {
         float start_time = 0;
         float max_time = constants::time::two_hours;
@@ -11,6 +20,7 @@ namespace sfr {
         int num_downlink_failures = 0;
         int max_downlink_failures = 5;
         bool downlinked = false;
+        float max_time = constants::time::two_hours;
     } // namespace aliveSignal
     namespace pins {
         std::map<int, int> pinMap = {
@@ -92,9 +102,7 @@ namespace sfr {
         MissionMode *current_mode = boot;
         MissionMode *previous_mode = boot;
 
-        unsigned long boot_start = 0.0;
-        unsigned long max_boot_time = constants::time::two_hours;
-
+        std::queue<int> mode_history;
     } // namespace mission
     namespace burnwire {
         bool fire = false;
@@ -248,7 +256,16 @@ namespace sfr {
     } // namespace current
 
     namespace acs {
-        acs_mode_type mode = acs_mode_type::off;
+        Simple simple_class;
+        Point point_class;
+        Off off_class;
+
+        ACSMode *simple = &simple_class;
+        ACSMode *point = &point_class;
+        ACSMode *off = &off_class;
+
+        ACSMode *current_mode = off;
+
         float current1 = 0;
         float current2 = 0;
         float current3 = 0;
@@ -257,6 +274,9 @@ namespace sfr {
         float pwm3 = 0;
         simple_acs_type mag = simple_acs_type::x;
         unsigned long max_no_communication = 0;
+
+        float on_time = 5 * constants::time::one_minute;
+        float off_time = 5 * constants::time::one_minute;
     } // namespace acs
     namespace battery {
         float voltage = 0.0;

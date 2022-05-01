@@ -180,7 +180,7 @@ void RockblockControlTask::dispatch_await_flow_control()
 void RockblockControlTask::dispatch_send_message_length()
 {
     std::stringstream ss;
-    ss << sizeof(sfr::rockblock::downlink_report);
+    ss << sfr::rockblock::downlink_report.size();
     std::string s = ss.str();
     std::string message_length = "AT+SBDWB=" + s + "\r";
 #ifdef VERBOSE
@@ -342,6 +342,10 @@ void RockblockControlTask::dispatch_process_mt_status()
         break;
     case '1':
         Serial.println("SAT INFO: message retrieved");
+        if (sfr::rockblock::downlink_report_type == report_type::camera_report) {
+            sfr::camera::report_downlinked = true;
+            sfr::rockblock::camera_report.clear();
+        }
         sfr::rockblock::num_downlinks = sfr::rockblock::num_downlinks + 1;
         transition_to(rockblock_mode_type::read_message);
         break;
@@ -453,6 +457,10 @@ void RockblockControlTask::dispatch_end_transmission()
         Pins::setPinState(constants::rockblock::sleep_pin, LOW);
     }
     sfr::rockblock::num_downlinks = sfr::rockblock::num_downlinks + 1;
+    if (sfr::rockblock::downlink_report_type == report_type::camera_report) {
+        sfr::camera::report_downlinked = true;
+        sfr::rockblock::camera_report.clear();
+    }
     transition_to(rockblock_mode_type::standby);
 }
 

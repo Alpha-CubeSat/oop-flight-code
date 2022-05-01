@@ -13,6 +13,8 @@ void RockblockReportMonitor::execute()
     case rockblock_mode_type::standby:
         schedule_report();
         break;
+    default:
+        break;
     }
 
     switch (sfr::rockblock::downlink_report_type) {
@@ -32,7 +34,7 @@ void RockblockReportMonitor::execute()
 
     case report_type::imu_report:
         sfr::rockblock::downlink_report.clear();
-        for (int i = 0; i < constants::rockblock::packet_size; i++) {
+        for (unsigned int i = 0; i < constants::rockblock::packet_size; i++) {
             sfr::rockblock::downlink_report.push_back(sfr::rockblock::imu_report[i]);
         }
         break;
