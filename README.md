@@ -25,6 +25,7 @@
     "editor.formatOnSave": true,
 }
 `
+* If the autoformat github action fails upon push, run `clang-format -i ./src/*.cpp ./src/*.hpp ./src/**/*.cpp ./src/**/*.hpp` in terminal to manually autoformat the source files and retry pushing the code
 
 ## Code Overview
 
