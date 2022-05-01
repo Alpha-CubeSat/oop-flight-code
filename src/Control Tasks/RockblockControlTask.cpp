@@ -217,7 +217,7 @@ void RockblockControlTask::dispatch_send_message()
 #ifdef VERBOSE
     Serial.print("SENT: ");
 #endif
-    for (auto& data : sfr::rockblock::downlink_report) {
+    for (auto &data : sfr::rockblock::downlink_report) {
 #ifdef VERBOSE
         if (data < 16) {
             Serial.print(0);
@@ -410,7 +410,7 @@ void RockblockControlTask::dispatch_process_command()
 void RockblockControlTask::dispatch_queue_check()
 {
     size_t idx = sfr::rockblock::commas[4] + 1;
-    char* ptr = sfr::rockblock::buffer + idx;
+    char *ptr = sfr::rockblock::buffer + idx;
     int queued = strtol(ptr, nullptr, 10);
     Serial.print("SAT INFO: ");
     Serial.print(queued);

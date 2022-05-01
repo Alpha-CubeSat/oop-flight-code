@@ -18,14 +18,14 @@ void RockblockReportMonitor::execute()
     switch (sfr::rockblock::downlink_report_type) {
     case report_type::camera_report:
         sfr::rockblock::downlink_report.clear();
-        for (auto& data : sfr::rockblock::camera_report) {
+        for (auto &data : sfr::rockblock::camera_report) {
             sfr::rockblock::downlink_report.push_back(data);
         }
         break;
 
     case report_type::normal_report:
         sfr::rockblock::downlink_report.clear();
-        for (auto& data : sfr::rockblock::normal_report) {
+        for (auto &data : sfr::rockblock::normal_report) {
             sfr::rockblock::downlink_report.push_back(data);
         }
         break;

@@ -18,7 +18,7 @@ void CommandMonitor::execute()
         bool temp_c_average_isValid = sfr::temperature::temp_c_average->is_valid();
         bool voltage_average_isValid = sfr::battery::voltage_average->is_valid();
         bool solar_current_average_isValid = sfr::current::solar_current_average->is_valid();
-        NormalReportMonitor::commands_received.push(sfr::rockblock::f_opcode & 0xFF); // Add byte 0 of opcode to the queue
+        NormalReportMonitor::commands_received.push(sfr::rockblock::f_opcode & 0xFF);          // Add byte 0 of opcode to the queue
         NormalReportMonitor::commands_received.push((sfr::rockblock::f_opcode & 0xFF00) >> 8); // Add byte 1 of opcode to the queue
         if (sfr::rockblock::f_opcode == get_decimal_opcode(constants::rockblock::mission_mode)) {
             dispatch_change_mission_mode();
@@ -84,7 +84,7 @@ void CommandMonitor::dispatch_change_mission_mode()
     }*/
 }
 
-void CommandMonitor::dispatch_change_true_false(bool& value)
+void CommandMonitor::dispatch_change_true_false(bool &value)
 {
     value = sfr::rockblock::f_arg_1;
 }
@@ -151,12 +151,12 @@ void CommandMonitor::dispatch_change_simplified_acs()
     sfr::acs::mag = (simple_acs_type)(int)sfr::rockblock::f_arg_1;
 }
 
-uint16_t CommandMonitor::get_decimal_opcode(const uint8_t* hex_opcode_bytes)
+uint16_t CommandMonitor::get_decimal_opcode(const uint8_t *hex_opcode_bytes)
 {
     return (hex_opcode_bytes[1] << 8) | (hex_opcode_bytes[0]);
 }
 
-uint32_t CommandMonitor::get_decimal_arg(const uint8_t* hex_arg_bytes)
+uint32_t CommandMonitor::get_decimal_arg(const uint8_t *hex_arg_bytes)
 {
     return (hex_arg_bytes[3] << 24) | (hex_arg_bytes[2]) << 16 | (hex_arg_bytes[1] << 8) | (hex_arg_bytes[0]);
 }

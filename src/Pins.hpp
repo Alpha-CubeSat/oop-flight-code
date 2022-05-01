@@ -3,7 +3,8 @@
 
 #include "sfr.hpp"
 
-class Pins {
+class Pins
+{
 public:
     static void setPinState(int pinName, int pinState);
     static int getPinState(int pinName);

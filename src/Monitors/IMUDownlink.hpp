@@ -3,7 +3,8 @@
 
 #include "sfr.hpp"
 
-class IMUDownlink : public TimedControlTask<void> {
+class IMUDownlink : public TimedControlTask<void>
+{
 public:
     IMUDownlink(unsigned int offset);
     void execute();

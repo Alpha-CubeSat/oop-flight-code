@@ -37,7 +37,7 @@ size_t RockblockSimulator::write(uint8_t c)
     return 1;
 }
 
-size_t RockblockSimulator::print(const char* s)
+size_t RockblockSimulator::print(const char *s)
 {
     input += s;
     execute();
@@ -65,7 +65,7 @@ void RockblockSimulator::insert(std::string s)
     }
     std::string tmp = "";
     for (size_t i = 0; i < st.length(); i += 2) {
-        const char* sub = s.substr(i, 2).c_str();
+        const char *sub = s.substr(i, 2).c_str();
         char c = strtol(sub, nullptr, 16);
         tmp += c;
     }
@@ -108,7 +108,7 @@ void RockblockSimulator::execute()
     serial_process();
 }
 
-void RockblockSimulator::insert(const char* s)
+void RockblockSimulator::insert(const char *s)
 {
     std::string str = s;
     insert(str);
@@ -161,27 +161,27 @@ void RockblockSimulator::serial_process()
             Serial.println(tmp.c_str());
         }
 
-        if (input == "AT\r") { // check AT
-            output = "AT\r\r\nOK\r\n"; // reply OK
+        if (input == "AT\r") {            // check AT
+            output = "AT\r\r\nOK\r\n";    // reply OK
         } else if (input == "AT+CSQ\r") { // signal quality check
             output = "AT+CSQ\r\r\n+CSQ:";
             output += '0' + signal;
-            output += "\r\n\r\nOK\r\n"; // reply with signal 5
-        } else if (input == "AT&K0\r") { // flow control
-            output = "AT&K0\r\r\nOK\r\n"; // reply OK
+            output += "\r\n\r\nOK\r\n";            // reply with signal 5
+        } else if (input == "AT&K0\r") {           // flow control
+            output = "AT&K0\r\r\nOK\r\n";          // reply OK
         } else if (input.find("AT+SBDWT=") == 0) { // transmit ASCII
             size_t idx1 = input.find('=') + 1;
             size_t idx2 = input.find('\r');
             downlink_data = input.substr(idx1, idx2 - idx1);
             output = input;
-            output += "\r\nOK\r\n"; // reply OK
+            output += "\r\nOK\r\n";                // reply OK
         } else if (input.find("AT+SBDWB=") == 0) { // transmit binary (length)
             size_t idx1 = input.find('=') + 1;
             size_t idx2 = input.find('\r');
             std::string tmp = input.substr(idx1, idx2 - idx1);
-            const char* ptr = tmp.c_str();
+            const char *ptr = tmp.c_str();
             send_len = strtol(ptr, nullptr, 10); // length from ascii to dec
-            bin_transmit = 1; // prepare for binary transmission
+            bin_transmit = 1;                    // prepare for binary transmission
             output = input;
             output += "\r\nREADY\r\n"; // reply READY
             // } else if( send_len != 0 && (int) input.size() == send_len + 2 + 1 ) {
@@ -251,7 +251,7 @@ void RockblockSimulator::serial_process()
             ss << ", ";
             ss << (int)mt_queue_len;
             output += ss.str();
-            output += "\r\n\r\nOK\r\n"; // reply OK
+            output += "\r\n\r\nOK\r\n";     // reply OK
         } else if (input == "AT+SBDRB\r") { // offload binary data
             output = "AT+SBDRB\r";
             output += (char)0;

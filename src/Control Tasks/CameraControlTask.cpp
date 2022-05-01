@@ -1,8 +1,7 @@
 #include "CameraControlTask.hpp"
 
 CameraControlTask::CameraControlTask(unsigned int offset)
-    : TimedControlTask<void>(offset)
-    , adaCam(&Serial5)
+    : TimedControlTask<void>(offset), adaCam(&Serial5)
 {
 }
 
@@ -69,7 +68,7 @@ void CameraControlTask::execute()
 
         imgFile = SD.open(sfr::camera::filename, FILE_WRITE);
 
-        uint8_t* buffer;
+        uint8_t *buffer;
         uint8_t bytesToRead = min(constants::camera::content_length, sfr::camera::jpglen);
         buffer = adaCam.readPicture(bytesToRead);
 
@@ -120,7 +119,7 @@ void CameraControlTask::camera_init()
             Pins::setPinState(constants::camera::power_on_pin, HIGH);
             sfr::camera::start_progress++;
             break;
-        case 1: // step 1 - call begin method
+        case 1:                                                                // step 1 - call begin method
             if (millis() - sfr::camera::step_time >= sfr::camera::begin_delay) // need to determine this delay
             {
                 if (adaCam.begin()) {

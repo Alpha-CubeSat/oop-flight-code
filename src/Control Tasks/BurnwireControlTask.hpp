@@ -4,7 +4,8 @@
 #include "Control Tasks/TimedControlTask.hpp"
 #include "sfr.hpp"
 
-class BurnwireControlTask : public TimedControlTask<void> {
+class BurnwireControlTask : public TimedControlTask<void>
+{
 public:
     BurnwireControlTask(unsigned int offset);
     void execute();

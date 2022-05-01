@@ -3,7 +3,8 @@
 
 #include "sfr.hpp"
 
-class FaultMonitor : public TimedControlTask<void> {
+class FaultMonitor : public TimedControlTask<void>
+{
 public:
     FaultMonitor(unsigned int offset);
     void execute();

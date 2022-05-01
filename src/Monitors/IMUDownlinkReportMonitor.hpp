@@ -6,7 +6,8 @@
 #include <cassert>
 #include <vector>
 
-class IMUDownlinkReportMonitor : public TimedControlTask<void> {
+class IMUDownlinkReportMonitor : public TimedControlTask<void>
+{
 public:
     IMUDownlinkReportMonitor(unsigned int offset);
     void execute();

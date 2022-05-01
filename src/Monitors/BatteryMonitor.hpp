@@ -3,7 +3,8 @@
 
 #include "sfr.hpp"
 
-class BatteryMonitor : public TimedControlTask<void> {
+class BatteryMonitor : public TimedControlTask<void>
+{
 public:
     BatteryMonitor(unsigned int offset);
     void execute();
