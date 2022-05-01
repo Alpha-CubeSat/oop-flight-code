@@ -5,10 +5,10 @@ namespace sfr {
         unsigned long max_time = constants::time::two_hours;
     }
     namespace simple {
-        float max_time = 5*constants::time::one_minute;
+        float max_time = 5 * constants::time::one_minute;
     }
     namespace point {
-        float max_time = 5*constants::time::one_minute;
+        float max_time = 5 * constants::time::one_minute;
     }
     namespace detumble {
         float start_time = 0;

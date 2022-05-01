@@ -1,5 +1,8 @@
 #include "CameraReportMonitor.hpp"
-CameraReportMonitor::CameraReportMonitor(unsigned int offset) : TimedControlTask<void>(offset) {}
+CameraReportMonitor::CameraReportMonitor(unsigned int offset)
+    : TimedControlTask<void>(offset)
+{
+}
 
 void CameraReportMonitor::execute()
 {

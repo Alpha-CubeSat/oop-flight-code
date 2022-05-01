@@ -1,6 +1,9 @@
 #include "CameraControlTask.hpp"
 
-CameraControlTask::CameraControlTask(unsigned int offset) : TimedControlTask<void>(offset), adaCam(&Serial5) {}
+CameraControlTask::CameraControlTask(unsigned int offset)
+    : TimedControlTask<void>(offset), adaCam(&Serial5)
+{
+}
 
 void CameraControlTask::execute()
 {

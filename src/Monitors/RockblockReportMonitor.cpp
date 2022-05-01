@@ -1,6 +1,9 @@
 #include "RockblockReportMonitor.hpp"
 
-RockblockReportMonitor::RockblockReportMonitor(unsigned int offset) : TimedControlTask<void>(offset) {}
+RockblockReportMonitor::RockblockReportMonitor(unsigned int offset)
+    : TimedControlTask<void>(offset)
+{
+}
 
 void RockblockReportMonitor::execute()
 {
