@@ -21,7 +21,7 @@ namespace constants {
     } // namespace sensor
     namespace photoresistor {
         constexpr int pin = 38;
-        constexpr int light_val = 150;
+        constexpr int light_val = 200;
         constexpr int min_val = 0;
         constexpr int max_val = 1023;
     } // namespace photoresistor
@@ -426,6 +426,7 @@ namespace constants {
         constexpr uint8_t burn_wire = 1 << 0;
         constexpr uint8_t sd_card = 1 << 1;
         constexpr uint8_t camera_on_failed = 1 << 2;
+        constexpr uint8_t light_val = 1 << 3;
     } // namespace fault
     namespace camera {
         constexpr int power_on_pin = 31;

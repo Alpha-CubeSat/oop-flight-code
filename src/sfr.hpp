@@ -1,6 +1,7 @@
 #ifndef SFR_HPP_
 #define SFR_HPP_
 
+#include "ACSMode.hpp"
 #include "Arduino.h"
 #include "Control Tasks/BurnwireControlTask.hpp"
 #include "Control Tasks/TimedControlTask.hpp"
@@ -19,17 +20,16 @@
 #include "RockblockSimulator.hpp"
 #include "SensorReading.hpp"
 #include "constants.hpp"
-#include "ACSMode.hpp"
 #include <Adafruit_LSM9DS1.h>
 #include <Adafruit_VC0706.h>
 #include <SD.h>
 #include <StarshotACS0.h>
 #include <cmath>
 #include <deque>
-#include <queue>
 #include <iostream>
 #include <map>
 #include <numeric>
+#include <queue>
 #include <sstream>
 #include <string>
 
@@ -60,6 +60,8 @@ namespace sfr {
     namespace photoresistor {
         extern int val;
         extern bool covered;
+        extern std::deque<int> light_val_buffer;
+        extern SensorReading *light_val_average;
     } // namespace photoresistor
     namespace mission {
         extern MissionMode *boot;
@@ -88,7 +90,7 @@ namespace sfr {
         extern MissionMode *current_mode;
         extern MissionMode *previous_mode;
 
-         extern std::queue<int> mode_history;
+        extern std::deque<int> mode_history;
     } // namespace mission
     namespace burnwire {
         extern bool fire;
