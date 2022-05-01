@@ -389,7 +389,7 @@ void RockblockControlTask::dispatch_process_command()
             if (look_ahead < 0x10)
                 Serial.print(0, HEX);
             Serial.print(look_ahead, HEX);
-            // Already read first first opcode index; start at second index
+            // Already read first opcode index; start at second index
             for (size_t o = 1; o < constants::rockblock::opcode_len; ++o) {
                 sfr::rockblock::raw_commands.back().opcode[o] = sfr::rockblock::serial.read();
                 if (sfr::rockblock::raw_commands.back().opcode[o] < 0x10)

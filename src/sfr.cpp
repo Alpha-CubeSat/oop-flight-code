@@ -170,9 +170,6 @@ namespace sfr {
         int commas[constants::rockblock::num_commas] = {0};
 
         std::deque<RawRockblockCommand> raw_commands;
-        uint8_t opcode[2] = {0};
-        uint8_t arg_1[4] = {0};
-        uint8_t arg_2[4] = {0};
 
         int imu_max_fragments = 10;
 #ifndef SIMULATOR
@@ -184,9 +181,6 @@ namespace sfr {
         bool waiting_command = false;
         size_t conseq_reads = 0;
         std::deque<RockblockCommand> processed_commands;
-        uint16_t f_opcode = 0;
-        uint32_t f_arg_1 = 0;
-        uint32_t f_arg_2 = 0;
         int timeout = 10 * constants::time::one_minute;
         int start_time = 0;
         bool last_timed_out = false;
