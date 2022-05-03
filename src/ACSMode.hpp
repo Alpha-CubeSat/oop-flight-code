@@ -18,10 +18,6 @@ class Simple : public ACSMode
 public:
     float max_time = 0;
     int id = 2;
-<<<<<<< HEAD
-    
-=======
->>>>>>> 98d04bdffb3a0ad629b257f332d12244e39d0c3f
 };
 
 class Point : public ACSMode

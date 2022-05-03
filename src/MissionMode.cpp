@@ -130,77 +130,7 @@ void RegularBurns::dispatch(){
 }
 
 void Photo::transition_to() {}
-void Photo::dispatch(){
-
-void NormalDeployment::transition_to() {}
-void NormalDeployment::dispatch()
-{
-}
-
-void TransmitDeployment::transition_to() {}
-void TransmitDeployment::dispatch()
-{
-}
-
-void LowPowerDeployment::transition_to() {}
-void LowPowerDeployment::dispatch()
-{
-}
-
-void NormalArmed::transition_to() {}
-void NormalArmed::dispatch()
-{
-}
-
-void TransmitArmed::transition_to() {}
-void TransmitArmed::dispatch()
-{
-}
-
-void LowPowerArmed::transition_to() {}
-void LowPowerArmed::dispatch()
-{
-}
-
-void NormalInSun::transition_to() {}
-void NormalInSun::dispatch()
-{
-}
-
-void TransmitInSun::transition_to() {}
-void TransmitInSun::dispatch()
-{
-}
-
-void LowPowerInSun::transition_to() {}
-void LowPowerInSun::dispatch()
-{
-}
-
-void VoltageFailureInSun::transition_to() {}
-void VoltageFailureInSun::dispatch()
-{
-}
-
-void BootCamera::transition_to() {}
-void BootCamera::dispatch()
-{
-}
-
-void MandatoryBurns::transition_to() {}
-void MandatoryBurns::dispatch()
-{
-}
-
-void RegularBurns::transition_to() {}
-void RegularBurns::dispatch()
-{
-}
-
-void Photo::transition_to() {}
-void Photo::dispatch()
-{
-}
+void Photo::dispatch(){}
 
 void exit_signal_phase(MissionMode *mode)
 {
