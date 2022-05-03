@@ -1,6 +1,7 @@
 #include "MissionManager.hpp"
 
-MissionManager::MissionManager(unsigned int offset) : TimedControlTask<void>(offset)
+MissionManager::MissionManager(unsigned int offset)
+    : TimedControlTask<void>(offset)
 {
     boot_initialization();
     sfr::mission::boot->set_id(0);

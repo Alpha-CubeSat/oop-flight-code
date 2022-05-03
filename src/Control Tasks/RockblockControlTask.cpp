@@ -1,6 +1,7 @@
 #include "RockblockControlTask.hpp"
 
-RockblockControlTask::RockblockControlTask(unsigned int offset) : TimedControlTask<void>(offset)
+RockblockControlTask::RockblockControlTask(unsigned int offset)
+    : TimedControlTask<void>(offset)
 {
     sfr::rockblock::serial.begin(constants::rockblock::baud);
 }
@@ -504,10 +505,7 @@ bool RockblockControlTask::valid_command()
         }
     }
 
-    bool non_std_cmd = (rockblock_downlink_period_opcode && arg_2) ||
-                       (request_image_fragment_opcode && arg_1) ||
-                       (burnwire_time_opcode) ||
-                       (burnwire_timeout_opcode);
+    bool non_std_cmd = (rockblock_downlink_period_opcode && arg_2) || (request_image_fragment_opcode && arg_1) || (burnwire_time_opcode) || (burnwire_timeout_opcode);
     if (non_std_cmd) {
         Serial.println("SAT CMD: command validated");
         return true;

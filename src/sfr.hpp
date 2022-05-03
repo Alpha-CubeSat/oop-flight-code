@@ -1,6 +1,7 @@
 #ifndef SFR_HPP_
 #define SFR_HPP_
 
+#include "ACSMode.hpp"
 #include "Arduino.h"
 #include "Control Tasks/BurnwireControlTask.hpp"
 #include "Control Tasks/TimedControlTask.hpp"
@@ -30,6 +31,7 @@
 #include <iostream>
 #include <map>
 #include <numeric>
+#include <queue>
 #include <sstream>
 #include <string>
 
@@ -88,7 +90,7 @@ namespace sfr {
         extern MissionMode *current_mode;
         extern MissionMode *previous_mode;
 
-         extern std::queue<int> mode_history;
+        extern std::queue<int> mode_history;
     } // namespace mission
     namespace burnwire {
         extern bool fire;

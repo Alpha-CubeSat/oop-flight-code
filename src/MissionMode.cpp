@@ -1,7 +1,7 @@
 #include "MissionMode.hpp"
 #include "sfr.hpp"
 
-void boot_initialization(){}
+void boot_initialization() {}
 
 void Boot::transition_to() {}
 void Boot::dispatch()
@@ -18,7 +18,8 @@ void AliveSignal::dispatch()
 }
 
 void LowPowerAliveSignal::transition_to() {}
-void LowPowerAliveSignal::dispatch() {
+void LowPowerAliveSignal::dispatch()
+{
     exit_lp(sfr::mission::aliveSignal);
     exit_signal_phase(sfr::mission::lowPowerDetumbleSpin);
 }
@@ -37,10 +38,12 @@ void LowPowerDetumbleSpin::dispatch()
     exit_detumble_phase(sfr::mission::lowPower);
 }
 
-void Normal::transition_to() {
+void Normal::transition_to()
+{
     sfr::mission::normal->set_start_time(millis());
 }
-void Normal::dispatch(){
+void Normal::dispatch()
+{
     timed_out(sfr::mission::transmit, sfr::acs::on_time);
     enter_lp(sfr::mission::lowPower);
 }
@@ -129,18 +132,88 @@ void RegularBurns::dispatch(){
 void Photo::transition_to() {}
 void Photo::dispatch(){
 
+void NormalDeployment::transition_to() {}
+void NormalDeployment::dispatch()
+{
 }
 
-void exit_signal_phase(MissionMode *mode){
+void TransmitDeployment::transition_to() {}
+void TransmitDeployment::dispatch()
+{
+}
+
+void LowPowerDeployment::transition_to() {}
+void LowPowerDeployment::dispatch()
+{
+}
+
+void NormalArmed::transition_to() {}
+void NormalArmed::dispatch()
+{
+}
+
+void TransmitArmed::transition_to() {}
+void TransmitArmed::dispatch()
+{
+}
+
+void LowPowerArmed::transition_to() {}
+void LowPowerArmed::dispatch()
+{
+}
+
+void NormalInSun::transition_to() {}
+void NormalInSun::dispatch()
+{
+}
+
+void TransmitInSun::transition_to() {}
+void TransmitInSun::dispatch()
+{
+}
+
+void LowPowerInSun::transition_to() {}
+void LowPowerInSun::dispatch()
+{
+}
+
+void VoltageFailureInSun::transition_to() {}
+void VoltageFailureInSun::dispatch()
+{
+}
+
+void BootCamera::transition_to() {}
+void BootCamera::dispatch()
+{
+}
+
+void MandatoryBurns::transition_to() {}
+void MandatoryBurns::dispatch()
+{
+}
+
+void RegularBurns::transition_to() {}
+void RegularBurns::dispatch()
+{
+}
+
+void Photo::transition_to() {}
+void Photo::dispatch()
+{
+}
+
+void exit_signal_phase(MissionMode *mode)
+{
     if (sfr::aliveSignal::num_downlink_failures >= sfr::aliveSignal::max_downlink_failures || sfr::aliveSignal::downlinked) {
         sfr::mission::current_mode = mode;
-    }   
+    }
 }
 
-void exit_detumble_phase(MissionMode *mode){
-    if ((sfr::imu::gyro_z_average->is_valid() && sfr::imu::gyro_z_average->get_value() >= sfr::detumble::stable_gyro_z) || (millis()-sfr::detumble::start_time >= sfr::detumble::max_time)) {
+void exit_detumble_phase(MissionMode *mode)
+{
+    if ((sfr::imu::gyro_z_average->is_valid() && sfr::imu::gyro_z_average->get_value() >= sfr::detumble::stable_gyro_z) || (millis() - sfr::detumble::start_time >= sfr::detumble::max_time)) {
         sfr::mission::current_mode = mode;
-    }   
+    }
 }
 
 void enter_lp(MissionMode *lp_mode)
@@ -163,6 +236,3 @@ void timed_out(MissionMode *next_mode, float max_time)
         sfr::mission::current_mode = next_mode;
     }
 }
-
-
-

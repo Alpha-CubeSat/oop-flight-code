@@ -1,6 +1,7 @@
 #include "ACSMonitor.hpp"
 
-ACSMonitor::ACSMonitor(unsigned int offset) : TimedControlTask<void>(offset)
+ACSMonitor::ACSMonitor(unsigned int offset)
+    : TimedControlTask<void>(offset)
 {
     rtObj.initialize();
 }
