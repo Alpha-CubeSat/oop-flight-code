@@ -7,6 +7,7 @@
 #include "Control Tasks/TimedControlTask.hpp"
 #include "MissionManager.hpp"
 #include "MissionMode.hpp"
+#include "Modes/mode_type.enum"
 #include "Modes/burnwire_mode_type.enum"
 #include "Modes/camera_init_mode_type.enum"
 #include "Modes/fault_index_type.enum"
@@ -90,7 +91,9 @@ namespace sfr {
         extern MissionMode *current_mode;
         extern MissionMode *previous_mode;
 
-        extern std::queue<int> mode_history;
+        extern std::deque<int> mode_history;
+
+        extern float acs_transmit_cycle_time;
     } // namespace mission
     namespace burnwire {
         extern bool fire;
@@ -261,7 +264,6 @@ namespace sfr {
         extern simple_acs_type mag;
         extern unsigned long max_no_communication;
         extern float on_time;
-        extern float off_time;
     } // namespace acs
     namespace battery {
         extern float voltage;

@@ -102,7 +102,9 @@ namespace sfr {
         MissionMode *current_mode = boot;
         MissionMode *previous_mode = boot;
 
-        std::queue<int> mode_history;
+        std::deque<int> mode_history;
+
+        float acs_transmit_cycle_time = constants::time::one_minute*100;
     } // namespace mission
     namespace burnwire {
         bool fire = false;
@@ -276,7 +278,6 @@ namespace sfr {
         unsigned long max_no_communication = 0;
 
         float on_time = 5 * constants::time::one_minute;
-        float off_time = 5 * constants::time::one_minute;
     } // namespace acs
     namespace battery {
         float voltage = 0.0;

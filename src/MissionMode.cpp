@@ -9,7 +9,6 @@ void Boot::dispatch()
     timed_out(sfr::mission::aliveSignal, sfr::boot::max_time);
 }
 
-
 void AliveSignal::transition_to() {}
 void AliveSignal::dispatch()
 {
@@ -44,24 +43,21 @@ void Normal::transition_to()
 }
 void Normal::dispatch()
 {
-    timed_out(sfr::mission::transmit, sfr::acs::on_time);
     enter_lp(sfr::mission::lowPower);
+    timed_out(sfr::mission::transmit, sfr::acs::on_time);
 }
 
 void LowPower::transition_to() {}
 void LowPower::dispatch(){
-    if(sfr::mission::previous_mode->id == sfr::mission::transmit->id){
-        exit_lp(sfr::mission::transmit);
-    } else{
-        exit_lp(sfr::mission::normal);
-    }
-    
-
+    check_previous(sfr::mission:: normal, sfr::mission::transmit);
 }
 
-void Transmit::transition_to() {}
+void Transmit::transition_to() {
+    sfr::mission::transmit->set_start_time(millis());
+}
 void Transmit::dispatch(){
-
+    enter_lp(sfr::mission::lowPower);
+    timed_out(sfr::mission::normal, sfr::mission::acs_transmit_cycle_time-sfr::acs::on_time);
 }
 
 void NormalDeployment::transition_to() {}
@@ -150,6 +146,14 @@ void enter_lp(MissionMode *lp_mode)
 {
     if (!sfr::battery::voltage_average->is_valid() || sfr::battery::voltage_average->get_value() <= sfr::battery::min_battery) {
         sfr::mission::current_mode = lp_mode;
+    }
+}
+
+void check_previous(MissionMode *normal_mode, MissionMode *transmit_mode){
+    if(sfr::mission::mode_history[1] == sfr::mission::transmit->get_id()){
+        exit_lp(sfr::mission::transmit);
+    } else{
+        exit_lp(sfr::mission::normal);
     }
 }
 
