@@ -95,8 +95,6 @@ void test_enter_acs(MissionManager mission_manager, MissionMode *currentMode, Mi
     TEST_ASSERT_EQUAL(nextMode->get_id(), sfr::mission::current_mode->get_id());
 }
 
-
-
 void test_exit_lp(MissionManager mission_manager, MissionMode *lpMode, MissionMode *currentMode){
     reset(mission_manager, currentMode);
     mission_manager.execute();
@@ -260,31 +258,40 @@ void test_exit_low_power_detumble_spin()
     test_exit_detumble_phase(mission_manager, sfr::mission::lowPowerDetumbleSpin, sfr::mission::lowPower);
 }
 
-void test_exit_normal()
+void test_standard_phase(MissionMode *normalMode, MissionMode *lpMode, MissionMode *transmitMode)
 {
+    //test exit normal
     MissionManager mission_manager(0);
-    reset(mission_manager, sfr::mission::normal);
+    reset(mission_manager, normalMode);
 
-    test_enter_lp(mission_manager, sfr::mission::lowPower, sfr::mission::normal);
-    test_exit_acs(mission_manager, sfr::mission::normal, sfr::mission::transmit);
-}
+    test_enter_lp(mission_manager, lpMode, normalMode);
+    test_exit_acs(mission_manager, normalMode, transmitMode);
 
-void test_exit_low_power(){
-    MissionManager mission_manager(0);
-
+    //test exit low power
     //if entered low power mode from normal mode go back to normal mode
-    test_exit_lp(mission_manager, sfr::mission::lowPower, sfr::mission::normal);
+    test_exit_lp(mission_manager, lpMode, normalMode);
 
     //if entered low power mode from transmit mode go back to transmit mode
-    test_exit_lp(mission_manager, sfr::mission::lowPower, sfr::mission::transmit);
+    test_exit_lp(mission_manager, lpMode, transmitMode);
+
+    //test exit transmit
+    test_enter_lp(mission_manager, lpMode, transmitMode);
+    test_enter_acs(mission_manager, transmitMode, normalMode);
+
 }
 
-void test_exit_transmit(){
-    MissionManager mission_manager(0);
-
-    test_enter_lp(mission_manager, sfr::mission::lowPower, sfr::mission::transmit);
-    test_enter_acs(mission_manager, sfr::mission::transmit, sfr::mission::normal);
+void test_standby() {
+    test_standard_phase(sfr::mission::normal, sfr::mission::lowPower, sfr::mission::transmit );
 }
+
+void test_deployment() {
+    test_standard_phase(sfr::mission::normalDeployment, sfr::mission::lowPowerDeployment, sfr::mission::transmitDeployment );
+}
+
+void test_armed() {
+    test_standard_phase(sfr::mission::normalArmed, sfr::mission::lowPowerArmed, sfr::mission::transmitArmed );
+}
+    
 
 int test_mission_manager()
 {
@@ -295,9 +302,9 @@ int test_mission_manager()
     RUN_TEST(test_exit_low_power_alive_signal);
     RUN_TEST(test_exit_detumble_spin);
     RUN_TEST(test_exit_low_power_detumble_spin);
-    RUN_TEST(test_exit_normal);
-    RUN_TEST(test_exit_low_power);
-    RUN_TEST(test_exit_transmit);
+    RUN_TEST(test_standby);
+    RUN_TEST(test_deployment);
+    RUN_TEST(test_armed);
     return UNITY_END();
 }
 
