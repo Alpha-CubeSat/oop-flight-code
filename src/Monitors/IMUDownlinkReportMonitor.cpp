@@ -35,7 +35,7 @@ void IMUDownlinkReportMonitor::execute()
 void IMUDownlinkReportMonitor::create_imu_downlink_report(int fragment_number)
 {
 
-    sfr::rockblock::imu_report.push_back(88);
+    sfr::rockblock::imu_report.push_back(24);
 
     sfr::rockblock::imu_report.push_back(sfr::imu::fragment_number);
     int pop_size = sfr::imu::content_length;
