@@ -60,34 +60,47 @@ void Transmit::dispatch(){
     timed_out(sfr::mission::normal, sfr::mission::acs_transmit_cycle_time-sfr::acs::on_time);
 }
 
-void NormalDeployment::transition_to() {}
+void NormalDeployment::transition_to() {
+    sfr::mission::normalDeployment->set_start_time(millis());
+}
 void NormalDeployment::dispatch(){
-
+    enter_lp(sfr::mission::lowPowerDeployment);
+    timed_out(sfr::mission::transmitDeployment, sfr::acs::on_time);
 }
 
-void TransmitDeployment::transition_to() {}
+void TransmitDeployment::transition_to() {
+    sfr::mission::transmitDeployment->set_start_time(millis());
+}
 void TransmitDeployment::dispatch(){
-
+    enter_lp(sfr::mission::lowPowerDeployment);
+    timed_out(sfr::mission::normalDeployment, sfr::mission::acs_transmit_cycle_time-sfr::acs::on_time);
 }
 
 void LowPowerDeployment::transition_to() {}
 void LowPowerDeployment::dispatch(){
-
+    check_previous(sfr::mission:: normalDeployment, sfr::mission::transmitDeployment);
 }
 
-void NormalArmed::transition_to() {}
+void NormalArmed::transition_to() {
+    sfr::mission::normalArmed->set_start_time(millis());
+}
 void NormalArmed::dispatch(){
+    enter_lp(sfr::mission::lowPowerArmed);
+    timed_out(sfr::mission::transmitArmed, sfr::acs::on_time);
 
 }
 
-void TransmitArmed::transition_to() {}
+void TransmitArmed::transition_to() {
+    sfr::mission::transmitArmed->set_start_time(millis());
+}
 void TransmitArmed::dispatch(){
-
+    enter_lp(sfr::mission::lowPowerArmed);
+    timed_out(sfr::mission::normalArmed, sfr::mission::acs_transmit_cycle_time-sfr::acs::on_time);
 }
 
 void LowPowerArmed::transition_to() {}
 void LowPowerArmed::dispatch(){
-
+    check_previous(sfr::mission:: normalArmed, sfr::mission::transmitArmed);
 }
 
 void NormalInSun::transition_to() {}
@@ -150,10 +163,10 @@ void enter_lp(MissionMode *lp_mode)
 }
 
 void check_previous(MissionMode *normal_mode, MissionMode *transmit_mode){
-    if(sfr::mission::mode_history[1] == sfr::mission::transmit->get_id()){
-        exit_lp(sfr::mission::transmit);
+    if(sfr::mission::mode_history[1] == transmit_mode->get_id()){
+        exit_lp(transmit_mode);
     } else{
-        exit_lp(sfr::mission::normal);
+        exit_lp(normal_mode);
     }
 }
 

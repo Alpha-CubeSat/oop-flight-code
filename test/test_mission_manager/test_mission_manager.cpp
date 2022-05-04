@@ -264,7 +264,7 @@ void test_standard_phase(MissionMode *normalMode, MissionMode *lpMode, MissionMo
     MissionManager mission_manager(0);
     reset(mission_manager, normalMode);
 
-    test_enter_lp(mission_manager, lpMode, normalMode);
+    //test_enter_lp(mission_manager, lpMode, normalMode);
     test_exit_acs(mission_manager, normalMode, transmitMode);
 
     //test exit low power
@@ -281,15 +281,15 @@ void test_standard_phase(MissionMode *normalMode, MissionMode *lpMode, MissionMo
 }
 
 void test_standby() {
-    test_standard_phase(sfr::mission::normal, sfr::mission::lowPower, sfr::mission::transmit );
+    test_standard_phase(sfr::mission::normal, sfr::mission::lowPower, sfr::mission::transmit);
 }
 
 void test_deployment() {
-    test_standard_phase(sfr::mission::normalDeployment, sfr::mission::lowPowerDeployment, sfr::mission::transmitDeployment );
+    test_standard_phase(sfr::mission::normalDeployment, sfr::mission::lowPowerDeployment, sfr::mission::transmitDeployment);
 }
 
 void test_armed() {
-    test_standard_phase(sfr::mission::normalArmed, sfr::mission::lowPowerArmed, sfr::mission::transmitArmed );
+    test_standard_phase(sfr::mission::normalArmed, sfr::mission::lowPowerArmed, sfr::mission::transmitArmed);
 }
     
 
