@@ -11,6 +11,16 @@ void test_normal_report_without_commands()
     TEST_ASSERT_EQUAL(33, sfr::rockblock::normal_report.size());
 }
 
+void test_normal_report_fault()
+{
+    NormalReportMonitor normal_report_monitor(0);
+    sfr::imu::mag_x_average->set_invalid();
+    sfr::imu::mag_z_average->set_invalid();
+    normal_report_monitor.execute();
+    TEST_ASSERT_EQUAL(0b00000101, sfr::rockblock::normal_report[26]);
+    TEST_ASSERT_EQUAL(33, sfr::rockblock::normal_report.size());
+}
+
 void test_normal_report_with_one_command()
 {
     NormalReportMonitor normal_report_monitor(0);
@@ -72,6 +82,7 @@ void test_normal_report_with_more_than_15_commands()
 int test_normal_report_acknowledge()
 {
     UNITY_BEGIN();
+    RUN_TEST(test_normal_report_fault);
     RUN_TEST(test_normal_report_without_commands);
     RUN_TEST(test_normal_report_with_one_command);
     RUN_TEST(test_normal_report_with_multiple_commands);
