@@ -380,7 +380,7 @@ void RockblockControlTask::dispatch_process_command()
             if (look_ahead == constants::rockblock::end_of_command_upload_flag) {
                 break; // Exit command read loop
             }
-            Serial.print("SAT CMD");
+            Serial.println("SAT CMD");
             // Instantiate a new unprocessed raw command
             RawRockblockCommand new_raw_command;
             sfr::rockblock::raw_commands.push_back(new_raw_command);
