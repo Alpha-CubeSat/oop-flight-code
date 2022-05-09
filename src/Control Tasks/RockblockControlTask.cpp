@@ -8,7 +8,7 @@ RockblockControlTask::RockblockControlTask(unsigned int offset)
 
 void RockblockControlTask::execute()
 {
-    //check_timeout();
+    // check_timeout();
     rockblock_mode_type mode = sfr::rockblock::mode;
 #ifdef VERBOSE
     Serial.printf("Current rockblock mode: %d\n", mode);

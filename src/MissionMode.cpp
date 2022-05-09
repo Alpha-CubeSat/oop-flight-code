@@ -1,13 +1,15 @@
 #include "MissionMode.hpp"
 #include "sfr.hpp"
 
-void boot_initialization() {
+void boot_initialization()
+{
     sfr::rockblock::sleep_mode = true;
     sfr::acs::off = true;
     sfr::imu::sample = false;
 }
 
-void Boot::transition_to(){
+void Boot::transition_to()
+{
     sfr::rockblock::sleep_mode = true;
     sfr::acs::off = true;
     sfr::imu::sample = false;
@@ -17,7 +19,8 @@ void Boot::dispatch()
     timed_out(sfr::mission::aliveSignal, sfr::boot::max_time);
 }
 
-void AliveSignal::transition_to(){
+void AliveSignal::transition_to()
+{
     sfr::rockblock::sleep_mode = false;
     sfr::acs::off = true;
     sfr::imu::sample = false;
@@ -28,7 +31,8 @@ void AliveSignal::dispatch()
     exit_signal_phase(sfr::mission::detumbleSpin);
 }
 
-void LowPowerAliveSignal::transition_to(){
+void LowPowerAliveSignal::transition_to()
+{
     sfr::rockblock::sleep_mode = false;
     sfr::acs::off = true;
     sfr::imu::sample = false;
@@ -39,7 +43,8 @@ void LowPowerAliveSignal::dispatch()
     exit_signal_phase(sfr::mission::lowPowerDetumbleSpin);
 }
 
-void DetumbleSpin::transition_to(){
+void DetumbleSpin::transition_to()
+{
     sfr::rockblock::sleep_mode = true;
     sfr::acs::off = false;
     sfr::imu::sample = true;
@@ -57,7 +62,8 @@ void DetumbleSpin::dispatch()
     exit_detumble_phase(sfr::mission::normal);
 }
 
-void LowPowerDetumbleSpin::transition_to(){
+void LowPowerDetumbleSpin::transition_to()
+{
     sfr::rockblock::sleep_mode = true;
     sfr::acs::off = true;
     sfr::imu::sample = false;
@@ -68,7 +74,8 @@ void LowPowerDetumbleSpin::dispatch()
     exit_detumble_phase(sfr::mission::lowPower);
 }
 
-void Normal::transition_to(){
+void Normal::transition_to()
+{
     sfr::rockblock::sleep_mode = true;
     sfr::acs::off = false;
     sfr::imu::sample = true;
@@ -79,7 +86,8 @@ void Normal::dispatch()
     timed_out(sfr::mission::transmit, sfr::acs::on_time);
 }
 
-void LowPower::transition_to(){
+void LowPower::transition_to()
+{
     sfr::rockblock::sleep_mode = false;
     sfr::acs::off = true;
     sfr::imu::sample = false;
@@ -89,7 +97,8 @@ void LowPower::dispatch()
     check_previous(sfr::mission::normal, sfr::mission::transmit);
 }
 
-void Transmit::transition_to(){
+void Transmit::transition_to()
+{
     sfr::rockblock::sleep_mode = false;
     sfr::acs::off = true;
     sfr::imu::sample = false;
@@ -100,7 +109,8 @@ void Transmit::dispatch()
     timed_out(sfr::mission::normal, sfr::mission::acs_transmit_cycle_time - sfr::acs::on_time);
 }
 
-void NormalDeployment::transition_to(){
+void NormalDeployment::transition_to()
+{
     sfr::rockblock::sleep_mode = true;
     sfr::acs::off = false;
     sfr::imu::sample = true;
@@ -111,7 +121,8 @@ void NormalDeployment::dispatch()
     timed_out(sfr::mission::transmitDeployment, sfr::acs::on_time);
 }
 
-void TransmitDeployment::transition_to(){
+void TransmitDeployment::transition_to()
+{
     sfr::rockblock::sleep_mode = false;
     sfr::acs::off = true;
     sfr::imu::sample = false;
@@ -122,7 +133,8 @@ void TransmitDeployment::dispatch()
     timed_out(sfr::mission::normalDeployment, sfr::mission::acs_transmit_cycle_time - sfr::acs::on_time);
 }
 
-void LowPowerDeployment::transition_to(){
+void LowPowerDeployment::transition_to()
+{
     sfr::rockblock::sleep_mode = false;
     sfr::acs::off = true;
     sfr::imu::sample = false;
@@ -132,7 +144,8 @@ void LowPowerDeployment::dispatch()
     check_previous(sfr::mission::normalDeployment, sfr::mission::transmitDeployment);
 }
 
-void NormalArmed::transition_to(){
+void NormalArmed::transition_to()
+{
     sfr::rockblock::sleep_mode = true;
     sfr::acs::off = false;
     sfr::imu::sample = true;
@@ -143,7 +156,8 @@ void NormalArmed::dispatch()
     timed_out(sfr::mission::transmitArmed, sfr::acs::on_time);
 }
 
-void TransmitArmed::transition_to(){
+void TransmitArmed::transition_to()
+{
     sfr::rockblock::sleep_mode = false;
     sfr::acs::off = true;
     sfr::imu::sample = false;
@@ -154,7 +168,8 @@ void TransmitArmed::dispatch()
     timed_out(sfr::mission::normalArmed, sfr::mission::acs_transmit_cycle_time - sfr::acs::on_time);
 }
 
-void LowPowerArmed::transition_to(){
+void LowPowerArmed::transition_to()
+{
     sfr::rockblock::sleep_mode = false;
     sfr::acs::off = true;
     sfr::imu::sample = false;
@@ -164,42 +179,42 @@ void LowPowerArmed::dispatch()
     check_previous(sfr::mission::normalArmed, sfr::mission::transmitArmed);
 }
 
-void NormalInSun::transition_to(){}
+void NormalInSun::transition_to() {}
 void NormalInSun::dispatch()
 {
 }
 
-void TransmitInSun::transition_to(){}
+void TransmitInSun::transition_to() {}
 void TransmitInSun::dispatch()
 {
 }
 
-void LowPowerInSun::transition_to(){}
+void LowPowerInSun::transition_to() {}
 void LowPowerInSun::dispatch()
 {
 }
 
-void VoltageFailureInSun::transition_to(){}
+void VoltageFailureInSun::transition_to() {}
 void VoltageFailureInSun::dispatch()
 {
 }
 
-void BootCamera::transition_to(){}
+void BootCamera::transition_to() {}
 void BootCamera::dispatch()
 {
 }
 
-void MandatoryBurns::transition_to(){}
+void MandatoryBurns::transition_to() {}
 void MandatoryBurns::dispatch()
 {
 }
 
-void RegularBurns::transition_to(){}
+void RegularBurns::transition_to() {}
 void RegularBurns::dispatch()
 {
 }
 
-void Photo::transition_to(){}
+void Photo::transition_to() {}
 void Photo::dispatch() {}
 
 void exit_signal_phase(MissionMode *mode)
