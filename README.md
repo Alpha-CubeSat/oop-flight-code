@@ -158,7 +158,7 @@ Constants contains values that will never be changed. This prevents "magic numbe
 | 30                 | camera powered          |                     |                     |
 | ...                | opcodes of received commands|                     |                     |
 | report.size() - 2  | 254 (end flag 1)        |                     |                     |
-| report.size() - 2  | 255 (end flag 2)        |                     |                     |
+| report.size() - 1  | 255 (end flag 2)        |                     |                     |
 
 **<center> Tests</center>**
 
