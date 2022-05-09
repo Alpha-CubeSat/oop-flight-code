@@ -1,6 +1,7 @@
 #include "CurrentMonitor.hpp"
 
-CurrentMonitor::CurrentMonitor(unsigned int offset) : TimedControlTask<void>(offset)
+CurrentMonitor::CurrentMonitor(unsigned int offset)
+    : TimedControlTask<void>(offset)
 {
     pinMode(constants::current::pin, OUTPUT);
 }

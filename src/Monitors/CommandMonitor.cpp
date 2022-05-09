@@ -1,7 +1,10 @@
 #include "CommandMonitor.hpp"
 #include "NormalReportMonitor.hpp"
 
-CommandMonitor::CommandMonitor(unsigned int offset) : TimedControlTask<void>(offset) {}
+CommandMonitor::CommandMonitor(unsigned int offset)
+    : TimedControlTask<void>(offset)
+{
+}
 
 void CommandMonitor::execute()
 {

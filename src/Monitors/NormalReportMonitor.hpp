@@ -1,6 +1,7 @@
 #ifndef NORMAL_REPORT_MONITOR_HPP_
 #define NORMAL_REPORT_MONITOR_HPP_
 
+#include "Faults.hpp"
 #include "sfr.hpp"
 #include <queue>
 

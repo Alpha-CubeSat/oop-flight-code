@@ -25,6 +25,7 @@
     "editor.formatOnSave": true,
 }
 `
+* If the autoformat github action fails upon push, run `clang-format -i ./src/*.cpp ./src/*.hpp ./src/**/*.cpp ./src/**/*.hpp` in terminal to manually autoformat the source files and retry pushing the code
 
 ## Code Overview
 
@@ -124,7 +125,7 @@ Constants contains values that will never be changed. This prevents "magic numbe
 
 | Index              | Data                    | Min (if applicable) | Max (if applicable) |
 | ------------------ | ----------------------- | ------------------- | ------------------- |
-| 0                  | 253 (normel report flag)| N/A                 | N/A                 |
+| 0                  | 99 (normel report flag) | N/A                 | N/A                 |
 | 1                  | photoresistor covered   |                     |                     |
 | 2                  | button pressed          |                     |                     |
 | 3                  | mission mode            |                     |                     |
@@ -143,27 +144,21 @@ Constants contains values that will never be changed. This prevents "magic numbe
 | 16                 | gyro\_x                 | 0.0                 | 0.0                 |
 | 17                 | gryo\_y                 | 0.0                 | 0.0                 |
 | 18                 | gyro\_z                 | 0.0                 | 0.0                 |
-| 19                 | temperature             |                     | 200                 |
-| 20                 | temperature mode        |                     |                     |
+| 19                 | light val               |                     |                     |
+| 20                 | temperature             |                     | 200                 |
 | 21                 | solar current           |                     | 500                 |
 | 22                 | in sun                  |                     |                     |
 | 23                 | acs mode                |                     |                     |
 | 24                 | voltage                 | 3                   | 5                   |
 | 25                 | fault mode              |                     |                     |
-| 26                 | mag\_x fault check      |                     |                     |
-| 27                 | mag\_y fault check      |                     |                     |
-| 28                 | mag\_z fault check      |                     |                     |
-| 29                 | gyro\_x fault check     |                     |                     |
-| 30                 | gyro\_y fault check     |                     |                     |
-| 31                 | gyro\_z fault check     |                     |                     |
-| 32                 | temp fault check        |                     |                     |
-| 33                 | voltage fault check     |                     |                     |
-| 34                 | solar fault check       |                     |                     |
-| 35                 | take photo              |                     |                     |
-| 36                 | camera powered          |                     |                     |
+| 26                 | fault1                  |                     |                     |
+| 27                 | fault2                  |                     |                     |
+| 28                 | fault3                  |                     |                     |
+| 29                 | take photo              |                     |                     |
+| 30                 | camera powered          |                     |                     |
 | ...                | opcodes of received commands|                     |                     |
 | report.size() - 2  | 254 (end flag 1)        |                     |                     |
-| report.size() - 2  | 255 (end flag 2)        |                     |                     |
+| report.size() - 1  | 255 (end flag 2)        |                     |                     |
 
 **<center> Tests</center>**
 

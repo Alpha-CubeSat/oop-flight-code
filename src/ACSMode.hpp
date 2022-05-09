@@ -8,7 +8,8 @@ class ACSMode
 public:
     int id;
     float max_time;
-    void set_max_time(float new_max_time){
+    void set_max_time(float new_max_time)
+    {
         max_time = new_max_time;
     }
 };
@@ -18,7 +19,6 @@ class Simple : public ACSMode
 public:
     float max_time = 0;
     int id = 2;
-    
 };
 
 class Point : public ACSMode

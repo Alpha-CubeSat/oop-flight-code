@@ -1,6 +1,9 @@
 #include "NormalReportMonitor.hpp"
 
-NormalReportMonitor::NormalReportMonitor(unsigned int offset) : TimedControlTask<void>(offset) {}
+NormalReportMonitor::NormalReportMonitor(unsigned int offset)
+    : TimedControlTask<void>(offset)
+{
+}
 
 std::queue<uint8_t> NormalReportMonitor::commands_received;
 
@@ -53,16 +56,9 @@ void NormalReportMonitor::execute()
     sfr::rockblock::normal_report.push_back(sfr::acs::current_mode->id);
     sfr::rockblock::normal_report.push_back(voltage);
     sfr::rockblock::normal_report.push_back((uint8_t)sfr::fault::mode);
-    sfr::rockblock::normal_report.push_back(sfr::imu::mag_x_average->is_valid());
-    sfr::rockblock::normal_report.push_back(sfr::imu::mag_y_average->is_valid());
-    sfr::rockblock::normal_report.push_back(sfr::imu::mag_z_average->is_valid());
-    sfr::rockblock::normal_report.push_back(sfr::imu::gyro_x_average->is_valid());
-    sfr::rockblock::normal_report.push_back(sfr::imu::gyro_y_average->is_valid());
-    sfr::rockblock::normal_report.push_back(sfr::imu::gyro_z_average->is_valid());
-    sfr::rockblock::normal_report.push_back(sfr::photoresistor::covered);
-    sfr::rockblock::normal_report.push_back(sfr::temperature::temp_c_average->is_valid());
-    sfr::rockblock::normal_report.push_back(sfr::battery::voltage_average->is_valid());
-    sfr::rockblock::normal_report.push_back(sfr::current::solar_current_average->is_valid());
+    sfr::rockblock::normal_report.push_back(faults::fault_1);
+    sfr::rockblock::normal_report.push_back(faults::fault_2);
+    sfr::rockblock::normal_report.push_back(faults::fault_3);
     sfr::rockblock::normal_report.push_back(sfr::camera::take_photo);
     sfr::rockblock::normal_report.push_back(sfr::camera::powered);
     int i = 0;
