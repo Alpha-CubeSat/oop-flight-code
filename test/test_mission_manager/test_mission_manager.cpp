@@ -13,6 +13,7 @@ void reset(){
     sfr::boot::max_time = constants::time::two_days;
     sfr::battery::voltage_average->set_value(sfr::battery::acceptable_battery+.1);
     sfr::rockblock::max_check_signal_time = constants::time::one_minute;
+    sfr::acs::on_time = constants::time::one_hour;
 }
 
 void reset_normal(MissionManager mission_manager, MissionMode *mode)
@@ -84,8 +85,8 @@ void test_enter_acs(MissionManager mission_manager, MissionMode *currentMode, Mi
     reset(mission_manager, currentMode);
     
     // exit transmit mode and enter normal mode if 
-    sfr::mission::acs_transmit_cycle_time = 10*constants::time::one_second;
-    sfr::acs::on_time = 5*constants::time::one_second;
+    sfr::mission::acs_transmit_cycle_time = 10;
+    sfr::acs::on_time = 5;
     currentMode->set_start_time(millis());
     delay(sfr::mission::acs_transmit_cycle_time-sfr::acs::on_time);
     mission_manager.execute();
@@ -274,14 +275,14 @@ void test_standard_phase(MissionMode *normalMode, MissionMode *lpMode, MissionMo
 
     //test exit low power
     //if entered low power mode from normal mode go back to normal mode
-    //test_exit_lp(mission_manager, lpMode, normalMode);
+    test_exit_lp(mission_manager, lpMode, normalMode);
 
     //if entered low power mode from transmit mode go back to transmit mode
-    //test_exit_lp(mission_manager, lpMode, transmitMode);
+    test_exit_lp(mission_manager, lpMode, transmitMode);
 
     //test exit transmit
-    //test_enter_lp(mission_manager, lpMode, transmitMode);
-    //test_enter_acs(mission_manager, transmitMode, normalMode);
+    test_enter_lp(mission_manager, lpMode, transmitMode);
+    test_enter_acs(mission_manager, transmitMode, normalMode);
 
 }
 
@@ -310,6 +311,7 @@ int test_mission_manager()
     RUN_TEST(test_standby);
     RUN_TEST(test_deployment);
     RUN_TEST(test_armed);
+    
     return UNITY_END();
 }
 
