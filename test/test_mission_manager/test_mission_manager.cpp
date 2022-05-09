@@ -13,7 +13,8 @@ void reset(){
     sfr::boot::max_time = constants::time::two_days;
     sfr::battery::voltage_average->set_value(sfr::battery::acceptable_battery+.1);
     sfr::rockblock::max_check_signal_time = constants::time::one_minute;
-    sfr::acs::on_time = constants::time::one_hour;
+    sfr::acs::on_time = constants::time::one_minute;
+    sfr::mission::acs_transmit_cycle_time = constants::time::one_hour;
 }
 
 void reset_normal(MissionManager mission_manager, MissionMode *mode)
@@ -78,13 +79,14 @@ void test_enter_acs(MissionManager mission_manager, MissionMode *currentMode, Mi
     // stay in transmit mode if not enough time has passed
     sfr::mission::acs_transmit_cycle_time = constants::time::one_hour;
     sfr::acs::on_time = constants::time::one_second;
+    currentMode->set_start_time(millis());
     delay(5);
     mission_manager.execute();
     TEST_ASSERT_EQUAL(currentMode->get_id(), sfr::mission::current_mode->get_id());
 
     reset(mission_manager, currentMode);
     
-    // exit transmit mode and enter normal mode if 
+    // exit transmit mode if acs transmit time has passed
     sfr::mission::acs_transmit_cycle_time = 10;
     sfr::acs::on_time = 5;
     currentMode->set_start_time(millis());
