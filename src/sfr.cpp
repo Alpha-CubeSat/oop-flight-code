@@ -216,12 +216,9 @@ namespace sfr {
         uint16_t f_opcode = 0;
         uint32_t f_arg_1 = 0;
         uint32_t f_arg_2 = 0;
-        int timeout = 10 * constants::time::one_minute;
-        int start_time = 0;
-        bool last_timed_out = false;
-        int num_downlinks = 2;
         float start_time_check_signal = 0;
         float max_check_signal_time = constants::time::one_minute;
+        bool sleep_mode = false;
     } // namespace rockblock
     namespace imu {
         sensor_mode_type mode = sensor_mode_type::init;
@@ -291,16 +288,6 @@ namespace sfr {
     } // namespace current
 
     namespace acs {
-        Simple simple_class;
-        Point point_class;
-        Off off_class;
-
-        ACSMode *simple = &simple_class;
-        ACSMode *point = &point_class;
-        ACSMode *off = &off_class;
-
-        ACSMode *current_mode = off;
-
         float current1 = 0;
         float current2 = 0;
         float current3 = 0;
@@ -311,6 +298,7 @@ namespace sfr {
         unsigned long max_no_communication = 0;
 
         float on_time = 5 * constants::time::one_minute;
+        bool off = true;
     } // namespace acs
     namespace battery {
         float voltage = 0.0;

@@ -8,7 +8,7 @@ RockblockControlTask::RockblockControlTask(unsigned int offset)
 
 void RockblockControlTask::execute()
 {
-    check_timeout();
+    //check_timeout();
     rockblock_mode_type mode = sfr::rockblock::mode;
 #ifdef VERBOSE
     Serial.printf("Current rockblock mode: %d\n", mode);
@@ -86,22 +86,6 @@ void RockblockControlTask::execute()
     }
 }
 
-void RockblockControlTask::check_timeout()
-{
-    if (millis() - sfr::rockblock::start_time >= (uint32_t)sfr::rockblock::timeout) {
-        if (sfr::rockblock::last_timed_out == false) {
-            sfr::rockblock::last_downlink = millis();
-            if (sfr::rockblock::downlink_period > constants::rockblock::min_sleep_period) {
-                Pins::setPinState(constants::rockblock::sleep_pin, LOW);
-            }
-            transition_to(rockblock_mode_type::standby);
-        }
-        sfr::rockblock::last_timed_out = true;
-    } else {
-        sfr::rockblock::last_timed_out = false;
-    }
-}
-
 void RockblockControlTask::dispatch_standby()
 {
 #ifdef VERBOSE
@@ -112,10 +96,11 @@ void RockblockControlTask::dispatch_standby()
     }
 #endif
 
-    if (sfr::rockblock::rockblock_ready_status || sfr::rockblock::waiting_message) {
+    if ((sfr::rockblock::rockblock_ready_status || sfr::rockblock::waiting_message) && !sfr::rockblock::sleep_mode) {
         transition_to(rockblock_mode_type::send_at);
         Pins::setPinState(constants::rockblock::sleep_pin, HIGH);
-        sfr::rockblock::start_time = millis();
+    } else {
+        Pins::setPinState(constants::rockblock::sleep_pin, LOW);
     }
 }
 
@@ -350,7 +335,6 @@ void RockblockControlTask::dispatch_process_mt_status()
             sfr::camera::report_downlinked = true;
             sfr::rockblock::camera_report.clear();
         }
-        sfr::rockblock::num_downlinks = sfr::rockblock::num_downlinks + 1;
         transition_to(rockblock_mode_type::read_message);
         break;
     case '0':
@@ -460,7 +444,6 @@ void RockblockControlTask::dispatch_end_transmission()
     if (sfr::rockblock::downlink_period > constants::rockblock::min_sleep_period) {
         Pins::setPinState(constants::rockblock::sleep_pin, LOW);
     }
-    sfr::rockblock::num_downlinks = sfr::rockblock::num_downlinks + 1;
     if (sfr::rockblock::downlink_report_type == report_type::camera_report) {
         sfr::camera::report_downlinked = true;
         sfr::rockblock::camera_report.clear();

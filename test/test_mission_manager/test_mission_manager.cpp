@@ -43,13 +43,55 @@ void reset_transmit(MissionManager mission_manager, MissionMode *transmitMode){
     TEST_ASSERT_EQUAL(transmitMode->get_id(), sfr::mission::current_mode->get_id()); 
 }
 
+void test_boot_settings(){
+    //TEST_ASSERT_EQUAL(Pins::getPinState(constants::rockblock::sleep_pin), LOW);
+    TEST_ASSERT_EQUAL(sfr::rockblock::sleep_mode, true);
+    TEST_ASSERT_EQUAL(sfr::acs::off, true);
+    TEST_ASSERT_EQUAL(sfr::imu::sample, false);
+}
+
+void test_transmit_settings(){
+    //TEST_ASSERT_EQUAL(Pins::getPinState(constants::rockblock::sleep_pin), HIGH);
+    TEST_ASSERT_EQUAL(sfr::rockblock::sleep_mode, false);
+    TEST_ASSERT_EQUAL(sfr::acs::off, true);
+    TEST_ASSERT_EQUAL(sfr::imu::sample, false);
+}
+
+void test_low_power_settings(){
+    //TEST_ASSERT_EQUAL(Pins::getPinState(constants::rockblock::sleep_pin), HIGH);
+    TEST_ASSERT_EQUAL(sfr::rockblock::sleep_mode, false);
+    TEST_ASSERT_EQUAL(sfr::acs::off, true);
+    TEST_ASSERT_EQUAL(sfr::imu::sample, false);
+}
+
+void test_normal_settings(){
+    //TEST_ASSERT_EQUAL(Pins::getPinState(constants::rockblock::sleep_pin), LOW);
+    TEST_ASSERT_EQUAL(sfr::rockblock::sleep_mode, true);
+    TEST_ASSERT_EQUAL(sfr::acs::off, false);
+    TEST_ASSERT_EQUAL(sfr::imu::sample, true);
+}
+
+void test_low_power_detumble_spin_settings(){
+    //TEST_ASSERT_EQUAL(Pins::getPinState(constants::rockblock::sleep_pin), LOW);
+    TEST_ASSERT_EQUAL(sfr::rockblock::sleep_mode, true);
+    TEST_ASSERT_EQUAL(sfr::acs::off, true);
+    TEST_ASSERT_EQUAL(sfr::imu::sample, false);
+}
+
 void reset(MissionManager mission_manager, MissionMode *mode){
     if(mode->get_type() == mode_type::TRANSMIT){
         reset_transmit(mission_manager, mode);
     } else if (mode->get_type() == mode_type::LP){
         reset_lp(mission_manager, mode);
-    } else{
+        test_low_power_settings();
+    } else if (mode->get_type() == mode_type::NORMAL){
         reset_normal(mission_manager, mode);
+        test_normal_settings();
+    } else if(mode->get_id() == 4){
+        reset_lp(mission_manager, mode);
+        test_low_power_detumble_spin_settings();
+    } else {
+    reset_normal(mission_manager, mode);
     }
 }
 
@@ -244,7 +286,7 @@ void test_exit_low_power_alive_signal()
     MissionManager mission_manager(0);
 
     test_exit_lp(mission_manager, sfr::mission::lowPowerAliveSignal, sfr::mission::aliveSignal);
-    test_exit_signal_phase(mission_manager, sfr::mission::lowPowerAliveSignal, sfr::mission::lowPowerDetumbleSpin);
+    //test_exit_signal_phase(mission_manager, sfr::mission::lowPowerAliveSignal, sfr::mission::lowPowerDetumbleSpin);
 }
 
 

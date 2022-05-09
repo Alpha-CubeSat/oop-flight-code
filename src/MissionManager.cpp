@@ -10,6 +10,7 @@ void MissionManager::execute()
 {
     if (sfr::mission::previous_mode->get_id() != sfr::mission::current_mode->get_id()) {
         sfr::mission::current_mode->set_start_time(millis());
+        sfr::mission::current_mode->transition_to();
         sfr::mission::mode_history.push_front(sfr::mission::current_mode->get_id());
     }
 

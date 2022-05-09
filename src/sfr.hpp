@@ -1,7 +1,6 @@
 #ifndef SFR_HPP_
 #define SFR_HPP_
 
-#include "ACSMode.hpp"
 #include "Arduino.h"
 #include "Control Tasks/BurnwireControlTask.hpp"
 #include "Control Tasks/TimedControlTask.hpp"
@@ -196,12 +195,10 @@ namespace sfr {
         extern uint16_t f_opcode;
         extern uint32_t f_arg_1;
         extern uint32_t f_arg_2;
-        extern int timeout;
-        extern int start_time;
-        extern bool last_timed_out;
-        extern int num_downlinks;
         extern float start_time_check_signal;
         extern float max_check_signal_time;
+
+        extern bool sleep_mode;
     } // namespace rockblock
     namespace imu {
         extern sensor_mode_type mode;
@@ -271,12 +268,6 @@ namespace sfr {
         extern bool in_sun;
     } // namespace current
     namespace acs {
-        extern ACSMode *simple;
-        extern ACSMode *point;
-        extern ACSMode *off;
-
-        extern ACSMode *current_mode;
-
         extern float current1;
         extern float current2;
         extern float current3;
@@ -286,6 +277,8 @@ namespace sfr {
         extern simple_acs_type mag;
         extern unsigned long max_no_communication;
         extern float on_time;
+
+        extern bool off;
     } // namespace acs
     namespace battery {
         extern float voltage;
