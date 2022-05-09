@@ -84,6 +84,14 @@ namespace sfr {
         RegularBurns regularBurns_class;
         Photo photo_class;
 
+        Initialization initialization_class;
+        Stabilization stabilization_class;
+        Standby standby_class;
+        Deployment deployment_class;
+        Armed armed_class;
+        InSun insun_class;
+        Firing firing_class;
+
         MissionMode *boot = &boot_class;
         MissionMode *aliveSignal = &aliveSignal_class;
         MissionMode *lowPowerAliveSignal = &lowPowerAliveSignal_class;
@@ -107,8 +115,19 @@ namespace sfr {
         MissionMode *regularBurns = &regularBurns_class;
         MissionMode *photo = &photo_class;
 
+        Phase *initialization = &initialization_class;
+        Phase *stabilization = &stabilization_class;
+        Phase *standby = &standby_class;
+        Phase *deployment = &deployment_class;
+        Phase *armed = &armed_class;
+        Phase *inSun = &insun_class;
+        Phase *firing = &firing_class;
+
         MissionMode *current_mode = boot;
         MissionMode *previous_mode = boot;
+
+        Phase *current_phase = initialization;
+        Phase *previous_phase = initialization;
 
         std::deque<int> mode_history;
 

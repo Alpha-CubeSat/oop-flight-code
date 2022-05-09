@@ -17,6 +17,7 @@
 #include "Modes/rockblock_mode_type.enum"
 #include "Modes/sensor_mode_type.enum"
 #include "Modes/simple_acs_type.enum"
+#include "Phase.hpp"
 #include "Pins.hpp"
 #include "RockblockSimulator.hpp"
 #include "SensorReading.hpp"
@@ -92,8 +93,19 @@ namespace sfr {
         extern MissionMode *regularBurns;
         extern MissionMode *photo;
 
+        extern Phase *initialization;
+        extern Phase *stabilization;
+        extern Phase *standby;
+        extern Phase *deployment;
+        extern Phase *armed;
+        extern Phase *inSun;
+        extern Phase *firing;
+
         extern MissionMode *current_mode;
         extern MissionMode *previous_mode;
+
+        extern Phase *current_phase;
+        extern Phase *previous_phase;
 
         extern std::deque<int> mode_history;
 

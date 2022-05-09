@@ -269,19 +269,19 @@ void test_standard_phase(MissionMode *normalMode, MissionMode *lpMode, MissionMo
     MissionManager mission_manager(0);
     reset(mission_manager, normalMode);
 
-    //test_enter_lp(mission_manager, lpMode, normalMode);
+    test_enter_lp(mission_manager, lpMode, normalMode);
     test_exit_acs(mission_manager, normalMode, transmitMode);
 
     //test exit low power
     //if entered low power mode from normal mode go back to normal mode
-    test_exit_lp(mission_manager, lpMode, normalMode);
+    //test_exit_lp(mission_manager, lpMode, normalMode);
 
     //if entered low power mode from transmit mode go back to transmit mode
-    test_exit_lp(mission_manager, lpMode, transmitMode);
+    //test_exit_lp(mission_manager, lpMode, transmitMode);
 
     //test exit transmit
-    test_enter_lp(mission_manager, lpMode, transmitMode);
-    test_enter_acs(mission_manager, transmitMode, normalMode);
+    //test_enter_lp(mission_manager, lpMode, transmitMode);
+    //test_enter_acs(mission_manager, transmitMode, normalMode);
 
 }
 
