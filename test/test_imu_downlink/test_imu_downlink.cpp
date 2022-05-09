@@ -25,6 +25,9 @@ void test_imu_downlink_mandburn()
     sfr::mission::current_mode = sfr::mission::mandatoryBurns;
     IMUDownlink imu_downlink(0);
     imu_downlink.execute();
+    TEST_ASSERT_EQUAL(true, sfr::imu::sample_gyro);
+    TEST_ASSERT_EQUAL(0, sfr::imu::imu_dlink.size());
+    imu_downlink.execute();
     TEST_ASSERT_EQUAL(3, sfr::imu::imu_dlink.size());
     uint8_t gyro_x_mapped = map(sfr::imu::gyro_x, sfr::imu::gyro_min, sfr::imu::gyro_max, 0, 255);
     uint8_t gyro_y_mapped = map(sfr::imu::gyro_y, sfr::imu::gyro_min, sfr::imu::gyro_max, 0, 255);
@@ -48,6 +51,9 @@ void test_imu_downlink_regburn()
     sfr::mission::current_mode = sfr::mission::regularBurns;
     IMUDownlink imu_downlink(0);
     imu_downlink.execute();
+    TEST_ASSERT_EQUAL(true, sfr::imu::sample_gyro);
+    TEST_ASSERT_EQUAL(0, sfr::imu::imu_dlink.size());
+    imu_downlink.execute();
     TEST_ASSERT_EQUAL(3, sfr::imu::imu_dlink.size());
     uint8_t gyro_x_mapped = map(sfr::imu::gyro_x, sfr::imu::gyro_min, sfr::imu::gyro_max, 0, 255);
     uint8_t gyro_y_mapped = map(sfr::imu::gyro_y, sfr::imu::gyro_min, sfr::imu::gyro_max, 0, 255);
@@ -70,6 +76,9 @@ void test_imu_downlink_deployed()
     sfr::mission::current_mode = sfr::mission::photo;
     sfr::mission::deployed = true;
     IMUDownlink imu_downlink(0);
+    imu_downlink.execute();
+    TEST_ASSERT_EQUAL(true, sfr::imu::sample_gyro);
+    TEST_ASSERT_EQUAL(0, sfr::imu::imu_dlink.size());
     imu_downlink.execute();
     TEST_ASSERT_EQUAL(3, sfr::imu::imu_dlink.size());
     uint8_t gyro_x_mapped = map(sfr::imu::gyro_x, sfr::imu::gyro_min, sfr::imu::gyro_max, 0, 255);
@@ -110,7 +119,7 @@ void test_imu_report()
     sfr::imu::report_written = true;
     sfr::imu::fragment_number = 1;
     imu_report_monitor.execute();
-    TEST_ASSERT_EQUAL(70, sfr::rockblock::imu_report.size());
+    TEST_ASSERT_EQUAL(68, sfr::rockblock::imu_report.size());
     TEST_ASSERT_EQUAL(0, sfr::imu::imu_dlink.size());
     TEST_ASSERT_EQUAL(false, sfr::imu::report_ready);
     TEST_ASSERT_EQUAL(false, sfr::imu::report_downlinked);
