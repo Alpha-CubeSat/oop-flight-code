@@ -15,12 +15,9 @@ void IMUDownlink::execute()
         uint8_t gyro_y = map(sfr::imu::gyro_y_value->get_value(), sfr::imu::gyro_min, sfr::imu::gyro_max, 0, 255);
         uint8_t gyro_z = map(sfr::imu::gyro_z_value->get_value(), sfr::imu::gyro_min, sfr::imu::gyro_max, 0, 255);
 
-        // sfr::imu::imu_dlink.push_front(sfr::imu::current_sample);
         sfr::imu::imu_dlink.push_front(gyro_x);
         sfr::imu::imu_dlink.push_front(gyro_y);
         sfr::imu::imu_dlink.push_front(gyro_z);
-
-        // sfr::imu::current_sample++;
     }
 
     if (sfr::mission::current_mode == sfr::mission::mandatoryBurns || sfr::mission::current_mode == sfr::mission::regularBurns) {
