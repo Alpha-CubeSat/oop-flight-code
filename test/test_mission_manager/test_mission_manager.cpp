@@ -8,7 +8,7 @@ void reset(){
     sfr::imu::gyro_y_average->set_value(0);
     sfr::aliveSignal::num_hard_faults = 0;
     sfr::aliveSignal::downlinked = false;
-    sfr::detumble::start_time = millis();
+    sfr::mission::stabilization->set_start_time(millis());
     sfr::detumble::max_time = constants::time::two_hours;
     sfr::boot::max_time = constants::time::two_days;
     sfr::battery::voltage_average->set_value(sfr::battery::acceptable_battery+.1);
@@ -185,9 +185,9 @@ void test_exit_signal_phase(MissionManager mission_manager, MissionMode *current
 void test_exit_detumble_phase(MissionManager mission_manager, MissionMode *currentMode, MissionMode *nextMode){
     reset(mission_manager, currentMode);
 
-    // exit if detumbling times out
-    sfr::detumble::start_time = millis();
-    sfr::detumble::max_time = 5;
+    // exit if stabilization times out
+    sfr::mission::stabilization->set_start_time(millis());
+    sfr::stabilization::max_time = 5;
     delay(5);
     mission_manager.execute();
     TEST_ASSERT_EQUAL(nextMode->get_id(), sfr::mission::current_mode->get_id());
@@ -221,7 +221,7 @@ void test_exit_boot()
     reset(mission_manager, sfr::mission::boot);
 
     // after max boot time, transition to aliveSignal
-    sfr::boot::max_time = 500;
+    sfr::boot::max_time = 5;
     delay(sfr::boot::max_time);
     mission_manager.execute();
     TEST_ASSERT_EQUAL(sfr::mission::aliveSignal->get_id(), sfr::mission::current_mode->get_id());

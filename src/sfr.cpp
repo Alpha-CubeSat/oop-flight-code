@@ -1,6 +1,9 @@
 #include "sfr.hpp"
 
 namespace sfr {
+    namespace stabilization {
+        float max_time = 30*constants::time::one_minute;
+    }
     namespace boot {
         unsigned long max_time = constants::time::two_hours;
     }

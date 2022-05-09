@@ -36,6 +36,9 @@
 #include <string>
 
 namespace sfr {
+    namespace stabilization {
+        extern float max_time;
+    }
     namespace boot {
         extern unsigned long max_time;
     }
