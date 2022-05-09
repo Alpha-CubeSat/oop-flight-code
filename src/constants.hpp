@@ -62,7 +62,7 @@ namespace constants {
         constexpr size_t max_conseq_read = 3;
 
         constexpr int num_initial_downlinks = 2;
-        constexpr uint8_t start_of_normal_downlink_flag = 253;
+        constexpr uint8_t start_of_normal_downlink_flag = 99;
         constexpr uint8_t end_of_normal_downlink_flag1 = 254;
         constexpr uint8_t end_of_normal_downlink_flag2 = 255;
 

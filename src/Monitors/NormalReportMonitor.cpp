@@ -59,7 +59,6 @@ void NormalReportMonitor::execute()
     sfr::rockblock::normal_report.push_back(faults::fault_1);
     sfr::rockblock::normal_report.push_back(faults::fault_2);
     sfr::rockblock::normal_report.push_back(faults::fault_3);
-    sfr::rockblock::normal_report.push_back(sfr::photoresistor::covered);
     sfr::rockblock::normal_report.push_back(sfr::camera::take_photo);
     sfr::rockblock::normal_report.push_back(sfr::camera::powered);
     int i = 0;
