@@ -134,6 +134,7 @@ void RockblockControlTask::dispatch_await_at()
     if (sfr::rockblock::serial.read() == 'K') {
         Serial.println("SAT INFO: ok");
         transition_to(rockblock_mode_type::send_signal_strength);
+        sfr::rockblock::start_time_check_signal = millis();
     }
 }
 
@@ -301,6 +302,9 @@ void RockblockControlTask::dispatch_process_mo_status()
 {
     if (sfr::rockblock::commas[0] > 1) {
         Serial.println("SAT INFO: there is another character");
+        if (sfr::mission::current_mode->get_id() == sfr::mission::aliveSignal->get_id()) {
+            sfr::aliveSignal::num_hard_faults++;
+        }
         transition_to(rockblock_mode_type::send_signal_strength_mo);
     } else if (sfr::rockblock::buffer[0] != '0' && sfr::rockblock::buffer[0] != '1' && sfr::rockblock::buffer[0] != '2') {
         Serial.println("SAT INFO: mo status is greater than 2");

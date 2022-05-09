@@ -3,13 +3,16 @@
 #include <unity.h>
 
 void reset(){
-    sfr::imu::gyro_z_average->set_value(sfr::detumble::stable_gyro_z -1);
-    sfr::aliveSignal::num_downlink_failures = 0;
+    sfr::imu::gyro_z_average->set_value(0);
+    sfr::imu::gyro_x_average->set_value(0);
+    sfr::imu::gyro_y_average->set_value(0);
+    sfr::aliveSignal::num_hard_faults = 0;
     sfr::aliveSignal::downlinked = false;
     sfr::detumble::start_time = millis();
     sfr::detumble::max_time = constants::time::two_hours;
     sfr::boot::max_time = constants::time::two_days;
     sfr::battery::voltage_average->set_value(sfr::battery::acceptable_battery+.1);
+    sfr::rockblock::max_check_signal_time = constants::time::one_minute;
 }
 
 void reset_normal(MissionManager mission_manager, MissionMode *mode)
@@ -35,13 +38,7 @@ void reset_transmit(MissionManager mission_manager, MissionMode *transmitMode){
     sfr::mission::current_mode = transmitMode;
     sfr::battery::voltage_average->set_valid();
     mission_manager.execute();
-    TEST_ASSERT_EQUAL(transmitMode->get_id(), sfr::mission::current_mode->get_id());
-
-    sfr::aliveSignal::max_time = 500;
-    delay(sfr::aliveSignal::max_time);
-    mission_manager.execute();
-    TEST_ASSERT_EQUAL(transmitMode->get_id(), sfr::mission::previous_mode->get_id());
-    TEST_ASSERT_EQUAL(transmitMode->get_id(), sfr::mission::current_mode->get_id());   
+    TEST_ASSERT_EQUAL(transmitMode->get_id(), sfr::mission::current_mode->get_id()); 
 }
 
 void reset(MissionManager mission_manager, MissionMode *mode){
@@ -163,13 +160,26 @@ void test_exit_signal_phase(MissionManager mission_manager, MissionMode *current
     mission_manager.execute();
     TEST_ASSERT_EQUAL(nextMode->get_id(), sfr::mission::current_mode->get_id());
 
-    sfr::aliveSignal::downlinked = false;
     reset(mission_manager, currentMode);
 
-    //exit if reached max number of failed downlinks
-    sfr::aliveSignal::num_downlink_failures = sfr::aliveSignal::max_downlink_failures;
+    //exit if reached max number of hard faults
+    sfr::aliveSignal::num_hard_faults = sfr::aliveSignal::max_downlink_hard_faults;
     mission_manager.execute();
     TEST_ASSERT_EQUAL(nextMode->get_id(), sfr::mission::current_mode->get_id());
+
+    reset(mission_manager, currentMode);
+
+    //exit if signal quality has not reached acceptable level in one minute
+    sfr::rockblock::max_check_signal_time = 5;
+    delay(sfr::rockblock::max_check_signal_time);
+    mission_manager.execute();
+    TEST_ASSERT_EQUAL(nextMode->get_id(), sfr::mission::current_mode->get_id());
+    
+    reset(mission_manager, currentMode);
+
+    //don't exit if none of the above conditions are met
+    mission_manager.execute();
+    TEST_ASSERT_EQUAL(currentMode->get_id(), sfr::mission::current_mode->get_id());
 }
 
 void test_exit_detumble_phase(MissionManager mission_manager, MissionMode *currentMode, MissionMode *nextMode){
@@ -185,7 +195,15 @@ void test_exit_detumble_phase(MissionManager mission_manager, MissionMode *curre
     reset(mission_manager, currentMode);
 
     //exit if imu determines stable
-    sfr::imu::gyro_z_average->set_value(sfr::detumble::stable_gyro_z);
+    sfr::imu::gyro_z_average->set_value(sfr::detumble::min_stable_gyro_z);
+    sfr::imu::gyro_x_average->set_value(sfr::detumble::max_stable_gyro_x);
+    sfr::imu::gyro_y_average->set_value(sfr::detumble::max_stable_gyro_y);
+    mission_manager.execute();
+    TEST_ASSERT_EQUAL(nextMode->get_id(), sfr::mission::current_mode->get_id());
+
+    //exit if imu determines unstable
+    sfr::imu::gyro_x_average->set_value(sfr::detumble::min_unstable_gyro_x);
+    sfr::imu::gyro_y_average->set_value(sfr::detumble::min_unstable_gyro_y);
     mission_manager.execute();
     TEST_ASSERT_EQUAL(nextMode->get_id(), sfr::mission::current_mode->get_id());
 }
@@ -215,12 +233,6 @@ void test_exit_alive_signal()
 
     test_enter_lp(mission_manager, sfr::mission::lowPowerAliveSignal, sfr::mission::aliveSignal);
     test_exit_signal_phase(mission_manager, sfr::mission::aliveSignal, sfr::mission::detumbleSpin);
-
-    // after max alive signal time, transition to detumble
-    sfr::aliveSignal::max_time = 500;
-    delay(sfr::aliveSignal::max_time);
-    mission_manager.execute();
-    TEST_ASSERT_EQUAL(sfr::mission::detumbleSpin->get_id(), sfr::mission::current_mode->get_id());
 }
 
 
@@ -230,13 +242,6 @@ void test_exit_low_power_alive_signal()
 
     test_exit_lp(mission_manager, sfr::mission::lowPowerAliveSignal, sfr::mission::aliveSignal);
     test_exit_signal_phase(mission_manager, sfr::mission::lowPowerAliveSignal, sfr::mission::lowPowerDetumbleSpin);
-
-     // after max alive signal time, transition to low power detumble
-    sfr::aliveSignal::max_time = 500;
-    delay(sfr::aliveSignal::max_time);
-    mission_manager.execute();
-    TEST_ASSERT_EQUAL(sfr::mission::lowPowerDetumbleSpin->get_id(), sfr::mission::current_mode->get_id());
-    reset(mission_manager, sfr::mission::transmit);
 }
 
 

@@ -7,12 +7,12 @@
 #include "Control Tasks/TimedControlTask.hpp"
 #include "MissionManager.hpp"
 #include "MissionMode.hpp"
-#include "Modes/mode_type.enum"
 #include "Modes/burnwire_mode_type.enum"
 #include "Modes/camera_init_mode_type.enum"
 #include "Modes/fault_index_type.enum"
 #include "Modes/fault_mode_type.enum"
 #include "Modes/imu_downlink_type.enum"
+#include "Modes/mode_type.enum"
 #include "Modes/report_type.enum"
 #include "Modes/rockblock_mode_type.enum"
 #include "Modes/sensor_mode_type.enum"
@@ -21,14 +21,12 @@
 #include "RockblockSimulator.hpp"
 #include "SensorReading.hpp"
 #include "constants.hpp"
-#include "ACSMode.hpp"
 #include <Adafruit_LSM9DS1.h>
 #include <Adafruit_VC0706.h>
 #include <SD.h>
 #include <StarshotACS0.h>
 #include <cmath>
 #include <deque>
-#include <queue>
 #include <iostream>
 #include <map>
 #include <numeric>
@@ -49,13 +47,19 @@ namespace sfr {
     namespace detumble {
         extern float start_time;
         extern float max_time;
-        extern float stable_gyro_z;
+        extern int num_imu_retries;
+        extern int max_imu_retries;
+        extern float min_stable_gyro_z;
+        extern float max_stable_gyro_x;
+        extern float max_stable_gyro_y;
+        extern float min_unstable_gyro_x;
+        extern float min_unstable_gyro_y;
     } // namespace detumble
     namespace aliveSignal {
-        extern int num_downlink_failures;
-        extern int max_downlink_failures;
+        extern int max_downlink_hard_faults;
         extern bool downlinked;
         extern float max_time;
+        extern int num_hard_faults;
     } // namespace aliveSignal
     namespace pins {
         extern std::map<int, int> pinMap;
@@ -145,7 +149,6 @@ namespace sfr {
         extern rockblock_mode_type mode;
 
         // Time Parameters
-        extern unsigned long last_communication;
         extern unsigned long last_downlink;
         extern unsigned long downlink_period;
 
@@ -182,6 +185,8 @@ namespace sfr {
         extern int start_time;
         extern bool last_timed_out;
         extern int num_downlinks;
+        extern float start_time_check_signal;
+        extern float max_check_signal_time;
     } // namespace rockblock
     namespace imu {
         extern sensor_mode_type mode;
@@ -235,6 +240,8 @@ namespace sfr {
         extern const int mag_16GAUSS_min;
         extern const int gyro_500DPS_min;
         extern const int gyro_2000DPS_min;
+
+        extern bool sample;
     } // namespace imu
     namespace temperature {
         extern float temp_c;

@@ -14,13 +14,21 @@ namespace sfr {
         float start_time = 0;
         float max_time = constants::time::two_hours;
         // TODO
-        float stable_gyro_z = 3;
+        int num_imu_retries = 0;
+        int max_imu_retries = 5;
+
+        float min_stable_gyro_z = 1;
+        float max_stable_gyro_x = 0.2;
+        float max_stable_gyro_y = 0.2;
+
+        float min_unstable_gyro_x = 0.7;
+        float min_unstable_gyro_y = 0.7;
     } // namespace detumble
     namespace aliveSignal {
-        int num_downlink_failures = 0;
-        int max_downlink_failures = 5;
+        int max_downlink_hard_faults = 3;
         bool downlinked = false;
         float max_time = constants::time::two_hours;
+        int num_hard_faults = 0;
     } // namespace aliveSignal
     namespace pins {
         std::map<int, int> pinMap = {
@@ -104,7 +112,7 @@ namespace sfr {
 
         std::deque<int> mode_history;
 
-        float acs_transmit_cycle_time = constants::time::one_minute*100;
+        float acs_transmit_cycle_time = constants::time::one_minute * 100;
     } // namespace mission
     namespace burnwire {
         bool fire = false;
@@ -155,7 +163,6 @@ namespace sfr {
         bool rockblock_ready_status = false;
         rockblock_mode_type mode = rockblock_mode_type::send_at;
 
-        unsigned long last_communication = 0;
         unsigned long last_downlink = 0;
         unsigned long downlink_period = 0;
 
@@ -191,6 +198,8 @@ namespace sfr {
         int start_time = 0;
         bool last_timed_out = false;
         int num_downlinks = 2;
+        float start_time_check_signal = 0;
+        float max_check_signal_time = constants::time::one_minute;
     } // namespace rockblock
     namespace imu {
         sensor_mode_type mode = sensor_mode_type::init;
@@ -243,6 +252,8 @@ namespace sfr {
         const int mag_16GAUSS_min = 12;
         const int gyro_500DPS_min = 245;
         const int gyro_2000DPS_min = 500;
+
+        bool sample = true;
     } // namespace imu
     namespace temperature {
         float temp_c = 0.0;

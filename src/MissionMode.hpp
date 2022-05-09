@@ -22,13 +22,14 @@ class Boot : public MissionMode
 public:
     void transition_to();
     void dispatch();
-    int get_id(){
+    int get_id()
+    {
         return 0;
     }
-    mode_type get_type(){
+    mode_type get_type()
+    {
         return mode_type::OTHER;
     }
-
 };
 
 class AliveSignal : public MissionMode
@@ -36,10 +37,12 @@ class AliveSignal : public MissionMode
 public:
     void dispatch();
     void transition_to();
-    int get_id(){
+    int get_id()
+    {
         return 1;
     }
-    mode_type get_type(){
+    mode_type get_type()
+    {
         return mode_type::TRANSMIT;
     }
 };
@@ -49,10 +52,12 @@ class LowPowerAliveSignal : public MissionMode
 public:
     void dispatch();
     void transition_to();
-    int get_id(){
+    int get_id()
+    {
         return 2;
     }
-    mode_type get_type(){
+    mode_type get_type()
+    {
         return mode_type::LP;
     }
 };
@@ -62,10 +67,12 @@ class DetumbleSpin : public MissionMode
 public:
     void dispatch();
     void transition_to();
-    int get_id(){
+    int get_id()
+    {
         return 3;
     }
-    mode_type get_type(){
+    mode_type get_type()
+    {
         return mode_type::NORMAL;
     }
 };
@@ -75,10 +82,12 @@ class LowPowerDetumbleSpin : public MissionMode
 public:
     void dispatch();
     void transition_to();
-    int get_id(){
+    int get_id()
+    {
         return 4;
     }
-    mode_type get_type(){
+    mode_type get_type()
+    {
         return mode_type::LP;
     }
 };
@@ -88,10 +97,12 @@ class Normal : public MissionMode
 public:
     void dispatch();
     void transition_to();
-    int get_id(){
+    int get_id()
+    {
         return 5;
     }
-    mode_type get_type(){
+    mode_type get_type()
+    {
         return mode_type::NORMAL;
     }
 };
@@ -101,10 +112,12 @@ class Transmit : public MissionMode
 public:
     void dispatch();
     void transition_to();
-    int get_id(){
+    int get_id()
+    {
         return 6;
     }
-    mode_type get_type(){
+    mode_type get_type()
+    {
         return mode_type::TRANSMIT;
     }
 };
@@ -114,10 +127,12 @@ class LowPower : public MissionMode
 public:
     void dispatch();
     void transition_to();
-    int get_id(){
+    int get_id()
+    {
         return 7;
     }
-    mode_type get_type(){
+    mode_type get_type()
+    {
         return mode_type::LP;
     }
 };
@@ -127,10 +142,12 @@ class NormalDeployment : public MissionMode
 public:
     void dispatch();
     void transition_to();
-    int get_id(){
+    int get_id()
+    {
         return 8;
     }
-    mode_type get_type(){
+    mode_type get_type()
+    {
         return mode_type::NORMAL;
     }
 };
@@ -140,10 +157,12 @@ class TransmitDeployment : public MissionMode
 public:
     void dispatch();
     void transition_to();
-    int get_id(){
+    int get_id()
+    {
         return 9;
     }
-    mode_type get_type(){
+    mode_type get_type()
+    {
         return mode_type::TRANSMIT;
     }
 };
@@ -153,10 +172,12 @@ class LowPowerDeployment : public MissionMode
 public:
     void dispatch();
     void transition_to();
-    int get_id(){
+    int get_id()
+    {
         return 10;
     }
-    mode_type get_type(){
+    mode_type get_type()
+    {
         return mode_type::LP;
     }
 };
@@ -166,10 +187,12 @@ class NormalArmed : public MissionMode
 public:
     void dispatch();
     void transition_to();
-    int get_id(){
+    int get_id()
+    {
         return 11;
     }
-    mode_type get_type(){
+    mode_type get_type()
+    {
         return mode_type::NORMAL;
     }
 };
@@ -179,10 +202,12 @@ class TransmitArmed : public MissionMode
 public:
     void dispatch();
     void transition_to();
-    int get_id(){
+    int get_id()
+    {
         return 12;
     }
-    mode_type get_type(){
+    mode_type get_type()
+    {
         return mode_type::TRANSMIT;
     }
 };
@@ -192,10 +217,12 @@ class LowPowerArmed : public MissionMode
 public:
     void dispatch();
     void transition_to();
-    int get_id(){
+    int get_id()
+    {
         return 13;
     }
-    mode_type get_type(){
+    mode_type get_type()
+    {
         return mode_type::LP;
     }
 };
@@ -205,10 +232,12 @@ class NormalInSun : public MissionMode
 public:
     void dispatch();
     void transition_to();
-    int get_id(){
+    int get_id()
+    {
         return 14;
     }
-    mode_type get_type(){
+    mode_type get_type()
+    {
         return mode_type::NORMAL;
     }
 };
@@ -218,10 +247,12 @@ class TransmitInSun : public MissionMode
 public:
     void dispatch();
     void transition_to();
-    int get_id(){
+    int get_id()
+    {
         return 15;
     }
-    mode_type get_type(){
+    mode_type get_type()
+    {
         return mode_type::TRANSMIT;
     }
 };
@@ -231,10 +262,12 @@ class LowPowerInSun : public MissionMode
 public:
     void dispatch();
     void transition_to();
-    int get_id(){
+    int get_id()
+    {
         return 16;
     }
-    mode_type get_type(){
+    mode_type get_type()
+    {
         return mode_type::LP;
     }
 };
@@ -244,10 +277,12 @@ class VoltageFailureInSun : public MissionMode
 public:
     void dispatch();
     void transition_to();
-    int get_id(){
+    int get_id()
+    {
         return 17;
     }
-    mode_type get_type(){
+    mode_type get_type()
+    {
         return mode_type::LP;
     }
 };
@@ -257,10 +292,12 @@ class BootCamera : public MissionMode
 public:
     void dispatch();
     void transition_to();
-    int get_id(){
+    int get_id()
+    {
         return 18;
     }
-    mode_type get_type(){
+    mode_type get_type()
+    {
         return mode_type::OTHER;
     }
 };
@@ -270,10 +307,12 @@ class MandatoryBurns : public MissionMode
 public:
     void dispatch();
     void transition_to();
-    int get_id(){
+    int get_id()
+    {
         return 19;
     }
-    mode_type get_type(){
+    mode_type get_type()
+    {
         return mode_type::OTHER;
     }
 };
@@ -283,10 +322,12 @@ class RegularBurns : public MissionMode
 public:
     void dispatch();
     void transition_to();
-    int get_id(){
+    int get_id()
+    {
         return 20;
     }
-    mode_type get_type(){
+    mode_type get_type()
+    {
         return mode_type::OTHER;
     }
 };
@@ -296,10 +337,12 @@ class Photo : public MissionMode
 public:
     void dispatch();
     void transition_to();
-    int get_id(){
+    int get_id()
+    {
         return 21;
     }
-    mode_type get_type(){
+    mode_type get_type()
+    {
         return mode_type::OTHER;
     }
 };
