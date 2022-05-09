@@ -27,8 +27,6 @@ void IMUDownlink::execute()
         sfr::imu::sample_gyro = true;
     }
 
-    // Serial.println("millis() - sfr::mission::time_deployed = " + String(millis() - sfr::mission::time_deployed));
-
     // need to be stored in sfr later (time to record imu data after deployment)
     if (millis() - sfr::mission::time_deployed > 60 * constants::time::one_second) {
         sfr::imu::sample_gyro = false;
