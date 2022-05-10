@@ -12,7 +12,7 @@ void PhotoresistorMonitor::execute()
 #endif
 }
 
-bool check_repeated_values(std::deque<int> buffer)
+bool PhotoresistorMonitor::check_repeated_values(std::deque<int> buffer)
 {
     if (buffer.empty() || buffer.size() == 1) {
         return false;
@@ -27,7 +27,7 @@ bool check_repeated_values(std::deque<int> buffer)
     return true;
 }
 
-bool check_invalid_reading(std::deque<int> buffer)
+bool PhotoresistorMonitor::check_invalid_reading(std::deque<int> buffer)
 {
     for (int val : buffer) {
         if (val > constants::photoresistor::light_val) {
