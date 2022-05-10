@@ -179,22 +179,38 @@ void LowPowerArmed::dispatch()
     check_previous(sfr::mission::normalArmed, sfr::mission::transmitArmed);
 }
 
-void NormalInSun::transition_to() {}
+void NormalInSun::transition_to() {
+    sfr::rockblock::sleep_mode = true;
+    sfr::acs::off = false;
+    sfr::imu::sample = true;
+}
 void NormalInSun::dispatch()
 {
 }
 
-void TransmitInSun::transition_to() {}
+void TransmitInSun::transition_to() {
+    sfr::rockblock::sleep_mode = false;
+    sfr::acs::off = true;
+    sfr::imu::sample = false;
+}
 void TransmitInSun::dispatch()
 {
 }
 
-void LowPowerInSun::transition_to() {}
+void LowPowerInSun::transition_to() {
+    sfr::rockblock::sleep_mode = false;
+    sfr::acs::off = true;
+    sfr::imu::sample = false;
+}
 void LowPowerInSun::dispatch()
 {
 }
 
-void VoltageFailureInSun::transition_to() {}
+void VoltageFailureInSun::transition_to() {
+    sfr::rockblock::sleep_mode = false;
+    sfr::acs::off = true;
+    sfr::imu::sample = false;
+}
 void VoltageFailureInSun::dispatch()
 {
 }

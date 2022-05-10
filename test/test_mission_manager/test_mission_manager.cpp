@@ -44,35 +44,30 @@ void reset_transmit(MissionManager mission_manager, MissionMode *transmitMode){
 }
 
 void test_boot_settings(){
-    //TEST_ASSERT_EQUAL(Pins::getPinState(constants::rockblock::sleep_pin), LOW);
     TEST_ASSERT_EQUAL(sfr::rockblock::sleep_mode, true);
     TEST_ASSERT_EQUAL(sfr::acs::off, true);
     TEST_ASSERT_EQUAL(sfr::imu::sample, false);
 }
 
 void test_transmit_settings(){
-    //TEST_ASSERT_EQUAL(Pins::getPinState(constants::rockblock::sleep_pin), HIGH);
     TEST_ASSERT_EQUAL(sfr::rockblock::sleep_mode, false);
     TEST_ASSERT_EQUAL(sfr::acs::off, true);
     TEST_ASSERT_EQUAL(sfr::imu::sample, false);
 }
 
 void test_low_power_settings(){
-    //TEST_ASSERT_EQUAL(Pins::getPinState(constants::rockblock::sleep_pin), HIGH);
     TEST_ASSERT_EQUAL(sfr::rockblock::sleep_mode, false);
     TEST_ASSERT_EQUAL(sfr::acs::off, true);
     TEST_ASSERT_EQUAL(sfr::imu::sample, false);
 }
 
 void test_normal_settings(){
-    //TEST_ASSERT_EQUAL(Pins::getPinState(constants::rockblock::sleep_pin), LOW);
     TEST_ASSERT_EQUAL(sfr::rockblock::sleep_mode, true);
     TEST_ASSERT_EQUAL(sfr::acs::off, false);
     TEST_ASSERT_EQUAL(sfr::imu::sample, true);
 }
 
 void test_low_power_detumble_spin_settings(){
-    //TEST_ASSERT_EQUAL(Pins::getPinState(constants::rockblock::sleep_pin), LOW);
     TEST_ASSERT_EQUAL(sfr::rockblock::sleep_mode, true);
     TEST_ASSERT_EQUAL(sfr::acs::off, true);
     TEST_ASSERT_EQUAL(sfr::imu::sample, false);
@@ -341,6 +336,33 @@ void test_deployment() {
 void test_armed() {
     test_standard_phase(sfr::mission::normalArmed, sfr::mission::lowPowerArmed, sfr::mission::transmitArmed);
 }
+
+void test_exit_insun_normal(){
+    MissionManager mission_manager(0);
+    reset(mission_manager, sfr::mission::normalInSun);
+
+    test_exit_acs(mission_manager, sfr::mission::normalInSun, sfr::mission::transmitInSun);
+
+    // exit if voltage sensor fails
+    sfr::battery::voltage_average->set_invalid();
+    mission_manager.execute();
+    TEST_ASSERT_EQUAL(sfr::mission::voltageFailureInSun->get_id(), sfr::mission::current_mode->get_id());
+
+    reset(mission_manager, sfr::mission::normalInSun);
+
+    // exit if battery voltage is too low
+    sfr::battery::voltage_average->set_value(sfr::battery::min_battery-.1);
+    mission_manager.execute();
+    TEST_ASSERT_EQUAL(sfr::mission::lowPowerInSun, sfr::mission::current_mode->get_id());
+
+    reset(mission_manager, sfr::mission::normalInSun);
+
+    // exit if battery voltage is too low and voltage sensor fails
+    sfr::battery::voltage_average->set_invalid();
+    sfr::battery::voltage_average->set_value(sfr::battery::min_battery-.1);
+    mission_manager.execute();
+    TEST_ASSERT_EQUAL(sfr::mission::voltageFailureInSun->get_id(), sfr::mission::current_mode->get_id());
+}
     
 
 int test_mission_manager()
@@ -355,6 +377,7 @@ int test_mission_manager()
     RUN_TEST(test_standby);
     RUN_TEST(test_deployment);
     RUN_TEST(test_armed);
+    RUN_TEST(test_exit_insun_normal);
     
     return UNITY_END();
 }
