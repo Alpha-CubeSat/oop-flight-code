@@ -1,6 +1,9 @@
 #include "sfr.hpp"
 
 namespace sfr {
+    namespace stabilization {
+        float max_time = 30 * constants::time::one_minute;
+    }
     namespace boot {
         unsigned long max_time = constants::time::two_hours;
     }
@@ -14,13 +17,21 @@ namespace sfr {
         float start_time = 0;
         float max_time = constants::time::two_hours;
         // TODO
-        float stable_gyro_z = 3;
+        int num_imu_retries = 0;
+        int max_imu_retries = 5;
+
+        float min_stable_gyro_z = 1;
+        float max_stable_gyro_x = 0.2;
+        float max_stable_gyro_y = 0.2;
+
+        float min_unstable_gyro_x = 0.7;
+        float min_unstable_gyro_y = 0.7;
     } // namespace detumble
     namespace aliveSignal {
-        int num_downlink_failures = 0;
-        int max_downlink_failures = 5;
+        int max_downlink_hard_faults = 3;
         bool downlinked = false;
         float max_time = constants::time::two_hours;
+        int num_hard_faults = 0;
     } // namespace aliveSignal
     namespace pins {
         std::map<int, int> pinMap = {
@@ -76,6 +87,14 @@ namespace sfr {
         RegularBurns regularBurns_class;
         Photo photo_class;
 
+        Initialization initialization_class;
+        Stabilization stabilization_class;
+        Standby standby_class;
+        Deployment deployment_class;
+        Armed armed_class;
+        InSun insun_class;
+        Firing firing_class;
+
         MissionMode *boot = &boot_class;
         MissionMode *aliveSignal = &aliveSignal_class;
         MissionMode *lowPowerAliveSignal = &lowPowerAliveSignal_class;
@@ -99,10 +118,23 @@ namespace sfr {
         MissionMode *regularBurns = &regularBurns_class;
         MissionMode *photo = &photo_class;
 
+        Phase *initialization = &initialization_class;
+        Phase *stabilization = &stabilization_class;
+        Phase *standby = &standby_class;
+        Phase *deployment = &deployment_class;
+        Phase *armed = &armed_class;
+        Phase *inSun = &insun_class;
+        Phase *firing = &firing_class;
+
         MissionMode *current_mode = boot;
         MissionMode *previous_mode = boot;
 
-        std::queue<int> mode_history;
+        Phase *current_phase = initialization;
+        Phase *previous_phase = initialization;
+
+        std::deque<int> mode_history;
+
+        float acs_transmit_cycle_time = constants::time::one_minute * 100;
     } // namespace mission
     namespace burnwire {
         bool fire = false;
@@ -153,7 +185,6 @@ namespace sfr {
         bool rockblock_ready_status = false;
         rockblock_mode_type mode = rockblock_mode_type::send_at;
 
-        unsigned long last_communication = 0;
         unsigned long last_downlink = 0;
         unsigned long downlink_period = 0;
 
@@ -185,10 +216,9 @@ namespace sfr {
         uint16_t f_opcode = 0;
         uint32_t f_arg_1 = 0;
         uint32_t f_arg_2 = 0;
-        int timeout = 10 * constants::time::one_minute;
-        int start_time = 0;
-        bool last_timed_out = false;
-        int num_downlinks = 2;
+        float start_time_check_signal = 0;
+        float max_check_signal_time = constants::time::one_minute;
+        bool sleep_mode = false;
     } // namespace rockblock
     namespace imu {
         sensor_mode_type mode = sensor_mode_type::init;
@@ -241,6 +271,8 @@ namespace sfr {
         const int mag_16GAUSS_min = 12;
         const int gyro_500DPS_min = 245;
         const int gyro_2000DPS_min = 500;
+
+        bool sample = true;
     } // namespace imu
     namespace temperature {
         float temp_c = 0.0;
@@ -256,16 +288,6 @@ namespace sfr {
     } // namespace current
 
     namespace acs {
-        Simple simple_class;
-        Point point_class;
-        Off off_class;
-
-        ACSMode *simple = &simple_class;
-        ACSMode *point = &point_class;
-        ACSMode *off = &off_class;
-
-        ACSMode *current_mode = off;
-
         float current1 = 0;
         float current2 = 0;
         float current3 = 0;
@@ -276,7 +298,7 @@ namespace sfr {
         unsigned long max_no_communication = 0;
 
         float on_time = 5 * constants::time::one_minute;
-        float off_time = 5 * constants::time::one_minute;
+        bool off = true;
     } // namespace acs
     namespace battery {
         float voltage = 0.0;
