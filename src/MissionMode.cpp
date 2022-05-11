@@ -179,7 +179,8 @@ void LowPowerArmed::dispatch()
     check_previous(sfr::mission::normalArmed, sfr::mission::transmitArmed);
 }
 
-void NormalInSun::transition_to() {
+void NormalInSun::transition_to()
+{
     sfr::rockblock::sleep_mode = true;
     sfr::acs::off = false;
     sfr::imu::sample = true;
@@ -188,10 +189,10 @@ void NormalInSun::dispatch()
 {
     timed_out(sfr::mission::transmitInSun, sfr::acs::on_time);
     enter_lp_insun();
-    
 }
 
-void TransmitInSun::transition_to() {
+void TransmitInSun::transition_to()
+{
     sfr::rockblock::sleep_mode = false;
     sfr::acs::off = true;
     sfr::imu::sample = false;
@@ -202,33 +203,36 @@ void TransmitInSun::dispatch()
     enter_lp_insun();
 }
 
-void LowPowerInSun::transition_to() {
+void LowPowerInSun::transition_to()
+{
     sfr::rockblock::sleep_mode = false;
     sfr::acs::off = true;
     sfr::imu::sample = false;
 }
 void LowPowerInSun::dispatch()
 {
-    if(!sfr::battery::voltage_average->is_valid()){
+    if (!sfr::battery::voltage_average->is_valid()) {
         sfr::mission::current_mode = sfr::mission::voltageFailureInSun;
-    } else{
+    } else {
         check_previous(sfr::mission::normalInSun, sfr::mission::transmitInSun);
     }
 }
 
-void VoltageFailureInSun::transition_to() {
+void VoltageFailureInSun::transition_to()
+{
     sfr::rockblock::sleep_mode = false;
     sfr::acs::off = true;
     sfr::imu::sample = false;
 }
 void VoltageFailureInSun::dispatch()
 {
-    if(sfr::battery::voltage_average->is_valid()){
+    if (sfr::battery::voltage_average->is_valid()) {
         sfr::mission::current_mode = sfr::mission::normalInSun;
-    } 
+    }
 }
 
-void BootCamera::transition_to() {
+void BootCamera::transition_to()
+{
     sfr::rockblock::sleep_mode = true;
     sfr::acs::off = true;
     sfr::imu::sample = false;
@@ -237,7 +241,8 @@ void BootCamera::dispatch()
 {
 }
 
-void MandatoryBurns::transition_to() {
+void MandatoryBurns::transition_to()
+{
     sfr::rockblock::sleep_mode = true;
     sfr::acs::off = true;
     sfr::imu::sample = true;
@@ -246,7 +251,8 @@ void MandatoryBurns::dispatch()
 {
 }
 
-void RegularBurns::transition_to() {
+void RegularBurns::transition_to()
+{
     sfr::rockblock::sleep_mode = true;
     sfr::acs::off = true;
     sfr::imu::sample = true;
@@ -255,7 +261,8 @@ void RegularBurns::dispatch()
 {
 }
 
-void Photo::transition_to() {
+void Photo::transition_to()
+{
     sfr::rockblock::sleep_mode = true;
     sfr::acs::off = true;
     sfr::imu::sample = true;
@@ -326,12 +333,11 @@ void timed_out(MissionMode *next_mode, float max_time)
     }
 }
 
-void enter_lp_insun(){
-    if(!sfr::battery::voltage_average->is_valid()){
+void enter_lp_insun()
+{
+    if (!sfr::battery::voltage_average->is_valid()) {
         sfr::mission::current_mode = sfr::mission::voltageFailureInSun;
-    }
-    else if (sfr::battery::voltage_average->is_valid() && (sfr::battery::voltage_average->get_value() <= sfr::battery::min_battery)) {
+    } else if (sfr::battery::voltage_average->is_valid() && (sfr::battery::voltage_average->get_value() <= sfr::battery::min_battery)) {
         sfr::mission::current_mode = sfr::mission::lowPowerInSun;
     }
 }
-
