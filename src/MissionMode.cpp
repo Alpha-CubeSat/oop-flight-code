@@ -186,6 +186,9 @@ void NormalInSun::transition_to() {
 }
 void NormalInSun::dispatch()
 {
+    timed_out(sfr::mission::transmitInSun, sfr::acs::on_time);
+    enter_lp_insun();
+    
 }
 
 void TransmitInSun::transition_to() {
@@ -195,6 +198,8 @@ void TransmitInSun::transition_to() {
 }
 void TransmitInSun::dispatch()
 {
+    timed_out(sfr::mission::normalInSun, sfr::mission::acs_transmit_cycle_time - sfr::acs::on_time);
+    enter_lp_insun();
 }
 
 void LowPowerInSun::transition_to() {
@@ -204,6 +209,11 @@ void LowPowerInSun::transition_to() {
 }
 void LowPowerInSun::dispatch()
 {
+    if(!sfr::battery::voltage_average->is_valid()){
+        sfr::mission::current_mode = sfr::mission::voltageFailureInSun;
+    } else{
+        check_previous(sfr::mission::normalInSun, sfr::mission::transmitInSun);
+    }
 }
 
 void VoltageFailureInSun::transition_to() {
@@ -213,24 +223,43 @@ void VoltageFailureInSun::transition_to() {
 }
 void VoltageFailureInSun::dispatch()
 {
+    if(sfr::battery::voltage_average->is_valid()){
+        sfr::mission::current_mode = sfr::mission::normalInSun;
+    } 
 }
 
-void BootCamera::transition_to() {}
+void BootCamera::transition_to() {
+    sfr::rockblock::sleep_mode = true;
+    sfr::acs::off = true;
+    sfr::imu::sample = false;
+}
 void BootCamera::dispatch()
 {
 }
 
-void MandatoryBurns::transition_to() {}
+void MandatoryBurns::transition_to() {
+    sfr::rockblock::sleep_mode = true;
+    sfr::acs::off = true;
+    sfr::imu::sample = true;
+}
 void MandatoryBurns::dispatch()
 {
 }
 
-void RegularBurns::transition_to() {}
+void RegularBurns::transition_to() {
+    sfr::rockblock::sleep_mode = true;
+    sfr::acs::off = true;
+    sfr::imu::sample = true;
+}
 void RegularBurns::dispatch()
 {
 }
 
-void Photo::transition_to() {}
+void Photo::transition_to() {
+    sfr::rockblock::sleep_mode = true;
+    sfr::acs::off = true;
+    sfr::imu::sample = true;
+}
 void Photo::dispatch() {}
 
 void exit_signal_phase(MissionMode *mode)
@@ -296,3 +325,13 @@ void timed_out(MissionMode *next_mode, float max_time)
         sfr::mission::current_mode = next_mode;
     }
 }
+
+void enter_lp_insun(){
+    if(!sfr::battery::voltage_average->is_valid()){
+        sfr::mission::current_mode = sfr::mission::voltageFailureInSun;
+    }
+    else if (sfr::battery::voltage_average->is_valid() && (sfr::battery::voltage_average->get_value() <= sfr::battery::min_battery)) {
+        sfr::mission::current_mode = sfr::mission::lowPowerInSun;
+    }
+}
+

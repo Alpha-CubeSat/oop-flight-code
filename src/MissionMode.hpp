@@ -268,7 +268,7 @@ public:
     }
     mode_type get_type()
     {
-        return mode_type::LP;
+        return mode_type::OTHER;
     }
 };
 
@@ -354,4 +354,5 @@ void exit_lp(MissionMode *reg_mode);
 void timed_out(MissionMode *next_mode, float max_time);
 void boot_initialization();
 void check_previous(MissionMode *normal_mode, MissionMode *transmit_mode);
+void enter_lp_insun();
 #endif
