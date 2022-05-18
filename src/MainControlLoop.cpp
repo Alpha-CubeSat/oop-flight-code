@@ -27,20 +27,11 @@ MainControlLoop::MainControlLoop()
 
 {
     delay(1000);
-    // Has entered mandatory burn mode, should be deleted later
-    sfr::mission::current_mode == sfr::mission::mandatoryBurns;
-    // Has entered mandatory burn mode
-    //  sfr::mission::possible_to_deploy = true;
     boot_initialization();
 }
 
 void MainControlLoop::execute()
 {
-    // simulating that there should be 30 seconds of data sampling between the start of the deployment sequence and the actual deployment
-    if (millis() - start > 30 * constants::time::one_second) {
-        sfr::mission::deployed = true;
-    }
-
     delay(200);
     faults::fault_1 = 0;
     faults::fault_2 = 0;
