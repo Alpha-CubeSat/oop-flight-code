@@ -1,7 +1,6 @@
 #ifndef SFR_HPP_
 #define SFR_HPP_
 
-#include "ACSMode.hpp"
 #include "Arduino.h"
 #include "Control Tasks/BurnwireControlTask.hpp"
 #include "Control Tasks/TimedControlTask.hpp"
@@ -12,10 +11,12 @@
 #include "Modes/fault_index_type.enum"
 #include "Modes/fault_mode_type.enum"
 #include "Modes/imu_downlink_type.enum"
+#include "Modes/mode_type.enum"
 #include "Modes/report_type.enum"
 #include "Modes/rockblock_mode_type.enum"
 #include "Modes/sensor_mode_type.enum"
 #include "Modes/simple_acs_type.enum"
+#include "Phase.hpp"
 #include "Pins.hpp"
 #include "RockblockSimulator.hpp"
 #include "SensorReading.hpp"
@@ -34,6 +35,9 @@
 #include <string>
 
 namespace sfr {
+    namespace stabilization {
+        extern float max_time;
+    }
     namespace boot {
         extern unsigned long max_time;
     }
@@ -46,13 +50,19 @@ namespace sfr {
     namespace detumble {
         extern float start_time;
         extern float max_time;
-        extern float stable_gyro_z;
+        extern int num_imu_retries;
+        extern int max_imu_retries;
+        extern float min_stable_gyro_z;
+        extern float max_stable_gyro_x;
+        extern float max_stable_gyro_y;
+        extern float min_unstable_gyro_x;
+        extern float min_unstable_gyro_y;
     } // namespace detumble
     namespace aliveSignal {
-        extern int num_downlink_failures;
-        extern int max_downlink_failures;
+        extern int max_downlink_hard_faults;
         extern bool downlinked;
         extern float max_time;
+        extern int num_hard_faults;
     } // namespace aliveSignal
     namespace pins {
         extern std::map<int, int> pinMap;
@@ -85,6 +95,14 @@ namespace sfr {
         extern MissionMode *regularBurns;
         extern MissionMode *photo;
 
+        extern Phase *initialization;
+        extern Phase *stabilization;
+        extern Phase *standby;
+        extern Phase *deployment;
+        extern Phase *armed;
+        extern Phase *inSun;
+        extern Phase *firing;
+
         extern MissionMode *current_mode;
         extern MissionMode *previous_mode;
         extern unsigned long boot_start;
@@ -95,7 +113,12 @@ namespace sfr {
         extern float time_deployed;
         extern bool already_deployed;
 
-        extern std::queue<int> mode_history;
+        extern Phase *current_phase;
+        extern Phase *previous_phase;
+
+        extern std::deque<int> mode_history;
+
+        extern float acs_transmit_cycle_time;
     } // namespace mission
     namespace burnwire {
         extern bool fire;
@@ -147,7 +170,6 @@ namespace sfr {
         extern rockblock_mode_type mode;
 
         // Time Parameters
-        extern unsigned long last_communication;
         extern unsigned long last_downlink;
         extern unsigned long downlink_period;
 
@@ -188,10 +210,10 @@ namespace sfr {
         extern uint16_t f_opcode;
         extern uint32_t f_arg_1;
         extern uint32_t f_arg_2;
-        extern int timeout;
-        extern int start_time;
-        extern bool last_timed_out;
-        extern int num_downlinks;
+        extern float start_time_check_signal;
+        extern float max_check_signal_time;
+
+        extern bool sleep_mode;
     } // namespace rockblock
     namespace imu {
         extern sensor_mode_type mode;
@@ -245,6 +267,13 @@ namespace sfr {
         extern bool full_report_written;
         extern int max_fragments;
         extern int content_length;
+        extern const int mag_8GAUSS_min;
+        extern const int mag_12GAUSS_min;
+        extern const int mag_16GAUSS_min;
+        extern const int gyro_500DPS_min;
+        extern const int gyro_2000DPS_min;
+
+        extern bool sample;
     } // namespace imu
     namespace temperature {
         extern float temp_c;
@@ -259,12 +288,6 @@ namespace sfr {
         extern bool in_sun;
     } // namespace current
     namespace acs {
-        extern ACSMode *simple;
-        extern ACSMode *point;
-        extern ACSMode *off;
-
-        extern ACSMode *current_mode;
-
         extern float current1;
         extern float current2;
         extern float current3;
@@ -274,7 +297,8 @@ namespace sfr {
         extern simple_acs_type mag;
         extern unsigned long max_no_communication;
         extern float on_time;
-        extern float off_time;
+
+        extern bool off;
     } // namespace acs
     namespace battery {
         extern float voltage;

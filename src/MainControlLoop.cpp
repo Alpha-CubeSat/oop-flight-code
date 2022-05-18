@@ -27,7 +27,6 @@ MainControlLoop::MainControlLoop()
 
 {
     delay(1000);
-    boot_initialization();
 }
 
 void MainControlLoop::execute()
