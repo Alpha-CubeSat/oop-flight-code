@@ -305,8 +305,8 @@ namespace sfr {
         std::deque<float> voltage_buffer;
         SensorReading *voltage_average = new SensorReading(fault_index_type::voltage, 0.0, false);
         // TODO
-        float acceptable_battery;
-        float min_battery;
+        float acceptable_battery = 3.9;
+        float min_battery = 3.75;
     } // namespace battery
     namespace fault {
         fault_mode_type mode = fault_mode_type::active;
