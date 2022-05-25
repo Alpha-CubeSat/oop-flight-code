@@ -376,21 +376,28 @@ void RockblockControlTask::dispatch_process_command()
         sfr::rockblock::serial.read();
 
         while (1) {
-            uint8_t look_ahead = sfr::rockblock::serial.read(); // Peek
-            if (look_ahead == constants::rockblock::end_of_command_upload_flag) {
+            uint8_t look_ahead1 = sfr::rockblock::serial.read(); // Peek
+            uint8_t look_ahead2 = sfr::rockblock::serial.read(); // Peek
+            if (look_ahead1 == constants::rockblock::end_of_command_upload_flag1 && look_ahead2 == constants::rockblock::end_of_command_upload_flag2) {
                 break; // Exit command read loop
             }
             Serial.println("SAT CMD");
             // Instantiate a new unprocessed raw command
             RawRockblockCommand new_raw_command;
             sfr::rockblock::raw_commands.push_back(new_raw_command);
-            sfr::rockblock::raw_commands.back().opcode[0] = look_ahead;
+            sfr::rockblock::raw_commands.back().opcode[0] = look_ahead1;
+            sfr::rockblock::raw_commands.back().opcode[1] = look_ahead2;
 
-            if (look_ahead < 0x10)
+            if (look_ahead1 < 0x10)
                 Serial.print(0, HEX);
-            Serial.print(look_ahead, HEX);
-            // Already read first opcode index; start at second index
-            for (size_t o = 1; o < constants::rockblock::opcode_len; ++o) {
+            Serial.print(look_ahead1, HEX);
+
+            if (look_ahead2 < 0x10)
+                Serial.print(0, HEX);
+            Serial.print(look_ahead2, HEX);
+
+            // Already read first and second opcode indices; start at third index
+            for (size_t o = 2; o < constants::rockblock::opcode_len; ++o) {
                 sfr::rockblock::raw_commands.back().opcode[o] = sfr::rockblock::serial.read();
                 if (sfr::rockblock::raw_commands.back().opcode[o] < 0x10)
                     Serial.print(0, HEX);
