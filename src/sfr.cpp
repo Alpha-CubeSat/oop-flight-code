@@ -62,6 +62,8 @@ namespace sfr {
     namespace photoresistor {
         int val = 0;
         bool covered = true;
+        std::deque<int> light_val_buffer;
+        SensorReading *light_val_average = new SensorReading(fault_index_type::light_val, 0.0, false);
     } // namespace photoresistor
     namespace mission {
         Boot boot_class;

@@ -70,6 +70,8 @@ namespace sfr {
     namespace photoresistor {
         extern int val;
         extern bool covered;
+        extern std::deque<int> light_val_buffer;
+        extern SensorReading *light_val_average;
     } // namespace photoresistor
     namespace mission {
         extern MissionMode *boot;
