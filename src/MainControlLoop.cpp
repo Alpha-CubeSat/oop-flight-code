@@ -10,7 +10,7 @@ MainControlLoop::MainControlLoop()
       command_monitor(constants::timecontrol::command_monitor_offset),
       current_monitor(constants::timecontrol::current_monitor_offset),
       fault_monitor(constants::timecontrol::fault_monitor_offset),
-      //   imu_monitor(constants::timecontrol::imu_monitor_offset),
+      imu_monitor(constants::timecontrol::imu_monitor_offset),
       normal_report_monitor(constants::timecontrol::normal_report_monitor_offset),
       photoresistor_monitor(constants::timecontrol::photoresistor_monitor_offset),
       rockblock_report_monitor(constants::timecontrol::rockblock_report_monitor_offset),
@@ -22,11 +22,12 @@ MainControlLoop::MainControlLoop()
       mission_manager(constants::timecontrol::mission_manager_offset)
 {
     delay(1000);
-    sfr::mission::boot->transition_to();
+    boot_initialization();
 }
 
 void MainControlLoop::execute()
 {
+    delay(200);
     faults::fault_1 = 0;
     faults::fault_2 = 0;
     faults::fault_3 = 0;
@@ -42,7 +43,7 @@ void MainControlLoop::execute()
     command_monitor.execute_on_time();
     current_monitor.execute_on_time();
     fault_monitor.execute_on_time();
-    // imu_monitor.execute_on_time();
+    imu_monitor.execute_on_time();
     normal_report_monitor.execute_on_time();
     photoresistor_monitor.execute_on_time();
     rockblock_report_monitor.execute_on_time();

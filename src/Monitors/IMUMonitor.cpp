@@ -10,36 +10,71 @@ IMUMonitor::IMUMonitor(unsigned int offset)
     imu = Adafruit_LSM9DS1(constants::imu::CSAG, constants::imu::CSM);
 
     if (!imu.begin()) {
-        transition_to_abnormal_init();
+        sfr::imu::successful_init = false;
     } else {
-        transition_to_normal();
+        sfr::imu::successful_init = true;
+        imu.setupAccel(imu.LSM9DS1_ACCELRANGE_2G);
+        imu.setupMag(imu.LSM9DS1_MAGGAIN_4GAUSS);
+        imu.setupGyro(imu.LSM9DS1_GYROSCALE_245DPS);
     }
-    imu.setupAccel(imu.LSM9DS1_ACCELRANGE_2G);
-    imu.setupMag(imu.LSM9DS1_MAGGAIN_4GAUSS);
-    imu.setupGyro(imu.LSM9DS1_GYROSCALE_245DPS);
+    sfr::imu::mode = sensor_mode_type::init; // This is already done in sfr.cpp but included for clarity
 }
 
 void IMUMonitor::execute()
 {
     switch (sfr::imu::mode) {
+    case sensor_mode_type::init:
+        // Reads result of IMUMonitor initialization and makes the transition to normal or abnormal_init.
+        // This step is needed to wait for sfr.cpp to finish initalizing everything. The SensorReading object
+        // constructors in sfr.cpp are not yet called when attempting to use those objects in the IMUMonitor
+        // initialization.
+        if (sfr::imu::successful_init) {
+            transition_to_normal();
+        } else {
+            transition_to_abnormal_init();
+        }
+        break;
     case sensor_mode_type::normal:
+#ifdef VERBOSE
         Serial.println("IMU is in Normal Mode");
+#endif
         capture_imu_values();
         break;
     case sensor_mode_type::abnormal_init:
+#ifdef VERBOSE
         Serial.println("IMU is in Abnormal Initialization Mode");
+#endif
         break;
     case sensor_mode_type::retry:
+#ifdef VERBOSE
         Serial.println("IMU is in Retry Mode");
-        bool began = false;
-        if (imu.begin()) {
-            transition_to_normal();
-            began = true;
-        }
-        if (began == false)
+#endif
+        if (!imu.begin()) {
             transition_to_abnormal_init();
+        } else {
+            transition_to_normal();
+            imu.setupAccel(imu.LSM9DS1_ACCELRANGE_2G);
+            imu.setupMag(imu.LSM9DS1_MAGGAIN_4GAUSS);
+            imu.setupGyro(imu.LSM9DS1_GYROSCALE_245DPS);
+        }
         break;
     }
+}
+
+bool check_repeated_values(std::deque<float> buffer)
+{
+    if (buffer.empty() || buffer.size() == 1) {
+        return false;
+    }
+
+    int first_val = buffer[0];
+    for (float val : buffer) {
+        if (first_val != val) {
+            return false;
+        }
+    }
+
+    return true;
 }
 
 void IMUMonitor::capture_imu_values()
@@ -111,24 +146,55 @@ void IMUMonitor::capture_imu_values()
         sfr::imu::gyro_z_buffer.pop_back();
     }
 
-    // Calculate sums
+    // Check for repeated/invalid readings, calculate sums and average
 
-    float mag_x_sum = std::accumulate(sfr::imu::mag_x_buffer.begin(), sfr::imu::mag_x_buffer.end(), 0.0);
-    float mag_y_sum = std::accumulate(sfr::imu::mag_y_buffer.begin(), sfr::imu::mag_y_buffer.end(), 0.0);
-    float mag_z_sum = std::accumulate(sfr::imu::mag_z_buffer.begin(), sfr::imu::mag_z_buffer.end(), 0.0);
-    float gyro_x_sum = std::accumulate(sfr::imu::gyro_x_buffer.begin(), sfr::imu::gyro_x_buffer.end(), 0.0);
-    float gyro_y_sum = std::accumulate(sfr::imu::gyro_y_buffer.begin(), sfr::imu::gyro_y_buffer.end(), 0.0);
-    float gyro_z_sum = std::accumulate(sfr::imu::gyro_z_buffer.begin(), sfr::imu::gyro_z_buffer.end(), 0.0);
+    if (check_repeated_values(sfr::imu::mag_x_buffer)) {
+        sfr::imu::mag_x_average->set_invalid();
+    } else {
+        sfr::imu::mag_x_average->set_valid();
+        float mag_x_sum = std::accumulate(sfr::imu::mag_x_buffer.begin(), sfr::imu::mag_x_buffer.end(), 0.0);
+        sfr::imu::mag_x_average->set_value(mag_x_sum / sfr::imu::mag_x_buffer.size());
+    }
 
-    // Calculate averages
+    if (check_repeated_values(sfr::imu::mag_y_buffer)) {
+        sfr::imu::mag_y_average->set_invalid();
+    } else {
+        sfr::imu::mag_y_average->set_valid();
+        float mag_y_sum = std::accumulate(sfr::imu::mag_y_buffer.begin(), sfr::imu::mag_y_buffer.end(), 0.0);
+        sfr::imu::mag_y_average->set_value(mag_y_sum / sfr::imu::mag_y_buffer.size());
+    }
 
-    sfr::imu::mag_x_average->set_value(mag_x_sum / sfr::imu::mag_x_buffer.size());
-    sfr::imu::mag_y_average->set_value(mag_y_sum / sfr::imu::mag_y_buffer.size());
-    sfr::imu::mag_z_average->set_value(mag_z_sum / sfr::imu::mag_z_buffer.size());
+    if (check_repeated_values(sfr::imu::mag_z_buffer)) {
+        sfr::imu::mag_z_average->set_invalid();
+    } else {
+        sfr::imu::mag_z_average->set_valid();
+        float mag_z_sum = std::accumulate(sfr::imu::mag_z_buffer.begin(), sfr::imu::mag_z_buffer.end(), 0.0);
+        sfr::imu::mag_z_average->set_value(mag_z_sum / sfr::imu::mag_z_buffer.size());
+    }
 
-    sfr::imu::gyro_x_average->set_value(gyro_x_sum / sfr::imu::gyro_x_buffer.size());
-    sfr::imu::gyro_y_average->set_value(gyro_y_sum / sfr::imu::gyro_y_buffer.size());
-    sfr::imu::gyro_z_average->set_value(gyro_z_sum / sfr::imu::gyro_z_buffer.size());
+    if (check_repeated_values(sfr::imu::gyro_x_buffer)) {
+        sfr::imu::gyro_x_average->set_invalid();
+    } else {
+        sfr::imu::gyro_x_average->set_valid();
+        float gyro_x_sum = std::accumulate(sfr::imu::gyro_x_buffer.begin(), sfr::imu::gyro_x_buffer.end(), 0.0);
+        sfr::imu::gyro_x_average->set_value(gyro_x_sum / sfr::imu::gyro_x_buffer.size());
+    }
+
+    if (check_repeated_values(sfr::imu::gyro_y_buffer)) {
+        sfr::imu::gyro_y_average->set_invalid();
+    } else {
+        sfr::imu::gyro_y_average->set_valid();
+        float gyro_y_sum = std::accumulate(sfr::imu::gyro_y_buffer.begin(), sfr::imu::gyro_y_buffer.end(), 0.0);
+        sfr::imu::gyro_y_average->set_value(gyro_y_sum / sfr::imu::gyro_y_buffer.size());
+    }
+
+    if (check_repeated_values(sfr::imu::gyro_z_buffer)) {
+        sfr::imu::gyro_z_average->set_invalid();
+    } else {
+        sfr::imu::gyro_z_average->set_valid();
+        float gyro_z_sum = std::accumulate(sfr::imu::gyro_z_buffer.begin(), sfr::imu::gyro_z_buffer.end(), 0.0);
+        sfr::imu::gyro_z_average->set_value(gyro_z_sum / sfr::imu::gyro_z_buffer.size());
+    }
 }
 
 void IMUMonitor::transition_to_normal()
@@ -153,7 +219,6 @@ void IMUMonitor::transition_to_abnormal_init()
     // trips fault
     // all check flags are set to false
     sfr::imu::mode = sensor_mode_type::abnormal_init;
-    // sfr::fault::fault_1 = sfr::fault::fault_1 | constants::fault::imu_init;
     sfr::imu::mag_x_average->set_invalid();
     sfr::imu::mag_y_average->set_invalid();
     sfr::imu::mag_z_average->set_invalid();
