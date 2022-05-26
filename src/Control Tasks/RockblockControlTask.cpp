@@ -107,7 +107,7 @@ void RockblockControlTask::dispatch_standby()
 void RockblockControlTask::dispatch_send_at()
 {
     sfr::rockblock::conseq_reads = 0;
-#ifdef VERBOSE
+#ifdef VERBOSE_IMUD
     Serial.println("SENT: ATr");
 #endif
     sfr::rockblock::serial.print("AT\r");
@@ -125,7 +125,7 @@ void RockblockControlTask::dispatch_await_at()
 
 void RockblockControlTask::dispatch_send_signal_strength()
 {
-#ifdef VERBOSE
+#ifdef VERBOSE_IMUD
     Serial.println("SENT: AT+CSQr");
 #endif
     sfr::rockblock::serial.print("AT+CSQ\r");
@@ -148,7 +148,7 @@ void RockblockControlTask::dispatch_await_signal_strength()
 
 void RockblockControlTask::dispatch_send_flow_control()
 {
-#ifdef VERBOSE
+#ifdef VERBOSE_IMUD
     Serial.println("SENT: AT&K0r");
 #endif
     sfr::rockblock::serial.print("AT&K0\r");
@@ -169,7 +169,7 @@ void RockblockControlTask::dispatch_send_message_length()
     ss << sfr::rockblock::downlink_report.size();
     std::string s = ss.str();
     std::string message_length = "AT+SBDWB=" + s + "\r";
-#ifdef VERBOSE
+#ifdef VERBOSE_IMUD
     Serial.println(("SENT: AT+SBDWB=" + s + "r").c_str());
 #endif
     sfr::rockblock::serial.print(message_length.c_str());
@@ -187,7 +187,7 @@ void RockblockControlTask::dispatch_await_message_length()
 void RockblockControlTask::dispatch_send_message()
 {
     uint16_t checksum = 0;
-#ifdef VERBOSE
+#ifdef VERBOSE_IMUD
     switch (sfr::rockblock::downlink_report_type) {
     case report_type::camera_report:
         Serial.print("Camera Report Downlinking\n");
@@ -200,11 +200,11 @@ void RockblockControlTask::dispatch_send_message()
         break;
     }
 #endif
-#ifdef VERBOSE
+#ifdef VERBOSE_IMUD
     Serial.print("SENT: ");
 #endif
     for (auto &data : sfr::rockblock::downlink_report) {
-#ifdef VERBOSE
+#ifdef VERBOSE_IMUD
         if (data < 16) {
             Serial.print(0);
         }
@@ -214,7 +214,7 @@ void RockblockControlTask::dispatch_send_message()
         checksum += (uint16_t)data;
     }
 
-#ifdef VERBOSE
+#ifdef VERBOSE_IMUD
     Serial.println();
     Serial.print("SENT: ");
     Serial.print(checksum >> 8);
@@ -243,7 +243,7 @@ void RockblockControlTask::dispatch_await_message()
 
 void RockblockControlTask::dispatch_send_response()
 {
-#ifdef VERBOSE
+#ifdef VERBOSE_IMUD
     Serial.println("SENT: AT+SBDIXr");
 #endif
     sfr::rockblock::serial.print("AT+SBDIX\r");
@@ -301,7 +301,7 @@ void RockblockControlTask::dispatch_process_mo_status()
 
 void RockblockControlTask::dispatch_send_signal_strength_mo()
 {
-#ifdef VERBOSE
+#ifdef VERBOSE_IMUD
     Serial.println("SENT: AT+CSQr");
 #endif
     sfr::rockblock::serial.print("AT+CSQ\r");
@@ -335,6 +335,10 @@ void RockblockControlTask::dispatch_process_mt_status()
             sfr::camera::report_downlinked = true;
             sfr::rockblock::camera_report.clear();
         }
+        if (sfr::rockblock::downlink_report_type == report_type::imu_report) {
+            sfr::imu::report_downlinked = true;
+            sfr::rockblock::imu_report.clear();
+        }
         transition_to(rockblock_mode_type::read_message);
         break;
     case '0':
@@ -346,7 +350,7 @@ void RockblockControlTask::dispatch_process_mt_status()
 
 void RockblockControlTask::dispatch_read_message()
 {
-#ifdef VERBOSE
+#ifdef VERBOSE_IMUD
     Serial.println("SENT: AT+SBDRBr");
 #endif
     sfr::rockblock::serial.print("AT+SBDRB\r");
@@ -422,7 +426,7 @@ void RockblockControlTask::dispatch_queue_check()
 
 void RockblockControlTask::dispatch_send_flush()
 {
-#ifdef VERBOSE
+#ifdef VERBOSE_IMUD
     Serial.println("SENT: AT+SBDWT=FLUSH_MTr");
 #endif
     sfr::rockblock::serial.print("AT+SBDWT=FLUSH_MT\r");
@@ -440,6 +444,7 @@ void RockblockControlTask::dispatch_await_flush()
 
 void RockblockControlTask::dispatch_end_transmission()
 {
+    // Serial.println("dispatch_end_transmission");
     sfr::rockblock::last_downlink = millis();
     if (sfr::rockblock::downlink_period > constants::rockblock::min_sleep_period) {
         Pins::setPinState(constants::rockblock::sleep_pin, LOW);
@@ -447,6 +452,10 @@ void RockblockControlTask::dispatch_end_transmission()
     if (sfr::rockblock::downlink_report_type == report_type::camera_report) {
         sfr::camera::report_downlinked = true;
         sfr::rockblock::camera_report.clear();
+    }
+    if (sfr::rockblock::downlink_report_type == report_type::imu_report) {
+        sfr::imu::report_downlinked = true;
+        sfr::rockblock::imu_report.clear();
     }
     transition_to(rockblock_mode_type::standby);
 }
@@ -463,6 +472,7 @@ bool RockblockControlTask::valid_command()
     bool arg_2 = true;
     bool rockblock_downlink_period_opcode = true;
     bool request_image_fragment_opcode = true;
+    bool request_imu_downlink_fragment_opcode = true;
     bool burnwire_time_opcode = true;
     bool burnwire_timeout_opcode = true;
 

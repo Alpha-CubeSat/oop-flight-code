@@ -193,18 +193,26 @@ namespace sfr {
         std::deque<uint8_t> downlink_report;
         std::deque<uint8_t> normal_report;
         std::deque<uint8_t> camera_report;
-        uint8_t imu_report[constants::rockblock::packet_size] = {0};
+        // uint8_t imu_report[constants::rockblock::packet_size] = {0};
+        std::deque<uint8_t> imu_report;
 
         char buffer[constants::rockblock::buffer_size] = {0};
         int camera_commands[99][constants::rockblock::command_len] = {};
         int camera_max_fragments[99] = {};
         int commas[constants::rockblock::num_commas] = {0};
 
+        int imu_downlink_max_fragments[99] = {};
+
         uint8_t opcode[2] = {0};
         uint8_t arg_1[4] = {0};
         uint8_t arg_2[4] = {0};
 
-        int imu_max_fragments = 10;
+        int imu_max_fragments = 256;
+
+        float imudownlink_start_time = 0.0;
+        float imudownlink_remain_time = constants::time::one_minute;
+        bool imu_first_start = true;
+        bool imu_downlink_on = true;
 #ifndef SIMULATOR
         HardwareSerial serial = Serial1;
 #else
@@ -240,10 +248,7 @@ namespace sfr {
         std::deque<float> acc_x_buffer;
         std::deque<float> acc_y_buffer;
         std::deque<float> acc_z_buffer;
-        // std::deque<std::experimental::any, time_t> imu_dlink_buffer;
-        std::deque<float> imu_dlink_gyro_x_buffer;
-        std::deque<float> imu_dlink_gyro_y_buffer;
-        std::deque<float> imu_dlink_gyro_z_buffer;
+        std::deque<uint8_t> imu_dlink;
 
         SensorReading *mag_x_average = new SensorReading(fault_index_type::mag_x, 0.0, false);
         SensorReading *mag_y_average = new SensorReading(fault_index_type::mag_y, 0.0, false);
@@ -254,23 +259,27 @@ namespace sfr {
         SensorReading *acc_x_average = new SensorReading(fault_index_type::acc_x, 0.0, false);
         SensorReading *acc_y_average = new SensorReading(fault_index_type::acc_y, 0.0, false);
 
-        imu_downlink_type imu_dlink_magid = imu_downlink_type::GAUSS_8;
-        const int imu_downlink_buffer_max_size = constants::sensor::collect; // not determined yet
-        const int imu_downlink_report_size = constants::sensor::collect * 5;
-        uint8_t imu_downlink_report[imu_downlink_report_size];
+        SensorReading *gyro_x_value = new SensorReading(fault_index_type::gyro_x, 0.0, false);
+        SensorReading *gyro_y_value = new SensorReading(fault_index_type::gyro_y, 0.0, false);
+        SensorReading *gyro_z_value = new SensorReading(fault_index_type::gyro_z, 0.0, false);
 
-        int fragment_number = 0;
-        bool fragment_requested = false;
-        int fragments_written = 0;
-        bool imu_dlink_report_ready = false;
+        // check with Josh
+        int gyro_min = -245;
+        int gyro_max = 245;
+        int mag_min = -8;
+        int mag_max = 8;
+
+        bool start_timing_deployed = false;
+        float start_time_deployed = 0.0;
+        uint8_t current_sample = 0;
+        bool sample_gyro = false;
+        uint8_t fragment_number = 0;
+        bool report_ready = false;
         bool report_downlinked = true;
-        char filename[15];
-
-        const int mag_8GAUSS_min = 4;
-        const int mag_12GAUSS_min = 8;
-        const int mag_16GAUSS_min = 12;
-        const int gyro_500DPS_min = 245;
-        const int gyro_2000DPS_min = 500;
+        bool report_written = false;
+        bool full_report_written = false;
+        int max_fragments = 256;
+        int content_length = 68;
 
         bool sample = true;
     } // namespace imu

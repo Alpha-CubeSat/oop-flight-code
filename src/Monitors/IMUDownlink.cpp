@@ -3,50 +3,36 @@
 IMUDownlink::IMUDownlink(unsigned int offset)
     : TimedControlTask<void>(offset)
 {
-    imu = Adafruit_LSM9DS1(constants::imu::CSAG, constants::imu::CSM);
-    imu.begin();
-    // if(!imu.begin()) then...
 }
 
 void IMUDownlink::execute()
 {
-    /*if (sfr::mission::mode == mission_mode_type::mand_burns || sfr::mission::mode == mission_mode_type::reg_burns) {
-        sensors_event_t accel, mag, gyro, temp;
-        imu.getEvent(&accel, &mag, &gyro, &temp);
-
-        imu.readMag();
-
-        if (mag.magnetic.x > 4 || mag.magnetic.y > 4 || mag.magnetic.z > 4) {
-            sfr::imu::imu_dlink_magid = imu_downlink_type::GAUSS_8;
-        }
-        if (mag.magnetic.x > 8 || mag.magnetic.y > 8 || mag.magnetic.z > 8) {
-            sfr::imu::imu_dlink_magid = imu_downlink_type::GAUSS_12;
-        }
-        if (mag.magnetic.x > 12 || mag.magnetic.y > 12 || mag.magnetic.z > 12) {
-            sfr::imu::imu_dlink_magid = imu_downlink_type::GAUSS_16;
-        }
-
-        // Get corrected IMU values
-        imu.readGyro();
-
-        imu.getEvent(&accel, &mag, &gyro, &temp);
+    if (sfr::imu::sample_gyro) {
 
         // Add reading to imu downlink buffer
 
-        sfr::imu::imu_dlink_gyro_x_buffer.push_front(sfr::imu::gyro_x);
-        sfr::imu::imu_dlink_gyro_y_buffer.push_front(sfr::imu::gyro_y);
-        sfr::imu::imu_dlink_gyro_z_buffer.push_front(sfr::imu::gyro_z);
+        uint8_t gyro_x = map(sfr::imu::gyro_x_value->get_value(), sfr::imu::gyro_min, sfr::imu::gyro_max, 0, 255);
+        uint8_t gyro_y = map(sfr::imu::gyro_y_value->get_value(), sfr::imu::gyro_min, sfr::imu::gyro_max, 0, 255);
+        uint8_t gyro_z = map(sfr::imu::gyro_z_value->get_value(), sfr::imu::gyro_min, sfr::imu::gyro_max, 0, 255);
 
-        // Remove old readings
+        sfr::imu::imu_dlink.push_front(gyro_x);
+        sfr::imu::imu_dlink.push_front(gyro_y);
+        sfr::imu::imu_dlink.push_front(gyro_z);
+    }
 
-        while (sfr::imu::imu_dlink_gyro_x_buffer.size() > sfr::imu::imu_downlink_buffer_max_size) {
-            sfr::imu::imu_dlink_gyro_x_buffer.pop_back();
+    if (sfr::mission::current_mode == sfr::mission::mandatoryBurns || sfr::mission::current_mode == sfr::mission::regularBurns) {
+        sfr::imu::sample_gyro = true;
+    }
+
+    // need to be stored in sfr later (time to record imu data after deployment)
+    if (millis() - sfr::mission::time_deployed > 60 * constants::time::one_second) {
+        sfr::imu::sample_gyro = false;
+        sfr::imu::report_written = true;
+    } else if (sfr::mission::deployed) {
+        if (!sfr::mission::already_deployed) {
+            sfr::mission::time_deployed = millis();
+            sfr::mission::already_deployed = true;
         }
-        while (sfr::imu::imu_dlink_gyro_y_buffer.size() > sfr::imu::imu_downlink_buffer_max_size) {
-            sfr::imu::imu_dlink_gyro_y_buffer.pop_back();
-        }
-        while (sfr::imu::imu_dlink_gyro_z_buffer.size() > sfr::imu::imu_downlink_buffer_max_size) {
-            sfr::imu::imu_dlink_gyro_z_buffer.pop_back();
-        }
-    }*/
+        sfr::imu::sample_gyro = true;
+    }
 }
