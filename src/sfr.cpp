@@ -135,6 +135,10 @@ namespace sfr {
         std::deque<int> mode_history;
 
         float acs_transmit_cycle_time = constants::time::one_minute * 100;
+
+        float time_deployed;
+        bool deployed;
+        bool already_deployed;
     } // namespace mission
     namespace burnwire {
         bool fire = false;
