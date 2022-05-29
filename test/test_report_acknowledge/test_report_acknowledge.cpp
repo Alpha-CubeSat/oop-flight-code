@@ -22,9 +22,9 @@ void test_normal_report_with_one_command()
     sfr::rockblock::waiting_command = true;
     command_monitor.execute();
     normal_report_monitor.execute();
+    TEST_ASSERT_EQUAL(36, sfr::rockblock::normal_report.size());
     TEST_ASSERT_EQUAL(constants::rockblock::mission_mode[0], sfr::rockblock::normal_report[32]);
     TEST_ASSERT_EQUAL(constants::rockblock::mission_mode[1], sfr::rockblock::normal_report[33]);
-    TEST_ASSERT_EQUAL(36, sfr::rockblock::normal_report.size());
 }
 
 void test_normal_report_with_multiple_commands()
@@ -42,11 +42,13 @@ void test_normal_report_with_multiple_commands()
     sfr::rockblock::waiting_command = true;
     command_monitor.execute();
     normal_report_monitor.execute();
+    TEST_ASSERT_EQUAL(38, sfr::rockblock::normal_report.size());
     TEST_ASSERT_EQUAL(constants::rockblock::mission_mode[0], sfr::rockblock::normal_report[32]);
     TEST_ASSERT_EQUAL(constants::rockblock::mission_mode[1], sfr::rockblock::normal_report[33]);
     TEST_ASSERT_EQUAL(constants::rockblock::burnwire_arm[0], sfr::rockblock::normal_report[34]);
     TEST_ASSERT_EQUAL(constants::rockblock::burnwire_arm[1], sfr::rockblock::normal_report[35]);
-    TEST_ASSERT_EQUAL(38, sfr::rockblock::normal_report.size());
+    TEST_ASSERT_EQUAL(constants::rockblock::end_of_normal_downlink_flag1, sfr::rockblock::normal_report[36]);
+    TEST_ASSERT_EQUAL(constants::rockblock::end_of_normal_downlink_flag2, sfr::rockblock::normal_report[37]);
 }
 
 void test_normal_report_with_more_than_15_commands()
@@ -62,13 +64,13 @@ void test_normal_report_with_more_than_15_commands()
     sfr::rockblock::waiting_command = true;
     command_monitor.execute();
     normal_report_monitor.execute();
+    TEST_ASSERT_EQUAL(64, sfr::rockblock::normal_report.size());
     for (int i = 0; i < 15; i++) {
-        TEST_ASSERT_EQUAL(constants::rockblock::burnwire_arm[0], sfr::rockblock::normal_report[38 + (i * 2)]);
-        TEST_ASSERT_EQUAL(constants::rockblock::burnwire_arm[1], sfr::rockblock::normal_report[38 + (i * 2) + 1]);
+        TEST_ASSERT_EQUAL(constants::rockblock::burnwire_arm[0], sfr::rockblock::normal_report[32 + (i * 2)]);
+        TEST_ASSERT_EQUAL(constants::rockblock::burnwire_arm[1], sfr::rockblock::normal_report[32 + (i * 2) + 1]);
     }
     TEST_ASSERT_EQUAL(constants::rockblock::end_of_normal_downlink_flag1, sfr::rockblock::normal_report[62]);
     TEST_ASSERT_EQUAL(constants::rockblock::end_of_normal_downlink_flag2, sfr::rockblock::normal_report[63]);
-    TEST_ASSERT_EQUAL(64, sfr::rockblock::normal_report.size());
 }
 
 int test_normal_report_acknowledge()

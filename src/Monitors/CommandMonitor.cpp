@@ -10,7 +10,7 @@ void CommandMonitor::execute()
 {
     if (sfr::rockblock::waiting_command) {
         while (!sfr::rockblock::processed_commands.empty()) {
-            RockblockCommand command = sfr::rockblock::processed_commands.back();
+            RockblockCommand command = sfr::rockblock::processed_commands.front();
             bool mag_x_average_isValid = sfr::imu::mag_x_average->is_valid();
             bool mag_y_average_isValid = sfr::imu::mag_y_average->is_valid();
             bool mag_z_average_isValid = sfr::imu::mag_z_average->is_valid();
@@ -67,7 +67,7 @@ void CommandMonitor::execute()
             } else if (command.f_opcode == get_decimal_opcode(constants::rockblock::camera_turn_off)) {
                 sfr::camera::turn_off = true;
             }
-            sfr::rockblock::processed_commands.pop_back();
+            sfr::rockblock::processed_commands.pop_front();
         }
         sfr::rockblock::waiting_command = false;
     }
