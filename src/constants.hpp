@@ -466,6 +466,8 @@ namespace constants {
 
         constexpr int CSAG = 21;
         constexpr int CSM = 20;
+
+        constexpr int max_gyro_imu_report_size = 66;
     } // namespace imu
     namespace timecontrol {
         // Environment-based initializations of the control loop time.
