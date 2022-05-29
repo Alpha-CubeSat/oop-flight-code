@@ -89,10 +89,8 @@ void CameraReportMonitor::create_camera_report(int fragment_number, uint8_t seri
     }
 
     // add actual image content to camera report
-    int z = 0;
-    while (z < constants::camera::content_length) {
-        sfr::rockblock::camera_report.push_back(parsedbuffer[z]);
-        z = z + 1;
+    for (int i = 0; i < constants::camera::content_length; i++) {
+        sfr::rockblock::camera_report.push_back(parsedbuffer[i]);
     }
     sfr::camera::report_ready = true;
     sfr::camera::report_downlinked = false;

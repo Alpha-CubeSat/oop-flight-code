@@ -10,7 +10,7 @@ void buffer_reset_default()
     sfr::imu::gyro_y = 0;
     sfr::imu::gyro_z = 0;
     // make sure the buffer size is starting from 0
-    while (sfr::imu::imu_dlink.size() != 0) {
+    while (!sfr::imu::imu_dlink.empty()) {
         sfr::imu::imu_dlink.pop_back();
     }
     TEST_ASSERT_EQUAL(0, sfr::imu::imu_dlink.size());

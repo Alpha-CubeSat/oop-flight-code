@@ -39,11 +39,9 @@ void IMUDownlinkReportMonitor::create_imu_downlink_report(int fragment_number)
     }
 
     // add actual gyro content to imu report
-    int z = 0;
-    while (z < pop_size && z < 66) {
+    for (int i = 0; i < min(pop_size, 66); i++) {
         sfr::rockblock::imu_report.push_back(sfr::imu::imu_dlink.back());
         sfr::imu::imu_dlink.pop_back();
-        z = z + 1;
     }
     // for the next downlink cycle
     sfr::imu::report_ready = true;
