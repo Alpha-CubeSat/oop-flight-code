@@ -337,6 +337,7 @@ namespace sfr {
         extern int time_of_last_write;
         extern int write_step_time;
         extern int alloted_time;
+        extern int eeprom_value;
         extern bool alloted_time_passed;
     } // namespace EEPROM
 };    // namespace sfr

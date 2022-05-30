@@ -3,15 +3,15 @@
 void EEPROMControlTask::execute()
 {
     if (!sfr::EEPROM::alloted_time_passed) {
-        int eeprom_value = EEPROM.read(0);
+        sfr::EEPROM::eeprom_value = EEPROM.read(0);
 
-        if (eeprom_value > sfr::EEPROM::alloted_time) {
+        if (sfr::EEPROM::eeprom_value > sfr::EEPROM::alloted_time) {
             sfr::EEPROM::alloted_time_passed = true;
         } else {
             int time_since_last_write = millis() - sfr::EEPROM::time_of_last_write;
 
             if (time_since_last_write > sfr::EEPROM::write_step_time) {
-                EEPROM.write(0, time_since_last_write + eeprom_value);
+                EEPROM.write(0, time_since_last_write + sfr::EEPROM::eeprom_value);
                 sfr::EEPROM::time_of_last_write += time_since_last_write;
             }
         }
