@@ -187,8 +187,9 @@ namespace sfr {
         bool pressed = true;
     }
     namespace EEPROM {
-        uint8_t curr_time = 0;
-        uint8_t start_time = 0;
-        bool two_hours_passed = false;
-    }
+        int time_of_last_write = 0;
+        int write_step_time = 1000; // the amount of time between each write to EEPROM
+        int alloted_time = 7200000; // the amount of time for the EEPROM to count to (7200000 ms = 2 h)
+        bool alloted_time_passed = false;
+    } // namespace EEPROM
 } // namespace sfr

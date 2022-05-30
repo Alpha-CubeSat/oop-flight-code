@@ -27,8 +27,6 @@ MainControlLoop::MainControlLoop()
 
 void MainControlLoop::execute()
 {
-    sfr::EEPROM::start_time = millis();
-
     sfr::fault::fault_1 = 0;
     sfr::fault::fault_2 = 0;
     sfr::fault::fault_3 = 0;
@@ -52,8 +50,6 @@ void MainControlLoop::execute()
     camera_control_task.execute_on_time();
     rockblock_control_task.execute_on_time();
     eeprom_control_task.execute();
-
-    Serial.println(EEPROM.read(0));
 
     mission_manager.execute_on_time();
 }

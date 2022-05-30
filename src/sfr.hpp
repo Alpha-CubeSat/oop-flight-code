@@ -3,8 +3,8 @@
 
 #include "Arduino.h"
 #include "Control Tasks/BurnwireControlTask.hpp"
-#include "Control Tasks/TimedControlTask.hpp"
 #include "Control Tasks/EEPROMControlTask.hpp"
+#include "Control Tasks/TimedControlTask.hpp"
 #include "MissionManager.hpp"
 #include "Modes/acs_mode_type.enum"
 #include "Modes/burnwire_mode_type.enum"
@@ -182,10 +182,11 @@ namespace sfr {
         extern bool pressed;
     }
     namespace EEPROM {
-        extern uint8_t curr_time;
-        extern uint8_t start_time;
-        extern bool two_hours_passed;
-    }
-}; // namespace sfr
+        extern int time_of_last_write;
+        extern int write_step_time;
+        extern int alloted_time;
+        extern bool alloted_time_passed;
+    } // namespace EEPROM
+};    // namespace sfr
 
 #endif
