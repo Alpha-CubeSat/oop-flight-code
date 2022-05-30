@@ -1,0 +1,15 @@
+#ifndef imu_downlink_type_enum_
+#define imu_downlink_type_enum_
+
+enum class imu_downlink_type : unsigned char
+{
+    GAUSS_4 = 0,
+    GAUSS_8,
+    GAUSS_12,
+    GAUSS_16,
+    DPS_245,
+    DPS_500,
+    DPS_2000
+};
+
+#endif

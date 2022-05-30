@@ -1,23 +1,23 @@
-/*************************************************** 
+/***************************************************
   This is a library for the Adafruit TTL JPEG Camera (VC0706 chipset)
+
   Pick one up today in the adafruit shop!
   ------> http://www.adafruit.com/products/397
+
   These displays use Serial to communicate, 2 pins are required to interface
-  Adafruit invests time and resources providing this open source code, 
-  please support Adafruit and open-source hardware by purchasing 
+
+  Adafruit invests time and resources providing this open source code,
+  please support Adafruit and open-source hardware by purchasing
   products from Adafruit!
-  Written by Limor Fried/Ladyada for Adafruit Industries.  
+
+  Written by Limor Fried/Ladyada for Adafruit Industries.
   BSD license, all text above must be included in any redistribution
  ****************************************************/
 
-#if ARDUINO >= 100
-#include "Arduino.h"
-#if not defined(_VARIANT_ARDUINO_DUE_X_) && not defined(_VARIANT_ARDUINO_ZERO_)
+#include <Arduino.h>
+
+#if defined(__AVR__) || defined(ESP8266)
 #include <SoftwareSerial.h>
-#endif
-#else
-#include "WProgram.h"
-#include "NewSoftSerial.h"
 #endif
 
 #define VC0706_RESET 0x26
@@ -57,18 +57,18 @@
 #define CAMERABUFFSIZ 100
 #define CAMERADELAY 10
 
-class Adafruit_VC0706
-{
+/**************************************************************************/
+/*!
+    @brief Class for communicating with VC0706 cameras
+*/
+/**************************************************************************/
+class Adafruit_VC0706 {
 public:
-#if not defined(_VARIANT_ARDUINO_DUE_X_) && not defined(_VARIANT_ARDUINO_ZERO_)
-#if ARDUINO >= 100
+#if defined(__AVR__) || defined(ESP8266)
   Adafruit_VC0706(SoftwareSerial *ser); // Constructor when using SoftwareSerial
-#else
-  Adafruit_VC0706(NewSoftSerial *ser); // Constructor when using NewSoftSerial
-#endif
 #endif
   Adafruit_VC0706(HardwareSerial *ser); // Constructor when using HardwareSerial
-  boolean begin(uint16_t baud = 38400);
+  boolean begin(uint32_t baud = 38400);
   boolean reset(void);
   boolean TVon(void);
   boolean TVoff(void);
@@ -91,7 +91,8 @@ public:
   uint8_t getCompression();
   boolean setCompression(uint8_t c);
 
-  boolean getPTZ(uint16_t &w, uint16_t &h, uint16_t &wz, uint16_t &hz, uint16_t &pan, uint16_t &tilt);
+  boolean getPTZ(uint16_t &w, uint16_t &h, uint16_t &wz, uint16_t &hz,
+                 uint16_t &pan, uint16_t &tilt);
   boolean setPTZ(uint16_t wz, uint16_t hz, uint16_t pan, uint16_t tilt);
 
   void OSD(uint8_t x, uint8_t y, char *s); // isnt supported by the chip :(
@@ -108,17 +109,14 @@ private:
   uint8_t bufferLen;
   uint16_t frameptr;
 
-#if not defined(_VARIANT_ARDUINO_DUE_X_) && not defined(_VARIANT_ARDUINO_ZERO_)
-#if ARDUINO >= 100
+#if defined(__AVR__) || defined(ESP8266)
   SoftwareSerial *swSerial;
-#else
-  NewSoftSerial *swSerial;
-#endif
 #endif
   HardwareSerial *hwSerial;
 
   void common_init(void);
-  boolean runCommand(uint8_t cmd, uint8_t args[], uint8_t argn, uint8_t resp, boolean flushflag = true);
+  boolean runCommand(uint8_t cmd, uint8_t args[], uint8_t argn, uint8_t resp,
+                     boolean flushflag = true);
   void sendCommand(uint8_t cmd, uint8_t args[], uint8_t argn);
   uint8_t readResponse(uint8_t numbytes, uint8_t timeout);
   boolean verifyResponse(uint8_t command);

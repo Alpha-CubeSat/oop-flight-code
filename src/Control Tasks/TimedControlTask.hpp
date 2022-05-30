@@ -143,8 +143,7 @@ public:
      */
     T execute_on_time()
     {
-        sys_time_t earliest_start_time =
-            TimedControlTaskBase::control_cycle_start_time + offset;
+        sys_time_t earliest_start_time = TimedControlTaskBase::control_cycle_start_time + offset;
         wait_until_time(earliest_start_time);
         // Serial.print("Executing");
         // Serial.print(" offset: ");
@@ -177,7 +176,8 @@ public:
      * @param offset Time offset of start of this task from the beginning of a
      *               control cycle, in microseconds.
      */
-    TimedControlTask(const unsigned int _offset) : ControlTask<T>(), offset(us_to_duration(_offset + 1))
+    TimedControlTask(const unsigned int _offset)
+        : ControlTask<T>(), offset(us_to_duration(_offset + 1))
     {
     }
 };

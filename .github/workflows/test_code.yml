@@ -32,3 +32,13 @@ jobs:
       run: pio lib -g install 1
     - name: Verify flight code builds
       run: platformio run
+
+  format:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: DoozyX/clang-format-lint-action@v0.13
+      with:
+        source: './src'
+        extensions: 'hpp,cpp'
+        clangFormatVersion: 13

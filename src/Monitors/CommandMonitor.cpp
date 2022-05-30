@@ -1,10 +1,25 @@
 #include "CommandMonitor.hpp"
+#include "NormalReportMonitor.hpp"
 
-CommandMonitor::CommandMonitor(unsigned int offset) : TimedControlTask<void>(offset) {}
+CommandMonitor::CommandMonitor(unsigned int offset)
+    : TimedControlTask<void>(offset)
+{
+}
 
 void CommandMonitor::execute()
 {
     if (sfr::rockblock::waiting_command) {
+        bool mag_x_average_isValid = sfr::imu::mag_x_average->is_valid();
+        bool mag_y_average_isValid = sfr::imu::mag_y_average->is_valid();
+        bool mag_z_average_isValid = sfr::imu::mag_z_average->is_valid();
+        bool gyro_x_average_isValid = sfr::imu::gyro_x_average->is_valid();
+        bool gyro_y_average_isValid = sfr::imu::gyro_y_average->is_valid();
+        bool gyro_z_average_isValid = sfr::imu::gyro_z_average->is_valid();
+        bool temp_c_average_isValid = sfr::temperature::temp_c_average->is_valid();
+        bool voltage_average_isValid = sfr::battery::voltage_average->is_valid();
+        bool solar_current_average_isValid = sfr::current::solar_current_average->is_valid();
+        NormalReportMonitor::commands_received.push(sfr::rockblock::f_opcode & 0xFF);          // Add byte 0 of opcode to the queue
+        NormalReportMonitor::commands_received.push((sfr::rockblock::f_opcode & 0xFF00) >> 8); // Add byte 1 of opcode to the queue
         if (sfr::rockblock::f_opcode == get_decimal_opcode(constants::rockblock::mission_mode)) {
             dispatch_change_mission_mode();
         } else if (sfr::rockblock::f_opcode == get_decimal_opcode(constants::rockblock::burnwire_arm)) {
@@ -19,6 +34,8 @@ void CommandMonitor::execute()
             dispatch_change_rockblock_downlink_period();
         } else if (sfr::rockblock::f_opcode == get_decimal_opcode(constants::rockblock::request_image_fragment)) {
             dispatch_request_image_fragment();
+        } else if (sfr::rockblock::f_opcode == get_decimal_opcode(constants::rockblock::request_imu_downlink_fragment)) {
+            dispatch_request_imu_downlink_fragment();
         } else if (sfr::rockblock::f_opcode == get_decimal_opcode(constants::rockblock::camera_take_photo)) {
             dispatch_change_true_false(sfr::camera::take_photo);
         } else if (sfr::rockblock::f_opcode == get_decimal_opcode(constants::rockblock::acs_mode)) {
@@ -26,23 +43,23 @@ void CommandMonitor::execute()
         } else if (sfr::rockblock::f_opcode == get_decimal_opcode(constants::rockblock::fault_mode)) {
             dispatch_change_fault_mode();
         } else if (sfr::rockblock::f_opcode == get_decimal_opcode(constants::rockblock::fault_check_mag_x)) {
-            dispatch_change_true_false(sfr::fault::check_mag_x);
+            dispatch_change_true_false(mag_x_average_isValid);
         } else if (sfr::rockblock::f_opcode == get_decimal_opcode(constants::rockblock::fault_check_mag_y)) {
-            dispatch_change_true_false(sfr::fault::check_mag_y);
+            dispatch_change_true_false(mag_y_average_isValid);
         } else if (sfr::rockblock::f_opcode == get_decimal_opcode(constants::rockblock::fault_check_mag_z)) {
-            dispatch_change_true_false(sfr::fault::check_mag_z);
+            dispatch_change_true_false(mag_z_average_isValid);
         } else if (sfr::rockblock::f_opcode == get_decimal_opcode(constants::rockblock::fault_check_gyro_x)) {
-            dispatch_change_true_false(sfr::fault::check_gyro_x);
+            dispatch_change_true_false(gyro_x_average_isValid);
         } else if (sfr::rockblock::f_opcode == get_decimal_opcode(constants::rockblock::fault_check_gyro_y)) {
-            dispatch_change_true_false(sfr::fault::check_gyro_y);
+            dispatch_change_true_false(gyro_y_average_isValid);
         } else if (sfr::rockblock::f_opcode == get_decimal_opcode(constants::rockblock::fault_check_gyro_z)) {
-            dispatch_change_true_false(sfr::fault::check_gyro_z);
+            dispatch_change_true_false(gyro_z_average_isValid);
         } else if (sfr::rockblock::f_opcode == get_decimal_opcode(constants::rockblock::fault_check_temp_c)) {
-            dispatch_change_true_false(sfr::fault::check_temp_c);
+            dispatch_change_true_false(temp_c_average_isValid);
         } else if (sfr::rockblock::f_opcode == get_decimal_opcode(constants::rockblock::fault_check_solar_current)) {
-            dispatch_change_true_false(sfr::fault::check_solar_current);
+            dispatch_change_true_false(voltage_average_isValid);
         } else if (sfr::rockblock::f_opcode == get_decimal_opcode(constants::rockblock::fault_check_voltage)) {
-            dispatch_change_true_false(sfr::fault::check_voltage);
+            dispatch_change_true_false(solar_current_average_isValid);
         } else if (sfr::rockblock::f_opcode == get_decimal_opcode(constants::rockblock::change_simplified_acs)) {
             dispatch_change_simplified_acs();
         } else if (sfr::rockblock::f_opcode == get_decimal_opcode(constants::rockblock::camera_turn_on)) {
@@ -76,13 +93,13 @@ void CommandMonitor::dispatch_change_true_false(bool &value)
 
 void CommandMonitor::dispatch_change_acs_mode()
 {
-    if (sfr::rockblock::f_arg_1 == get_decimal_arg(constants::rockblock::full)) {
+    /*if (sfr::rockblock::f_arg_1 == get_decimal_arg(constants::rockblock::full)) {
         sfr::acs::mode = acs_mode_type::full;
     } else if (sfr::rockblock::f_arg_1 == get_decimal_arg(constants::rockblock::simple)) {
         sfr::acs::mode = acs_mode_type::simple;
     } else if (sfr::rockblock::f_arg_1 == get_decimal_arg(constants::rockblock::off)) {
         sfr::acs::mode = acs_mode_type::off;
-    }
+    }*/
 }
 
 void CommandMonitor::dispatch_change_fault_mode()
@@ -108,6 +125,23 @@ void CommandMonitor::dispatch_request_image_fragment()
         Serial.println(sfr::camera::serial_requested);
 #endif
     }
+}
+
+void CommandMonitor::dispatch_request_imu_downlink_fragment()
+{
+    // if (sfr::rockblock::f_arg_2 < sfr::rockblock::imu_downlink_max_fragments[sfr::rockblock::f_arg_1]) {
+    //     sfr::imu::fragment_requested = true;
+    //     sfr::imu::fragment_number_requested = sfr::rockblock::f_arg_2;
+    // }
+    /*if (sfr::imu::fragment_number_requested < sfr::rockblock::imu_max_fragments) {
+        sfr::imu::fragment_requested = true;
+        sfr::imu::fragment_number_requested++;
+    }
+
+#ifdef VERBOSE
+    Serial.print("Fragment requested: ");
+    Serial.println(sfr::imu::fragment_number_requested);
+#endif*/
 }
 
 void CommandMonitor::dispatch_change_rockblock_downlink_period()

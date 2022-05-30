@@ -1,6 +1,38 @@
 #include "sfr.hpp"
 
 namespace sfr {
+    namespace stabilization {
+        float max_time = 30 * constants::time::one_minute;
+    }
+    namespace boot {
+        unsigned long max_time = constants::time::two_hours;
+    }
+    namespace simple {
+        float max_time = 5 * constants::time::one_minute;
+    }
+    namespace point {
+        float max_time = 5 * constants::time::one_minute;
+    }
+    namespace detumble {
+        float start_time = 0;
+        float max_time = constants::time::two_hours;
+        // TODO
+        int num_imu_retries = 0;
+        int max_imu_retries = 5;
+
+        float min_stable_gyro_z = 1;
+        float max_stable_gyro_x = 0.2;
+        float max_stable_gyro_y = 0.2;
+
+        float min_unstable_gyro_x = 0.7;
+        float min_unstable_gyro_y = 0.7;
+    } // namespace detumble
+    namespace aliveSignal {
+        int max_downlink_hard_faults = 3;
+        bool downlinked = false;
+        float max_time = constants::time::two_hours;
+        int num_hard_faults = 0;
+    } // namespace aliveSignal
     namespace pins {
         std::map<int, int> pinMap = {
             {constants::photoresistor::pin, LOW},
@@ -26,15 +58,89 @@ namespace sfr {
             {constants::camera::rx, LOW},
             {constants::camera::tx, LOW},
             {constants::button::button_pin, LOW}};
-    }
+    } // namespace pins
     namespace photoresistor {
+        int val = 0;
         bool covered = true;
-    }
+        std::deque<int> light_val_buffer;
+        SensorReading *light_val_average = new SensorReading(fault_index_type::light_val, 0.0, false);
+    } // namespace photoresistor
     namespace mission {
-        mission_mode_type mode = mission_mode_type::boot;
-        bool low_power_eligible = true;
-        unsigned long boot_start_test = 0;
+        Boot boot_class;
+        AliveSignal aliveSignal_class;
+        LowPowerAliveSignal lowPowerAliveSignal_class;
+        DetumbleSpin detumbleSpin_class;
+        LowPowerDetumbleSpin lowPowerDetumbleSpin_class;
+        Normal normal_class;
+        Transmit transmit_class;
+        LowPower lowPower_class;
+        NormalDeployment normalDeployment_class;
+        TransmitDeployment transmitDeployment_class;
+        LowPowerDeployment lowPowerDeployment_class;
+        NormalArmed normalArmed_class;
+        TransmitArmed transmitArmed_class;
+        LowPowerArmed lowPowerArmed_class;
+        NormalInSun normalInSun_class;
+        TransmitInSun transmitInSun_class;
+        LowPowerInSun lowPowerInSun_class;
+        VoltageFailureInSun voltageFailureInSun_class;
+        BootCamera bootCamera_class;
+        MandatoryBurns mandatoryBurns_class;
+        RegularBurns regularBurns_class;
+        Photo photo_class;
 
+        Initialization initialization_class;
+        Stabilization stabilization_class;
+        Standby standby_class;
+        Deployment deployment_class;
+        Armed armed_class;
+        InSun insun_class;
+        Firing firing_class;
+
+        MissionMode *boot = &boot_class;
+        MissionMode *aliveSignal = &aliveSignal_class;
+        MissionMode *lowPowerAliveSignal = &lowPowerAliveSignal_class;
+        MissionMode *detumbleSpin = &detumbleSpin_class;
+        MissionMode *lowPowerDetumbleSpin = &lowPowerDetumbleSpin_class;
+        MissionMode *normal = &normal_class;
+        MissionMode *transmit = &transmit_class;
+        MissionMode *lowPower = &lowPower_class;
+        MissionMode *normalDeployment = &normalDeployment_class;
+        MissionMode *transmitDeployment = &transmitDeployment_class;
+        MissionMode *lowPowerDeployment = &lowPowerDeployment_class;
+        MissionMode *normalArmed = &normalArmed_class;
+        MissionMode *transmitArmed = &transmitArmed_class;
+        MissionMode *lowPowerArmed = &lowPowerArmed_class;
+        MissionMode *normalInSun = &normalInSun_class;
+        MissionMode *transmitInSun = &transmitInSun_class;
+        MissionMode *lowPowerInSun = &lowPowerInSun_class;
+        MissionMode *voltageFailureInSun = &voltageFailureInSun_class;
+        MissionMode *bootCamera = &bootCamera_class;
+        MissionMode *mandatoryBurns = &mandatoryBurns_class;
+        MissionMode *regularBurns = &regularBurns_class;
+        MissionMode *photo = &photo_class;
+
+        Phase *initialization = &initialization_class;
+        Phase *stabilization = &stabilization_class;
+        Phase *standby = &standby_class;
+        Phase *deployment = &deployment_class;
+        Phase *armed = &armed_class;
+        Phase *inSun = &insun_class;
+        Phase *firing = &firing_class;
+
+        MissionMode *current_mode = boot;
+        MissionMode *previous_mode = boot;
+
+        Phase *current_phase = initialization;
+        Phase *previous_phase = initialization;
+
+        std::deque<int> mode_history;
+
+        float acs_transmit_cycle_time = constants::time::one_minute * 100;
+
+        float time_deployed;
+        bool deployed;
+        bool already_deployed;
     } // namespace mission
     namespace burnwire {
         bool fire = false;
@@ -47,16 +153,23 @@ namespace sfr {
         int armed_time = constants::time::two_days;
     } // namespace burnwire
     namespace camera {
+        sensor_mode_type mode = sensor_mode_type::normal;
         bool photo_taken_sd_failed = false;
         bool take_photo = false;
         bool turn_on = false;
         bool turn_off = false;
         bool powered = false;
-        bool begun = false;
-        bool resolution_set = false;
-        uint64_t start_time = 0;
-        uint64_t begin_time = 0;
-        uint64_t resolution_set_time = 0;
+
+        // Initialization
+        camera_init_mode_type init_mode = camera_init_mode_type::awaiting;
+        uint8_t start_progress = 0;
+        uint64_t step_time = 0;
+        uint64_t init_start_time = 0;
+        uint64_t init_timeout = 12000;
+        uint8_t begin_delay = 100;
+        uint8_t resolution_set_delay = 500;
+        uint8_t resolution_get_delay = 200;
+
         uint64_t buffer[255] = {0};
         int current_serial = 0;
         int fragment_number = 0;
@@ -74,23 +187,38 @@ namespace sfr {
         uint8_t set_res = VC0706_160x120;
     } // namespace camera
     namespace rockblock {
-        unsigned long last_communication = 0;
-        bool last_downlink_normal = false;
-        int camera_commands[99][constants::rockblock::command_len] = {};
-        int camera_max_fragments[99] = {};
-        bool downlink_camera = false;
+        report_type downlink_report_type = report_type::normal_report;
+        bool rockblock_ready_status = false;
+        rockblock_mode_type mode = rockblock_mode_type::send_at;
+
         unsigned long last_downlink = 0;
         unsigned long downlink_period = 0;
-        unsigned long camera_downlink_period = 0;
-        rockblock_mode_type mode = rockblock_mode_type::send_at;
+
         bool waiting_message = false;
+
+        std::deque<uint8_t> downlink_report;
+        std::deque<uint8_t> normal_report;
+        std::deque<uint8_t> camera_report;
+        // uint8_t imu_report[constants::rockblock::packet_size] = {0};
+        std::deque<uint8_t> imu_report;
+
         char buffer[constants::rockblock::buffer_size] = {0};
-        uint8_t report[constants::rockblock::packet_size] = {0};
-        uint8_t camera_report[constants::rockblock::packet_size] = {0};
+        int camera_commands[99][constants::rockblock::command_len] = {};
+        int camera_max_fragments[99] = {};
         int commas[constants::rockblock::num_commas] = {0};
+
+        int imu_downlink_max_fragments[99] = {};
+
         uint8_t opcode[2] = {0};
         uint8_t arg_1[4] = {0};
         uint8_t arg_2[4] = {0};
+
+        int imu_max_fragments = 256;
+
+        float imudownlink_start_time = 0.0;
+        float imudownlink_remain_time = constants::time::one_minute;
+        bool imu_first_start = true;
+        bool imu_downlink_on = true;
 #ifndef SIMULATOR
         HardwareSerial serial = Serial1;
 #else
@@ -102,12 +230,14 @@ namespace sfr {
         uint16_t f_opcode = 0;
         uint32_t f_arg_1 = 0;
         uint32_t f_arg_2 = 0;
-        int timeout = 10 * constants::time::one_minute;
-        int start_time = 0;
-        bool last_timed_out = false;
-        int num_downlinks = 0;
+        float start_time_check_signal = 0;
+        float max_check_signal_time = constants::time::one_minute;
+        bool sleep_mode = false;
     } // namespace rockblock
     namespace imu {
+        sensor_mode_type mode = sensor_mode_type::init;
+        bool successful_init = true;
+
         float mag_x = 0.0;
         float mag_y = 0.0;
         float mag_z = 0.0;
@@ -124,64 +254,102 @@ namespace sfr {
         std::deque<float> acc_x_buffer;
         std::deque<float> acc_y_buffer;
         std::deque<float> acc_z_buffer;
+        std::deque<uint8_t> imu_dlink;
 
-        float mag_x_average = 0.0;
-        float mag_y_average = 0.0;
-        float mag_z_average = 0.0;
-        float gyro_x_average = 0.0;
-        float gyro_y_average = 0.0;
-        float gyro_z_average = 0.0;
-        float acc_x_average = 0.0;
-        float acc_y_average = 0.0;
-        float acc_z_average = 0.0;
+        SensorReading *mag_x_average = new SensorReading(fault_index_type::mag_x, 0.0, false);
+        SensorReading *mag_y_average = new SensorReading(fault_index_type::mag_y, 0.0, false);
+        SensorReading *mag_z_average = new SensorReading(fault_index_type::mag_z, 0.0, false);
+        SensorReading *gyro_x_average = new SensorReading(fault_index_type::gyro_x, 0.0, false);
+        SensorReading *gyro_y_average = new SensorReading(fault_index_type::gyro_y, 0.0, false);
+        SensorReading *gyro_z_average = new SensorReading(fault_index_type::gyro_z, 0.0, false);
+        SensorReading *acc_x_average = new SensorReading(fault_index_type::acc_x, 0.0, false);
+        SensorReading *acc_y_average = new SensorReading(fault_index_type::acc_y, 0.0, false);
+
+        SensorReading *gyro_x_value = new SensorReading(fault_index_type::gyro_x, 0.0, false);
+        SensorReading *gyro_y_value = new SensorReading(fault_index_type::gyro_y, 0.0, false);
+        SensorReading *gyro_z_value = new SensorReading(fault_index_type::gyro_z, 0.0, false);
+
+        // check with Josh
+        int gyro_min = -245;
+        int gyro_max = 245;
+        int mag_min = -8;
+        int mag_max = 8;
+
+        bool start_timing_deployed = false;
+        float start_time_deployed = 0.0;
+        uint8_t current_sample = 0;
+        bool sample_gyro = false;
+        uint8_t fragment_number = 0;
+        bool report_ready = false;
+        bool report_downlinked = true;
+        bool report_written = false;
+        bool full_report_written = false;
+        int max_fragments = 256;
+        int content_length = 68;
+
+        bool sample = true;
     } // namespace imu
     namespace temperature {
         float temp_c = 0.0;
         std::deque<float> temp_c_buffer;
-        float temp_c_average = 0.0;
+        SensorReading *temp_c_average = new SensorReading(fault_index_type::temp_c, 0.0, false);
         bool in_sun = false;
     } // namespace temperature
     namespace current {
         float solar_current = 0.0;
         std::deque<float> solar_current_buffer;
-        float solar_current_average = 0.0;
+        SensorReading *solar_current_average = new SensorReading(fault_index_type::solar_current, 0.0, false);
         bool in_sun = false;
     } // namespace current
+
     namespace acs {
-        acs_mode_type mode = acs_mode_type::off;
         float current1 = 0;
         float current2 = 0;
         float current3 = 0;
+        float pwm1 = 0;
+        float pwm2 = 0;
+        float pwm3 = 0;
         simple_acs_type mag = simple_acs_type::x;
         unsigned long max_no_communication = 0;
+
+        float on_time = 5 * constants::time::one_minute;
+        bool off = true;
     } // namespace acs
     namespace battery {
         float voltage = 0.0;
         std::deque<float> voltage_buffer;
-        float voltage_average = 0.0;
+        SensorReading *voltage_average = new SensorReading(fault_index_type::voltage, 0.0, false);
+        // TODO
+        float acceptable_battery;
+        float min_battery;
     } // namespace battery
     namespace fault {
         fault_mode_type mode = fault_mode_type::active;
 
-        unsigned char fault_1 = 0;
-        unsigned char fault_2 = 0;
-        unsigned char fault_3 = 0;
+        // unsigned char fault_1 = 0;
+        // unsigned char fault_2 = 0;
+        // unsigned char fault_3 = 0;
 
-        // FAULT 1
-        bool check_mag_x = true;
-        bool check_mag_y = true;
-        bool check_mag_z = true;
-        bool check_gyro_x = true;
-        bool check_gyro_y = true;
-        bool check_gyro_z = true;
-        bool check_acc_x = true;
-        bool check_acc_y = true;
+        // // FAULT 1
+        // bool check_mag_x = true;
+        // bool check_mag_y = true;
+        // bool check_mag_z = true;
+        // bool check_gyro_x = true;
+        // bool check_gyro_y = true;
+        // bool check_gyro_z = true;
+        // bool check_acc_x = true;
+        // bool check_acc_y = true;
 
-        // FAULT 2
-        bool check_acc_z = true;
-        bool check_temp_c = true;
-        bool check_solar_current = true;
-        bool check_voltage = true;
+        // // FAULT 2
+        // bool check_acc_z = true;
+        // bool check_temp_c = true;
+        // bool check_solar_current = true;
+        // bool check_voltage = true;
+
+        // // FAULT 3
+        // bool check_burn_wire = true;
+        // bool check_sd_card = true;
+        // bool check_camera_on_failed = true;
     } // namespace fault
     namespace button {
         bool pressed = true;

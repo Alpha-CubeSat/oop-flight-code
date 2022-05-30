@@ -44,7 +44,13 @@
         "iostream": "cpp",
         "thread": "cpp",
         "deque": "cpp",
-        "numeric": "cpp"
+        "numeric": "cpp",
+        "any": "cpp",
+        "map": "cpp",
+        "cstddef": "cpp",
+        "string": "cpp",
+        "random": "cpp"
     },
-    "C_Cpp.dimInactiveRegions": false
+    "C_Cpp.dimInactiveRegions": false,
+    "C_Cpp.formatting": "clangFormat"
 }
