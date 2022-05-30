@@ -32,11 +32,17 @@ MainControlLoop::MainControlLoop()
 
 void MainControlLoop::execute()
 {
+<<<<<<< HEAD
     sfr::EEPROM::time_of_last_write = millis();
     delay(200); // To prolong the speed of the main control loop to ensure correct RockBlock reads. Can reduce in the future.
     faults::fault_1 = 0;
     faults::fault_2 = 0;
     faults::fault_3 = 0;
+=======
+    sfr::fault::fault_1 = 0;
+    sfr::fault::fault_2 = 0;
+    sfr::fault::fault_3 = 0;
+>>>>>>> 038714e (completed EEPROM writing)
 
     clock_manager.execute();
     mission_manager.execute_on_time();
@@ -59,4 +65,9 @@ void MainControlLoop::execute()
     camera_control_task.execute_on_time();
     rockblock_control_task.execute_on_time();
     eeprom_control_task.execute();
+<<<<<<< HEAD
+=======
+
+    mission_manager.execute_on_time();
+>>>>>>> 038714e (completed EEPROM writing)
 }

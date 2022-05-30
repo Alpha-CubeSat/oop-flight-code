@@ -3,9 +3,13 @@
 
 #include "Arduino.h"
 #include "Control Tasks/BurnwireControlTask.hpp"
+<<<<<<< HEAD
 #include "Control Tasks/EEPROMControlTask.hpp"
 #include "Control Tasks/TimedControlTask.hpp"
+=======
+>>>>>>> 038714e (completed EEPROM writing)
 #include "Control Tasks/EEPROMControlTask.hpp"
+#include "Control Tasks/TimedControlTask.hpp"
 #include "MissionManager.hpp"
 #include "MissionMode.hpp"
 #include "Modes/burnwire_mode_type.enum"
@@ -334,6 +338,7 @@ namespace sfr {
     }
     namespace EEPROM {
 <<<<<<< HEAD
+<<<<<<< HEAD
         extern int time_of_last_write;
         extern int write_step_time;
         extern int alloted_time;
@@ -348,5 +353,13 @@ namespace sfr {
     }
 }; // namespace sfr
 >>>>>>> 6709f1c (I guess i never pushed, sorry!)
+=======
+        extern int time_of_last_write;
+        extern int write_step_time;
+        extern int alloted_time;
+        extern bool alloted_time_passed;
+    } // namespace EEPROM
+};    // namespace sfr
+>>>>>>> 038714e (completed EEPROM writing)
 
 #endif
