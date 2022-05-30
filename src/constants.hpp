@@ -37,11 +37,6 @@ namespace constants {
         constexpr int max_armed_time = 86400000;
     } // namespace burnwire
     namespace rockblock {
-        constexpr unsigned long one_second = 1000;
-        constexpr unsigned long one_minute = 60 * one_second;
-        constexpr unsigned long one_hour = 60 * one_minute;
-        constexpr unsigned long one_day = 24 * one_hour;
-
         constexpr int sleep_pin = 19;
 
         constexpr int min_sleep_period = 2 * time::one_minute;
