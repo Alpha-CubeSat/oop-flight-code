@@ -96,7 +96,7 @@ void test_burn_times()
 
     // burn time in range
     f_opcode = command_monitor.get_decimal_opcode(constants::rockblock::burnwire_time);
-    f_arg_1 = constants::rockblock::one_second;
+    f_arg_1 = constants::time::one_second;
     command = RockblockCommand(f_opcode, f_arg_1, 0);
     sfr::rockblock::processed_commands.push_back(command);
     sfr::rockblock::waiting_command = true;
@@ -114,7 +114,7 @@ void test_burn_times()
 
     // arm time in range
     f_opcode = command_monitor.get_decimal_opcode(constants::rockblock::burnwire_timeout);
-    f_arg_1 = constants::rockblock::one_hour;
+    f_arg_1 = constants::time::one_hour;
     command = RockblockCommand(f_opcode, f_arg_1, 0);
     sfr::rockblock::processed_commands.push_back(command);
     sfr::rockblock::waiting_command = true;
@@ -414,7 +414,7 @@ void test_down_period()
 
     // downlink period too low (500 ms)
     f_opcode = command_monitor.get_decimal_opcode(constants::rockblock::rockblock_downlink_period);
-    f_arg_1 = constants::rockblock::one_second / 2;
+    f_arg_1 = constants::time::one_second / 2;
     command = RockblockCommand(f_opcode, f_arg_1, 0);
     sfr::rockblock::processed_commands.push_back(command);
     sfr::rockblock::waiting_command = true;
