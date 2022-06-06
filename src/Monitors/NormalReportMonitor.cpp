@@ -17,7 +17,7 @@ void NormalReportMonitor::execute()
     uint8_t gyro_y = map(sfr::imu::gyro_y_average->get_value(), constants::imu::min_gyro_y, constants::imu::max_gyro_y, 0, 255);
     uint8_t gyro_z = map(sfr::imu::gyro_z_average->get_value(), constants::imu::min_gyro_z, constants::imu::max_gyro_z, 0, 255);
 
-    uint8_t light_val = map(sfr::photoresistor::val, constants::photoresistor::min_val, constants::photoresistor::max_val, 0, 255);
+    uint8_t light_val = map(sfr::photoresistor::light_val_average->get_value(), constants::photoresistor::min_val, constants::photoresistor::max_val, 0, 255);
 
     uint8_t temp_c = map(sfr::temperature::temp_c_average->get_value(), constants::temperature::min_temp_c, constants::temperature::max_temp_c, 0, 255);
 
@@ -32,7 +32,7 @@ void NormalReportMonitor::execute()
     sfr::rockblock::normal_report.push_back(constants::rockblock::start_of_normal_downlink_flag);
     sfr::rockblock::normal_report.push_back(sfr::photoresistor::covered);
     sfr::rockblock::normal_report.push_back(sfr::button::pressed);
-    sfr::rockblock::normal_report.push_back(sfr::mission::current_mode->id);
+    sfr::rockblock::normal_report.push_back(sfr::mission::current_mode->get_id());
     sfr::rockblock::normal_report.push_back(sfr::burnwire::fire);
     sfr::rockblock::normal_report.push_back(sfr::burnwire::arm);
     sfr::rockblock::normal_report.push_back(sfr::burnwire::burn_time);
@@ -53,13 +53,12 @@ void NormalReportMonitor::execute()
     // removed temperature mode type
     sfr::rockblock::normal_report.push_back(solar_current);
     sfr::rockblock::normal_report.push_back(sfr::current::in_sun);
-    sfr::rockblock::normal_report.push_back(sfr::acs::current_mode->id);
+    // sfr::rockblock::normal_report.push_back(sfr::acs::current_mode->id);
     sfr::rockblock::normal_report.push_back(voltage);
     sfr::rockblock::normal_report.push_back((uint8_t)sfr::fault::mode);
     sfr::rockblock::normal_report.push_back(faults::fault_1);
     sfr::rockblock::normal_report.push_back(faults::fault_2);
     sfr::rockblock::normal_report.push_back(faults::fault_3);
-    sfr::rockblock::normal_report.push_back(sfr::photoresistor::covered);
     sfr::rockblock::normal_report.push_back(sfr::camera::take_photo);
     sfr::rockblock::normal_report.push_back(sfr::camera::powered);
     int i = 0;

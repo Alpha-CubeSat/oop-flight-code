@@ -11,38 +11,30 @@ void test_initialize()
 // {
 //     CommandMonitor command_monitor(0);
 
-//     // mission mode = deployment
-//     uint16_t f_opcode = command_monitor.get_decimal_opcode(constants::rockblock::mission_mode);
-//     uint32_t f_arg_1 = command_monitor.get_decimal_arg(constants::rockblock::deployment);
-//     RockblockCommand command = RockblockCommand(f_opcode, f_arg_1, 0);
-//     sfr::rockblock::processed_commands.push_back(command);
+//     mission mode = deployment
+//     sfr::rockblock::f_opcode = command_monitor.get_decimal_opcode(constants::rockblock::mission_mode);
+//     sfr::rockblock::f_arg_1 = command_monitor.get_decimal_arg(constants::rockblock::deployment);
 //     sfr::rockblock::waiting_command = true;
 //     command_monitor.execute();
 //     TEST_ASSERT(sfr::mission::mode == mission_mode_type::deployment);
 
-//     // mission mode = standby
-//     f_opcode = command_monitor.get_decimal_opcode(constants::rockblock::mission_mode);
-//     f_arg_1 = command_monitor.get_decimal_arg(constants::rockblock::standby);
-//     command = RockblockCommand(f_opcode, f_arg_1, 0);
-//     sfr::rockblock::processed_commands.push_back(command);
+//     mission mode = standby
+//     sfr::rockblock::f_opcode = command_monitor.get_decimal_opcode(constants::rockblock::mission_mode);
+//     sfr::rockblock::f_arg_1 = command_monitor.get_decimal_arg(constants::rockblock::standby);
 //     sfr::rockblock::waiting_command = true;
 //     command_monitor.execute();
 //     TEST_ASSERT(sfr::mission::mode == mission_mode_type::standby);
 
-//     // mission mode = safe
-//     f_opcode = command_monitor.get_decimal_opcode(constants::rockblock::mission_mode);
-//     f_arg_1 = command_monitor.get_decimal_arg(constants::rockblock::safe);
-//     command = RockblockCommand(f_opcode, f_arg_1, 0);
-//     sfr::rockblock::processed_commands.push_back(command);
+//     mission mode = safe
+//     sfr::rockblock::f_opcode = command_monitor.get_decimal_opcode(constants::rockblock::mission_mode);
+//     sfr::rockblock::f_arg_1 = command_monitor.get_decimal_arg(constants::rockblock::safe);
 //     sfr::rockblock::waiting_command = true;
 //     command_monitor.execute();
 //     TEST_ASSERT(sfr::mission::mode == mission_mode_type::safe);
 
-//     // mission mode = low power
-//     f_opcode = command_monitor.get_decimal_opcode(constants::rockblock::mission_mode);
-//     f_arg_1 = command_monitor.get_decimal_arg(constants::rockblock::low_power);
-//     command = RockblockCommand(f_opcode, f_arg_1, 0);
-//     sfr::rockblock::processed_commands.push_back(command);
+//     mission mode = low power
+//     sfr::rockblock::f_opcode = command_monitor.get_decimal_opcode(constants::rockblock::mission_mode);
+//     sfr::rockblock::f_arg_1 = command_monitor.get_decimal_arg(constants::rockblock::low_power);
 //     sfr::rockblock::waiting_command = true;
 //     command_monitor.execute();
 //     TEST_ASSERT(sfr::mission::mode == mission_mode_type::low_power);
@@ -157,29 +149,23 @@ void test_camera()
 // {
 //     CommandMonitor command_monitor(0);
 
-//     // acs mode = full
-//     uint16_t f_opcode = command_monitor.get_decimal_opcode(constants::rockblock::acs_mode);
-//     uint32_t f_arg_1 = command_monitor.get_decimal_arg(constants::rockblock::full);
-//     RockblockCommand command = RockblockCommand(f_opcode, f_arg_1, 0);
-//     sfr::rockblock::processed_commands.push_back(command);
+//     acs mode = full
+//     sfr::rockblock::f_opcode = command_monitor.get_decimal_opcode(constants::rockblock::acs_mode);
+//     sfr::rockblock::f_arg_1 = command_monitor.get_decimal_arg(constants::rockblock::full);
 //     sfr::rockblock::waiting_command = true;
 //     command_monitor.execute();
 //     TEST_ASSERT(sfr::acs::mode == acs_mode_type::full);
 
-//     // acs mode = simple
-//     f_opcode = command_monitor.get_decimal_opcode(constants::rockblock::acs_mode);
-//     f_arg_1 = command_monitor.get_decimal_arg(constants::rockblock::simple);
-//     command = RockblockCommand(f_opcode, f_arg_1, 0);
-//     sfr::rockblock::processed_commands.push_back(command);
+//     acs mode = simple
+//     sfr::rockblock::f_opcode = command_monitor.get_decimal_opcode(constants::rockblock::acs_mode);
+//     sfr::rockblock::f_arg_1 = command_monitor.get_decimal_arg(constants::rockblock::simple);
 //     sfr::rockblock::waiting_command = true;
 //     command_monitor.execute();
 //     TEST_ASSERT(sfr::acs::mode == acs_mode_type::simple);
 
-//     // acs mode = off
-//     f_opcode = command_monitor.get_decimal_opcode(constants::rockblock::acs_mode);
-//     f_arg_1 = command_monitor.get_decimal_arg(constants::rockblock::off);
-//     command = RockblockCommand(f_opcode, f_arg_1, 0);
-//     sfr::rockblock::processed_commands.push_back(command);
+//     acs mode = off
+//     sfr::rockblock::f_opcode = command_monitor.get_decimal_opcode(constants::rockblock::acs_mode);
+//     sfr::rockblock::f_arg_1 = command_monitor.get_decimal_arg(constants::rockblock::off);
 //     sfr::rockblock::waiting_command = true;
 //     command_monitor.execute();
 //     TEST_ASSERT(sfr::acs::mode == acs_mode_type::off);

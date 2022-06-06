@@ -1,0 +1,12 @@
+#ifndef mode_type_enum_
+#define mode_type_enum_
+
+enum class mode_type : unsigned char
+{
+    NORMAL = 0,
+    TRANSMIT,
+    LP,
+    OTHER
+};
+
+#endif

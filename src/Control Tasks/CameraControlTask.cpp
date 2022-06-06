@@ -141,7 +141,7 @@ void CameraControlTask::camera_init()
             }
             break;
         case 3: // step 3 - get resolution
-            if (millis() - sfr::camera::step_time >= sfr::camera::resolution_set_delay) {
+            if (millis() - sfr::camera::step_time >= sfr::camera::resolution_get_delay) {
                 uint8_t get_res = adaCam.getImageSize();
                 if (get_res == sfr::camera::set_res) {
                     Serial.print("resolution fetched successfully: ");

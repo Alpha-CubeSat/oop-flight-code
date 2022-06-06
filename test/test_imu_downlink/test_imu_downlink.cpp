@@ -2,156 +2,144 @@
 #include "Monitors/IMUDownlinkReportMonitor.hpp"
 #include <unity.h>
 
-void buffer_size_back_to_zero()
+void buffer_reset_default()
 {
-    sfr::imu::gyro_x = 64;
-    sfr::imu::gyro_y = 65;
-    sfr::imu::gyro_z = 66;
-    // make sure the three buffer sizes are starting from 0
-    while (sfr::imu::imu_dlink_gyro_x_buffer.size() != 0) {
-        sfr::imu::imu_dlink_gyro_x_buffer.pop_back();
+    sfr::imu::sample_gyro = false;
+    sfr::mission::time_deployed = 0.0;
+    sfr::imu::gyro_x = 0;
+    sfr::imu::gyro_y = 0;
+    sfr::imu::gyro_z = 0;
+    // make sure the buffer size is starting from 0
+    while (!sfr::imu::imu_dlink.empty()) {
+        sfr::imu::imu_dlink.pop_back();
     }
-    while (sfr::imu::imu_dlink_gyro_y_buffer.size() != 0) {
-        sfr::imu::imu_dlink_gyro_y_buffer.pop_back();
-    }
-    while (sfr::imu::imu_dlink_gyro_z_buffer.size() != 0) {
-        sfr::imu::imu_dlink_gyro_z_buffer.pop_back();
-    }
-    TEST_ASSERT_EQUAL(0, sfr::imu::imu_dlink_gyro_x_buffer.size());
-    TEST_ASSERT_EQUAL(0, sfr::imu::imu_dlink_gyro_y_buffer.size());
-    TEST_ASSERT_EQUAL(0, sfr::imu::imu_dlink_gyro_z_buffer.size());
+    TEST_ASSERT_EQUAL(0, sfr::imu::imu_dlink.size());
+    sfr::imu::gyro_x_value->set_value(sfr::imu::gyro_x);
+    sfr::imu::gyro_y_value->set_value(sfr::imu::gyro_y);
+    sfr::imu::gyro_z_value->set_value(sfr::imu::gyro_z);
 }
 
-void test_IMUDownlink_execute_mandburns()
+void test_imu_downlink_mandburn()
 {
-    buffer_size_back_to_zero();
-    sfr::mission::mode = mission_mode_type::mand_burns;
-    TEST_ASSERT_EQUAL(sfr::mission::mode, mission_mode_type::mand_burns);
+    buffer_reset_default();
+    sfr::mission::current_mode = sfr::mission::mandatoryBurns;
     IMUDownlink imu_downlink(0);
     imu_downlink.execute();
-
-    // test for mission mode is mand_burn
-
-    TEST_ASSERT_EQUAL(1, sfr::imu::imu_dlink_gyro_z_buffer.size());
-    TEST_ASSERT_EQUAL(1, sfr::imu::imu_dlink_gyro_y_buffer.size());
-    TEST_ASSERT_EQUAL(1, sfr::imu::imu_dlink_gyro_z_buffer.size());
+    TEST_ASSERT_EQUAL(true, sfr::imu::sample_gyro);
+    TEST_ASSERT_EQUAL(0, sfr::imu::imu_dlink.size());
+    imu_downlink.execute();
+    TEST_ASSERT_EQUAL(3, sfr::imu::imu_dlink.size());
+    uint8_t gyro_x_mapped = map(sfr::imu::gyro_x, sfr::imu::gyro_min, sfr::imu::gyro_max, 0, 255);
+    uint8_t gyro_y_mapped = map(sfr::imu::gyro_y, sfr::imu::gyro_min, sfr::imu::gyro_max, 0, 255);
+    uint8_t gyro_z_mapped = map(sfr::imu::gyro_z, sfr::imu::gyro_min, sfr::imu::gyro_max, 0, 255);
+    uint8_t gyro_x_popped = sfr::imu::imu_dlink.back();
+    sfr::imu::imu_dlink.pop_back();
+    uint8_t gyro_y_popped = sfr::imu::imu_dlink.back();
+    sfr::imu::imu_dlink.pop_back();
+    uint8_t gyro_z_popped = sfr::imu::imu_dlink.back();
+    sfr::imu::imu_dlink.pop_back();
+    TEST_ASSERT_EQUAL(gyro_x_popped, gyro_x_mapped);
+    TEST_ASSERT_EQUAL(gyro_y_popped, gyro_y_mapped);
+    TEST_ASSERT_EQUAL(gyro_z_popped, gyro_z_mapped);
+    TEST_ASSERT_EQUAL(0, sfr::imu::imu_dlink.size());
+    sfr::imu::sample_gyro = false;
 }
 
-void test_IMUDownlink_execute_regburns()
+void test_imu_downlink_regburn()
 {
-    buffer_size_back_to_zero();
-    sfr::mission::mode = mission_mode_type::reg_burns;
+    buffer_reset_default();
+    sfr::mission::current_mode = sfr::mission::regularBurns;
     IMUDownlink imu_downlink(0);
     imu_downlink.execute();
-
-    // test for mission mode is mand_burn
-    TEST_ASSERT_EQUAL(1, sfr::imu::imu_dlink_gyro_x_buffer.size());
-    TEST_ASSERT_EQUAL(1, sfr::imu::imu_dlink_gyro_y_buffer.size());
-    TEST_ASSERT_EQUAL(1, sfr::imu::imu_dlink_gyro_z_buffer.size());
+    TEST_ASSERT_EQUAL(true, sfr::imu::sample_gyro);
+    TEST_ASSERT_EQUAL(0, sfr::imu::imu_dlink.size());
+    imu_downlink.execute();
+    TEST_ASSERT_EQUAL(3, sfr::imu::imu_dlink.size());
+    uint8_t gyro_x_mapped = map(sfr::imu::gyro_x, sfr::imu::gyro_min, sfr::imu::gyro_max, 0, 255);
+    uint8_t gyro_y_mapped = map(sfr::imu::gyro_y, sfr::imu::gyro_min, sfr::imu::gyro_max, 0, 255);
+    uint8_t gyro_z_mapped = map(sfr::imu::gyro_z, sfr::imu::gyro_min, sfr::imu::gyro_max, 0, 255);
+    uint8_t gyro_x_popped = sfr::imu::imu_dlink.back();
+    sfr::imu::imu_dlink.pop_back();
+    uint8_t gyro_y_popped = sfr::imu::imu_dlink.back();
+    sfr::imu::imu_dlink.pop_back();
+    uint8_t gyro_z_popped = sfr::imu::imu_dlink.back();
+    sfr::imu::imu_dlink.pop_back();
+    TEST_ASSERT_EQUAL(gyro_x_popped, gyro_x_mapped);
+    TEST_ASSERT_EQUAL(gyro_y_popped, gyro_y_mapped);
+    TEST_ASSERT_EQUAL(gyro_z_popped, gyro_z_mapped);
+    TEST_ASSERT_EQUAL(0, sfr::imu::imu_dlink.size());
+    sfr::imu::sample_gyro = false;
 }
-
-void test_IMUDownlink_buffer_size()
+void test_imu_downlink_deployed()
 {
-
-    buffer_size_back_to_zero();
-    // reach the max size of the IMU downlink buffer
-    for (int i = 0; i < 3; i++) {
-        sfr::imu::imu_dlink_gyro_x_buffer.push_front(sfr::imu::gyro_x);
-        sfr::imu::imu_dlink_gyro_y_buffer.push_front(sfr::imu::gyro_y);
-        sfr::imu::imu_dlink_gyro_z_buffer.push_front(sfr::imu::gyro_z);
-    }
-    sfr::mission::mode = mission_mode_type::reg_burns;
-    TEST_ASSERT_EQUAL(sfr::mission::mode, mission_mode_type::reg_burns);
+    buffer_reset_default();
+    sfr::mission::current_mode = sfr::mission::photo;
+    sfr::mission::deployed = true;
     IMUDownlink imu_downlink(0);
     imu_downlink.execute();
-    TEST_ASSERT_EQUAL(sfr::imu::imu_downlink_buffer_max_size, sfr::imu::imu_dlink_gyro_x_buffer.size());
-    TEST_ASSERT_EQUAL(sfr::imu::imu_downlink_buffer_max_size, sfr::imu::imu_dlink_gyro_y_buffer.size());
-    TEST_ASSERT_EQUAL(sfr::imu::imu_downlink_buffer_max_size, sfr::imu::imu_dlink_gyro_z_buffer.size());
-
-    // starting as exceeded buffer size
-    sfr::imu::imu_dlink_gyro_x_buffer.push_front(sfr::imu::gyro_x);
-    sfr::imu::imu_dlink_gyro_y_buffer.push_front(sfr::imu::gyro_y);
-    sfr::imu::imu_dlink_gyro_z_buffer.push_front(sfr::imu::gyro_z);
+    TEST_ASSERT_EQUAL(true, sfr::imu::sample_gyro);
+    TEST_ASSERT_EQUAL(0, sfr::imu::imu_dlink.size());
     imu_downlink.execute();
-    TEST_ASSERT_EQUAL(sfr::imu::imu_downlink_buffer_max_size, sfr::imu::imu_dlink_gyro_x_buffer.size());
-    TEST_ASSERT_EQUAL(sfr::imu::imu_downlink_buffer_max_size, sfr::imu::imu_dlink_gyro_y_buffer.size());
-    TEST_ASSERT_EQUAL(sfr::imu::imu_downlink_buffer_max_size, sfr::imu::imu_dlink_gyro_z_buffer.size());
+    TEST_ASSERT_EQUAL(3, sfr::imu::imu_dlink.size());
+    uint8_t gyro_x_mapped = map(sfr::imu::gyro_x, sfr::imu::gyro_min, sfr::imu::gyro_max, 0, 255);
+    uint8_t gyro_y_mapped = map(sfr::imu::gyro_y, sfr::imu::gyro_min, sfr::imu::gyro_max, 0, 255);
+    uint8_t gyro_z_mapped = map(sfr::imu::gyro_z, sfr::imu::gyro_min, sfr::imu::gyro_max, 0, 255);
+    uint8_t gyro_x_popped = sfr::imu::imu_dlink.back();
+    sfr::imu::imu_dlink.pop_back();
+    uint8_t gyro_y_popped = sfr::imu::imu_dlink.back();
+    sfr::imu::imu_dlink.pop_back();
+    uint8_t gyro_z_popped = sfr::imu::imu_dlink.back();
+    sfr::imu::imu_dlink.pop_back();
+    TEST_ASSERT_EQUAL(gyro_x_popped, gyro_x_mapped);
+    TEST_ASSERT_EQUAL(gyro_y_popped, gyro_y_mapped);
+    TEST_ASSERT_EQUAL(gyro_z_popped, gyro_z_mapped);
+    TEST_ASSERT_EQUAL(0, sfr::imu::imu_dlink.size());
+    sfr::imu::sample_gyro = false;
 }
 
-void test_IMUDownlink_report_execute()
+void write_to_report()
 {
-    sfr::imu::gyro_x = 64;
-    sfr::imu::gyro_y = 65;
-    sfr::imu::gyro_z = 66;
-    uint8_t gyro_x = map(sfr::imu::gyro_x, constants::imu::min_gyro_x, constants::imu::max_gyro_x, 0, 255);
-    uint8_t gyro_y = map(sfr::imu::gyro_y, constants::imu::min_gyro_y, constants::imu::max_gyro_y, 0, 255);
-    uint8_t gyro_z = map(sfr::imu::gyro_z, constants::imu::min_gyro_z, constants::imu::max_gyro_z, 0, 255);
-
-    for (int i = 0; i < 3; i++) {
-        sfr::imu::imu_dlink_gyro_x_buffer.push_front(sfr::imu::gyro_x);
-        sfr::imu::imu_dlink_gyro_y_buffer.push_front(sfr::imu::gyro_y);
-        sfr::imu::imu_dlink_gyro_z_buffer.push_front(sfr::imu::gyro_z);
+    buffer_reset_default();
+    uint8_t gyro_x_mapped = map(sfr::imu::gyro_x, sfr::imu::gyro_min, sfr::imu::gyro_max, 0, 255);
+    uint8_t gyro_y_mapped = map(sfr::imu::gyro_y, sfr::imu::gyro_min, sfr::imu::gyro_max, 0, 255);
+    uint8_t gyro_z_mapped = map(sfr::imu::gyro_z, sfr::imu::gyro_min, sfr::imu::gyro_max, 0, 255);
+    for (int i = 0; i < 22; i++) {
+        sfr::imu::imu_dlink.push_front(gyro_x_mapped);
+        sfr::imu::imu_dlink.push_front(gyro_y_mapped);
+        sfr::imu::imu_dlink.push_front(gyro_z_mapped);
     }
-    // test when fragment number has not exceeded the limit
+}
+void test_imu_report()
+{
+    write_to_report();
+    IMUDownlinkReportMonitor imu_report_monitor(0);
+    sfr::imu::report_ready = true;
+    sfr::rockblock::downlink_report_type = report_type::imu_report;
     sfr::imu::report_downlinked = true;
-    sfr::imu::fragment_requested = true;
-    sfr::imu::fragment_number = 7;
-    IMUDownlinkReportMonitor imu_downlink_report(0);
-
-    imu_downlink_report.execute();
-
-    TEST_ASSERT_EQUAL(false, sfr::imu::fragment_requested);
-    TEST_ASSERT_EQUAL(8, sfr::imu::fragment_number);
-    TEST_ASSERT_EQUAL(70, sizeof(sfr::rockblock::imu_report));
-    TEST_ASSERT_EQUAL(true, sfr::imu::imu_dlink_report_ready);
+    sfr::imu::report_written = true;
+    sfr::imu::fragment_number = 1;
+    imu_report_monitor.execute();
+    TEST_ASSERT_EQUAL(68, sfr::rockblock::imu_report.size());
+    TEST_ASSERT_EQUAL(0, sfr::imu::imu_dlink.size());
+    TEST_ASSERT_EQUAL(false, sfr::imu::report_ready);
     TEST_ASSERT_EQUAL(false, sfr::imu::report_downlinked);
-    TEST_ASSERT_EQUAL(88, sfr::rockblock::imu_report[0]);
-    TEST_ASSERT_EQUAL(7, sfr::rockblock::imu_report[1]);
-    for (int i = 2; i < 2 + sfr::imu::imu_dlink_gyro_x_buffer.size() * 3; i += 3) {
-        TEST_ASSERT_EQUAL(gyro_x, sfr::rockblock::imu_report[i]);
-        TEST_ASSERT_EQUAL(gyro_y, sfr::rockblock::imu_report[i + 1]);
-        TEST_ASSERT_EQUAL(gyro_z, sfr::rockblock::imu_report[i + 2]);
-    }
-
-    // test when fragment number has exceeded the limit
-    sfr::imu::report_downlinked = true;
-    sfr::imu::fragment_requested = true;
-    sfr::imu::fragment_number = sfr::rockblock::imu_max_fragments - 1;
-
-    imu_downlink_report.execute();
-
-    TEST_ASSERT_EQUAL(false, sfr::imu::fragment_requested);
-    TEST_ASSERT_EQUAL(0, sfr::imu::fragment_number);
-    TEST_ASSERT_EQUAL(70, sizeof(sfr::rockblock::imu_report));
-    TEST_ASSERT_EQUAL(false, sfr::imu::imu_dlink_report_ready);
-    TEST_ASSERT_EQUAL(false, sfr::imu::report_downlinked);
-    TEST_ASSERT_EQUAL(88, sfr::rockblock::imu_report[0]);
-    TEST_ASSERT_EQUAL(sfr::rockblock::imu_max_fragments - 1, sfr::rockblock::imu_report[1]);
-    for (int i = 2; i < 2 + sfr::imu::imu_dlink_gyro_x_buffer.size() * 3; i += 3) {
-        TEST_ASSERT_EQUAL(gyro_x, sfr::rockblock::imu_report[i]);
-        TEST_ASSERT_EQUAL(gyro_y, sfr::rockblock::imu_report[i + 1]);
-        TEST_ASSERT_EQUAL(gyro_z, sfr::rockblock::imu_report[i + 2]);
-    }
+    TEST_ASSERT_EQUAL(1, sfr::imu::fragment_number);
 }
 
-void test_create_imu_downlink_report()
-{
-}
-
-int test_imu_downlink()
+int test_rockblock_report_monitor()
 {
     UNITY_BEGIN();
-    RUN_TEST(test_IMUDownlink_execute_mandburns);
-    RUN_TEST(test_IMUDownlink_execute_regburns);
-    RUN_TEST(test_IMUDownlink_buffer_size);
-    RUN_TEST(test_IMUDownlink_report_execute);
+    RUN_TEST(test_imu_downlink_mandburn);
+    RUN_TEST(test_imu_downlink_regburn);
+    RUN_TEST(test_imu_downlink_deployed);
+    RUN_TEST(test_imu_report);
     return UNITY_END();
 }
 
 #ifdef DESKTOP
 int main()
 {
-    return test_imu_downlink();
+    return test_rockblock_report_monitor();
 }
 #else
 #include <Arduino.h>
@@ -159,7 +147,8 @@ void setup()
 {
     delay(2000);
     Serial.begin(9600);
-    test_imu_downlink();
+    Serial.println("Rockblock Report Monitor Started");
+    test_rockblock_report_monitor();
 }
 
 void loop() {}

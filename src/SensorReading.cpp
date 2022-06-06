@@ -17,7 +17,7 @@ std::map<fault_index_type, int> map_to_reg = {
     {fault_index_type::burn_wire, 3},
     {fault_index_type::sd_card, 3},
     {fault_index_type::camera_on_failed, 3},
-}; // map from a fault type to the fault register
+    {fault_index_type::light_val, 3}}; // map from a fault type to the fault register
 
 std::map<fault_index_type, uint8_t> map_to_mask = {
     {fault_index_type::mag_x, constants::fault::mag_x},
@@ -36,6 +36,7 @@ std::map<fault_index_type, uint8_t> map_to_mask = {
     {fault_index_type::burn_wire, constants::fault::burn_wire},
     {fault_index_type::sd_card, constants::fault::sd_card},
     {fault_index_type::camera_on_failed, constants::fault::camera_on_failed},
+    {fault_index_type::light_val, constants::fault::light_val},
 }; // map from a fault type to the mask
 
 SensorReading::SensorReading(fault_index_type t, float x, bool fault)
