@@ -3,6 +3,7 @@
 
 #include "Arduino.h"
 #include "Control Tasks/BurnwireControlTask.hpp"
+#include "Control Tasks/EEPROMControlTask.hpp"
 #include "Control Tasks/TimedControlTask.hpp"
 #include "MissionManager.hpp"
 #include "MissionMode.hpp"
@@ -332,6 +333,13 @@ namespace sfr {
     namespace button {
         extern bool pressed;
     }
-}; // namespace sfr
+    namespace EEPROM {
+        extern int time_of_last_write;
+        extern int write_step_time;
+        extern int alloted_time;
+        extern int eeprom_value;
+        extern bool alloted_time_passed;
+    } // namespace EEPROM
+};    // namespace sfr
 
 #endif
