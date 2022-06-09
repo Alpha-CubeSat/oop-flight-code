@@ -10,6 +10,7 @@ public:
     void execute();
 
 private:
+    bool check_in_lower_power_mode();
     void schedule_report();
 };
 

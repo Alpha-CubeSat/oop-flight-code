@@ -41,29 +41,28 @@ void RockblockReportMonitor::execute()
     }
 }
 
+bool check_in_lower_power_mode()
+{
+    return sfr::mission::current_mode == sfr::mission::lowPowerAliveSignal ||
+           sfr::mission::current_mode == sfr::mission::lowPowerDetumbleSpin ||
+           sfr::mission::current_mode == sfr::mission::lowPower ||
+           sfr::mission::current_mode == sfr::mission::lowPowerDeployment ||
+           sfr::mission::current_mode == sfr::mission::lowPowerArmed ||
+           sfr::mission::current_mode == sfr::mission::lowPowerInSun;
+}
+
 void RockblockReportMonitor::schedule_report()
 {
 
-    // Schedule IMU Report: Highest Priority
-    if (sfr::imu::report_ready == true) {
-        sfr::rockblock::downlink_report_type = report_type::imu_report;
-        sfr::rockblock::rockblock_ready_status = true;
+    // Check if in a low-power mode; if so, only allow normal report downlink
+    if (check_in_lower_power_mode()) {
+        if (millis() - sfr::rockblock::last_downlink >= sfr::rockblock::downlink_period) {
+            sfr::rockblock::downlink_report_type = report_type::normal_report;
+            sfr::rockblock::rockblock_ready_status = true;
+            return;
+        }
+
+        sfr::rockblock::rockblock_ready_status = false;
         return;
     }
-
-    // Schedule Normal Report: Second Highest Priority
-    if (millis() - sfr::rockblock::last_downlink >= sfr::rockblock::downlink_period) {
-        sfr::rockblock::downlink_report_type = report_type::normal_report;
-        sfr::rockblock::rockblock_ready_status = true;
-        return;
-    }
-
-    // Schedule Camera Report: Third Highest Priority
-    if (sfr::camera::report_ready == true) {
-        sfr::rockblock::downlink_report_type = report_type::camera_report;
-        sfr::rockblock::rockblock_ready_status = true;
-        return;
-    }
-
-    sfr::rockblock::rockblock_ready_status = false;
 }
