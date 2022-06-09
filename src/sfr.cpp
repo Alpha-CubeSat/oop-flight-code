@@ -208,6 +208,7 @@ namespace sfr {
 
         std::deque<RawRockblockCommand> raw_commands;
         std::deque<RockblockCommand> processed_commands;
+        int max_commands_count = 10;
 
         int imu_downlink_max_fragments[99] = {};
         int imu_max_fragments = 256;

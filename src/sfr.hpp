@@ -191,6 +191,7 @@ namespace sfr {
 
         extern std::deque<RawRockblockCommand> raw_commands;
         extern std::deque<RockblockCommand> processed_commands;
+        extern int max_commands_count;
 
         extern int imu_downlink_max_fragments[99];
         extern int imu_max_fragments;

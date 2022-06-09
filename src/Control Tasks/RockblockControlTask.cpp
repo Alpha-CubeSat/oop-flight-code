@@ -367,7 +367,11 @@ void RockblockControlTask::dispatch_process_command()
         sfr::rockblock::serial.read();
         sfr::rockblock::serial.read();
 
-        while (1) {
+        /*
+            Parses up to `max_commands_count` number of commands
+            Exits early if end-of-command-upload flags read
+        */
+        for (int i = 0; i < sfr::rockblock::max_commands_count; i++) {
             uint8_t look_ahead1 = sfr::rockblock::serial.read(); // Peek
             uint8_t look_ahead2 = sfr::rockblock::serial.read(); // Peek
             if (look_ahead1 == constants::rockblock::end_of_command_upload_flag1 && look_ahead2 == constants::rockblock::end_of_command_upload_flag2) {
