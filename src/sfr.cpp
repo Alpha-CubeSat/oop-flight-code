@@ -199,7 +199,6 @@ namespace sfr {
         std::deque<uint8_t> downlink_report;
         std::deque<uint8_t> normal_report;
         std::deque<uint8_t> camera_report;
-        // uint8_t imu_report[constants::rockblock::packet_size] = {0};
         std::deque<uint8_t> imu_report;
 
         char buffer[constants::rockblock::buffer_size] = {0};
@@ -207,12 +206,11 @@ namespace sfr {
         int camera_max_fragments[99] = {};
         int commas[constants::rockblock::num_commas] = {0};
 
+        std::deque<RawRockblockCommand> raw_commands;
+        std::deque<RockblockCommand> processed_commands;
+        int max_commands_count = 10;
+
         int imu_downlink_max_fragments[99] = {};
-
-        uint8_t opcode[2] = {0};
-        uint8_t arg_1[4] = {0};
-        uint8_t arg_2[4] = {0};
-
         int imu_max_fragments = 256;
 
         float imudownlink_start_time = 0.0;
@@ -227,9 +225,8 @@ namespace sfr {
         bool flush_status = false;
         bool waiting_command = false;
         size_t conseq_reads = 0;
-        uint16_t f_opcode = 0;
-        uint32_t f_arg_1 = 0;
-        uint32_t f_arg_2 = 0;
+        int timeout = 10 * constants::time::one_minute;
+        int start_time = 0;
         float start_time_check_signal = 0;
         float max_check_signal_time = constants::time::one_minute;
         bool sleep_mode = false;

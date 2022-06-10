@@ -60,6 +60,8 @@ namespace constants {
         constexpr uint8_t start_of_normal_downlink_flag = 99;
         constexpr uint8_t end_of_normal_downlink_flag1 = 254;
         constexpr uint8_t end_of_normal_downlink_flag2 = 255;
+        constexpr uint8_t end_of_command_upload_flag1 = 0;
+        constexpr uint8_t end_of_command_upload_flag2 = 250;
 
         constexpr uint8_t mission_mode[opcode_len] = {0x00, 0x00};
         constexpr uint8_t burnwire_arm[opcode_len] = {0x01, 0x00};

@@ -19,6 +19,7 @@
 #include "Modes/simple_acs_type.enum"
 #include "Phase.hpp"
 #include "Pins.hpp"
+#include "RockblockCommand.hpp"
 #include "RockblockSimulator.hpp"
 #include "SensorReading.hpp"
 #include "constants.hpp"
@@ -182,7 +183,6 @@ namespace sfr {
         extern std::deque<uint8_t> downlink_report;
         extern std::deque<uint8_t> normal_report;
         extern std::deque<uint8_t> camera_report;
-        // extern uint8_t imu_report[constants::rockblock::packet_size];
         extern std::deque<uint8_t> imu_report;
 
         extern char buffer[constants::rockblock::buffer_size];
@@ -190,12 +190,11 @@ namespace sfr {
         extern int camera_max_fragments[99];
         extern int commas[constants::rockblock::num_commas];
 
+        extern std::deque<RawRockblockCommand> raw_commands;
+        extern std::deque<RockblockCommand> processed_commands;
+        extern int max_commands_count;
+
         extern int imu_downlink_max_fragments[99];
-
-        extern uint8_t opcode[2];
-        extern uint8_t arg_1[4];
-        extern uint8_t arg_2[4];
-
         extern int imu_max_fragments;
 
         extern float imudownlink_start_time;
@@ -210,12 +209,8 @@ namespace sfr {
         extern bool flush_status;
         extern bool waiting_command;
         extern size_t conseq_reads;
-        extern uint16_t f_opcode;
-        extern uint32_t f_arg_1;
-        extern uint32_t f_arg_2;
         extern float start_time_check_signal;
         extern float max_check_signal_time;
-
         extern bool sleep_mode;
     } // namespace rockblock
     namespace imu {
