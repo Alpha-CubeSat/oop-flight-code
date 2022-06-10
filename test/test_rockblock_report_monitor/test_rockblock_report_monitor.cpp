@@ -14,7 +14,7 @@ void set_rockblock_test_environment(report_type starting_report_type, bool is_im
     sfr::rockblock::downlink_report.clear();
 }
 
-// Tests for Rockblock Report Type Switching from Normal Report and Report Write
+// Tests for Rockblock Report Type Switching from Normal Report
 void test_schedule_from_normal_report()
 {
     RockblockReportMonitor rockblock_report_monitor(0);
@@ -50,7 +50,7 @@ void test_schedule_from_normal_report()
         TEST_ASSERT_EQUAL(sfr::rockblock::imu_report[i], sfr::rockblock::downlink_report[i]);
     }
 
-    // Both IMU and Camera unavailable
+    // Both IMU and Camera unavailable, time since last downlink exceeds downlink period
     set_rockblock_test_environment(report_type::normal_report, false, false, 0);
     for (int i = 0; i < constants::rockblock::packet_size; i++) {
         sfr::rockblock::normal_report.push_back(1);
@@ -65,11 +65,122 @@ void test_schedule_from_normal_report()
         TEST_ASSERT_EQUAL(sfr::rockblock::normal_report[i], sfr::rockblock::downlink_report[i]);
     }
 
-    // Both IMU and Camera unavailable, long downlink period
+    // Both IMU and Camera unavailable, downlink period exceeds time since last downlink
     set_rockblock_test_environment(report_type::normal_report, false, false, INT_MAX);
+    rockblock_report_monitor.execute();
+    TEST_ASSERT_TRUE(sfr::rockblock::rockblock_ready_status == false);
+}
+
+// Tests for Rockblock Report Type Switching from IMU Report
+void test_schedule_from_imu_report()
+{
+    RockblockReportMonitor rockblock_report_monitor(0);
+    sfr::rockblock::mode = rockblock_mode_type::standby;
+
+    // Normal and Camera both available
+    set_rockblock_test_environment(report_type::imu_report, true, true, 0);
+    for (int i = 0; i < constants::rockblock::packet_size; i++) {
+        sfr::rockblock::camera_report.push_back(1);
+    }
+    rockblock_report_monitor.execute();
+    TEST_ASSERT_EQUAL(report_type::camera_report, sfr::rockblock::downlink_report_type);
+    TEST_ASSERT_TRUE(sfr::rockblock::rockblock_ready_status == true);
+
+    TEST_ASSERT_EQUAL(constants::rockblock::packet_size, sfr::rockblock::camera_report.size());
+    TEST_ASSERT_EQUAL(constants::rockblock::packet_size, sfr::rockblock::downlink_report.size());
+    for (int i = 0; i < constants::rockblock::packet_size; i++) {
+        TEST_ASSERT_EQUAL(sfr::rockblock::camera_report[i], sfr::rockblock::downlink_report[i]);
+    }
+
+    // Only IMU available and time since last downlink exceeds downlink period
+    set_rockblock_test_environment(report_type::imu_report, true, false, 0);
     for (int i = 0; i < constants::rockblock::packet_size; i++) {
         sfr::rockblock::normal_report.push_back(1);
     }
+    rockblock_report_monitor.execute();
+    TEST_ASSERT_EQUAL(report_type::normal_report, sfr::rockblock::downlink_report_type);
+    TEST_ASSERT_TRUE(sfr::rockblock::rockblock_ready_status == true);
+
+    TEST_ASSERT_EQUAL(constants::rockblock::packet_size, sfr::rockblock::normal_report.size());
+    TEST_ASSERT_EQUAL(constants::rockblock::packet_size, sfr::rockblock::downlink_report.size());
+    for (int i = 0; i < constants::rockblock::packet_size; i++) {
+        TEST_ASSERT_EQUAL(sfr::rockblock::normal_report[i], sfr::rockblock::downlink_report[i]);
+    }
+
+    // Only IMU available and downlink period exceeds time since last downlink
+    set_rockblock_test_environment(report_type::imu_report, true, false, INT_MAX);
+    for (int i = 0; i < constants::rockblock::packet_size; i++) {
+        sfr::rockblock::imu_report.push_back(1);
+    }
+    rockblock_report_monitor.execute();
+    TEST_ASSERT_EQUAL(report_type::imu_report, sfr::rockblock::downlink_report_type);
+    TEST_ASSERT_TRUE(sfr::rockblock::rockblock_ready_status == true);
+
+    TEST_ASSERT_EQUAL(constants::rockblock::packet_size, sfr::rockblock::imu_report.size());
+    TEST_ASSERT_EQUAL(constants::rockblock::packet_size, sfr::rockblock::downlink_report.size());
+    for (int i = 0; i < constants::rockblock::packet_size; i++) {
+        TEST_ASSERT_EQUAL(sfr::rockblock::imu_report[i], sfr::rockblock::downlink_report[i]);
+    }
+
+    // Both IMU and Camera unavailable, downlink period exceeds time since last downlink
+    set_rockblock_test_environment(report_type::imu_report, false, false, INT_MAX);
+    rockblock_report_monitor.execute();
+    TEST_ASSERT_TRUE(sfr::rockblock::rockblock_ready_status == false);
+}
+
+// Tests for Rockblock Report Type Switching from Camera Report
+void test_schedule_from_camera_report()
+{
+    RockblockReportMonitor rockblock_report_monitor(0);
+    sfr::rockblock::mode = rockblock_mode_type::standby;
+
+    // Normal and Camera both available
+    set_rockblock_test_environment(report_type::camera_report, true, true, 0);
+    for (int i = 0; i < constants::rockblock::packet_size; i++) {
+        sfr::rockblock::normal_report.push_back(1);
+    }
+    rockblock_report_monitor.execute();
+    TEST_ASSERT_EQUAL(report_type::normal_report, sfr::rockblock::downlink_report_type);
+    TEST_ASSERT_TRUE(sfr::rockblock::rockblock_ready_status == true);
+
+    TEST_ASSERT_EQUAL(constants::rockblock::packet_size, sfr::rockblock::normal_report.size());
+    TEST_ASSERT_EQUAL(constants::rockblock::packet_size, sfr::rockblock::downlink_report.size());
+    for (int i = 0; i < constants::rockblock::packet_size; i++) {
+        TEST_ASSERT_EQUAL(sfr::rockblock::normal_report[i], sfr::rockblock::downlink_report[i]);
+    }
+
+    // Both IMU and Camera available and downlink period exceeds time since last downlink
+    set_rockblock_test_environment(report_type::camera_report, true, true, INT_MAX);
+    for (int i = 0; i < constants::rockblock::packet_size; i++) {
+        sfr::rockblock::imu_report.push_back(1);
+    }
+    rockblock_report_monitor.execute();
+    TEST_ASSERT_EQUAL(report_type::imu_report, sfr::rockblock::downlink_report_type);
+    TEST_ASSERT_TRUE(sfr::rockblock::rockblock_ready_status == true);
+
+    TEST_ASSERT_EQUAL(constants::rockblock::packet_size, sfr::rockblock::imu_report.size());
+    TEST_ASSERT_EQUAL(constants::rockblock::packet_size, sfr::rockblock::downlink_report.size());
+    for (int i = 0; i < constants::rockblock::packet_size; i++) {
+        TEST_ASSERT_EQUAL(sfr::rockblock::imu_report[i], sfr::rockblock::downlink_report[i]);
+    }
+
+    // Only Camera available and downlink period exceeds time since last downlink
+    set_rockblock_test_environment(report_type::camera_report, false, true, INT_MAX);
+    for (int i = 0; i < constants::rockblock::packet_size; i++) {
+        sfr::rockblock::camera_report.push_back(1);
+    }
+    rockblock_report_monitor.execute();
+    TEST_ASSERT_EQUAL(report_type::camera_report, sfr::rockblock::downlink_report_type);
+    TEST_ASSERT_TRUE(sfr::rockblock::rockblock_ready_status == true);
+
+    TEST_ASSERT_EQUAL(constants::rockblock::packet_size, sfr::rockblock::camera_report.size());
+    TEST_ASSERT_EQUAL(constants::rockblock::packet_size, sfr::rockblock::downlink_report.size());
+    for (int i = 0; i < constants::rockblock::packet_size; i++) {
+        TEST_ASSERT_EQUAL(sfr::rockblock::camera_report[i], sfr::rockblock::downlink_report[i]);
+    }
+
+    // Both IMU and Camera unavailable, downlink period exceeds time since last downlink
+    set_rockblock_test_environment(report_type::camera_report, false, false, INT_MAX);
     rockblock_report_monitor.execute();
     TEST_ASSERT_TRUE(sfr::rockblock::rockblock_ready_status == false);
 }
@@ -78,6 +189,8 @@ int test_rockblock_report_monitor()
 {
     UNITY_BEGIN();
     RUN_TEST(test_schedule_from_normal_report);
+    RUN_TEST(test_schedule_from_imu_report);
+    RUN_TEST(test_schedule_from_camera_report);
     return UNITY_END();
 }
 
