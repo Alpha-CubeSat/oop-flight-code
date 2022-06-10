@@ -12,11 +12,12 @@ RockblockSimulator::RockblockSimulator()
     flush_stage = 0;
     bin_transmit = 0;
     signal = 5;
-    // insert("0B000100000000000000");
-    // insert("07000100000000000000");
+    // Command with end of command flag
+    // insert("0B00010000000000000000FA");
     // insert("01000000000000000000");
     //  insert("01000100000000000000");
     //  insert("02000100000000000000");
+    insert("070001000000000000000B00010000000000000000FA");
 }
 
 void RockblockSimulator::begin(uint32_t baud)

@@ -23,6 +23,7 @@ MainControlLoop::MainControlLoop()
       burnwire_control_task(constants::timecontrol::burnwire_control_task_offset),
       camera_control_task(constants::timecontrol::camera_control_task_offset),
       rockblock_control_task(constants::timecontrol::rockblock_control_task_offset),
+      eeprom_control_task(),
       mission_manager(constants::timecontrol::mission_manager_offset)
 
 {
@@ -58,4 +59,5 @@ void MainControlLoop::execute()
     burnwire_control_task.execute_on_time();
     camera_control_task.execute_on_time();
     rockblock_control_task.execute_on_time();
+    eeprom_control_task.execute();
 }
