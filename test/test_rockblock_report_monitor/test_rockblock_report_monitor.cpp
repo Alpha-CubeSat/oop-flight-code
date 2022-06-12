@@ -185,12 +185,43 @@ void test_schedule_from_camera_report()
     TEST_ASSERT_TRUE(sfr::rockblock::rockblock_ready_status == false);
 }
 
+int test_rockblock_report_monitor_low_power_mode()
+{
+    RockblockReportMonitor rockblock_report_monitor(0);
+    sfr::rockblock::mode = rockblock_mode_type::standby;
+
+    // Normal and Camera both available, low downlink period
+    set_rockblock_test_environment(report_type::camera_report, true, true, 0);
+    // In low power deployment mode
+    sfr::mission::current_mode = sfr::mission::lowPowerDeployment;
+    for (int i = 0; i < constants::rockblock::packet_size; i++) {
+        sfr::rockblock::normal_report.push_back(1);
+    }
+    rockblock_report_monitor.execute();
+    TEST_ASSERT_EQUAL(report_type::normal_report, sfr::rockblock::downlink_report_type);
+    TEST_ASSERT_TRUE(sfr::rockblock::rockblock_ready_status == true);
+
+    TEST_ASSERT_EQUAL(constants::rockblock::packet_size, sfr::rockblock::normal_report.size());
+    TEST_ASSERT_EQUAL(constants::rockblock::packet_size, sfr::rockblock::downlink_report.size());
+    for (int i = 0; i < constants::rockblock::packet_size; i++) {
+        TEST_ASSERT_EQUAL(sfr::rockblock::normal_report[i], sfr::rockblock::downlink_report[i]);
+    }
+
+    // Normal and Camera both available, high downlink period
+    set_rockblock_test_environment(report_type::camera_report, true, true, INT_MAX);
+    // In low power deployment mode
+    sfr::mission::current_mode = sfr::mission::lowPowerDeployment;
+    rockblock_report_monitor.execute();
+    TEST_ASSERT_TRUE(sfr::rockblock::rockblock_ready_status == false);
+}
+
 int test_rockblock_report_monitor()
 {
     UNITY_BEGIN();
     RUN_TEST(test_schedule_from_normal_report);
     RUN_TEST(test_schedule_from_imu_report);
     RUN_TEST(test_schedule_from_camera_report);
+    RUN_TEST(test_rockblock_report_monitor_low_power_mode);
     return UNITY_END();
 }
 

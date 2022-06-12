@@ -40,16 +40,6 @@ void RockblockReportMonitor::execute()
     }
 }
 
-bool RockblockReportMonitor::check_in_low_power_mode()
-{
-    return sfr::mission::current_mode == sfr::mission::lowPowerAliveSignal ||
-           sfr::mission::current_mode == sfr::mission::lowPowerDetumbleSpin ||
-           sfr::mission::current_mode == sfr::mission::lowPower ||
-           sfr::mission::current_mode == sfr::mission::lowPowerDeployment ||
-           sfr::mission::current_mode == sfr::mission::lowPowerArmed ||
-           sfr::mission::current_mode == sfr::mission::lowPowerInSun;
-}
-
 void RockblockReportMonitor::switch_report_type_to(report_type downlink_report_type)
 {
     sfr::rockblock::downlink_report_type = downlink_report_type;
@@ -60,7 +50,7 @@ void RockblockReportMonitor::schedule_report()
 {
 
     // Check if in a low-power mode; if so, only enable normal report downlink
-    if (check_in_low_power_mode()) {
+    if (sfr::mission::current_mode->get_type() == mode_type::LP) {
         if (millis() - sfr::rockblock::last_downlink >= sfr::rockblock::downlink_period) {
             sfr::rockblock::downlink_report_type = report_type::normal_report;
             sfr::rockblock::rockblock_ready_status = true;
