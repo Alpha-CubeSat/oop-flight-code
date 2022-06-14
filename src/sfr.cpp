@@ -272,7 +272,7 @@ namespace sfr {
         const int gyro_500DPS_min = 245;
         const int gyro_2000DPS_min = 500;
 
-        bool sample = true;
+        bool sample = true;  // zp74, whether we should downlink gyro data to our buffer or not.
     } // namespace imu
     namespace temperature {
         float temp_c = 0.0;

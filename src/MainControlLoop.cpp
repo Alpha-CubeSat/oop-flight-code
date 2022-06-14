@@ -6,6 +6,8 @@ MainControlLoop::MainControlLoop()
     delay(1000);
 }
 
+int count = 0;
+
 void MainControlLoop::execute()
 {
     delay(200);
@@ -15,10 +17,12 @@ void MainControlLoop::execute()
 
     clock_manager.execute();
 
+    // switching mission mode happens in mission manager
     mission_manager.execute_on_time();
 
     acs_monitor.execute_on_time();
     battery_monitor.execute_on_time();
+   
     button_monitor.execute_on_time();
     camera_report_monitor.execute_on_time();
     command_monitor.execute_on_time();
@@ -34,4 +38,5 @@ void MainControlLoop::execute()
     burnwire_control_task.execute_on_time();
     camera_control_task.execute_on_time();
     rockblock_control_task.execute_on_time();
+
 }

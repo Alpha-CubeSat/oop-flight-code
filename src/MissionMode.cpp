@@ -224,8 +224,10 @@ void VoltageFailureInSun::transition_to()
     sfr::acs::off = true;
     sfr::imu::sample = false;
 }
+
 void VoltageFailureInSun::dispatch()
 {
+    // zp74, different from the wiki diagram ???
     if (sfr::battery::voltage_average->is_valid()) {
         sfr::mission::current_mode = sfr::mission::normalInSun;
     }
@@ -239,6 +241,8 @@ void BootCamera::transition_to()
 }
 void BootCamera::dispatch()
 {
+    // zp74, how do I know how many times the camera failed?
+    // if(sfr::camera::turn_on || )
 }
 
 void MandatoryBurns::transition_to()
@@ -247,6 +251,7 @@ void MandatoryBurns::transition_to()
     sfr::acs::off = true;
     sfr::imu::sample = true;
 }
+
 void MandatoryBurns::dispatch()
 {
 }
@@ -337,7 +342,10 @@ void enter_lp_insun()
 {
     if (!sfr::battery::voltage_average->is_valid()) {
         sfr::mission::current_mode = sfr::mission::voltageFailureInSun;
-    } else if (sfr::battery::voltage_average->is_valid() && (sfr::battery::voltage_average->get_value() <= sfr::battery::min_battery)) {
+    } else if (sfr::battery::voltage_average->get_value() <= sfr::battery::min_battery) {
         sfr::mission::current_mode = sfr::mission::lowPowerInSun;
+    } else if ((sfr::temperature::temp_c_average->is_valid() && sfr::temperature::in_sun) || 
+               (!sfr::temperature::temp_c_average->is_valid() && sfr::current::solar_current_average->is_valid() && sfr::current::in_sun)) {
+        sfr::mission::current_mode = sfr::mission::bootCamera;
     }
 }

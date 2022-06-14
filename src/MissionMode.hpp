@@ -6,6 +6,7 @@
 class MissionMode
 {
 public:
+    // zp74: what does this function do
     virtual void transition_to();
     virtual void dispatch();
     float start_time;
