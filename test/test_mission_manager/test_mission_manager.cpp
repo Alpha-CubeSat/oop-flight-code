@@ -12,7 +12,7 @@ void reset(){
     sfr::mission::inSun->set_start_time(millis());
     sfr::detumble::max_time = constants::time::two_hours;
     sfr::boot::max_time = constants::time::two_days;
-    sfr::battery::voltage_average->set_value(sfr::battery::acceptable_battery+.1);
+    sfr::battery::voltage_average->set_value(sfr::battery::acceptable_battery+.1); // zp74, a lot of "." here, what is this ?
     sfr::rockblock::max_check_signal_time = constants::time::one_minute;
     sfr::acs::on_time = constants::time::one_minute;
     sfr::mission::acs_transmit_cycle_time = constants::time::one_hour;
@@ -268,6 +268,27 @@ void test_exit_detumble_phase(MissionManager mission_manager, MissionMode *curre
     reset(mission_manager, currentMode);
 }
 
+void test_exit_insun_phase(MissionManager mission_manager, MissionMode *currentMode, MissionMode *nextMode) {
+    reset(mission_manager, currentMode);
+
+    // exit if the CubeSat is in sun (Temperature sensor readings are valid and the temperature determines the CubeSat is in sun)
+    sfr::temperature::temp_c_average->set_valid();
+    sfr::temperature::in_sun = true;
+    mission_manager.execute();
+    TEST_ASSERT_EQUAL(nextMode->get_id(), sfr::mission::current_mode->get_id());
+
+    reset(mission_manager, currentMode);
+
+    // exit if the CubeSat is in sun (Temperature sensor readings are invalid, current sensor readings are valid and current determines the CubeSat is in sun)
+    sfr::temperature::temp_c_average->set_invalid();
+    sfr::current::solar_current_average->set_valid();
+    sfr::current::in_sun = true;
+    mission_manager.execute();
+    TEST_ASSERT_EQUAL(nextMode->get_id(), sfr::mission::current_mode->get_id());
+
+    reset(mission_manager, currentMode);
+}
+
 void test_valid_initialization()
 {
     MissionManager mission_manager(0);
@@ -322,6 +343,29 @@ void test_exit_low_power_detumble_spin()
     test_exit_lp(mission_manager, sfr::mission::lowPowerDetumbleSpin, sfr::mission::detumbleSpin);
     test_exit_detumble_phase(mission_manager, sfr::mission::lowPowerDetumbleSpin, sfr::mission::lowPower);
 }
+
+void test_exit_normal_insun() 
+{
+    MissionManager mission_manager(0);
+    reset(mission_manager, sfr::mission::normalInSun);
+    test_exit_insun_phase(mission_manager, sfr::mission::normalInSun, sfr::mission::bootCamera);
+}
+
+void test_exit_transmit_insun() 
+{
+    MissionManager mission_manager(0);
+    reset(mission_manager, sfr::mission::transmitInSun);
+    test_exit_insun_phase(mission_manager, sfr::mission::transmitInSun, sfr::mission::bootCamera);
+}
+
+
+void test_exit_voltageFailure_insun() 
+{
+    MissionManager mission_manager(0);
+    reset(mission_manager, sfr::mission::voltageFailureInSun);
+    test_exit_insun_phase(mission_manager, sfr::mission::voltageFailureInSun, sfr::mission::bootCamera);
+}
+
 
 void test_standard_phase(MissionMode *normalMode, MissionMode *lpMode, MissionMode *transmitMode)
 {

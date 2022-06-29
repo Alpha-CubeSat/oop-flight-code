@@ -39,4 +39,24 @@ void MainControlLoop::execute()
     camera_control_task.execute_on_time();
     rockblock_control_task.execute_on_time();
 
+    /* Testing Transitions in Firing Phase */
+
+    // // test from turn on camera to mandatory burns due to init mode is complete
+    // if(count++ == 0) sfr::mission::current_mode = sfr::mission::bootCamera;
+    // sfr::camera::init_mode = camera_init_mode_type::complete;
+    // Serial.printf("current id : %d\n\n", sfr::mission::current_mode->get_id());
+
+    // test from turn on camera to mandatory burns due to failed times is larger than 5
+    if(count++ == 0) sfr::mission::current_mode = sfr::mission::bootCamera;
+    sfr::camera::turn_on = true;
+    sfr::camera::powered = false;
+    sfr::camera::init_mode = camera_init_mode_type::failed;
+    Serial.printf("failed times : %d\n\n", sfr::camera::failed_times);
+    Serial.printf("current id : %d\n", sfr::mission::current_mode->get_id());
+
+    // test from regular burns to take photo due to button unpressed 
+    // test from regular burns to take photo due to photoresistor uncovered
+    // test from regular burns to take photo due to button pressed after X burns
+    
+
 }

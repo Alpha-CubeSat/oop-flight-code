@@ -189,6 +189,7 @@ void NormalInSun::dispatch()
 {
     timed_out(sfr::mission::transmitInSun, sfr::acs::on_time);
     enter_lp_insun();
+    exit_insun_phase(sfr::mission::bootCamera);
 }
 
 void TransmitInSun::transition_to()
@@ -201,6 +202,7 @@ void TransmitInSun::dispatch()
 {
     timed_out(sfr::mission::normalInSun, sfr::mission::acs_transmit_cycle_time - sfr::acs::on_time);
     enter_lp_insun();
+    exit_insun_phase(sfr::mission::bootCamera);
 }
 
 void LowPowerInSun::transition_to()
@@ -230,6 +232,8 @@ void VoltageFailureInSun::dispatch()
     // zp74, different from the wiki diagram ???
     if (sfr::battery::voltage_average->is_valid()) {
         sfr::mission::current_mode = sfr::mission::normalInSun;
+    } else {
+        exit_insun_phase(sfr::mission::bootCamera);
     }
 }
 
@@ -241,8 +245,11 @@ void BootCamera::transition_to()
 }
 void BootCamera::dispatch()
 {
-    // zp74, how do I know how many times the camera failed?
-    // if(sfr::camera::turn_on || )
+    if(sfr::camera::init_mode == camera_init_mode_type::complete || sfr::camera::failed_times >= 5) {
+        // reset
+        sfr::camera::failed_times = 0;
+        sfr::mission::current_mode = sfr::mission::mandatoryBurns;
+    }
 }
 
 void MandatoryBurns::transition_to()
@@ -254,6 +261,7 @@ void MandatoryBurns::transition_to()
 
 void MandatoryBurns::dispatch()
 {
+    sfr::mission::current_mode = sfr::mission::regularBurns;
 }
 
 void RegularBurns::transition_to()
@@ -264,6 +272,13 @@ void RegularBurns::transition_to()
 }
 void RegularBurns::dispatch()
 {
+    if(!sfr::button::pressed || !sfr::photoresistor::covered) {
+        sfr::mission::current_mode = sfr::mission::photo;
+       
+    } else if(sfr::burnwire::attempts > sfr::burnwire::attemptsLimit) {
+        sfr::mission::current_mode = sfr::mission::transmitArmed;
+    }
+   
 }
 
 void Photo::transition_to()
@@ -271,8 +286,14 @@ void Photo::transition_to()
     sfr::rockblock::sleep_mode = true;
     sfr::acs::off = true;
     sfr::imu::sample = true;
+    // set two variables to true to make sure the CubeSat would take the photo
+    sfr::camera::take_photo = true;
+    sfr::camera::turn_on = true;
 }
-void Photo::dispatch() {}
+
+void Photo::dispatch() {
+    sfr::mission::current_mode = sfr::mission::detumbleSpin;
+}
 
 void exit_signal_phase(MissionMode *mode)
 {
@@ -304,6 +325,14 @@ void exit_detumble_phase(MissionMode *mode)
 
     // detumble has timed out
     if (millis() - sfr::mission::stabilization->start_time >= sfr::stabilization::max_time) {
+        sfr::mission::current_mode = mode;
+    }
+}
+
+void exit_insun_phase(MissionMode *mode) 
+{
+    if ((sfr::temperature::temp_c_average->is_valid() && sfr::temperature::in_sun) || 
+        (!sfr::temperature::temp_c_average->is_valid() && sfr::current::solar_current_average->is_valid() && sfr::current::in_sun)) {
         sfr::mission::current_mode = mode;
     }
 }
@@ -344,8 +373,7 @@ void enter_lp_insun()
         sfr::mission::current_mode = sfr::mission::voltageFailureInSun;
     } else if (sfr::battery::voltage_average->get_value() <= sfr::battery::min_battery) {
         sfr::mission::current_mode = sfr::mission::lowPowerInSun;
-    } else if ((sfr::temperature::temp_c_average->is_valid() && sfr::temperature::in_sun) || 
-               (!sfr::temperature::temp_c_average->is_valid() && sfr::current::solar_current_average->is_valid() && sfr::current::in_sun)) {
-        sfr::mission::current_mode = sfr::mission::bootCamera;
-    }
+    } 
 }
+
+

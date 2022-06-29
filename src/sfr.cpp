@@ -141,6 +141,7 @@ namespace sfr {
         bool arm = false;
         burnwire_mode_type mode = burnwire_mode_type::standby;
         int attempts = 0;
+        int attemptsLimit = 10;
         int start_time = 0;
         int camera_attempts = 0;
         int burn_time = 500;
@@ -157,6 +158,7 @@ namespace sfr {
         // Initialization
         camera_init_mode_type init_mode = camera_init_mode_type::awaiting;
         uint8_t start_progress = 0;
+        uint8_t failed_times = 0; // zp74, do I need to reset this value? what's the appropriate type?
         uint64_t step_time = 0;
         uint64_t init_start_time = 0;
         uint64_t init_timeout = 12000;
@@ -272,7 +274,7 @@ namespace sfr {
         const int gyro_500DPS_min = 245;
         const int gyro_2000DPS_min = 500;
 
-        bool sample = true;  // zp74, whether we should downlink gyro data to our buffer or not.
+        bool sample = true;  
     } // namespace imu
     namespace temperature {
         float temp_c = 0.0;
