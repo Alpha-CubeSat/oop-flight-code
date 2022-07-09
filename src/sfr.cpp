@@ -2,8 +2,9 @@
 
 namespace sfr {
     namespace stabilization {
-        float max_time = 30 * constants::time::one_minute;
-    }
+        // float max_time = 30 * constants::time::one_minute;
+        SFRField<float> max_time(30 * constants::time::one_minute, 10 * constants::time::one_minute, 60 * constants::time::one_minute, 1001);
+    } // namespace stabilization
     namespace boot {
         unsigned long max_time = constants::time::two_hours;
     }

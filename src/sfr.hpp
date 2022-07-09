@@ -21,6 +21,7 @@
 #include "Pins.hpp"
 #include "RockblockCommand.hpp"
 #include "RockblockSimulator.hpp"
+#include "SFRField.hpp"
 #include "SensorReading.hpp"
 #include "constants.hpp"
 #include <Adafruit_LSM9DS1.h>
@@ -38,8 +39,10 @@
 
 namespace sfr {
     namespace stabilization {
-        extern float max_time;
-    }
+        // SFRField<float> max_time(1.0f, 0.0f, 2.0f, 1001);
+        extern SFRField<float> max_time;
+        //  extern float max_time;
+    } // namespace stabilization
     namespace boot {
         extern unsigned long max_time;
     }
