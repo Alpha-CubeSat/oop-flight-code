@@ -46,17 +46,46 @@ void MainControlLoop::execute()
     // sfr::camera::init_mode = camera_init_mode_type::complete;
     // Serial.printf("current id : %d\n\n", sfr::mission::current_mode->get_id());
 
-    // test from turn on camera to mandatory burns due to failed times is larger than 5
-    if(count++ == 0) sfr::mission::current_mode = sfr::mission::bootCamera;
-    sfr::camera::turn_on = true;
-    sfr::camera::powered = false;
-    sfr::camera::init_mode = camera_init_mode_type::failed;
-    Serial.printf("failed times : %d\n\n", sfr::camera::failed_times);
-    Serial.printf("current id : %d\n", sfr::mission::current_mode->get_id());
+    // // test from turn on camera (18) to mandatory burns (19) due to failed times is larger than 5
+    // if(count++ == 0) sfr::mission::current_mode = sfr::mission::bootCamera;
+    // sfr::camera::turn_on = true;
+    // sfr::camera::powered = false;
+    // sfr::camera::init_mode = camera_init_mode_type::failed;
+    // Serial.printf("failed times : %d\n", sfr::camera::failed_times);
+    // Serial.printf("current id : %d\n\n", sfr::mission::current_mode->get_id());
 
-    // test from regular burns to take photo due to button unpressed 
-    // test from regular burns to take photo due to photoresistor uncovered
-    // test from regular burns to take photo due to button pressed after X burns
-    
+    // // test from mandatory burns to regular burns 
+    // if(count++ == 0) sfr::mission::current_mode = sfr::mission::mandatoryBurns;
+    // Serial.printf("current id : %d\n\n", sfr::mission::current_mode->get_id());
+
+    // // test from regular burns to take photo due to button unpressed 
+    // if(count++ == 0) sfr::mission::current_mode = sfr::mission::regularBurns;
+    // sfr::photoresistor::covered = true;
+    // sfr::button::pressed = false;
+    // Serial.printf("current id : %d\n\n", sfr::mission::current_mode->get_id());
+
+    // // test from regular burns to take photo due to photoresistor uncovered
+    // if(count++ == 0) sfr::mission::current_mode = sfr::mission::regularBurns;
+    // sfr::button::pressed = true;
+    // sfr::photoresistor::covered = false;
+    // Serial.printf("current id : %d\n\n", sfr::mission::current_mode->get_id());
+
+    // // test from regular burns to armed transition due to button pressed after X burns
+    // // zp74, BurnwireControlTask::dispatch_burn method isn't called, can't test attempts, still in development?
+    // if(count++ == 0) sfr::mission::current_mode = sfr::mission::regularBurns;
+    // sfr::button::pressed = true;
+    // sfr::photoresistor::covered = true;
+    // sfr::burnwire::attempts = 11;
+    // Serial.printf("current id : %d\n\n", sfr::mission::current_mode->get_id());
+
+    // test exit in sun phase
+    if(count++ == 0) sfr::mission::current_mode = sfr::mission::normalInSun;
+    // sfr::temperature::temp_c_average->set_valid();
+    // sfr::temperature::in_sun = true;
+
+    // sfr::temperature::temp_c_average->set_invalid();
+    // sfr::current::solar_current_average->set_valid();
+    // sfr::current::in_sun = true;
+    Serial.printf("current id : %d\n\n", sfr::mission::current_mode->get_id());
 
 }

@@ -229,7 +229,7 @@ void VoltageFailureInSun::transition_to()
 
 void VoltageFailureInSun::dispatch()
 {
-    // zp74, different from the wiki diagram ???
+    // zp74, different from the wiki diagram, change accordingly
     if (sfr::battery::voltage_average->is_valid()) {
         sfr::mission::current_mode = sfr::mission::normalInSun;
     } else {
