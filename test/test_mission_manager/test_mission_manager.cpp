@@ -268,30 +268,6 @@ void test_exit_detumble_phase(MissionManager mission_manager, MissionMode *curre
     reset(mission_manager, currentMode);
 }
 
-void test_exit_insun_phase(MissionManager mission_manager, MissionMode *currentMode, MissionMode *nextMode) {
-    reset(mission_manager, currentMode);
-
-    // exit if the CubeSat is in sun (Temperature sensor readings are valid and the temperature determines the CubeSat is in sun)
-    sfr::temperature::temp_c_average->set_valid();
-    sfr::temperature::in_sun = true;
-    // mission_manager.execute();
-    // zp74, why doesn't the code update?
-    TEST_ASSERT_EQUAL(sfr::mission::normalInSun->get_id(), sfr::mission::normalInSun->get_id());
-    // TEST_ASSERT_EQUAL(nextMode->get_id(), sfr::mission::current_mode->get_id());
-
-    reset(mission_manager, currentMode);
-
-    // exit if the CubeSat is in sun (Temperature sensor readings are invalid, current sensor readings are valid and current determines the CubeSat is in sun)
-    sfr::temperature::temp_c_average->set_invalid();
-    sfr::current::solar_current_average->set_valid();
-    sfr::current::in_sun = true;
-    mission_manager.execute();
-    // TEST_ASSERT_EQUAL(sfr::mission::bootCamera->get_id(), sfr::mission::current_mode->get_id());
-    // TEST_ASSERT_EQUAL(nextMode->get_id(), sfr::mission::current_mode->get_id());
-
-    reset(mission_manager, currentMode);
-}
-
 void test_valid_initialization()
 {
     MissionManager mission_manager(0);
@@ -463,25 +439,6 @@ void test_insun_voltage_fault_to_others(){
 
     reset(mission_manager, sfr::mission::voltageFailureInSun);
 }
-
-void test_exit_normal_insun() 
-{
-    MissionManager mission_manager(0);
-    test_exit_insun_phase(mission_manager, sfr::mission::normalInSun, sfr::mission::bootCamera);
-}
-
-void test_exit_transmit_insun() 
-{
-    MissionManager mission_manager(0);
-    test_exit_insun_phase(mission_manager, sfr::mission::transmitInSun, sfr::mission::bootCamera);
-}
-
-
-void test_exit_voltageFailure_insun() 
-{
-    MissionManager mission_manager(0);
-    test_exit_insun_phase(mission_manager, sfr::mission::voltageFailureInSun, sfr::mission::bootCamera);
-}
     
 int test_mission_manager()
 {
@@ -499,9 +456,6 @@ int test_mission_manager()
     RUN_TEST(test_insun_transmit_to_normal);
     RUN_TEST(test_insun_lp_to_others);
     RUN_TEST(test_insun_voltage_fault_to_others);
-    RUN_TEST(test_exit_normal_insun);
-    // RUN_TEST(test_exit_transmit_insun);
-    // RUN_TEST(test_exit_voltageFailure_insun);
     return UNITY_END();
 }
 
