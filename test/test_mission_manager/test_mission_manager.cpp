@@ -323,9 +323,6 @@ void test_exit_low_power_detumble_spin()
     test_exit_detumble_phase(mission_manager, sfr::mission::lowPowerDetumbleSpin, sfr::mission::lowPower);
 }
 
-
-
-
 void test_standard_phase(MissionMode *normalMode, MissionMode *lpMode, MissionMode *transmitMode)
 {
     //test exit normal
@@ -386,19 +383,19 @@ void test_enter_lp_insun(MissionManager mission_manager, MissionMode *currentMod
     reset(mission_manager, currentMode);
 }
 
-void test_insun_normal_to_transmit(){
+void test_exit_insun_normal(){
     MissionManager mission_manager(0);
     test_enter_lp_insun(mission_manager, sfr::mission::normalInSun);
     test_exit_acs(mission_manager, sfr::mission::normalInSun, sfr::mission::transmitInSun);
 }
 
-void test_insun_transmit_to_normal(){
+void test_exit_insun_transmit(){
     MissionManager mission_manager(0);
     test_enter_lp_insun(mission_manager, sfr::mission::transmitInSun);
     test_enter_acs(mission_manager, sfr::mission::transmitInSun, sfr::mission::normalInSun);
 }
 
-void test_insun_lp_to_others(){
+void test_exit_insun_lp(){
     MissionManager mission_manager(0);
     reset(mission_manager, sfr::mission::lowPowerInSun);
 
@@ -419,7 +416,7 @@ void test_insun_lp_to_others(){
     reset(mission_manager, sfr::mission::lowPowerInSun);
 }
 
-void test_insun_voltage_fault_to_others(){
+void test_exit_insun_voltage_fault(){
     MissionManager mission_manager(0);
     reset(mission_manager, sfr::mission::voltageFailureInSun);
 
@@ -452,10 +449,10 @@ int test_mission_manager()
     RUN_TEST(test_standby);
     RUN_TEST(test_deployment);
     RUN_TEST(test_armed);
-    RUN_TEST(test_insun_normal_to_transmit);
-    RUN_TEST(test_insun_transmit_to_normal);
-    RUN_TEST(test_insun_lp_to_others);
-    RUN_TEST(test_insun_voltage_fault_to_others);
+    RUN_TEST(test_exit_insun_normal);
+    RUN_TEST(test_exit_insun_transmit);
+    RUN_TEST(test_exit_insun_lp);
+    RUN_TEST(test_exit_insun_voltage_fault);
     return UNITY_END();
 }
 
