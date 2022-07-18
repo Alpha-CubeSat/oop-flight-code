@@ -44,10 +44,10 @@ namespace sfr {
         //  extern float max_time;
     } // namespace stabilization
     namespace boot {
-        extern unsigned long max_time;
+        extern SFRField<float> max_time;
     }
     namespace simple {
-        extern float max_time;
+        extern SFRField<float> max_time;
     }
     namespace point {
         extern float max_time;
@@ -151,7 +151,7 @@ namespace sfr {
         extern uint64_t init_start_time;
         extern uint64_t init_timeout;
         extern uint8_t begin_delay;
-        extern uint8_t resolution_set_delay;
+        extern uint16_t resolution_set_delay;
         extern uint8_t resolution_get_delay;
 
         extern uint64_t buffer[255];

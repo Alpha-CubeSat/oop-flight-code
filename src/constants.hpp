@@ -12,9 +12,6 @@ namespace constants {
         constexpr unsigned long one_day = 24 * one_hour;
 
         constexpr unsigned long half_second = one_second / 2;
-        constexpr unsigned long ten_minutes = 10 * one_minute;
-        constexpr unsigned long two_hours = 2 * one_hour;
-        constexpr unsigned long two_days = 2 * one_day;
     } // namespace time
     namespace sensor {
         constexpr int collect = 3;
@@ -42,7 +39,7 @@ namespace constants {
         constexpr int min_sleep_period = 2 * time::one_minute;
 
         constexpr int min_downlink_period = time::one_second;
-        constexpr int max_downlink_period = time::two_days;
+        constexpr int max_downlink_period = 2 * time::one_day;
 
         constexpr int baud = 19200;
         constexpr size_t buffer_size = 63;

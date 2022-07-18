@@ -1,6 +1,7 @@
 #include <map>
 #include <stdint.h>
 #include <type_traits>
+#include <limits>
 
 class SFRInterface
 {
@@ -23,10 +24,11 @@ template <typename T, typename = typename std::enable_if<std::is_arithmetic<T>::
 class SFRField : public SFRInterface
 {
 private:
-    T value;    // </brief Field Value, Only Arithmetic Types Allowed
-    T max;      // </brief Inclusive Minium Value
-    T min;      // </brief Inclusive Maximum Value
-    int opcode; // </brief Uplink Op Code to set this field
+    T value;      // </brief Field Value, Only Arithmetic Types Allowed
+    T max;        // </brief Inclusive Minium Value
+    T min;        // </brief Inclusive Maximum Value
+    bool bounded; // </brief If max and min are bounded beyond data type
+    int opcode;   // </brief Uplink Op Code to set this field
 
 #ifdef DEBUG
     T inital;
@@ -38,6 +40,18 @@ public:
         value = default_val;
         min = min;
         max = max;
+        bounded = true;
+        opcode = opcode_val;
+#ifdef DEBUG
+        T inital = default_val;
+#endif
+        SFRInterface::opcode_lookup[opcode_val] = this;
+    }
+
+    SFRField(T default_val, int opcode_val)
+    {
+        value = default_val;
+        bounded = false;
         opcode = opcode_val;
 #ifdef DEBUG
         T inital = default_val;
@@ -52,7 +66,7 @@ public:
     T get() { return value; }
     T set(T input)
     {
-        if (input <= max && input >= min) {
+        if (bounded && input <= max && input >= min) {
             value = input;
         }
     }
