@@ -37,8 +37,6 @@ void MainControlLoop::execute()
     faults::fault_2 = 0;
     faults::fault_3 = 0;
 
-    Serial.println("hello");
-
     clock_manager.execute();
 
     mission_manager.execute_on_time();
