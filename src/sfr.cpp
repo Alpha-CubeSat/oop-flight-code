@@ -2,20 +2,20 @@
 
 namespace sfr {
     namespace stabilization {
-        float max_time = 30 * constants::time::one_minute;
-    }
+        SFRField<float> max_time(30 * constants::time::one_minute, 0, 5 * constants::time::one_hour, 1001);
+    } // namespace stabilization
     namespace boot {
-        unsigned long max_time = constants::time::two_hours;
+        SFRField<float> max_time(2 * constants::time::one_hour, 10, 5 * constants::time::one_hour, 1002);
     }
     namespace simple {
-        float max_time = 5 * constants::time::one_minute;
+        SFRField<float> max_time(5 * constants::time::one_minute, 10, 5 * constants::time::one_hour, 1003);
     }
     namespace point {
         float max_time = 5 * constants::time::one_minute;
     }
     namespace detumble {
         float start_time = 0;
-        float max_time = constants::time::two_hours;
+        float max_time = 2 * constants::time::one_hour;
         // TODO
         int num_imu_retries = 0;
         int max_imu_retries = 5;
@@ -30,7 +30,7 @@ namespace sfr {
     namespace aliveSignal {
         int max_downlink_hard_faults = 3;
         bool downlinked = false;
-        float max_time = constants::time::two_hours;
+        float max_time = 2 * constants::time::one_hour;
         int num_hard_faults = 0;
     } // namespace aliveSignal
     namespace pins {
@@ -150,7 +150,7 @@ namespace sfr {
         int start_time = 0;
         int camera_attempts = 0;
         int burn_time = 500;
-        int armed_time = constants::time::two_days;
+        int armed_time = 2 * constants::time::one_day;
     } // namespace burnwire
     namespace camera {
         sensor_mode_type mode = sensor_mode_type::normal;
@@ -167,7 +167,7 @@ namespace sfr {
         uint64_t init_start_time = 0;
         uint64_t init_timeout = 12000;
         uint8_t begin_delay = 100;
-        uint8_t resolution_set_delay = 500;
+        uint16_t resolution_set_delay = 500;
         uint8_t resolution_get_delay = 200;
 
         uint64_t buffer[255] = {0};

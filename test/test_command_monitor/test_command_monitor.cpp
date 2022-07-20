@@ -110,7 +110,7 @@ void test_burn_times()
     sfr::rockblock::processed_commands.push_back(command);
     sfr::rockblock::waiting_command = true;
     command_monitor.execute();
-    TEST_ASSERT(sfr::burnwire::armed_time == constants::time::two_days);
+    TEST_ASSERT(sfr::burnwire::armed_time == 2 * constants::time::one_day);
 
     // arm time in range
     f_opcode = command_monitor.get_decimal_opcode(constants::rockblock::burnwire_timeout);
@@ -405,12 +405,12 @@ void test_down_period()
 
     // downlink period 2 hours
     uint16_t f_opcode = command_monitor.get_decimal_opcode(constants::rockblock::rockblock_downlink_period);
-    uint32_t f_arg_1 = constants::time::two_hours;
+    uint32_t f_arg_1 = 2 * constants::time::one_hour;
     RockblockCommand command = RockblockCommand(f_opcode, f_arg_1, 0);
     sfr::rockblock::processed_commands.push_back(command);
     sfr::rockblock::waiting_command = true;
     command_monitor.execute();
-    TEST_ASSERT(sfr::rockblock::downlink_period == constants::time::two_hours);
+    TEST_ASSERT(sfr::rockblock::downlink_period == 2 * constants::time::one_hour);
 
     // downlink period too low (500 ms)
     f_opcode = command_monitor.get_decimal_opcode(constants::rockblock::rockblock_downlink_period);
@@ -419,16 +419,16 @@ void test_down_period()
     sfr::rockblock::processed_commands.push_back(command);
     sfr::rockblock::waiting_command = true;
     command_monitor.execute();
-    TEST_ASSERT(sfr::rockblock::downlink_period == constants::time::two_hours);
+    TEST_ASSERT(sfr::rockblock::downlink_period == 2 * constants::time::one_hour);
 
     // downlink period too high (4 days)
     f_opcode = command_monitor.get_decimal_opcode(constants::rockblock::rockblock_downlink_period);
-    f_arg_1 = constants::time::two_days * 2;
+    f_arg_1 = 4 * constants::time::one_day;
     command = RockblockCommand(f_opcode, f_arg_1, 0);
     sfr::rockblock::processed_commands.push_back(command);
     sfr::rockblock::waiting_command = true;
     command_monitor.execute();
-    TEST_ASSERT(sfr::rockblock::downlink_period == constants::time::two_hours);
+    TEST_ASSERT(sfr::rockblock::downlink_period == 2 * constants::time::one_hour);
 
     // downlink period in middle (1 hour)
     f_opcode = command_monitor.get_decimal_opcode(constants::rockblock::rockblock_downlink_period);
@@ -462,7 +462,7 @@ void test_multiple_commands()
     sfr::rockblock::waiting_command = true;
     command_monitor.execute();
 
-    TEST_ASSERT(sfr::rockblock::downlink_period == constants::time::two_hours);
+    TEST_ASSERT(sfr::rockblock::downlink_period == 2 * constants::time::one_hour);
     TEST_ASSERT(sfr::camera::fragment_requested == true);
     TEST_ASSERT(sfr::camera::serial_requested == 1);
     TEST_ASSERT(sfr::camera::fragment_number_requested == 1);
