@@ -66,9 +66,11 @@ public:
     T get() { return value; }
     T set(T input)
     {
-        if (bounded && input <= max && input >= min) {
-            value = input;
-        }
+        if (bounded && input <= max && input >= min)
+            || !bounded
+            {
+                value = input;
+            }
     }
 #ifdef DEBUG
     void reset()
