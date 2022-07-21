@@ -62,7 +62,6 @@ namespace sfr {
     namespace photoresistor {
         int val = 0;
         bool covered = true;
-        std::deque<int> light_val_buffer;
         SensorReading *light_val_average = new SensorReading(fault_index_type::light_val, 0.0, false);
     } // namespace photoresistor
     namespace mission {
@@ -242,15 +241,6 @@ namespace sfr {
         float gyro_y = 0.0;
         float gyro_z = 0.0;
 
-        std::deque<float> mag_x_buffer;
-        std::deque<float> mag_y_buffer;
-        std::deque<float> mag_z_buffer;
-        std::deque<float> gyro_x_buffer;
-        std::deque<float> gyro_y_buffer;
-        std::deque<float> gyro_z_buffer;
-        std::deque<float> acc_x_buffer;
-        std::deque<float> acc_y_buffer;
-        std::deque<float> acc_z_buffer;
         std::deque<uint8_t> imu_dlink;
 
         SensorReading *mag_x_average = new SensorReading(fault_index_type::mag_x, 0.0, false);
@@ -288,13 +278,11 @@ namespace sfr {
     } // namespace imu
     namespace temperature {
         float temp_c = 0.0;
-        std::deque<float> temp_c_buffer;
         SensorReading *temp_c_average = new SensorReading(fault_index_type::temp_c, 0.0, false);
         bool in_sun = false;
     } // namespace temperature
     namespace current {
         float solar_current = 0.0;
-        std::deque<float> solar_current_buffer;
         SensorReading *solar_current_average = new SensorReading(fault_index_type::solar_current, 0.0, false);
         bool in_sun = false;
     } // namespace current
@@ -314,7 +302,6 @@ namespace sfr {
     } // namespace acs
     namespace battery {
         float voltage = 0.0;
-        std::deque<float> voltage_buffer;
         SensorReading *voltage_average = new SensorReading(fault_index_type::voltage, 0.0, false);
         // TODO
         float acceptable_battery;

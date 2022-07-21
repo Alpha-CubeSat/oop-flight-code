@@ -6,13 +6,15 @@
 #include "Modes/fault_index_type.enum"
 #include "constants.hpp"
 #include <map>
+#include <deque>
 
 class SensorReading
 {
 private:
-    fault_index_type type; // Type of reading
-    float value;           // Sensor reading (set to the averaged value in SFR)
-    bool fault_status;     // Fault flag: true means invalid reading and false means valid reading
+    fault_index_type type;    // Type of reading
+    // float value;           // Sensor reading (set to the averaged value in SFR)
+    std::deque<float> buffer; // buffer used to store the raw values
+    bool fault_status;        // Fault flag: true means invalid reading and false means valid reading
 
 public:
     SensorReading(fault_index_type t, float x, bool fault); // Constructor
