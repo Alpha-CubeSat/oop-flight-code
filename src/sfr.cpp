@@ -2,20 +2,20 @@
 
 namespace sfr {
     namespace stabilization {
-        float max_time = 30 * constants::time::one_minute;
-    }
+        SFRField<float> max_time(30 * constants::time::one_minute, 0, 5 * constants::time::one_hour, 1001);
+    } // namespace stabilization
     namespace boot {
-        unsigned long max_time = constants::time::two_hours;
+        SFRField<float> max_time(2 * constants::time::one_hour, 10, 5 * constants::time::one_hour, 1002);
     }
     namespace simple {
-        float max_time = 5 * constants::time::one_minute;
+        SFRField<float> max_time(5 * constants::time::one_minute, 10, 5 * constants::time::one_hour, 1003);
     }
     namespace point {
         float max_time = 5 * constants::time::one_minute;
     }
     namespace detumble {
         float start_time = 0;
-        float max_time = constants::time::two_hours;
+        float max_time = 2 * constants::time::one_hour;
         // TODO
         int num_imu_retries = 0;
         int max_imu_retries = 5;
@@ -30,7 +30,7 @@ namespace sfr {
     namespace aliveSignal {
         int max_downlink_hard_faults = 3;
         bool downlinked = false;
-        float max_time = constants::time::two_hours;
+        float max_time = 2 * constants::time::one_hour;
         int num_hard_faults = 0;
     } // namespace aliveSignal
     namespace pins {
@@ -62,6 +62,8 @@ namespace sfr {
     namespace photoresistor {
         int val = 0;
         bool covered = true;
+        std::deque<int> light_val_buffer;
+        SensorReading *light_val_average = new SensorReading(fault_index_type::light_val, 0.0, false);
     } // namespace photoresistor
     namespace mission {
         Boot boot_class;
@@ -135,6 +137,10 @@ namespace sfr {
         std::deque<int> mode_history;
 
         float acs_transmit_cycle_time = constants::time::one_minute * 100;
+
+        float time_deployed;
+        bool deployed;
+        bool already_deployed;
     } // namespace mission
     namespace burnwire {
         bool fire = false;
@@ -145,7 +151,7 @@ namespace sfr {
         int start_time = 0;
         int camera_attempts = 0;
         int burn_time = 500;
-        int armed_time = constants::time::two_days;
+        int armed_time = 2 * constants::time::one_day;
     } // namespace burnwire
     namespace camera {
         sensor_mode_type mode = sensor_mode_type::normal;
@@ -163,7 +169,7 @@ namespace sfr {
         uint64_t init_start_time = 0;
         uint64_t init_timeout = 12000;
         uint8_t begin_delay = 100;
-        uint8_t resolution_set_delay = 500;
+        uint16_t resolution_set_delay = 500;
         uint8_t resolution_get_delay = 200;
 
         uint64_t buffer[255] = {0};
@@ -195,18 +201,24 @@ namespace sfr {
         std::deque<uint8_t> downlink_report;
         std::deque<uint8_t> normal_report;
         std::deque<uint8_t> camera_report;
-        uint8_t imu_report[constants::rockblock::packet_size] = {0};
+        std::deque<uint8_t> imu_report;
 
         char buffer[constants::rockblock::buffer_size] = {0};
         int camera_commands[99][constants::rockblock::command_len] = {};
         int camera_max_fragments[99] = {};
         int commas[constants::rockblock::num_commas] = {0};
 
-        uint8_t opcode[2] = {0};
-        uint8_t arg_1[4] = {0};
-        uint8_t arg_2[4] = {0};
+        std::deque<RawRockblockCommand> raw_commands;
+        std::deque<RockblockCommand> processed_commands;
+        int max_commands_count = 10;
 
-        int imu_max_fragments = 10;
+        int imu_downlink_max_fragments[99] = {};
+        int imu_max_fragments = 256;
+
+        float imudownlink_start_time = 0.0;
+        float imudownlink_remain_time = constants::time::one_minute;
+        bool imu_first_start = true;
+        bool imu_downlink_on = true;
 #ifndef SIMULATOR
         HardwareSerial serial = Serial1;
 #else
@@ -215,9 +227,8 @@ namespace sfr {
         bool flush_status = false;
         bool waiting_command = false;
         size_t conseq_reads = 0;
-        uint16_t f_opcode = 0;
-        uint32_t f_arg_1 = 0;
-        uint32_t f_arg_2 = 0;
+        int timeout = 10 * constants::time::one_minute;
+        int start_time = 0;
         float start_time_check_signal = 0;
         float max_check_signal_time = constants::time::one_minute;
         bool sleep_mode = false;
@@ -242,10 +253,7 @@ namespace sfr {
         std::deque<float> acc_x_buffer;
         std::deque<float> acc_y_buffer;
         std::deque<float> acc_z_buffer;
-        // std::deque<std::experimental::any, time_t> imu_dlink_buffer;
-        std::deque<float> imu_dlink_gyro_x_buffer;
-        std::deque<float> imu_dlink_gyro_y_buffer;
-        std::deque<float> imu_dlink_gyro_z_buffer;
+        std::deque<uint8_t> imu_dlink;
 
         SensorReading *mag_x_average = new SensorReading(fault_index_type::mag_x, 0.0, false);
         SensorReading *mag_y_average = new SensorReading(fault_index_type::mag_y, 0.0, false);
@@ -256,23 +264,27 @@ namespace sfr {
         SensorReading *acc_x_average = new SensorReading(fault_index_type::acc_x, 0.0, false);
         SensorReading *acc_y_average = new SensorReading(fault_index_type::acc_y, 0.0, false);
 
-        imu_downlink_type imu_dlink_magid = imu_downlink_type::GAUSS_8;
-        const int imu_downlink_buffer_max_size = constants::sensor::collect; // not determined yet
-        const int imu_downlink_report_size = constants::sensor::collect * 5;
-        uint8_t imu_downlink_report[imu_downlink_report_size];
+        SensorReading *gyro_x_value = new SensorReading(fault_index_type::gyro_x, 0.0, false);
+        SensorReading *gyro_y_value = new SensorReading(fault_index_type::gyro_y, 0.0, false);
+        SensorReading *gyro_z_value = new SensorReading(fault_index_type::gyro_z, 0.0, false);
 
-        int fragment_number = 0;
-        bool fragment_requested = false;
-        int fragments_written = 0;
-        bool imu_dlink_report_ready = false;
+        // check with Josh
+        int gyro_min = -245;
+        int gyro_max = 245;
+        int mag_min = -8;
+        int mag_max = 8;
+
+        bool start_timing_deployed = false;
+        float start_time_deployed = 0.0;
+        uint8_t current_sample = 0;
+        bool sample_gyro = false;
+        uint8_t fragment_number = 0;
+        bool report_ready = false;
         bool report_downlinked = true;
-        char filename[15];
-
-        const int mag_8GAUSS_min = 4;
-        const int mag_12GAUSS_min = 8;
-        const int mag_16GAUSS_min = 12;
-        const int gyro_500DPS_min = 245;
-        const int gyro_2000DPS_min = 500;
+        bool report_written = false;
+        bool full_report_written = false;
+        int max_fragments = 256;
+        int content_length = 68;
 
         bool sample = true;
     } // namespace imu
@@ -341,4 +353,11 @@ namespace sfr {
     namespace button {
         bool pressed = true;
     }
+    namespace EEPROM {
+        int time_of_last_write = 0;
+        int write_step_time = 1000; // the amount of time between each write to EEPROM
+        int alloted_time = 7200000; // the amount of time for the EEPROM to count to (7200000 ms = 2 h)
+        int eeprom_value = 0;       // the amount of time that the EEPROM has counted, stops when the alloted time has been reached
+        bool alloted_time_passed = false;
+    } // namespace EEPROM
 } // namespace sfr

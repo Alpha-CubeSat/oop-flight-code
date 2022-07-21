@@ -10,8 +10,8 @@ void reset(){
     sfr::aliveSignal::downlinked = false;
     sfr::mission::stabilization->set_start_time(millis());
     sfr::mission::inSun->set_start_time(millis());
-    sfr::detumble::max_time = constants::time::two_hours;
-    sfr::boot::max_time = constants::time::two_days;
+    sfr::detumble::max_time = 4 * constants::time::one_hour;
+    sfr::boot::max_time = constants::time::one_day;
     sfr::battery::voltage_average->set_value(sfr::battery::acceptable_battery+.1);
     sfr::rockblock::max_check_signal_time = constants::time::one_minute;
     sfr::acs::on_time = constants::time::one_minute;

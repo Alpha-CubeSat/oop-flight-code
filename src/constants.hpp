@@ -12,16 +12,13 @@ namespace constants {
         constexpr unsigned long one_day = 24 * one_hour;
 
         constexpr unsigned long half_second = one_second / 2;
-        constexpr unsigned long ten_minutes = 10 * one_minute;
-        constexpr unsigned long two_hours = 2 * one_hour;
-        constexpr unsigned long two_days = 2 * one_day;
     } // namespace time
     namespace sensor {
         constexpr int collect = 3;
     } // namespace sensor
     namespace photoresistor {
         constexpr int pin = 38;
-        constexpr int light_val = 150;
+        constexpr int light_val = 200;
         constexpr int min_val = 0;
         constexpr int max_val = 1023;
     } // namespace photoresistor
@@ -37,17 +34,12 @@ namespace constants {
         constexpr int max_armed_time = 86400000;
     } // namespace burnwire
     namespace rockblock {
-        constexpr unsigned long one_second = 1000;
-        constexpr unsigned long one_minute = 60 * one_second;
-        constexpr unsigned long one_hour = 60 * one_minute;
-        constexpr unsigned long one_day = 24 * one_hour;
-
         constexpr int sleep_pin = 19;
 
         constexpr int min_sleep_period = 2 * time::one_minute;
 
         constexpr int min_downlink_period = time::one_second;
-        constexpr int max_downlink_period = time::two_days;
+        constexpr int max_downlink_period = 2 * time::one_day;
 
         constexpr int baud = 19200;
         constexpr size_t buffer_size = 63;
@@ -65,6 +57,8 @@ namespace constants {
         constexpr uint8_t start_of_normal_downlink_flag = 99;
         constexpr uint8_t end_of_normal_downlink_flag1 = 254;
         constexpr uint8_t end_of_normal_downlink_flag2 = 255;
+        constexpr uint8_t end_of_command_upload_flag1 = 0;
+        constexpr uint8_t end_of_command_upload_flag2 = 250;
 
         constexpr uint8_t mission_mode[opcode_len] = {0x00, 0x00};
         constexpr uint8_t burnwire_arm[opcode_len] = {0x01, 0x00};
@@ -79,6 +73,7 @@ namespace constants {
         constexpr uint8_t change_simplified_acs[opcode_len] = {0x0A, 0x00};
         constexpr uint8_t camera_turn_on[opcode_len] = {0x0B, 0x00};
         constexpr uint8_t camera_turn_off[opcode_len] = {0x0C, 0x00};
+        constexpr uint8_t request_imu_downlink_fragment[opcode_len] = {0x0D, 0x00}; // change
         constexpr uint8_t fault_mode[opcode_len] = {0xF1, 0xFF};
         constexpr uint8_t fault_check_mag_x[opcode_len] = {0xF2, 0xFF};
         constexpr uint8_t fault_check_mag_y[opcode_len] = {0xF3, 0xFF};
@@ -426,6 +421,7 @@ namespace constants {
         constexpr uint8_t burn_wire = 1 << 0;
         constexpr uint8_t sd_card = 1 << 1;
         constexpr uint8_t camera_on_failed = 1 << 2;
+        constexpr uint8_t light_val = 1 << 3;
     } // namespace fault
     namespace camera {
         constexpr int power_on_pin = 31;
@@ -459,11 +455,13 @@ namespace constants {
         constexpr float min_gyro_z = 0.0;
         constexpr float max_gyro_z = 10;
 
-        constexpr int bytes_allocated_fragment = 1;
+        constexpr int bytes_allocated_fragment = 3;
         constexpr int bytes_allocated_serial_opcode = 2;
 
         constexpr int CSAG = 21;
         constexpr int CSM = 20;
+
+        constexpr int max_gyro_imu_report_size = 66;
     } // namespace imu
     namespace timecontrol {
         // Environment-based initializations of the control loop time.
@@ -483,7 +481,9 @@ namespace constants {
         static constexpr unsigned int current_monitor_offset = 0;
         static constexpr unsigned int fault_monitor_offset = 0;
         static constexpr unsigned int imu_monitor_offset = 0;
+        static constexpr unsigned int imu_downlink_offset = 0;
         static constexpr unsigned int normal_report_monitor_offset = 0;
+        static constexpr unsigned int imudownlink_report_monitor_offset = 0;
         static constexpr unsigned int photoresistor_monitor_offset = 0;
         static constexpr unsigned int temperature_monitor_offset = 0;
 

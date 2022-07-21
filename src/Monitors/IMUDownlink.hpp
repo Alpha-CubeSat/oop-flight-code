@@ -1,6 +1,5 @@
 #ifndef IMU_DOWNLINK_HPP_
 #define IMU_DOWNLINK_HPP_
-
 #include "sfr.hpp"
 
 class IMUDownlink : public TimedControlTask<void>

@@ -48,7 +48,8 @@
         "any": "cpp",
         "map": "cpp",
         "cstddef": "cpp",
-        "string": "cpp"
+        "string": "cpp",
+        "random": "cpp"
     },
     "C_Cpp.dimInactiveRegions": false,
     "C_Cpp.formatting": "clangFormat"
