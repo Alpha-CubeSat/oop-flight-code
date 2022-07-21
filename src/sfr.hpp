@@ -118,7 +118,7 @@ namespace sfr {
         extern bool arm;
         extern burnwire_mode_type mode;
         extern int attempts;
-        extern int attemptsLimit;
+        extern int attempts_limit;
         extern int start_time;
         extern int camera_attempts;
         extern int burn_time;

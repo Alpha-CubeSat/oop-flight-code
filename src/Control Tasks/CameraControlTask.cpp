@@ -35,7 +35,8 @@ void CameraControlTask::execute()
             transition_to_normal();
         }
         if (sfr::camera::init_mode == camera_init_mode_type::failed) {
-            if(sfr::camera::failed_times < 10) sfr::camera::failed_times = sfr::camera::failed_times + 1;
+            if (sfr::camera::failed_times < 10)
+                sfr::camera::failed_times = sfr::camera::failed_times + 1;
             transition_to_abnormal_init();
         }
     }

@@ -229,7 +229,6 @@ void VoltageFailureInSun::transition_to()
 
 void VoltageFailureInSun::dispatch()
 {
-    // zp74, different from the wiki diagram, change accordingly
     if (sfr::battery::voltage_average->is_valid()) {
         sfr::mission::current_mode = sfr::mission::normalInSun;
     } else {
@@ -245,7 +244,7 @@ void BootCamera::transition_to()
 }
 void BootCamera::dispatch()
 {
-    if(sfr::camera::init_mode == camera_init_mode_type::complete || sfr::camera::failed_times >= 5) {
+    if (sfr::camera::init_mode == camera_init_mode_type::complete || sfr::camera::failed_times >= 5) {
         // reset
         sfr::camera::failed_times = 0;
         sfr::mission::current_mode = sfr::mission::mandatoryBurns;
@@ -272,13 +271,12 @@ void RegularBurns::transition_to()
 }
 void RegularBurns::dispatch()
 {
-    if(!sfr::button::pressed || !sfr::photoresistor::covered) {
+    if (!sfr::button::pressed || !sfr::photoresistor::covered) {
         sfr::mission::current_mode = sfr::mission::photo;
-       
-    } else if(sfr::burnwire::attempts > sfr::burnwire::attemptsLimit) {
+
+    } else if (sfr::burnwire::attempts > sfr::burnwire::attempts_limit) {
         sfr::mission::current_mode = sfr::mission::transmitArmed;
     }
-   
 }
 
 void Photo::transition_to()
@@ -291,7 +289,8 @@ void Photo::transition_to()
     sfr::camera::turn_on = true;
 }
 
-void Photo::dispatch() {
+void Photo::dispatch()
+{
     sfr::mission::current_mode = sfr::mission::detumbleSpin;
 }
 
@@ -329,9 +328,9 @@ void exit_detumble_phase(MissionMode *mode)
     }
 }
 
-void exit_insun_phase(MissionMode *mode) 
+void exit_insun_phase(MissionMode *mode)
 {
-    if ((sfr::temperature::temp_c_average->is_valid() && sfr::temperature::in_sun) || 
+    if ((sfr::temperature::temp_c_average->is_valid() && sfr::temperature::in_sun) ||
         (!sfr::temperature::temp_c_average->is_valid() && sfr::current::solar_current_average->is_valid() && sfr::current::in_sun)) {
         sfr::mission::current_mode = mode;
     }
@@ -373,7 +372,5 @@ void enter_lp_insun()
         sfr::mission::current_mode = sfr::mission::voltageFailureInSun;
     } else if (sfr::battery::voltage_average->get_value() <= sfr::battery::min_battery) {
         sfr::mission::current_mode = sfr::mission::lowPowerInSun;
-    } 
+    }
 }
-
-

@@ -19,7 +19,7 @@ void MainControlLoop::execute()
 
     acs_monitor.execute_on_time();
     battery_monitor.execute_on_time();
-   
+
     button_monitor.execute_on_time();
     camera_report_monitor.execute_on_time();
     command_monitor.execute_on_time();
