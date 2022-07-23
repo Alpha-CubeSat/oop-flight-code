@@ -2,23 +2,28 @@
 
 namespace sfr {
     namespace stabilization {
-        SFRField<float> max_time(30 * constants::time::one_minute, 0, 5 * constants::time::one_hour, 1001);
+        // OP Codes 1100
+        SFRField<uint32_t> max_time(30 * constants::time::one_minute, 0UL, 5 * constants::time::one_hour, 1100);
     } // namespace stabilization
     namespace boot {
-        SFRField<float> max_time(2 * constants::time::one_hour, 10, 5 * constants::time::one_hour, 1002);
-    }
+        // OP Codes 1200
+        SFRField<uint32_t> max_time(2 * constants::time::one_hour, 10UL, 5 * constants::time::one_hour, 1200);
+    } // namespace boot
     namespace simple {
-        SFRField<float> max_time(5 * constants::time::one_minute, 10, 5 * constants::time::one_hour, 1003);
-    }
+        // OP Codes 1300
+        SFRField<uint32_t> max_time(5 * constants::time::one_minute, 10UL, 5 * constants::time::one_hour, 1300);
+    } // namespace simple
     namespace point {
-        float max_time = 5 * constants::time::one_minute;
-    }
+        // OP Codes 1400
+        SFRField<uint32_t> max_time(5 * constants::time::one_minute, 1400);
+    } // namespace point
     namespace detumble {
-        float start_time = 0;
-        float max_time = 2 * constants::time::one_hour;
+        // OP Codes 1500
+        SFRField<uint32_t> start_time(0UL, 1500);
+        SFRField<uint32_t> max_time(2 * constants::time::one_hour, 1501);
         // TODO
-        int num_imu_retries = 0;
-        int max_imu_retries = 5;
+        SFRField<uint16_t> num_imu_retries(0, 1502);
+        SFRField<uint16_t> max_imu_retries(5, 1503);
 
         float min_stable_gyro_z = 1;
         float max_stable_gyro_x = 0.2;
@@ -28,12 +33,14 @@ namespace sfr {
         float min_unstable_gyro_y = 0.7;
     } // namespace detumble
     namespace aliveSignal {
-        int max_downlink_hard_faults = 3;
-        bool downlinked = false;
-        float max_time = 2 * constants::time::one_hour;
-        int num_hard_faults = 0;
+        // OP Codes 1600
+        SFRField<uint16_t> max_downlink_hard_faults(3, 1600);
+        SFRField<bool> downlinked(false, 1601);
+        SFRField<uint32_t> max_time(2 * constants::time::one_hour, 1602);
+        SFRField<uint16_t> num_hard_faults(0, 1603);
     } // namespace aliveSignal
     namespace pins {
+        // OP Codes N/A
         std::map<int, int> pinMap = {
             {constants::photoresistor::pin, LOW},
             {constants::burnwire::first_pin, LOW},
@@ -60,12 +67,14 @@ namespace sfr {
             {constants::button::button_pin, LOW}};
     } // namespace pins
     namespace photoresistor {
+        // OP Codes 1700
         int val = 0;
-        bool covered = true;
+        SFRField<bool> covered(true, 1700);
         std::deque<int> light_val_buffer;
         SensorReading *light_val_average = new SensorReading(fault_index_type::light_val, 0.0, false);
     } // namespace photoresistor
     namespace mission {
+        // OP Codes 1800
         Boot boot_class;
         AliveSignal aliveSignal_class;
         LowPowerAliveSignal lowPowerAliveSignal_class;
@@ -136,44 +145,47 @@ namespace sfr {
 
         std::deque<int> mode_history;
 
-        float acs_transmit_cycle_time = constants::time::one_minute * 100;
+        SFRField<uint32_t> acs_transmit_cycle_time(constants::time::one_minute * 100, 1800);
 
-        float time_deployed;
-        bool deployed;
-        bool already_deployed;
+        SFRField<uint32_t> time_deployed(0, 1801);
+        SFRField<bool> deployed(false, 1802);
+        SFRField<bool> already_deployed(false, 1803);
+
     } // namespace mission
     namespace burnwire {
-        bool fire = false;
-        bool arm = false;
+        // OP Codes 1900
         burnwire_mode_type mode = burnwire_mode_type::standby;
-        int attempts = 0;
-        int start_time = 0;
-        int camera_attempts = 0;
-        int burn_time = 500;
-        int armed_time = 2 * constants::time::one_day;
+        SFRField<bool> fire(false, 1900);
+        SFRField<bool> arm(false, 1901);
+        SFRField<uint16_t> attempts(0, 1902);
+        SFRField<uint16_t> camera_attempts(0, 1904);
+        SFRField<uint32_t> start_time(0, 1903);
+        SFRField<uint32_t> burn_time(500, 1905);
+        SFRField<uint32_t> armed_time(2 * constants::time::one_day, 1906);
     } // namespace burnwire
     namespace camera {
+        // OP Codes 2000
         sensor_mode_type mode = sensor_mode_type::normal;
-        bool photo_taken_sd_failed = false;
-        bool take_photo = false;
-        bool turn_on = false;
-        bool turn_off = false;
-        bool powered = false;
+        SFRField<bool> photo_taken_sd_failed(false, 2000);
+        SFRField<bool> take_photo(false, 2001);
+        SFRField<bool> turn_on(false, 2002);
+        SFRField<bool> turn_off(false, 2003);
+        SFRField<bool> powered(false, 2004);
 
         // Initialization
         camera_init_mode_type init_mode = camera_init_mode_type::awaiting;
-        uint8_t start_progress = 0;
-        uint64_t step_time = 0;
-        uint64_t init_start_time = 0;
-        uint64_t init_timeout = 12000;
-        uint8_t begin_delay = 100;
-        uint16_t resolution_set_delay = 500;
-        uint8_t resolution_get_delay = 200;
+        SFRField<uint8_t> start_progress(0, 2005);
+        SFRField<uint32_t> step_time(0, 2006);
+        SFRField<uint32_t> init_start_time(0, 2007);
+        SFRField<uint32_t> init_timeout(12000, 2008);
+        SFRField<uint32_t> begin_delay(100, 2009);
+        SFRField<uint32_t> resolution_set_delay(500, 2010);
+        SFRField<uint32_t> resolution_get_delay(200, 2011);
 
-        uint64_t buffer[255] = {0};
+        //@Lauren What here should be settable
         int current_serial = 0;
         int fragment_number = 0;
-        int fragment_number_requested = 3;
+        int fragment_number_requested = 3; //@Lauren why's this = 3?
         int serial_requested = 0;
         bool fragment_requested = false;
         int images_written = 0;
@@ -187,14 +199,15 @@ namespace sfr {
         uint8_t set_res = VC0706_160x120;
     } // namespace camera
     namespace rockblock {
+        // OP Codes 2100
         report_type downlink_report_type = report_type::normal_report;
-        bool rockblock_ready_status = false;
         rockblock_mode_type mode = rockblock_mode_type::send_at;
+        SFRField<bool> rockblock_ready_status(false, 2100);
 
-        unsigned long last_downlink = 0;
-        unsigned long downlink_period = 0;
+        SFRField<uint32_t> last_downlink(0, 2101);
+        SFRField<uint32_t> downlink_period(0, 2102);
 
-        bool waiting_message = false;
+        SFRField<bool> waiting_message(false, 2103);
 
         std::deque<uint8_t> downlink_report;
         std::deque<uint8_t> normal_report;
@@ -208,32 +221,33 @@ namespace sfr {
 
         std::deque<RawRockblockCommand> raw_commands;
         std::deque<RockblockCommand> processed_commands;
-        int max_commands_count = 10;
+        SFRField<uint8_t> max_commands_count(10, 2104);
 
         int imu_downlink_max_fragments[99] = {};
-        int imu_max_fragments = 256;
+        SFRField<uint16_t> imu_max_fragments(256, 2105);
 
-        float imudownlink_start_time = 0.0;
-        float imudownlink_remain_time = constants::time::one_minute;
-        bool imu_first_start = true;
-        bool imu_downlink_on = true;
+        SFRField<uint32_t> imudownlink_start_time(0, 2106);
+        SFRField<uint32_t> imudownlink_remain_time(constants::time::one_minute, 2107);
+        SFRField<bool> imu_first_start(true, 2108);
+        SFRField<bool> imu_downlink_on(true, 2109);
 #ifndef SIMULATOR
         HardwareSerial serial = Serial1;
 #else
         RockblockSimulator serial;
 #endif
-        bool flush_status = false;
-        bool waiting_command = false;
-        size_t conseq_reads = 0;
-        int timeout = 10 * constants::time::one_minute;
-        int start_time = 0;
-        float start_time_check_signal = 0;
-        float max_check_signal_time = constants::time::one_minute;
-        bool sleep_mode = false;
+        SFRField<bool> flush_status(false, 2108);
+        SFRField<bool> waiting_command(false, 2109);
+        SFRField<uint32_t> conseq_reads(0, 2110);
+        SFRField<uint32_t> timeout(10 * constants::time::one_minute, 2111);
+        SFRField<uint32_t> start_time(0, 2112);
+        SFRField<uint32_t> start_time_check_signal(0, 2113);
+        SFRField<uint32_t> max_check_signal_time(constants::time::one_minute, 2114);
+        SFRField<bool> sleep_mode(false, 2115);
     } // namespace rockblock
     namespace imu {
+        // OP Codes 2200
         sensor_mode_type mode = sensor_mode_type::init;
-        bool successful_init = true;
+        SFRField<bool> successful_init(true, 2200);
 
         float mag_x = 0.0;
         float mag_y = 0.0;
@@ -272,6 +286,7 @@ namespace sfr {
         int mag_min = -8;
         int mag_max = 8;
 
+        //@Lauren Which of these should be settable
         bool start_timing_deployed = false;
         float start_time_deployed = 0.0;
         uint8_t current_sample = 0;
@@ -287,19 +302,22 @@ namespace sfr {
         bool sample = true;
     } // namespace imu
     namespace temperature {
+        // OP Codes 2300
         float temp_c = 0.0;
         std::deque<float> temp_c_buffer;
         SensorReading *temp_c_average = new SensorReading(fault_index_type::temp_c, 0.0, false);
-        bool in_sun = false;
+        SFRField<bool> in_sun(false, 2300);
     } // namespace temperature
     namespace current {
+        // OP Codes 2400
         float solar_current = 0.0;
         std::deque<float> solar_current_buffer;
         SensorReading *solar_current_average = new SensorReading(fault_index_type::solar_current, 0.0, false);
-        bool in_sun = false;
+        SFRField<bool> in_sun(false, 2400);
     } // namespace current
 
     namespace acs {
+        // OP Codes 2500
         float current1 = 0;
         float current2 = 0;
         float current3 = 0;
@@ -307,12 +325,13 @@ namespace sfr {
         float pwm2 = 0;
         float pwm3 = 0;
         simple_acs_type mag = simple_acs_type::x;
-        unsigned long max_no_communication = 0;
+        SFRField<uint32_t> max_no_communication(0, 2500);
 
-        float on_time = 5 * constants::time::one_minute;
-        bool off = true;
+        SFRField<uint32_t> on_time(5 * constants::time::one_minute, 2501);
+        SFRField<bool> off(true, 2502);
     } // namespace acs
     namespace battery {
+        // OP Codes 2600
         float voltage = 0.0;
         std::deque<float> voltage_buffer;
         SensorReading *voltage_average = new SensorReading(fault_index_type::voltage, 0.0, false);
@@ -321,6 +340,7 @@ namespace sfr {
         float min_battery;
     } // namespace battery
     namespace fault {
+        // OP Codes 2700
         fault_mode_type mode = fault_mode_type::active;
 
         // unsigned char fault_1 = 0;
@@ -349,13 +369,15 @@ namespace sfr {
         // bool check_camera_on_failed = true;
     } // namespace fault
     namespace button {
-        bool pressed = true;
-    }
+        // OP Codes 2800
+        SFRField<bool> pressed(true, 2800);
+    } // namespace button
     namespace EEPROM {
-        int time_of_last_write = 0;
-        int write_step_time = 1000; // the amount of time between each write to EEPROM
-        int alloted_time = 7200000; // the amount of time for the EEPROM to count to (7200000 ms = 2 h)
-        int eeprom_value = 0;       // the amount of time that the EEPROM has counted, stops when the alloted time has been reached
-        bool alloted_time_passed = false;
+        // OP Codes 2900
+        SFRField<uint32_t> time_of_last_write(0, 2900);
+        SFRField<uint32_t> write_step_time(1000, 2901); // the amount of time between each write to EEPROM
+        SFRField<uint32_t> alloted_time(7200000, 2902); // the amount of time for the EEPROM to count to (7200000 ms = 2 h)
+        SFRField<uint32_t> eeprom_value(0, 2905);       // the amount of time that the EEPROM has counted, stops when the alloted time has been reached
+        SFRField<bool> alloted_time_passed(false, 2904);
     } // namespace EEPROM
 } // namespace sfr

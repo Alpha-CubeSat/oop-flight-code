@@ -26,7 +26,7 @@ void NormalReportMonitor::execute()
 
     uint8_t voltage = map(sfr::battery::voltage_average->get_value(), constants::battery::min_voltage, constants::battery::max_voltage, 0, 255);
 
-    uint8_t downlink_period = map(sfr::rockblock::downlink_period, constants::rockblock::min_downlink_period, constants::rockblock::max_downlink_period, 0, 255);
+    uint8_t downlink_period = map(sfr::rockblock::downlink_period.get(), constants::rockblock::min_downlink_period, constants::rockblock::max_downlink_period, 0, 255);
 
     sfr::rockblock::normal_report.clear();
     sfr::rockblock::normal_report.push_back(constants::rockblock::start_of_normal_downlink_flag);
