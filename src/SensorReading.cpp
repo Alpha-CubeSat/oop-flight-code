@@ -38,40 +38,53 @@ std::map<fault_index_type, uint8_t> map_to_mask = {
     {fault_index_type::camera_on_failed, constants::fault::camera_on_failed},
 }; // map from a fault type to the mask
 
-SensorReading::SensorReading(fault_index_type t, float x, bool fault)
+SensorReading::SensorReading(fault_index_type type, uint8_t buffer_size, float max, float min)
 {
-    type = t;
-    fault_status = fault;
+    type = type;
+    buffer_size = buffer_size;
+    max = max;
+    min = min;
     buffer.clear();
-    buffer.push_back(x);
 } // constructor
 
-float SensorReading::get_value()
+boolean SensorReading::get_value(float *value_location)
 {
-    // zp74, what should I return if the value is invalid?
-    if(buffer.size() == 1) return buffer.back();
-    float sum = 0;
-    auto size = buffer.size();
-    for(float n : buffer) sum += n;
-    buffer.clear();
-    buffer.push_back(sum / size);
-    return buffer.back();
-} // accesser for valoue
+    // enough values have been accumulated to get the average
+    if (buffer.size() == buffer_size) {
+        // get average value
+        float average = (std::accumulate(buffer.begin(), buffer.end(), 0.0))/buffer_size;
+        value_location = &average;
+        return 1;
+    } else {
+        return -1;
+    }
 
-bool SensorReading::is_valid()
-{
-    return !fault_status;
-} // accesser for fault
+} 
 
 void SensorReading::set_value(float x)
 {
-    buffer.clear();
-    buffer.push_back(x);
-} // mutator for value
+    // check if value is within expected range
+    if (x <= max && x >= min) {
+        if (valid) {
+            // add value to buffer
+            buffer.push_front(x);
+
+            // check if buffer is full
+            if (buffer.size() > buffer_size) {
+                // remove oldest value from buffer
+                buffer.pop_back();
+            }
+        }
+    } else {
+        set_invalid();
+    }
+
+} // mutator for buffer
 
 void SensorReading::set_valid()
 {
-    this->fault_status = false; // set the fault status to false (no fault)
+    valid = true;
+    // clear fault bit
     if (map_to_reg[this->type] == 1) {
         faults::fault_1 &= ~map_to_mask[this->type];
     } else if (map_to_reg[this->type] == 2) {
@@ -79,11 +92,16 @@ void SensorReading::set_valid()
     } else {
         faults::fault_3 &= ~map_to_mask[this->type];
     } // clear the flag in the corresponding fault register
-} // mutator for fault status
+}
 
 void SensorReading::set_invalid()
 {
-    this->fault_status = true; // set the fault status to true
+    valid = false;
+
+    // clear buffer
+    buffer.clear();
+
+    // set fault bit
     if (map_to_reg[this->type] == 1) {
         faults::fault_1 |= map_to_mask[this->type];
     } else if (map_to_reg[this->type] == 2) {
@@ -91,4 +109,4 @@ void SensorReading::set_invalid()
     } else {
         faults::fault_3 |= map_to_mask[this->type];
     } // set the flag in the corresponding fault register
-} // mutator for fault status
+}
