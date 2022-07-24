@@ -13,7 +13,6 @@
 #include "Monitors/CameraReportMonitor.hpp"
 #include "Monitors/CommandMonitor.hpp"
 #include "Monitors/CurrentMonitor.hpp"
-#include "Monitors/FaultMonitor.hpp"
 #include "Monitors/IMUDownlinkReportMonitor.hpp"
 #include "Monitors/IMUMonitor.hpp"
 #include "Monitors/NormalReportMonitor.hpp"
@@ -33,7 +32,6 @@ protected:
     CameraReportMonitor camera_report_monitor;
     CommandMonitor command_monitor;
     CurrentMonitor current_monitor;
-    FaultMonitor fault_monitor;
     IMUMonitor imu_monitor;
     IMUDownlink imu_downlink;
     NormalReportMonitor normal_report_monitor;

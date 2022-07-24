@@ -47,24 +47,33 @@ SensorReading::SensorReading(fault_index_type type, uint8_t buffer_size, float m
     buffer.clear();
 } // constructor
 
+SensorReading::SensorReading(uint8_t buffer_size, float max, float min)
+{
+    type = NULL;
+    buffer_size = buffer_size;
+    max = max;
+    min = min;
+    buffer.clear();
+} // constructor
+
 boolean SensorReading::get_value(float *value_location)
 {
     // enough values have been accumulated to get the average
-    if (buffer.size() == buffer_size) {
+    if (buffer.size() == buffer_size && valid) {
         // get average value
-        float average = (std::accumulate(buffer.begin(), buffer.end(), 0.0))/buffer_size;
+        float average = (std::accumulate(buffer.begin(), buffer.end(), 0.0)) / buffer_size;
         value_location = &average;
         return 1;
     } else {
         return -1;
     }
-
-} 
+}
 
 void SensorReading::set_value(float x)
 {
+    // LJG TODO might need to add whether we want to check for repeated values in the constructor
     // check if value is within expected range
-    if (x <= max && x >= min) {
+    if (x <= max && x >= min && !repeated_values(buffer)) {
         if (valid) {
             // add value to buffer
             buffer.push_front(x);
@@ -84,14 +93,17 @@ void SensorReading::set_value(float x)
 void SensorReading::set_valid()
 {
     valid = true;
-    // clear fault bit
-    if (map_to_reg[this->type] == 1) {
-        faults::fault_1 &= ~map_to_mask[this->type];
-    } else if (map_to_reg[this->type] == 2) {
-        faults::fault_2 &= ~map_to_mask[this->type];
-    } else {
-        faults::fault_3 &= ~map_to_mask[this->type];
-    } // clear the flag in the corresponding fault register
+
+    if (type != NULL)
+        // clear fault bit
+        if (map_to_reg[this->type] == 1) {
+            faults::fault_1 &= ~map_to_mask[this->type];
+        } else if (map_to_reg[this->type] == 2) {
+            faults::fault_2 &= ~map_to_mask[this->type];
+        } else {
+            faults::fault_3 &= ~map_to_mask[this->type];
+        } // clear the flag in the corresponding fault register
+}
 }
 
 void SensorReading::set_invalid()
@@ -101,12 +113,30 @@ void SensorReading::set_invalid()
     // clear buffer
     buffer.clear();
 
-    // set fault bit
-    if (map_to_reg[this->type] == 1) {
-        faults::fault_1 |= map_to_mask[this->type];
-    } else if (map_to_reg[this->type] == 2) {
-        faults::fault_2 |= map_to_mask[this->type];
-    } else {
-        faults::fault_3 |= map_to_mask[this->type];
-    } // set the flag in the corresponding fault register
+    if (type != NULL) {
+        // set fault bit
+        if (map_to_reg[this->type] == 1) {
+            faults::fault_1 |= map_to_mask[this->type];
+        } else if (map_to_reg[this->type] == 2) {
+            faults::fault_2 |= map_to_mask[this->type];
+        } else {
+            faults::fault_3 |= map_to_mask[this->type];
+        } // set the flag in the corresponding fault register
+    }
+}
+
+bool repeated_values(std::deque<float> buffer)
+{
+    if (buffer.empty() || buffer.size() == 1) {
+        return false;
+    }
+
+    int first_val = buffer[0];
+    for (float val : buffer) {
+        if (first_val != val) {
+            return false;
+        }
+    }
+
+    return true;
 }

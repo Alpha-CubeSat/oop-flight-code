@@ -39,24 +39,22 @@
 
 namespace sfr {
     namespace stabilization {
-        // SFRField<float> max_time(1.0f, 0.0f, 2.0f, 1001);
-        extern SFRField<float> max_time;
-        //  extern float max_time;
+        extern SFRField<uint32_t> max_time;
     } // namespace stabilization
     namespace boot {
-        extern SFRField<float> max_time;
+        extern SFRField<uint32_t> max_time;
     }
     namespace simple {
-        extern SFRField<float> max_time;
+        extern SFRField<uint32_t> max_time;
     }
     namespace point {
-        extern float max_time;
+        extern SFRField<uint32_t> max_time;
     }
     namespace detumble {
-        extern float start_time;
-        extern float max_time;
-        extern int num_imu_retries;
-        extern int max_imu_retries;
+        extern SFRField<uint32_t> start_time;
+        extern SFRField<uint32_t> max_time;
+        extern SFRField<uint16_t> num_imu_retries;
+        extern SFRField<uint16_t> max_imu_retries;
         extern float min_stable_gyro_z;
         extern float max_stable_gyro_x;
         extern float max_stable_gyro_y;
@@ -64,17 +62,17 @@ namespace sfr {
         extern float min_unstable_gyro_y;
     } // namespace detumble
     namespace aliveSignal {
-        extern int max_downlink_hard_faults;
-        extern bool downlinked;
-        extern float max_time;
-        extern int num_hard_faults;
+        extern SFRField<uint16_t> max_downlink_hard_faults;
+        extern SFRField<bool> downlinked;
+        extern SFRField<uint32_t> max_time;
+        extern SFRField<uint16_t> num_hard_faults;
     } // namespace aliveSignal
     namespace pins {
         extern std::map<int, int> pinMap;
     } // namespace pins
     namespace photoresistor {
-        extern int val;
-        extern bool covered;
+        extern int val; // Will be Deleted? @Lauren/Zehua
+        extern SFRField<bool> covered;
         extern std::deque<int> light_val_buffer;
         extern SensorReading *light_val_average;
     } // namespace photoresistor
@@ -112,47 +110,44 @@ namespace sfr {
 
         extern MissionMode *current_mode;
         extern MissionMode *previous_mode;
-        extern unsigned long boot_start;
-        extern unsigned long max_boot_time;
 
-        extern bool possible_to_deploy;
-        extern bool deployed;
-        extern float time_deployed;
-        extern bool already_deployed;
+        extern SFRField<uint32_t> time_deployed;
+        extern SFRField<bool> deployed;
+        extern SFRField<bool> already_deployed;
 
         extern Phase *current_phase;
         extern Phase *previous_phase;
 
         extern std::deque<int> mode_history;
 
-        extern float acs_transmit_cycle_time;
+        extern SFRField<uint32_t> acs_transmit_cycle_time;
     } // namespace mission
     namespace burnwire {
-        extern bool fire;
-        extern bool arm;
         extern burnwire_mode_type mode;
-        extern int attempts;
-        extern int start_time;
-        extern int camera_attempts;
-        extern int burn_time;
-        extern int armed_time;
+        extern SFRField<bool> fire;
+        extern SFRField<bool> arm;
+        extern SFRField<uint16_t> attempts;
+        extern SFRField<uint16_t> camera_attempts;
+        extern SFRField<uint32_t> start_time;
+        extern SFRField<uint32_t> burn_time;
+        extern SFRField<uint32_t> armed_time;
     } // namespace burnwire
     namespace camera {
         extern sensor_mode_type mode;
-        extern bool photo_taken_sd_failed;
-        extern bool take_photo;
-        extern bool turn_on;
-        extern bool turn_off;
-        extern bool powered;
+        extern SFRField<bool> photo_taken_sd_failed;
+        extern SFRField<bool> take_photo;
+        extern SFRField<bool> turn_on;
+        extern SFRField<bool> turn_off;
+        extern SFRField<bool> powered;
 
         extern camera_init_mode_type init_mode;
-        extern uint8_t start_progress;
-        extern uint64_t step_time;
-        extern uint64_t init_start_time;
-        extern uint64_t init_timeout;
-        extern uint8_t begin_delay;
-        extern uint16_t resolution_set_delay;
-        extern uint8_t resolution_get_delay;
+        extern SFRField<uint8_t> start_progress;
+        extern SFRField<uint32_t> step_time;
+        extern SFRField<uint32_t> init_start_time;
+        extern SFRField<uint32_t> init_timeout;
+        extern SFRField<uint32_t> begin_delay;
+        extern SFRField<uint32_t> resolution_set_delay;
+        extern SFRField<uint32_t> resolution_get_delay;
 
         extern uint64_t buffer[255];
         extern int current_serial;
@@ -173,14 +168,14 @@ namespace sfr {
     namespace rockblock {
         // Report Types
         extern report_type downlink_report_type;
-        extern bool rockblock_ready_status;
+        extern SFRField<bool> rockblock_ready_status;
         extern rockblock_mode_type mode;
 
         // Time Parameters
-        extern unsigned long last_downlink;
-        extern unsigned long downlink_period;
+        extern SFRField<uint32_t> last_downlink;
+        extern SFRField<uint32_t> downlink_period;
 
-        extern bool waiting_message;
+        extern SFRField<bool> waiting_message;
 
         // Report Data
         extern std::deque<uint8_t> downlink_report;
@@ -195,62 +190,32 @@ namespace sfr {
 
         extern std::deque<RawRockblockCommand> raw_commands;
         extern std::deque<RockblockCommand> processed_commands;
-        extern int max_commands_count;
+        extern SFRField<uint8_t> max_commands_count;
 
         extern int imu_downlink_max_fragments[99];
-        extern int imu_max_fragments;
+        extern SFRField<uint16_t> imu_max_fragments;
 
-        extern float imudownlink_start_time;
-        extern float imudownlink_remain_time;
-        extern bool imu_first_start;
-        extern bool imu_downlink_on;
+        extern SFRField<uint32_t> imudownlink_start_time;
+        extern SFRField<uint32_t> imudownlink_remain_time;
+        extern SFRField<bool> imu_first_start;
+        extern SFRField<bool> imu_downlink_on;
 #ifndef SIMULATOR
         extern HardwareSerial serial;
 #else
         extern RockblockSimulator serial;
 #endif
-        extern bool flush_status;
-        extern bool waiting_command;
-        extern size_t conseq_reads;
-        extern float start_time_check_signal;
-        extern float max_check_signal_time;
-        extern bool sleep_mode;
+        extern SFRField<bool> flush_status;
+        extern SFRField<bool> waiting_command;
+        extern SFRField<uint32_t> conseq_reads;
+        extern SFRField<uint32_t> start_time_check_signal;
+        extern SFRField<uint32_t> max_check_signal_time;
+        extern SFRField<bool> sleep_mode;
     } // namespace rockblock
     namespace imu {
         extern sensor_mode_type mode;
-        extern bool successful_init;
+        extern SFRField<bool> successful_init;
 
-        extern float mag_x;
-        extern float mag_y;
-        extern float mag_z;
-        extern float gyro_x;
-        extern float gyro_y;
-        extern float gyro_z;
-
-        extern std::deque<float> mag_x_buffer;
-        extern std::deque<float> mag_y_buffer;
-        extern std::deque<float> mag_z_buffer;
-        extern std::deque<float> gyro_x_buffer;
-        extern std::deque<float> gyro_y_buffer;
-        extern std::deque<float> gyro_z_buffer;
-        extern std::deque<float> acc_x_buffer;
-        extern std::deque<float> acc_y_buffer;
-        extern std::deque<float> acc_z_buffer;
         extern std::deque<uint8_t> imu_dlink;
-
-        extern SensorReading *mag_x_average;
-        extern SensorReading *mag_y_average;
-        extern SensorReading *mag_z_average;
-        extern SensorReading *gyro_x_average;
-        extern SensorReading *gyro_y_average;
-        extern SensorReading *gyro_z_average;
-        extern SensorReading *acc_x_average;
-        extern SensorReading *acc_y_average;
-
-        extern SensorReading *gyro_x_value;
-        extern SensorReading *gyro_y_value;
-        extern SensorReading *gyro_z_value;
-
         extern imu_downlink_type imu_dlink_mode;
 
         extern bool sample;
@@ -261,6 +226,8 @@ namespace sfr {
         extern int gyro_max;
         extern int mag_min;
         extern int mag_max;
+        extern int acc_min;
+        extern int acc_max;
         extern bool report_ready;
         extern bool report_downlinked;
         extern bool report_written;
@@ -272,13 +239,13 @@ namespace sfr {
         extern float temp_c;
         extern std::deque<float> temp_c_buffer;
         extern SensorReading *temp_c_average;
-        extern bool in_sun;
+        extern SFRField<bool> in_sun;
     } // namespace temperature
     namespace current {
         extern float solar_current;
         extern std::deque<float> solar_current_buffer;
         extern SensorReading *solar_current_average;
-        extern bool in_sun;
+        extern SFRField<bool> in_sun;
     } // namespace current
     namespace acs {
         extern float current1;
@@ -288,10 +255,10 @@ namespace sfr {
         extern float pwm2;
         extern float pwm3;
         extern simple_acs_type mag;
-        extern unsigned long max_no_communication;
-        extern float on_time;
+        extern SFRField<uint32_t> max_no_communication;
+        extern SFRField<uint32_t> on_time;
 
-        extern bool off;
+        extern SFRField<bool> off;
     } // namespace acs
     namespace battery {
         extern float voltage;
@@ -329,14 +296,14 @@ namespace sfr {
         // extern bool check_camera_on_failed;
     } // namespace fault
     namespace button {
-        extern bool pressed;
+        extern SFRField<bool> pressed;
     }
     namespace EEPROM {
-        extern int time_of_last_write;
-        extern int write_step_time;
-        extern int alloted_time;
-        extern int eeprom_value;
-        extern bool alloted_time_passed;
+        extern SFRField<uint32_t> time_of_last_write;
+        extern SFRField<uint32_t> write_step_time;
+        extern SFRField<uint32_t> alloted_time;
+        extern SFRField<uint32_t> eeprom_value;
+        extern SFRField<bool> alloted_time_passed;
     } // namespace EEPROM
 };    // namespace sfr
 

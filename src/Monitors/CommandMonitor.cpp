@@ -10,63 +10,63 @@ void CommandMonitor::execute()
 {
     if (sfr::rockblock::waiting_command) {
         while (!sfr::rockblock::processed_commands.empty()) {
-            RockblockCommand command = sfr::rockblock::processed_commands.front();
-            bool mag_x_average_isValid = sfr::imu::mag_x_average->is_valid();
-            bool mag_y_average_isValid = sfr::imu::mag_y_average->is_valid();
-            bool mag_z_average_isValid = sfr::imu::mag_z_average->is_valid();
-            bool gyro_x_average_isValid = sfr::imu::gyro_x_average->is_valid();
-            bool gyro_y_average_isValid = sfr::imu::gyro_y_average->is_valid();
-            bool gyro_z_average_isValid = sfr::imu::gyro_z_average->is_valid();
-            bool temp_c_average_isValid = sfr::temperature::temp_c_average->is_valid();
-            bool voltage_average_isValid = sfr::battery::voltage_average->is_valid();
-            bool solar_current_average_isValid = sfr::current::solar_current_average->is_valid();
-            NormalReportMonitor::commands_received.push(command.f_opcode & 0xFF);        // Add byte 0 of opcode to the queue
-            NormalReportMonitor::commands_received.push((command.f_opcode >> 8) & 0xFF); // Add byte 1 of opcode to the queue
-            if (command.f_opcode == get_decimal_opcode(constants::rockblock::mission_mode)) {
-                dispatch_change_mission_mode();
-            } else if (command.f_opcode == get_decimal_opcode(constants::rockblock::burnwire_arm)) {
-                dispatch_change_true_false(sfr::burnwire::arm, command.f_arg_1);
-            } else if (command.f_opcode == get_decimal_opcode(constants::rockblock::burnwire_fire)) {
-                dispatch_change_true_false(sfr::burnwire::fire, command.f_arg_1);
-            } else if (command.f_opcode == get_decimal_opcode(constants::rockblock::burnwire_time)) {
-                dispatch_change_burnwire_time(command.f_arg_1);
-            } else if (command.f_opcode == get_decimal_opcode(constants::rockblock::burnwire_timeout)) {
-                dispatch_change_burnwire_timeout(command.f_arg_1);
-            } else if (command.f_opcode == get_decimal_opcode(constants::rockblock::rockblock_downlink_period)) {
-                dispatch_change_rockblock_downlink_period(command.f_arg_1);
-            } else if (command.f_opcode == get_decimal_opcode(constants::rockblock::request_image_fragment)) {
-                dispatch_request_image_fragment(command.f_arg_1, command.f_arg_2);
-            } else if (command.f_opcode == get_decimal_opcode(constants::rockblock::camera_take_photo)) {
-                dispatch_change_true_false(sfr::camera::take_photo, command.f_arg_1);
-            } else if (command.f_opcode == get_decimal_opcode(constants::rockblock::acs_mode)) {
-                dispatch_change_acs_mode();
-            } else if (command.f_opcode == get_decimal_opcode(constants::rockblock::fault_mode)) {
-                dispatch_change_fault_mode(command.f_arg_1);
-            } else if (command.f_opcode == get_decimal_opcode(constants::rockblock::fault_check_mag_x)) {
-                dispatch_change_true_false(mag_x_average_isValid, command.f_arg_1);
-            } else if (command.f_opcode == get_decimal_opcode(constants::rockblock::fault_check_mag_y)) {
-                dispatch_change_true_false(mag_y_average_isValid, command.f_arg_1);
-            } else if (command.f_opcode == get_decimal_opcode(constants::rockblock::fault_check_mag_z)) {
-                dispatch_change_true_false(mag_z_average_isValid, command.f_arg_1);
-            } else if (command.f_opcode == get_decimal_opcode(constants::rockblock::fault_check_gyro_x)) {
-                dispatch_change_true_false(gyro_x_average_isValid, command.f_arg_1);
-            } else if (command.f_opcode == get_decimal_opcode(constants::rockblock::fault_check_gyro_y)) {
-                dispatch_change_true_false(gyro_y_average_isValid, command.f_arg_1);
-            } else if (command.f_opcode == get_decimal_opcode(constants::rockblock::fault_check_gyro_z)) {
-                dispatch_change_true_false(gyro_z_average_isValid, command.f_arg_1);
-            } else if (command.f_opcode == get_decimal_opcode(constants::rockblock::fault_check_temp_c)) {
-                dispatch_change_true_false(temp_c_average_isValid, command.f_arg_1);
-            } else if (command.f_opcode == get_decimal_opcode(constants::rockblock::fault_check_solar_current)) {
-                dispatch_change_true_false(voltage_average_isValid, command.f_arg_1);
-            } else if (command.f_opcode == get_decimal_opcode(constants::rockblock::fault_check_voltage)) {
-                dispatch_change_true_false(solar_current_average_isValid, command.f_arg_1);
-            } else if (command.f_opcode == get_decimal_opcode(constants::rockblock::change_simplified_acs)) {
-                dispatch_change_simplified_acs(command.f_arg_1);
-            } else if (command.f_opcode == get_decimal_opcode(constants::rockblock::camera_turn_on)) {
-                sfr::camera::turn_on = true;
-            } else if (command.f_opcode == get_decimal_opcode(constants::rockblock::camera_turn_off)) {
-                sfr::camera::turn_off = true;
-            }
+            // RockblockCommand command = sfr::rockblock::processed_commands.front();
+            // bool mag_x_average_isValid = sfr::imu::mag_x_average->is_valid();
+            // bool mag_y_average_isValid = sfr::imu::mag_y_average->is_valid();
+            // bool mag_z_average_isValid = sfr::imu::mag_z_average->is_valid();
+            // bool gyro_x_average_isValid = sfr::imu::gyro_x_average->is_valid();
+            // bool gyro_y_average_isValid = sfr::imu::gyro_y_average->is_valid();
+            // bool gyro_z_average_isValid = sfr::imu::gyro_z_average->is_valid();
+            // bool temp_c_average_isValid = sfr::temperature::temp_c_average->is_valid();
+            // bool voltage_average_isValid = sfr::battery::voltage_average->is_valid();
+            // bool solar_current_average_isValid = sfr::current::solar_current_average->is_valid();
+            // NormalReportMonitor::commands_received.push(command.f_opcode & 0xFF);        // Add byte 0 of opcode to the queue
+            // NormalReportMonitor::commands_received.push((command.f_opcode >> 8) & 0xFF); // Add byte 1 of opcode to the queue
+            // if (command.f_opcode == get_decimal_opcode(constants::rockblock::mission_mode)) {
+            //     dispatch_change_mission_mode();
+            // } else if (command.f_opcode == get_decimal_opcode(constants::rockblock::burnwire_arm)) {
+            //     dispatch_change_true_false(sfr::burnwire::arm, command.f_arg_1);
+            // } else if (command.f_opcode == get_decimal_opcode(constants::rockblock::burnwire_fire)) {
+            //     dispatch_change_true_false(sfr::burnwire::fire, command.f_arg_1);
+            // } else if (command.f_opcode == get_decimal_opcode(constants::rockblock::burnwire_time)) {
+            //     dispatch_change_burnwire_time(command.f_arg_1);
+            // } else if (command.f_opcode == get_decimal_opcode(constants::rockblock::burnwire_timeout)) {
+            //     dispatch_change_burnwire_timeout(command.f_arg_1);
+            // } else if (command.f_opcode == get_decimal_opcode(constants::rockblock::rockblock_downlink_period)) {
+            //     dispatch_change_rockblock_downlink_period(command.f_arg_1);
+            // } else if (command.f_opcode == get_decimal_opcode(constants::rockblock::request_image_fragment)) {
+            //     dispatch_request_image_fragment(command.f_arg_1, command.f_arg_2);
+            // } else if (command.f_opcode == get_decimal_opcode(constants::rockblock::camera_take_photo)) {
+            //     dispatch_change_true_false(sfr::camera::take_photo, command.f_arg_1);
+            // } else if (command.f_opcode == get_decimal_opcode(constants::rockblock::acs_mode)) {
+            //     dispatch_change_acs_mode();
+            // } else if (command.f_opcode == get_decimal_opcode(constants::rockblock::fault_mode)) {
+            //     dispatch_change_fault_mode(command.f_arg_1);
+            // } else if (command.f_opcode == get_decimal_opcode(constants::rockblock::fault_check_mag_x)) {
+            //     dispatch_change_true_false(mag_x_average_isValid, command.f_arg_1);
+            // } else if (command.f_opcode == get_decimal_opcode(constants::rockblock::fault_check_mag_y)) {
+            //     dispatch_change_true_false(mag_y_average_isValid, command.f_arg_1);
+            // } else if (command.f_opcode == get_decimal_opcode(constants::rockblock::fault_check_mag_z)) {
+            //     dispatch_change_true_false(mag_z_average_isValid, command.f_arg_1);
+            // } else if (command.f_opcode == get_decimal_opcode(constants::rockblock::fault_check_gyro_x)) {
+            //     dispatch_change_true_false(gyro_x_average_isValid, command.f_arg_1);
+            // } else if (command.f_opcode == get_decimal_opcode(constants::rockblock::fault_check_gyro_y)) {
+            //     dispatch_change_true_false(gyro_y_average_isValid, command.f_arg_1);
+            // } else if (command.f_opcode == get_decimal_opcode(constants::rockblock::fault_check_gyro_z)) {
+            //     dispatch_change_true_false(gyro_z_average_isValid, command.f_arg_1);
+            // } else if (command.f_opcode == get_decimal_opcode(constants::rockblock::fault_check_temp_c)) {
+            //     dispatch_change_true_false(temp_c_average_isValid, command.f_arg_1);
+            // } else if (command.f_opcode == get_decimal_opcode(constants::rockblock::fault_check_solar_current)) {
+            //     dispatch_change_true_false(voltage_average_isValid, command.f_arg_1);
+            // } else if (command.f_opcode == get_decimal_opcode(constants::rockblock::fault_check_voltage)) {
+            //     dispatch_change_true_false(solar_current_average_isValid, command.f_arg_1);
+            // } else if (command.f_opcode == get_decimal_opcode(constants::rockblock::change_simplified_acs)) {
+            //     dispatch_change_simplified_acs(command.f_arg_1);
+            // } else if (command.f_opcode == get_decimal_opcode(constants::rockblock::camera_turn_on)) {
+            //     sfr::camera::turn_on = true;
+            // } else if (command.f_opcode == get_decimal_opcode(constants::rockblock::camera_turn_off)) {
+            //     sfr::camera::turn_off = true;
+            // }
             sfr::rockblock::processed_commands.pop_front();
         }
         sfr::rockblock::waiting_command = false;

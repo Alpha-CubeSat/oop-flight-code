@@ -11,21 +11,21 @@
 class SensorReading
 {
 private:
-    fault_index_type type; // type of reading
-    uint8_t buffer_size; // amount of values that should be averaged
-    float max; // max valid value
-    float min; // min valid value
+    fault_index_type type;    // type of reading
+    uint8_t buffer_size;      // amount of values that should be averaged
+    float max;                // max valid value
+    float min;                // min valid value
     std::deque<float> buffer; // buffer used to store the raw values
-    boolean valid; // if SensorReading is valid
-
-    void set_invalid();
-    void set_valid();
+    boolean valid;            // if SensorReading is valid
+    bool repeated_values(std::deque<float> buffer);
 
 public:
     SensorReading(fault_index_type type, uint8_t buffer_size, float max, float min); // constructor
-    boolean get_value(float *value_location); // get SensorReading averaged value
-    void set_value(float x); // set SensorReading value
-
+    SensorReading(uint8_t buffer_size, float max, float min);                        // constructor
+    boolean get_value(float *value_location);                                        // get SensorReading averaged value
+    void set_value(float x);                                                         // set SensorReading value
+    void set_invalid();
+    void set_valid();
 };
 
 #endif
