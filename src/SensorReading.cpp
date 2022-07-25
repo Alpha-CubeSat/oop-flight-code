@@ -104,7 +104,6 @@ void SensorReading::set_valid()
             faults::fault_3 &= ~map_to_mask[this->type];
         } // clear the flag in the corresponding fault register
 }
-}
 
 void SensorReading::set_invalid()
 {

@@ -22,7 +22,6 @@
 #include "RockblockCommand.hpp"
 #include "RockblockSimulator.hpp"
 #include "SFRField.hpp"
-#include "SensorReading.hpp"
 #include "constants.hpp"
 #include <Adafruit_LSM9DS1.h>
 #include <Adafruit_VC0706.h>
@@ -71,10 +70,7 @@ namespace sfr {
         extern std::map<int, int> pinMap;
     } // namespace pins
     namespace photoresistor {
-        extern int val; // Will be Deleted? @Lauren/Zehua
         extern SFRField<bool> covered;
-        extern std::deque<int> light_val_buffer;
-        extern SensorReading *light_val_average;
     } // namespace photoresistor
     namespace mission {
         extern MissionMode *boot;
@@ -236,15 +232,9 @@ namespace sfr {
         extern int content_length;
     } // namespace imu
     namespace temperature {
-        extern float temp_c;
-        extern std::deque<float> temp_c_buffer;
-        extern SensorReading *temp_c_average;
         extern SFRField<bool> in_sun;
     } // namespace temperature
     namespace current {
-        extern float solar_current;
-        extern std::deque<float> solar_current_buffer;
-        extern SensorReading *solar_current_average;
         extern SFRField<bool> in_sun;
     } // namespace current
     namespace acs {
@@ -261,39 +251,11 @@ namespace sfr {
         extern SFRField<bool> off;
     } // namespace acs
     namespace battery {
-        extern float voltage;
-        extern std::deque<float> voltage_buffer;
-        extern SensorReading *voltage_average;
-        extern float acceptable_battery;
-        extern float min_battery;
+        extern uint32_t acceptable_battery;
+        extern uint32_t min_battery;
     } // namespace battery
     namespace fault {
         extern fault_mode_type mode;
-
-        // extern unsigned char fault_1;
-        // extern unsigned char fault_2;
-        // extern unsigned char fault_3;
-
-        // // FAULT 1
-        // extern bool check_mag_x;
-        // extern bool check_mag_y;
-        // extern bool check_mag_z;
-        // extern bool check_gyro_x;
-        // extern bool check_gyro_y;
-        // extern bool check_gyro_z;
-        // extern bool check_acc_x;
-        // extern bool check_acc_y;
-
-        // // FAULT 2
-        // extern bool check_acc_z;
-        // extern bool check_temp_c;
-        // extern bool check_solar_current;
-        // extern bool check_voltage;
-
-        // // FAULT 3
-        // extern bool check_burn_wire;
-        // extern bool check_sd_card;
-        // extern bool check_camera_on_failed;
     } // namespace fault
     namespace button {
         extern SFRField<bool> pressed;

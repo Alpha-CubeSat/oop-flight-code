@@ -68,10 +68,7 @@ namespace sfr {
     } // namespace pins
     namespace photoresistor {
         // OP Codes 1700
-        int val = 0;
         SFRField<bool> covered(true, 1700);
-        std::deque<int> light_val_buffer;
-        SensorReading *light_val_average = new SensorReading(fault_index_type::light_val, 0.0, false);
     } // namespace photoresistor
     namespace mission {
         // OP Codes 1800
@@ -283,14 +280,10 @@ namespace sfr {
     } // namespace imu
     namespace temperature {
         // OP Codes 2300
-        float temp_c = 0.0;
-        SensorReading *temp_c_average = new SensorReading(fault_index_type::temp_c, 0.0, false);
         SFRField<bool> in_sun(false, 2300);
     } // namespace temperature
     namespace current {
         // OP Codes 2400
-        float solar_current = 0.0;
-        SensorReading *solar_current_average = new SensorReading(fault_index_type::solar_current, 0.0, false);
         SFRField<bool> in_sun(false, 2400);
     } // namespace current
 
@@ -310,40 +303,13 @@ namespace sfr {
     } // namespace acs
     namespace battery {
         // OP Codes 2600
-        float voltage = 0.0;
-        SensorReading *voltage_average = new SensorReading(fault_index_type::voltage, 0.0, false);
         // TODO
-        float acceptable_battery;
-        float min_battery;
+        uint32_t acceptable_battery;
+        uint32_t min_battery;
     } // namespace battery
     namespace fault {
         // OP Codes 2700
         fault_mode_type mode = fault_mode_type::active;
-
-        // unsigned char fault_1 = 0;
-        // unsigned char fault_2 = 0;
-        // unsigned char fault_3 = 0;
-
-        // // FAULT 1
-        // bool check_mag_x = true;
-        // bool check_mag_y = true;
-        // bool check_mag_z = true;
-        // bool check_gyro_x = true;
-        // bool check_gyro_y = true;
-        // bool check_gyro_z = true;
-        // bool check_acc_x = true;
-        // bool check_acc_y = true;
-
-        // // FAULT 2
-        // bool check_acc_z = true;
-        // bool check_temp_c = true;
-        // bool check_solar_current = true;
-        // bool check_voltage = true;
-
-        // // FAULT 3
-        // bool check_burn_wire = true;
-        // bool check_sd_card = true;
-        // bool check_camera_on_failed = true;
     } // namespace fault
     namespace button {
         // OP Codes 2800
