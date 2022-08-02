@@ -3,7 +3,7 @@
 #ifndef CLOCK_MANAGER_HPP_
 #define CLOCK_MANAGER_HPP_
 
-#include "sfr.hpp"
+#include "Control Tasks/TimedControlTask.hpp"
 
 class ClockManager : public TimedControlTask<void>
 {

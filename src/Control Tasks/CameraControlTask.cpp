@@ -1,4 +1,6 @@
 #include "CameraControlTask.hpp"
+#include "Pins.hpp"
+#include "sfr.hpp"
 
 CameraControlTask::CameraControlTask(unsigned int offset)
     : TimedControlTask<void>(offset), adaCam(&Serial5)
@@ -12,9 +14,9 @@ void CameraControlTask::execute()
             Serial.println("Failed to snap!");
         } else {
             Serial.println("Picture taken!");
-            sfr::camera::jpglen = adaCam.frameLength();
-            Serial.println("Camera frame length: " + String(sfr::camera::jpglen));
-            if (sfr::camera::jpglen > 0) {
+            jpglen = adaCam.frameLength();
+            Serial.println("Camera frame length: " + String(jpglen));
+            if (jpglen > 0) {
                 sfr::camera::take_photo = false;
                 sfr::camera::photo_taken_sd_failed = true;
             }
@@ -52,24 +54,24 @@ void CameraControlTask::execute()
         sfr::camera::turn_off = false;
     }
 
-    if (sfr::camera::jpglen > 0 && sfr::camera::photo_taken_sd_failed == false) {
+    if (jpglen > 0 && sfr::camera::photo_taken_sd_failed == false) {
         filetocreate = "";
         if (sfr::camera::images_written < 10) {
             filetocreate += "0";
         }
         filetocreate += String(sfr::camera::images_written);
-        sfr::camera::image_lengths[sfr::camera::images_written] = sfr::camera::jpglen;
+        image_lengths[sfr::camera::images_written] = jpglen;
 
         if (sfr::camera::fragments_written < 10) {
             filetocreate += "0";
         }
         filetocreate += String(sfr::camera::fragments_written) + ".jpg";
-        strcpy(sfr::camera::filename, filetocreate.c_str());
+        strcpy(filename, filetocreate.c_str());
 
-        imgFile = SD.open(sfr::camera::filename, FILE_WRITE);
+        imgFile = SD.open(filename, FILE_WRITE);
 
         uint8_t *buffer;
-        uint8_t bytesToRead = min(constants::camera::content_length, sfr::camera::jpglen);
+        uint8_t bytesToRead = min(constants::camera::content_length, jpglen);
         buffer = adaCam.readPicture(bytesToRead);
 
         for (int i = 0; i < bytesToRead; i++) {
@@ -87,12 +89,12 @@ void CameraControlTask::execute()
 
         Serial.println("");
 
-        sfr::camera::jpglen -= bytesToRead;
+        jpglen -= bytesToRead;
         imgFile.close();
         sfr::camera::fragments_written++;
-        if (sfr::camera::jpglen == 0) {
-            sfr::rockblock::camera_max_fragments[sfr::camera::images_written] = sfr::camera::fragments_written;
-            sfr::camera::images_written++;
+        if (jpglen == 0) {
+            camera_max_fragments[sfr::camera::images_written] = sfr::camera::fragments_written;
+            images_written++;
             Serial.println("Done writing file");
         }
     }

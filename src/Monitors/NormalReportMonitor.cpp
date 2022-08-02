@@ -9,7 +9,7 @@ std::queue<uint8_t> NormalReportMonitor::commands_received;
 
 void NormalReportMonitor::execute()
 {
-    uint8_t mag_x = map(sfr::imu::mag_x_average->get_value(), constants::imu::min_mag_x, constants::imu::max_mag_x, 0, 255);
+    /*uint8_t mag_x = map(sfr::imu::mag_x_average->get_value(), constants::imu::min_mag_x, constants::imu::max_mag_x, 0, 255);
     uint8_t mag_y = map(sfr::imu::mag_y_average->get_value(), constants::imu::min_mag_y, constants::imu::max_mag_y, 0, 255);
     uint8_t mag_z = map(sfr::imu::mag_z_average->get_value(), constants::imu::min_mag_z, constants::imu::max_mag_z, 0, 255);
 
@@ -60,7 +60,7 @@ void NormalReportMonitor::execute()
     sfr::rockblock::normal_report.push_back(faults::fault_2);
     sfr::rockblock::normal_report.push_back(faults::fault_3);
     sfr::rockblock::normal_report.push_back(sfr::camera::take_photo);
-    sfr::rockblock::normal_report.push_back(sfr::camera::powered);
+    sfr::rockblock::normal_report.push_back(sfr::camera::powered);*/
     int i = 0;
     while (!commands_received.empty() && i < 30) {
         sfr::rockblock::normal_report.push_back(commands_received.front());

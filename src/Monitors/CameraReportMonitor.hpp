@@ -1,7 +1,8 @@
 #ifndef CAMERA_REPORT_MONITOR_HPP_
 #define CAMERA_REPORT_MONITOR_HPP_
 
-#include "sfr.hpp"
+#include "Control Tasks/TimedControlTask.hpp"
+#include "SD.h"
 #include <vector>
 
 class CameraReportMonitor : public TimedControlTask<void>

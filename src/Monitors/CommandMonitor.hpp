@@ -1,7 +1,7 @@
 #ifndef COMMAND_MONITOR_HPP_
 #define COMMAND_MONITOR_HPP_
 
-#include "sfr.hpp"
+#include "Control Tasks/TimedControlTask.hpp"
 
 class CommandMonitor : public TimedControlTask<void>
 {

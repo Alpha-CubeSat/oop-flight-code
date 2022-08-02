@@ -1,6 +1,8 @@
 #ifndef IMU_DOWNLINK_HPP_
 #define IMU_DOWNLINK_HPP_
-#include "sfr.hpp"
+
+#include "Adafruit_LSM9DS1.h"
+#include "Control Tasks/TimedControlTask.hpp"
 
 class IMUDownlink : public TimedControlTask<void>
 {

@@ -1,7 +1,8 @@
 #ifndef ROCKBLOCK_CONTROL_TASK_HPP_
 #define ROCKBLOCK_CONTROL_TASK_HPP_
 
-#include "sfr.hpp"
+#include "Control Tasks/TimedControlTask.hpp"
+#include "Modes/rockblock_mode_type.enum"
 
 class RockblockControlTask : public TimedControlTask<void>
 {

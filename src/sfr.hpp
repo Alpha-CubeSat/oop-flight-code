@@ -1,271 +1,199 @@
 #ifndef SFR_HPP_
 #define SFR_HPP_
 
+#include "Adafruit_VC0706.h"
 #include "Arduino.h"
-#include "Control Tasks/BurnwireControlTask.hpp"
-#include "Control Tasks/EEPROMControlTask.hpp"
-#include "Control Tasks/TimedControlTask.hpp"
-#include "MissionManager.hpp"
 #include "MissionMode.hpp"
 #include "Modes/burnwire_mode_type.enum"
 #include "Modes/camera_init_mode_type.enum"
-#include "Modes/fault_index_type.enum"
-#include "Modes/fault_mode_type.enum"
-#include "Modes/imu_downlink_type.enum"
-#include "Modes/mode_type.enum"
 #include "Modes/report_type.enum"
 #include "Modes/rockblock_mode_type.enum"
 #include "Modes/sensor_mode_type.enum"
 #include "Modes/simple_acs_type.enum"
 #include "Phase.hpp"
-#include "Pins.hpp"
-#include "RockblockCommand.hpp"
-#include "RockblockSimulator.hpp"
 #include "SFRField.hpp"
 #include "constants.hpp"
-#include <Adafruit_LSM9DS1.h>
-#include <Adafruit_VC0706.h>
-#include <SD.h>
-#include <StarshotACS0.h>
-#include <cmath>
-#include <deque>
-#include <iostream>
-#include <map>
-#include <numeric>
-#include <queue>
-#include <sstream>
-#include <string>
 
 namespace sfr {
     namespace stabilization {
-        extern SFRField<uint32_t> max_time;
+        // OP Codes 1100
+        SFRField<uint32_t> max_time(30 * constants::time::one_minute, 0UL, 5 * constants::time::one_hour, 1100);
     } // namespace stabilization
     namespace boot {
-        extern SFRField<uint32_t> max_time;
-    }
+        // OP Codes 1200
+        SFRField<uint32_t> max_time(2 * constants::time::one_hour, 10UL, 5 * constants::time::one_hour, 1200);
+    } // namespace boot
     namespace simple {
-        extern SFRField<uint32_t> max_time;
-    }
+        // OP Codes 1300
+        SFRField<uint32_t> max_time(5 * constants::time::one_minute, 10UL, 5 * constants::time::one_hour, 1300);
+    } // namespace simple
     namespace point {
-        extern SFRField<uint32_t> max_time;
-    }
+        // OP Codes 1400
+        SFRField<uint32_t> max_time(5 * constants::time::one_minute, 1400);
+    } // namespace point
     namespace detumble {
-        extern SFRField<uint32_t> start_time;
-        extern SFRField<uint32_t> max_time;
-        extern SFRField<uint16_t> num_imu_retries;
-        extern SFRField<uint16_t> max_imu_retries;
-        extern float min_stable_gyro_z;
-        extern float max_stable_gyro_x;
-        extern float max_stable_gyro_y;
-        extern float min_unstable_gyro_x;
-        extern float min_unstable_gyro_y;
+        // OP Codes 1500
+        SFRField<uint32_t> start_time(0UL, 1500);
+        SFRField<uint32_t> max_time(2 * constants::time::one_hour, 1501);
+        // TODO
+        SFRField<uint16_t> num_imu_retries(0, 1502);
+        SFRField<uint16_t> max_imu_retries(5, 1503);
     } // namespace detumble
     namespace aliveSignal {
-        extern SFRField<uint16_t> max_downlink_hard_faults;
-        extern SFRField<bool> downlinked;
-        extern SFRField<uint32_t> max_time;
-        extern SFRField<uint16_t> num_hard_faults;
+        // OP Codes 1600
+        SFRField<uint16_t> max_downlink_hard_faults(3, 1600);
+        SFRField<bool> downlinked(false, 1601);
+        SFRField<uint32_t> max_time(2 * constants::time::one_hour, 1602);
+        SFRField<uint16_t> num_hard_faults(0, 1603);
     } // namespace aliveSignal
     namespace pins {
-        extern std::map<int, int> pinMap;
+        //@Josh would we need to change this?
+        std::map<int, int> pinMap = {
+            {constants::photoresistor::pin, LOW},
+            {constants::burnwire::first_pin, LOW},
+            {constants::burnwire::second_pin, LOW},
+            {constants::rockblock::sleep_pin, LOW},
+            {constants::temperature::pin, LOW},
+            {constants::current::pin, LOW},
+            {constants::acs::xPWMpin, LOW},
+            {constants::acs::yPWMpin, LOW},
+            {constants::acs::zPWMpin, LOW},
+            {constants::acs::yout1, LOW},
+            {constants::acs::yout2, LOW},
+            {constants::acs::xout1, LOW},
+            {constants::acs::xout2, LOW},
+            {constants::acs::zout1, LOW},
+            {constants::acs::zout2, LOW},
+            {constants::acs::STBXYpin, LOW},
+            {constants::acs::STBZpin, LOW},
+            {constants::battery::voltage_value_pin, LOW},
+            {constants::battery::allow_measurement_pin, HIGH},
+            {constants::camera::power_on_pin, LOW},
+            {constants::camera::rx, LOW},
+            {constants::camera::tx, LOW},
+            {constants::button::button_pin, LOW}};
     } // namespace pins
     namespace photoresistor {
-        extern SFRField<bool> covered;
+        // OP Codes 1700
+        SFRField<bool> covered(true, 1700);
     } // namespace photoresistor
     namespace mission {
-        extern MissionMode *boot;
-        extern MissionMode *aliveSignal;
-        extern MissionMode *lowPowerAliveSignal;
-        extern MissionMode *detumbleSpin;
-        extern MissionMode *lowPowerDetumbleSpin;
-        extern MissionMode *normal;
-        extern MissionMode *transmit;
-        extern MissionMode *lowPower;
-        extern MissionMode *normalDeployment;
-        extern MissionMode *transmitDeployment;
-        extern MissionMode *lowPowerDeployment;
-        extern MissionMode *normalArmed;
-        extern MissionMode *transmitArmed;
-        extern MissionMode *lowPowerArmed;
-        extern MissionMode *normalInSun;
-        extern MissionMode *transmitInSun;
-        extern MissionMode *lowPowerInSun;
-        extern MissionMode *voltageFailureInSun;
-        extern MissionMode *bootCamera;
-        extern MissionMode *mandatoryBurns;
-        extern MissionMode *regularBurns;
-        extern MissionMode *photo;
+        // OP Codes 1800
+        SFRField<uint32_t> acs_transmit_cycle_time(constants::time::one_minute * 100, 1800);
 
-        extern Phase *initialization;
-        extern Phase *stabilization;
-        extern Phase *standby;
-        extern Phase *deployment;
-        extern Phase *armed;
-        extern Phase *inSun;
-        extern Phase *firing;
-
-        extern MissionMode *current_mode;
-        extern MissionMode *previous_mode;
-
-        extern SFRField<uint32_t> time_deployed;
-        extern SFRField<bool> deployed;
-        extern SFRField<bool> already_deployed;
-
-        extern Phase *current_phase;
-        extern Phase *previous_phase;
-
-        extern std::deque<int> mode_history;
-
-        extern SFRField<uint32_t> acs_transmit_cycle_time;
+        SFRField<uint32_t> time_deployed(0, 1801);
+        SFRField<bool> deployed(false, 1802);
+        SFRField<bool> already_deployed(false, 1803);
     } // namespace mission
     namespace burnwire {
-        extern burnwire_mode_type mode;
-        extern SFRField<bool> fire;
-        extern SFRField<bool> arm;
-        extern SFRField<uint16_t> attempts;
-        extern SFRField<uint16_t> camera_attempts;
-        extern SFRField<uint32_t> start_time;
-        extern SFRField<uint32_t> burn_time;
-        extern SFRField<uint32_t> armed_time;
+        // OP Codes 1900
+        SFRField<bool> fire(false, 1900);
+        SFRField<bool> arm(false, 1901);
+        SFRField<uint16_t> attempts(0, 1902);
+        SFRField<uint16_t> camera_attempts(0, 1904);
+        SFRField<uint32_t> start_time(0, 1903);
+        SFRField<uint32_t> burn_time(500, 1905);
+        SFRField<uint32_t> armed_time(2 * constants::time::one_day, 1906);
+        SFRField<uint16_t> mode((uint16_t)burnwire_mode_type::standby, 1907);
     } // namespace burnwire
     namespace camera {
-        extern sensor_mode_type mode;
-        extern SFRField<bool> photo_taken_sd_failed;
-        extern SFRField<bool> take_photo;
-        extern SFRField<bool> turn_on;
-        extern SFRField<bool> turn_off;
-        extern SFRField<bool> powered;
+        // OP Codes 2000
+        SFRField<bool> photo_taken_sd_failed(false, 2000);
+        SFRField<bool> take_photo(false, 2001);
+        SFRField<bool> turn_on(false, 2002);
+        SFRField<bool> turn_off(false, 2003);
+        SFRField<bool> powered(false, 2004);
 
-        extern camera_init_mode_type init_mode;
-        extern SFRField<uint8_t> start_progress;
-        extern SFRField<uint32_t> step_time;
-        extern SFRField<uint32_t> init_start_time;
-        extern SFRField<uint32_t> init_timeout;
-        extern SFRField<uint32_t> begin_delay;
-        extern SFRField<uint32_t> resolution_set_delay;
-        extern SFRField<uint32_t> resolution_get_delay;
+        // Initialization
+        SFRField<uint8_t> start_progress(0, 2005);
+        SFRField<uint32_t> step_time(0, 2006);
+        SFRField<uint32_t> init_start_time(0, 2007);
+        SFRField<uint32_t> init_timeout(12000, 2008);
+        SFRField<uint32_t> begin_delay(100, 2009);
+        SFRField<uint32_t> resolution_set_delay(500, 2010);
+        SFRField<uint32_t> resolution_get_delay(200, 2011);
 
-        extern uint64_t buffer[255];
-        extern int current_serial;
-        extern int fragment_number;
-        extern int fragment_number_requested;
-        extern int serial_requested;
-        extern bool fragment_requested;
-        extern int images_written;
-        extern int fragments_written;
-        extern int image_lengths[255];
-        extern bool report_ready;
-        extern bool full_image_written;
-        extern bool report_downlinked;
-        extern char filename[15];
-        extern uint16_t jpglen;
-        extern uint8_t set_res;
+        SFRField<uint16_t> init_mode((uint16_t)camera_init_mode_type::awaiting, 2012);
+        SFRField<uint16_t> mode((uint16_t)sensor_mode_type::normal, 2013);
+
+        SFRField<uint32_t> images_written(0, 2014);
+        SFRField<uint32_t> fragments_written(0, 2015);
+
+        SFRField<uint32_t> set_res(VC0706_160x120, 2016);
     } // namespace camera
     namespace rockblock {
-        // Report Types
-        extern report_type downlink_report_type;
-        extern SFRField<bool> rockblock_ready_status;
-        extern rockblock_mode_type mode;
+        // OP Codes 2100
+        SFRField<bool> rockblock_ready_status(false, 2100);
 
-        // Time Parameters
-        extern SFRField<uint32_t> last_downlink;
-        extern SFRField<uint32_t> downlink_period;
+        SFRField<uint32_t> last_downlink(0, 2101);
+        SFRField<uint32_t> downlink_period(0, 2102);
 
-        extern SFRField<bool> waiting_message;
+        SFRField<bool> waiting_message(false, 2103);
 
-        // Report Data
-        extern std::deque<uint8_t> downlink_report;
-        extern std::deque<uint8_t> normal_report;
-        extern std::deque<uint8_t> camera_report;
-        extern std::deque<uint8_t> imu_report;
+        SFRField<uint8_t> max_commands_count(10, 2104);
 
-        extern char buffer[constants::rockblock::buffer_size];
-        extern int camera_commands[99][constants::rockblock::command_len];
-        extern int camera_max_fragments[99];
-        extern int commas[constants::rockblock::num_commas];
+        SFRField<uint16_t> imu_max_fragments(256, 2105);
 
-        extern std::deque<RawRockblockCommand> raw_commands;
-        extern std::deque<RockblockCommand> processed_commands;
-        extern SFRField<uint8_t> max_commands_count;
+        SFRField<uint32_t> imudownlink_start_time(0, 2106);
+        SFRField<uint32_t> imudownlink_remain_time(constants::time::one_minute, 2107);
+        SFRField<bool> imu_first_start(true, 2108);
+        SFRField<bool> imu_downlink_on(true, 2109);
 
-        extern int imu_downlink_max_fragments[99];
-        extern SFRField<uint16_t> imu_max_fragments;
+        SFRField<bool> flush_status(false, 2108);
+        SFRField<bool> waiting_command(false, 2109);
+        SFRField<uint32_t> conseq_reads(0, 2110);
+        SFRField<uint32_t> timeout(10 * constants::time::one_minute, 2111);
+        SFRField<uint32_t> start_time(0, 2112);
+        SFRField<uint32_t> start_time_check_signal(0, 2113);
+        SFRField<uint32_t> max_check_signal_time(constants::time::one_minute, 2114);
+        SFRField<bool> sleep_mode(false, 2115);
 
-        extern SFRField<uint32_t> imudownlink_start_time;
-        extern SFRField<uint32_t> imudownlink_remain_time;
-        extern SFRField<bool> imu_first_start;
-        extern SFRField<bool> imu_downlink_on;
-#ifndef SIMULATOR
-        extern HardwareSerial serial;
-#else
-        extern RockblockSimulator serial;
-#endif
-        extern SFRField<bool> flush_status;
-        extern SFRField<bool> waiting_command;
-        extern SFRField<uint32_t> conseq_reads;
-        extern SFRField<uint32_t> start_time_check_signal;
-        extern SFRField<uint32_t> max_check_signal_time;
-        extern SFRField<bool> sleep_mode;
+        SFRField<uint16_t> downlink_report_type((uint16_t)report_type::normal_report, 2116);
+        SFRField<uint16_t> mode((uint16_t)rockblock_mode_type::send_at, 2117);
     } // namespace rockblock
     namespace imu {
-        extern sensor_mode_type mode;
-        extern SFRField<bool> successful_init;
+        // OP Codes 2200
+        SFRField<uint16_t> mode(sensor_mode_type::init, 2200);
+        SFRField<bool> successful_init(true, 2201);
 
-        extern std::deque<uint8_t> imu_dlink;
-        extern imu_downlink_type imu_dlink_mode;
+        SFRField<uint32_t> max_fragments(256, 2202);
 
-        extern bool sample;
-        extern uint8_t fragment_number;
-        extern uint8_t current_sample;
-        extern bool sample_gyro;
-        extern int gyro_min;
-        extern int gyro_max;
-        extern int mag_min;
-        extern int mag_max;
-        extern int acc_min;
-        extern int acc_max;
-        extern bool report_ready;
-        extern bool report_downlinked;
-        extern bool report_written;
-        extern bool full_report_written;
-        extern int max_fragments;
-        extern int content_length;
+        SFRField<bool> sample(true, 2203);
     } // namespace imu
     namespace temperature {
-        extern SFRField<bool> in_sun;
+        // OP Codes 2300
+        SFRField<bool> in_sun(false, 2300);
     } // namespace temperature
     namespace current {
-        extern SFRField<bool> in_sun;
+        // OP Codes 2400
+        SFRField<bool> in_sun(false, 2400);
     } // namespace current
     namespace acs {
-        extern float current1;
-        extern float current2;
-        extern float current3;
-        extern float pwm1;
-        extern float pwm2;
-        extern float pwm3;
-        extern simple_acs_type mag;
-        extern SFRField<uint32_t> max_no_communication;
-        extern SFRField<uint32_t> on_time;
+        // OP Codes 2500
+        SFRField<uint32_t> max_no_communication(0, 2500);
 
-        extern SFRField<bool> off;
+        SFRField<uint32_t> on_time(5 * constants::time::one_minute, 2501);
+        SFRField<bool> off(true, 2502);
+
+        SFRField<uint16_t> mag((uint16_t)simple_acs_type::x, 2503);
     } // namespace acs
     namespace battery {
-        extern uint32_t acceptable_battery;
-        extern uint32_t min_battery;
+        // OP Codes 2600
+        // TODO
+        SFRField<uint32_t> acceptable_battery(0, 2600);
+        SFRField<uint32_t> min_battery(0, 2601);
     } // namespace battery
-    namespace fault {
-        extern fault_mode_type mode;
-    } // namespace fault
     namespace button {
-        extern SFRField<bool> pressed;
-    }
+        // OP Codes 2700
+        SFRField<bool> pressed(true, 2700);
+    } // namespace button
     namespace EEPROM {
-        extern SFRField<uint32_t> time_of_last_write;
-        extern SFRField<uint32_t> write_step_time;
-        extern SFRField<uint32_t> alloted_time;
-        extern SFRField<uint32_t> eeprom_value;
-        extern SFRField<bool> alloted_time_passed;
+        // OP Codes 2800
+        SFRField<uint32_t> time_of_last_write(0, 2800);
+        SFRField<uint32_t> write_step_time(1000, 2801); // the amount of time between each write to EEPROM
+        SFRField<uint32_t> alloted_time(7200000, 2802); // the amount of time for the EEPROM to count to (7200000 ms = 2 h)
+        SFRField<uint32_t> eeprom_value(0, 2803);       // the amount of time that the EEPROM has counted, stops when the alloted time has been reached
+        SFRField<bool> alloted_time_passed(false, 2804);
     } // namespace EEPROM
 };    // namespace sfr
 

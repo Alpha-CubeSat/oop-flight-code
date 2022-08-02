@@ -11,7 +11,6 @@ MainControlLoop::MainControlLoop()
       camera_report_monitor(constants::timecontrol::camera_report_monitor_offset),
       command_monitor(constants::timecontrol::command_monitor_offset),
       current_monitor(constants::timecontrol::current_monitor_offset),
-      fault_monitor(constants::timecontrol::fault_monitor_offset),
       normal_report_monitor(constants::timecontrol::normal_report_monitor_offset),
       imu_monitor(constants::timecontrol::imu_monitor_offset),
       imudownlink_report_monitor(constants::timecontrol::imudownlink_report_monitor_offset),
@@ -47,7 +46,6 @@ void MainControlLoop::execute()
     camera_report_monitor.execute_on_time();
     command_monitor.execute_on_time();
     current_monitor.execute_on_time();
-    fault_monitor.execute_on_time();
     imu_monitor.execute_on_time();
     imu_downlink.execute_on_time();
     imudownlink_report_monitor.execute_on_time();

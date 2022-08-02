@@ -1,8 +1,8 @@
 #ifndef TEMPERATURE_MONITOR_HPP_
 #define TEMPERATURE_MONITOR_HPP_
 
+#include "Control Tasks/TimedControlTask.hpp"
 #include "SensorReading.hpp"
-#include "sfr.hpp"
 
 class TemperatureMonitor : public TimedControlTask<void>
 {

@@ -1,8 +1,6 @@
 #ifndef PINS_HPP_
 #define PINS_HPP_
 
-#include "sfr.hpp"
-
 class Pins
 {
 public:

@@ -5,8 +5,10 @@
 #include "Control Tasks/ACSControlTask.hpp"
 #include "Control Tasks/BurnwireControlTask.hpp"
 #include "Control Tasks/CameraControlTask.hpp"
+#include "Control Tasks/EEPROMControlTask.hpp"
 #include "Control Tasks/RockblockControlTask.hpp"
 #include "Faults.hpp"
+#include "MissionManager.hpp"
 #include "Monitors/ACSMonitor.hpp"
 #include "Monitors/BatteryMonitor.hpp"
 #include "Monitors/ButtonMonitor.hpp"
@@ -19,7 +21,6 @@
 #include "Monitors/PhotoresistorMonitor.hpp"
 #include "Monitors/RockblockReportMonitor.hpp"
 #include "Monitors/TemperatureMonitor.hpp"
-#include "sfr.hpp"
 
 class MainControlLoop : ControlTask<void>
 {

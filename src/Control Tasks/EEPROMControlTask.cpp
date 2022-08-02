@@ -1,4 +1,5 @@
 #include "EEPROMControlTask.hpp"
+#include "sfr.hpp"
 
 void EEPROMControlTask::execute()
 {
