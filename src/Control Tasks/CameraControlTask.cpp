@@ -24,9 +24,8 @@ void CameraControlTask::execute()
         camera_init();
         if (sfr::camera::init_mode == camera_init_mode_type::complete) {
             transition_to_normal();
-        }
-        else if (sfr::camera::init_mode == camera_init_mode_type::failed) {
-            if(sfr::camera::failed_times > sfr::camera::failed_limit) {
+        } else if (sfr::camera::init_mode == camera_init_mode_type::failed) {
+            if (sfr::camera::failed_times > sfr::camera::failed_limit) {
                 sfr::camera::failed_times = 0; // reset
                 transition_to_abnormal_init();
             } else {
@@ -140,7 +139,7 @@ void CameraControlTask::camera_init()
             Serial.println("###### Go into setting resolution #####");
             if (millis() - sfr::camera::step_time >= sfr::camera::resolution_set_delay) {
                 if (adaCam.setImageSize(sfr::camera::set_res)) {
-                    if(adaCam.getImageSize() != sfr::camera::set_res) {
+                    if (adaCam.getImageSize() != sfr::camera::set_res) {
                         Serial.println("Setting resolution failed");
                         sfr::camera::init_mode = camera_init_mode_type::failed;
                     } else {

@@ -222,9 +222,9 @@ namespace sfr {
     namespace imu {
         extern sensor_mode_type mode;
         extern bool successful_init;
-        extern bool turn_off;  // action variable
-        extern bool turn_on;   // action variable
-        extern bool powered;    // state variable
+        extern bool turn_off; // action variable
+        extern bool turn_on;  // action variable
+        extern bool powered;  // state variable
 
         extern float mag_x;
         extern float mag_y;

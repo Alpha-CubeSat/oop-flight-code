@@ -237,9 +237,9 @@ namespace sfr {
     namespace imu {
         sensor_mode_type mode = sensor_mode_type::init;
         bool successful_init = true;
-        bool turn_off = false;  // action variable
-        bool turn_on = false;   // action variable
-        bool powered = false;    // state variable
+        bool turn_off = false; // action variable
+        bool turn_on = false;  // action variable
+        bool powered = false;  // state variable
 
         float mag_x = 0.0;
         float mag_y = 0.0;

@@ -12,7 +12,8 @@ IMUMonitor::IMUMonitor(unsigned int offset)
     IMUMonitor::IMU_setup();
 }
 
-void IMUMonitor::IMU_setup() {
+void IMUMonitor::IMU_setup()
+{
     if (!imu.begin()) {
         Serial.println("\n\n\nInitialize failed\n\n\n");
         sfr::imu::successful_init = false;
@@ -35,7 +36,7 @@ void IMUMonitor::execute()
         pinMode(constants::imu::CSM, OUTPUT);
         Pins::setPinState(constants::imu::CSAG, LOW);
         Pins::setPinState(constants::imu::CSM, LOW);
-        
+
         sfr::imu::powered = false;
         sfr::imu::turn_off = false;
     }
@@ -46,7 +47,7 @@ void IMUMonitor::execute()
 #endif
         sfr::imu::turn_on = false; // we don't want to initialize every time
 
-        if(sfr::imu::successful_init) {
+        if (sfr::imu::successful_init) {
             sfr::imu::powered = true;
             transition_to_normal();
         } else {
@@ -55,7 +56,7 @@ void IMUMonitor::execute()
         }
     }
 
-    if(sfr::imu::powered == true) {
+    if (sfr::imu::powered == true) {
 #ifdef VERBOSE
         Serial.println("IMU is on");
 #endif
