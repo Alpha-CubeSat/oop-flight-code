@@ -18,7 +18,7 @@ void MissionManager::execute()
         sfr::mission::current_phase->set_start_time(millis());
     }
 
-    sfr::mission::current_mode->dispatch();
-
     sfr::mission::previous_mode = sfr::mission::current_mode;
+
+    sfr::mission::current_mode->dispatch();
 }

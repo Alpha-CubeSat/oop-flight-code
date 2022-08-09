@@ -5,6 +5,7 @@ void boot_initialization()
 {
     sfr::rockblock::sleep_mode = true;
     sfr::acs::off = true;
+    sfr::imu::turn_off = true;
     sfr::imu::sample = false;
 }
 
@@ -12,6 +13,7 @@ void Boot::transition_to()
 {
     sfr::rockblock::sleep_mode = true;
     sfr::acs::off = true;
+    sfr::imu::turn_off = true;
     sfr::imu::sample = false;
 }
 void Boot::dispatch()
@@ -23,6 +25,7 @@ void AliveSignal::transition_to()
 {
     sfr::rockblock::sleep_mode = false;
     sfr::acs::off = true;
+    sfr::imu::turn_off = true;
     sfr::imu::sample = false;
 }
 void AliveSignal::dispatch()
@@ -35,6 +38,7 @@ void LowPowerAliveSignal::transition_to()
 {
     sfr::rockblock::sleep_mode = false;
     sfr::acs::off = true;
+    sfr::imu::turn_off = true;
     sfr::imu::sample = false;
 }
 void LowPowerAliveSignal::dispatch()
@@ -66,6 +70,7 @@ void LowPowerDetumbleSpin::transition_to()
 {
     sfr::rockblock::sleep_mode = true;
     sfr::acs::off = true;
+    sfr::imu::turn_off = true;
     sfr::imu::sample = false;
 }
 void LowPowerDetumbleSpin::dispatch()
@@ -90,6 +95,7 @@ void LowPower::transition_to()
 {
     sfr::rockblock::sleep_mode = false;
     sfr::acs::off = true;
+    sfr::imu::turn_off = true;
     sfr::imu::sample = false;
 }
 void LowPower::dispatch()
@@ -101,6 +107,7 @@ void Transmit::transition_to()
 {
     sfr::rockblock::sleep_mode = false;
     sfr::acs::off = true;
+    sfr::imu::turn_off = true;
     sfr::imu::sample = false;
 }
 void Transmit::dispatch()
@@ -125,6 +132,7 @@ void TransmitDeployment::transition_to()
 {
     sfr::rockblock::sleep_mode = false;
     sfr::acs::off = true;
+    sfr::imu::turn_off = true;
     sfr::imu::sample = false;
 }
 void TransmitDeployment::dispatch()
@@ -137,6 +145,7 @@ void LowPowerDeployment::transition_to()
 {
     sfr::rockblock::sleep_mode = false;
     sfr::acs::off = true;
+    sfr::imu::turn_off = true;
     sfr::imu::sample = false;
 }
 void LowPowerDeployment::dispatch()
@@ -160,6 +169,7 @@ void TransmitArmed::transition_to()
 {
     sfr::rockblock::sleep_mode = false;
     sfr::acs::off = true;
+    sfr::imu::turn_off = true;
     sfr::imu::sample = false;
 }
 void TransmitArmed::dispatch()
@@ -172,6 +182,7 @@ void LowPowerArmed::transition_to()
 {
     sfr::rockblock::sleep_mode = false;
     sfr::acs::off = true;
+    sfr::imu::turn_off = true;
     sfr::imu::sample = false;
 }
 void LowPowerArmed::dispatch()
@@ -196,6 +207,7 @@ void TransmitInSun::transition_to()
 {
     sfr::rockblock::sleep_mode = false;
     sfr::acs::off = true;
+    sfr::imu::turn_off = true;
     sfr::imu::sample = false;
 }
 void TransmitInSun::dispatch()
@@ -209,6 +221,7 @@ void LowPowerInSun::transition_to()
 {
     sfr::rockblock::sleep_mode = false;
     sfr::acs::off = true;
+    sfr::imu::turn_off = true;
     sfr::imu::sample = false;
 }
 void LowPowerInSun::dispatch()
@@ -224,6 +237,7 @@ void VoltageFailureInSun::transition_to()
 {
     sfr::rockblock::sleep_mode = false;
     sfr::acs::off = true;
+    sfr::imu::turn_off = true;
     sfr::imu::sample = false;
 }
 
@@ -240,13 +254,13 @@ void BootCamera::transition_to()
 {
     sfr::rockblock::sleep_mode = true;
     sfr::acs::off = true;
+    sfr::imu::turn_off = true;
     sfr::imu::sample = false;
+    sfr::camera::turn_on = true;
 }
 void BootCamera::dispatch()
 {
-    if (sfr::camera::init_mode == camera_init_mode_type::complete || sfr::camera::failed_times >= 5) {
-        // reset
-        sfr::camera::failed_times = 0;
+    if (sfr::camera::init_mode == camera_init_mode_type::complete || sfr::camera::failed_times > sfr::camera::failed_limit) {
         sfr::mission::current_mode = sfr::mission::mandatoryBurns;
     }
 }
@@ -255,6 +269,7 @@ void MandatoryBurns::transition_to()
 {
     sfr::rockblock::sleep_mode = true;
     sfr::acs::off = true;
+    sfr::imu::turn_off = true;
     sfr::imu::sample = true;
 }
 
@@ -267,6 +282,7 @@ void RegularBurns::transition_to()
 {
     sfr::rockblock::sleep_mode = true;
     sfr::acs::off = true;
+    sfr::imu::turn_off = true;
     sfr::imu::sample = true;
 }
 void RegularBurns::dispatch()
@@ -283,10 +299,9 @@ void Photo::transition_to()
 {
     sfr::rockblock::sleep_mode = true;
     sfr::acs::off = true;
+    sfr::imu::turn_off = true;
     sfr::imu::sample = true;
-    // set two variables to true to make sure the CubeSat would take the photo
     sfr::camera::take_photo = true;
-    sfr::camera::turn_on = true;
 }
 
 void Photo::dispatch()

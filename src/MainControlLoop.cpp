@@ -1,6 +1,7 @@
 #include "MainControlLoop.hpp"
 
 int start;
+int test_count = 0;
 
 MainControlLoop::MainControlLoop()
     : ControlTask<void>(),
@@ -61,4 +62,8 @@ void MainControlLoop::execute()
     camera_control_task.execute_on_time();
     rockblock_control_task.execute_on_time();
     eeprom_control_task.execute();
+
+    sfr::imu::turn_on = true;
+
+    Serial.printf("End of the loop\n\n");
 }
