@@ -3,6 +3,8 @@
 
 #include "Adafruit_LSM9DS1.h"
 #include "Control Tasks/TimedControlTask.hpp"
+#include "sfr.hpp"
+#include "IMUMonitor.hpp"
 
 class IMUDownlink : public TimedControlTask<void>
 {

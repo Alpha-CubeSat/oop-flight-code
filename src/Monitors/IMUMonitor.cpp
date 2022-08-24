@@ -7,6 +7,8 @@
 IMUMonitor::IMUMonitor(unsigned int offset)
     : TimedControlTask<void>(offset)
 {
+
+    gyro_x_value = new SensorReading(1, gyro_min, gyro_max);
     imu = Adafruit_LSM9DS1(constants::imu::CSAG, constants::imu::CSM);
 
     if (!imu.begin()) {
@@ -17,13 +19,13 @@ IMUMonitor::IMUMonitor(unsigned int offset)
         imu.setupMag(imu.LSM9DS1_MAGGAIN_4GAUSS);
         imu.setupGyro(imu.LSM9DS1_GYROSCALE_245DPS);
     }
-    sfr::imu::mode = sensor_mode_type::init; // This is already done in sfr.cpp but included for clarity
+    mode = sensor_mode_type::init; // This is already done in sfr.cpp but included for clarity
 }
 
 void IMUMonitor::execute()
 {
     if (sfr::imu::sample) {
-        switch (sfr::imu::mode) {
+        switch (mode) {
         case sensor_mode_type::init:
             // Reads result of IMUMonitor initialization and makes the transition to normal or abnormal_init.
             // This step is needed to wait for sfr.cpp to finish initalizing everything. The SensorReading object
@@ -97,7 +99,7 @@ void IMUMonitor::transition_to_normal()
     // updates imu mode to normal
     // faults are cleared
     // all check flags are set to true
-    sfr::imu::mode = sensor_mode_type::normal;
+    mode = sensor_mode_type::normal;
     mag_x_average->set_valid();
     mag_y_average->set_valid();
     mag_z_average->set_valid();
@@ -113,7 +115,7 @@ void IMUMonitor::transition_to_abnormal_init()
     // updates imu mode to abnormal_init
     // trips fault
     // all check flags are set to false
-    sfr::imu::mode = sensor_mode_type::abnormal_init;
+    mode = sensor_mode_type::abnormal_init;
     mag_x_average->set_invalid();
     mag_y_average->set_invalid();
     mag_z_average->set_invalid();

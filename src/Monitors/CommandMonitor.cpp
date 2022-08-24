@@ -8,6 +8,7 @@ CommandMonitor::CommandMonitor(unsigned int offset)
 
 void CommandMonitor::execute()
 {
+    #if 0
     if (sfr::rockblock::waiting_command) {
         while (!sfr::rockblock::processed_commands.empty()) {
             // RockblockCommand command = sfr::rockblock::processed_commands.front();
@@ -71,6 +72,8 @@ void CommandMonitor::execute()
         }
         sfr::rockblock::waiting_command = false;
     }
+
+    #endif
 }
 
 void CommandMonitor::dispatch_change_mission_mode()
@@ -104,6 +107,7 @@ void CommandMonitor::dispatch_change_acs_mode()
     }*/
 }
 
+#if 0
 void CommandMonitor::dispatch_change_fault_mode(uint32_t f_arg_1)
 {
     if (f_arg_1 == get_decimal_arg(constants::rockblock::active)) {
@@ -164,3 +168,5 @@ uint32_t CommandMonitor::get_decimal_arg(const uint8_t *hex_arg_bytes)
 {
     return (hex_arg_bytes[3] << 24) | (hex_arg_bytes[2]) << 16 | (hex_arg_bytes[1] << 8) | (hex_arg_bytes[0]);
 }
+
+#endif

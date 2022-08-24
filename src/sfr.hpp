@@ -159,6 +159,7 @@ namespace sfr {
         SFRField<uint32_t> max_fragments(256, 2202);
 
         SFRField<bool> sample(true, 2203);
+        SFRField<bool> sample_gyro(true, 2204);
     } // namespace imu
     namespace temperature {
         // OP Codes 2300

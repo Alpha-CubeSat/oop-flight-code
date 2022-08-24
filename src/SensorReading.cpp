@@ -139,3 +139,13 @@ bool repeated_values(std::deque<float> buffer)
 
     return true;
 }
+
+float get_max()
+{
+    return max;
+}
+
+float get_min()
+{
+    return min;
+}

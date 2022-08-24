@@ -3,6 +3,7 @@
 
 #include "Control Tasks/TimedControlTask.hpp"
 #include "SensorReading.hpp"
+#include "sfr.hpp"
 
 class CurrentMonitor : public TimedControlTask<void>
 {

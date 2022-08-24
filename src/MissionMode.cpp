@@ -15,7 +15,7 @@ void Boot::transition_to()
 }
 void Boot::dispatch()
 {
-    timed_out(sfr::mission::aliveSignal, sfr::boot::max_time);
+    timed_out(&aliveSignal, sfr::boot::max_time);
 }
 
 void AliveSignal::transition_to()
@@ -26,8 +26,8 @@ void AliveSignal::transition_to()
 }
 void AliveSignal::dispatch()
 {
-    enter_lp(sfr::mission::lowPowerAliveSignal);
-    exit_signal_phase(sfr::mission::detumbleSpin);
+    enter_lp(&lowPowerAliveSignal);
+    exit_signal_phase(&detumbleSpin);
 }
 
 void LowPowerAliveSignal::transition_to()
@@ -38,8 +38,8 @@ void LowPowerAliveSignal::transition_to()
 }
 void LowPowerAliveSignal::dispatch()
 {
-    exit_lp(sfr::mission::aliveSignal);
-    exit_signal_phase(sfr::mission::lowPowerDetumbleSpin);
+    exit_lp(&aliveSignal);
+    exit_signal_phase(&lowPowerDetumbleSpin);
 }
 
 void DetumbleSpin::transition_to()
@@ -55,10 +55,10 @@ void DetumbleSpin::dispatch()
         sfr::detumble::num_imu_retries++;
     }
     if (sfr::detumble::num_imu_retries >= sfr::detumble::max_imu_retries) {
-        sfr::mission::current_mode = sfr::mission::normal;
+        current_mode = normal;
     }
-    enter_lp(sfr::mission::lowPowerDetumbleSpin);
-    exit_detumble_phase(sfr::mission::normal);
+    enter_lp(lowPowerDetumbleSpin);
+    exit_detumble_phase(normal);
 }
 
 void LowPowerDetumbleSpin::transition_to()
@@ -69,8 +69,8 @@ void LowPowerDetumbleSpin::transition_to()
 }
 void LowPowerDetumbleSpin::dispatch()
 {
-    exit_lp(sfr::mission::detumbleSpin);
-    exit_detumble_phase(sfr::mission::lowPower);
+    exit_lp(&detumbleSpin);
+    exit_detumble_phase(&lowPower);
 }
 
 void Normal::transition_to()
@@ -81,8 +81,8 @@ void Normal::transition_to()
 }
 void Normal::dispatch()
 {
-    enter_lp(sfr::mission::lowPower);
-    timed_out(sfr::mission::transmit, sfr::acs::on_time);
+    enter_lp(&lowPower);
+    timed_out(&transmit, sfr::acs::on_time);
 }
 
 void LowPower::transition_to()
@@ -93,7 +93,7 @@ void LowPower::transition_to()
 }
 void LowPower::dispatch()
 {
-    check_previous(sfr::mission::normal, sfr::mission::transmit);
+    check_previous(&normal, &transmit);
 }
 
 void Transmit::transition_to()
@@ -104,8 +104,8 @@ void Transmit::transition_to()
 }
 void Transmit::dispatch()
 {
-    enter_lp(sfr::mission::lowPower);
-    timed_out(sfr::mission::normal, sfr::mission::acs_transmit_cycle_time - sfr::acs::on_time);
+    enter_lp(&lowPower);
+    timed_out(&normal, sfr::mission::acs_transmit_cycle_time - sfr::acs::on_time);
 }
 
 void NormalDeployment::transition_to()
@@ -116,8 +116,8 @@ void NormalDeployment::transition_to()
 }
 void NormalDeployment::dispatch()
 {
-    enter_lp(sfr::mission::lowPowerDeployment);
-    timed_out(sfr::mission::transmitDeployment, sfr::acs::on_time);
+    enter_lp(&lowPowerDeployment);
+    timed_out(&transmitDeployment, sfr::acs::on_time);
 }
 
 void TransmitDeployment::transition_to()
@@ -128,8 +128,8 @@ void TransmitDeployment::transition_to()
 }
 void TransmitDeployment::dispatch()
 {
-    enter_lp(sfr::mission::lowPowerDeployment);
-    timed_out(sfr::mission::normalDeployment, sfr::mission::acs_transmit_cycle_time - sfr::acs::on_time);
+    enter_lp(&lowPowerDeployment);
+    timed_out(&normalDeployment, sfr::mission::acs_transmit_cycle_time - sfr::acs::on_time);
 }
 
 void LowPowerDeployment::transition_to()
@@ -140,7 +140,7 @@ void LowPowerDeployment::transition_to()
 }
 void LowPowerDeployment::dispatch()
 {
-    check_previous(sfr::mission::normalDeployment, sfr::mission::transmitDeployment);
+    check_previous(&normalDeployment, &transmitDeployment);
 }
 
 void NormalArmed::transition_to()
@@ -151,8 +151,8 @@ void NormalArmed::transition_to()
 }
 void NormalArmed::dispatch()
 {
-    enter_lp(sfr::mission::lowPowerArmed);
-    timed_out(sfr::mission::transmitArmed, sfr::acs::on_time);
+    enter_lp(&lowPowerArmed);
+    timed_out(&transmitArmed, sfr::acs::on_time);
 }
 
 void TransmitArmed::transition_to()
