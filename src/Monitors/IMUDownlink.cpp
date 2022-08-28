@@ -19,10 +19,9 @@ void IMUDownlink::execute()
         IMUMonitor::gyro_y_value->get_value( &gyro_y );
         IMUMonitor::gyro_z_value->get_value( &gyro_z );
 
-        // LJG TODO convert float to uint8
-        /*sfr::imu::imu_dlink.push_front(gyro_x);
-        sfr::imu::imu_dlink.push_front(gyro_y);
-        sfr::imu::imu_dlink.push_front(gyro_z);*/
+        imu_dlink.push_front(gyro_x);
+        imu_dlink.push_front(gyro_y);
+        imu_dlink.push_front(gyro_z);
     }
 
     if (sfr::mission::current_mode == sfr::mission::mandatoryBurns || sfr::mission::current_mode == sfr::mission::regularBurns) {

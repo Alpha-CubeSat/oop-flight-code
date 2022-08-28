@@ -7,8 +7,10 @@
 IMUMonitor::IMUMonitor(unsigned int offset)
     : TimedControlTask<void>(offset)
 {
+    gyro_x_value = new SensorReading(1, 0, 0);
+    gyro_y_value = new SensorReading(1, 0, 0);
+    gyro_z_value = new SensorReading(1, 0, 0);
 
-    gyro_x_value = new SensorReading(1, gyro_min, gyro_max);
     imu = Adafruit_LSM9DS1(constants::imu::CSAG, constants::imu::CSM);
 
     if (!imu.begin()) {

@@ -27,9 +27,6 @@ public:
     static SensorReading *gyro_y_value; 
     static SensorReading *gyro_z_value; 
 
-    SensorReading *gyro_y_value = new SensorReading(1, 0, 0);
-    SensorReading *gyro_z_value = new SensorReading(1, 0, 0);
-
     SensorReading *mag_x_average = new SensorReading(fault_index_type::mag_x, 20, 0, 0);
     SensorReading *mag_y_average = new SensorReading(fault_index_type::mag_y, 20, 0, 0);
     SensorReading *mag_z_average = new SensorReading(fault_index_type::mag_z, 20, 0, 0);
@@ -54,8 +51,6 @@ private:
     void capture_imu_values();
 
     sensor_mode_type mode;
-
-    // LJG TODO confirm how many values should be used for average
 };
 
 #endif
