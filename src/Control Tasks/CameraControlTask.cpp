@@ -164,7 +164,7 @@ void CameraControlTask::camera_init()
 void CameraControlTask::transition_to_normal()
 {
     // updates camera mode to normal
-    sfr::camera::mode = sensor_mode_type::normal;
+    sfr::camera::mode = (uint16_t)sensor_mode_type::normal;
 #ifdef VERBOSE
     Serial.println("camera initialization successful");
 #endif
@@ -174,7 +174,7 @@ void CameraControlTask::transition_to_abnormal_init()
 {
     // updates camera mode to abnormal_init
     // trips fault
-    sfr::camera::mode = sensor_mode_type::abnormal_init;
+    sfr::camera::mode = (uint16_t)sensor_mode_type::abnormal_init;
     Pins::setPinState(constants::camera::power_on_pin, LOW);
     pinMode(constants::camera::rx, OUTPUT);
     pinMode(constants::camera::tx, OUTPUT);
