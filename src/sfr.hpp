@@ -13,7 +13,6 @@
 #include "Phase.hpp"
 #include "SFRField.hpp"
 #include "constants.hpp"
-#include "MissionMode.hpp"
 #include <deque>
 
 namespace sfr {
@@ -225,7 +224,7 @@ namespace sfr {
     } // namespace rockblock
     namespace imu {
         // OP Codes 2200
-        SFRField<uint16_t> mode(sensor_mode_type::init, 2200);
+        SFRField<uint16_t> mode((uint16_t)sensor_mode_type::init, 2200);
         SFRField<bool> successful_init(true, 2201);
 
         SFRField<uint32_t> max_fragments(256, 2202);

@@ -5,8 +5,8 @@
 #include "MissionMode.hpp"
 #include "Phase.hpp"
 #include "constants.hpp"
-#include <deque>
 #include "sfr.hpp"
+#include <deque>
 
 class MissionManager : public TimedControlTask<void>
 {
