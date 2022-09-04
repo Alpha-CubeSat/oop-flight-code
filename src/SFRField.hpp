@@ -80,13 +80,15 @@ public:
     {
         return value;
     }
-    
-    T get() { 
-        return value; 
+
+    T get()
+    {
+        return value;
     }
 
-    float get_float() { 
-        return value / resolution; 
+    float get_float()
+    {
+        return value / resolution;
     }
 
     T set(T input)
