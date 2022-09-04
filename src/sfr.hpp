@@ -2,6 +2,7 @@
 #define SFR_HPP_
 
 #include "Arduino.h"
+#include "Commands/RockblockCommand.hpp"
 #include "Control Tasks/BurnwireControlTask.hpp"
 #include "Control Tasks/EEPROMControlTask.hpp"
 #include "Control Tasks/TimedControlTask.hpp"
@@ -19,7 +20,6 @@
 #include "Modes/simple_acs_type.enum"
 #include "Phase.hpp"
 #include "Pins.hpp"
-#include "RockblockCommand.hpp"
 #include "RockblockSimulator.hpp"
 #include "SFRField.hpp"
 #include "SensorReading.hpp"
@@ -303,30 +303,30 @@ namespace sfr {
     namespace fault {
         extern fault_mode_type mode;
 
-        // extern unsigned char fault_1;
-        // extern unsigned char fault_2;
-        // extern unsigned char fault_3;
+        extern unsigned char fault_1;
+        extern unsigned char fault_2;
+        extern unsigned char fault_3;
 
-        // // FAULT 1
-        // extern bool check_mag_x;
-        // extern bool check_mag_y;
-        // extern bool check_mag_z;
-        // extern bool check_gyro_x;
-        // extern bool check_gyro_y;
-        // extern bool check_gyro_z;
-        // extern bool check_acc_x;
-        // extern bool check_acc_y;
+        // FAULT 1
+        extern bool check_mag_x;
+        extern bool check_mag_y;
+        extern bool check_mag_z;
+        extern bool check_gyro_x;
+        extern bool check_gyro_y;
+        extern bool check_gyro_z;
+        extern bool check_acc_x;
+        extern bool check_acc_y;
 
-        // // FAULT 2
-        // extern bool check_acc_z;
-        // extern bool check_temp_c;
-        // extern bool check_solar_current;
-        // extern bool check_voltage;
+        // FAULT 2
+        extern bool check_acc_z;
+        extern bool check_temp_c;
+        extern bool check_solar_current;
+        extern bool check_voltage;
 
-        // // FAULT 3
-        // extern bool check_burn_wire;
-        // extern bool check_sd_card;
-        // extern bool check_camera_on_failed;
+        // FAULT 3
+        extern bool check_burn_wire;
+        extern bool check_sd_card;
+        extern bool check_camera_on_failed;
     } // namespace fault
     namespace button {
         extern bool pressed;

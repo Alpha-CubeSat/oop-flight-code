@@ -380,9 +380,8 @@ void RockblockControlTask::dispatch_process_command()
             Serial.println("SAT CMD");
             // Instantiate a new unprocessed raw command
             RawRockblockCommand new_raw_command;
-            sfr::rockblock::raw_commands.push_back(new_raw_command);
-            sfr::rockblock::raw_commands.back().opcode[0] = look_ahead1;
-            sfr::rockblock::raw_commands.back().opcode[1] = look_ahead2;
+            new_raw_command.opcode[0] = look_ahead1;
+            new_raw_command.opcode[1] = look_ahead2;
 
             if (look_ahead1 < 0x10)
                 Serial.print(0, HEX);
@@ -394,42 +393,39 @@ void RockblockControlTask::dispatch_process_command()
 
             // Already read first and second opcode indices; start at third index
             for (size_t o = 2; o < constants::rockblock::opcode_len; ++o) {
-                sfr::rockblock::raw_commands.back().opcode[o] = sfr::rockblock::serial.read();
-                if (sfr::rockblock::raw_commands.back().opcode[o] < 0x10)
+                new_raw_command.opcode[o] = sfr::rockblock::serial.read();
+                if (new_raw_command.opcode[o] < 0x10)
                     Serial.print(0, HEX);
-                Serial.print(sfr::rockblock::raw_commands.back().opcode[o], HEX);
+                Serial.print(new_raw_command.opcode[o], HEX);
             }
             for (size_t a1 = 0; a1 < constants::rockblock::arg1_len; ++a1) {
-                sfr::rockblock::raw_commands.back().arg_1[a1] = sfr::rockblock::serial.read();
-                if (sfr::rockblock::raw_commands.back().arg_1[a1] < 0x10)
+                new_raw_command.arg_1[a1] = sfr::rockblock::serial.read();
+                if (new_raw_command.arg_1[a1] < 0x10)
                     Serial.print(0, HEX);
-                Serial.print(sfr::rockblock::raw_commands.back().arg_1[a1], HEX);
+                Serial.print(new_raw_command.arg_1[a1], HEX);
             }
             for (size_t a2 = 0; a2 < constants::rockblock::arg2_len; ++a2) {
-                sfr::rockblock::raw_commands.back().arg_2[a2] = sfr::rockblock::serial.read();
-                if (sfr::rockblock::raw_commands.back().arg_2[a2] < 0x10)
+                new_raw_command.arg_2[a2] = sfr::rockblock::serial.read();
+                if (new_raw_command.arg_2[a2] < 0x10)
                     Serial.print(0, HEX);
-                Serial.print(sfr::rockblock::raw_commands.back().arg_2[a2], HEX);
+                Serial.print(new_raw_command.arg_2[a2], HEX);
             }
 
             Serial.println();
 
-            if (check_valid_command(sfr::rockblock::raw_commands.back())) {
-                uint16_t f_opcode = sfr::rockblock::raw_commands.back().get_f_opcode();
-                uint32_t f_arg_1 = sfr::rockblock::raw_commands.back().get_f_arg_1();
-                uint32_t f_arg_2 = sfr::rockblock::raw_commands.back().get_f_arg_2();
-                RockblockCommand new_command = RockblockCommand(f_opcode, f_arg_1, f_arg_2);
-                sfr::rockblock::processed_commands.push_back(new_command);
+            // Parse New Command From Input OP Codes
+            RockblockCommand processed = RockblockCommand::commandFactory(new_raw_command);
+            if (processed.isValid()) {
+                // Comand is Valid - Will be added to list to be Executed During CommandMonitor Execute
+                sfr::rockblock::processed_commands.push_back(processed);
                 sfr::rockblock::waiting_command = true;
-            } else if (sfr::rockblock::raw_commands.back().opcode[0] == 'F' && sfr::rockblock::raw_commands.back().opcode[1] == 'L') {
+            } else if (new_raw_command.opcode[0] == 'F' && new_raw_command.opcode[1] == 'L') {
                 Serial.println("SAT INFO: flush confirmed");
                 sfr::rockblock::flush_status = false;
+            } else {
+                // Invalid Command Recieved
+                // TODO: What Goes Here @Lauren
             }
-        }
-
-        // Clear the raw command buffer
-        while (!sfr::rockblock::raw_commands.empty()) {
-            sfr::rockblock::raw_commands.pop_back();
         }
 
         sfr::rockblock::conseq_reads++;
@@ -497,80 +493,4 @@ void RockblockControlTask::dispatch_end_transmission()
 void RockblockControlTask::transition_to(rockblock_mode_type new_mode)
 {
     sfr::rockblock::mode = new_mode;
-}
-
-bool RockblockControlTask::check_valid_command(RawRockblockCommand raw_command)
-{
-    bool opcode = false;
-    bool arg_1 = true;
-    bool arg_2 = true;
-    bool rockblock_downlink_period_opcode = true;
-    bool request_image_fragment_opcode = true;
-    bool request_imu_downlink_fragment_opcode = true;
-    bool burnwire_time_opcode = true;
-    bool burnwire_timeout_opcode = true;
-
-    // Check if opcode matches non-standard command (variable arg)
-    for (size_t o = 0; o < constants::rockblock::opcode_len; o++) {
-        if (raw_command.opcode[o] != constants::rockblock::request_image_fragment[o]) {
-            request_image_fragment_opcode = false;
-        }
-        if (raw_command.opcode[o] != constants::rockblock::rockblock_downlink_period[o]) {
-            rockblock_downlink_period_opcode = false;
-        }
-        if (raw_command.opcode[o] != constants::rockblock::burnwire_time[o]) {
-            burnwire_time_opcode = false;
-        }
-        if (raw_command.opcode[o] != constants::rockblock::burnwire_timeout[o]) {
-            burnwire_timeout_opcode = false;
-        }
-    }
-
-    if (request_image_fragment_opcode) {
-        for (size_t c = 0; c < 99; c++) {
-            for (size_t a1 = 0; a1 < constants::rockblock::arg1_len; a1++) {
-                if (raw_command.arg_1[a1] != sfr::rockblock::camera_commands[c][a1 + constants::rockblock::opcode_len]) {
-                    arg_1 = false;
-                }
-            }
-        }
-    }
-
-    bool non_std_cmd = (rockblock_downlink_period_opcode && arg_2) || (request_image_fragment_opcode && arg_1) || (burnwire_time_opcode) || (burnwire_timeout_opcode);
-    if (non_std_cmd) {
-        Serial.println("SAT CMD: command validated");
-        return true;
-    }
-
-    // Loop over all standard commands
-    for (size_t c = 0; c < constants::rockblock::num_commands; c++) {
-        opcode = true;
-        arg_1 = true;
-        arg_2 = true;
-
-        for (size_t o = 0; o < constants::rockblock::opcode_len; o++) {
-            if (raw_command.opcode[o] != constants::rockblock::known_commands[c][o]) {
-                opcode = false;
-            }
-        }
-        for (size_t a1 = 0; a1 < constants::rockblock::arg1_len; a1++) {
-            if (raw_command.arg_1[a1] != constants::rockblock::known_commands[c][a1 + constants::rockblock::opcode_len]) {
-                arg_1 = false;
-            }
-        }
-        for (size_t a2 = 0; a2 < constants::rockblock::arg2_len; a2++) {
-            if (raw_command.arg_2[a2] != constants::rockblock::known_commands[c][a2 + constants::rockblock::opcode_len + constants::rockblock::arg1_len]) {
-                arg_2 = false;
-            }
-        }
-
-        if ((opcode && arg_1 && arg_2)) {
-            Serial.println("SAT CMD: command validated");
-            return true;
-        }
-    }
-
-    // Command neither standard or non-standard
-    Serial.println("SAT CMD: command invalid");
-    return false;
 }

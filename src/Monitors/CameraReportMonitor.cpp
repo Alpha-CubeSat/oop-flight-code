@@ -23,7 +23,6 @@ void CameraReportMonitor::execute()
         }
         create_camera_report(sfr::camera::fragment_number, sfr::camera::current_serial);
         if (sfr::camera::fragment_number == sfr::rockblock::camera_max_fragments[sfr::camera::current_serial]) {
-            add_possible_command();
             sfr::camera::current_serial += 1;
         } else {
             sfr::camera::fragment_number++;
@@ -94,20 +93,4 @@ void CameraReportMonitor::create_camera_report(int fragment_number, uint8_t seri
     }
     sfr::camera::report_ready = true;
     sfr::camera::report_downlinked = false;
-}
-
-void CameraReportMonitor::add_possible_command()
-{
-    // convert endianness
-    uint32_t converted_serial = __builtin_bswap32(sfr::camera::current_serial);
-
-    // add opcode to possible commands
-    for (size_t i = 0; i < constants::rockblock::opcode_len; i++) {
-        sfr::rockblock::camera_commands[sfr::camera::current_serial][i] = constants::rockblock::request_image_fragment[i];
-    }
-
-    // add argument 1 to possible commands
-    for (size_t i = constants::rockblock::opcode_len; i < (constants::rockblock::arg1_len + constants::rockblock::opcode_len); i++) {
-        sfr::rockblock::camera_commands[sfr::camera::current_serial][i] = (converted_serial >> (8 * i)) & 0xff;
-    }
 }

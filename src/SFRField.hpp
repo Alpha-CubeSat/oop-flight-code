@@ -1,7 +1,11 @@
+#include <cstring>
 #include <limits>
 #include <map>
 #include <stdint.h>
 #include <type_traits>
+
+#ifndef _SFRFIELD_HPP_
+#define _SFRFIELD_HPP_
 
 class SFRInterface
 {
@@ -18,6 +22,10 @@ public:
 
     virtual void reset();
 #endif
+
+    virtual ~SFRInterface(){};
+    static void setFieldVal(int opcode, uint32_t arg1);
+    virtual void setValue(uint32_t arg1);
 };
 
 template <typename T, typename = typename std::enable_if<std::is_arithmetic<T>::value, T>::type>
@@ -29,7 +37,6 @@ private:
     T min;        // </brief Inclusive Maximum Value
     bool bounded; // </brief If max and min are bounded beyond data type
     int opcode;   // </brief Uplink Op Code to set this field
-    int resolution;
 
 #ifdef DEBUG
     T inital;
@@ -43,7 +50,6 @@ public:
         max = max;
         bounded = true;
         opcode = opcode_val;
-        resolution = 1;
 #ifdef DEBUG
         T inital = default_val;
 #endif
@@ -55,21 +61,6 @@ public:
         value = default_val;
         bounded = false;
         opcode = opcode_val;
-        resolution = 1;
-#ifdef DEBUG
-        T inital = default_val;
-#endif
-        SFRInterface::opcode_lookup[opcode_val] = this;
-    }
-
-    SFRField(float default_val, float min, float max, int opcode_val, float resolution)
-    {
-        value = default_val * resolution;
-        min = min;
-        max = max;
-        bounded = true;
-        opcode = opcode_val;
-        resolution = resolution;
 #ifdef DEBUG
         T inital = default_val;
 #endif
@@ -80,28 +71,44 @@ public:
     {
         return value;
     }
-
-    T get()
-    {
-        return value;
-    }
-
-    float get_float()
-    {
-        return value / resolution;
-    }
-
-    T set(T input)
+    T get() { return value; }
+    void set(T input)
     {
         if ((bounded && input <= max && input >= min) || (!bounded)) {
             value = input;
         }
     }
-
 #ifdef DEBUG
     void reset()
     {
         value = initial;
     }
 #endif
+    void setValue(uint32_t arg1)
+    {
+        // Convert 32bit word into Target Type #TODO Joining Two uint16s
+        static_assert(sizeof(T) <= sizeof arg1, "Templated Type is larger than input.");
+        T casted;
+        std::memcpy(&casted, &arg1, sizeof(T));
+        set(casted);
+    }
+
+    // Postfix increment operator.
+    void operator++(int)
+    {
+        value++;
+    }
+
+    // Assignment Operator
+    void operator=(T val)
+    {
+        set(val);
+    }
+
+    void operator+=(T val)
+    {
+        set(value + val);
+    }
 };
+
+#endif

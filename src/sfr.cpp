@@ -206,7 +206,7 @@ namespace sfr {
         int camera_max_fragments[99] = {};
         int commas[constants::rockblock::num_commas] = {0};
 
-        std::deque<RawRockblockCommand> raw_commands;
+        std::deque<RockblockCommand> input_commands;
         std::deque<RockblockCommand> processed_commands;
         int max_commands_count = 10;
 
@@ -323,30 +323,30 @@ namespace sfr {
     namespace fault {
         fault_mode_type mode = fault_mode_type::active;
 
-        // unsigned char fault_1 = 0;
-        // unsigned char fault_2 = 0;
-        // unsigned char fault_3 = 0;
+        unsigned char fault_1 = 0;
+        unsigned char fault_2 = 0;
+        unsigned char fault_3 = 0;
 
-        // // FAULT 1
-        // bool check_mag_x = true;
-        // bool check_mag_y = true;
-        // bool check_mag_z = true;
-        // bool check_gyro_x = true;
-        // bool check_gyro_y = true;
-        // bool check_gyro_z = true;
-        // bool check_acc_x = true;
-        // bool check_acc_y = true;
+        // FAULT 1
+        bool check_mag_x = true;
+        bool check_mag_y = true;
+        bool check_mag_z = true;
+        bool check_gyro_x = true;
+        bool check_gyro_y = true;
+        bool check_gyro_z = true;
+        bool check_acc_x = true;
+        bool check_acc_y = true;
 
-        // // FAULT 2
-        // bool check_acc_z = true;
-        // bool check_temp_c = true;
-        // bool check_solar_current = true;
-        // bool check_voltage = true;
+        // FAULT 2
+        bool check_acc_z = true;
+        bool check_temp_c = true;
+        bool check_solar_current = true;
+        bool check_voltage = true;
 
-        // // FAULT 3
-        // bool check_burn_wire = true;
-        // bool check_sd_card = true;
-        // bool check_camera_on_failed = true;
+        // FAULT 3
+        bool check_burn_wire = true;
+        bool check_sd_card = true;
+        bool check_camera_on_failed = true;
     } // namespace fault
     namespace button {
         bool pressed = true;
