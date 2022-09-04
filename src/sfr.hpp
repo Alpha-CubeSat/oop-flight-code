@@ -13,6 +13,7 @@
 #include "Phase.hpp"
 #include "SFRField.hpp"
 #include "constants.hpp"
+#include "SensorReading.hpp"
 
 namespace sfr {
     namespace stabilization {
@@ -160,6 +161,25 @@ namespace sfr {
 
         SFRField<bool> sample(true, 2203);
         SFRField<bool> sample_gyro(true, 2204);
+
+        SensorReading *mag_x_value = new SensorReading(1, 0, 0);
+        SensorReading *mag_y_value = new SensorReading(1, 0, 0);
+        SensorReading *mag_z_value = new SensorReading(1, 0, 0);
+
+        SensorReading *gyro_x_value = new SensorReading(1, 0, 0);
+        SensorReading *gyro_y_value = new SensorReading(1, 0, 0);
+        SensorReading *gyro_z_value = new SensorReading(1, 0, 0);
+
+        SensorReading *mag_x_average = new SensorReading(fault_index_type::mag_x, 20, 0, 0);
+        SensorReading *mag_y_average = new SensorReading(fault_index_type::mag_y, 20, 0, 0);
+        SensorReading *mag_z_average = new SensorReading(fault_index_type::mag_z, 20, 0, 0);
+
+        SensorReading *gyro_x_average = new SensorReading(fault_index_type::gyro_x, 20, 0, 0);
+        SensorReading *gyro_y_average = new SensorReading(fault_index_type::gyro_y, 20, 0, 0);
+        SensorReading *gyro_z_average = new SensorReading(fault_index_type::gyro_z, 20, 0, 0);
+
+        SensorReading *acc_x_average = new SensorReading(fault_index_type::acc_x, 20, 0, 0);
+        SensorReading *acc_y_average = new SensorReading(fault_index_type::acc_y, 20, 0, 0);
     } // namespace imu
     namespace temperature {
         // OP Codes 2300
