@@ -29,6 +29,7 @@ private:
     T min;        // </brief Inclusive Maximum Value
     bool bounded; // </brief If max and min are bounded beyond data type
     int opcode;   // </brief Uplink Op Code to set this field
+    int resolution;
 
 #ifdef DEBUG
     T inital;
@@ -42,6 +43,7 @@ public:
         max = max;
         bounded = true;
         opcode = opcode_val;
+        resolution = 1;
 #ifdef DEBUG
         T inital = default_val;
 #endif
@@ -53,6 +55,21 @@ public:
         value = default_val;
         bounded = false;
         opcode = opcode_val;
+        resolution = 1;
+#ifdef DEBUG
+        T inital = default_val;
+#endif
+        SFRInterface::opcode_lookup[opcode_val] = this;
+    }
+
+    SFRField(float default_val, float min, float max, int opcode_val, float resolution)
+    {
+        value = default_val * resolution;
+        min = min;
+        max = max;
+        bounded = true;
+        opcode = opcode_val;
+        resolution = resolution;
 #ifdef DEBUG
         T inital = default_val;
 #endif
@@ -63,13 +80,24 @@ public:
     {
         return value;
     }
-    T get() { return value; }
+
+    T get()
+    {
+        return value;
+    }
+
+    float get_float()
+    {
+        return value / resolution;
+    }
+
     T set(T input)
     {
         if ((bounded && input <= max && input >= min) || (!bounded)) {
             value = input;
         }
     }
+
 #ifdef DEBUG
     void reset()
     {
