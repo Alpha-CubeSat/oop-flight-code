@@ -7,6 +7,7 @@
 #include "constants.hpp"
 #include <deque>
 #include <map>
+#include <numeric>
 
 class SensorReading
 {
@@ -28,6 +29,7 @@ public:
     void set_valid();
     float get_min();
     float get_max();
+    boolean is_valid();
 };
 
 #endif

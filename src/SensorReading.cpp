@@ -49,7 +49,7 @@ SensorReading::SensorReading(fault_index_type type, uint8_t buffer_size, float m
 
 SensorReading::SensorReading(uint8_t buffer_size, float max, float min)
 {
-    type = NULL;
+    type = fault_index_type::no_fault;
     buffer_size = buffer_size;
     max = max;
     min = min;
@@ -94,7 +94,7 @@ void SensorReading::set_valid()
 {
     valid = true;
 
-    if (type != NULL)
+    if (type != fault_index_type::no_fault)
         // clear fault bit
         if (map_to_reg[this->type] == 1) {
             faults::fault_1 &= ~map_to_mask[this->type];
@@ -112,7 +112,7 @@ void SensorReading::set_invalid()
     // clear buffer
     buffer.clear();
 
-    if (type != NULL) {
+    if (type != fault_index_type::no_fault) {
         // set fault bit
         if (map_to_reg[this->type] == 1) {
             faults::fault_1 |= map_to_mask[this->type];
@@ -140,12 +140,17 @@ bool repeated_values(std::deque<float> buffer)
     return true;
 }
 
-float get_max()
+float SensorReading::get_max()
 {
     return max;
 }
 
-float get_min()
+float SensorReading::get_min()
 {
     return min;
+}
+
+boolean SensorReading::is_valid()
+{
+    return valid;
 }

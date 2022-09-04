@@ -129,5 +129,5 @@ void IMUMonitor::transition_to_retry()
     // updates imu mode to retry
     // this mode will call either transition_to_normal or transition_to_abnormal_init, which will flip flags
     // called when command to retry processes
-    sfr::imu::mode = sensor_mode_type::retry;
+    sfr::imu::mode = (uint16_t)sensor_mode_type::retry;
 }

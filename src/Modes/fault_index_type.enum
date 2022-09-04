@@ -24,6 +24,8 @@ enum class fault_index_type : unsigned char
     camera_on_failed,
     light_val,
 
+    no_fault
+
 };
 
 #endif

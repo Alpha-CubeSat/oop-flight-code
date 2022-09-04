@@ -285,6 +285,8 @@ void exit_signal_phase(MissionMode *mode)
 
 void exit_detumble_phase(MissionMode *mode)
 {
+    // TODO min unstable gyro and max unstable gyro are SFR fields with resolution
+    /*
     // cubesat has stabilized: gyro z > 1 rad/s && gyro x and gyro y are below 0.2 rad/s
     if (sfr::imu::gyro_z_average->is_valid() && sfr::imu::gyro_x_average->is_valid() && sfr::imu::gyro_y_average->is_valid() && (sfr::imu::gyro_z_average->get_value() >= sfr::detumble::min_stable_gyro_z) && (sfr::imu::gyro_x_average->get_value() <= sfr::detumble::max_stable_gyro_x) && (sfr::imu::gyro_y_average->get_value() <= sfr::detumble::max_stable_gyro_y)) {
         sfr::mission::current_mode = mode;
@@ -295,7 +297,7 @@ void exit_detumble_phase(MissionMode *mode)
         (sfr::imu::gyro_x_average->get_value() >= sfr::detumble::min_unstable_gyro_x) &&
         (sfr::imu::gyro_y_average->get_value() >= sfr::detumble::min_unstable_gyro_y)) {
         sfr::mission::current_mode = mode;
-    }
+    }*/
 
     // detumble has timed out
     if (millis() - sfr::mission::stabilization->start_time >= sfr::stabilization::max_time) {
@@ -305,7 +307,9 @@ void exit_detumble_phase(MissionMode *mode)
 
 void enter_lp(MissionMode *lp_mode)
 {
-    if (!sfr::battery::voltage_average->is_valid() || sfr::battery::voltage_average->get_value() <= sfr::battery::min_battery) {
+    float voltage;
+
+    if (sfr::battery::voltage_average->get_value(&voltage) && voltage <= sfr::battery::min_battery) {
         sfr::mission::current_mode = lp_mode;
     }
 }
@@ -321,7 +325,9 @@ void check_previous(MissionMode *normal_mode, MissionMode *transmit_mode)
 
 void exit_lp(MissionMode *reg_mode)
 {
-    if (sfr::battery::voltage_average->is_valid() && sfr::battery::voltage_average->get_value() >= sfr::battery::acceptable_battery) {
+    float voltage;
+
+    if (sfr::battery::voltage_average->get_value(&voltage) && voltage >= sfr::battery::acceptable_battery) {
         sfr::mission::current_mode = reg_mode;
     }
 }
@@ -335,9 +341,13 @@ void timed_out(MissionMode *next_mode, float max_time)
 
 void enter_lp_insun()
 {
+    float voltage;
+
+    // using is valid rather than the return of get value because we should not enter voltageFailureInSun just because the buffer is not full
+
     if (!sfr::battery::voltage_average->is_valid()) {
         sfr::mission::current_mode = sfr::mission::voltageFailureInSun;
-    } else if (sfr::battery::voltage_average->is_valid() && (sfr::battery::voltage_average->get_value() <= sfr::battery::min_battery)) {
+    } else if (sfr::battery::voltage_average->get_value(&voltage) && voltage <= sfr::battery::min_battery) {
         sfr::mission::current_mode = sfr::mission::lowPowerInSun;
     }
 }
