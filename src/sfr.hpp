@@ -14,6 +14,8 @@
 #include "SFRField.hpp"
 #include "SensorReading.hpp"
 #include "constants.hpp"
+#include <deque>
+#include <RockblockCommand.hpp>
 
 namespace sfr {
     namespace stabilization {
@@ -193,6 +195,10 @@ namespace sfr {
         SFRField<uint32_t> fragments_written(0, 2015);
 
         SFRField<uint32_t> set_res(VC0706_160x120, 2016);
+
+        boolean report_written = false;
+        boolean report_downlinked = true;
+        boolean report_ready = true;
     } // namespace camera
     namespace rockblock {
         // OP Codes 2100
@@ -202,6 +208,19 @@ namespace sfr {
         SFRField<uint32_t> downlink_period(0, 2102);
 
         SFRField<bool> waiting_message(false, 2103);
+
+        std::deque<uint8_t> downlink_report;
+        std::deque<uint8_t> normal_report;
+        std::deque<uint8_t> camera_report;
+        std::deque<uint8_t> imu_report;
+
+        char buffer[constants::rockblock::buffer_size] = {0};
+        int camera_commands[99][constants::rockblock::command_len] = {};
+        int camera_max_fragments[99] = {};
+        int commas[constants::rockblock::num_commas] = {0};
+
+        std::deque<RawRockblockCommand> raw_commands;
+        std::deque<RockblockCommand> processed_commands;
 
         SFRField<uint8_t> max_commands_count(10, 2104);
 
@@ -258,7 +277,9 @@ namespace sfr {
         std::deque<uint8_t> imu_dlink;
 
         boolean report_written = false;
-
+        boolean report_downlinked = true;
+        boolean report_ready = true;
+        
     } // namespace imu
     namespace temperature {
         // OP Codes 2300

@@ -7,12 +7,12 @@ CameraReportMonitor::CameraReportMonitor(unsigned int offset)
 void CameraReportMonitor::execute()
 {
     // Get a requested fragment
-    if (report_downlinked == true && fragment_requested == true) {
+    if (sfr::camera::report_downlinked == true && fragment_requested == true) {
         create_camera_report(fragment_number_requested, serial_requested);
         fragment_requested = false;
     }
     // Prepare data from an image taken for downlink
-    else if (report_downlinked == true && images_written != 0) {
+    else if (sfr::camera::report_downlinked == true && images_written != 0) {
 #ifdef VERBOSE
         Serial.println("Report monitor started");
         Serial.println("Current serial: " + String(sfr::camera::current_serial));
@@ -22,7 +22,7 @@ void CameraReportMonitor::execute()
             full_image_written = false;
         }
         create_camera_report(fragment_number, current_serial);
-        if (fragment_number == RockblockControlTask::getCameraMaxFragments(current_serial)) {
+        if (fragment_number == sfr::rockblock::camera_max_fragments[current_serial]) {
             add_possible_command();
             current_serial += 1;
         } else {
@@ -30,8 +30,8 @@ void CameraReportMonitor::execute()
         }
     }
 
-    if (fragment_number == RockblockControlTask::getCameraMaxFragments(current_serial)) {
-        report_ready = false;
+    if (fragment_number == sfr::rockblock::camera_max_fragments[current_serial]) {
+        sfr::camera::report_ready = false;
         fragment_number = 0;
     }
 }
@@ -92,8 +92,8 @@ void CameraReportMonitor::create_camera_report(int fragment_number, uint8_t seri
     for (int i = 0; i < constants::camera::content_length; i++) {
         sfr::rockblock::camera_report.push_back(parsedbuffer[i]);
     }
-    report_ready = true;
-    report_downlinked = false;
+    sfr::camera::report_ready = true;
+    sfr::camera::report_downlinked = false;
 }
 
 void CameraReportMonitor::add_possible_command()
@@ -103,11 +103,11 @@ void CameraReportMonitor::add_possible_command()
 
     // add opcode to possible commands
     for (size_t i = 0; i < constants::rockblock::opcode_len; i++) {
-        sfr::rockblock::camera_commands[sfr::camera::current_serial][i] = constants::rockblock::request_image_fragment[i];
+        sfr::rockblock::camera_commands[current_serial][i] = constants::rockblock::request_image_fragment[i];
     }
 
     // add argument 1 to possible commands
     for (size_t i = constants::rockblock::opcode_len; i < (constants::rockblock::arg1_len + constants::rockblock::opcode_len); i++) {
-        sfr::rockblock::camera_commands[sfr::camera::current_serial][i] = (converted_serial >> (8 * i)) & 0xff;
+        sfr::rockblock::camera_commands[current_serial][i] = (converted_serial >> (8 * i)) & 0xff;
     }
 }
