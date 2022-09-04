@@ -13,6 +13,7 @@
 #include "Phase.hpp"
 #include "SFRField.hpp"
 #include "constants.hpp"
+#include "SensorReading.hpp"
 
 namespace sfr {
     namespace stabilization {
@@ -76,6 +77,8 @@ namespace sfr {
     namespace photoresistor {
         // OP Codes 1700
         SFRField<bool> covered(true, 1700);
+
+        SensorReading *light_val_average = new SensorReading(fault_index_type::light_val, 20, 0, 1000);
     } // namespace photoresistor
     namespace mission {
         // OP Codes 1800
@@ -164,10 +167,15 @@ namespace sfr {
     namespace temperature {
         // OP Codes 2300
         SFRField<bool> in_sun(false, 2300);
+
+        SensorReading *temp_c_average = new SensorReading(fault_index_type::temp_c, 20, -500, 500);
+        SensorReading *temp_c_value = new SensorReading(1, -500, 500);
     } // namespace temperature
     namespace current {
         // OP Codes 2400
         SFRField<bool> in_sun(false, 2400);
+
+        SensorReading *solar_current_average = new SensorReading(fault_index_type::solar_current, 20, 0, 1000);
     } // namespace current
     namespace acs {
         // OP Codes 2500
@@ -183,6 +191,9 @@ namespace sfr {
         // TODO
         SFRField<uint32_t> acceptable_battery(0, 2600);
         SFRField<uint32_t> min_battery(0, 2601);
+
+        SensorReading *voltage_value = new SensorReading(1, 0, 5);
+        SensorReading *voltage_average = new SensorReading(fault_index_type::voltage, 20, 0, 5);
     } // namespace battery
     namespace button {
         // OP Codes 2700
