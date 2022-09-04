@@ -12,8 +12,8 @@
 #include "Modes/simple_acs_type.enum"
 #include "Phase.hpp"
 #include "SFRField.hpp"
-#include "constants.hpp"
 #include "SensorReading.hpp"
+#include "constants.hpp"
 
 namespace sfr {
     namespace stabilization {
@@ -184,6 +184,8 @@ namespace sfr {
         SensorReading *acc_y_average = new SensorReading(fault_index_type::acc_y, 20, 0, 0);
 
         std::deque<uint8_t> imu_dlink;
+
+        boolean report_written = false;
 
     } // namespace imu
     namespace temperature {

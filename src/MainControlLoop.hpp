@@ -15,6 +15,7 @@
 #include "Monitors/CameraReportMonitor.hpp"
 #include "Monitors/CommandMonitor.hpp"
 #include "Monitors/CurrentMonitor.hpp"
+#include "Monitors/IMUDownlink.hpp"
 #include "Monitors/IMUDownlinkReportMonitor.hpp"
 #include "Monitors/IMUMonitor.hpp"
 #include "Monitors/NormalReportMonitor.hpp"

@@ -20,5 +20,4 @@ void MissionManager::execute()
 
     previous_mode = current_mode;
     current_mode.dispatch();
-
 }

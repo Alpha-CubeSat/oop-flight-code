@@ -8,7 +8,7 @@ CommandMonitor::CommandMonitor(unsigned int offset)
 
 void CommandMonitor::execute()
 {
-    #if 0
+#if 0
     if (sfr::rockblock::waiting_command) {
         while (!sfr::rockblock::processed_commands.empty()) {
             // RockblockCommand command = sfr::rockblock::processed_commands.front();
@@ -73,7 +73,7 @@ void CommandMonitor::execute()
         sfr::rockblock::waiting_command = false;
     }
 
-    #endif
+#endif
 }
 
 void CommandMonitor::dispatch_change_mission_mode()

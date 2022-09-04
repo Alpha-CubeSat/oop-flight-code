@@ -3,8 +3,8 @@
 
 #include "Control Tasks/TimedControlTask.hpp"
 #include "SD.h"
-#include <vector>
 #include "sfr.hpp"
+#include <vector>
 
 class CameraReportMonitor : public TimedControlTask<void>
 {

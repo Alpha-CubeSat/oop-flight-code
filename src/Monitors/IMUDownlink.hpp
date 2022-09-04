@@ -11,7 +11,6 @@ public:
     IMUDownlink(unsigned int offset);
     void execute();
     Adafruit_LSM9DS1 imu;
-    std::deque<uint8_t> imu_dlink;
 };
 
 #endif

@@ -4,7 +4,7 @@ IMUDownlinkReportMonitor::IMUDownlinkReportMonitor(unsigned int offset) : TimedC
 
 void IMUDownlinkReportMonitor::execute()
 {
-    if (report_downlinked == true && report_written) {
+    if (report_downlinked == true && sfr::imu::report_written) {
         if (full_report_written == true || fragment_number == 0) {
             full_report_written = false;
         }

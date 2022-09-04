@@ -2,9 +2,9 @@
 #define IMU_DOWNLINK_REPORT_MONITOR_HPP_
 
 #include "Control Tasks/TimedControlTask.hpp"
+#include "sfr.hpp"
 #include <cassert>
 #include <vector>
-#include "sfr.hpp"
 
 class IMUDownlinkReportMonitor : public TimedControlTask<void>
 {
@@ -18,7 +18,6 @@ public:
     uint8_t fragment_number = 0;
     bool report_ready = false;
     bool report_downlinked = true;
-    bool report_written = false;
     bool full_report_written = false;
 };
 
