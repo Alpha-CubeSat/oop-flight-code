@@ -10,7 +10,7 @@ void IMUDownlinkReportMonitor::execute()
         }
         create_imu_downlink_report(fragment_number);
         // imu_downlink buffer is empty and all fragments have been downlinked
-        if (imu_dlink.size() == 0) {
+        if (sfr::imu::imu_dlink.size() == 0) {
             report_ready = false;
             // TODO
             // add_possible_command();
@@ -29,19 +29,19 @@ void IMUDownlinkReportMonitor::create_imu_downlink_report(int fragment_number)
 {
 
     // pushed imu report id
-    imu_report.push_back(24);
+    sfr::rockblock::imu_report.push_back(24);
 
     // pushed imu fragment number
-    imu_report.push_back(fragment_number);
-    int pop_size = sfr::imu::content_length;
-    if (content_length > imu_dlink.size()) {
-        pop_size = imu_dlink.size();
+    sfr::rockblock::imu_report.push_back(fragment_number);
+    int pop_size = constants::rockblock::content_length;
+    if (constants::rockblock::content_length > sfr::imu::imu_dlink.size()) {
+        pop_size = sfr::imu::imu_dlink.size();
     }
 
     // add actual gyro content to imu report
     for (int i = 0; i < min(pop_size, constants::imu::max_gyro_imu_report_size); i++) {
-        imu_report.push_back(imu_dlink.back());
-        imu_dlink.pop_back();
+        sfr::rockblock::imu_report.push_back(sfr::imu::imu_dlink.back());
+        sfr::imu::imu_dlink.pop_back();
     }
     // for the next downlink cycle
     report_ready = true;

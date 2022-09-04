@@ -151,6 +151,8 @@ namespace sfr {
 
         SFRField<uint16_t> downlink_report_type((uint16_t)report_type::normal_report, 2116);
         SFRField<uint16_t> mode((uint16_t)rockblock_mode_type::send_at, 2117);
+
+        std::deque<uint8_t> imu_report;
     } // namespace rockblock
     namespace imu {
         // OP Codes 2200
@@ -180,6 +182,9 @@ namespace sfr {
 
         SensorReading *acc_x_average = new SensorReading(fault_index_type::acc_x, 20, 0, 0);
         SensorReading *acc_y_average = new SensorReading(fault_index_type::acc_y, 20, 0, 0);
+
+        std::deque<uint8_t> imu_dlink;
+
     } // namespace imu
     namespace temperature {
         // OP Codes 2300
