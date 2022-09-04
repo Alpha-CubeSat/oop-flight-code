@@ -10,7 +10,6 @@ class TemperatureMonitor : public TimedControlTask<void>
 public:
     TemperatureMonitor(unsigned int offset);
     void execute();
-
 };
 
 #endif

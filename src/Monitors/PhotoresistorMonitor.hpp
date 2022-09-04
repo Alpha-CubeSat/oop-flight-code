@@ -2,9 +2,9 @@
 #define PHOTORESISTOR_MONITOR_HPP_
 
 #include "Control Tasks/TimedControlTask.hpp"
-#include <deque>
 #include "constants.hpp"
 #include "sfr.hpp"
+#include <deque>
 
 class PhotoresistorMonitor : public TimedControlTask<void>
 {
@@ -16,7 +16,6 @@ public:
 
 private:
     void capture_photoresistor_value();
-    
 };
 
 #endif
