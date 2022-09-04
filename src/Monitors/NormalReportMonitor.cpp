@@ -1,4 +1,5 @@
 #include "NormalReportMonitor.hpp"
+#include "sfr.hpp"
 
 NormalReportMonitor::NormalReportMonitor(unsigned int offset)
     : TimedControlTask<void>(offset)

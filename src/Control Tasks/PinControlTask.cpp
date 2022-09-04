@@ -1,4 +1,5 @@
 #include "PinControlTask.hpp"
+#include "Pins.hpp"
 
 PinControlTask::PinControlTask()
 {
