@@ -8,17 +8,18 @@ MissionManager::MissionManager(unsigned int offset)
 
 void MissionManager::execute()
 {
-    if (previous_mode.get_id() != current_mode.get_id()) {
-        current_mode.set_start_time(millis());
-        current_mode.transition_to();
-        mode_history.push_front(current_mode.get_id());
+    if (sfr::mission::previous_mode->get_id() != sfr::mission::current_mode->get_id()) {
+        sfr::mission::current_mode->set_start_time(millis());
+        sfr::mission::current_mode->transition_to();
+        sfr::mission::mode_history.push_front(sfr::mission::current_mode->get_id());
     }
 
-    if (previous_phase.get_id() != current_phase.get_id()) {
-        current_phase.set_start_time(millis());
+    if (sfr::mission::previous_phase->get_id() != sfr::mission::current_phase->get_id()) {
+        sfr::mission::current_phase->set_start_time(millis());
     }
 
-    previous_mode = current_mode;
-    current_mode.dispatch();
+    sfr::mission::current_mode->dispatch();
+    sfr::mission::previous_mode = sfr::mission::current_mode;
+    
 
 }

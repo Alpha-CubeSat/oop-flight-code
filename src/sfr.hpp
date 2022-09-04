@@ -13,6 +13,8 @@
 #include "Phase.hpp"
 #include "SFRField.hpp"
 #include "constants.hpp"
+#include "MissionMode.hpp"
+#include <deque>
 
 namespace sfr {
     namespace stabilization {
@@ -84,6 +86,76 @@ namespace sfr {
         SFRField<uint32_t> time_deployed(0, 1801);
         SFRField<bool> deployed(false, 1802);
         SFRField<bool> already_deployed(false, 1803);
+
+        Boot boot_class;
+        AliveSignal aliveSignal_class;
+        LowPowerAliveSignal lowPowerAliveSignal_class;
+        DetumbleSpin detumbleSpin_class;
+        LowPowerDetumbleSpin lowPowerDetumbleSpin_class;
+        Normal normal_class;
+        Transmit transmit_class;
+        LowPower lowPower_class;
+        NormalDeployment normalDeployment_class;
+        TransmitDeployment transmitDeployment_class;
+        LowPowerDeployment lowPowerDeployment_class;
+        NormalArmed normalArmed_class;
+        TransmitArmed transmitArmed_class;
+        LowPowerArmed lowPowerArmed_class;
+        NormalInSun normalInSun_class;
+        TransmitInSun transmitInSun_class;
+        LowPowerInSun lowPowerInSun_class;
+        VoltageFailureInSun voltageFailureInSun_class;
+        BootCamera bootCamera_class;
+        MandatoryBurns mandatoryBurns_class;
+        RegularBurns regularBurns_class;
+        Photo photo_class;
+
+        Initialization initialization_class;
+        Stabilization stabilization_class;
+        Standby standby_class;
+        Deployment deployment_class;
+        Armed armed_class;
+        InSun insun_class;
+        Firing firing_class;
+
+        MissionMode *boot = &boot_class;
+        MissionMode *aliveSignal = &aliveSignal_class;
+        MissionMode *lowPowerAliveSignal = &lowPowerAliveSignal_class;
+        MissionMode *detumbleSpin = &detumbleSpin_class;
+        MissionMode *lowPowerDetumbleSpin = &lowPowerDetumbleSpin_class;
+        MissionMode *normal = &normal_class;
+        MissionMode *transmit = &transmit_class;
+        MissionMode *lowPower = &lowPower_class;
+        MissionMode *normalDeployment = &normalDeployment_class;
+        MissionMode *transmitDeployment = &transmitDeployment_class;
+        MissionMode *lowPowerDeployment = &lowPowerDeployment_class;
+        MissionMode *normalArmed = &normalArmed_class;
+        MissionMode *transmitArmed = &transmitArmed_class;
+        MissionMode *lowPowerArmed = &lowPowerArmed_class;
+        MissionMode *normalInSun = &normalInSun_class;
+        MissionMode *transmitInSun = &transmitInSun_class;
+        MissionMode *lowPowerInSun = &lowPowerInSun_class;
+        MissionMode *voltageFailureInSun = &voltageFailureInSun_class;
+        MissionMode *bootCamera = &bootCamera_class;
+        MissionMode *mandatoryBurns = &mandatoryBurns_class;
+        MissionMode *regularBurns = &regularBurns_class;
+        MissionMode *photo = &photo_class;
+
+        Phase *initialization = &initialization_class;
+        Phase *stabilization = &stabilization_class;
+        Phase *standby = &standby_class;
+        Phase *deployment = &deployment_class;
+        Phase *armed = &armed_class;
+        Phase *inSun = &insun_class;
+        Phase *firing = &firing_class;
+
+        MissionMode *current_mode = boot;
+        MissionMode *previous_mode = boot;
+
+        Phase *current_phase = initialization;
+        Phase *previous_phase = initialization;
+
+        std::deque<int> mode_history;
     } // namespace mission
     namespace burnwire {
         // OP Codes 1900

@@ -2,7 +2,6 @@
 #define MISSION_MODE_HPP_
 
 #include "Modes/mode_type.enum"
-#include "sfr.hpp"
 
 class MissionMode
 {
