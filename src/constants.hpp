@@ -486,6 +486,7 @@ namespace constants {
         static constexpr unsigned int imudownlink_report_monitor_offset = 0;
         static constexpr unsigned int photoresistor_monitor_offset = 0;
         static constexpr unsigned int temperature_monitor_offset = 0;
+        static constexpr unsigned int gps_monitor_offset = 0;
 
         static constexpr unsigned int acs_control_task_offset = 0;
         static constexpr unsigned int burnwire_control_task_offset = 0;
