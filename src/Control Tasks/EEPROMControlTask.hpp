@@ -4,9 +4,10 @@
 #include "sfr.hpp"
 #include <EEPROM.h>
 
-class EEPROMControlTask
+class EEPROMControlTask : public TimedControlTask<void>
 {
 public:
+    EEPROMControlTask(unsigned int offset);
     void execute();
 };
 
