@@ -11,7 +11,7 @@ void EEPROMControlTask::execute()
         } else {
             int time_since_last_write = millis() - sfr::EEPROM::time_of_last_write;
 
-            if (time_since_last_write > sfr::EEPROM::write_step_time) {
+            if ((uint32_t)time_since_last_write > sfr::EEPROM::write_step_time) {
                 EEPROM.write(0, time_since_last_write + sfr::EEPROM::eeprom_value);
                 sfr::EEPROM::time_of_last_write += time_since_last_write;
             }

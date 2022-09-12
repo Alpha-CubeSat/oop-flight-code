@@ -15,8 +15,8 @@ void CameraReportMonitor::execute()
     else if (sfr::camera::report_downlinked == true && images_written != 0) {
 #ifdef VERBOSE
         Serial.println("Report monitor started");
-        Serial.println("Current serial: " + String(sfr::camera::current_serial));
-        Serial.println("Current fragment: " + String(sfr::camera::fragment_number));
+        Serial.println("Current serial: " + String(current_serial));
+        Serial.println("Current fragment: " + String(fragment_number));
 #endif
         if (full_image_written == true || fragment_number == 0) {
             full_image_written = false;

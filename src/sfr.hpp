@@ -14,315 +14,291 @@
 #include "SFRField.hpp"
 #include "SensorReading.hpp"
 #include "constants.hpp"
-#include <deque>
 #include <RockblockCommand.hpp>
+#include <deque>
 
 namespace sfr {
     namespace stabilization {
         // OP Codes 1100
-        SFRField<uint32_t> max_time(30 * constants::time::one_minute, 0UL, 5 * constants::time::one_hour, 1100);
+        extern SFRField<uint32_t> max_time;
     } // namespace stabilization
     namespace boot {
         // OP Codes 1200
-        SFRField<uint32_t> max_time(2 * constants::time::one_hour, 10UL, 5 * constants::time::one_hour, 1200);
+        extern SFRField<uint32_t> max_time;
     } // namespace boot
     namespace simple {
         // OP Codes 1300
-        SFRField<uint32_t> max_time(5 * constants::time::one_minute, 10UL, 5 * constants::time::one_hour, 1300);
+        extern SFRField<uint32_t> max_time;
     } // namespace simple
     namespace point {
         // OP Codes 1400
-        SFRField<uint32_t> max_time(5 * constants::time::one_minute, 1400);
+        extern SFRField<uint32_t> max_time;
     } // namespace point
     namespace detumble {
         // OP Codes 1500
-        SFRField<uint32_t> start_time(0UL, 1500);
-        SFRField<uint32_t> max_time(2 * constants::time::one_hour, 1501);
+        extern SFRField<uint32_t> start_time;
+        extern SFRField<uint32_t> max_time;
         // TODO
-        SFRField<uint16_t> num_imu_retries(0, 1502);
-        SFRField<uint16_t> max_imu_retries(5, 1503);
+        extern SFRField<uint16_t> num_imu_retries;
+        extern SFRField<uint16_t> max_imu_retries;
     } // namespace detumble
     namespace aliveSignal {
         // OP Codes 1600
-        SFRField<uint16_t> max_downlink_hard_faults(3, 1600);
-        SFRField<bool> downlinked(false, 1601);
-        SFRField<uint32_t> max_time(2 * constants::time::one_hour, 1602);
-        SFRField<uint16_t> num_hard_faults(0, 1603);
+        extern SFRField<uint16_t> max_downlink_hard_faults;
+        extern SFRField<bool> downlinked;
+        extern SFRField<uint32_t> max_time;
+        extern SFRField<uint16_t> num_hard_faults;
     } // namespace aliveSignal
     namespace pins {
         //@Josh would we need to change this?
-        std::map<int, int> pinMap = {
-            {constants::photoresistor::pin, LOW},
-            {constants::burnwire::first_pin, LOW},
-            {constants::burnwire::second_pin, LOW},
-            {constants::rockblock::sleep_pin, LOW},
-            {constants::temperature::pin, LOW},
-            {constants::current::pin, LOW},
-            {constants::acs::xPWMpin, LOW},
-            {constants::acs::yPWMpin, LOW},
-            {constants::acs::zPWMpin, LOW},
-            {constants::acs::yout1, LOW},
-            {constants::acs::yout2, LOW},
-            {constants::acs::xout1, LOW},
-            {constants::acs::xout2, LOW},
-            {constants::acs::zout1, LOW},
-            {constants::acs::zout2, LOW},
-            {constants::acs::STBXYpin, LOW},
-            {constants::acs::STBZpin, LOW},
-            {constants::battery::voltage_value_pin, LOW},
-            {constants::battery::allow_measurement_pin, HIGH},
-            {constants::camera::power_on_pin, LOW},
-            {constants::camera::rx, LOW},
-            {constants::camera::tx, LOW},
-            {constants::button::button_pin, LOW}};
+        extern std::map<int, int> pinMap;
     } // namespace pins
     namespace photoresistor {
         // OP Codes 1700
-        SFRField<bool> covered(true, 1700);
+        extern SFRField<bool> covered;
 
-        SensorReading *light_val_average = new SensorReading(fault_index_type::light_val, 20, 0, 1000);
+        extern SensorReading *light_val_average;
     } // namespace photoresistor
     namespace mission {
         // OP Codes 1800
-        SFRField<uint32_t> acs_transmit_cycle_time(constants::time::one_minute * 100, 1800);
+        extern SFRField<uint32_t> acs_transmit_cycle_time;
 
-        SFRField<uint32_t> time_deployed(0, 1801);
-        SFRField<bool> deployed(false, 1802);
-        SFRField<bool> already_deployed(false, 1803);
+        extern SFRField<uint32_t> time_deployed;
+        extern SFRField<bool> deployed;
+        extern SFRField<bool> already_deployed;
 
-        Boot boot_class;
-        AliveSignal aliveSignal_class;
-        LowPowerAliveSignal lowPowerAliveSignal_class;
-        DetumbleSpin detumbleSpin_class;
-        LowPowerDetumbleSpin lowPowerDetumbleSpin_class;
-        Normal normal_class;
-        Transmit transmit_class;
-        LowPower lowPower_class;
-        NormalDeployment normalDeployment_class;
-        TransmitDeployment transmitDeployment_class;
-        LowPowerDeployment lowPowerDeployment_class;
-        NormalArmed normalArmed_class;
-        TransmitArmed transmitArmed_class;
-        LowPowerArmed lowPowerArmed_class;
-        NormalInSun normalInSun_class;
-        TransmitInSun transmitInSun_class;
-        LowPowerInSun lowPowerInSun_class;
-        VoltageFailureInSun voltageFailureInSun_class;
-        BootCamera bootCamera_class;
-        MandatoryBurns mandatoryBurns_class;
-        RegularBurns regularBurns_class;
-        Photo photo_class;
+        extern Boot boot_class;
+        extern AliveSignal aliveSignal_class;
+        extern LowPowerAliveSignal lowPowerAliveSignal_class;
+        extern DetumbleSpin detumbleSpin_class;
+        extern LowPowerDetumbleSpin lowPowerDetumbleSpin_class;
+        extern Normal normal_class;
+        extern Transmit transmit_class;
+        extern LowPower lowPower_class;
+        extern NormalDeployment normalDeployment_class;
+        extern TransmitDeployment transmitDeployment_class;
+        extern LowPowerDeployment lowPowerDeployment_class;
+        extern NormalArmed normalArmed_class;
+        extern TransmitArmed transmitArmed_class;
+        extern LowPowerArmed lowPowerArmed_class;
+        extern NormalInSun normalInSun_class;
+        extern TransmitInSun transmitInSun_class;
+        extern LowPowerInSun lowPowerInSun_class;
+        extern VoltageFailureInSun voltageFailureInSun_class;
+        extern BootCamera bootCamera_class;
+        extern MandatoryBurns mandatoryBurns_class;
+        extern RegularBurns regularBurns_class;
+        extern Photo photo_class;
 
-        Initialization initialization_class;
-        Stabilization stabilization_class;
-        Standby standby_class;
-        Deployment deployment_class;
-        Armed armed_class;
-        InSun insun_class;
-        Firing firing_class;
+        extern Initialization initialization_class;
+        extern Stabilization stabilization_class;
+        extern Standby standby_class;
+        extern Deployment deployment_class;
+        extern Armed armed_class;
+        extern InSun insun_class;
+        extern Firing firing_class;
 
-        MissionMode *boot = &boot_class;
-        MissionMode *aliveSignal = &aliveSignal_class;
-        MissionMode *lowPowerAliveSignal = &lowPowerAliveSignal_class;
-        MissionMode *detumbleSpin = &detumbleSpin_class;
-        MissionMode *lowPowerDetumbleSpin = &lowPowerDetumbleSpin_class;
-        MissionMode *normal = &normal_class;
-        MissionMode *transmit = &transmit_class;
-        MissionMode *lowPower = &lowPower_class;
-        MissionMode *normalDeployment = &normalDeployment_class;
-        MissionMode *transmitDeployment = &transmitDeployment_class;
-        MissionMode *lowPowerDeployment = &lowPowerDeployment_class;
-        MissionMode *normalArmed = &normalArmed_class;
-        MissionMode *transmitArmed = &transmitArmed_class;
-        MissionMode *lowPowerArmed = &lowPowerArmed_class;
-        MissionMode *normalInSun = &normalInSun_class;
-        MissionMode *transmitInSun = &transmitInSun_class;
-        MissionMode *lowPowerInSun = &lowPowerInSun_class;
-        MissionMode *voltageFailureInSun = &voltageFailureInSun_class;
-        MissionMode *bootCamera = &bootCamera_class;
-        MissionMode *mandatoryBurns = &mandatoryBurns_class;
-        MissionMode *regularBurns = &regularBurns_class;
-        MissionMode *photo = &photo_class;
+        extern MissionMode *boot;
+        extern MissionMode *aliveSignal;
+        extern MissionMode *lowPowerAliveSignal;
+        extern MissionMode *detumbleSpin;
+        extern MissionMode *lowPowerDetumbleSpin;
+        extern MissionMode *normal;
+        extern MissionMode *transmit;
+        extern MissionMode *lowPower;
+        extern MissionMode *normalDeployment;
+        extern MissionMode *transmitDeployment;
+        extern MissionMode *lowPowerDeployment;
+        extern MissionMode *normalArmed;
+        extern MissionMode *transmitArmed;
+        extern MissionMode *lowPowerArmed;
+        extern MissionMode *normalInSun;
+        extern MissionMode *transmitInSun;
+        extern MissionMode *lowPowerInSun;
+        extern MissionMode *voltageFailureInSun;
+        extern MissionMode *bootCamera;
+        extern MissionMode *mandatoryBurns;
+        extern MissionMode *regularBurns;
+        extern MissionMode *photo;
 
-        Phase *initialization = &initialization_class;
-        Phase *stabilization = &stabilization_class;
-        Phase *standby = &standby_class;
-        Phase *deployment = &deployment_class;
-        Phase *armed = &armed_class;
-        Phase *inSun = &insun_class;
-        Phase *firing = &firing_class;
+        extern Phase *initialization;
+        extern Phase *stabilization;
+        extern Phase *standby;
+        extern Phase *deployment;
+        extern Phase *armed;
+        extern Phase *inSun;
+        extern Phase *firing;
 
-        MissionMode *current_mode = boot;
-        MissionMode *previous_mode = boot;
+        extern MissionMode *current_mode;
+        extern MissionMode *previous_mode;
 
-        Phase *current_phase = initialization;
-        Phase *previous_phase = initialization;
+        extern Phase *current_phase;
+        extern Phase *previous_phase;
 
-        std::deque<int> mode_history;
+        extern std::deque<int> mode_history;
     } // namespace mission
     namespace burnwire {
         // OP Codes 1900
-        SFRField<bool> fire(false, 1900);
-        SFRField<bool> arm(false, 1901);
-        SFRField<uint16_t> attempts(0, 1902);
-        SFRField<uint16_t> camera_attempts(0, 1904);
-        SFRField<uint32_t> start_time(0, 1903);
-        SFRField<uint32_t> burn_time(500, 1905);
-        SFRField<uint32_t> armed_time(2 * constants::time::one_day, 1906);
-        SFRField<uint16_t> mode((uint16_t)burnwire_mode_type::standby, 1907);
+        extern SFRField<bool> fire;
+        extern SFRField<bool> arm;
+        extern SFRField<uint16_t> attempts;
+        extern SFRField<uint16_t> camera_attempts;
+        extern SFRField<uint32_t> start_time;
+        extern SFRField<uint32_t> burn_time;
+        extern SFRField<uint32_t> armed_time;
+        extern SFRField<uint16_t> mode;
     } // namespace burnwire
     namespace camera {
         // OP Codes 2000
-        SFRField<bool> photo_taken_sd_failed(false, 2000);
-        SFRField<bool> take_photo(false, 2001);
-        SFRField<bool> turn_on(false, 2002);
-        SFRField<bool> turn_off(false, 2003);
-        SFRField<bool> powered(false, 2004);
+        extern SFRField<bool> photo_taken_sd_failed;
+        extern SFRField<bool> take_photo;
+        extern SFRField<bool> turn_on;
+        extern SFRField<bool> turn_off;
+        extern SFRField<bool> powered;
 
         // Initialization
-        SFRField<uint8_t> start_progress(0, 2005);
-        SFRField<uint32_t> step_time(0, 2006);
-        SFRField<uint32_t> init_start_time(0, 2007);
-        SFRField<uint32_t> init_timeout(12000, 2008);
-        SFRField<uint32_t> begin_delay(100, 2009);
-        SFRField<uint32_t> resolution_set_delay(500, 2010);
-        SFRField<uint32_t> resolution_get_delay(200, 2011);
+        extern SFRField<uint8_t> start_progress;
+        extern SFRField<uint32_t> step_time;
+        extern SFRField<uint32_t> init_start_time;
+        extern SFRField<uint32_t> init_timeout;
+        extern SFRField<uint32_t> begin_delay;
+        extern SFRField<uint32_t> resolution_set_delay;
+        extern SFRField<uint32_t> resolution_get_delay;
 
-        SFRField<uint16_t> init_mode((uint16_t)camera_init_mode_type::awaiting, 2012);
-        SFRField<uint16_t> mode((uint16_t)sensor_mode_type::normal, 2013);
+        extern SFRField<uint16_t> init_mode;
+        extern SFRField<uint16_t> mode;
 
-        SFRField<uint32_t> images_written(0, 2014);
-        SFRField<uint32_t> fragments_written(0, 2015);
+        extern SFRField<uint32_t> images_written;
+        extern SFRField<uint32_t> fragments_written;
 
-        SFRField<uint32_t> set_res(VC0706_160x120, 2016);
+        extern SFRField<uint32_t> set_res;
 
-        boolean report_written = false;
-        boolean report_downlinked = true;
-        boolean report_ready = true;
+        extern boolean report_written;
+        extern boolean report_downlinked;
+        extern boolean report_ready;
     } // namespace camera
     namespace rockblock {
         // OP Codes 2100
-        SFRField<bool> rockblock_ready_status(false, 2100);
+        extern SFRField<bool> rockblock_ready_status;
 
-        SFRField<uint32_t> last_downlink(0, 2101);
-        SFRField<uint32_t> downlink_period(0, 2102);
+        extern SFRField<uint32_t> last_downlink;
+        extern SFRField<uint32_t> downlink_period;
 
-        SFRField<bool> waiting_message(false, 2103);
+        extern SFRField<bool> waiting_message;
 
-        std::deque<uint8_t> downlink_report;
-        std::deque<uint8_t> normal_report;
-        std::deque<uint8_t> camera_report;
-        std::deque<uint8_t> imu_report;
+        extern std::deque<uint8_t> downlink_report;
+        extern std::deque<uint8_t> normal_report;
+        extern std::deque<uint8_t> camera_report;
+        extern std::deque<uint8_t> imu_report;
 
-        char buffer[constants::rockblock::buffer_size] = {0};
-        int camera_commands[99][constants::rockblock::command_len] = {};
-        int camera_max_fragments[99] = {};
-        int commas[constants::rockblock::num_commas] = {0};
+        extern char buffer[constants::rockblock::buffer_size];
+        extern int camera_commands[99][constants::rockblock::command_len];
+        extern uint32_t camera_max_fragments[99];
+        extern int commas[constants::rockblock::num_commas];
 
-        std::deque<RawRockblockCommand> raw_commands;
-        std::deque<RockblockCommand> processed_commands;
+        extern std::deque<RawRockblockCommand> raw_commands;
+        extern std::deque<RockblockCommand> processed_commands;
 
-        SFRField<uint8_t> max_commands_count(10, 2104);
+        extern SFRField<uint8_t> max_commands_count;
 
-        SFRField<uint16_t> imu_max_fragments(256, 2105);
+        extern SFRField<uint16_t> imu_max_fragments;
 
-        SFRField<uint32_t> imudownlink_start_time(0, 2106);
-        SFRField<uint32_t> imudownlink_remain_time(constants::time::one_minute, 2107);
-        SFRField<bool> imu_first_start(true, 2108);
-        SFRField<bool> imu_downlink_on(true, 2109);
+        extern SFRField<uint32_t> imudownlink_start_time;
+        extern SFRField<uint32_t> imudownlink_remain_time;
+        extern SFRField<bool> imu_first_start;
+        extern SFRField<bool> imu_downlink_on;
 
-        SFRField<bool> flush_status(false, 2108);
-        SFRField<bool> waiting_command(false, 2109);
-        SFRField<uint32_t> conseq_reads(0, 2110);
-        SFRField<uint32_t> timeout(10 * constants::time::one_minute, 2111);
-        SFRField<uint32_t> start_time(0, 2112);
-        SFRField<uint32_t> start_time_check_signal(0, 2113);
-        SFRField<uint32_t> max_check_signal_time(constants::time::one_minute, 2114);
-        SFRField<bool> sleep_mode(false, 2115);
+        extern SFRField<bool> flush_status;
+        extern SFRField<bool> waiting_command;
+        extern SFRField<uint32_t> conseq_reads;
+        extern SFRField<uint32_t> timeout;
+        extern SFRField<uint32_t> start_time;
+        extern SFRField<uint32_t> start_time_check_signal;
+        extern SFRField<uint32_t> max_check_signal_time;
+        extern SFRField<bool> sleep_mode;
 
-        SFRField<uint16_t> downlink_report_type((uint16_t)report_type::normal_report, 2116);
-        SFRField<uint16_t> mode((uint16_t)rockblock_mode_type::send_at, 2117);
+        extern SFRField<uint16_t> downlink_report_type;
+        extern SFRField<uint16_t> mode;
 
-        std::deque<uint8_t> imu_report;
     } // namespace rockblock
     namespace imu {
         // OP Codes 2200
-        SFRField<uint16_t> mode((uint16_t)sensor_mode_type::init, 2200);
-        SFRField<bool> successful_init(true, 2201);
+        extern SFRField<uint16_t> mode;
+        extern SFRField<bool> successful_init;
 
-        SFRField<uint32_t> max_fragments(256, 2202);
+        extern SFRField<uint32_t> max_fragments;
 
-        SFRField<bool> sample(true, 2203);
-        SFRField<bool> sample_gyro(true, 2204);
+        extern SFRField<bool> sample;
+        extern SFRField<bool> sample_gyro;
 
-        SensorReading *mag_x_value = new SensorReading(1, 0, 0);
-        SensorReading *mag_y_value = new SensorReading(1, 0, 0);
-        SensorReading *mag_z_value = new SensorReading(1, 0, 0);
+        extern SensorReading *mag_x_value;
+        extern SensorReading *mag_y_value;
+        extern SensorReading *mag_z_value;
 
-        SensorReading *gyro_x_value = new SensorReading(1, 0, 0);
-        SensorReading *gyro_y_value = new SensorReading(1, 0, 0);
-        SensorReading *gyro_z_value = new SensorReading(1, 0, 0);
+        extern SensorReading *gyro_x_value;
+        extern SensorReading *gyro_y_value;
+        extern SensorReading *gyro_z_value;
 
-        SensorReading *mag_x_average = new SensorReading(fault_index_type::mag_x, 20, 0, 0);
-        SensorReading *mag_y_average = new SensorReading(fault_index_type::mag_y, 20, 0, 0);
-        SensorReading *mag_z_average = new SensorReading(fault_index_type::mag_z, 20, 0, 0);
+        extern SensorReading *mag_x_average;
+        extern SensorReading *mag_y_average;
+        extern SensorReading *mag_z_average;
 
-        SensorReading *gyro_x_average = new SensorReading(fault_index_type::gyro_x, 20, 0, 0);
-        SensorReading *gyro_y_average = new SensorReading(fault_index_type::gyro_y, 20, 0, 0);
-        SensorReading *gyro_z_average = new SensorReading(fault_index_type::gyro_z, 20, 0, 0);
+        extern SensorReading *gyro_x_average;
+        extern SensorReading *gyro_y_average;
+        extern SensorReading *gyro_z_average;
 
-        SensorReading *acc_x_average = new SensorReading(fault_index_type::acc_x, 20, 0, 0);
-        SensorReading *acc_y_average = new SensorReading(fault_index_type::acc_y, 20, 0, 0);
+        extern SensorReading *acc_x_average;
+        extern SensorReading *acc_y_average;
 
-        std::deque<uint8_t> imu_dlink;
+        extern std::deque<uint8_t> imu_dlink;
 
-        boolean report_written = false;
-        boolean report_downlinked = true;
-        boolean report_ready = true;
-        
+        extern boolean report_written;
+        extern boolean report_downlinked;
+        extern boolean report_ready;
+
     } // namespace imu
     namespace temperature {
         // OP Codes 2300
-        SFRField<bool> in_sun(false, 2300);
+        extern SFRField<bool> in_sun;
 
-        SensorReading *temp_c_average = new SensorReading(fault_index_type::temp_c, 20, -500, 500);
-        SensorReading *temp_c_value = new SensorReading(1, -500, 500);
+        extern SensorReading *temp_c_average;
+        extern SensorReading *temp_c_value;
     } // namespace temperature
     namespace current {
         // OP Codes 2400
-        SFRField<bool> in_sun(false, 2400);
+        extern SFRField<bool> in_sun;
 
-        SensorReading *solar_current_average = new SensorReading(fault_index_type::solar_current, 20, 0, 1000);
+        extern SensorReading *solar_current_average;
     } // namespace current
     namespace acs {
         // OP Codes 2500
-        SFRField<uint32_t> max_no_communication(0, 2500);
+        extern SFRField<uint32_t> max_no_communication;
 
-        SFRField<uint32_t> on_time(5 * constants::time::one_minute, 2501);
-        SFRField<bool> off(true, 2502);
+        extern SFRField<uint32_t> on_time;
+        extern SFRField<bool> off;
 
-        SFRField<uint16_t> mag((uint16_t)simple_acs_type::x, 2503);
+        extern SFRField<uint16_t> mag;
     } // namespace acs
     namespace battery {
         // OP Codes 2600
         // TODO
-        SFRField<uint32_t> acceptable_battery(0, 2600);
-        SFRField<uint32_t> min_battery(0, 2601);
+        extern SFRField<uint32_t> acceptable_battery;
+        extern SFRField<uint32_t> min_battery;
 
-        SensorReading *voltage_value = new SensorReading(1, 0, 5);
-        SensorReading *voltage_average = new SensorReading(fault_index_type::voltage, 20, 0, 5);
+        extern SensorReading *voltage_value;
+        extern SensorReading *voltage_average;
     } // namespace battery
     namespace button {
         // OP Codes 2700
-        SFRField<bool> pressed(true, 2700);
+        extern SFRField<bool> pressed;
     } // namespace button
     namespace EEPROM {
         // OP Codes 2800
-        SFRField<uint32_t> time_of_last_write(0, 2800);
-        SFRField<uint32_t> write_step_time(1000, 2801); // the amount of time between each write to EEPROM
-        SFRField<uint32_t> alloted_time(7200000, 2802); // the amount of time for the EEPROM to count to (7200000 ms = 2 h)
-        SFRField<uint32_t> eeprom_value(0, 2803);       // the amount of time that the EEPROM has counted, stops when the alloted time has been reached
-        SFRField<bool> alloted_time_passed(false, 2804);
+        extern SFRField<uint32_t> time_of_last_write;
+        extern SFRField<uint32_t> write_step_time; // the amount of time between each write to EEPROM
+        extern SFRField<uint32_t> alloted_time;    // the amount of time for the EEPROM to count to (7200000 ms = 2 h)
+        extern SFRField<uint32_t> eeprom_value;    // the amount of time that the EEPROM has counted, stops when the alloted time has been reached
+        extern SFRField<bool> alloted_time_passed;
     } // namespace EEPROM
 };    // namespace sfr
 

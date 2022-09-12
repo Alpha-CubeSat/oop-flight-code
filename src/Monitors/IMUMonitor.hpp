@@ -2,7 +2,6 @@
 #define IMU_MONITOR_HPP_
 
 #include "Adafruit_LSM9DS1.h"
-#include "ClockManager.cpp"
 #include "Control Tasks/TimedControlTask.hpp"
 #include "Modes/sensor_mode_type.enum"
 #include "SensorReading.hpp"

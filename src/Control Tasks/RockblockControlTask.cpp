@@ -1,6 +1,4 @@
 #include "RockblockControlTask.hpp"
-#include "sfr.hpp"
-#include "Pins.hpp"
 
 RockblockControlTask::RockblockControlTask(unsigned int offset)
     : TimedControlTask<void>(offset)
@@ -190,7 +188,7 @@ void RockblockControlTask::dispatch_send_message()
 {
     uint16_t checksum = 0;
 #ifdef VERBOSE_IMUD
-    switch (sfr::rockblock::downlink_report_type) {
+    switch (static_cast<report_type>(sfr::rockblock::downlink_report_type.get())) {
     case report_type::camera_report:
         Serial.print("Camera Report Downlinking\n");
         break;

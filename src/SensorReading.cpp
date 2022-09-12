@@ -94,7 +94,7 @@ void SensorReading::set_valid()
 {
     valid = true;
 
-    if (type != fault_index_type::no_fault)
+    if (type != fault_index_type::no_fault) {
         // clear fault bit
         if (map_to_reg[this->type] == 1) {
             faults::fault_1 &= ~map_to_mask[this->type];
@@ -103,6 +103,7 @@ void SensorReading::set_valid()
         } else {
             faults::fault_3 &= ~map_to_mask[this->type];
         } // clear the flag in the corresponding fault register
+    }
 }
 
 void SensorReading::set_invalid()
@@ -124,7 +125,7 @@ void SensorReading::set_invalid()
     }
 }
 
-bool repeated_values(std::deque<float> buffer)
+bool SensorReading::repeated_values(std::deque<float> buffer)
 {
     if (buffer.empty() || buffer.size() == 1) {
         return false;

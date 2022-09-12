@@ -1,6 +1,4 @@
 #include "BurnwireControlTask.hpp"
-#include "sfr.hpp"
-#include "Pins.hpp"
 
 BurnwireControlTask::BurnwireControlTask(unsigned int offset)
     : TimedControlTask<void>(offset)

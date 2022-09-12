@@ -2,6 +2,7 @@
 #define ROCKBLOCK_REPORT_MONITOR_HPP_
 
 #include "Control Tasks/TimedControlTask.hpp"
+#include "sfr.hpp"
 
 class RockblockReportMonitor : public TimedControlTask<void>
 {

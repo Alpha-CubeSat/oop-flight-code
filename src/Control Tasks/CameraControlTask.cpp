@@ -1,6 +1,4 @@
 #include "CameraControlTask.hpp"
-#include "Pins.hpp"
-#include "sfr.hpp"
 
 CameraControlTask::CameraControlTask(unsigned int offset)
     : TimedControlTask<void>(offset), adaCam(&Serial5)
