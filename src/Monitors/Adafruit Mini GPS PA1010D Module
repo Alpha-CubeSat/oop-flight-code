@@ -1,0 +1,42 @@
+#include <Adafruit_GPS.h>
+
+// Connect to the GPS on the hardware I2C port
+Adafruit_GPS GPS(&Wire);
+import GPS_I2C_Parsing.ino
+
+# In order to start off this challenge we first need to know what our primary goals are to do with the device and why we are even doing this in the first place. 
+Its uses and methods are crucial in how we want it to work and as said its purpose. Given our goal it is to write down the longitude/latitude, however if we are going
+to find any of those values I assume we will be using the Earth's latitude/lomgitude, unless we are restrcited to a specifc map or plane then that is crucial to where
+we are setting our latitue/lomgitude; if we were doing the Earth then these number wpuld be very precise and need to be counted a very small scale, however if we are
+doing a smaller field then we would have  to specify. Regardless it a latitude/longitude in a specific field would be necssary.
+
+# Next we would need to connect the mini GPS to the Teensy using a specficication sheet in oreder to have it working properly. In order for any code to work the hardware
+would need to be installed on correctly. After we have connected everything properly we can begin to code after we have our goals and purposes thought out. We would 
+need to prepare first by importingf the library and the module needed for this challenge as said on the sheet given (which are found on top.)
+
+# We would then need to define the pins used with the device and a serial monitor in order to track our latitude/longitude alongside time using a void setup.
+
+void setup()
+
+# , afterwards we we can begin running out functions in the void loop in order to elaboarte lat/long throughout time. However we should specify how much we want in between 
+each coordintae, it could be every 10ms, or every 1000ms, which would be 1s,  reasonable time such as 500 ms would be reasonable in order to not have the serial moniter
+updated every single time the device moves from one place to another.
+
+# In order to see this infomation to avoid getting a bunch or random intergrsf/loat numbers we would need to add a few print statements and check every single time if a
+certain condition is true using if commands such as if the module is in the air, if it has moved, if it has stopped and is maintained in a fix position, if the object is 
+at angle or rotated, there are overall many scenarios we need to consider, but a right amount of infomation so we are not bombarded with very specific details which could
+stop the functions from happening.
+
+# As a previous student who has worked with ArduinoUno, the Tweensy seems very similar and I could learn to use Tweensy very quickly, I will be honest and say that I have 
+not worked with GitHub alot in the past, but it does seem relatively alright considering it has been a while since I have been on here.
+
+# Regardless this is th though process I had when thinking about this challenge, being that I do not know what every single module does in this respitory, I do not have
+much code to show, but I do know the basics of microcontrollers such as Tweensy.
+
+# Overall this was a pretty good challenge to think about, there are always many scenarios we need to consider, as well as what conditions we need and processes in order
+to get our results we want. Mistakes and fallacies are part of the challenge, but it depends on what we do to fix them.
+
+# I hope to be involved with this group in order to be a further developed programmer and being that this would be my first research project to be in, I would be very
+satisfied and proud to be on this team.
+
+# Thank you once again for this oppurtunity.
