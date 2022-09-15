@@ -352,10 +352,9 @@ namespace sfr {
         bool pressed = true;
     }
     namespace EEPROM {
-        int time_of_last_write = 0;
-        int write_step_time = 1000; // the amount of time between each write to EEPROM
-        int alloted_time = 7200000; // the amount of time for the EEPROM to count to (7200000 ms = 2 h)
-        int eeprom_value = 0;       // the amount of time that the EEPROM has counted, stops when the alloted time has been reached
-        bool alloted_time_passed = false;
-    } // namespace EEPROM
+        int time_of_last_write = 0;       // the millis() value when the last EEPROM write ocurred
+        int write_step_time = 1000;       // the amount of time between each write to EEPROM
+        int alloted_time = 7200000;       // the amount of time for the EEPROM to count to (7200000 ms = 2 h)
+        bool alloted_time_passed = false; // indicates if the EEPROM count has reached the alloted time
+    }                                     // namespace EEPROM
 } // namespace sfr

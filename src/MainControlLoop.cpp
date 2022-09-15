@@ -23,24 +23,21 @@ MainControlLoop::MainControlLoop()
       burnwire_control_task(constants::timecontrol::burnwire_control_task_offset),
       camera_control_task(constants::timecontrol::camera_control_task_offset),
       rockblock_control_task(constants::timecontrol::rockblock_control_task_offset),
-      eeprom_control_task(),
+      eeprom_control_task(constants::timecontrol::eeprom_control_task_offset),
       mission_manager(constants::timecontrol::mission_manager_offset)
-
 {
     delay(1000);
 }
 
 void MainControlLoop::execute()
 {
-    delay(200);
+    delay(200); // To prolong the speed of the main control loop to ensure correct RockBlock reads. Can reduce in the future.
+    delay(1000);
     faults::fault_1 = 0;
     faults::fault_2 = 0;
     faults::fault_3 = 0;
 
     clock_manager.execute();
-
-    mission_manager.execute_on_time();
-
     acs_monitor.execute_on_time();
     battery_monitor.execute_on_time();
     button_monitor.execute_on_time();
@@ -59,5 +56,6 @@ void MainControlLoop::execute()
     burnwire_control_task.execute_on_time();
     camera_control_task.execute_on_time();
     rockblock_control_task.execute_on_time();
-    eeprom_control_task.execute();
+    eeprom_control_task.execute_on_time();
+    mission_manager.execute_on_time();
 }
