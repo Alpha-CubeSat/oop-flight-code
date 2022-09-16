@@ -111,7 +111,7 @@ public:
 #endif
     void setValue(uint32_t arg1)
     {
-        // Convert 32bit word into Target Type 
+        // Convert 32bit word into Target Type
         // TODO Joining Two uint16s FS-158
         static_assert(sizeof(T) <= sizeof arg1, "Templated Type is larger than input.");
         T casted;

@@ -309,8 +309,7 @@ void enter_lp(MissionMode *lp_mode)
 {
     float voltage;
 
-    if (!sfr::battery::voltage_average->is_valid()
-     ||(sfr::battery::voltage_average->get_value(&voltage) && voltage <= sfr::battery::min_battery)) {
+    if (!sfr::battery::voltage_average->is_valid() || (sfr::battery::voltage_average->get_value(&voltage) && voltage <= sfr::battery::min_battery)) {
         sfr::mission::current_mode = lp_mode;
     }
 }
