@@ -33,7 +33,7 @@ namespace sfr {
         SFRField<uint16_t> num_hard_faults = SFRField<uint16_t>(0, 1603);
     } // namespace aliveSignal
     namespace pins {
-        //@Josh would we need to change this?
+        //TODO confirm initial pin states are correct FS-159
         std::map<int, int> pinMap = {
             {constants::photoresistor::pin, LOW},
             {constants::burnwire::first_pin, LOW},

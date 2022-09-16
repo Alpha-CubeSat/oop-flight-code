@@ -5,7 +5,6 @@ int start;
 MainControlLoop::MainControlLoop()
     : ControlTask<void>(),
       clock_manager(constants::timecontrol::control_cycle_time),
-      acs_monitor(constants::timecontrol::acs_monitor_offset),
       battery_monitor(constants::timecontrol::battery_monitor_offset),
       button_monitor(constants::timecontrol::button_monitor_offset),
       camera_report_monitor(constants::timecontrol::camera_report_monitor_offset),
@@ -18,7 +17,6 @@ MainControlLoop::MainControlLoop()
       photoresistor_monitor(constants::timecontrol::photoresistor_monitor_offset),
       rockblock_report_monitor(constants::timecontrol::rockblock_report_monitor_offset),
       temperature_monitor(constants::timecontrol::temperature_monitor_offset),
-      acs_control_task(constants::timecontrol::acs_control_task_offset),
       burnwire_control_task(constants::timecontrol::burnwire_control_task_offset),
       camera_control_task(constants::timecontrol::camera_control_task_offset),
       rockblock_control_task(constants::timecontrol::rockblock_control_task_offset),
@@ -40,7 +38,6 @@ void MainControlLoop::execute()
 
     mission_manager.execute_on_time();
 
-    acs_monitor.execute_on_time();
     battery_monitor.execute_on_time();
     button_monitor.execute_on_time();
     camera_report_monitor.execute_on_time();
@@ -53,7 +50,6 @@ void MainControlLoop::execute()
     photoresistor_monitor.execute_on_time();
     rockblock_report_monitor.execute_on_time();
     temperature_monitor.execute_on_time();
-    acs_control_task.execute_on_time();
     burnwire_control_task.execute_on_time();
     camera_control_task.execute_on_time();
     rockblock_control_task.execute_on_time();

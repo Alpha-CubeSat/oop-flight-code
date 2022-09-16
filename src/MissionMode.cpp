@@ -285,7 +285,7 @@ void exit_signal_phase(MissionMode *mode)
 
 void exit_detumble_phase(MissionMode *mode)
 {
-    // TODO min unstable gyro and max unstable gyro are SFR fields with resolution
+    // TODO min unstable gyro and max unstable gyro are SFR fields with resolution. FS-160
     /*
     // cubesat has stabilized: gyro z > 1 rad/s && gyro x and gyro y are below 0.2 rad/s
     if (sfr::imu::gyro_z_average->is_valid() && sfr::imu::gyro_x_average->is_valid() && sfr::imu::gyro_y_average->is_valid() && (sfr::imu::gyro_z_average->get_value() >= sfr::detumble::min_stable_gyro_z) && (sfr::imu::gyro_x_average->get_value() <= sfr::detumble::max_stable_gyro_x) && (sfr::imu::gyro_y_average->get_value() <= sfr::detumble::max_stable_gyro_y)) {
@@ -309,7 +309,8 @@ void enter_lp(MissionMode *lp_mode)
 {
     float voltage;
 
-    if (sfr::battery::voltage_average->get_value(&voltage) && voltage <= sfr::battery::min_battery) {
+    if (!sfr::battery::voltage_average->is_valid()
+     ||(sfr::battery::voltage_average->get_value(&voltage) && voltage <= sfr::battery::min_battery)) {
         sfr::mission::current_mode = lp_mode;
     }
 }
