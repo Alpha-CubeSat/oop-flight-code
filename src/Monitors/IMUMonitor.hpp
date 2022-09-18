@@ -4,8 +4,8 @@
 #include "Adafruit_LSM9DS1.h"
 #include "Control Tasks/TimedControlTask.hpp"
 #include "Modes/sensor_mode_type.enum"
-#include "SensorReading.hpp"
 #include "Pins.hpp"
+#include "SensorReading.hpp"
 #include "sfr.hpp"
 class IMUMonitor : public TimedControlTask<void>
 {
