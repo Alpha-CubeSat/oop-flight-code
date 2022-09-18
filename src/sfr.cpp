@@ -147,6 +147,7 @@ namespace sfr {
         bool arm = false;
         burnwire_mode_type mode = burnwire_mode_type::standby;
         int attempts = 0;
+        int attempts_limit = 10;
         int start_time = 0;
         int camera_attempts = 0;
         int burn_time = 500;
@@ -163,6 +164,8 @@ namespace sfr {
         // Initialization
         camera_init_mode_type init_mode = camera_init_mode_type::awaiting;
         uint8_t start_progress = 0;
+        uint8_t failed_times = 0;
+        uint8_t failed_limit = 5;
         uint64_t step_time = 0;
         uint64_t init_start_time = 0;
         uint64_t init_timeout = 12000;
@@ -234,6 +237,9 @@ namespace sfr {
     namespace imu {
         sensor_mode_type mode = sensor_mode_type::init;
         bool successful_init = true;
+        bool turn_off = false; // action variable
+        bool turn_on = false;  // action variable
+        bool powered = false;  // state variable
 
         float mag_x = 0.0;
         float mag_y = 0.0;
@@ -317,8 +323,8 @@ namespace sfr {
         std::deque<float> voltage_buffer;
         SensorReading *voltage_average = new SensorReading(fault_index_type::voltage, 0.0, false);
         // TODO
-        float acceptable_battery;
-        float min_battery;
+        float acceptable_battery = 3.9;
+        float min_battery = 3.75;
     } // namespace battery
     namespace fault {
         fault_mode_type mode = fault_mode_type::active;

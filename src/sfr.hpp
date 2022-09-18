@@ -132,6 +132,7 @@ namespace sfr {
         extern bool arm;
         extern burnwire_mode_type mode;
         extern int attempts;
+        extern int attempts_limit;
         extern int start_time;
         extern int camera_attempts;
         extern int burn_time;
@@ -147,6 +148,8 @@ namespace sfr {
 
         extern camera_init_mode_type init_mode;
         extern uint8_t start_progress;
+        extern uint8_t failed_times;
+        extern uint8_t failed_limit;
         extern uint64_t step_time;
         extern uint64_t init_start_time;
         extern uint64_t init_timeout;
@@ -219,6 +222,9 @@ namespace sfr {
     namespace imu {
         extern sensor_mode_type mode;
         extern bool successful_init;
+        extern bool turn_off; // action variable
+        extern bool turn_on;  // action variable
+        extern bool powered;  // state variable
 
         extern float mag_x;
         extern float mag_y;
