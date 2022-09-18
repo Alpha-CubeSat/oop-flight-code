@@ -147,6 +147,7 @@ namespace sfr {
         extern SFRField<uint32_t> burn_time;
         extern SFRField<uint32_t> armed_time;
         extern SFRField<uint16_t> mode;
+        extern SFRField<uint16_t> attempts_limit; 
     } // namespace burnwire
     namespace camera {
         // OP Codes 2000
@@ -172,6 +173,9 @@ namespace sfr {
         extern SFRField<uint32_t> fragments_written;
 
         extern SFRField<uint32_t> set_res;
+
+        extern SFRField<uint16_t> failed_times; 
+        extern SFRField<uint16_t> failed_limit; 
 
         extern boolean report_written;
         extern boolean report_downlinked;
@@ -228,8 +232,11 @@ namespace sfr {
 
         extern SFRField<uint32_t> max_fragments;
 
-        extern SFRField<bool> sample;
         extern SFRField<bool> sample_gyro;
+
+        extern SFRField<bool> turn_on; 
+        extern SFRField<bool> turn_off; 
+        extern SFRField<bool> powered; 
 
         extern SensorReading *mag_x_value;
         extern SensorReading *mag_y_value;

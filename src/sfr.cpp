@@ -153,6 +153,7 @@ namespace sfr {
         SFRField<uint32_t> burn_time = SFRField<uint32_t>(500, 1905);
         SFRField<uint32_t> armed_time = SFRField<uint32_t>(2 * constants::time::one_day, 1906);
         SFRField<uint16_t> mode = SFRField<uint16_t>((uint16_t)burnwire_mode_type::standby, 1907);
+        SFRField<uint16_t> attempts_limit = SFRField<uint16_t>(10, 1908);
     } // namespace burnwire
     namespace camera {
         // OP Codes 2000
@@ -178,6 +179,9 @@ namespace sfr {
         SFRField<uint32_t> fragments_written = SFRField<uint32_t>(0, 2015);
 
         SFRField<uint32_t> set_res = SFRField<uint32_t>(VC0706_160x120, 2016);
+
+        SFRField<uint16_t> failed_times = SFRField<uint16_t>(0, 2017);
+        SFRField<uint16_t> failed_limit = SFRField<uint16_t>(5, 2018);
 
         boolean report_written = false;
         boolean report_downlinked = true;
@@ -234,8 +238,11 @@ namespace sfr {
 
         SFRField<uint32_t> max_fragments = SFRField<uint32_t>(256, 2202);
 
-        SFRField<bool> sample = SFRField<bool>(true, 2203);
         SFRField<bool> sample_gyro = SFRField<bool>(true, 2204);
+
+        SFRField<bool> turn_on = SFRField<bool>(false, 2205);
+        SFRField<bool> turn_off = SFRField<bool>(false, 2206);
+        SFRField<bool> powered = SFRField<bool>(false, 2207);
 
         SensorReading *mag_x_value = new SensorReading(1, 0, 0);
         SensorReading *mag_y_value = new SensorReading(1, 0, 0);

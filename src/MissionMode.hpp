@@ -349,6 +349,7 @@ public:
 
 void exit_signal_phase(MissionMode *mode);
 void exit_detumble_phase(MissionMode *mode);
+void exit_insun_phase(MissionMode *mode);
 void enter_lp(MissionMode *lp_mode);
 void exit_lp(MissionMode *reg_mode);
 void timed_out(MissionMode *next_mode, float max_time);

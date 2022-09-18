@@ -5,14 +5,14 @@ void boot_initialization()
 {
     sfr::rockblock::sleep_mode = true;
     sfr::acs::off = true;
-    sfr::imu::sample = false;
+    sfr::imu::turn_off = true;
 }
 
 void Boot::transition_to()
 {
     sfr::rockblock::sleep_mode = true;
     sfr::acs::off = true;
-    sfr::imu::sample = false;
+    sfr::imu::turn_off = true;
 }
 void Boot::dispatch()
 {
@@ -23,7 +23,7 @@ void AliveSignal::transition_to()
 {
     sfr::rockblock::sleep_mode = false;
     sfr::acs::off = true;
-    sfr::imu::sample = false;
+    sfr::imu::turn_off = true;
 }
 void AliveSignal::dispatch()
 {
@@ -35,7 +35,7 @@ void LowPowerAliveSignal::transition_to()
 {
     sfr::rockblock::sleep_mode = false;
     sfr::acs::off = true;
-    sfr::imu::sample = false;
+    sfr::imu::turn_off = true;
 }
 void LowPowerAliveSignal::dispatch()
 {
@@ -47,7 +47,6 @@ void DetumbleSpin::transition_to()
 {
     sfr::rockblock::sleep_mode = true;
     sfr::acs::off = false;
-    sfr::imu::sample = true;
 }
 void DetumbleSpin::dispatch()
 {
@@ -66,7 +65,7 @@ void LowPowerDetumbleSpin::transition_to()
 {
     sfr::rockblock::sleep_mode = true;
     sfr::acs::off = true;
-    sfr::imu::sample = false;
+    sfr::imu::turn_off = true;
 }
 void LowPowerDetumbleSpin::dispatch()
 {
@@ -78,7 +77,6 @@ void Normal::transition_to()
 {
     sfr::rockblock::sleep_mode = true;
     sfr::acs::off = false;
-    sfr::imu::sample = true;
 }
 void Normal::dispatch()
 {
@@ -90,7 +88,7 @@ void LowPower::transition_to()
 {
     sfr::rockblock::sleep_mode = false;
     sfr::acs::off = true;
-    sfr::imu::sample = false;
+    sfr::imu::turn_off = true;
 }
 void LowPower::dispatch()
 {
@@ -101,7 +99,7 @@ void Transmit::transition_to()
 {
     sfr::rockblock::sleep_mode = false;
     sfr::acs::off = true;
-    sfr::imu::sample = false;
+    sfr::imu::turn_off = true;
 }
 void Transmit::dispatch()
 {
@@ -113,7 +111,6 @@ void NormalDeployment::transition_to()
 {
     sfr::rockblock::sleep_mode = true;
     sfr::acs::off = false;
-    sfr::imu::sample = true;
 }
 void NormalDeployment::dispatch()
 {
@@ -125,7 +122,7 @@ void TransmitDeployment::transition_to()
 {
     sfr::rockblock::sleep_mode = false;
     sfr::acs::off = true;
-    sfr::imu::sample = false;
+    sfr::imu::turn_off = true;
 }
 void TransmitDeployment::dispatch()
 {
@@ -137,7 +134,7 @@ void LowPowerDeployment::transition_to()
 {
     sfr::rockblock::sleep_mode = false;
     sfr::acs::off = true;
-    sfr::imu::sample = false;
+    sfr::imu::turn_off = true;
 }
 void LowPowerDeployment::dispatch()
 {
@@ -148,7 +145,6 @@ void NormalArmed::transition_to()
 {
     sfr::rockblock::sleep_mode = true;
     sfr::acs::off = false;
-    sfr::imu::sample = true;
 }
 void NormalArmed::dispatch()
 {
@@ -160,7 +156,7 @@ void TransmitArmed::transition_to()
 {
     sfr::rockblock::sleep_mode = false;
     sfr::acs::off = true;
-    sfr::imu::sample = false;
+    sfr::imu::turn_off = true;
 }
 void TransmitArmed::dispatch()
 {
@@ -172,7 +168,7 @@ void LowPowerArmed::transition_to()
 {
     sfr::rockblock::sleep_mode = false;
     sfr::acs::off = true;
-    sfr::imu::sample = false;
+    sfr::imu::turn_off = true;
 }
 void LowPowerArmed::dispatch()
 {
@@ -183,31 +179,32 @@ void NormalInSun::transition_to()
 {
     sfr::rockblock::sleep_mode = true;
     sfr::acs::off = false;
-    sfr::imu::sample = true;
 }
 void NormalInSun::dispatch()
 {
     timed_out(sfr::mission::transmitInSun, sfr::acs::on_time);
     enter_lp_insun();
+    exit_insun_phase(sfr::mission::bootCamera);
 }
 
 void TransmitInSun::transition_to()
 {
     sfr::rockblock::sleep_mode = false;
     sfr::acs::off = true;
-    sfr::imu::sample = false;
+    sfr::imu::turn_off = true;
 }
 void TransmitInSun::dispatch()
 {
     timed_out(sfr::mission::normalInSun, sfr::mission::acs_transmit_cycle_time - sfr::acs::on_time);
     enter_lp_insun();
+    exit_insun_phase(sfr::mission::bootCamera);
 }
 
 void LowPowerInSun::transition_to()
 {
     sfr::rockblock::sleep_mode = false;
     sfr::acs::off = true;
-    sfr::imu::sample = false;
+    sfr::imu::turn_off = true;
 }
 void LowPowerInSun::dispatch()
 {
@@ -222,12 +219,15 @@ void VoltageFailureInSun::transition_to()
 {
     sfr::rockblock::sleep_mode = false;
     sfr::acs::off = true;
-    sfr::imu::sample = false;
+    sfr::imu::turn_off = true;
 }
+
 void VoltageFailureInSun::dispatch()
 {
     if (sfr::battery::voltage_average->is_valid()) {
         sfr::mission::current_mode = sfr::mission::normalInSun;
+    } else {
+        exit_insun_phase(sfr::mission::bootCamera);
     }
 }
 
@@ -235,39 +235,56 @@ void BootCamera::transition_to()
 {
     sfr::rockblock::sleep_mode = true;
     sfr::acs::off = true;
-    sfr::imu::sample = false;
+    sfr::imu::turn_off = true;
+    sfr::camera::turn_on = true;
 }
 void BootCamera::dispatch()
 {
+    if (sfr::camera::init_mode == (uint16_t)camera_init_mode_type::complete || sfr::camera::failed_times > sfr::camera::failed_limit) {
+        sfr::mission::current_mode = sfr::mission::mandatoryBurns;
+    }
 }
 
 void MandatoryBurns::transition_to()
 {
     sfr::rockblock::sleep_mode = true;
     sfr::acs::off = true;
-    sfr::imu::sample = true;
+    sfr::imu::turn_off = true;
 }
+
 void MandatoryBurns::dispatch()
 {
+    sfr::mission::current_mode = sfr::mission::regularBurns;
 }
 
 void RegularBurns::transition_to()
 {
     sfr::rockblock::sleep_mode = true;
     sfr::acs::off = true;
-    sfr::imu::sample = true;
+    sfr::imu::turn_off = true;
 }
 void RegularBurns::dispatch()
 {
+    if (!sfr::button::pressed || !sfr::photoresistor::covered) {
+        sfr::mission::current_mode = sfr::mission::photo;
+
+    } else if (sfr::burnwire::attempts > sfr::burnwire::attempts_limit) {
+        sfr::mission::current_mode = sfr::mission::transmitArmed;
+    }
 }
 
 void Photo::transition_to()
 {
     sfr::rockblock::sleep_mode = true;
     sfr::acs::off = true;
-    sfr::imu::sample = true;
+    sfr::imu::turn_off = true;
+    sfr::camera::take_photo = true;
 }
-void Photo::dispatch() {}
+
+void Photo::dispatch()
+{
+    sfr::mission::current_mode = sfr::mission::detumbleSpin;
+}
 
 void exit_signal_phase(MissionMode *mode)
 {
@@ -301,6 +318,14 @@ void exit_detumble_phase(MissionMode *mode)
 
     // detumble has timed out
     if (millis() - sfr::mission::stabilization->start_time >= sfr::stabilization::max_time) {
+        sfr::mission::current_mode = mode;
+    }
+}
+
+void exit_insun_phase(MissionMode *mode)
+{
+    if ((sfr::temperature::temp_c_average->is_valid() && sfr::temperature::in_sun) ||
+        (!sfr::temperature::temp_c_average->is_valid() && sfr::current::solar_current_average->is_valid() && sfr::current::in_sun)) {
         sfr::mission::current_mode = mode;
     }
 }
