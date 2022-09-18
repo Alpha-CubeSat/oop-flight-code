@@ -1,4 +1,5 @@
 #include "RockblockReportMonitor.hpp"
+#include "sfr.hpp"
 
 RockblockReportMonitor::RockblockReportMonitor(unsigned int offset)
     : TimedControlTask<void>(offset)
@@ -7,7 +8,7 @@ RockblockReportMonitor::RockblockReportMonitor(unsigned int offset)
 
 void RockblockReportMonitor::execute()
 {
-    switch (sfr::rockblock::mode) {
+    switch (static_cast<rockblock_mode_type>(sfr::rockblock::mode.get())) {
     // Report scheduling is only performed in `rockblock_mode_type::standby` mode
     case rockblock_mode_type::standby:
         schedule_report();
@@ -16,7 +17,7 @@ void RockblockReportMonitor::execute()
         break;
     }
 
-    switch (sfr::rockblock::downlink_report_type) {
+    switch (static_cast<report_type>(sfr::rockblock::downlink_report_type.get())) {
     case report_type::camera_report:
         sfr::rockblock::downlink_report.clear();
         for (auto &data : sfr::rockblock::camera_report) {
@@ -42,7 +43,7 @@ void RockblockReportMonitor::execute()
 
 void RockblockReportMonitor::switch_report_type_to(report_type downlink_report_type)
 {
-    sfr::rockblock::downlink_report_type = downlink_report_type;
+    sfr::rockblock::downlink_report_type = (uint16_t)downlink_report_type;
     sfr::rockblock::rockblock_ready_status = true;
 }
 
@@ -52,7 +53,7 @@ void RockblockReportMonitor::schedule_report()
     // Check if in a low-power mode; if so, only enable normal report downlink
     if (sfr::mission::current_mode->get_type() == mode_type::LP) {
         if (millis() - sfr::rockblock::last_downlink >= sfr::rockblock::downlink_period) {
-            sfr::rockblock::downlink_report_type = report_type::normal_report;
+            sfr::rockblock::downlink_report_type = (uint16_t)report_type::normal_report;
             sfr::rockblock::rockblock_ready_status = true;
             return;
         }
@@ -62,7 +63,7 @@ void RockblockReportMonitor::schedule_report()
     }
 
     // Not in low-power mode; report type cycle order: normal report, IMU report, camera report
-    switch (sfr::rockblock::downlink_report_type) {
+    switch (static_cast<report_type>(sfr::rockblock::downlink_report_type.get())) {
     case report_type::normal_report:
         if (sfr::imu::report_ready) {
             switch_report_type_to(report_type::imu_report);

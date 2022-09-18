@@ -90,101 +90,23 @@ void IMUMonitor::capture_imu_values()
 
     // Save most recent readings
 
-    sfr::imu::mag_x = mag.magnetic.x;
-    sfr::imu::mag_y = mag.magnetic.y;
-    sfr::imu::mag_z = mag.magnetic.z;
+    sfr::imu::mag_x_value->set_value(mag.magnetic.x);
+    sfr::imu::mag_y_value->set_value(mag.magnetic.y);
+    sfr::imu::mag_z_value->set_value(mag.magnetic.z);
 
-    sfr::imu::gyro_x = gyro.gyro.x;
-    sfr::imu::gyro_y = gyro.gyro.y;
-    sfr::imu::gyro_z = gyro.gyro.z;
-
-    // for testing
-    Serial.printf("\n\nx : %f, y: %f, z: %f\n\n", sfr::imu::gyro_x, sfr::imu::gyro_y, sfr::imu::gyro_z);
-
-    sfr::imu::gyro_x_value->set_value(sfr::imu::gyro_x);
-    sfr::imu::gyro_y_value->set_value(sfr::imu::gyro_y);
-    sfr::imu::gyro_z_value->set_value(sfr::imu::gyro_z);
+    sfr::imu::gyro_x_value->set_value(gyro.gyro.x);
+    sfr::imu::gyro_y_value->set_value(gyro.gyro.y);
+    sfr::imu::gyro_z_value->set_value(gyro.gyro.z);
 
     // Add reading to buffer
 
-    sfr::imu::mag_x_buffer.push_front(mag.magnetic.x);
-    sfr::imu::mag_y_buffer.push_front(mag.magnetic.y);
-    sfr::imu::mag_z_buffer.push_front(mag.magnetic.z);
+    sfr::imu::mag_x_average->set_value(mag.magnetic.x);
+    sfr::imu::mag_y_average->set_value(mag.magnetic.y);
+    sfr::imu::mag_z_average->set_value(mag.magnetic.z);
 
-    sfr::imu::gyro_x_buffer.push_front(gyro.gyro.x);
-    sfr::imu::gyro_y_buffer.push_front(gyro.gyro.y);
-    sfr::imu::gyro_z_buffer.push_front(gyro.gyro.z);
-
-    // Remove old readings
-
-    if (sfr::imu::mag_x_buffer.size() > constants::sensor::collect) {
-        sfr::imu::mag_x_buffer.pop_back();
-    }
-    if (sfr::imu::mag_y_buffer.size() > constants::sensor::collect) {
-        sfr::imu::mag_y_buffer.pop_back();
-    }
-    if (sfr::imu::mag_z_buffer.size() > constants::sensor::collect) {
-        sfr::imu::mag_z_buffer.pop_back();
-    }
-    if (sfr::imu::gyro_x_buffer.size() > constants::sensor::collect) {
-        sfr::imu::gyro_x_buffer.pop_back();
-    }
-    if (sfr::imu::gyro_y_buffer.size() > constants::sensor::collect) {
-        sfr::imu::gyro_y_buffer.pop_back();
-    }
-    if (sfr::imu::gyro_z_buffer.size() > constants::sensor::collect) {
-        sfr::imu::gyro_z_buffer.pop_back();
-    }
-
-    // Check for repeated/invalid readings, calculate sums and average
-
-    if (check_repeated_values(sfr::imu::mag_x_buffer)) {
-        sfr::imu::mag_x_average->set_invalid();
-    } else {
-        sfr::imu::mag_x_average->set_valid();
-        float mag_x_sum = std::accumulate(sfr::imu::mag_x_buffer.begin(), sfr::imu::mag_x_buffer.end(), 0.0);
-        sfr::imu::mag_x_average->set_value(mag_x_sum / sfr::imu::mag_x_buffer.size());
-    }
-
-    if (check_repeated_values(sfr::imu::mag_y_buffer)) {
-        sfr::imu::mag_y_average->set_invalid();
-    } else {
-        sfr::imu::mag_y_average->set_valid();
-        float mag_y_sum = std::accumulate(sfr::imu::mag_y_buffer.begin(), sfr::imu::mag_y_buffer.end(), 0.0);
-        sfr::imu::mag_y_average->set_value(mag_y_sum / sfr::imu::mag_y_buffer.size());
-    }
-
-    if (check_repeated_values(sfr::imu::mag_z_buffer)) {
-        sfr::imu::mag_z_average->set_invalid();
-    } else {
-        sfr::imu::mag_z_average->set_valid();
-        float mag_z_sum = std::accumulate(sfr::imu::mag_z_buffer.begin(), sfr::imu::mag_z_buffer.end(), 0.0);
-        sfr::imu::mag_z_average->set_value(mag_z_sum / sfr::imu::mag_z_buffer.size());
-    }
-
-    if (check_repeated_values(sfr::imu::gyro_x_buffer)) {
-        sfr::imu::gyro_x_average->set_invalid();
-    } else {
-        sfr::imu::gyro_x_average->set_valid();
-        float gyro_x_sum = std::accumulate(sfr::imu::gyro_x_buffer.begin(), sfr::imu::gyro_x_buffer.end(), 0.0);
-        sfr::imu::gyro_x_average->set_value(gyro_x_sum / sfr::imu::gyro_x_buffer.size());
-    }
-
-    if (check_repeated_values(sfr::imu::gyro_y_buffer)) {
-        sfr::imu::gyro_y_average->set_invalid();
-    } else {
-        sfr::imu::gyro_y_average->set_valid();
-        float gyro_y_sum = std::accumulate(sfr::imu::gyro_y_buffer.begin(), sfr::imu::gyro_y_buffer.end(), 0.0);
-        sfr::imu::gyro_y_average->set_value(gyro_y_sum / sfr::imu::gyro_y_buffer.size());
-    }
-
-    if (check_repeated_values(sfr::imu::gyro_z_buffer)) {
-        sfr::imu::gyro_z_average->set_invalid();
-    } else {
-        sfr::imu::gyro_z_average->set_valid();
-        float gyro_z_sum = std::accumulate(sfr::imu::gyro_z_buffer.begin(), sfr::imu::gyro_z_buffer.end(), 0.0);
-        sfr::imu::gyro_z_average->set_value(gyro_z_sum / sfr::imu::gyro_z_buffer.size());
-    }
+    sfr::imu::gyro_x_average->set_value(gyro.gyro.x);
+    sfr::imu::gyro_y_average->set_value(gyro.gyro.y);
+    sfr::imu::gyro_z_average->set_value(gyro.gyro.z);
 }
 
 void IMUMonitor::transition_to_normal()

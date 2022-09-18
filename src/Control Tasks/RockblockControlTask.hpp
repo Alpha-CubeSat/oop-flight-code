@@ -1,6 +1,11 @@
 #ifndef ROCKBLOCK_CONTROL_TASK_HPP_
 #define ROCKBLOCK_CONTROL_TASK_HPP_
 
+#include "Control Tasks/TimedControlTask.hpp"
+#include "Modes/rockblock_mode_type.enum"
+#include "Pins.hpp"
+#include "RockblockCommand.hpp"
+#include "RockblockSimulator.hpp"
 #include "sfr.hpp"
 
 class RockblockControlTask : public TimedControlTask<void>
@@ -36,6 +41,11 @@ private:
     void transition_to(rockblock_mode_type new_mode);
     bool check_valid_command(RawRockblockCommand raw_command);
     void check_timeout();
+#ifndef SIMULATOR
+    HardwareSerial serial = Serial1;
+#else
+    RockblockSimulator serial;
+#endif
 };
 
 #endif

@@ -7,13 +7,17 @@ IMUDownlink::IMUDownlink(unsigned int offset)
 
 void IMUDownlink::execute()
 {
+    float gyro_x;
+    float gyro_y;
+    float gyro_z;
+
     if (sfr::imu::sample_gyro) {
 
         // Add reading to imu downlink buffer
 
-        uint8_t gyro_x = map(sfr::imu::gyro_x_value->get_value(), sfr::imu::gyro_min, sfr::imu::gyro_max, 0, 255);
-        uint8_t gyro_y = map(sfr::imu::gyro_y_value->get_value(), sfr::imu::gyro_min, sfr::imu::gyro_max, 0, 255);
-        uint8_t gyro_z = map(sfr::imu::gyro_z_value->get_value(), sfr::imu::gyro_min, sfr::imu::gyro_max, 0, 255);
+        sfr::imu::gyro_x_value->get_value(&gyro_x);
+        sfr::imu::gyro_x_value->get_value(&gyro_y);
+        sfr::imu::gyro_x_value->get_value(&gyro_z);
 
         sfr::imu::imu_dlink.push_front(gyro_x);
         sfr::imu::imu_dlink.push_front(gyro_y);

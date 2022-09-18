@@ -1,7 +1,7 @@
 #ifndef sensor_mode_type_enum_
 #define sensor_mode_type_enum_
 
-enum sensor_mode_type : unsigned char
+enum class sensor_mode_type : unsigned char
 {
     init = 0,
     normal,

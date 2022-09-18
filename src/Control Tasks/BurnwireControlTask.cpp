@@ -93,7 +93,7 @@ void BurnwireControlTask::execute()
 void BurnwireControlTask::dispatch_burn()
 {
     sfr::burnwire::camera_attempts = 0;
-    sfr::burnwire::mode = burnwire_mode_type::burn;
+    sfr::burnwire::mode = (uint16_t)burnwire_mode_type::burn;
     sfr::burnwire::start_time = millis();
     if (sfr::burnwire::attempts > constants::burnwire::max_attempts) {
         transition_to_standby();
@@ -111,7 +111,7 @@ void BurnwireControlTask::dispatch_burn()
 
 void BurnwireControlTask::transition_to_standby()
 {
-    sfr::burnwire::mode = burnwire_mode_type::standby;
+    sfr::burnwire::mode = (uint16_t)burnwire_mode_type::standby;
     Pins::setPinState(constants::burnwire::first_pin, LOW);
     Pins::setPinState(constants::burnwire::second_pin, LOW);
     sfr::burnwire::fire = false;

@@ -5,22 +5,31 @@
 #include "Faults.hpp" // Cannot include sfr.hpp in this file without creating circular dependency since SensorReading objects are declared in sfr.hpp
 #include "Modes/fault_index_type.enum"
 #include "constants.hpp"
+#include <deque>
 #include <map>
+#include <numeric>
 
 class SensorReading
 {
 private:
-    fault_index_type type; // Type of reading
-    float value;           // Sensor reading (set to the averaged value in SFR)
-    bool fault_status;     // Fault flag: true means invalid reading and false means valid reading
+    fault_index_type type;    // type of reading
+    uint8_t buffer_size;      // amount of values that should be averaged
+    float max;                // max valid value
+    float min;                // min valid value
+    std::deque<float> buffer; // buffer used to store the raw values
+    boolean valid;            // if SensorReading is valid
+    bool repeated_values(std::deque<float> buffer);
 
 public:
-    SensorReading(fault_index_type t, float x, bool fault); // Constructor
-    float get_value();                                      // Get the sensor reading
-    bool is_valid();                                        // Get the fault status
-    void set_value(float value);                            // Set the value of a SensorReading object
-    void set_valid();                                       // Set the fault flag of a SensorReading object to 1
-    void set_invalid();                                     // Set the fault flag of a SensorReading object to 0
+    SensorReading(fault_index_type type, uint8_t buffer_size, float max, float min); // constructor
+    SensorReading(uint8_t buffer_size, float max, float min);                        // constructor
+    boolean get_value(float *value_location);                                        // get SensorReading averaged value
+    void set_value(float x);                                                         // set SensorReading value
+    void set_invalid();
+    void set_valid();
+    float get_min();
+    float get_max();
+    boolean is_valid();
 };
 
 #endif

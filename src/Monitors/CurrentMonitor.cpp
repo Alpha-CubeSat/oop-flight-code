@@ -12,18 +12,18 @@ void CurrentMonitor::execute()
     float voltage = (val * constants::current::voltage_ref) / constants::current::resolution;
     float milliamps = 1000 * voltage / (constants::current::load * constants::current::shunt);
 
-    sfr::current::solar_current = milliamps;
+    sfr::current::solar_current_average->set_value(milliamps);
 
-    sfr::current::solar_current_buffer.push_front(sfr::current::solar_current);
-    if (sfr::current::solar_current_buffer.size() > constants::sensor::collect) {
-        sfr::current::solar_current_buffer.pop_back();
-    }
-    float sum = std::accumulate(sfr::current::solar_current_buffer.begin(), sfr::current::solar_current_buffer.end(), (float)0.0);
-    sfr::current::solar_current_average->set_value(sum / sfr::current::solar_current_buffer.size());
+    if (sfr::current::solar_current_average->get_value(&milliamps)) {
+
 #ifdef VERBOSE
-    Serial.print("Current: ");
-    Serial.print(sfr::current::solar_current_average->get_value());
-    Serial.println(" mA");
+        Serial.print("Current: ");
+        Serial.print(milliamps);
+        Serial.println(" mA");
+
 #endif
-    sfr::current::in_sun = sfr::current::solar_current_average->get_value() >= constants::current::in_sun_val;
+        sfr::current::in_sun = milliamps >= constants::current::in_sun_val;
+    } else {
+        sfr::current::in_sun = false;
+    }
 }
