@@ -495,6 +495,7 @@ namespace constants {
         static constexpr unsigned int rockblock_control_task_offset = 0;
         static constexpr unsigned int rockblock_report_monitor_offset = 0;
         static constexpr unsigned int temperature_control_task_offset = 0;
+        static constexpr unsigned int eeprom_control_task_offset = 0;
         static constexpr unsigned int mission_manager_offset = 0;
     } // namespace timecontrol
 };    // namespace constants
