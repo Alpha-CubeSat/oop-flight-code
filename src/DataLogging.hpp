@@ -4,11 +4,8 @@
 #include "sfr.hpp"
 
 
-//Starts a serial session, Initializes the SD card
+//Initializes the SD card
 void DataLogSetup();
 
 //Opens the Data.txt file, writes data, close the file when exits
-void DataLog(float Data[12], int size);
-
-// void call();
-// int IsCalled();
+void DataLog(float Data[], int size);

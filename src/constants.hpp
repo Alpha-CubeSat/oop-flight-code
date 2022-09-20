@@ -17,8 +17,8 @@ namespace constants {
         constexpr unsigned long two_days = 2 * one_day;
     } // namespace time
     namespace sensor {
-        //window size for moving kernel fileter
-        constexpr int collect = 10;
+        //window size for moving kernel fileter (rn not the exact size)
+        constexpr int collect = 5;
     } // namespace sensor
     namespace photoresistor {
         constexpr int pin = 38;

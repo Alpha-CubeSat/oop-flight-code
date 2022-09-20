@@ -78,22 +78,30 @@ bool check_repeated_values(std::deque<float> buffer)
     return true;
 }
 
-float get_sd(std::deque<float> buffer)
-{
-    float sum = 0;
-    float mean = 0;
-    float sd = 0;
-    for (float val : buffer) {
-        sum += val;
-    }
-    mean = sum / buffer.size();
+// float x_new = 0;
+// float x_old = 0;
+// float x_oldLP = 0;
+// float x_newLP = 0;
 
-    for (int i = 0; i < buffer.size(); i++) {
-        sd += pow(buffer[i] - mean, 2);
-    }
-    sd = sqrt(sd / (buffer.size() - 1));
-    return sd;
-}
+// float y_new = 0;
+// float y_old = 0;
+// float y_oldLP = 0;
+// float y_newLP = 0;
+
+// float z_new = 0;
+// float z_old = 0;
+// float z_oldLP = 0;
+// float z_newLP = 0;
+
+// //6th order low pass filter, cutoff frequency of 0.1 Hz
+// float x_a = 0.98473518;
+// float x_b[] = {0.00763241, 0.00763241};
+
+// float LP_filter(float old_LPval, float new_val, float old_val, float a, float b[])
+// {
+//     float new_LPval = a * old_LPval + b[0] * new_val + b[1] * old_val;
+//     return new_LPval;
+// }
 
 //Epanechnikov kernel for smooth
 // return the weight for the given t=|x-x_0|/window_size
@@ -105,22 +113,18 @@ float Ep_kernel(float t)
         return 0;
     }
 }
-// float Gaussian_kernel(float t, float sigma, float mu)
-// {
-    
-// }
 
 // Epanechnikov kernel smoothing
 // return the smoothed value of the current window
-float Epa_smooth(std::deque<float> buffer)
+float smooth_func(std::deque<float> buffer)
 {
     int window_size = buffer.size();
-    int x_0 = window_size / 2+1;
+    int x_0 = window_size / 2;
     float weight = 0;
     float weight_data_sum = 0;
     float weight_sum = 0;
-    float sigma = get_sd(buffer);
-
+    //Serial.print("Window Size: ");
+    //Serial.println(window_size);
     for (int i = 0; i < window_size; i++) {
         weight = Ep_kernel(fabs(i - x_0) / window_size);
         Serial.print(String(i) +": raw buffer value: ");
@@ -135,6 +139,7 @@ float Epa_smooth(std::deque<float> buffer)
 void IMUMonitor::capture_imu_values()
 {
     sensors_event_t accel, mag, gyro, temp;
+    
     imu.getEvent(&accel, &mag, &gyro, &temp);
 
     imu.setupMag(imu.LSM9DS1_MAGGAIN_8GAUSS);
@@ -152,16 +157,25 @@ void IMUMonitor::capture_imu_values()
     sfr::imu::gyro_y_value->set_value(sfr::imu::gyro_y);
     sfr::imu::gyro_z_value->set_value(sfr::imu::gyro_z);
 
-    // Add reading to buffer
+    // Add reading(s) to buffer
     int collection_cycle = 3;
-    for (int i = 0; i < collection_cycle; i++) {
-        sfr::imu::mag_x_buffer.push_front(mag.magnetic.x);
-        sfr::imu::mag_y_buffer.push_front(mag.magnetic.y);
-        sfr::imu::mag_z_buffer.push_front(mag.magnetic.z);
 
+    for (int i = 0; i < collection_cycle; i++) {
+        imu.getEvent(&accel, &mag, &gyro, &temp);
+        // Serial.print("Mag timestamp: ");
+        // Serial.println(mag.timestamp);
+
+        sfr::imu::mag_x_buffer.push_front(mag.magnetic.x);
         sfr::imu::gyro_x_buffer.push_front(gyro.gyro.x);
+
+
+        sfr::imu::mag_y_buffer.push_front(mag.magnetic.y);
         sfr::imu::gyro_y_buffer.push_front(gyro.gyro.y);
+
+        sfr::imu::mag_z_buffer.push_front(mag.magnetic.z);
         sfr::imu::gyro_z_buffer.push_front(gyro.gyro.z);
+        //delay for imu timestamp updating in order to get new data
+        delay(2);
     }
 
     // Remove old readings
@@ -209,13 +223,37 @@ void IMUMonitor::capture_imu_values()
     //     //sfr::imu::mag_x_average->set_value(mag_x_sum / sfr::imu::mag_x_buffer.size());
     // }
 
-    sfr::imu::mag_x_average->set_valid();
-    sfr::imu::mag_y_average->set_valid();
-    sfr::imu::mag_z_average->set_valid();
+    // sfr::imu::mag_x_average->set_valid();
+    // sfr::imu::mag_y_average->set_valid();
+    // sfr::imu::mag_z_average->set_valid();
     
-    sfr::imu::mag_x_average->set_value(Epa_smooth(sfr::imu::mag_x_buffer));
-    sfr::imu::mag_y_average->set_value(Epa_smooth(sfr::imu::mag_y_buffer));
-    sfr::imu::mag_z_average->set_value(Epa_smooth(sfr::imu::mag_z_buffer));
+    // sfr::imu::mag_x_average->set_value(smooth_func(sfr::imu::mag_x_buffer));
+    // sfr::imu::mag_y_average->set_value(smooth_func(sfr::imu::mag_y_buffer));
+    // sfr::imu::mag_z_average->set_value(smooth_func(sfr::imu::mag_z_buffer));
+
+    // x_new = sfr::imu::mag_x;
+    // x_newLP = LP_filter(x_oldLP, x_new, x_old, x_a, x_b);
+
+    // y_new = sfr::imu::mag_y;
+    // y_newLP = LP_filter(y_oldLP, y_new, y_old, x_a, x_b);
+
+    // z_new = sfr::imu::mag_z;
+    // z_newLP = LP_filter(z_oldLP, z_new, z_old, x_a, x_b);
+
+    // sfr::imu::mag_x_average->set_value(x_newLP);
+    // sfr::imu::mag_y_average->set_value(y_newLP);
+    // sfr::imu::mag_z_average->set_value(z_newLP);
+
+    // sfr::imu::mag_x_average->set_valid();
+    // sfr::imu::mag_y_average->set_valid();
+    // sfr::imu::mag_z_average->set_valid();
+
+    // x_old = x_new;
+    // x_oldLP = x_newLP;
+    // y_old = y_new;
+    // y_oldLP = y_newLP;
+    // z_old = z_new;
+    // z_oldLP = z_newLP;
 
     // if (check_repeated_values(sfr::imu::mag_y_buffer)) {
     //     sfr::imu::mag_y_average->set_invalid();
@@ -235,9 +273,12 @@ void IMUMonitor::capture_imu_values()
     //         // sfr::imu::mag_z_average->set_value(mag_z_sum / sfr::imu::mag_z_buffer.size());
     // }
 
-    if (check_repeated_values(sfr::imu::gyro_x_buffer)) {
+    if (check_repeated_values(sfr::imu::gyro_x_buffer))
+    {
         sfr::imu::gyro_x_average->set_invalid();
-    } else {
+    }
+    else
+    {
         sfr::imu::gyro_x_average->set_valid();
         float gyro_x_sum = std::accumulate(sfr::imu::gyro_x_buffer.begin(), sfr::imu::gyro_x_buffer.end(), 0.0);
         sfr::imu::gyro_x_average->set_value(gyro_x_sum / sfr::imu::gyro_x_buffer.size());

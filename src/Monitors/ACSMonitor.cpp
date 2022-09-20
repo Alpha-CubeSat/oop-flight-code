@@ -7,7 +7,30 @@ ACSMonitor::ACSMonitor(unsigned int offset)
                            ampfactor, max_current, csarea, num_loops, wdx, wdy, wdz);
 }
 
-float test_mag = 0.0;
+float x_new = 0;
+float x_old = 0;
+float x_oldLP = 0;
+float x_newLP = 0;
+
+float y_new = 0;
+float y_old = 0;
+float y_oldLP = 0;
+float y_newLP = 0;
+
+float z_new = 0;
+float z_old = 0;
+float z_oldLP = 0;
+float z_newLP = 0;
+
+// 6th order low pass filter, cutoff frequency of 0.1 Hz
+float x_a = -0.93751226;
+float x_b[] = {0.96875613, 0.96875613};
+
+float LP_filter(float old_LPval, float new_val, float old_val, float a, float b[])
+{
+    float new_LPval = a * old_LPval + b[0] * new_val + b[1] * old_val;
+    return new_LPval;
+}
 
 void ACSMonitor::execute()
 
@@ -19,24 +42,41 @@ void ACSMonitor::execute()
     float w_y = sfr::imu::gyro_y_average->get_value() * 3.14159 / 180.0;
     float w_z = sfr::imu::gyro_z_average->get_value() * 3.14159 / 180.0;
 
-    float mag_x = sfr::imu::mag_x_average->get_value();
-    float mag_y = sfr::imu::mag_y_average->get_value();
-    float mag_z = sfr::imu::mag_z_average->get_value();
+    // float mag_x = sfr::imu::mag_x_average->get_value();
+    // float mag_y = sfr::imu::mag_y_average->get_value();
+    // float mag_z = sfr::imu::mag_z_average->get_value();
 
-    //float mag_x_offset;
-    //float mag_y_offset;
-    //float mag_z_offset;
+    float mag_x_raw = sfr::imu::mag_x;
+    float mag_y_raw = sfr::imu::mag_y;
+    float mag_z_raw = sfr::imu::mag_z;
 
-    Serial.print("magXYZ w/o offset:");
-    Serial.print(mag_x);
+    float mag_x = mag_x_raw;
+    float mag_y = mag_y_raw;
+    float mag_z = mag_z_raw;
+
+    Serial.print("magXYZ w/o offset(raw):");
+    Serial.print(mag_x_raw);
     Serial.print(", ");
-    Serial.print(mag_y);
+    Serial.print(mag_x_raw);
     Serial.print(", ");
-    Serial.println(mag_z);
+    Serial.println(mag_x_raw);
 
-    IMUOffset(mag_x, mag_y, mag_z, sfr::temperature::temp_c, sfr::battery::voltage, sfr::acs::pwmX, sfr::acs::pwmY, sfr::acs::pwmZ);
+    //IMUOffset(&mag_x, &mag_y, &mag_z, sfr::temperature::temp_c, sfr::battery::voltage, sfr::acs::pwmX, sfr::acs::pwmY, sfr::acs::pwmZ);
 
-  
+    x_new = mag_x;
+    x_newLP = LP_filter(x_oldLP, x_new, x_old, x_a, x_b);
+
+    y_new = mag_y;
+    y_newLP = LP_filter(y_oldLP, y_new, y_old, x_a, x_b);
+
+    z_new = mag_z;
+    z_newLP = LP_filter(z_oldLP, z_new, z_old, x_a, x_b);
+
+
+    mag_x = x_newLP;
+    mag_y = y_newLP;
+    mag_z = z_newLP;
+    
     Serial.print("magXYZ w/ offset:");
     Serial.print(mag_x);
     Serial.print(", ");
@@ -48,9 +88,7 @@ void ACSMonitor::execute()
     mag_x = mag_x/ 1000000.0;
     mag_y = mag_y/ 1000000.0;
     mag_z = mag_z/ 1000000.0;
-
-    // Serial.print("IMU sample ");
-    // Serial.println(sfr::imu::sample);
+    
 
     Serial.print("wXYZ: ");
     Serial.print(w_x);
@@ -63,14 +101,9 @@ void ACSMonitor::execute()
     starshotObj.rtU.w[1] = w_y;
     starshotObj.rtU.w[2] = w_z;
 
-    // if(test_mag<1000.0){
-    //     test_mag=test_mag+5.0;
-    // }
-    //Serial.print("test_mag: ");
-    //Serial.println(test_mag);
-    starshotObj.rtU.magneticfield[0] = mag_x;//-27.0/ 1000000.0;
-    starshotObj.rtU.magneticfield[1] = mag_y;//-18.0/ 1000000.0;                                   // mag_y;
-    starshotObj.rtU.magneticfield[2] = mag_z;//-71/ 1000000.0; //
+    starshotObj.rtU.magneticfield[0] = mag_x;
+    starshotObj.rtU.magneticfield[1] = mag_y;
+    starshotObj.rtU.magneticfield[2] = mag_z;
 
     starshotObj.step();
 
@@ -146,16 +179,33 @@ void ACSMonitor::execute()
         sfr::acs::currentZ = pt_I_z;
         break;
     case acs_mode_type::off:
+
+        Serial.println("PT X, Y, Z current: ");
+        Serial.print(pt_I_x * 1000);
+        Serial.print(" mA, ");
+        Serial.print(pt_I_y * 1000);
+        Serial.print(" mA, ");
+        Serial.print(pt_I_z * 1000);
+        Serial.println(" mA");
         sfr::acs::currentX = 0;
         sfr::acs::currentY = 0;
         sfr::acs::currentZ = 0;
         break;
     }
-    float ACSData[12] = {w_x, w_y, w_z, mag_x, mag_y, mag_z, de_I_x, de_I_y, de_I_z, pt_I_x, pt_I_y, pt_I_z};
-    DataLog(ACSData, 12);
+
+    x_old = x_new;
+    x_oldLP = x_newLP;
+    y_old = y_new;
+    y_oldLP = y_newLP;
+    z_old = z_new;
+    z_oldLP = z_newLP;
+
+    //float ACSData[12] = {w_x, w_y, w_z, mag_x, mag_y, mag_z, de_I_x, de_I_y, de_I_z, pt_I_x, pt_I_y, pt_I_z};
+    float ACSData[7] = {mag_x_raw, mag_y_raw, mag_z_raw, mag_x * 1000000.0, mag_y * 1000000.0, mag_z * 1000000.0, pt_I_z*1000.0};
+    DataLog(ACSData, 7);
 }
 
-void ACSMonitor::IMUOffset(float &mag_x, float &mag_y, float &mag_z, float temp, float voltage, float pwmX, float pwmY, float pwmZ)
+void ACSMonitor::IMUOffset(float *mag_x, float *mag_y, float *mag_z, float temp, float voltage, float pwmX, float pwmY, float pwmZ)
 {
     using namespace constants::acs;
 
@@ -197,7 +247,7 @@ void ACSMonitor::IMUOffset(float &mag_x, float &mag_y, float &mag_z, float temp,
     /*******************************************/
     /* Finally, adjust magnetometer readings*/
 
-    mag_x = mag_x - xoffset;
-    mag_y = mag_y - yoffset;
-    mag_z = mag_z - zoffset;
+    *mag_x = *mag_x - xoffset;
+    *mag_y = *mag_y - yoffset;
+    *mag_z = *mag_z - zoffset;
 }
