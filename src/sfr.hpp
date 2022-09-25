@@ -38,6 +38,12 @@ namespace sfr {
         // OP Codes 1500
         extern SFRField<uint32_t> start_time;
         extern SFRField<uint32_t> max_time;
+        extern SFRField<uint8_t> min_stable_gyro_z;
+        extern SFRField<uint8_t> max_stable_gyro_x;
+        extern SFRField<uint8_t> max_stable_gyro_y;
+        extern SFRField<uint8_t> min_unstable_gyro_x;
+        extern SFRField<uint8_t> min_unstable_gyro_y;
+
         // TODO
         extern SFRField<uint16_t> num_imu_retries;
         extern SFRField<uint16_t> max_imu_retries;

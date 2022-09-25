@@ -24,6 +24,13 @@ namespace sfr {
         // TODO
         SFRField<uint16_t> num_imu_retries = SFRField<uint16_t>(0, 1502);
         SFRField<uint16_t> max_imu_retries = SFRField<uint16_t>(5, 1503);
+
+        SFRField<uint8_t> min_stable_gyro_z = SFRField<uint8_t>(1, 0, 2, 1504, 10);
+        SFRField<uint8_t> max_stable_gyro_x = SFRField<uint8_t>(.2, 0, 1, 1505, 10);
+        SFRField<uint8_t> max_stable_gyro_y = SFRField<uint8_t>(.2, 0, 1, 1506, 10);
+
+        SFRField<uint8_t> min_unstable_gyro_x = SFRField<uint8_t>(.7, 0, 1, 1507, 10);
+        SFRField<uint8_t> min_unstable_gyro_y = SFRField<uint8_t>(.7, 0, 1, 1508, 10);
     } // namespace detumble
     namespace aliveSignal {
         // OP Codes 1600
