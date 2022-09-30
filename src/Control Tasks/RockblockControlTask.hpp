@@ -4,7 +4,7 @@
 #include "Control Tasks/TimedControlTask.hpp"
 #include "Modes/rockblock_mode_type.enum"
 #include "Pins.hpp"
-#include "RockblockCommand.hpp"
+#include "Commands/RockblockCommand.hpp"
 #include "RockblockSimulator.hpp"
 #include "sfr.hpp"
 

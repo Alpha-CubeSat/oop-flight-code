@@ -14,8 +14,8 @@
 #include "SFRField.hpp"
 #include "SensorReading.hpp"
 #include "constants.hpp"
-#include <RockblockCommand.hpp>
 #include <deque>
+#include "Commands/RockblockCommand.hpp"
 
 namespace sfr {
     namespace stabilization {
@@ -186,6 +186,7 @@ namespace sfr {
         extern boolean report_written;
         extern boolean report_downlinked;
         extern boolean report_ready;
+
     } // namespace camera
     namespace rockblock {
         // OP Codes 2100
