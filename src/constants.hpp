@@ -78,7 +78,7 @@ namespace constants {
             constexpr uint16_t camera_turn_on = 11;
             constexpr uint16_t camera_turn_off = 12;
 
-            //SFRField Commands
+            // SFRField Commands
             constexpr uint16_t sfr_field_opcode_min = 11;
             constexpr uint16_t sfr_field_opcode_max = 28;
 

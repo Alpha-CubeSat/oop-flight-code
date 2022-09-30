@@ -26,7 +26,7 @@ RockblockCommand RockblockCommand::commandFactory(RawRockblockCommand raw)
     uint16_t op_code = raw.get_f_opcode();
     if (op_code == opcodes::mission_mode) {
         return MissionModeCommand(raw);
-    } else if (op_code <= opcodes::sfr_field_opcode_max && op_code >= opcodes::sfr_field_opcode_min) { 
+    } else if (op_code <= opcodes::sfr_field_opcode_max && op_code >= opcodes::sfr_field_opcode_min) {
         return SFROverrideCommand(raw);
     } else {
         return UnknownCommand(raw);
