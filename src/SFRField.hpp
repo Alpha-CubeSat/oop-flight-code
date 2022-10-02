@@ -4,6 +4,9 @@
 #include <stdint.h>
 #include <type_traits>
 
+#ifndef _SFRFIELD_HPP_
+#define _SFRFIELD_HPP_
+
 class SFRInterface
 {
 
@@ -136,3 +139,5 @@ public:
         set(value + val);
     }
 };
+
+#endif

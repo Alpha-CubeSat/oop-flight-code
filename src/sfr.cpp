@@ -193,6 +193,7 @@ namespace sfr {
         boolean report_written = false;
         boolean report_downlinked = true;
         boolean report_ready = true;
+
     } // namespace camera
     namespace rockblock {
         // OP Codes 2100

@@ -3,6 +3,7 @@
 
 #include "Adafruit_VC0706.h"
 #include "Arduino.h"
+#include "Commands/RockblockCommand.hpp"
 #include "MissionMode.hpp"
 #include "Modes/burnwire_mode_type.enum"
 #include "Modes/camera_init_mode_type.enum"
@@ -14,7 +15,6 @@
 #include "SFRField.hpp"
 #include "SensorReading.hpp"
 #include "constants.hpp"
-#include <RockblockCommand.hpp>
 #include <deque>
 
 namespace sfr {
@@ -186,6 +186,7 @@ namespace sfr {
         extern boolean report_written;
         extern boolean report_downlinked;
         extern boolean report_ready;
+
     } // namespace camera
     namespace rockblock {
         // OP Codes 2100
