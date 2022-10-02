@@ -52,3 +52,8 @@ void EEPROMControlTask::execute()
       write for that powered session.
 > eeprom_value holds the total accumulated time tracked by EEPROM.
 */
+
+// need loop cycle counter to track when to write
+// write_address (increments after each write call), also needs to shift x bytes over after memory cycle is over
+// address_to_start reading from, restore this at the beginning of boot. Reading does not stress the life cycle.
+// https://www.pjrc.com/teensy/td_libs_EEPROM.html

@@ -325,10 +325,13 @@ namespace sfr {
     namespace EEPROM {
         // OP Codes 2800
         extern SFRField<uint32_t> time_of_last_write;
-        extern SFRField<uint32_t> write_step_time; // the amount of time between each write to EEPROM
-        extern SFRField<uint32_t> alloted_time;    // the amount of time for the EEPROM to count to (7200000 ms = 2 h)
-        extern SFRField<uint32_t> eeprom_value;    // the amount of time that the EEPROM has counted, stops when the alloted time has been reached
+        extern SFRField<uint32_t> write_step_time;
+        extern SFRField<uint32_t> alloted_time;
+        extern SFRField<uint32_t> eeprom_value;
         extern SFRField<bool> alloted_time_passed;
+        extern SFRField<uint16_t> read_address;
+        extern SFRField<uint16_t> write_address;
+        extern SFRField<uint32_t> data_address_age;
     } // namespace EEPROM
 };    // namespace sfr
 
