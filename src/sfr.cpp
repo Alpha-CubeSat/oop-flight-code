@@ -315,10 +315,15 @@ namespace sfr {
     } // namespace button
     namespace EEPROM {
         // OP Codes 2800
-        SFRField<uint32_t> time_of_last_write = SFRField<uint32_t>(0, 2800);
+        SFRField<uint32_t> time_of_last_write = SFRField<uint32_t>(0, 2800); // the millis() value when the last EEPROM write ocurred
         SFRField<uint32_t> write_step_time = SFRField<uint32_t>(1000, 2801); // the amount of time between each write to EEPROM
         SFRField<uint32_t> alloted_time = SFRField<uint32_t>(7200000, 2802); // the amount of time for the EEPROM to count to (7200000 ms = 2 h)
-        SFRField<uint32_t> eeprom_value = SFRField<uint32_t>(0, 2803);       // the amount of time that the EEPROM has counted, stops when the alloted time has been reached
-        SFRField<bool> alloted_time_passed = SFRField<bool>(false, 2804);
+        SFRField<bool> alloted_time_passed = SFRField<bool>(false, 2803);    // indicates if the EEPROM count has reached the alloted time
+
+        // ytes 0-3 are for the time passed, bytes 4-5 are for the address where values are to be written and stored.
+        // SFR data begins at byte 6 and after. The section of EEPROM bytes where SFR data is stored will change to avoid exceeding the write endurance.
+        SFRField<uint16_t> read_address = SFRField<uint16_t>(6, 2804);
+        SFRField<uint16_t> write_address = SFRField<uint16_t>(6, 2805);
+        SFRField<uint32_t> data_address_age = SFRField<uint32_t>(0, 2806);
     } // namespace EEPROM
 };    // namespace sfr
