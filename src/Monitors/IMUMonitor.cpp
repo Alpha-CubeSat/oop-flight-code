@@ -78,30 +78,7 @@ bool check_repeated_values(std::deque<float> buffer)
     return true;
 }
 
-// float x_new = 0;
-// float x_old = 0;
-// float x_oldLP = 0;
-// float x_newLP = 0;
 
-// float y_new = 0;
-// float y_old = 0;
-// float y_oldLP = 0;
-// float y_newLP = 0;
-
-// float z_new = 0;
-// float z_old = 0;
-// float z_oldLP = 0;
-// float z_newLP = 0;
-
-// //6th order low pass filter, cutoff frequency of 0.1 Hz
-// float x_a = 0.98473518;
-// float x_b[] = {0.00763241, 0.00763241};
-
-// float LP_filter(float old_LPval, float new_val, float old_val, float a, float b[])
-// {
-//     float new_LPval = a * old_LPval + b[0] * new_val + b[1] * old_val;
-//     return new_LPval;
-// }
 
 //Epanechnikov kernel for smooth
 // return the weight for the given t=|x-x_0|/window_size

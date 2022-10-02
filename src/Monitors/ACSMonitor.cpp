@@ -22,9 +22,24 @@ float z_old = 0;
 float z_oldLP = 0;
 float z_newLP = 0;
 
+float wx_new = 0;
+float wx_old = 0;
+float wx_oldLP = 0;
+float wx_newLP = 0;
+
+float wy_new = 0;
+float wy_old = 0;
+float wy_oldLP = 0;
+float wy_newLP = 0;
+
+float wz_new = 0;
+float wz_old = 0;
+float wz_oldLP = 0;
+float wz_newLP = 0;
+
 // 6th order low pass filter, cutoff frequency of 0.1 Hz
-float x_a = -0.93751226;
-float x_b[] = {0.96875613, 0.96875613};
+float x_a = 0.43708596;
+float x_b[] = {0.28145702, 0.28145702};
 
 float LP_filter(float old_LPval, float new_val, float old_val, float a, float b[])
 {
@@ -38,13 +53,17 @@ void ACSMonitor::execute()
     Serial.print("ACS called, current MissionMode:");
     Serial.println(sfr::mission::current_mode->get_id());
     // loading adjusted values into the ACS model
-    float w_x = sfr::imu::gyro_x_average->get_value() * 3.14159 / 180.0;
-    float w_y = sfr::imu::gyro_y_average->get_value() * 3.14159 / 180.0;
-    float w_z = sfr::imu::gyro_z_average->get_value() * 3.14159 / 180.0;
+    float w_x_raw = sfr::imu::gyro_x_average->get_value() * 3.14159 / 180.0;
+    float w_y_raw = sfr::imu::gyro_y_average->get_value() * 3.14159 / 180.0;
+    float w_z_raw = sfr::imu::gyro_z_average->get_value() * 3.14159 / 180.0;
 
-    // float mag_x = sfr::imu::mag_x_average->get_value();
-    // float mag_y = sfr::imu::mag_y_average->get_value();
-    // float mag_z = sfr::imu::mag_z_average->get_value();
+    float w_x = w_x_raw;
+    float w_y = w_y_raw;
+    float w_z = w_z_raw;
+
+    // float mag_x_raw = sfr::imu::mag_x_average->get_value();
+    // float mag_y_raw = sfr::imu::mag_y_average->get_value();
+    // float mag_z_raw = sfr::imu::mag_z_average->get_value();
 
     float mag_x_raw = sfr::imu::mag_x;
     float mag_y_raw = sfr::imu::mag_y;
@@ -55,11 +74,11 @@ void ACSMonitor::execute()
     float mag_z = mag_z_raw;
 
     Serial.print("magXYZ w/o offset(raw):");
-    Serial.print(mag_x_raw);
+    Serial.print(mag_x);
     Serial.print(", ");
-    Serial.print(mag_x_raw);
+    Serial.print(mag_y);
     Serial.print(", ");
-    Serial.println(mag_x_raw);
+    Serial.println(mag_z);
 
     //IMUOffset(&mag_x, &mag_y, &mag_z, sfr::temperature::temp_c, sfr::battery::voltage, sfr::acs::pwmX, sfr::acs::pwmY, sfr::acs::pwmZ);
 
@@ -76,8 +95,21 @@ void ACSMonitor::execute()
     mag_x = x_newLP;
     mag_y = y_newLP;
     mag_z = z_newLP;
-    
-    Serial.print("magXYZ w/ offset:");
+
+    wx_new = w_x;
+    wx_newLP = LP_filter(wx_oldLP, wx_new, wx_old, x_a, x_b);
+
+    wy_new = w_y;
+    wy_newLP = LP_filter(wy_oldLP, wy_new, wy_old, x_a, x_b);
+
+    wz_new = w_z;
+    wz_newLP = LP_filter(wz_oldLP, wz_new, wz_old, x_a, x_b);
+
+    w_x = wx_newLP;
+    w_y = wy_newLP;
+    w_z = wz_newLP;
+
+    Serial.print("magXYZ smooth");
     Serial.print(mag_x);
     Serial.print(", ");
     Serial.print(mag_y);
@@ -115,15 +147,6 @@ void ACSMonitor::execute()
     float pt_I_y = starshotObj.rtY.point[1];
     float pt_I_z = starshotObj.rtY.point[2];
 
-    /*if(sfr::fault::check_acc_x && sfr::fault::check_acc_y && sfr::acs::mode != acs_mode_type::off){
-        if(sfr::imu::gyro_x < 0 && sfr::imu::gyro_y < 0){
-            sfr::acs::mode = acs_mode_type::point;
-        }
-        else{
-            sfr::acs::mode = acs_mode_type::detumble;
-        }
-    }
-    */
     // testing pointing mode
     digitalWrite(constants::acs::STBXYpin,HIGH);
     digitalWrite(constants::acs::STBZpin,HIGH);
@@ -200,9 +223,16 @@ void ACSMonitor::execute()
     z_old = z_new;
     z_oldLP = z_newLP;
 
+    wx_old = wx_new;
+    wx_oldLP = wx_newLP;
+    wy_old = wy_new;
+    wy_oldLP = wy_newLP;
+    wz_old = wz_new;
+    wz_oldLP = wz_newLP;
+
     //float ACSData[12] = {w_x, w_y, w_z, mag_x, mag_y, mag_z, de_I_x, de_I_y, de_I_z, pt_I_x, pt_I_y, pt_I_z};
-    float ACSData[7] = {mag_x_raw, mag_y_raw, mag_z_raw, mag_x * 1000000.0, mag_y * 1000000.0, mag_z * 1000000.0, pt_I_z*1000.0};
-    DataLog(ACSData, 7);
+    float ACSData[13] = {mag_x_raw, mag_y_raw, mag_z_raw, mag_x * 1000000.0, mag_y * 1000000.0, mag_z * 1000000.0, w_x_raw * 10000.0, w_y_raw * 10000.0, w_z_raw * 10000.0, w_x * 10000.0, w_y * 10000.0, w_z * 10000.0, pt_I_z * 1000.0};
+    DataLog(ACSData, 13);
 }
 
 void ACSMonitor::IMUOffset(float *mag_x, float *mag_y, float *mag_z, float temp, float voltage, float pwmX, float pwmY, float pwmZ)
