@@ -41,6 +41,7 @@ private:
     void transition_to(rockblock_mode_type new_mode);
     bool check_valid_command(RawRockblockCommand raw_command);
     void check_timeout();
+
 #ifndef SIMULATOR
     HardwareSerial serial = Serial1;
 #else

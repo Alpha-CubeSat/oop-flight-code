@@ -416,7 +416,7 @@ void RockblockControlTask::dispatch_process_command()
             // Parse New Command From Input OP Codes
             RockblockCommand processed = RockblockCommand::commandFactory(new_raw_command);
             if (processed.isValid()) {
-                // Comand is Valid - Will be added to list to be Executed During CommandMonitor Execute
+                // Command is Valid - Will be added to list to be Executed During CommandMonitor Execute
                 sfr::rockblock::processed_commands.push_back(processed);
                 sfr::rockblock::waiting_command = true;
             } else if (new_raw_command.opcode[0] == 'F' && new_raw_command.opcode[1] == 'L') {
