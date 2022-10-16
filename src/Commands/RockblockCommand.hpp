@@ -10,12 +10,13 @@ public:
     uint8_t opcode[2];
     uint8_t arg_1[4];
     uint8_t arg_2[4];
+    uint8_t transmitted_checksum[2];
     uint16_t get_f_opcode();
     uint32_t get_f_arg_1();
     uint32_t get_f_arg_2();
 
     // added for checksum
-    // bool checksum();
+    bool check_checksum();
 };
 
 class RockblockCommand

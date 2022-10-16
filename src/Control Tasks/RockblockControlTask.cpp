@@ -231,15 +231,12 @@ void RockblockControlTask::dispatch_send_message()
 void RockblockControlTask::dispatch_await_message()
 {
     char c = serial.read();
-    if (c == '0' || c == '1' || c == '2' || c == '3') {
+    if (c == '0' || c == '1' || c == '2' || c == '3') { // Checks status of +SBDWB
         if (c == '0') {
             Serial.println("SAT INFO: report accepted"); // SBD message successfully written to ISU
             transition_to(rockblock_mode_type::send_response);
-        } else if (c == '2') {
-            Serial.println("SAT INFO: checksum failed"); // SBD message checksum sent from DTE doesn't match checksum calculated at ISU
-            transition_to(rockblock_mode_type::send_message);
         } else {
-            transition_to(rockblock_mode_type::send_message); // SBD message write timeout or size isn't correct
+            transition_to(rockblock_mode_type::send_message); // SBD message write timeout, checksum failed, or size isn't correct
         }
     }
 }
@@ -413,8 +410,18 @@ void RockblockControlTask::dispatch_process_command()
                     Serial.print(0, HEX);
                 Serial.print(new_raw_command.arg_2[a2], HEX);
             }
+            for (size_t cs = 0; cs < constants::rockblock::checksum_len; ++cs) {
+                new_raw_command.transmitted_checksum[cs] = serial.read();
+                if (new_raw_command.transmitted_checksum[cs] < 0x10)
+                    Serial.print(0, HEX);
+                Serial.print(new_raw_command.transmitted_checksum[cs], HEX);
+            }
 
             Serial.println();
+
+            if (!new_raw_command.check_checksum()) {
+                Serial.println("SAT INFO: checksum failed");
+            }
 
             // Parse New Command From Input OP Codes
             RockblockCommand processed = RockblockCommand::commandFactory(new_raw_command);
