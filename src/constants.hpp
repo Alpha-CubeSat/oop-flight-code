@@ -52,7 +52,7 @@ namespace constants {
         constexpr size_t opcode_len = 2;
         constexpr size_t arg1_len = 4;
         constexpr size_t arg2_len = 4;
-        constexpr size_t checksum_len = 2;
+        constexpr size_t checksum_len = 4;
         constexpr size_t command_len = opcode_len + arg1_len + arg2_len;
         constexpr size_t max_conseq_read = 3;
 

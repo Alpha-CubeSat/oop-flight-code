@@ -367,6 +367,10 @@ void RockblockControlTask::dispatch_process_command()
         serial.read();
         serial.read();
 
+        uint32_t opcodes[sfr::rockblock::max_commands_count];
+        uint32_t args_1[sfr::rockblock::max_commands_count];
+        uint32_t args_2[sfr::rockblock::max_commands_count];
+
         /*
             Parses up to `max_commands_count` number of commands
             Exits early if end-of-command-upload flags read
@@ -374,7 +378,19 @@ void RockblockControlTask::dispatch_process_command()
         for (int i = 0; i < sfr::rockblock::max_commands_count; i++) {
             uint8_t look_ahead1 = serial.read(); // Peek
             uint8_t look_ahead2 = serial.read(); // Peek
+
             if (look_ahead1 == constants::rockblock::end_of_command_upload_flag1 && look_ahead2 == constants::rockblock::end_of_command_upload_flag2) {
+                uint8_t transmitted_checksum[4];
+                for (size_t cs = 0; cs < constants::rockblock::checksum_len; ++cs) {
+                    transmitted_checksum[cs] = serial.read();
+                    if (transmitted_checksum[cs] < 0x10)
+                        Serial.print(0, HEX);
+                    Serial.print(transmitted_checksum[cs], HEX);
+                }
+                uint32_t calculated_checksum = 0;
+                for (int j = 0; j < i; j++) {
+                    calculated_checksum = calculated_checksum ^ ((opcodes[j] | args_1[j]) ^ args_2[j]);
+                }
                 break; // Exit command read loop
             }
             Serial.println("SAT CMD");
@@ -410,24 +426,29 @@ void RockblockControlTask::dispatch_process_command()
                     Serial.print(0, HEX);
                 Serial.print(new_raw_command.arg_2[a2], HEX);
             }
-            for (size_t cs = 0; cs < constants::rockblock::checksum_len; ++cs) {
-                new_raw_command.transmitted_checksum[cs] = serial.read();
-                if (new_raw_command.transmitted_checksum[cs] < 0x10)
-                    Serial.print(0, HEX);
-                Serial.print(new_raw_command.transmitted_checksum[cs], HEX);
-            }
+            // for (size_t cs = 0; cs < constants::rockblock::checksum_len; ++cs) {
+            //     new_raw_command.transmitted_checksum[cs] = serial.read();
+            //     if (new_raw_command.transmitted_checksum[cs] < 0x10)
+            //         Serial.print(0, HEX);
+            //     Serial.print(new_raw_command.transmitted_checksum[cs], HEX);
+            // }
 
             Serial.println();
 
-            if (!new_raw_command.check_checksum()) {
-                Serial.println("SAT INFO: checksum failed");
-            }
+            // if (!new_raw_command.check_checksum()) {
+            //     Serial.println("SAT INFO: checksum failed");
+            // }
+
+            opcodes[i] = (uint32_t)(new_raw_command.get_f_opcode());
+            args_1[i] = new_raw_command.get_f_arg_1();
+            args_2[i] = new_raw_command.get_f_arg_2();
 
             // Parse New Command From Input OP Codes
             RockblockCommand processed = RockblockCommand::commandFactory(new_raw_command);
             if (processed.isValid()) {
                 // Command is Valid - Will be added to list to be Executed During CommandMonitor Execute
                 sfr::rockblock::processed_commands.push_back(processed);
+
                 sfr::rockblock::waiting_command = true;
             } else if (new_raw_command.opcode[0] == 'F' && new_raw_command.opcode[1] == 'L') {
                 Serial.println("SAT INFO: flush confirmed");
