@@ -15,7 +15,7 @@ public:
     uint32_t get_f_arg_2();
 
     // added for checksum
-    uint32_t get_checksum();
+    // bool checksum();
 };
 
 class RockblockCommand

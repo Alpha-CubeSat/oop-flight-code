@@ -20,16 +20,15 @@ uint32_t RawRockblockCommand::get_f_arg_2()
     return (this->arg_2[3] << 24) | (this->arg_2[2] << 16) | (this->arg_2[1] << 8) | (this->arg_2[0]);
 }
 
-uint32_t RawRockblockCommand::get_checksum()
-{
-    // Get opcode and args
-    uint32_t opcode = (uint32_t)(this->get_f_opcode());
-    uint32_t arg_1 = this->get_f_arg_1();
-    uint32_t arg_2 = this->get_f_arg_2();
+// bool RawRockblockCommand::checksum()
+// {
+//     // Get opcode and args
+//     uint32_t opcode = (uint32_t)(this->get_f_opcode());
+//     uint32_t arg_1 = this->get_f_arg_1();
+//     uint32_t arg_2 = this->get_f_arg_2();
 
-    // Hash them to produce one 32-bit checksum
-    return ((opcode | arg_1) & arg_2);
-}
+//     return true;
+// }
 
 RockblockCommand RockblockCommand::commandFactory(RawRockblockCommand raw)
 {
