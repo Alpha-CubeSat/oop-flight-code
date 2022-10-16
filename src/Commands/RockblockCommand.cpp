@@ -25,10 +25,19 @@ RockblockCommand RockblockCommand::commandFactory(RawRockblockCommand raw)
     // Create Specific Child Class of Rockblock command depending on the OP Code
     uint16_t op_code = raw.get_f_opcode();
     if (op_code == opcodes::mission_mode) {
+        #ifdef VERBOSE_RB
+            Serial.println("Mission Mode Command");
+        #endif
         return MissionModeCommand(raw);
     } else if (op_code <= opcodes::sfr_field_opcode_max && op_code >= opcodes::sfr_field_opcode_min) {
+        #ifdef VERBOSE_RB
+            Serial.println("SFR Override Command");
+        #endif
         return SFROverrideCommand(raw);
     } else {
+        #ifdef VERBOSE_RB
+            Serial.println("Uknown Command");
+        #endif
         return UnknownCommand(raw);
     }
 }

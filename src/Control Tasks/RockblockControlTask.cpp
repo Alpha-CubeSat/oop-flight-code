@@ -205,7 +205,6 @@ void RockblockControlTask::dispatch_send_message()
     }
     
     Serial.print("SENT: ");
-    Serial.println(sfr::rockblock::downlink_report.size());
     #endif
     for (auto &data : sfr::rockblock::downlink_report) {
         if (data < 16) {
