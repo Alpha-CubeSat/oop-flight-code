@@ -237,7 +237,7 @@ void RockblockControlTask::dispatch_await_message()
             transition_to(rockblock_mode_type::send_response);
         } else if (c == '2') {
             Serial.println("SAT INFO: checksum failed"); // SBD message checksum sent from DTE doesn't match checksum calculated at ISU
-            transition_to(rockblock_mode_type::send_response);
+            transition_to(rockblock_mode_type::send_message);
         } else {
             transition_to(rockblock_mode_type::send_message); // SBD message write timeout or size isn't correct
         }
