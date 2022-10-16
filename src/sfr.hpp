@@ -16,6 +16,7 @@
 #include "SensorReading.hpp"
 #include "constants.hpp"
 #include <deque>
+#include "RockblockSimulator.hpp"
 
 namespace sfr {
     namespace stabilization {
@@ -230,6 +231,12 @@ namespace sfr {
 
         extern SFRField<uint16_t> downlink_report_type;
         extern SFRField<uint16_t> mode;
+
+        #ifndef SIMULATOR
+            extern HardwareSerial serial;
+        #else
+            extern RockblockSimulator serial;
+        #endif
 
     } // namespace rockblock
     namespace imu {

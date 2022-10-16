@@ -238,6 +238,12 @@ namespace sfr {
         SFRField<uint16_t> downlink_report_type = SFRField<uint16_t>((uint16_t)report_type::normal_report, 2116);
         SFRField<uint16_t> mode = SFRField<uint16_t>((uint16_t)rockblock_mode_type::send_at, 2117);
 
+        #ifndef SIMULATOR
+            HardwareSerial serial = Serial1;
+        #else
+            RockblockSimulator serial;
+        #endif
+
     } // namespace rockblock
     namespace imu {
         // OP Codes 2200
