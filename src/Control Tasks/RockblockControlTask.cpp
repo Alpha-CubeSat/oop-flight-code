@@ -233,10 +233,13 @@ void RockblockControlTask::dispatch_await_message()
     char c = serial.read();
     if (c == '0' || c == '1' || c == '2' || c == '3') {
         if (c == '0') {
-            Serial.println("SAT INFO: report accepted");
+            Serial.println("SAT INFO: report accepted"); // SBD message successfully written to ISU
+            transition_to(rockblock_mode_type::send_response);
+        } else if (c == '2') {
+            Serial.println("SAT INFO: checksum failed"); // SBD message checksum sent from DTE doesn't match checksum calculated at ISU
             transition_to(rockblock_mode_type::send_response);
         } else {
-            transition_to(rockblock_mode_type::send_message);
+            transition_to(rockblock_mode_type::send_message); // SBD message write timeout or size isn't correct
         }
     }
 }
