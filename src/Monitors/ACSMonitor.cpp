@@ -3,7 +3,7 @@ ACSMonitor::ACSMonitor(unsigned int offset)
     : TimedControlTask<void>(offset)
 {
     using namespace sfr::acs;
-    starshotObj.initialize(kane_damper_c, kane_Id,
+    starshotObj.initialize(0.2, kane_damper_c, kane_Id,
                            ampfactor, max_current, csarea, num_loops, wdx, wdy, wdz);
 }
 
@@ -37,7 +37,7 @@ float wz_old = 0;
 float wz_oldLP = 0;
 float wz_newLP = 0;
 
-// 6th order low pass filter, cutoff frequency of 0.1 Hz
+
 float x_a = 0.43708596;
 float x_b[] = {0.28145702, 0.28145702};
 
@@ -53,17 +53,19 @@ void ACSMonitor::execute()
     Serial.print("ACS called, current MissionMode:");
     Serial.println(sfr::mission::current_mode->get_id());
     // loading adjusted values into the ACS model
-    float w_x_raw = sfr::imu::gyro_x_average->get_value() * 3.14159 / 180.0;
-    float w_y_raw = sfr::imu::gyro_y_average->get_value() * 3.14159 / 180.0;
-    float w_z_raw = sfr::imu::gyro_z_average->get_value() * 3.14159 / 180.0;
 
-    float w_x = w_x_raw;
-    float w_y = w_y_raw;
-    float w_z = w_z_raw;
 
     // float mag_x_raw = sfr::imu::mag_x_average->get_value();
     // float mag_y_raw = sfr::imu::mag_y_average->get_value();
     // float mag_z_raw = sfr::imu::mag_z_average->get_value();
+
+    float w_x_raw = sfr::imu::gyro_x;
+    float w_y_raw = sfr::imu::gyro_y;
+    float w_z_raw = sfr::imu::gyro_z;
+
+    float w_x = w_x_raw;
+    float w_y = w_y_raw;
+    float w_z = w_z_raw;
 
     float mag_x_raw = sfr::imu::mag_x;
     float mag_y_raw = sfr::imu::mag_y;
@@ -150,7 +152,7 @@ void ACSMonitor::execute()
     // testing pointing mode
     digitalWrite(constants::acs::STBXYpin,HIGH);
     digitalWrite(constants::acs::STBZpin,HIGH);
-    sfr::acs::mode = acs_mode_type::point;
+    sfr::acs::mode = acs_mode_type::off;
 
     //sfr::acs::mag = simple_acs_type::z;
 

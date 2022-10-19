@@ -20,61 +20,67 @@
 //
 #ifndef RTW_HEADER_StarshotACS_h_
 #define RTW_HEADER_StarshotACS_h_
-#include <cmath>
 #include "rtwtypes.h"
+#include <cmath>
 
 // Model Code Variants
 
 // Macros for accessing real-time model data structure
 #ifndef rtmGetErrorStatus
-#define rtmGetErrorStatus(rtm)         ((rtm)->errorStatus)
+#define rtmGetErrorStatus(rtm) ((rtm)->errorStatus)
 #endif
 
 #ifndef rtmSetErrorStatus
-#define rtmSetErrorStatus(rtm, val)    ((rtm)->errorStatus = (val))
+#define rtmSetErrorStatus(rtm, val) ((rtm)->errorStatus = (val))
 #endif
 
 // Forward declaration for rtModel
 typedef struct tag_RTM RT_MODEL;
 
 // Block signals and states (default storage) for system '<Root>'
-struct DW {
-  real_T DiscreteTimeIntegrator_DSTATE[3];// '<S2>/Discrete-Time Integrator'
-  real_T UD_DSTATE[3];                 // '<S5>/UD'
-  real_T UD_DSTATE_k;                  // '<S7>/UD'
+struct DW
+{
+    real_T DiscreteTimeIntegrator_DSTATE[3]; // '<S2>/Discrete-Time Integrator'
+    real_T UD_DSTATE[3];                     // '<S5>/UD'
+    real_T UD_DSTATE_k;                      // '<S7>/UD'
 };
 
 // Invariant block signals (default storage)
-struct ConstB {
-  real_T VectorConcatenate[9];         // '<S10>/Vector Concatenate'
+struct ConstB
+{
+    real_T VectorConcatenate[9]; // '<S10>/Vector Concatenate'
 };
 
 // Constant parameters (default storage)
-struct ConstPacs {
-  // Expression: [1 0 0;0 1 0;0 0 1]
-  //  Referenced by: '<S2>/Identity matrix'
+struct ConstPacs
+{
+    // Expression: [1 0 0;0 1 0;0 0 1]
+    //  Referenced by: '<S2>/Identity matrix'
 
-  real_T Identitymatrix_Value[9];
+    real_T Identitymatrix_Value[9];
 };
 
 // External inputs (root inport signals with default storage)
-struct ExtU {
-  real_T w[3];                         // '<Root>/angularvelocity'
-  real_T magneticfield[3];               // '<Root>/Bfield_body'
+struct ExtU
+{
+    real_T w[3];             // '<Root>/angularvelocity'
+    real_T magneticfield[3]; // '<Root>/Bfield_body'
 };
 
 // External outputs (root outports fed by signals with default storage)
-struct ExtY {
-  real_T detumble[3];                  // '<Root>/detumble'
-  real_T point[3];                     // '<Root>/point'
+struct ExtY
+{
+    real_T detumble[3]; // '<Root>/detumble'
+    real_T point[3];    // '<Root>/point'
 };
 
 // Real-time Model Data Structure
-struct tag_RTM {
-  const char_T * volatile errorStatus;
+struct tag_RTM
+{
+    const char_T *volatile errorStatus;
 };
 
-extern const ConstB rtConstB;          // constant block i/o
+extern const ConstB rtConstB; // constant block i/o
 
 // Constant parameters (default storage)
 extern const ConstPacs rtConstPacs;
@@ -82,43 +88,44 @@ extern const ConstPacs rtConstPacs;
 // Class declaration for model StarshotACS
 class StarshotACSModelClass
 {
-  // public data and function members
- public:
- real_T maximum_current;
- real_T magtorqhwvalue;
- real_T m_max;
- real_T damperc;
- real_T Id;
- real_T invId;
- real_T pointing_error;
-  // Real-Time Model get method
-  RT_MODEL * getRTM();
+    // public data and function members
+public:
+    real_T maximum_current;
+    real_T magtorqhwvalue;
+    real_T m_max;
+    real_T damperc;
+    real_T Id;
+    real_T invId;
+    real_T pointing_error;
+    real_T time_step;
+    // Real-Time Model get method
+    RT_MODEL *getRTM();
 
-  // External inputs
-  ExtU rtU;
+    // External inputs
+    ExtU rtU;
 
-  // External outputs
-  ExtY rtY;
+    // External outputs
+    ExtY rtY;
 
-  // model initialize function
-  void initialize(float kane_damper_c,float kane_Id,float ampFactor, float max_current, float csareamt, float no_loops, float wdx, float wdy, float wdz);
+    // model initialize function
+    void initialize(float t_stp, float kane_damper_c, float kane_Id, float ampFactor, float max_current, float csareamt, float no_loops, float wdx, float wdy, float wdz);
 
-  // model step function
-  void step();
+    // model step function
+    void step();
 
-  // Constructor
-  StarshotACSModelClass();
+    // Constructor
+    StarshotACSModelClass();
 
-  // Destructor
-  ~StarshotACSModelClass();
+    // Destructor
+    ~StarshotACSModelClass();
 
-  // private data and function members
- private:
-  // Block states
-  DW rtDW;
+    // private data and function members
+private:
+    // Block states
+    DW rtDW;
 
-  // Real-Time Model
-  RT_MODEL rtM;
+    // Real-Time Model
+    RT_MODEL rtM;
 };
 
 //-
@@ -129,7 +136,6 @@ class StarshotACSModelClass
 //  Block '<S2>/To Workspace' : Unused code path elimination
 //  Block '<S7>/Data Type Duplicate' : Unused code path elimination
 //  Block '<S2>/Gain 1' : Eliminated nontunable gain of 1
-
 
 //-
 //  The generated code includes comments that allow you to trace directly
@@ -164,7 +170,7 @@ class StarshotACSModelClass
 //  '<S13>'  : 'starshotsimv5/StarshotACS/Orientation controller/Subsystem1/Norm4'
 //  '<S14>'  : 'starshotsimv5/StarshotACS/Orientation controller/Subsystem1/Norm5'
 
-#endif                                 // RTW_HEADER_StarshotACS_h_
+#endif // RTW_HEADER_StarshotACS_h_
 
 //
 // File trailer for generated code.
