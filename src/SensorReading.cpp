@@ -17,6 +17,8 @@ std::map<fault_index_type, int> map_to_reg = {
     {fault_index_type::burn_wire, 3},
     {fault_index_type::sd_card, 3},
     {fault_index_type::camera_on_failed, 3},
+    {fault_index_type::light_val, 3},
+    {fault_index_type::button, 3},
 }; // map from a fault type to the fault register
 
 std::map<fault_index_type, uint8_t> map_to_mask = {
@@ -36,23 +38,25 @@ std::map<fault_index_type, uint8_t> map_to_mask = {
     {fault_index_type::burn_wire, constants::fault::burn_wire},
     {fault_index_type::sd_card, constants::fault::sd_card},
     {fault_index_type::camera_on_failed, constants::fault::camera_on_failed},
+    {fault_index_type::light_val, constants::fault::light_val},
+    {fault_index_type::button, constants::fault::button},
 }; // map from a fault type to the mask
 
 SensorReading::SensorReading(fault_index_type type, uint8_t buffer_size, float max, float min)
 {
-    type = type;
-    buffer_size = buffer_size;
-    max = max;
-    min = min;
+    this->type = type;
+    this->buffer_size = buffer_size;
+    this->max = max;
+    this->min = min;
     buffer.clear();
 } // constructor
 
 SensorReading::SensorReading(uint8_t buffer_size, float max, float min)
 {
-    type = fault_index_type::no_fault;
-    buffer_size = buffer_size;
-    max = max;
-    min = min;
+    this->type = fault_index_type::no_fault;
+    this->buffer_size = buffer_size;
+    this->max = max;
+    this->min = min;
     buffer.clear();
 } // constructor
 
@@ -134,7 +138,7 @@ bool SensorReading::repeated_values(std::deque<float> buffer)
     int first_val = buffer[0];
     for (float val : buffer) {
         if (first_val != val) {
-            return false;
+            return false; //This seems problematic
         }
     }
 

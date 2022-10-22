@@ -305,6 +305,8 @@ namespace sfr {
     namespace button {
         // OP Codes 2700
         extern SFRField<bool> pressed;
+
+        extern SensorReading *button_pressed;
     } // namespace button
     namespace EEPROM {
         // OP Codes 2800

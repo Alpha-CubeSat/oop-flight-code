@@ -312,6 +312,7 @@ namespace sfr {
     namespace button {
         // OP Codes 2700
         SFRField<bool> pressed = SFRField<bool>(true, 2700);
+        SensorReading *button_pressed = new SensorReading(fault_index_type::button, 1, 1, 0);
     } // namespace button
     namespace EEPROM {
         // OP Codes 2800
