@@ -381,7 +381,11 @@ void RockblockControlTask::dispatch_process_command()
 
             if (look_ahead1 == constants::rockblock::end_of_command_upload_flag1 && look_ahead2 == constants::rockblock::end_of_command_upload_flag2) {
                 uint8_t transmitted_checksum[constants::rockblock::checksum_len];
-                for (size_t cs = 0; cs < constants::rockblock::checksum_len; ++cs) {
+#ifdef VERBOSE_IMUD
+                Serial.println("\nChecksum:")
+#endif
+                    for (size_t cs = 0; cs < constants::rockblock::checksum_len; ++cs)
+                {
                     transmitted_checksum[cs] = serial.read();
                     if (transmitted_checksum[cs] < 0x10)
                         Serial.print(0, HEX);
@@ -458,8 +462,10 @@ void RockblockControlTask::dispatch_process_command()
                 // TODO: What Goes Here @Lauren
             }
         }
-
-        uint8_t transmitted_checksum[constants::rockblock::checksum_len];
+#ifdef VERBOSE_IMUD
+        Serial.println("\nChecksum: ")
+#endif
+            uint8_t transmitted_checksum[constants::rockblock::checksum_len];
         for (size_t cs = 0; cs < constants::rockblock::checksum_len; ++cs) {
             transmitted_checksum[cs] = serial.read();
             if (transmitted_checksum[cs] < 0x10)
