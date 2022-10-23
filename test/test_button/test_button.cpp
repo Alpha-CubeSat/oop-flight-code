@@ -6,27 +6,19 @@
 
 void test_valid_readings()
 {
-    // pressed readings in normal mode (valid)
-    sfr::button::button_pressed->set_value(1);
-    while (sfr::mission::mode_history.size() < constants::sensor::collect) {
-        sfr::mission::mode_history.push_front(5);
-    }
-    ButtonMonitor button_monitor(0);
-    TEST_ASSERT_EQUAL(sfr::button::button_pressed->is_valid(), true);
-    sfr::button::button_pressed->set_valid();
+    TEST_ASSERT_TRUE(sfr::button::button_pressed->is_valid());
+}
 
-    // unpressed readings in normal mode (invalid)
-    sfr::button::button_pressed->set_value(0);
-    while (sfr::mission::mode_history.size() < constants::sensor::collect) {
-        sfr::mission::mode_history.push_front(5);
-    }
-    TEST_ASSERT_EQUAL(sfr::button::button_pressed->is_valid(), false);
+void test_invalid_readings() {
+    sfr::button::button_pressed->set_invalid();
+    TEST_ASSERT_FALSE(sfr::button::button_pressed->is_valid());
 }
 
 int test_button()
 {
     UNITY_BEGIN();
     RUN_TEST(test_valid_readings);
+    RUN_TEST(test_invalid_readings);
     return UNITY_END();
 }
 
