@@ -380,7 +380,7 @@ void RockblockControlTask::dispatch_process_command()
             uint8_t look_ahead2 = serial.read(); // Peek
 
             if (look_ahead1 == constants::rockblock::end_of_command_upload_flag1 && look_ahead2 == constants::rockblock::end_of_command_upload_flag2) {
-                uint8_t transmitted_checksum[4];
+                uint8_t transmitted_checksum[constants::rockblock::checksum_len];
                 for (size_t cs = 0; cs < constants::rockblock::checksum_len; ++cs) {
                     transmitted_checksum[cs] = serial.read();
                     if (transmitted_checksum[cs] < 0x10)
@@ -391,6 +391,15 @@ void RockblockControlTask::dispatch_process_command()
                 for (int j = 0; j < i; j++) {
                     calculated_checksum = calculated_checksum ^ ((opcodes[j] | args_1[j]) ^ args_2[j]);
                 }
+
+                // if the checksum doesn't pass, write a message and retry the process command stage
+                if (calculated_checksum != (transmitted_checksum[3] << 24 | transmitted_checksum[2] << 16 | transmitted_checksum[1] << 8 | transmitted_checksum[0])) {
+#ifdef VERBOSE_IMUD
+                    Serial.println("Checksum failed, reattempting transmission");
+#endif
+                    transition_to(rockblock_mode_type::process_command);
+                }
+
                 break; // Exit command read loop
             }
             Serial.println("SAT CMD");
