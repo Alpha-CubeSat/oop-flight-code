@@ -77,11 +77,8 @@ void SensorReading::set_value(float x)
 {
     // LJG TODO might need to add whether we want to check for repeated values in the constructor
     // check if value is within expected range
-    if (x <= max && x >= min && !repeated_values(buffer)) {
-        if (valid) {
-            // add value to buffer
-            buffer.push_front(x);
-
+    if (x <= max && x >= min) {
+        if (valid && !repeated_values(buffer, x)) {
             // check if buffer is full
             if (buffer.size() > buffer_size) {
                 // remove oldest value from buffer
@@ -129,16 +126,16 @@ void SensorReading::set_invalid()
     }
 }
 
-bool SensorReading::repeated_values(std::deque<float> buffer)
+bool SensorReading::repeated_values(std::deque<float> buffer, float val)
 {
     if (buffer.empty() || buffer.size() == 1) {
         return false;
     }
 
-    int first_val = buffer[0];
-    for (float val : buffer) {
-        if (first_val != val) {
-            return false; //This seems problematic
+    for (int i = 0; i < constants::sensor::repeats - 1; i++) {
+        if (buffer.at(i) != val) {
+            buffer.push_front(val);
+            return false;
         }
     }
 

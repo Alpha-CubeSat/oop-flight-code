@@ -15,6 +15,7 @@ namespace constants {
     } // namespace time
     namespace sensor {
         constexpr int collect = 3;
+        constexpr int repeats = 10;
     } // namespace sensor
     namespace photoresistor {
         constexpr int pin = 38;

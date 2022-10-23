@@ -72,6 +72,7 @@ namespace sfr {
         extern SFRField<uint32_t> time_deployed;
         extern SFRField<bool> deployed;
         extern SFRField<bool> already_deployed;
+        extern SFRField<bool> possible_uncovered;
 
         extern Boot boot_class;
         extern AliveSignal aliveSignal_class;
