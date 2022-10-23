@@ -389,7 +389,8 @@ void RockblockControlTask::dispatch_process_command()
                 }
                 uint32_t calculated_checksum = 0;
                 for (int j = 0; j < i; j++) {
-                    calculated_checksum = calculated_checksum ^ ((opcodes[j] | args_1[j]) ^ args_2[j]);
+                    // Longitudinal redundancy check, kinda
+                    calculated_checksum = calculated_checksum ^ (opcodes[j] ^ args_1[j] ^ args_2[j]);
                 }
 
                 // if the checksum doesn't pass, write a message and retry the process command stage
@@ -477,7 +478,8 @@ void RockblockControlTask::dispatch_process_command()
         }
         uint32_t calculated_checksum = 0;
         for (int j = 0; j < sfr::rockblock::max_commands_count; j++) {
-            calculated_checksum = calculated_checksum ^ ((opcodes[j] | args_1[j]) ^ args_2[j]);
+            // Longitudinal redundancy check, kinda
+            calculated_checksum = calculated_checksum ^ (opcodes[j] ^ args_1[j] ^ args_2[j]);
         }
 
         // if the checksum doesn't pass, write a message and retry the process command stage
