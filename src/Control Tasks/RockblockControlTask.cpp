@@ -436,18 +436,8 @@ void RockblockControlTask::dispatch_process_command()
                     Serial.print(0, HEX);
                 Serial.print(new_raw_command.arg_2[a2], HEX);
             }
-            // for (size_t cs = 0; cs < constants::rockblock::checksum_len; ++cs) {
-            //     new_raw_command.transmitted_checksum[cs] = serial.read();
-            //     if (new_raw_command.transmitted_checksum[cs] < 0x10)
-            //         Serial.print(0, HEX);
-            //     Serial.print(new_raw_command.transmitted_checksum[cs], HEX);
-            // }
 
             Serial.println();
-
-            // if (!new_raw_command.check_checksum()) {
-            //     Serial.println("SAT INFO: checksum failed");
-            // }
 
             opcodes[i] = (uint32_t)(new_raw_command.get_f_opcode());
             args_1[i] = new_raw_command.get_f_arg_1();

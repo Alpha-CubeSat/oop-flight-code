@@ -4,7 +4,7 @@
 // Sets up Rockblock environment for testing
 void set_rockblock_test_environment(report_type starting_report_type, bool is_imu_report_ready, bool is_camera_report_ready, int downlink_period)
 {
-    sfr::rockblock::downlink_report_type = starting_report_type;
+    sfr::rockblock::downlink_report_type = (uint16_t)starting_report_type;
     sfr::imu::report_ready = is_imu_report_ready;
     sfr::camera::report_ready = is_camera_report_ready;
     sfr::rockblock::downlink_period = downlink_period;
@@ -18,7 +18,7 @@ void set_rockblock_test_environment(report_type starting_report_type, bool is_im
 void test_schedule_from_normal_report()
 {
     RockblockReportMonitor rockblock_report_monitor(0);
-    sfr::rockblock::mode = rockblock_mode_type::standby;
+    sfr::rockblock::mode = (uint16_t)rockblock_mode_type::standby;
 
     // IMU and Camera both available
     set_rockblock_test_environment(report_type::normal_report, true, true, 0);
@@ -27,7 +27,7 @@ void test_schedule_from_normal_report()
     }
     rockblock_report_monitor.execute();
     TEST_ASSERT_EQUAL(report_type::imu_report, sfr::rockblock::downlink_report_type);
-    TEST_ASSERT_TRUE(sfr::rockblock::rockblock_ready_status == true);
+    TEST_ASSERT_TRUE(sfr::rockblock::rockblock_ready_status);
 
     TEST_ASSERT_EQUAL(constants::rockblock::packet_size, sfr::rockblock::imu_report.size());
     TEST_ASSERT_EQUAL(constants::rockblock::packet_size, sfr::rockblock::downlink_report.size());
@@ -42,7 +42,7 @@ void test_schedule_from_normal_report()
     }
     rockblock_report_monitor.execute();
     TEST_ASSERT_EQUAL(report_type::imu_report, sfr::rockblock::downlink_report_type);
-    TEST_ASSERT_TRUE(sfr::rockblock::rockblock_ready_status == true);
+    TEST_ASSERT_TRUE(sfr::rockblock::rockblock_ready_status);
 
     TEST_ASSERT_EQUAL(constants::rockblock::packet_size, sfr::rockblock::imu_report.size());
     TEST_ASSERT_EQUAL(constants::rockblock::packet_size, sfr::rockblock::downlink_report.size());
@@ -57,7 +57,7 @@ void test_schedule_from_normal_report()
     }
     rockblock_report_monitor.execute();
     TEST_ASSERT_EQUAL(report_type::normal_report, sfr::rockblock::downlink_report_type);
-    TEST_ASSERT_TRUE(sfr::rockblock::rockblock_ready_status == true);
+    TEST_ASSERT_TRUE(sfr::rockblock::rockblock_ready_status);
 
     TEST_ASSERT_EQUAL(constants::rockblock::packet_size, sfr::rockblock::normal_report.size());
     TEST_ASSERT_EQUAL(constants::rockblock::packet_size, sfr::rockblock::downlink_report.size());
@@ -75,7 +75,7 @@ void test_schedule_from_normal_report()
 void test_schedule_from_imu_report()
 {
     RockblockReportMonitor rockblock_report_monitor(0);
-    sfr::rockblock::mode = rockblock_mode_type::standby;
+    sfr::rockblock::mode = (uint16_t)rockblock_mode_type::standby;
 
     // Normal and Camera both available
     set_rockblock_test_environment(report_type::imu_report, true, true, 0);
@@ -84,7 +84,7 @@ void test_schedule_from_imu_report()
     }
     rockblock_report_monitor.execute();
     TEST_ASSERT_EQUAL(report_type::camera_report, sfr::rockblock::downlink_report_type);
-    TEST_ASSERT_TRUE(sfr::rockblock::rockblock_ready_status == true);
+    TEST_ASSERT_TRUE(sfr::rockblock::rockblock_ready_status);
 
     TEST_ASSERT_EQUAL(constants::rockblock::packet_size, sfr::rockblock::camera_report.size());
     TEST_ASSERT_EQUAL(constants::rockblock::packet_size, sfr::rockblock::downlink_report.size());
@@ -99,7 +99,7 @@ void test_schedule_from_imu_report()
     }
     rockblock_report_monitor.execute();
     TEST_ASSERT_EQUAL(report_type::normal_report, sfr::rockblock::downlink_report_type);
-    TEST_ASSERT_TRUE(sfr::rockblock::rockblock_ready_status == true);
+    TEST_ASSERT_TRUE(sfr::rockblock::rockblock_ready_status);
 
     TEST_ASSERT_EQUAL(constants::rockblock::packet_size, sfr::rockblock::normal_report.size());
     TEST_ASSERT_EQUAL(constants::rockblock::packet_size, sfr::rockblock::downlink_report.size());
@@ -114,7 +114,7 @@ void test_schedule_from_imu_report()
     }
     rockblock_report_monitor.execute();
     TEST_ASSERT_EQUAL(report_type::imu_report, sfr::rockblock::downlink_report_type);
-    TEST_ASSERT_TRUE(sfr::rockblock::rockblock_ready_status == true);
+    TEST_ASSERT_TRUE(sfr::rockblock::rockblock_ready_status);
 
     TEST_ASSERT_EQUAL(constants::rockblock::packet_size, sfr::rockblock::imu_report.size());
     TEST_ASSERT_EQUAL(constants::rockblock::packet_size, sfr::rockblock::downlink_report.size());
@@ -132,7 +132,7 @@ void test_schedule_from_imu_report()
 void test_schedule_from_camera_report()
 {
     RockblockReportMonitor rockblock_report_monitor(0);
-    sfr::rockblock::mode = rockblock_mode_type::standby;
+    sfr::rockblock::mode = (uint16_t)rockblock_mode_type::standby;
 
     // Normal and Camera both available
     set_rockblock_test_environment(report_type::camera_report, true, true, 0);
@@ -141,7 +141,7 @@ void test_schedule_from_camera_report()
     }
     rockblock_report_monitor.execute();
     TEST_ASSERT_EQUAL(report_type::normal_report, sfr::rockblock::downlink_report_type);
-    TEST_ASSERT_TRUE(sfr::rockblock::rockblock_ready_status == true);
+    TEST_ASSERT_TRUE(sfr::rockblock::rockblock_ready_status);
 
     TEST_ASSERT_EQUAL(constants::rockblock::packet_size, sfr::rockblock::normal_report.size());
     TEST_ASSERT_EQUAL(constants::rockblock::packet_size, sfr::rockblock::downlink_report.size());
@@ -156,7 +156,7 @@ void test_schedule_from_camera_report()
     }
     rockblock_report_monitor.execute();
     TEST_ASSERT_EQUAL(report_type::imu_report, sfr::rockblock::downlink_report_type);
-    TEST_ASSERT_TRUE(sfr::rockblock::rockblock_ready_status == true);
+    TEST_ASSERT_TRUE(sfr::rockblock::rockblock_ready_status);
 
     TEST_ASSERT_EQUAL(constants::rockblock::packet_size, sfr::rockblock::imu_report.size());
     TEST_ASSERT_EQUAL(constants::rockblock::packet_size, sfr::rockblock::downlink_report.size());
@@ -171,7 +171,7 @@ void test_schedule_from_camera_report()
     }
     rockblock_report_monitor.execute();
     TEST_ASSERT_EQUAL(report_type::camera_report, sfr::rockblock::downlink_report_type);
-    TEST_ASSERT_TRUE(sfr::rockblock::rockblock_ready_status == true);
+    TEST_ASSERT_TRUE(sfr::rockblock::rockblock_ready_status);
 
     TEST_ASSERT_EQUAL(constants::rockblock::packet_size, sfr::rockblock::camera_report.size());
     TEST_ASSERT_EQUAL(constants::rockblock::packet_size, sfr::rockblock::downlink_report.size());
@@ -185,10 +185,31 @@ void test_schedule_from_camera_report()
     TEST_ASSERT_TRUE(sfr::rockblock::rockblock_ready_status == false);
 }
 
-int test_rockblock_report_monitor_low_power_mode()
+void test_rockblock_checksum()
 {
     RockblockReportMonitor rockblock_report_monitor(0);
-    sfr::rockblock::mode = rockblock_mode_type::standby;
+    sfr::rockblock::mode = (uint16_t)rockblock_mode_type::standby;
+
+    // IMU and Camera both available
+    set_rockblock_test_environment(report_type::normal_report, true, true, 0);
+    for (int i = 0; i < constants::rockblock::packet_size; i++) {
+        sfr::rockblock::normal_report.push_back(1);
+    }
+    rockblock_report_monitor.execute();
+    TEST_ASSERT_EQUAL(report_type::normal_report, sfr::rockblock::downlink_report_type);
+    TEST_ASSERT_TRUE(sfr::rockblock::rockblock_ready_status);
+
+    TEST_ASSERT_EQUAL(constants::rockblock::packet_size, sfr::rockblock::normal_report.size());
+    TEST_ASSERT_EQUAL(constants::rockblock::packet_size, sfr::rockblock::downlink_report.size());
+    for (int i = 0; i < constants::rockblock::packet_size; i++) {
+        TEST_ASSERT_EQUAL(sfr::rockblock::normal_report[i], sfr::rockblock::downlink_report[i]);
+    }
+}
+
+void test_rockblock_report_monitor_low_power_mode()
+{
+    RockblockReportMonitor rockblock_report_monitor(0);
+    sfr::rockblock::mode = (uint16_t)rockblock_mode_type::standby;
 
     // Normal and Camera both available, low downlink period
     set_rockblock_test_environment(report_type::camera_report, true, true, 0);
@@ -199,7 +220,7 @@ int test_rockblock_report_monitor_low_power_mode()
     }
     rockblock_report_monitor.execute();
     TEST_ASSERT_EQUAL(report_type::normal_report, sfr::rockblock::downlink_report_type);
-    TEST_ASSERT_TRUE(sfr::rockblock::rockblock_ready_status == true);
+    TEST_ASSERT_TRUE(sfr::rockblock::rockblock_ready_status);
 
     TEST_ASSERT_EQUAL(constants::rockblock::packet_size, sfr::rockblock::normal_report.size());
     TEST_ASSERT_EQUAL(constants::rockblock::packet_size, sfr::rockblock::downlink_report.size());
