@@ -30,6 +30,10 @@ void ButtonMonitor::execute()
     Serial.print(sfr::button::pressed);
     Serial.println("(1 yes, 0 no)");
     Serial.print("Button valid: ");
-    Serial.println(sfr::button::button_pressed->is_valid());
+    if (sfr::button::button_pressed->is_valid()) {
+        Serial.println("true");
+    } else {
+        Serial.println("false");
+    }
 #endif
 }
