@@ -231,6 +231,9 @@ namespace sfr {
         extern SFRField<uint16_t> downlink_report_type;
         extern SFRField<uint16_t> mode;
 
+        extern SFRField<uint32_t> transmitted_checksum;
+        extern SFRField<uint32_t> calculated_checksum;
+
     } // namespace rockblock
     namespace imu {
         // OP Codes 2200

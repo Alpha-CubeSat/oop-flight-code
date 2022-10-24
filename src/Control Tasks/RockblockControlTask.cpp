@@ -397,6 +397,9 @@ void RockblockControlTask::dispatch_process_command()
                     calculated_checksum = calculated_checksum ^ (opcodes[j] ^ args_1[j] ^ args_2[j]);
                 }
 
+                sfr::rockblock::transmitted_checksum = (uint32_t)(transmitted_checksum[3] << 24 | transmitted_checksum[2] << 16 | transmitted_checksum[1] << 8 | transmitted_checksum[0]);
+                sfr::rockblock::calculated_checksum = calculated_checksum;
+
                 // if the checksum doesn't pass, write a message and retry the process command stage
                 if (calculated_checksum != (uint32_t)(transmitted_checksum[3] << 24 | transmitted_checksum[2] << 16 | transmitted_checksum[1] << 8 | transmitted_checksum[0])) {
 #ifdef VERBOSE_IMUD
@@ -477,6 +480,8 @@ void RockblockControlTask::dispatch_process_command()
             // Longitudinal redundancy check, kinda
             calculated_checksum = calculated_checksum ^ (opcodes[j] ^ args_1[j] ^ args_2[j]);
         }
+        sfr::rockblock::transmitted_checksum = (uint32_t)(transmitted_checksum[3] << 24 | transmitted_checksum[2] << 16 | transmitted_checksum[1] << 8 | transmitted_checksum[0]);
+        sfr::rockblock::calculated_checksum = calculated_checksum;
 
         // if the checksum doesn't pass, write a message and retry the process command stage
         if (calculated_checksum != (uint32_t)(transmitted_checksum[3] << 24 | transmitted_checksum[2] << 16 | transmitted_checksum[1] << 8 | transmitted_checksum[0])) {

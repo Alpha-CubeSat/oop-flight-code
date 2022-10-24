@@ -99,7 +99,7 @@ public:
         return value / resolution;
     }
 
-    T set(T input)
+    void set(T input) // this had a return value of T for some reason
     {
         if ((bounded && input <= max && input >= min) || (!bounded)) {
             value = input;

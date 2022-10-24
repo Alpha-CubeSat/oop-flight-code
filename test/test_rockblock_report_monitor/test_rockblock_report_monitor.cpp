@@ -185,27 +185,27 @@ void test_schedule_from_camera_report()
     TEST_ASSERT_TRUE(sfr::rockblock::rockblock_ready_status == false);
 }
 
-// void test_rockblock_checksum()
-// {
-//     RockblockReportMonitor rockblock_report_monitor(0);
-//     sfr::rockblock::mode = (uint16_t)rockblock_mode_type::standby;
+void test_rockblock_checksum()
+{
+    RockblockReportMonitor rockblock_report_monitor(0);
+    sfr::rockblock::mode = (uint16_t)rockblock_mode_type::standby;
 
-//     // IMU and Camera both available
-//     set_rockblock_test_environment(report_type::normal_report, true, true, 0);
-//     for (int i = 0; i < constants::rockblock::packet_size; i++) {
-//         sfr::rockblock::normal_report.push_back(1);
-//     }
-//     rockblock_report_monitor.execute();
-//     TEST_ASSERT_EQUAL(report_type::normal_report, sfr::rockblock::downlink_report_type);
-//     TEST_ASSERT_TRUE(sfr::rockblock::rockblock_ready_status);
+    // IMU and Camera both available
+    set_rockblock_test_environment(report_type::normal_report, true, true, 0);
+    for (int i = 0; i < constants::rockblock::packet_size; i++) {
+        sfr::rockblock::normal_report.push_back(1);
+    }
+    rockblock_report_monitor.execute();
+    TEST_ASSERT_EQUAL(report_type::normal_report, sfr::rockblock::downlink_report_type);
+    TEST_ASSERT_TRUE(sfr::rockblock::rockblock_ready_status);
 
-//     TEST_ASSERT_EQUAL(constants::rockblock::packet_size, sfr::rockblock::normal_report.size());
-//     TEST_ASSERT_EQUAL(constants::rockblock::packet_size, sfr::rockblock::downlink_report.size());
-//     for (int i = 0; i < constants::rockblock::packet_size; i++) {
-//         TEST_ASSERT_EQUAL(sfr::rockblock::normal_report[i], sfr::rockblock::downlink_report[i]);
-//     }
-//     TEST_ASSERT_EQUAL(0, 1);
-// }
+    TEST_ASSERT_EQUAL(constants::rockblock::packet_size, sfr::rockblock::normal_report.size());
+    TEST_ASSERT_EQUAL(constants::rockblock::packet_size, sfr::rockblock::downlink_report.size());
+    for (int i = 0; i < constants::rockblock::packet_size; i++) {
+        TEST_ASSERT_EQUAL(sfr::rockblock::normal_report[i], sfr::rockblock::downlink_report[i]);
+    }
+    TEST_ASSERT_EQUAL(sfr::rockblock::transmitted_checksum, sfr::rockblock::calculated_checksum);
+}
 
 void test_rockblock_report_monitor_low_power_mode()
 {
@@ -244,6 +244,7 @@ int test_rockblock_report_monitor()
     RUN_TEST(test_schedule_from_imu_report);
     RUN_TEST(test_schedule_from_camera_report);
     RUN_TEST(test_rockblock_report_monitor_low_power_mode);
+    RUN_TEST(test_rockblock_checksum);
     return UNITY_END();
 }
 
