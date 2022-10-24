@@ -63,7 +63,9 @@ namespace sfr {
         // OP Codes 1700
         extern SFRField<bool> covered;
 
-        extern SensorReading *light_val_average;
+        extern SensorReading *light_val_average_standby;
+        extern SensorReading *light_val_average_deployment;
+
     } // namespace photoresistor
     namespace mission {
         // OP Codes 1800
