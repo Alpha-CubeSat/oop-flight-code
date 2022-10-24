@@ -1,7 +1,7 @@
 #ifndef ROCKBLOCK_CONTROL_TASK_HPP_
 #define ROCKBLOCK_CONTROL_TASK_HPP_
 
-#include "Commands/RockblockCommand.hpp"
+#include "RockblockCommand.hpp"
 #include "Control Tasks/TimedControlTask.hpp"
 #include "Modes/rockblock_mode_type.enum"
 #include "Pins.hpp"
@@ -39,6 +39,7 @@ private:
     void dispatch_await_flush();
     void dispatch_end_transmission();
     void transition_to(rockblock_mode_type new_mode);
+    RockblockCommand* commandFactory(RawRockblockCommand raw);
 };
 
 #endif

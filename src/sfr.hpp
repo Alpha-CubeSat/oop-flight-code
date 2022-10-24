@@ -1,9 +1,9 @@
 #ifndef SFR_HPP_
 #define SFR_HPP_
 
+#include "RockblockCommand.hpp"
 #include "Adafruit_VC0706.h"
 #include "Arduino.h"
-#include "Commands/RockblockCommand.hpp"
 #include "MissionMode.hpp"
 #include "Modes/burnwire_mode_type.enum"
 #include "Modes/camera_init_mode_type.enum"
@@ -209,7 +209,7 @@ namespace sfr {
         extern int commas[constants::rockblock::num_commas];
 
         extern std::deque<RawRockblockCommand> raw_commands;
-        extern std::deque<RockblockCommand> processed_commands;
+        extern std::deque<RockblockCommand*> processed_commands;
 
         extern SFRField<uint8_t> max_commands_count;
 

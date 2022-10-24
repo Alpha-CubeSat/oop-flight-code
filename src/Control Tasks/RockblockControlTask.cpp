@@ -418,9 +418,9 @@ void RockblockControlTask::dispatch_process_command()
             Serial.println();
 
             // Parse New Command From Input OP Codes
-            RockblockCommand processed = RockblockCommand::commandFactory(new_raw_command);
-            if (processed.isValid()) {
-                // Comand is Valid - Will be added to list to be Executed During CommandMonitor Execute
+            RockblockCommand* processed = commandFactory(new_raw_command);
+            if (processed->isValid()) {
+                // Command is Valid - Will be added to list to be Executed During CommandMonitor Execute
                 sfr::rockblock::processed_commands.push_back(processed);
                 sfr::rockblock::waiting_command = true;
             } else if (new_raw_command.opcode[0] == 'F' && new_raw_command.opcode[1] == 'L') {
@@ -495,4 +495,22 @@ void RockblockControlTask::dispatch_end_transmission()
 void RockblockControlTask::transition_to(rockblock_mode_type new_mode)
 {
     sfr::rockblock::mode = (uint16_t)new_mode;
+}
+
+RockblockCommand* RockblockControlTask::commandFactory(RawRockblockCommand raw)
+{
+    // Create Specific Child Class of Rockblock command depending on the OP Code
+    uint16_t op_code = raw.get_f_opcode();
+    if (op_code <= constants::rockblock::opcodes::sfr_field_opcode_max && op_code >= constants::rockblock::opcodes::sfr_field_opcode_min) {
+        #ifdef VERBOSE_RB
+            Serial.println("SFR Override Command");
+        #endif
+        return new SFROverrideCommand(raw);
+    } else {
+        #ifdef VERBOSE_RB
+            Serial.print("Unknown Command with opcode: ");
+            Serial.println(op_code);
+        #endif
+        return new UnknownCommand(raw);
+    }
 }
