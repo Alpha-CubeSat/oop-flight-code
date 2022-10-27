@@ -147,13 +147,17 @@ namespace sfr {
         // OP Codes 1900
         SFRField<bool> fire = SFRField<bool>(false, 1900);
         SFRField<bool> arm = SFRField<bool>(false, 1901);
-        SFRField<uint16_t> attempts = SFRField<uint16_t>(0, 1902);
+        SFRField<uint16_t> regular_attempts = SFRField<uint16_t>(0, 1902);
         SFRField<uint16_t> camera_attempts = SFRField<uint16_t>(0, 1904);
-        SFRField<uint32_t> start_time = SFRField<uint32_t>(0, 1903);
+        SFRField<uint32_t> mandatoryburn_start_time = SFRField<uint32_t>(0, 1903);
         SFRField<uint32_t> burn_time = SFRField<uint32_t>(500, 1905);
         SFRField<uint32_t> armed_time = SFRField<uint32_t>(2 * constants::time::one_day, 1906);
-        SFRField<uint16_t> mode = SFRField<uint16_t>((uint16_t)burnwire_mode_type::standby, 1907);
-        SFRField<uint16_t> attempts_limit = SFRField<uint16_t>(10, 1908);
+        SFRField<uint16_t> mode = SFRField<uint16_t>((uint16_t)burnwire_mode_type::burn, 1907);
+        SFRField<uint16_t> regular_attempts_limit = SFRField<uint16_t>(10, 1908);
+        SFRField<uint16_t> mandatory_attempts = SFRField<uint16_t>(0, 1909);
+        SFRField<uint16_t> mandatory_attempts_limit = SFRField<uint16_t>(4, 1910);
+        SFRField<uint32_t> burn_wait = SFRField<uint32_t>(250, 1911);
+        SFRField<uint32_t> regularburn_start_time = SFRField<uint32_t>(0, 1912);
     } // namespace burnwire
     namespace camera {
         // OP Codes 2000

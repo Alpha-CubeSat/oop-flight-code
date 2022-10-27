@@ -157,6 +157,8 @@ void TransmitArmed::transition_to()
     sfr::rockblock::sleep_mode = false;
     sfr::acs::off = true;
     sfr::imu::turn_off = true;
+    sfr::burnwire::mandatory_attempts = 0;
+    sfr::burnwire::regular_attempts = 0;
 }
 void TransmitArmed::dispatch()
 {
@@ -249,26 +251,29 @@ void MandatoryBurns::transition_to()
 {
     sfr::rockblock::sleep_mode = true;
     sfr::acs::off = true;
-    sfr::imu::turn_off = true;
+    sfr::imu::turn_off = false;
 }
 
 void MandatoryBurns::dispatch()
 {
-    sfr::mission::current_mode = sfr::mission::regularBurns;
+    if(sfr::burnwire::mandatory_attempts > sfr::burnwire::mandatory_attempts_limit) {
+        sfr::mission::current_mode = sfr::mission::regularBurns;
+    }
+    
 }
 
 void RegularBurns::transition_to()
 {
     sfr::rockblock::sleep_mode = true;
     sfr::acs::off = true;
-    sfr::imu::turn_off = true;
+    sfr::imu::turn_off = false;
 }
 void RegularBurns::dispatch()
 {
     if (!sfr::button::pressed || !sfr::photoresistor::covered) {
         sfr::mission::current_mode = sfr::mission::photo;
 
-    } else if (sfr::burnwire::attempts > sfr::burnwire::attempts_limit) {
+    } else if (sfr::burnwire::regular_attempts > sfr::burnwire::regular_attempts_limit) {
         sfr::mission::current_mode = sfr::mission::transmitArmed;
     }
 }
@@ -277,7 +282,7 @@ void Photo::transition_to()
 {
     sfr::rockblock::sleep_mode = true;
     sfr::acs::off = true;
-    sfr::imu::turn_off = true;
+    sfr::imu::turn_off = false;
     sfr::camera::take_photo = true;
 }
 
