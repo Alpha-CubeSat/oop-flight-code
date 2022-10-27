@@ -58,10 +58,10 @@ namespace constants {
 
         constexpr int num_initial_downlinks = 2;
         constexpr uint8_t start_of_normal_downlink_flag = 99;
-        constexpr uint8_t end_of_normal_downlink_flag1 = 254;
-        constexpr uint8_t end_of_normal_downlink_flag2 = 255;
-        constexpr uint8_t end_of_command_upload_flag1 = 0;
-        constexpr uint8_t end_of_command_upload_flag2 = 250;
+        constexpr uint8_t end_of_normal_downlink_flag1 = 254; // FE
+        constexpr uint8_t end_of_normal_downlink_flag2 = 255; // FF
+        constexpr uint8_t end_of_command_upload_flag1 = 0;    // 00
+        constexpr uint8_t end_of_command_upload_flag2 = 250;  // FA
         namespace opcodes {
             constexpr uint16_t mission_mode = 0; // -> StateCommand //? Should this be Phase_mode?
 
