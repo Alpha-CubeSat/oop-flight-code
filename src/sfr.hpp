@@ -72,6 +72,7 @@ namespace sfr {
         extern SFRField<uint32_t> time_deployed;
         extern SFRField<bool> deployed;
         extern SFRField<bool> already_deployed;
+        extern SFRField<bool> possible_uncovered;
 
         extern Boot boot_class;
         extern AliveSignal aliveSignal_class;
@@ -305,6 +306,8 @@ namespace sfr {
     namespace button {
         // OP Codes 2700
         extern SFRField<bool> pressed;
+
+        extern SensorReading *button_pressed;
     } // namespace button
     namespace EEPROM {
         // OP Codes 2800

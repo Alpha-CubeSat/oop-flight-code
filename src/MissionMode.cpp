@@ -250,6 +250,7 @@ void MandatoryBurns::transition_to()
     sfr::rockblock::sleep_mode = true;
     sfr::acs::off = true;
     sfr::imu::turn_off = true;
+    sfr::mission::possible_uncovered = true;
 }
 
 void MandatoryBurns::dispatch()
