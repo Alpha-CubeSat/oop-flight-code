@@ -81,6 +81,7 @@ namespace sfr {
         SFRField<uint32_t> time_deployed = SFRField<uint32_t>(0, 1801);
         SFRField<bool> deployed = SFRField<bool>(false, 1802);
         SFRField<bool> already_deployed = SFRField<bool>(false, 1803);
+        SFRField<bool> possible_uncovered = SFRField<bool>(false, 1804);
 
         Boot boot_class;
         AliveSignal aliveSignal_class;
@@ -314,6 +315,7 @@ namespace sfr {
     namespace button {
         // OP Codes 2700
         SFRField<bool> pressed = SFRField<bool>(true, 2700);
+        SensorReading *button_pressed = new SensorReading(fault_index_type::button, 1, 1, 0);
     } // namespace button
     namespace EEPROM {
         // OP Codes 2800

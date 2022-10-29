@@ -8,7 +8,6 @@ PhotoresistorMonitor::PhotoresistorMonitor(unsigned int offset)
 void PhotoresistorMonitor::execute()
 {
     float val = analogRead(constants::photoresistor::pin);
-    boolean possible_uncovered = false;
 
     sfr::photoresistor::light_val_average_standby->set_value(val);
     sfr::photoresistor::light_val_average_deployment->set_value(val);
