@@ -67,14 +67,13 @@ class SFROverrideCommand : public RockblockCommand
 public:
     SFROverrideCommand(RawRockblockCommand raw) : RockblockCommand{raw}
     {
-        if (SFRInterface::opcode_lookup.find(f_arg_1) != SFRInterface::opcode_lookup.end()) {
-            field = SFRInterface::opcode_lookup[f_arg_1];
+        if (SFRInterface::opcode_lookup.find(f_opcode) != SFRInterface::opcode_lookup.end()) {
+            field = SFRInterface::opcode_lookup[f_opcode];
         }
     };
 
     void execute() 
     {
-        // LJG TODO: freezes here
         if (field) {
             field->setValue(f_arg_1);
         }
