@@ -15,6 +15,7 @@ namespace constants {
     } // namespace time
     namespace sensor {
         constexpr int collect = 3;
+        constexpr int repeats = 10;
     } // namespace sensor
     namespace photoresistor {
         constexpr int pin = 38;
@@ -196,6 +197,7 @@ namespace constants {
         constexpr uint8_t sd_card = 1 << 1;
         constexpr uint8_t camera_on_failed = 1 << 2;
         constexpr uint8_t light_val = 1 << 3;
+        constexpr uint8_t button = 1 << 4;
     } // namespace fault
     namespace camera {
         constexpr int power_on_pin = 31;
