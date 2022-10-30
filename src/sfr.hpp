@@ -3,7 +3,6 @@
 
 #include "Adafruit_VC0706.h"
 #include "Arduino.h"
-#include "RockblockCommand.hpp"
 #include "MissionMode.hpp"
 #include "Modes/burnwire_mode_type.enum"
 #include "Modes/camera_init_mode_type.enum"

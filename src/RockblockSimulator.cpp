@@ -18,7 +18,7 @@ RockblockSimulator::RockblockSimulator()
     // arg_2  00000000
     // end of command upload flag 1 00
     // end of command upload flag 2 FA
-    //insert("1901111111110000000000FA");
+    // insert("1901111111110000000000FA");
 }
 
 void RockblockSimulator::begin(uint32_t baud)
