@@ -392,7 +392,7 @@ void RockblockControlTask::dispatch_process_command()
                 Serial.println("\nChecksum:");
 #endif
                 for (size_t cs = 0; cs < constants::rockblock::checksum_len; ++cs) {
-                    transmitted_checksum[cs] = serial.read();
+                    transmitted_checksum[cs] = sfr::rockblock::serial.read();
                     if (transmitted_checksum[cs] < 0x10)
                         Serial.print(0, HEX);
                     Serial.print(transmitted_checksum[cs], HEX);
@@ -475,7 +475,7 @@ void RockblockControlTask::dispatch_process_command()
 #endif
         uint8_t transmitted_checksum[constants::rockblock::checksum_len];
         for (size_t cs = 0; cs < constants::rockblock::checksum_len; ++cs) {
-            transmitted_checksum[cs] = serial.read();
+            transmitted_checksum[cs] = sfr::rockblock::serial.read();
             if (transmitted_checksum[cs] < 0x10)
                 Serial.print(0, HEX);
             Serial.print(transmitted_checksum[cs], HEX);

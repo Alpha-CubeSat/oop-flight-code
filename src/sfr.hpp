@@ -210,7 +210,7 @@ namespace sfr {
         extern int commas[constants::rockblock::num_commas];
 
         extern std::deque<RawRockblockCommand> raw_commands;
-        extern std::deque<RockblockCommand> processed_commands;
+        extern std::deque<RockblockCommand *> processed_commands;
 
         extern SFRField<uint8_t> max_commands_count;
 
