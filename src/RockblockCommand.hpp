@@ -3,9 +3,8 @@
 
 #include "Arduino.h"
 #include "SFRField.hpp"
-#include <stdint.h>
 #include "constants.hpp"
-
+#include <stdint.h>
 
 class RawRockblockCommand
 {
@@ -16,7 +15,7 @@ public:
 
     uint16_t get_f_opcode()
     {
-        return (this->opcode[0] << 8) | (this->opcode[1]); 
+        return (this->opcode[0] << 8) | (this->opcode[1]);
     }
 
     uint32_t get_f_arg_1()
@@ -28,7 +27,6 @@ public:
     {
         return (this->arg_2[0] << 24) | (this->arg_2[1] << 16) | (this->arg_2[2] << 8) | (this->arg_2[3]);
     }
-
 };
 
 class RockblockCommand
@@ -38,14 +36,16 @@ public:
     uint32_t f_arg_1;
     uint32_t f_arg_2;
 
-    RockblockCommand(RawRockblockCommand raw) {
+    RockblockCommand(RawRockblockCommand raw)
+    {
         this->f_opcode = raw.get_f_opcode();
-        this->f_arg_1  = raw.get_f_arg_1();
-        this->f_arg_2  = raw.get_f_arg_2();
+        this->f_arg_1 = raw.get_f_arg_1();
+        this->f_arg_2 = raw.get_f_arg_2();
     };
 
-    virtual bool isValid(){ 
-        return false; 
+    virtual bool isValid()
+    {
+        return false;
     } ///< \brief Return true if a command arguments are valid for that op code, false otherwise
 
     virtual void execute(){}; ///< \brief Executes Command Functionality or SFR Edit
@@ -59,7 +59,6 @@ public:
     {
         return (hex_arg_bytes[3] << 24) | (hex_arg_bytes[2]) << 16 | (hex_arg_bytes[1] << 8) | (hex_arg_bytes[0]);
     }
-
 };
 
 class SFROverrideCommand : public RockblockCommand
@@ -67,20 +66,19 @@ class SFROverrideCommand : public RockblockCommand
 public:
     SFROverrideCommand(RawRockblockCommand raw) : RockblockCommand{raw}
     {
-        if (SFRInterface::opcode_lookup.find(f_arg_1) != SFRInterface::opcode_lookup.end()) {
-            field = SFRInterface::opcode_lookup[f_arg_1];
+        if (SFRInterface::opcode_lookup.find(f_opcode) != SFRInterface::opcode_lookup.end()) {
+            field = SFRInterface::opcode_lookup[f_opcode];
         }
     };
 
-    void execute() 
+    void execute()
     {
-        // LJG TODO: freezes here
         if (field) {
             field->setValue(f_arg_1);
         }
     }
 
-    bool isValid() 
+    bool isValid()
     {
         return field != nullptr;
     }
