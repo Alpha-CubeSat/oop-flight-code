@@ -70,7 +70,9 @@ namespace sfr {
         // OP Codes 1700
         SFRField<bool> covered = SFRField<bool>(true, 1700);
 
-        SensorReading *light_val_average = new SensorReading(fault_index_type::light_val, 20, 0, 1000);
+        SensorReading *light_val_average_standby = new SensorReading(fault_index_type::light_val, 20, 0, 1000);
+        SensorReading *light_val_average_deployment = new SensorReading(fault_index_type::light_val, 1, 0, 1000);
+
     } // namespace photoresistor
     namespace mission {
         // OP Codes 1800
@@ -283,14 +285,14 @@ namespace sfr {
         // OP Codes 2300
         SFRField<bool> in_sun = SFRField<bool>(false, 2300);
 
-        SensorReading *temp_c_average = new SensorReading(fault_index_type::temp_c, 20, -500, 500);
+        SensorReading *temp_c_average = new SensorReading(fault_index_type::temp_c, 1500, -500, 500);
         SensorReading *temp_c_value = new SensorReading(1, -500, 500);
     } // namespace temperature
     namespace current {
         // OP Codes 2400
         SFRField<bool> in_sun = SFRField<bool>(false, 2400);
 
-        SensorReading *solar_current_average = new SensorReading(fault_index_type::solar_current, 20, 0, 1000);
+        SensorReading *solar_current_average = new SensorReading(fault_index_type::solar_current, 1500, 0, 1000);
     } // namespace current
     namespace acs {
         // OP Codes 2500
@@ -308,7 +310,7 @@ namespace sfr {
         SFRField<uint32_t> min_battery = SFRField<uint32_t>(0, 2601);
 
         SensorReading *voltage_value = new SensorReading(1, 0, 5);
-        SensorReading *voltage_average = new SensorReading(fault_index_type::voltage, 20, 0, 5);
+        SensorReading *voltage_average = new SensorReading(fault_index_type::voltage, 300, 0, 5);
     } // namespace battery
     namespace button {
         // OP Codes 2700
