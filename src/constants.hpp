@@ -80,8 +80,8 @@ namespace constants {
             constexpr uint16_t camera_turn_off = 12;
 
             // SFRField Commands
-            constexpr uint16_t sfr_field_opcode_min = 11;
-            constexpr uint16_t sfr_field_opcode_max = 28;
+            constexpr uint16_t sfr_field_opcode_min = 4352;  // 1100
+            constexpr uint16_t sfr_field_opcode_max = 10393; // 2899
 
         } // namespace opcodes
         // namespace rockblock

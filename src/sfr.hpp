@@ -12,6 +12,8 @@
 #include "Modes/sensor_mode_type.enum"
 #include "Modes/simple_acs_type.enum"
 #include "Phase.hpp"
+#include "RockblockCommand.hpp"
+#include "RockblockSimulator.hpp"
 #include "SFRField.hpp"
 #include "SensorReading.hpp"
 #include "constants.hpp"
@@ -231,8 +233,11 @@ namespace sfr {
         extern SFRField<uint16_t> downlink_report_type;
         extern SFRField<uint16_t> mode;
 
-        extern SFRField<uint32_t> transmitted_checksum;
-        extern SFRField<uint32_t> calculated_checksum;
+#ifndef SIMULATOR
+        extern HardwareSerial serial;
+#else
+        extern RockblockSimulator serial;
+#endif
 
     } // namespace rockblock
     namespace imu {

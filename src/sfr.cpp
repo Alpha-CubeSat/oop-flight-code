@@ -215,7 +215,7 @@ namespace sfr {
         int commas[constants::rockblock::num_commas] = {0};
 
         std::deque<RawRockblockCommand> raw_commands;
-        std::deque<RockblockCommand> processed_commands;
+        std::deque<RockblockCommand *> processed_commands;
 
         SFRField<uint8_t> max_commands_count = SFRField<uint8_t>(10, 2104);
 
@@ -238,8 +238,11 @@ namespace sfr {
         SFRField<uint16_t> downlink_report_type = SFRField<uint16_t>((uint16_t)report_type::normal_report, 2116);
         SFRField<uint16_t> mode = SFRField<uint16_t>((uint16_t)rockblock_mode_type::send_at, 2117);
 
-        // SFRField<uint32_t> transmitted_checksum = SFRField<u_int32_t>(0, 2118);
-        // SFRField<uint32_t> calculated_checksum = SFRField<u_int32_t>(0, 2119);
+#ifndef SIMULATOR
+        HardwareSerial serial = Serial1;
+#else
+        RockblockSimulator serial;
+#endif
 
     } // namespace rockblock
     namespace imu {
