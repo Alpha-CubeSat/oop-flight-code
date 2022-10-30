@@ -375,10 +375,6 @@ void RockblockControlTask::dispatch_process_command()
         uint32_t args_1[(int)sfr::rockblock::max_commands_count];
         uint32_t args_2[(int)sfr::rockblock::max_commands_count];
 
-        uint32_t opcodes[(int)sfr::rockblock::max_commands_count];
-        uint32_t args_1[(int)sfr::rockblock::max_commands_count];
-        uint32_t args_2[(int)sfr::rockblock::max_commands_count];
-
         /*
             Parses up to `max_commands_count` number of commands
             Exits early if end-of-command-upload flags read
@@ -388,8 +384,8 @@ void RockblockControlTask::dispatch_process_command()
             uint8_t look_ahead2 = sfr::rockblock::serial.read(); // Peek
             if (look_ahead1 == constants::rockblock::end_of_command_upload_flag1 && look_ahead2 == constants::rockblock::end_of_command_upload_flag2) {
                 uint8_t transmitted_checksum[constants::rockblock::checksum_len];
-#ifdef VERBOSE_IMUD
-                Serial.println("\nChecksum:");
+#ifdef VERBOSE_RB
+                Serial.print("Transmitted Checksum: ");
 #endif
                 for (size_t cs = 0; cs < constants::rockblock::checksum_len; ++cs) {
                     transmitted_checksum[cs] = sfr::rockblock::serial.read();
@@ -401,6 +397,12 @@ void RockblockControlTask::dispatch_process_command()
                 for (int j = 0; j < i; j++) {
                     // Longitudinal redundancy check, kinda
                     calculated_checksum = calculated_checksum ^ (opcodes[j] ^ args_1[j] ^ args_2[j]);
+                    Serial.println();
+                    Serial.print(opcodes[j], HEX);
+                    Serial.print(" ");
+                    Serial.print(args_1[j], HEX);
+                    Serial.print(" ");
+                    Serial.print(args_2[j], HEX);
                 }
 
                 // sfr::rockblock::transmitted_checksum = (uint32_t)(transmitted_checksum[3] << 24 | transmitted_checksum[2] << 16 | transmitted_checksum[1] << 8 | transmitted_checksum[0]);
@@ -408,8 +410,15 @@ void RockblockControlTask::dispatch_process_command()
 
                 // if the checksum doesn't pass, write a message and retry the process command stage
                 if (calculated_checksum != (uint32_t)(transmitted_checksum[3] << 24 | transmitted_checksum[2] << 16 | transmitted_checksum[1] << 8 | transmitted_checksum[0])) {
-#ifdef VERBOSE_IMUD
-                    Serial.println("Checksum failed, reattempting transmission");
+#ifdef VERBOSE_RB
+                    Serial.println("\nChecksum failed, reattempting transmission");
+                    Serial.println(calculated_checksum, HEX);
+                    Serial.println((((uint32_t)(transmitted_checksum[3]) << 24) | ((uint32_t)(transmitted_checksum[2]) << 16) | ((uint32_t)(transmitted_checksum[1]) << 8) | ((uint32_t)(transmitted_checksum[0]))), HEX);
+                    for (size_t cs = 0; cs < constants::rockblock::checksum_len; ++cs) {
+                        if (transmitted_checksum[cs] < 0x10)
+                            Serial.print(0, HEX);
+                        Serial.print(transmitted_checksum[cs], HEX);
+                    }
 #endif
                     transition_to(rockblock_mode_type::process_command);
                 }
@@ -452,7 +461,7 @@ void RockblockControlTask::dispatch_process_command()
 
             Serial.println();
 
-            opcodes[i] = (uint32_t)(new_raw_command.get_f_opcode());
+            opcodes[i] = new_raw_command.get_f_opcode();
             args_1[i] = new_raw_command.get_f_arg_1();
             args_2[i] = new_raw_command.get_f_arg_2();
 
@@ -470,8 +479,8 @@ void RockblockControlTask::dispatch_process_command()
                 // TODO: What Goes Here @Lauren
             }
         }
-#ifdef VERBOSE_IMUD
-        Serial.println("\nChecksum: ");
+#ifdef VERBOSE_RB
+        Serial.print("Checksum: ");
 #endif
         uint8_t transmitted_checksum[constants::rockblock::checksum_len];
         for (size_t cs = 0; cs < constants::rockblock::checksum_len; ++cs) {
@@ -490,8 +499,10 @@ void RockblockControlTask::dispatch_process_command()
 
         // if the checksum doesn't pass, write a message and retry the process command stage
         if (calculated_checksum != (uint32_t)(transmitted_checksum[3] << 24 | transmitted_checksum[2] << 16 | transmitted_checksum[1] << 8 | transmitted_checksum[0])) {
-#ifdef VERBOSE_IMUD
-            Serial.println("Checksum failed, reattempting transmission");
+#ifdef VERBOSE_RB
+            Serial.println("\nChecksum failed, reattempting transmission");
+            Serial.println(calculated_checksum, HEX);
+            Serial.println((uint32_t)(transmitted_checksum[3] << 24 | transmitted_checksum[2] << 16 | transmitted_checksum[1] << 8 | transmitted_checksum[0]), HEX);
 #endif
             transition_to(rockblock_mode_type::process_command);
         }
@@ -573,7 +584,7 @@ RockblockCommand *RockblockControlTask::commandFactory(RawRockblockCommand raw)
     } else {
 #ifdef VERBOSE_RB
         Serial.print("Unknown Command with opcode: ");
-        Serial.println(op_code);
+        Serial.println(op_code, HEX);
 #endif
         return new UnknownCommand(raw);
     }
