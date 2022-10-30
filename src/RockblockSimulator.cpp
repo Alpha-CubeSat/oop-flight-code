@@ -13,7 +13,7 @@ RockblockSimulator::RockblockSimulator()
     bin_transmit = 0;
     signal = 5;
     // Command with end of command flag
-    // opcode 1901 
+    // opcode 1901
     // arg_1  11111111
     // arg_2  00000000
     // end of command upload flag 1 00

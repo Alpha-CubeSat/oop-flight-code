@@ -103,9 +103,9 @@ void RockblockControlTask::dispatch_standby()
 void RockblockControlTask::dispatch_send_at()
 {
     sfr::rockblock::conseq_reads = 0;
-    #ifdef VERBOSE_RB
+#ifdef VERBOSE_RB
     Serial.println("SENT: ATr");
-    #endif
+#endif
     sfr::rockblock::serial.print("AT\r");
     transition_to(rockblock_mode_type::await_at);
 }
@@ -113,9 +113,9 @@ void RockblockControlTask::dispatch_send_at()
 void RockblockControlTask::dispatch_await_at()
 {
     if (sfr::rockblock::serial.read() == 'K') {
-        #ifdef VERBOSE_RB
+#ifdef VERBOSE_RB
         Serial.println("SAT INFO: ok");
-        #endif
+#endif
         transition_to(rockblock_mode_type::send_signal_strength);
         sfr::rockblock::start_time_check_signal = millis();
     }
@@ -123,9 +123,9 @@ void RockblockControlTask::dispatch_await_at()
 
 void RockblockControlTask::dispatch_send_signal_strength()
 {
-    #ifdef VERBOSE_RB
+#ifdef VERBOSE_RB
     Serial.println("SENT: AT+CSQr");
-    #endif
+#endif
     sfr::rockblock::serial.print("AT+CSQ\r");
     transition_to(rockblock_mode_type::await_signal_strength);
 }
@@ -134,10 +134,10 @@ void RockblockControlTask::dispatch_await_signal_strength()
 {
     if (sfr::rockblock::serial.read() == ':') {
         char signal = sfr::rockblock::serial.read();
-        #ifdef VERBOSE_RB
+#ifdef VERBOSE_RB
         Serial.print("SAT INFO: signal level ");
         Serial.println(signal);
-        #endif
+#endif
         if (signal == '3' || signal == '4' || signal == '5') {
             transition_to(rockblock_mode_type::send_flow_control);
         } else {
@@ -148,9 +148,9 @@ void RockblockControlTask::dispatch_await_signal_strength()
 
 void RockblockControlTask::dispatch_send_flow_control()
 {
-    #ifdef VERBOSE_RB
+#ifdef VERBOSE_RB
     Serial.println("SENT: AT&K0r");
-    #endif
+#endif
     sfr::rockblock::serial.print("AT&K0\r");
     transition_to(rockblock_mode_type::await_flow_control);
 }
@@ -158,9 +158,9 @@ void RockblockControlTask::dispatch_send_flow_control()
 void RockblockControlTask::dispatch_await_flow_control()
 {
     if (sfr::rockblock::serial.read() == 'K') {
-        #ifdef VERBOSE_RB
+#ifdef VERBOSE_RB
         Serial.println("SAT INFO: ok");
-        #endif
+#endif
         transition_to(rockblock_mode_type::send_message_length);
     }
 }
@@ -171,9 +171,9 @@ void RockblockControlTask::dispatch_send_message_length()
     ss << sfr::rockblock::downlink_report.size();
     std::string s = ss.str();
     std::string message_length = "AT+SBDWB=" + s + "\r";
-    #ifdef VERBOSE_RB
+#ifdef VERBOSE_RB
     Serial.println(("SENT: AT+SBDWB=" + s + "r").c_str());
-    #endif
+#endif
     sfr::rockblock::serial.print(message_length.c_str());
     transition_to(rockblock_mode_type::await_message_length);
 }
@@ -181,9 +181,9 @@ void RockblockControlTask::dispatch_send_message_length()
 void RockblockControlTask::dispatch_await_message_length()
 {
     if (sfr::rockblock::serial.read() == 'Y') {
-        #ifdef VERBOSE_RB
+#ifdef VERBOSE_RB
         Serial.println("SAT INFO: ready");
-        #endif
+#endif
         transition_to(rockblock_mode_type::send_message);
     }
 }
@@ -191,7 +191,7 @@ void RockblockControlTask::dispatch_await_message_length()
 void RockblockControlTask::dispatch_send_message()
 {
     uint16_t checksum = 0;
-    #ifdef VERBOSE_RB
+#ifdef VERBOSE_RB
     switch (static_cast<report_type>(sfr::rockblock::downlink_report_type.get())) {
     case report_type::camera_report:
         Serial.print("Camera Report Downlinking\n");
@@ -203,30 +203,30 @@ void RockblockControlTask::dispatch_send_message()
         Serial.print("Normal Report Downlinking\n");
         break;
     }
-    
+
     Serial.print("SENT: ");
-    #endif
+#endif
     for (auto &data : sfr::rockblock::downlink_report) {
         if (data < 16) {
-            #ifdef VERBOSE_RB
+#ifdef VERBOSE_RB
             Serial.print(0);
-            #endif
+#endif
         }
-        #ifdef VERBOSE_RB
+#ifdef VERBOSE_RB
         Serial.print(data, HEX);
-        #endif
+#endif
         sfr::rockblock::serial.write(data);
         checksum += (uint16_t)data;
     }
 
-    #ifdef VERBOSE_RB
+#ifdef VERBOSE_RB
     Serial.println();
     Serial.print("SENT: ");
     Serial.print(checksum >> 8);
     Serial.print(checksum & 0xFF);
     Serial.print('r');
     Serial.println();
-    #endif
+#endif
 
     sfr::rockblock::serial.write(checksum >> 8);
     sfr::rockblock::serial.write(checksum & 0xFF);
@@ -239,9 +239,9 @@ void RockblockControlTask::dispatch_await_message()
     char c = sfr::rockblock::serial.read();
     if (c == '0' || c == '1' || c == '2' || c == '3') {
         if (c == '0') {
-            #ifdef VERBOSE_RB
+#ifdef VERBOSE_RB
             Serial.println("SAT INFO: report accepted");
-            #endif
+#endif
             transition_to(rockblock_mode_type::send_response);
         } else {
             transition_to(rockblock_mode_type::send_message);
@@ -251,9 +251,9 @@ void RockblockControlTask::dispatch_await_message()
 
 void RockblockControlTask::dispatch_send_response()
 {
-    #ifdef VERBOSE_RB
+#ifdef VERBOSE_RB
     Serial.println("SENT: AT+SBDIXr");
-    #endif
+#endif
     sfr::rockblock::serial.print("AT+SBDIX\r");
     transition_to(rockblock_mode_type::create_buffer);
 }
@@ -418,7 +418,7 @@ void RockblockControlTask::dispatch_process_command()
             Serial.println();
 
             // Parse New Command From Input OP Codes
-            RockblockCommand* processed = commandFactory(new_raw_command);
+            RockblockCommand *processed = commandFactory(new_raw_command);
             if (processed->isValid()) {
                 // Command is Valid - Will be added to list to be Executed During CommandMonitor Execute
                 sfr::rockblock::processed_commands.push_back(processed);
@@ -497,20 +497,20 @@ void RockblockControlTask::transition_to(rockblock_mode_type new_mode)
     sfr::rockblock::mode = (uint16_t)new_mode;
 }
 
-RockblockCommand* RockblockControlTask::commandFactory(RawRockblockCommand raw)
+RockblockCommand *RockblockControlTask::commandFactory(RawRockblockCommand raw)
 {
     // Create Specific Child Class of Rockblock command depending on the OP Code
     uint16_t op_code = raw.get_f_opcode();
     if (op_code <= constants::rockblock::opcodes::sfr_field_opcode_max && op_code >= constants::rockblock::opcodes::sfr_field_opcode_min) {
-        #ifdef VERBOSE_RB
-            Serial.println("SFR Override Command");
-        #endif
+#ifdef VERBOSE_RB
+        Serial.println("SFR Override Command");
+#endif
         return new SFROverrideCommand(raw);
     } else {
-        #ifdef VERBOSE_RB
-            Serial.print("Unknown Command with opcode: ");
-            Serial.println(op_code);
-        #endif
+#ifdef VERBOSE_RB
+        Serial.print("Unknown Command with opcode: ");
+        Serial.println(op_code);
+#endif
         return new UnknownCommand(raw);
     }
 }
