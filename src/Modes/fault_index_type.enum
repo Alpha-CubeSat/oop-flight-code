@@ -23,6 +23,7 @@ enum class fault_index_type : unsigned char
     sd_card,
     camera_on_failed,
     light_val,
+    button,
 
     no_fault
 

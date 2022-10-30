@@ -3,6 +3,7 @@
 
 #include "Adafruit_VC0706.h"
 #include "Arduino.h"
+#include "RockblockCommand.hpp"
 #include "MissionMode.hpp"
 #include "Modes/burnwire_mode_type.enum"
 #include "Modes/camera_init_mode_type.enum"
@@ -64,7 +65,9 @@ namespace sfr {
         // OP Codes 1700
         extern SFRField<bool> covered;
 
-        extern SensorReading *light_val_average;
+        extern SensorReading *light_val_average_standby;
+        extern SensorReading *light_val_average_deployment;
+
     } // namespace photoresistor
     namespace mission {
         // OP Codes 1800
@@ -73,6 +76,7 @@ namespace sfr {
         extern SFRField<uint32_t> time_deployed;
         extern SFRField<bool> deployed;
         extern SFRField<bool> already_deployed;
+        extern SFRField<bool> possible_uncovered;
 
         extern Boot boot_class;
         extern AliveSignal aliveSignal_class;
@@ -312,6 +316,8 @@ namespace sfr {
     namespace button {
         // OP Codes 2700
         extern SFRField<bool> pressed;
+
+        extern SensorReading *button_pressed;
     } // namespace button
     namespace EEPROM {
         // OP Codes 2800

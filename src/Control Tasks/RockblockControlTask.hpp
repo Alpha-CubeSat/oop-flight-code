@@ -1,10 +1,10 @@
 #ifndef ROCKBLOCK_CONTROL_TASK_HPP_
 #define ROCKBLOCK_CONTROL_TASK_HPP_
 
+#include "RockblockCommand.hpp"
 #include "Control Tasks/TimedControlTask.hpp"
 #include "Modes/rockblock_mode_type.enum"
 #include "Pins.hpp"
-#include "RockblockCommand.hpp"
 #include "RockblockSimulator.hpp"
 #include "sfr.hpp"
 
