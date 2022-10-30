@@ -393,34 +393,25 @@ void RockblockControlTask::dispatch_process_command()
                         Serial.print(0, HEX);
                     Serial.print(transmitted_checksum[cs], HEX);
                 }
+#ifdef VERBOSE_RB
+                Serial.println();
+#endif
                 uint32_t calculated_checksum = 0;
                 for (int j = 0; j < i; j++) {
                     // Longitudinal redundancy check, kinda
                     calculated_checksum = calculated_checksum ^ (opcodes[j] ^ args_1[j] ^ args_2[j]);
-                    Serial.println();
-                    Serial.print(opcodes[j], HEX);
-                    Serial.print(" ");
-                    Serial.print(args_1[j], HEX);
-                    Serial.print(" ");
-                    Serial.print(args_2[j], HEX);
                 }
 
-                // sfr::rockblock::transmitted_checksum = (uint32_t)(transmitted_checksum[3] << 24 | transmitted_checksum[2] << 16 | transmitted_checksum[1] << 8 | transmitted_checksum[0]);
-                // sfr::rockblock::calculated_checksum = calculated_checksum;
-
                 // if the checksum doesn't pass, write a message and retry the process command stage
-                if (calculated_checksum != (uint32_t)(transmitted_checksum[3] << 24 | transmitted_checksum[2] << 16 | transmitted_checksum[1] << 8 | transmitted_checksum[0])) {
+                if (calculated_checksum != (uint32_t)((transmitted_checksum[0] << 24) | (transmitted_checksum[1] << 16) | (transmitted_checksum[2] << 8) | transmitted_checksum[3])) {
 #ifdef VERBOSE_RB
-                    Serial.println("\nChecksum failed, reattempting transmission");
+                    Serial.println("Checksum failed, reattempting transmission");
+                    Serial.print("Calculated Checksum: ");
                     Serial.println(calculated_checksum, HEX);
-                    Serial.println((((uint32_t)(transmitted_checksum[3]) << 24) | ((uint32_t)(transmitted_checksum[2]) << 16) | ((uint32_t)(transmitted_checksum[1]) << 8) | ((uint32_t)(transmitted_checksum[0]))), HEX);
-                    for (size_t cs = 0; cs < constants::rockblock::checksum_len; ++cs) {
-                        if (transmitted_checksum[cs] < 0x10)
-                            Serial.print(0, HEX);
-                        Serial.print(transmitted_checksum[cs], HEX);
-                    }
+                    Serial.print("Transmitted Checksum: ");
+                    Serial.println((uint32_t)((transmitted_checksum[0] << 24) | (transmitted_checksum[1] << 16) | (transmitted_checksum[2] << 8) | transmitted_checksum[3]), HEX);
 #endif
-                    transition_to(rockblock_mode_type::process_command);
+                    // What should actually happen if a checksum is failed?
                 }
 
                 break; // Exit command read loop
@@ -479,32 +470,36 @@ void RockblockControlTask::dispatch_process_command()
                 // TODO: What Goes Here @Lauren
             }
         }
-#ifdef VERBOSE_RB
-        Serial.print("Checksum: ");
-#endif
+
         uint8_t transmitted_checksum[constants::rockblock::checksum_len];
+#ifdef VERBOSE_RB
+        Serial.print("Transmitted Checksum: ");
+#endif
         for (size_t cs = 0; cs < constants::rockblock::checksum_len; ++cs) {
             transmitted_checksum[cs] = sfr::rockblock::serial.read();
             if (transmitted_checksum[cs] < 0x10)
                 Serial.print(0, HEX);
             Serial.print(transmitted_checksum[cs], HEX);
         }
+#ifdef VERBOSE_RB
+        Serial.println();
+#endif
         uint32_t calculated_checksum = 0;
         for (int j = 0; j < sfr::rockblock::max_commands_count; j++) {
             // Longitudinal redundancy check, kinda
             calculated_checksum = calculated_checksum ^ (opcodes[j] ^ args_1[j] ^ args_2[j]);
         }
-        // sfr::rockblock::transmitted_checksum = (uint32_t)(transmitted_checksum[3] << 24 | transmitted_checksum[2] << 16 | transmitted_checksum[1] << 8 | transmitted_checksum[0]);
-        // sfr::rockblock::calculated_checksum = calculated_checksum;
 
         // if the checksum doesn't pass, write a message and retry the process command stage
-        if (calculated_checksum != (uint32_t)(transmitted_checksum[3] << 24 | transmitted_checksum[2] << 16 | transmitted_checksum[1] << 8 | transmitted_checksum[0])) {
+        if (calculated_checksum != (uint32_t)((transmitted_checksum[0] << 24) | (transmitted_checksum[1] << 16) | (transmitted_checksum[2] << 8) | transmitted_checksum[3])) {
 #ifdef VERBOSE_RB
-            Serial.println("\nChecksum failed, reattempting transmission");
+            Serial.println("Checksum failed, reattempting transmission");
+            Serial.print("Calculated Checksum: ");
             Serial.println(calculated_checksum, HEX);
-            Serial.println((uint32_t)(transmitted_checksum[3] << 24 | transmitted_checksum[2] << 16 | transmitted_checksum[1] << 8 | transmitted_checksum[0]), HEX);
+            Serial.print("Transmitted Checksum: ");
+            Serial.println((uint32_t)((transmitted_checksum[0] << 24) | (transmitted_checksum[1] << 16) | (transmitted_checksum[2] << 8) | transmitted_checksum[3]), HEX);
 #endif
-            transition_to(rockblock_mode_type::process_command);
+            // What should actually happen if a checksum is failed?
         }
 
         sfr::rockblock::conseq_reads++;
