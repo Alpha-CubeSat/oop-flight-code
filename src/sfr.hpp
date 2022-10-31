@@ -3,7 +3,6 @@
 
 #include "Adafruit_VC0706.h"
 #include "Arduino.h"
-#include "Commands/RockblockCommand.hpp"
 #include "MissionMode.hpp"
 #include "Modes/burnwire_mode_type.enum"
 #include "Modes/camera_init_mode_type.enum"
@@ -12,6 +11,8 @@
 #include "Modes/sensor_mode_type.enum"
 #include "Modes/simple_acs_type.enum"
 #include "Phase.hpp"
+#include "RockblockCommand.hpp"
+#include "RockblockSimulator.hpp"
 #include "SFRField.hpp"
 #include "SensorReading.hpp"
 #include "constants.hpp"
@@ -211,7 +212,7 @@ namespace sfr {
         extern int commas[constants::rockblock::num_commas];
 
         extern std::deque<RawRockblockCommand> raw_commands;
-        extern std::deque<RockblockCommand> processed_commands;
+        extern std::deque<RockblockCommand *> processed_commands;
 
         extern SFRField<uint8_t> max_commands_count;
 
@@ -233,6 +234,12 @@ namespace sfr {
 
         extern SFRField<uint16_t> downlink_report_type;
         extern SFRField<uint16_t> mode;
+
+#ifndef SIMULATOR
+        extern HardwareSerial serial;
+#else
+        extern RockblockSimulator serial;
+#endif
 
     } // namespace rockblock
     namespace imu {
