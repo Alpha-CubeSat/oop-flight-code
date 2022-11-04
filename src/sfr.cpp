@@ -277,7 +277,6 @@ namespace sfr {
         std::deque<uint8_t> imu_dlink;
 
         boolean report_written = false;
-        boolean report_downlinked = true;
         boolean report_ready = true;
 
     } // namespace imu

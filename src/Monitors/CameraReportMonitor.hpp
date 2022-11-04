@@ -18,7 +18,6 @@ public:
     uint32_t fragment_number_requested;
     uint8_t serial_requested;
     boolean images_written = 0;
-    boolean full_image_written = false;
     uint32_t fragment_number = 0;
     uint32_t current_serial;
 };

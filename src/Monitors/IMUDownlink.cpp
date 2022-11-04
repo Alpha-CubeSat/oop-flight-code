@@ -29,6 +29,7 @@ void IMUDownlink::execute()
     }
 
     // need to be stored in sfr later (time to record imu data after deployment)
+    // 60 seconds is about 14 packets
     if (millis() - sfr::mission::time_deployed > 60 * constants::time::one_second) {
         sfr::imu::sample_gyro = false;
         sfr::imu::report_written = true;

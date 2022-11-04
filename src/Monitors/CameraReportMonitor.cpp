@@ -18,9 +18,6 @@ void CameraReportMonitor::execute()
         Serial.println("Current serial: " + String(current_serial));
         Serial.println("Current fragment: " + String(fragment_number));
 #endif
-        if (full_image_written == true || fragment_number == 0) {
-            full_image_written = false;
-        }
         create_camera_report(fragment_number, current_serial);
         if (fragment_number == sfr::rockblock::camera_max_fragments[current_serial]) {
             current_serial += 1;

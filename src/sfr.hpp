@@ -270,7 +270,6 @@ namespace sfr {
         extern std::deque<uint8_t> imu_dlink;
 
         extern boolean report_written;
-        extern boolean report_downlinked;
         extern boolean report_ready;
 
     } // namespace imu

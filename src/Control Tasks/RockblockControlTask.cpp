@@ -336,7 +336,6 @@ void RockblockControlTask::dispatch_process_mt_status()
             sfr::rockblock::camera_report.clear();
         }
         if (sfr::rockblock::downlink_report_type == (uint16_t)report_type::imu_report) {
-            sfr::imu::report_downlinked = true;
             sfr::rockblock::imu_report.clear();
         }
         transition_to(rockblock_mode_type::read_message);
@@ -484,7 +483,6 @@ void RockblockControlTask::dispatch_end_transmission()
         sfr::rockblock::camera_report.clear();
     }
     if (sfr::rockblock::downlink_report_type == (uint16_t)report_type::imu_report) {
-        sfr::imu::report_downlinked = true;
         sfr::rockblock::imu_report.clear();
     }
     transition_to(rockblock_mode_type::standby);
