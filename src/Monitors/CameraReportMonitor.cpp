@@ -7,12 +7,12 @@ CameraReportMonitor::CameraReportMonitor(unsigned int offset)
 void CameraReportMonitor::execute()
 {
     // Get a requested fragment
-    if (sfr::camera::report_downlinked == true && fragment_requested == true) {
+    if (sfr::rockblock::camera_report.empty() && fragment_requested) {
         create_camera_report(fragment_number_requested, serial_requested);
         fragment_requested = false;
     }
     // Prepare data from an image taken for downlink
-    else if (sfr::camera::report_downlinked == true && images_written != 0) {
+    else if (sfr::rockblock::camera_report.empty() && images_written != 0) {
 #ifdef VERBOSE
         Serial.println("Report monitor started");
         Serial.println("Current serial: " + String(current_serial));
@@ -89,5 +89,4 @@ void CameraReportMonitor::create_camera_report(int fragment_number, uint8_t seri
         sfr::rockblock::camera_report.push_back(parsedbuffer[i]);
     }
     sfr::camera::report_ready = true;
-    sfr::camera::report_downlinked = false;
 }

@@ -187,7 +187,6 @@ namespace sfr {
         extern SFRField<uint16_t> failed_limit;
 
         extern boolean report_written;
-        extern boolean report_downlinked;
         extern boolean report_ready;
 
     } // namespace camera

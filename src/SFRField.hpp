@@ -47,8 +47,8 @@ public:
     SFRField(T default_val, T min, T max, int opcode_val)
     {
         value = default_val;
-        min = min;
-        max = max;
+        this->min = min;
+        this->max = max;
         bounded = true;
         opcode = opcode_val;
         resolution = 1;
@@ -73,11 +73,11 @@ public:
     SFRField(float default_val, float min, float max, int opcode_val, float resolution)
     {
         value = default_val * resolution;
-        min = min;
-        max = max;
+        this->min = min;
+        this->max = max;
         bounded = true;
         opcode = opcode_val;
-        resolution = resolution;
+        this->resolution = resolution;
 #ifdef DEBUG
         T inital = default_val;
 #endif

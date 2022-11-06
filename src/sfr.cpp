@@ -194,7 +194,6 @@ namespace sfr {
         SFRField<uint16_t> failed_limit = SFRField<uint16_t>(5, 2018);
 
         boolean report_written = false;
-        boolean report_downlinked = true;
         boolean report_ready = true;
 
     } // namespace camera
