@@ -11,17 +11,18 @@ void IMUDownlinkReportMonitor::execute()
 
     if (fragment_number < sfr::imu::max_fragments && sfr::rockblock::imu_report.empty() && sfr::imu::report_written) {
         create_imu_downlink_report(fragment_number);
-        // imu_downlink buffer is empty and all fragments have been downlinked
-        if (sfr::imu::imu_dlink.size() == 0) {
-            sfr::imu::report_ready = false;
-        } else {
-            fragment_number++;
-        }
+        fragment_number++;
     }
 }
 
 void IMUDownlinkReportMonitor::create_imu_downlink_report(int fragment_number)
 {
+
+    // imu_dlink empty and all fragments have been downlinked
+    if (sfr::imu::imu_dlink.size() == 0 && sfr::rockblock::imu_report.size() == 0) {
+        sfr::imu::report_ready = false;
+        return;
+    }
 
     // pushed imu report id
     sfr::rockblock::imu_report.push_back(24);
