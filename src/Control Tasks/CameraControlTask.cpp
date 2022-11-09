@@ -49,6 +49,7 @@ void CameraControlTask::execute()
         Pins::setPinState(constants::camera::tx, LOW);
         sfr::camera::powered = false;
         sfr::camera::turn_off = false;
+        sfr::camera::init_mode = (uint16_t)camera_init_mode_type::in_progress;
     }
 
     if (jpglen > 0) {
@@ -124,6 +125,7 @@ void CameraControlTask::camera_init()
             }
             break;
         case 1: // step 1 - setting power
+            // zag7 check the pin is correct
             Pins::setPinState(constants::camera::power_on_pin, HIGH);
             sfr::camera::start_progress++;
             break;

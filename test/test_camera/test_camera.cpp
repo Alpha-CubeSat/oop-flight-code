@@ -9,7 +9,7 @@ void test_camera_valid_initialize()
     TEST_ASSERT_EQUAL(2, 2);
 }
 
-void test_camera_power_on()
+void test_camera_power_on_and_off()
 {
 
     CameraControlTask camera_control_task(0);
@@ -25,9 +25,13 @@ void test_camera_power_on()
     delay(500);
     camera_control_task.execute();
     TEST_ASSERT_EQUAL(3, sfr::camera::start_progress);
-    delay(200);
+    delay(600);
     camera_control_task.execute();
     TEST_ASSERT_EQUAL(4, sfr::camera::start_progress);
+    delay(300);
+    camera_control_task.execute();
+    TEST_ASSERT_EQUAL(5, sfr::camera::start_progress);
+    delay(100);
     camera_control_task.execute();
     TEST_ASSERT_EQUAL(true, sfr::camera::powered);
 
@@ -35,27 +39,38 @@ void test_camera_power_on()
     TEST_ASSERT_EQUAL(false, sfr::camera::turn_on);
     TEST_ASSERT_EQUAL(true, sfr::camera::powered);
     TEST_ASSERT_EQUAL(sensor_mode_type::normal, sfr::camera::mode);
+
+    sfr::camera::take_photo = true;
+    for (int i = 0; i< 80; i++) {
+        camera_control_task.execute();
+    }
+    TEST_ASSERT_EQUAL(true, sfr::camera::report_ready);
+    TEST_ASSERT_FALSE(sfr::camera::take_photo);
+    TEST_ASSERT_EQUAL(1, sfr::camera::images_written);
+    TEST_ASSERT_FALSE(sfr::camera::powered);
+    TEST_ASSERT_FALSE(sfr::camera::turn_off);
 }
 
 void test_camera_power_off()
 {
     CameraControlTask camera_control_task(0);
-    TEST_ASSERT_EQUAL(false, sfr::camera::powered);
+    TEST_ASSERT_FALSE(sfr::camera::powered);
 
     sfr::camera::turn_on = true;
     camera_control_task.execute();
-    TEST_ASSERT_EQUAL(true, sfr::camera::powered);
+    TEST_ASSERT_TRUE(sfr::camera::powered);
 
     sfr::camera::turn_on = false;
     sfr::camera::turn_off = true;
     camera_control_task.execute();
-    TEST_ASSERT_EQUAL(false, sfr::camera::powered);
+    TEST_ASSERT_FALSE(sfr::camera::powered);
 }
 
 void test_take_picture()
 {
     CameraControlTask camera_control_task(0);
-    TEST_ASSERT_EQUAL(false, sfr::camera::powered);
+    TEST_ASSERT_FALSE(sfr::camera::powered);
+    TEST_ASSERT_EQUAL(5, sfr::camera::start_progress);
 
     sfr::camera::turn_on = true;
     camera_control_task.execute();
@@ -73,16 +88,18 @@ void test_camera_report_prepare()
     sfr::camera::report_ready = true;
     camera_report_monitor.execute();
     TEST_ASSERT_EQUAL(false, sfr::camera::report_ready);
-    TEST_ASSERT_EQUAL(sfr::camera::current_serial, sfr::camera::images_written);
+    TEST_ASSERT_FALSE(sfr::rockblock::camera_report.empty());
+    sfr::rockblock::camera_report.pop_front();
+    TEST_ASSERT_EQUAL(sfr::rockblock::camera_report.front(), sfr::camera::images_written);
 }
 
 int test_camera()
 {
     UNITY_BEGIN();
     RUN_TEST(test_camera_valid_initialize);
-    RUN_TEST(test_camera_power_on);
-    RUN_TEST(test_camera_power_off);
-    RUN_TEST(test_take_picture);
+    RUN_TEST(test_camera_power_on_and_off);
+    // RUN_TEST(test_camera_power_off);
+    // RUN_TEST(test_take_picture);
     RUN_TEST(test_camera_report_prepare);
     return UNITY_END();
 }
@@ -98,6 +115,7 @@ void setup()
 {
     delay(2000);
     Serial.begin(9600);
+    Serial.println("Camera Test Started");
     test_camera();
 }
 
