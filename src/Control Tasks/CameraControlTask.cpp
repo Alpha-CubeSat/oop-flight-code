@@ -26,12 +26,12 @@ void CameraControlTask::execute()
         if (sfr::camera::init_mode == (uint16_t)camera_init_mode_type::complete) {
             transition_to_normal();
         } else if (sfr::camera::init_mode == (uint16_t)camera_init_mode_type::failed) {
-            if (sfr::camera::failed_times = sfr::camera::failed_limit) {
+            if (sfr::camera::failed_times == sfr::camera::failed_limit) {
                 sfr::camera::failed_times = 0; // reset
                 transition_to_abnormal_init();
             } else {
                 sfr::camera::failed_times = sfr::camera::failed_times + 1;
-                Serial.println("failed times: ");
+                Serial.print("failed times: ");
                 Serial.println(sfr::camera::failed_times);
                 sfr::camera::init_mode = (uint16_t)camera_init_mode_type::awaiting;
             }
