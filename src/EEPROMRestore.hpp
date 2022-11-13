@@ -10,7 +10,7 @@ public:
     static void execute();
 
 private:
-    int get_address();
+    void set_address();
 };
 
 #endif

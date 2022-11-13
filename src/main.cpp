@@ -1,8 +1,7 @@
-#include "Control Tasks/PinControlTask.hpp"
 #include "MainControlLoop.hpp"
+#include "Pins.hpp"
 
 MainControlLoop mcl;
-PinControlTask pin_control_task;
 
 #ifndef UNIT_TEST
 
@@ -12,7 +11,7 @@ void setup()
     // delay(7200000);
     Serial.begin(9600);
     delay(5000);
-    pin_control_task.execute();
+    Pins::setInitialPinStates();
 }
 
 void loop()
