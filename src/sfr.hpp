@@ -148,9 +148,13 @@ namespace sfr {
         extern std::deque<int> mode_history;
     } // namespace mission
     namespace burnwire {
+        // OP Code 4444
+        extern bool fire;
+
+        // OP Code 5555
+        extern bool arm;
+
         // OP Codes 1900
-        extern SFRField<bool> fire;
-        extern SFRField<bool> arm;
         extern SFRField<uint16_t> attempts;
         extern SFRField<uint16_t> camera_attempts;
         extern SFRField<uint32_t> start_time;
