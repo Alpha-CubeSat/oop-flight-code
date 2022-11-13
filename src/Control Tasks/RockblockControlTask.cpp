@@ -407,8 +407,8 @@ void RockblockControlTask::dispatch_process_command()
                 // if the checksum doesn't pass, write a message and end the transmission
                 if (calculated_checksum != (uint32_t)((transmitted_checksum[0] << 24) | (transmitted_checksum[1] << 16) | (transmitted_checksum[2] << 8) | transmitted_checksum[3])) {
 #ifdef VERBOSE_RB
-                    Serial.println("Checksum failed, reattempting transmission");
-                    Serial.print("Calculated Checksum: ");
+                    Serial.println("Checksum failed, cancelling transmission");
+                    Serial.print("Calculated Checksum:  ");
                     Serial.println(calculated_checksum, HEX);
                     Serial.print("Transmitted Checksum: ");
                     Serial.println((uint32_t)((transmitted_checksum[0] << 24) | (transmitted_checksum[1] << 16) | (transmitted_checksum[2] << 8) | transmitted_checksum[3]), HEX);
@@ -497,8 +497,8 @@ void RockblockControlTask::dispatch_process_command()
             // if the checksum doesn't pass, write a message and end the transmission
             if (calculated_checksum != (uint32_t)((transmitted_checksum[0] << 24) | (transmitted_checksum[1] << 16) | (transmitted_checksum[2] << 8) | transmitted_checksum[3])) {
 #ifdef VERBOSE_RB
-                Serial.println("Checksum failed, reattempting transmission");
-                Serial.print("Calculated Checksum: ");
+                Serial.println("Checksum failed, cancelling transmission");
+                Serial.print("Calculated Checksum:  ");
                 Serial.println(calculated_checksum, HEX);
                 Serial.print("Transmitted Checksum: ");
                 Serial.println((uint32_t)((transmitted_checksum[0] << 24) | (transmitted_checksum[1] << 16) | (transmitted_checksum[2] << 8) | transmitted_checksum[3]), HEX);

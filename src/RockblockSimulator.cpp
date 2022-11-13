@@ -20,7 +20,8 @@ RockblockSimulator::RockblockSimulator()
     // end of command upload flag 1       00
     // end of command upload flag 2       FA
     // checksum                     11110810
-    insert("1901111111110000000000FA11110810");
+    insert("1901111111110000000000FA11110819"); // should fail due to incorrect checksum
+    insert("1901111111110000000000FA11110810"); // should successfully transmit
 }
 
 void RockblockSimulator::begin(uint32_t baud)
