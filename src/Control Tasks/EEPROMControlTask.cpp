@@ -7,7 +7,6 @@ EEPROMControlTask::EEPROMControlTask(unsigned int offset)
 
 void EEPROMControlTask::execute()
 {
-
     // WAIT TIME TRACKING
     if (!sfr::EEPROM::alloted_time_passed) {
         /* The wait time of two hours was not reached at the previous EEPROM read. Since then, the wait time
