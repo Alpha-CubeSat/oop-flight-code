@@ -18,7 +18,7 @@ private:
     float min;                // min valid value
     std::deque<float> buffer; // buffer used to store the raw values
     boolean valid;            // if SensorReading is valid
-    bool repeated_values(std::deque<float> buffer);
+    bool repeated_values(std::deque<float> buffer, float val);
 
 public:
     SensorReading(fault_index_type type, uint8_t buffer_size, float max, float min); // constructor

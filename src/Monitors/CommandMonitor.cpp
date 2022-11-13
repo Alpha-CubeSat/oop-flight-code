@@ -8,5 +8,12 @@ CommandMonitor::CommandMonitor(unsigned int offset)
 
 void CommandMonitor::execute()
 {
-    // TODO implement- implemented as part of FS-136
+    if (sfr::rockblock::waiting_command) {
+        while (!sfr::rockblock::processed_commands.empty()) { // (Only Valid Commands - cmd.isValid())
+            RockblockCommand *command = sfr::rockblock::processed_commands.front();
+            command->execute(); // Polymorphic Command Execution
+            sfr::rockblock::processed_commands.pop_front();
+        }
+        sfr::rockblock::waiting_command = false;
+    }
 }

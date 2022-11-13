@@ -251,7 +251,8 @@ void MandatoryBurns::transition_to()
 {
     sfr::rockblock::sleep_mode = true;
     sfr::acs::off = true;
-    sfr::imu::turn_off = false;
+    sfr::imu::turn_off = true;
+    sfr::mission::possible_uncovered = true;
 }
 
 void MandatoryBurns::dispatch()
@@ -307,19 +308,25 @@ void exit_signal_phase(MissionMode *mode)
 
 void exit_detumble_phase(MissionMode *mode)
 {
-    // TODO min unstable gyro and max unstable gyro are SFR fields with resolution. FS-160
-    /*
+    // TODO min stable/unstable gyro and max stable gyro are SFR fields with resolution. FS-160
+    float gyro_x;
+    float gyro_y;
+    float gyro_z;
+
     // cubesat has stabilized: gyro z > 1 rad/s && gyro x and gyro y are below 0.2 rad/s
-    if (sfr::imu::gyro_z_average->is_valid() && sfr::imu::gyro_x_average->is_valid() && sfr::imu::gyro_y_average->is_valid() && (sfr::imu::gyro_z_average->get_value() >= sfr::detumble::min_stable_gyro_z) && (sfr::imu::gyro_x_average->get_value() <= sfr::detumble::max_stable_gyro_x) && (sfr::imu::gyro_y_average->get_value() <= sfr::detumble::max_stable_gyro_y)) {
+    if (sfr::imu::gyro_z_average->is_valid() && sfr::imu::gyro_x_average->is_valid() && sfr::imu::gyro_y_average->is_valid() &&
+        sfr::imu::gyro_z_average->get_value(&gyro_z) && gyro_z >= sfr::detumble::min_stable_gyro_z.get_float() &&
+        sfr::imu::gyro_x_average->get_value(&gyro_x) && gyro_x <= sfr::detumble::max_stable_gyro_x.get_float() &&
+        sfr::imu::gyro_y_average->get_value(&gyro_y) && gyro_y <= sfr::detumble::max_stable_gyro_y.get_float()) {
         sfr::mission::current_mode = mode;
     }
 
     // cubesat will never stabilize: x gyro or y gyro are greater than 0.7 rad/s
     if (sfr::imu::gyro_x_average->is_valid() && sfr::imu::gyro_y_average->is_valid() &&
-        (sfr::imu::gyro_x_average->get_value() >= sfr::detumble::min_unstable_gyro_x) &&
-        (sfr::imu::gyro_y_average->get_value() >= sfr::detumble::min_unstable_gyro_y)) {
+        ((sfr::imu::gyro_x_average->get_value(&gyro_x) && gyro_x >= sfr::detumble::min_unstable_gyro_x.get_float()) ||
+         (sfr::imu::gyro_y_average->get_value(&gyro_y) && gyro_y >= sfr::detumble::min_unstable_gyro_y.get_float()))) {
         sfr::mission::current_mode = mode;
-    }*/
+    }
 
     // detumble has timed out
     if (millis() - sfr::mission::stabilization->start_time >= sfr::stabilization::max_time) {

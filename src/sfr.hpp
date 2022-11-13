@@ -11,10 +11,11 @@
 #include "Modes/sensor_mode_type.enum"
 #include "Modes/simple_acs_type.enum"
 #include "Phase.hpp"
+#include "RockblockCommand.hpp"
+#include "RockblockSimulator.hpp"
 #include "SFRField.hpp"
 #include "SensorReading.hpp"
 #include "constants.hpp"
-#include <RockblockCommand.hpp>
 #include <deque>
 
 namespace sfr {
@@ -38,6 +39,12 @@ namespace sfr {
         // OP Codes 1500
         extern SFRField<uint32_t> start_time;
         extern SFRField<uint32_t> max_time;
+        extern SFRField<uint8_t> min_stable_gyro_z;
+        extern SFRField<uint8_t> max_stable_gyro_x;
+        extern SFRField<uint8_t> max_stable_gyro_y;
+        extern SFRField<uint8_t> min_unstable_gyro_x;
+        extern SFRField<uint8_t> min_unstable_gyro_y;
+
         // TODO
         extern SFRField<uint16_t> num_imu_retries;
         extern SFRField<uint16_t> max_imu_retries;
@@ -57,7 +64,9 @@ namespace sfr {
         // OP Codes 1700
         extern SFRField<bool> covered;
 
-        extern SensorReading *light_val_average;
+        extern SensorReading *light_val_average_standby;
+        extern SensorReading *light_val_average_deployment;
+
     } // namespace photoresistor
     namespace mission {
         // OP Codes 1800
@@ -66,6 +75,7 @@ namespace sfr {
         extern SFRField<uint32_t> time_deployed;
         extern SFRField<bool> deployed;
         extern SFRField<bool> already_deployed;
+        extern SFRField<bool> possible_uncovered;
 
         extern Boot boot_class;
         extern AliveSignal aliveSignal_class;
@@ -138,10 +148,14 @@ namespace sfr {
         extern std::deque<int> mode_history;
     } // namespace mission
     namespace burnwire {
+        // OP Code 4444
+        extern bool fire;
+
+        // OP Code 5555
+        extern bool arm;
+
         // OP Codes 1900
-        extern SFRField<bool> fire;
-        extern SFRField<bool> arm;
-        extern SFRField<uint16_t> regular_attempts;
+        extern SFRField<uint16_t> attempts;
         extern SFRField<uint16_t> camera_attempts;
         extern SFRField<uint32_t> mandatoryburn_start_time;
         extern SFRField<uint32_t> burn_time;
@@ -184,6 +198,7 @@ namespace sfr {
         extern boolean report_written;
         extern boolean report_downlinked;
         extern boolean report_ready;
+
     } // namespace camera
     namespace rockblock {
         // OP Codes 2100
@@ -205,7 +220,7 @@ namespace sfr {
         extern int commas[constants::rockblock::num_commas];
 
         extern std::deque<RawRockblockCommand> raw_commands;
-        extern std::deque<RockblockCommand> processed_commands;
+        extern std::deque<RockblockCommand *> processed_commands;
 
         extern SFRField<uint8_t> max_commands_count;
 
@@ -227,6 +242,12 @@ namespace sfr {
 
         extern SFRField<uint16_t> downlink_report_type;
         extern SFRField<uint16_t> mode;
+
+#ifndef SIMULATOR
+        extern HardwareSerial serial;
+#else
+        extern RockblockSimulator serial;
+#endif
 
     } // namespace rockblock
     namespace imu {
@@ -302,6 +323,8 @@ namespace sfr {
     namespace button {
         // OP Codes 2700
         extern SFRField<bool> pressed;
+
+        extern SensorReading *button_pressed;
     } // namespace button
     namespace EEPROM {
         // OP Codes 2800
