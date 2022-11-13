@@ -9,6 +9,12 @@
 
 class SFRInterface
 {
+private:
+    int field_value;    // The value of the field cast to an int
+    int data_type;      // An int representing the field's type T, 1 for bool, 2 for uint8_t, 3 for uint16_t, and 4 for uint64_t
+    int address_offset; // This field's byte offset from the beginning of the EEPROM section where SFR data is currently stored
+                        // read_address + address_offset gives this field's location in EEPROM
+    bool restore;       // If the field should be restored or not
 
 public:
     static std::map<int, SFRInterface *> opcode_lookup; // </brief Op Code Lookup Map For SFR Field Uplink Override
@@ -26,6 +32,32 @@ public:
     virtual ~SFRInterface(){};
     static void setFieldVal(int opcode, uint32_t arg1);
     virtual void setValue(uint32_t arg1);
+
+    int getValue()
+    {
+        return field_value;
+    }
+
+    int getDataType()
+    {
+        return data_type;
+    }
+
+    int getAddressOffset()
+    {
+        return address_offset;
+    }
+
+    void setRestore(bool restore)
+    {
+        // Use this function when processing command to turn off EEPROM saving for a value
+        restore = restore;
+    }
+
+    bool getRestore()
+    {
+        return restore;
+    }
 };
 
 template <typename T, typename = typename std::enable_if<std::is_arithmetic<T>::value, T>::type>
@@ -44,7 +76,7 @@ private:
 #endif
 
 public:
-    SFRField(T default_val, T min, T max, int opcode_val)
+    SFRField(T default_val, T min, T max, int opcode_val, int address_offset, bool restore)
     {
         value = default_val;
         min = min;
@@ -52,25 +84,49 @@ public:
         bounded = true;
         opcode = opcode_val;
         resolution = 1;
+        field_value = (int)value;
+        if (sizeof(T) == sizeof(uint32_t))
+            data_type = 4;
+        else if (sizeof(T) == sizeof(uint16_t))
+            data_type = 3;
+        else if (sizeof(T) == sizeof(uint8_t))
+            data_type = 2;
+        else if (sizeof(T) == sizeof(bool))
+            data_type = 1;
+        address_offset = address_offset;
+        restore = restore;
+
 #ifdef DEBUG
         T inital = default_val;
 #endif
         SFRInterface::opcode_lookup[opcode_val] = this;
     }
 
-    SFRField(T default_val, int opcode_val)
+    SFRField(T default_val, int opcode_val, int address_offset, bool restore)
     {
         value = default_val;
         bounded = false;
         opcode = opcode_val;
         resolution = 1;
+        field_value = (int)value;
+        if (sizeof(T) == sizeof(uint32_t))
+            data_type = 4;
+        else if (sizeof(T) == sizeof(uint16_t))
+            data_type = 3;
+        else if (sizeof(T) == sizeof(uint8_t))
+            data_type = 2;
+        else if (sizeof(T) == sizeof(bool))
+            data_type = 1;
+        address_offset = address_offset;
+        restore = restore;
+
 #ifdef DEBUG
         T inital = default_val;
 #endif
         SFRInterface::opcode_lookup[opcode_val] = this;
     }
 
-    SFRField(float default_val, float min, float max, int opcode_val, float resolution)
+    SFRField(float default_val, float min, float max, int opcode_val, float resolution, int address_offset, bool restore)
     {
         value = default_val * resolution;
         min = min;
@@ -78,6 +134,18 @@ public:
         bounded = true;
         opcode = opcode_val;
         resolution = resolution;
+        field_value = (int)value;
+        if (sizeof(T) == sizeof(uint32_t))
+            data_type = 4;
+        else if (sizeof(T) == sizeof(uint16_t))
+            data_type = 3;
+        else if (sizeof(T) == sizeof(uint8_t))
+            data_type = 2;
+        else if (sizeof(T) == sizeof(bool))
+            data_type = 1;
+        address_offset = address_offset;
+        restore = restore;
+
 #ifdef DEBUG
         T inital = default_val;
 #endif

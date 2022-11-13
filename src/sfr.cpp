@@ -1,84 +1,57 @@
 #include "sfr.hpp"
-
 namespace sfr {
+    std::vector<SFRInterface *> eeprom_restore;
     namespace stabilization {
         // OP Codes 1100
-        SFRField<uint32_t> max_time = SFRField<uint32_t>(30 * constants::time::one_minute, 0UL, 5 * constants::time::one_hour, 1100);
+        SFRField<uint32_t> max_time = SFRField<uint32_t>(30 * constants::time::one_minute, 0UL, 5 * constants::time::one_hour, 1100, constants::eeprom::stabilization_max_time_offset, true);
     } // namespace stabilization
     namespace boot {
         // OP Codes 1200
-        SFRField<uint32_t> max_time = SFRField<uint32_t>(2 * constants::time::one_hour, 10UL, 5 * constants::time::one_hour, 1200);
+        SFRField<uint32_t> max_time = SFRField<uint32_t>(2 * constants::time::one_hour, 10UL, 5 * constants::time::one_hour, 1200, constants::eeprom::boot_max_time_offset, true);
     } // namespace boot
     namespace simple {
         // OP Codes 1300
-        SFRField<uint32_t> max_time = SFRField<uint32_t>(5 * constants::time::one_minute, 10UL, 5 * constants::time::one_hour, 1300);
+        SFRField<uint32_t> max_time = SFRField<uint32_t>(5 * constants::time::one_minute, 10UL, 5 * constants::time::one_hour, 1300, constants::eeprom::simple_max_time_offset, true);
     } // namespace simple
     namespace point {
         // OP Codes 1400
-        SFRField<uint32_t> max_time = SFRField<uint32_t>(5 * constants::time::one_minute, 1400);
+        SFRField<uint32_t> max_time = SFRField<uint32_t>(5 * constants::time::one_minute, 1400, constants::eeprom::point_max_time_offset, true);
     } // namespace point
     namespace detumble {
         // OP Codes 1500
-        SFRField<uint32_t> start_time = SFRField<uint32_t>(0UL, 1500);
-        SFRField<uint32_t> max_time = SFRField<uint32_t>(2 * constants::time::one_hour, 1501);
+        SFRField<uint32_t> start_time = SFRField<uint32_t>(0UL, 1500, constants::eeprom::detumble_start_time_offset, true);
+        SFRField<uint32_t> max_time = SFRField<uint32_t>(2 * constants::time::one_hour, 1501, constants::eeprom::detumble_max_time_offset, true);
         // TODO
-        SFRField<uint16_t> num_imu_retries = SFRField<uint16_t>(0, 1502);
-        SFRField<uint16_t> max_imu_retries = SFRField<uint16_t>(5, 1503);
+        SFRField<uint16_t> num_imu_retries = SFRField<uint16_t>(0, 1502, constants::eeprom::detumble_num_imu_retries_offset, true);
+        SFRField<uint16_t> max_imu_retries = SFRField<uint16_t>(5, 1503, constants::eeprom::detumble_max_imu_retries_offset, true);
 
-        SFRField<uint8_t> min_stable_gyro_z = SFRField<uint8_t>(1, 0, 2, 1504, 10);
-        SFRField<uint8_t> max_stable_gyro_x = SFRField<uint8_t>(.2, 0, 1, 1505, 10);
-        SFRField<uint8_t> max_stable_gyro_y = SFRField<uint8_t>(.2, 0, 1, 1506, 10);
+        SFRField<uint8_t> min_stable_gyro_z = SFRField<uint8_t>(1, 0, 2, 1504, 10, constants::eeprom::detumble_min_stable_gyro_z_offset, true);
+        SFRField<uint8_t> max_stable_gyro_x = SFRField<uint8_t>(.2, 0, 1, 1505, 10, constants::eeprom::detumble_max_stable_gyro_x_offset, true);
+        SFRField<uint8_t> max_stable_gyro_y = SFRField<uint8_t>(.2, 0, 1, 1506, 10, constants::eeprom::detumble_max_stable_gyro_y_offset, true);
 
-        SFRField<uint8_t> min_unstable_gyro_x = SFRField<uint8_t>(.7, 0, 1, 1507, 10);
-        SFRField<uint8_t> min_unstable_gyro_y = SFRField<uint8_t>(.7, 0, 1, 1508, 10);
+        SFRField<uint8_t> min_unstable_gyro_x = SFRField<uint8_t>(.7, 0, 1, 1507, 10, constants::eeprom::detumble_min_unstable_gyro_x_offset, true);
+        SFRField<uint8_t> min_unstable_gyro_y = SFRField<uint8_t>(.7, 0, 1, 1508, 10, constants::eeprom::detumble_min_unstable_gyro_y_offset, true);
     } // namespace detumble
     namespace aliveSignal {
         // OP Codes 1600
-        SFRField<uint16_t> max_downlink_hard_faults = SFRField<uint16_t>(3, 1600);
-        SFRField<bool> downlinked = SFRField<bool>(false, 1601);
-        SFRField<uint32_t> max_time = SFRField<uint32_t>(2 * constants::time::one_hour, 1602);
-        SFRField<uint16_t> num_hard_faults = SFRField<uint16_t>(0, 1603);
+        SFRField<uint16_t> max_downlink_hard_faults = SFRField<uint16_t>(3, 1600, constants::eeprom::aliveSignal_max_downlink_hard_faults_offset, true);
+        SFRField<bool> downlinked = SFRField<bool>(false, 1601, constants::eeprom::aliveSignal_downlinked_offset, true);
+        SFRField<uint32_t> max_time = SFRField<uint32_t>(2 * constants::time::one_hour, 1602, constants::eeprom::aliveSignal_max_time_offset, true);
+        SFRField<uint16_t> num_hard_faults = SFRField<uint16_t>(0, 1603, constants::eeprom::aliveSignal_num_hard_faults_offset, true);
     } // namespace aliveSignal
-    namespace pins {
-        // TODO confirm initial pin states are correct FS-159
-        std::map<int, int> pinMap = {
-            {constants::photoresistor::pin, LOW},
-            {constants::burnwire::first_pin, LOW},
-            {constants::burnwire::second_pin, LOW},
-            {constants::rockblock::sleep_pin, LOW},
-            {constants::temperature::pin, LOW},
-            {constants::current::pin, LOW},
-            {constants::acs::xPWMpin, LOW},
-            {constants::acs::yPWMpin, LOW},
-            {constants::acs::zPWMpin, LOW},
-            {constants::acs::yout1, LOW},
-            {constants::acs::yout2, LOW},
-            {constants::acs::xout1, LOW},
-            {constants::acs::xout2, LOW},
-            {constants::acs::zout1, LOW},
-            {constants::acs::zout2, LOW},
-            {constants::acs::STBXYpin, LOW},
-            {constants::acs::STBZpin, LOW},
-            {constants::battery::voltage_value_pin, LOW},
-            {constants::battery::allow_measurement_pin, HIGH},
-            {constants::camera::power_on_pin, LOW},
-            {constants::camera::rx, LOW},
-            {constants::camera::tx, LOW},
-            {constants::button::button_pin, LOW}};
-    } // namespace pins
     namespace photoresistor {
         // OP Codes 1700
-        SFRField<bool> covered = SFRField<bool>(true, 1700);
+        SFRField<bool> covered = SFRField<bool>(true, 1700, constants::eeprom::photoresistor_covered_offset, true);
 
         SensorReading *light_val_average = new SensorReading(fault_index_type::light_val, 20, 0, 1000);
     } // namespace photoresistor
     namespace mission {
         // OP Codes 1800
-        SFRField<uint32_t> acs_transmit_cycle_time = SFRField<uint32_t>(constants::time::one_minute * 100, 1800);
+        SFRField<uint32_t> acs_transmit_cycle_time = SFRField<uint32_t>(constants::time::one_minute * 100, 1800, constants::eeprom::mission_acs_transmit_cycle_time_offset, true);
 
-        SFRField<uint32_t> time_deployed = SFRField<uint32_t>(0, 1801);
-        SFRField<bool> deployed = SFRField<bool>(false, 1802);
-        SFRField<bool> already_deployed = SFRField<bool>(false, 1803);
+        SFRField<uint32_t> time_deployed = SFRField<uint32_t>(0, 1801, constants::eeprom::mission_time_deployed_offset, true);
+        SFRField<bool> deployed = SFRField<bool>(false, 1802, constants::eeprom::mission_deployed_offset, true);
+        SFRField<bool> already_deployed = SFRField<bool>(false, 1803, constants::eeprom::mission_already_deployed_offset, true);
 
         Boot boot_class;
         AliveSignal aliveSignal_class;
@@ -152,43 +125,42 @@ namespace sfr {
     } // namespace mission
     namespace burnwire {
         // OP Codes 1900
-        SFRField<bool> fire = SFRField<bool>(false, 1900);
-        SFRField<bool> arm = SFRField<bool>(false, 1901);
-        SFRField<uint16_t> attempts = SFRField<uint16_t>(0, 1902);
-        SFRField<uint16_t> camera_attempts = SFRField<uint16_t>(0, 1904);
-        SFRField<uint32_t> start_time = SFRField<uint32_t>(0, 1903);
-        SFRField<uint32_t> burn_time = SFRField<uint32_t>(500, 1905);
-        SFRField<uint32_t> armed_time = SFRField<uint32_t>(2 * constants::time::one_day, 1906);
-        SFRField<uint16_t> mode = SFRField<uint16_t>((uint16_t)burnwire_mode_type::standby, 1907);
-        SFRField<uint16_t> attempts_limit = SFRField<uint16_t>(10, 1908);
+        SFRField<bool> fire = SFRField<bool>(false, 1900, constants::eeprom::burnwire_fire_offset, true);
+        SFRField<bool> arm = SFRField<bool>(false, 1901, constants::eeprom::burnwire_arm_offset, true);
+        SFRField<uint16_t> attempts = SFRField<uint16_t>(0, 1902, constants::eeprom::burnwire_attempts_offset, true);
+        SFRField<uint16_t> camera_attempts = SFRField<uint16_t>(0, 1904, constants::eeprom::burnwire_camera_attempts_offset, true);
+        SFRField<uint32_t> start_time = SFRField<uint32_t>(0, 1903, constants::eeprom::burnwire_start_time_offset, true);
+        SFRField<uint32_t> burn_time = SFRField<uint32_t>(500, 1905, constants::eeprom::burnwire_burn_time_offset, true);
+        SFRField<uint32_t> armed_time = SFRField<uint32_t>(2 * constants::time::one_day, 1906, constants::eeprom::burnwire_armed_time_offset, true);
+        SFRField<uint16_t> mode = SFRField<uint16_t>((uint16_t)burnwire_mode_type::standby, 1907, constants::eeprom::burnwire_mode_offset, true);
+        SFRField<uint16_t> attempts_limit = SFRField<uint16_t>(10, 1908, constants::eeprom::burnwire_attempts_limit_offset, true);
     } // namespace burnwire
     namespace camera {
         // OP Codes 2000
-        SFRField<bool> photo_taken_sd_failed = SFRField<bool>(false, 2000);
-        SFRField<bool> take_photo = SFRField<bool>(false, 2001);
-        SFRField<bool> turn_on = SFRField<bool>(false, 2002);
-        SFRField<bool> turn_off = SFRField<bool>(false, 2003);
-        SFRField<bool> powered = SFRField<bool>(false, 2004);
+        SFRField<bool> photo_taken_sd_failed = SFRField<bool>(false, 2000, constants::eeprom::camera_photo_taken_sd_failed_offset, true);
+        SFRField<bool> take_photo = SFRField<bool>(false, 2001, constants::eeprom::camera_take_photo_offset, true);
+        SFRField<bool> turn_on = SFRField<bool>(false, 2002, constants::eeprom::camera_turn_on_offset, true);
+        SFRField<bool> turn_off = SFRField<bool>(false, 2003, constants::eeprom::camera_turn_off_offset, true);
+        SFRField<bool> powered = SFRField<bool>(false, 2004, constants::eeprom::camera_powered_offset, true);
 
         // Initialization
-        SFRField<uint8_t> start_progress = SFRField<uint8_t>(0, 2005);
-        SFRField<uint32_t> step_time = SFRField<uint32_t>(0, 2006);
-        SFRField<uint32_t> init_start_time = SFRField<uint32_t>(0, 2007);
-        SFRField<uint32_t> init_timeout = SFRField<uint32_t>(12000, 2008);
-        SFRField<uint32_t> begin_delay = SFRField<uint32_t>(100, 2009);
-        SFRField<uint32_t> resolution_set_delay = SFRField<uint32_t>(500, 2010);
-        SFRField<uint32_t> resolution_get_delay = SFRField<uint32_t>(200, 2011);
+        SFRField<uint8_t> start_progress = SFRField<uint8_t>(0, 2005, constants::eeprom::camera_start_progress_offset, true);
+        SFRField<uint32_t> step_time = SFRField<uint32_t>(0, 2006, constants::eeprom::camera_step_time_offset, true);
+        SFRField<uint32_t> init_start_time = SFRField<uint32_t>(0, 2007, constants::eeprom::camera_init_start_time_offset, true);
+        SFRField<uint32_t> init_timeout = SFRField<uint32_t>(12000, 2008, constants::eeprom::camera_init_timeout_offset, true);
+        SFRField<uint32_t> begin_delay = SFRField<uint32_t>(100, 2009, constants::eeprom::camera_begin_delay_offset, true);
+        SFRField<uint32_t> resolution_set_delay = SFRField<uint32_t>(500, 2010, constants::eeprom::camera_resolution_set_delay_offset, true);
+        SFRField<uint32_t> resolution_get_delay = SFRField<uint32_t>(200, 2011, constants::eeprom::camera_resolution_get_delay_offset, true);
+        SFRField<uint16_t> init_mode = SFRField<uint16_t>((uint16_t)camera_init_mode_type::awaiting, 2012, constants::eeprom::camera_init_mode_offset, true);
+        SFRField<uint16_t> mode = SFRField<uint16_t>((uint16_t)sensor_mode_type::normal, 2013, constants::eeprom::camera_mode_offset, true);
 
-        SFRField<uint16_t> init_mode = SFRField<uint16_t>((uint16_t)camera_init_mode_type::awaiting, 2012);
-        SFRField<uint16_t> mode = SFRField<uint16_t>((uint16_t)sensor_mode_type::normal, 2013);
+        SFRField<uint32_t> images_written = SFRField<uint32_t>(0, 2014, constants::eeprom::camera_images_written_offset, true);
+        SFRField<uint32_t> fragments_written = SFRField<uint32_t>(0, 2015, constants::eeprom::camera_fragments_written_offset, true);
 
-        SFRField<uint32_t> images_written = SFRField<uint32_t>(0, 2014);
-        SFRField<uint32_t> fragments_written = SFRField<uint32_t>(0, 2015);
+        SFRField<uint32_t> set_res = SFRField<uint32_t>(VC0706_160x120, 2016, constants::eeprom::camera_set_res_offset, true);
 
-        SFRField<uint32_t> set_res = SFRField<uint32_t>(VC0706_160x120, 2016);
-
-        SFRField<uint16_t> failed_times = SFRField<uint16_t>(0, 2017);
-        SFRField<uint16_t> failed_limit = SFRField<uint16_t>(5, 2018);
+        SFRField<uint16_t> failed_times = SFRField<uint16_t>(0, 2017, constants::eeprom::camera_failed_times_offset, true);
+        SFRField<uint16_t> failed_limit = SFRField<uint16_t>(5, 2018, constants::eeprom::camera_failed_limit_offset, true);
 
         boolean report_written = false;
         boolean report_downlinked = true;
@@ -197,12 +169,12 @@ namespace sfr {
     } // namespace camera
     namespace rockblock {
         // OP Codes 2100
-        SFRField<bool> rockblock_ready_status = SFRField<bool>(false, 2100);
+        SFRField<bool> ready_status = SFRField<bool>(false, 2100, constants::eeprom::rockblock_ready_status_offset, true);
 
-        SFRField<uint32_t> last_downlink = SFRField<uint32_t>(0, 2101);
-        SFRField<uint32_t> downlink_period = SFRField<uint32_t>(0, 2102);
+        SFRField<uint32_t> last_downlink = SFRField<uint32_t>(0, 2101, constants::eeprom::rockblock_last_downlink_offset, true);
+        SFRField<uint32_t> downlink_period = SFRField<uint32_t>(0, 2102, constants::eeprom::rockblock_downlink_period_offset, true);
 
-        SFRField<bool> waiting_message = SFRField<bool>(false, 2103);
+        SFRField<bool> waiting_message = SFRField<bool>(false, 2103, constants::eeprom::rockblock_waiting_message_offset, true);
 
         std::deque<uint8_t> downlink_report;
         std::deque<uint8_t> normal_report;
@@ -217,40 +189,40 @@ namespace sfr {
         std::deque<RawRockblockCommand> raw_commands;
         std::deque<RockblockCommand> processed_commands;
 
-        SFRField<uint8_t> max_commands_count = SFRField<uint8_t>(10, 2104);
+        SFRField<uint8_t> max_commands_count = SFRField<uint8_t>(10, 2104, constants::eeprom::rockblock_max_commands_count_offset, true);
 
-        SFRField<uint16_t> imu_max_fragments = SFRField<uint16_t>(256, 2105);
+        SFRField<uint16_t> imu_max_fragments = SFRField<uint16_t>(256, 2105, constants::eeprom::rockblock_imu_max_fragments_offset, true);
 
-        SFRField<uint32_t> imudownlink_start_time = SFRField<uint32_t>(0, 2106);
-        SFRField<uint32_t> imudownlink_remain_time = SFRField<uint32_t>(constants::time::one_minute, 2107);
-        SFRField<bool> imu_first_start = SFRField<bool>(true, 2108);
-        SFRField<bool> imu_downlink_on = SFRField<bool>(true, 2109);
+        SFRField<uint32_t> imudownlink_start_time = SFRField<uint32_t>(0, 2106, constants::eeprom::rockblock_imudownlink_start_time_offset, true);
+        SFRField<uint32_t> imudownlink_remain_time = SFRField<uint32_t>(constants::time::one_minute, 2107, constants::eeprom::rockblock_imudownlink_remain_time_offset, true);
+        SFRField<bool> imu_first_start = SFRField<bool>(true, 2108, constants::eeprom::rockblock_imu_first_start_offset, true);
+        SFRField<bool> imu_downlink_on = SFRField<bool>(true, 2109, constants::eeprom::rockblock_imu_downlink_on_offset, true);
 
-        SFRField<bool> flush_status = SFRField<bool>(false, 2108);
-        SFRField<bool> waiting_command = SFRField<bool>(false, 2109);
-        SFRField<uint32_t> conseq_reads = SFRField<uint32_t>(0, 2110);
-        SFRField<uint32_t> timeout = SFRField<uint32_t>(10 * constants::time::one_minute, 2111);
-        SFRField<uint32_t> start_time = SFRField<uint32_t>(0, 2112);
-        SFRField<uint32_t> start_time_check_signal = SFRField<uint32_t>(0, 2113);
-        SFRField<uint32_t> max_check_signal_time = SFRField<uint32_t>(constants::time::one_minute, 2114);
-        SFRField<bool> sleep_mode = SFRField<bool>(false, 2115);
+        SFRField<bool> flush_status = SFRField<bool>(false, 2108, constants::eeprom::rockblock_flush_status_offset, true);
+        SFRField<bool> waiting_command = SFRField<bool>(false, 2109, constants::eeprom::rockblock_waiting_command_offset, true);
+        SFRField<uint32_t> conseq_reads = SFRField<uint32_t>(0, 2110, constants::eeprom::rockblock_conseq_reads_offset, true);
+        SFRField<uint32_t> timeout = SFRField<uint32_t>(10 * constants::time::one_minute, 2111, constants::eeprom::rockblock_timeout_offset, true);
+        SFRField<uint32_t> start_time = SFRField<uint32_t>(0, 2112, constants::eeprom::rockblock_start_time_offset, true);
+        SFRField<uint32_t> start_time_check_signal = SFRField<uint32_t>(0, 2113, constants::eeprom::rockblock_start_time_check_signal_offset, true);
+        SFRField<uint32_t> max_check_signal_time = SFRField<uint32_t>(constants::time::one_minute, 2114, constants::eeprom::rockblock_max_check_signal_time_offset, true);
+        SFRField<bool> sleep_mode = SFRField<bool>(false, 2115, constants::eeprom::rockblock_sleep_mode_offset, true);
 
-        SFRField<uint16_t> downlink_report_type = SFRField<uint16_t>((uint16_t)report_type::normal_report, 2116);
-        SFRField<uint16_t> mode = SFRField<uint16_t>((uint16_t)rockblock_mode_type::send_at, 2117);
+        SFRField<uint16_t> downlink_report_type = SFRField<uint16_t>((uint16_t)report_type::normal_report, 2116, rockblock_downlink_report_type_offset, true);
+        SFRField<uint16_t> mode = SFRField<uint16_t>((uint16_t)rockblock_mode_type::send_at, 2117, rockblock_mode_offset, true);
 
     } // namespace rockblock
     namespace imu {
         // OP Codes 2200
-        SFRField<uint16_t> mode = SFRField<uint16_t>((uint16_t)sensor_mode_type::init, 2200);
-        SFRField<bool> successful_init = SFRField<bool>(true, 2201);
+        SFRField<uint16_t> mode = SFRField<uint16_t>((uint16_t)sensor_mode_type::init, 2200, constants::eeprom::imu_mode_offset, true);
+        SFRField<bool> successful_init = SFRField<bool>(true, 2201, constants::eeprom::imu_successful_init_offset, true);
 
-        SFRField<uint32_t> max_fragments = SFRField<uint32_t>(256, 2202);
+        SFRField<uint32_t> max_fragments = SFRField<uint32_t>(256, 2202, constants::eeprom::imu_max_fragments_offset, true);
 
-        SFRField<bool> sample_gyro = SFRField<bool>(true, 2204);
+        SFRField<bool> sample_gyro = SFRField<bool>(true, 2204, constants::eeprom::imu_sample_gyro_offset, true);
 
-        SFRField<bool> turn_on = SFRField<bool>(false, 2205);
-        SFRField<bool> turn_off = SFRField<bool>(false, 2206);
-        SFRField<bool> powered = SFRField<bool>(false, 2207);
+        SFRField<bool> turn_on = SFRField<bool>(false, 2205, constants::eeprom::imu_turn_on_offset, true);
+        SFRField<bool> turn_off = SFRField<bool>(false, 2206, constants::eeprom::imu_turn_off_offset, true);
+        SFRField<bool> powered = SFRField<bool>(false, 2207, constants::eeprom::imu_powered_offset, true);
 
         SensorReading *mag_x_value = new SensorReading(1, 0, 0);
         SensorReading *mag_y_value = new SensorReading(1, 0, 0);
@@ -280,50 +252,53 @@ namespace sfr {
     } // namespace imu
     namespace temperature {
         // OP Codes 2300
-        SFRField<bool> in_sun = SFRField<bool>(false, 2300);
+        SFRField<bool> in_sun = SFRField<bool>(false, 2300, constants::eeprom::temperature_in_sun_offset, true);
 
         SensorReading *temp_c_average = new SensorReading(fault_index_type::temp_c, 20, -500, 500);
         SensorReading *temp_c_value = new SensorReading(1, -500, 500);
     } // namespace temperature
     namespace current {
         // OP Codes 2400
-        SFRField<bool> in_sun = SFRField<bool>(false, 2400);
+        SFRField<bool> in_sun = SFRField<bool>(false, 2400, constants::eeprom::current_in_sun_offset, true);
 
         SensorReading *solar_current_average = new SensorReading(fault_index_type::solar_current, 20, 0, 1000);
     } // namespace current
     namespace acs {
         // OP Codes 2500
-        SFRField<uint32_t> max_no_communication = SFRField<uint32_t>(0, 2500);
+        SFRField<uint32_t> max_no_communication = SFRField<uint32_t>(0, 2500, constants::eeprom::acs_max_no_communication_offset, true);
 
-        SFRField<uint32_t> on_time = SFRField<uint32_t>(5 * constants::time::one_minute, 2501);
-        SFRField<bool> off = SFRField<bool>(true, 2502);
+        SFRField<uint32_t> on_time = SFRField<uint32_t>(5 * constants::time::one_minute, 2501, constants::eeprom::acs_on_time_offset, true);
+        SFRField<bool> off = SFRField<bool>(true, 2502, constants::eeprom::acs_off_offset, true);
 
-        SFRField<uint16_t> mag = SFRField<uint16_t>((uint16_t)simple_acs_type::x, 2503);
+        SFRField<uint16_t> mag = SFRField<uint16_t>((uint16_t)simple_acs_type::x, 2503, constants::eeprom::acs_mag_offset, true);
     } // namespace acs
     namespace battery {
         // OP Codes 2600
         // TODO
-        SFRField<uint32_t> acceptable_battery = SFRField<uint32_t>(0, 2600);
-        SFRField<uint32_t> min_battery = SFRField<uint32_t>(0, 2601);
+        SFRField<uint32_t> acceptable_battery = SFRField<uint32_t>(0, 2600, constants::eeprom::battery_acceptable_battery_offset, true);
+        SFRField<uint32_t> min_battery = SFRField<uint32_t>(0, 2601, constants::eeprom::battery_min_battery_offset, true);
 
         SensorReading *voltage_value = new SensorReading(1, 0, 5);
         SensorReading *voltage_average = new SensorReading(fault_index_type::voltage, 20, 0, 5);
     } // namespace battery
     namespace button {
         // OP Codes 2700
-        SFRField<bool> pressed = SFRField<bool>(true, 2700);
+        SFRField<bool> pressed = SFRField<bool>(true, 2700, button_pressed_offset, true);
     } // namespace button
-    namespace EEPROM {
+    namespace eeprom {
         // OP Codes 2800
-        SFRField<uint32_t> time_of_last_write = SFRField<uint32_t>(0, 2800); // the millis() value when the last EEPROM write ocurred
-        SFRField<uint32_t> write_step_time = SFRField<uint32_t>(1000, 2801); // the amount of time between each write to EEPROM
-        SFRField<uint32_t> alloted_time = SFRField<uint32_t>(7200000, 2802); // the amount of time for the EEPROM to count to (7200000 ms = 2 h)
-        SFRField<bool> alloted_time_passed = SFRField<bool>(false, 2803);    // indicates if the EEPROM count has reached the alloted time
 
-        // ytes 0-3 are for the time passed, bytes 4-5 are for the address where values are to be written and stored.
+        // Tracking the initial 2 hour wait time
+        SFRField<uint32_t> wait_time_last_write_time = SFRField<uint32_t>(0, 2800, constants::eeprom::eeprom_wait_time_last_write_time_offset, false);   // the millis() value when the last EEPROM write ocurred, reset argument is false because it should reset every boot up cycle
+        SFRField<uint32_t> wait_time_write_step_time = SFRField<uint32_t>(1000, 2801, constants::eeprom::eeprom_wait_time_write_step_time_offset, true); // the amount of time between each write to EEPROM
+        SFRField<uint32_t> alloted_time = SFRField<uint32_t>(7200000, 2802, constants::eeprom::eeprom_alloted_time_offset, true);                        // the amount of time for the EEPROM to count to (7200000 ms = 2 h)
+        SFRField<bool> alloted_time_passed = SFRField<bool>(false, 2803, constants::eeprom::eeprom_alloted_time_passed_offset, true);                    // indicates if the EEPROM count has reached the alloted time
+
+        // Bytes 0-3 are for the time passed, bytes 4-5 are for the address where values are to be written and stored.
         // SFR data begins at byte 6 and after. The section of EEPROM bytes where SFR data is stored will change to avoid exceeding the write endurance.
-        SFRField<uint16_t> read_address = SFRField<uint16_t>(6, 2804);
-        SFRField<uint16_t> write_address = SFRField<uint16_t>(6, 2805);
-        SFRField<uint32_t> data_address_age = SFRField<uint32_t>(0, 2806);
-    } // namespace EEPROM
-};    // namespace sfr
+        SFRField<uint32_t> sfr_last_write_time = SFRField<uint32_t>(0, 2804, constants::eeprom::eeprom_sfr_last_write_time_offset, false);   // the millis() value when the last EEPROM write ocurred, false because it should reset every boot up cycle
+        SFRField<uint32_t> sfr_write_step_time = SFRField<uint32_t>(1000, 2805, constants::eeprom::eeprom_sfr_write_step_time_offset, true); // the amount of time between each write to EEPROM
+        SFRField<uint16_t> sfr_address = SFRField<uint16_t>(6, 2806, constants::eeprom::eeprom_sfr_address_age_offset, false);               // the address of where current sfr data is stored, reset argument is false because it is set at the beginning of every boot up cycle
+        SFRField<uint32_t> sfr_address_age = SFRField<uint32_t>(0, 2807, constants::eeprom::eeprom_sfr_address_age_offset, true);            // the write age of the current sfr data section in EEPROM
+    }                                                                                                                                        // namespace eeprom
+};                                                                                                                                           // namespace sfr

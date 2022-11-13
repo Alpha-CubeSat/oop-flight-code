@@ -52,5 +52,6 @@
         "random": "cpp"
     },
     "C_Cpp.dimInactiveRegions": false,
-    "C_Cpp.formatting": "clangFormat"
+    "C_Cpp.formatting": "clangFormat",
+    "cmake.sourceDirectory": "${workspaceFolder}/lib/Adafruit_BusIO-master"
 }
