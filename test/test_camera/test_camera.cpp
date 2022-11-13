@@ -110,7 +110,7 @@ int test_camera()
     RUN_TEST(test_camera_power_on);
     RUN_TEST(test_take_picture_and_turn_off);
     RUN_TEST(test_camera_failure);
-    // RUN_TEST(test_camera_timeout); // delays 12 seconds. Uncomment to test timeout
+    RUN_TEST(test_camera_timeout); // delays 12 seconds.
     RUN_TEST(test_camera_report_prepare);
     return UNITY_END();
 }

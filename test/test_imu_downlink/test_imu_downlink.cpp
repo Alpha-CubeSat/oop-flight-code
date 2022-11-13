@@ -166,7 +166,7 @@ int test_rockblock_report_monitor()
     RUN_TEST(test_imu_downlink_mandburn);
     RUN_TEST(test_imu_downlink_regburn);
     RUN_TEST(test_imu_downlink_deployed);
-    //RUN_TEST(test_imu_downlink_delay); // Delays a minute, uncomment this out to test the time control logic.
+    RUN_TEST(test_imu_downlink_delay); // Delays a minute
     RUN_TEST(test_imu_report);
     return UNITY_END();
 }

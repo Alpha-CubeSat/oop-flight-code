@@ -125,7 +125,6 @@ void CameraControlTask::camera_init()
             }
             break;
         case 1: // step 1 - setting power
-            // zag7 check the pin is correct
             Pins::setPinState(constants::camera::power_on_pin, HIGH);
             sfr::camera::start_progress++;
             break;
