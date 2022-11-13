@@ -64,25 +64,15 @@ namespace constants {
         constexpr uint8_t end_of_command_upload_flag1 = 0;    // 00
         constexpr uint8_t end_of_command_upload_flag2 = 250;  // FA
         namespace opcodes {
-            constexpr uint16_t mission_mode = 0; // -> StateCommand //? Should this be Phase_mode?
-
-            // Burnwire Commands
-            constexpr uint16_t burnwire_arm = 1; // -> BurnwireCommand
-            constexpr uint16_t burnwire_fire = 2;
-            constexpr uint16_t burnwire_time = 3;
-            constexpr uint16_t burnwire_timeout = 4;
-
-            constexpr uint16_t rockblock_downlink_period[opcode_len] = {0x05, 0x00};
-
-            // Camera Commands
-            constexpr uint16_t request_image_fragment = 6;
-            constexpr uint16_t camera_take_photo = 7;
-            constexpr uint16_t camera_turn_on = 11;
-            constexpr uint16_t camera_turn_off = 12;
-
             // SFRField Commands
             constexpr uint16_t sfr_field_opcode_min = 0x1100;
             constexpr uint16_t sfr_field_opcode_max = 0x2899;
+
+            // Fire Command
+            constexpr uint16_t sfr_field_opcode_fire = 0x4444;
+
+            // Arm Command
+            constexpr uint16_t sfr_field_opcode_arm = 0x5555;
 
         } // namespace opcodes
         // namespace rockblock
