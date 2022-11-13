@@ -52,5 +52,11 @@
         "random": "cpp"
     },
     "C_Cpp.dimInactiveRegions": false,
+<<<<<<< HEAD
     "C_Cpp.formatting": "clangFormat"
 }
+=======
+    "C_Cpp.formatting": "clangFormat",
+    "cmake.sourceDirectory": "${workspaceFolder}/lib/Adafruit_BusIO-master"
+}
+>>>>>>> 7fa8443 (Completed SFR data saving in EEPROM)

@@ -17,8 +17,10 @@
 #include "SensorReading.hpp"
 #include "constants.hpp"
 #include <deque>
+#include <vector>
 
 namespace sfr {
+    std::vector<SFRInterface *> sfr_fields_vector;
     namespace stabilization {
         // OP Codes 1100
         extern SFRField<uint32_t> max_time;
@@ -56,10 +58,6 @@ namespace sfr {
         extern SFRField<uint32_t> max_time;
         extern SFRField<uint16_t> num_hard_faults;
     } // namespace aliveSignal
-    namespace pins {
-        //@Josh would we need to change this?
-        extern std::map<int, int> pinMap;
-    } // namespace pins
     namespace photoresistor {
         // OP Codes 1700
         extern SFRField<bool> covered;
@@ -191,14 +189,14 @@ namespace sfr {
         extern SFRField<uint16_t> failed_times;
         extern SFRField<uint16_t> failed_limit;
 
-        extern boolean report_written;
-        extern boolean report_downlinked;
-        extern boolean report_ready;
+        extern bool report_written;
+        extern bool report_downlinked;
+        extern bool report_ready;
 
     } // namespace camera
     namespace rockblock {
         // OP Codes 2100
-        extern SFRField<bool> rockblock_ready_status;
+        extern SFRField<bool> ready_status;
 
         extern SFRField<uint32_t> last_downlink;
         extern SFRField<uint32_t> downlink_period;
@@ -280,9 +278,9 @@ namespace sfr {
 
         extern std::deque<uint8_t> imu_dlink;
 
-        extern boolean report_written;
-        extern boolean report_downlinked;
-        extern boolean report_ready;
+        extern bool report_written;
+        extern bool report_downlinked;
+        extern bool report_ready;
 
     } // namespace imu
     namespace temperature {
@@ -322,17 +320,17 @@ namespace sfr {
 
         extern SensorReading *button_pressed;
     } // namespace button
-    namespace EEPROM {
+    namespace eeprom {
         // OP Codes 2800
-        extern SFRField<uint32_t> time_of_last_write;
-        extern SFRField<uint32_t> write_step_time;
+        extern SFRField<uint32_t> wait_time_last_write_time;
+        extern SFRField<uint32_t> wait_time_write_step_time;
         extern SFRField<uint32_t> alloted_time;
-        extern SFRField<uint32_t> eeprom_value;
         extern SFRField<bool> alloted_time_passed;
-        extern SFRField<uint16_t> read_address;
-        extern SFRField<uint16_t> write_address;
-        extern SFRField<uint32_t> data_address_age;
-    } // namespace EEPROM
+        extern SFRField<uint32_t> sfr_last_write_time;
+        extern SFRField<uint32_t> sfr_write_step_time;
+        extern SFRField<uint16_t> sfr_address;
+        extern SFRField<uint32_t> sfr_address_age;
+    } // namespace eeprom
 };    // namespace sfr
 
 #endif
