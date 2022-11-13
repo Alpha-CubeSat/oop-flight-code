@@ -67,6 +67,12 @@ namespace constants {
             constexpr uint16_t sfr_field_opcode_min = 0x1100;
             constexpr uint16_t sfr_field_opcode_max = 0x2899;
 
+            // Fire Command
+            constexpr uint16_t sfr_field_opcode_fire = 0x4444;
+
+            // Arm Command
+            constexpr uint16_t sfr_field_opcode_arm = 0x5555;
+
         } // namespace opcodes
         // namespace rockblock
 
