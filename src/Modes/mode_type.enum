@@ -6,6 +6,7 @@ enum class mode_type : unsigned char
     NORMAL = 0,
     TRANSMIT,
     LP,
+    BURN,
     OTHER
 };
 

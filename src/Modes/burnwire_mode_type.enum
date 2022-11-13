@@ -3,7 +3,8 @@
 
 enum class burnwire_mode_type : unsigned char
 {
-    burn = 0,
+    standby = 0,
+    burn,
     delay
 };
 

@@ -148,25 +148,15 @@ namespace sfr {
         extern std::deque<int> mode_history;
     } // namespace mission
     namespace burnwire {
-        // OP Code 4444
-        extern bool fire;
-
-        // OP Code 5555
-        extern bool arm;
-
         // OP Codes 1900
         extern SFRField<uint16_t> attempts;
-        extern SFRField<uint16_t> camera_attempts;
-        extern SFRField<uint32_t> mandatoryburn_start_time;
+        extern SFRField<uint32_t> start_time;
         extern SFRField<uint32_t> burn_time;
         extern SFRField<uint32_t> armed_time;
         extern SFRField<uint16_t> mode;
-        extern SFRField<uint16_t> regular_attempts_limit;
-        extern SFRField<uint16_t> mandatory_attempts;
+        extern SFRField<uint16_t> attempts_limit;
         extern SFRField<uint16_t> mandatory_attempts_limit;
-        extern SFRField<uint32_t> burn_wait;
-        extern SFRField<uint32_t> regularburn_start_time;
-             } // namespace burnwire
+    } // namespace burnwire
     namespace camera {
         // OP Codes 2000
         extern SFRField<bool> photo_taken_sd_failed;

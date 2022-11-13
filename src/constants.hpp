@@ -67,6 +67,9 @@ namespace constants {
             constexpr uint16_t sfr_field_opcode_min = 0x1100;
             constexpr uint16_t sfr_field_opcode_max = 0x2899;
 
+            // Deploy Command
+            constexpr uint16_t sfr_field_opcode_deploy = 0x3333;
+
             // Fire Command
             constexpr uint16_t sfr_field_opcode_fire = 0x4444;
 

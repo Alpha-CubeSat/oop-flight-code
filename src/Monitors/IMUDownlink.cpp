@@ -24,7 +24,7 @@ void IMUDownlink::execute()
         sfr::imu::imu_dlink.push_front(gyro_z);
     }
 
-    if (sfr::mission::current_mode == sfr::mission::mandatoryBurns || sfr::mission::current_mode == sfr::mission::regularBurns) {
+    if (sfr::mission::current_mode->get_id() == sfr::mission::mandatoryBurns->get_id() || sfr::mission::current_mode->get_id() == sfr::mission::regularBurns->get_id()) {
         sfr::imu::sample_gyro = true;
     }
 
