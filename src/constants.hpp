@@ -2,6 +2,7 @@
 #define CONSTANTS_HPP_
 
 #include <cstddef>
+#include <map>
 #include <stdint.h>
 
 namespace constants {
