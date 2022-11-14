@@ -96,7 +96,7 @@ public:
         address_offset = address_offset;
         restore = restore;
 
-        if (restore):
+        if (restore)
             sfr::sfr_fields_vector.push_back(this);
 
 #ifdef DEBUG
@@ -123,7 +123,7 @@ public:
         address_offset = address_offset;
         restore = restore;
 
-        if (restore):
+        if (restore)
             sfr::sfr_fields_vector.push_back(this);
 
 #ifdef DEBUG
@@ -152,7 +152,7 @@ public:
         address_offset = address_offset;
         restore = restore;
 
-        if (restore):
+        if (restore)
             sfr::sfr_fields_vector.push_back(this);
 
 #ifdef DEBUG
