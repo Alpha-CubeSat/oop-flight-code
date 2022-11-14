@@ -1,8 +1,8 @@
 #include "sfr.hpp"
 namespace sfr {
-    std::vector<SFRInterface *> eeprom_restore;
+    std::vector<SFRInterface *> sfr_fields_vector;
     namespace stabilization {
-        // OP Codes 1100
+        // OP Codes 1100`
         SFRField<uint32_t> max_time = SFRField<uint32_t>(30 * constants::time::one_minute, 0UL, 5 * constants::time::one_hour, 0x1100, constants::eeprom::stabilization_max_time_offset, true);
     } // namespace stabilization
     namespace boot {
@@ -48,11 +48,12 @@ namespace sfr {
     } // namespace photoresistor
     namespace mission {
         // OP Codes 1800
-        SFRField<uint32_t> acs_transmit_cycle_time = SFRField<uint32_t>(constants::time::one_minute * 100, 0x1800, constants::eeprom::mission_acs_transmit_cycle_time_offset, true);
+        SFRField<uint32_t> acs_transmit_cycle_time = SFRField<uint32_t>(100 * constants::time::one_minute, 0x1800, constants::eeprom::mission_acs_transmit_cycle_time_offset, true);
 
         SFRField<uint32_t> time_deployed = SFRField<uint32_t>(0, 0x1801, constants::eeprom::mission_time_deployed_offset, true);
         SFRField<bool> deployed = SFRField<bool>(false, 0x1802, constants::eeprom::mission_deployed_offset, true);
         SFRField<bool> already_deployed = SFRField<bool>(false, 0x1803, constants::eeprom::mission_already_deployed_offset, true);
+        SFRField<bool> possible_uncovered = SFRField<bool>(false, 0x1804, constants::eeprom::mission_possible_uncovered_offset, true);
 
         Boot boot_class;
         AliveSignal aliveSignal_class;
@@ -176,8 +177,10 @@ namespace sfr {
     namespace rockblock {
         // OP Codes 2100
         SFRField<bool> ready_status = SFRField<bool>(false, 0x2100, constants::eeprom::rockblock_ready_status_offset, true);
+
         SFRField<uint32_t> last_downlink = SFRField<uint32_t>(0, 0x2101, constants::eeprom::rockblock_last_downlink_offset, true);
         SFRField<uint32_t> downlink_period = SFRField<uint32_t>(0, 0x2102, constants::eeprom::rockblock_downlink_period_offset, true);
+
         SFRField<bool> waiting_message = SFRField<bool>(false, 0x2103, constants::eeprom::rockblock_waiting_message_offset, true);
 
         std::deque<uint8_t> downlink_report;
@@ -202,17 +205,17 @@ namespace sfr {
         SFRField<bool> imu_first_start = SFRField<bool>(true, 0x2108, constants::eeprom::rockblock_imu_first_start_offset, true);
         SFRField<bool> imu_downlink_on = SFRField<bool>(true, 0x2109, constants::eeprom::rockblock_imu_downlink_on_offset, true);
 
-        SFRField<bool> flush_status = SFRField<bool>(false, 0x2108, constants::eeprom::rockblock_flush_status_offset, true);
-        SFRField<bool> waiting_command = SFRField<bool>(false, 0x2109, constants::eeprom::rockblock_waiting_command_offset, true);
-        SFRField<uint32_t> conseq_reads = SFRField<uint32_t>(0, 0x2110, constants::eeprom::rockblock_conseq_reads_offset, true);
-        SFRField<uint32_t> timeout = SFRField<uint32_t>(10 * constants::time::one_minute, 0x2111, constants::eeprom::rockblock_timeout_offset, true);
-        SFRField<uint32_t> start_time = SFRField<uint32_t>(0, 0x2112, constants::eeprom::rockblock_start_time_offset, true);
-        SFRField<uint32_t> start_time_check_signal = SFRField<uint32_t>(0, 0x2113, constants::eeprom::rockblock_start_time_check_signal_offset, true);
-        SFRField<uint32_t> max_check_signal_time = SFRField<uint32_t>(constants::time::one_minute, 0x2114, constants::eeprom::rockblock_max_check_signal_time_offset, true);
-        SFRField<bool> sleep_mode = SFRField<bool>(false, 0x2115, constants::eeprom::rockblock_sleep_mode_offset, true);
+        SFRField<bool> flush_status = SFRField<bool>(false, 0x2110, constants::eeprom::rockblock_flush_status_offset, true);
+        SFRField<bool> waiting_command = SFRField<bool>(false, 0x2111, constants::eeprom::rockblock_waiting_command_offset, true);
+        SFRField<uint32_t> conseq_reads = SFRField<uint32_t>(0, 0x2112, constants::eeprom::rockblock_conseq_reads_offset, true);
+        SFRField<uint32_t> timeout = SFRField<uint32_t>(10 * constants::time::one_minute, 0x2113, constants::eeprom::rockblock_timeout_offset, true);
+        SFRField<uint32_t> start_time = SFRField<uint32_t>(0, 0x2114, constants::eeprom::rockblock_start_time_offset, true);
+        SFRField<uint32_t> start_time_check_signal = SFRField<uint32_t>(0, 0x2115, constants::eeprom::rockblock_start_time_check_signal_offset, true);
+        SFRField<uint32_t> max_check_signal_time = SFRField<uint32_t>(constants::time::one_minute, 0x2116, constants::eeprom::rockblock_max_check_signal_time_offset, true);
+        SFRField<bool> sleep_mode = SFRField<bool>(false, 0x2117, constants::eeprom::rockblock_sleep_mode_offset, true);
 
-        SFRField<uint16_t> downlink_report_type = SFRField<uint16_t>((uint16_t)report_type::normal_report, 0x2116, constants::eeprom::rockblock_downlink_report_type_offset, true);
-        SFRField<uint16_t> mode = SFRField<uint16_t>((uint16_t)rockblock_mode_type::send_at, 0x2117, constants::eeprom::rockblock_mode_offset, true);
+        SFRField<uint16_t> downlink_report_type = SFRField<uint16_t>((uint16_t)report_type::normal_report, 0x2118, constants::eeprom::rockblock_downlink_report_type_offset, true);
+        SFRField<uint16_t> mode = SFRField<uint16_t>((uint16_t)rockblock_mode_type::send_at, 0x2119, constants::eeprom::rockblock_mode_offset, true);
 
 #ifndef SIMULATOR
         HardwareSerial serial = Serial1;
@@ -227,11 +230,11 @@ namespace sfr {
 
         SFRField<uint32_t> max_fragments = SFRField<uint32_t>(256, 0x2202, constants::eeprom::imu_max_fragments_offset, true);
 
-        SFRField<bool> sample_gyro = SFRField<bool>(true, 0x2204, constants::eeprom::imu_sample_gyro_offset, true);
+        SFRField<bool> sample_gyro = SFRField<bool>(true, 0x2203, constants::eeprom::imu_sample_gyro_offset, true);
 
-        SFRField<bool> turn_on = SFRField<bool>(false, 0x2205, constants::eeprom::imu_turn_on_offset, true);
-        SFRField<bool> turn_off = SFRField<bool>(false, 0x2206, constants::eeprom::imu_turn_off_offset, true);
-        SFRField<bool> powered = SFRField<bool>(false, 0x2207, constants::eeprom::imu_powered_offset, true);
+        SFRField<bool> turn_on = SFRField<bool>(false, 0x2204, constants::eeprom::imu_turn_on_offset, true);
+        SFRField<bool> turn_off = SFRField<bool>(false, 0x2205, constants::eeprom::imu_turn_off_offset, true);
+        SFRField<bool> powered = SFRField<bool>(false, 0x2206, constants::eeprom::imu_powered_offset, true);
 
         SensorReading *mag_x_value = new SensorReading(1, 0, 0);
         SensorReading *mag_y_value = new SensorReading(1, 0, 0);

@@ -321,10 +321,11 @@ namespace constants {
         static constexpr unsigned int mission_time_deployed_offset = mission_acs_transmit_cycle_time_offset + 6;
         static constexpr unsigned int mission_deployed_offset = mission_time_deployed_offset + 6;
         static constexpr unsigned int mission_already_deployed_offset = mission_deployed_offset + 4;
+        static constexpr unsigned int mission_possible_uncovered_offset = mission_already_deployed_offset + 4;
 
-        static constexpr unsigned int burnwire_attempts_offset = mission_already_deployed_offset + 4;
+        static constexpr unsigned int burnwire_attempts_offset = mission_possible_uncovered_offset + 4;
         static constexpr unsigned int burnwire_camera_attempts_offset = burnwire_attempts_offset + 4;
-        static constexpr unsigned int burnwire_start_time_offset = burnwire_camera_attempts_offset + 6;
+        static constexpr unsigned int burnwire_start_time_offset = burnwire_camera_attempts_offset + 4;
         static constexpr unsigned int burnwire_burn_time_offset = burnwire_start_time_offset + 6;
         static constexpr unsigned int burnwire_armed_time_offset = burnwire_burn_time_offset + 6;
         static constexpr unsigned int burnwire_mode_offset = burnwire_armed_time_offset + 6;
@@ -393,16 +394,13 @@ namespace constants {
 
         static constexpr unsigned int button_pressed_offset = battery_min_battery_offset + 6;
 
-        static constexpr unsigned int eeprom_wait_time_last_write_time_offset = button_pressed_offset + 4;
-        static constexpr unsigned int eeprom_wait_time_write_step_time_offset = eeprom_wait_time_last_write_time_offset + 6;
+        static constexpr unsigned int eeprom_wait_time_write_step_time_offset = button_pressed_offset + 4;
         static constexpr unsigned int eeprom_alloted_time_offset = eeprom_wait_time_write_step_time_offset + 6;
         static constexpr unsigned int eeprom_alloted_time_passed_offset = eeprom_alloted_time_offset + 6;
-        static constexpr unsigned int eeprom_sfr_last_write_time_offset = eeprom_alloted_time_passed_offset + 4;
-        static constexpr unsigned int eeprom_sfr_write_step_time_offset = eeprom_sfr_last_write_time_offset + 6;
-        static constexpr unsigned int eeprom_sfr_address_offset = eeprom_sfr_write_step_time_offset + 6;
-        static constexpr unsigned int eeprom_sfr_address_age_offset = eeprom_sfr_address_offset + 4;
+        static constexpr unsigned int eeprom_sfr_write_step_time_offset = eeprom_alloted_time_passed_offset + 4;
+        static constexpr unsigned int eeprom_sfr_address_age_offset = eeprom_sfr_write_step_time_offset + 6;
 
-        static constexpr unsigned int full_offset = eeprom_sfr_address_age_offset + 4;
+        static constexpr unsigned int full_offset = eeprom_sfr_address_age_offset + 6;
     } // namespace eeprom
 };    // namespace constants
 

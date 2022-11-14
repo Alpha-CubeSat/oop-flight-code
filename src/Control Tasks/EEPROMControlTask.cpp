@@ -32,12 +32,11 @@ void EEPROMControlTask::save_wait_time()
             int time_since_last_write = millis() - sfr::eeprom::wait_time_last_write_time;
 
             if (time_since_last_write > sfr::eeprom::wait_time_write_step_time) {
-                // The last EEPROM write exceeds the interval between writes, so update the EEPROM value
-                int write_value = time_since_last_write + wait_time;
+                // The time since the last EEPROM write exceeds the interval between writes, so update the EEPROM value
+                int write_value = wait_time + time_since_last_write;
 #ifdef VERBOSE
                 Serial.println("New value to write: " + String(write_value));
 #endif
-                // Saves the value in write by bytes
                 EEPROM.put(0, write_value);
 
                 sfr::eeprom::wait_time_last_write_time += time_since_last_write;
@@ -53,7 +52,7 @@ void EEPROMControlTask::save_sfr_data()
 
     if (time_since_last_write > sfr::eeprom::sfr_write_step_time) {
         // The last EEPROM write exceeds the interval between writes, so update the EEPROM value
-        uint16_t write_addr = sfr::eeprom::sfr_address;
+        int sfr_address = sfr::eeprom::sfr_address;
 
         /*
         > Each field is stored in this format: [boolean restore][T value].
@@ -64,18 +63,18 @@ void EEPROMControlTask::save_sfr_data()
         */
         for (SFRInterface *s : sfr::sfr_fields_vector) {
             bool restore = s->getRestore();
-            write_addr = s->getAddressOffset();
-            EEPROM.put(write_addr, restore);
+            int write_address = sfr_address + s->getAddressOffset();
+            EEPROM.put(write_address, restore);
             if (restore) {
                 int data_type = s->getDataType();
                 if (data_type == 4)
-                    EEPROM.put(write_addr + 2, (uint32_t)s->getValue());
+                    EEPROM.put(write_address + 2, (uint32_t)s->getValue());
                 else if (data_type == 3)
-                    EEPROM.put(write_addr + 2, (uint16_t)s->getValue());
+                    EEPROM.put(write_address + 2, (uint16_t)s->getValue());
                 else if (data_type == 2)
-                    EEPROM.put(write_addr + 2, (uint8_t)s->getValue());
+                    EEPROM.put(write_address + 2, (uint8_t)s->getValue());
                 else if (data_type == 1)
-                    EEPROM.put(write_addr + 2, (bool)s->getValue());
+                    EEPROM.put(write_address + 2, (bool)s->getValue());
             }
             sfr::eeprom::sfr_last_write_time += time_since_last_write;
         }

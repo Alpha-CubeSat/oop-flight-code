@@ -41,15 +41,16 @@ namespace sfr {
         // OP Codes 1500
         extern SFRField<uint32_t> start_time;
         extern SFRField<uint32_t> max_time;
+
+        // TODO
+        extern SFRField<uint16_t> num_imu_retries;
+        extern SFRField<uint16_t> max_imu_retries;
+
         extern SFRField<uint8_t> min_stable_gyro_z;
         extern SFRField<uint8_t> max_stable_gyro_x;
         extern SFRField<uint8_t> max_stable_gyro_y;
         extern SFRField<uint8_t> min_unstable_gyro_x;
         extern SFRField<uint8_t> min_unstable_gyro_y;
-
-        // TODO
-        extern SFRField<uint16_t> num_imu_retries;
-        extern SFRField<uint16_t> max_imu_retries;
     } // namespace detumble
     namespace aliveSignal {
         // OP Codes 1600
@@ -322,13 +323,13 @@ namespace sfr {
     } // namespace button
     namespace eeprom {
         // OP Codes 2800
-        extern SFRField<uint32_t> wait_time_last_write_time;
+        extern int wait_time_last_write_time;
         extern SFRField<uint32_t> wait_time_write_step_time;
         extern SFRField<uint32_t> alloted_time;
         extern SFRField<bool> alloted_time_passed;
-        extern SFRField<uint32_t> sfr_last_write_time;
+        extern int sfr_last_write_time;
         extern SFRField<uint32_t> sfr_write_step_time;
-        extern SFRField<uint16_t> sfr_address;
+        extern int sfr_address;
         extern SFRField<uint32_t> sfr_address_age;
     } // namespace eeprom
 };    // namespace sfr
