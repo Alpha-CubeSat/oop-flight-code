@@ -13,7 +13,7 @@ private:
     int field_value;    // The value of the field cast to an int
     int data_type;      // An int representing the field's type T, 1 for bool, 2 for uint8_t, 3 for uint16_t, and 4 for uint64_t
     int address_offset; // This field's byte offset from the beginning of the EEPROM section where SFR data is currently stored
-                        // read_address + address_offset gives this field's location in EEPROM
+                        // sfr_address + address_offset gives this field's location in EEPROM
     bool restore;       // If the field should be restored or not
 
 public:
