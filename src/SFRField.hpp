@@ -167,7 +167,7 @@ public:
         return value / resolution;
     }
 
-    T set(T input)
+    void set(T input)
     {
         if ((bounded && input <= max && input >= min) || (!bounded)) {
             value = input;
