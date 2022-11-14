@@ -5,34 +5,6 @@
 #include <stdint.h>
 
 namespace constants {
-    namespace pins {
-        // TODO confirm initial pin states are correct FS-159
-        // @ Josh do we need to change this?
-        std::map<int, int> pinMap = {
-            {constants::photoresistor::pin, LOW},
-            {constants::burnwire::first_pin, LOW},
-            {constants::burnwire::second_pin, LOW},
-            {constants::rockblock::sleep_pin, LOW},
-            {constants::temperature::pin, LOW},
-            {constants::current::pin, LOW},
-            {constants::acs::xPWMpin, LOW},
-            {constants::acs::yPWMpin, LOW},
-            {constants::acs::zPWMpin, LOW},
-            {constants::acs::yout1, LOW},
-            {constants::acs::yout2, LOW},
-            {constants::acs::xout1, LOW},
-            {constants::acs::xout2, LOW},
-            {constants::acs::zout1, LOW},
-            {constants::acs::zout2, LOW},
-            {constants::acs::STBXYpin, LOW},
-            {constants::acs::STBZpin, LOW},
-            {constants::battery::voltage_value_pin, LOW},
-            {constants::battery::allow_measurement_pin, HIGH},
-            {constants::camera::power_on_pin, LOW},
-            {constants::camera::rx, LOW},
-            {constants::camera::tx, LOW},
-            {constants::button::button_pin, LOW}};
-    } // namespace pins
     namespace time {
         constexpr unsigned long one_second = 1000;
         constexpr unsigned long one_minute = 60 * one_second;
@@ -289,6 +261,34 @@ namespace constants {
         static constexpr unsigned int eeprom_control_task_offset = 0;
         static constexpr unsigned int mission_manager_offset = 0;
     } // namespace timecontrol
+    namespace pins {
+        // TODO confirm initial pin states are correct FS-159
+        // @ Josh do we need to change this?
+        std::map<int, int> pinMap = {
+            {constants::photoresistor::pin, LOW},
+            {constants::burnwire::first_pin, LOW},
+            {constants::burnwire::second_pin, LOW},
+            {constants::rockblock::sleep_pin, LOW},
+            {constants::temperature::pin, LOW},
+            {constants::current::pin, LOW},
+            {constants::acs::xPWMpin, LOW},
+            {constants::acs::yPWMpin, LOW},
+            {constants::acs::zPWMpin, LOW},
+            {constants::acs::yout1, LOW},
+            {constants::acs::yout2, LOW},
+            {constants::acs::xout1, LOW},
+            {constants::acs::xout2, LOW},
+            {constants::acs::zout1, LOW},
+            {constants::acs::zout2, LOW},
+            {constants::acs::STBXYpin, LOW},
+            {constants::acs::STBZpin, LOW},
+            {constants::battery::voltage_value_pin, LOW},
+            {constants::battery::allow_measurement_pin, HIGH},
+            {constants::camera::power_on_pin, LOW},
+            {constants::camera::rx, LOW},
+            {constants::camera::tx, LOW},
+            {constants::button::button_pin, LOW}};
+    } // namespace pins
     namespace eeprom {
         // EEPROM SFR memory offsets, determined by size of the prevoius SFR value type + size of a boolean + offset of the previous SFR value
         // The boolean indicates whether or not to restore the value on bootup

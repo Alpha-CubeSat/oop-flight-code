@@ -49,6 +49,7 @@ namespace sfr {
         extern SFRField<uint8_t> min_stable_gyro_z;
         extern SFRField<uint8_t> max_stable_gyro_x;
         extern SFRField<uint8_t> max_stable_gyro_y;
+
         extern SFRField<uint8_t> min_unstable_gyro_x;
         extern SFRField<uint8_t> min_unstable_gyro_y;
     } // namespace detumble
