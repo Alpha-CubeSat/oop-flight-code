@@ -96,6 +96,9 @@ public:
         address_offset = address_offset;
         restore = restore;
 
+        if (restore):
+            sfr::sfr_fields_vector.push_back(this);
+
 #ifdef DEBUG
         T inital = default_val;
 #endif
@@ -119,6 +122,9 @@ public:
             data_type = 1;
         address_offset = address_offset;
         restore = restore;
+
+        if (restore):
+            sfr::sfr_fields_vector.push_back(this);
 
 #ifdef DEBUG
         T inital = default_val;
@@ -145,6 +151,9 @@ public:
             data_type = 1;
         address_offset = address_offset;
         restore = restore;
+
+        if (restore):
+            sfr::sfr_fields_vector.push_back(this);
 
 #ifdef DEBUG
         T inital = default_val;

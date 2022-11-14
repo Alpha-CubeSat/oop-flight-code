@@ -1,6 +1,5 @@
 #include "sfr.hpp"
 namespace sfr {
-    std::vector<SFRInterface *> sfr_fields_vector;
     namespace stabilization {
         // OP Codes 1100`
         SFRField<uint32_t> max_time = SFRField<uint32_t>(30 * constants::time::one_minute, 0UL, 5 * constants::time::one_hour, 0x1100, constants::eeprom::stabilization_max_time_offset, true);
