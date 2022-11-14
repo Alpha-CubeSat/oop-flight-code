@@ -50,35 +50,35 @@ void test_boot_settings()
 {
     TEST_ASSERT_EQUAL(sfr::rockblock::sleep_mode, true);
     TEST_ASSERT_EQUAL(sfr::acs::off, true);
-    TEST_ASSERT_EQUAL(sfr::imu::sample, false);
+    // TEST_ASSERT_EQUAL(sfr::imu::sample, false);
 }
 
 void test_transmit_settings()
 {
     TEST_ASSERT_EQUAL(sfr::rockblock::sleep_mode, false);
     TEST_ASSERT_EQUAL(sfr::acs::off, true);
-    TEST_ASSERT_EQUAL(sfr::imu::sample, false);
+    // TEST_ASSERT_EQUAL(sfr::imu::sample, false);
 }
 
 void test_low_power_settings()
 {
     TEST_ASSERT_EQUAL(sfr::rockblock::sleep_mode, false);
     TEST_ASSERT_EQUAL(sfr::acs::off, true);
-    TEST_ASSERT_EQUAL(sfr::imu::sample, false);
+    // TEST_ASSERT_EQUAL(sfr::imu::sample, false);
 }
 
 void test_normal_settings()
 {
     TEST_ASSERT_EQUAL(sfr::rockblock::sleep_mode, true);
     TEST_ASSERT_EQUAL(sfr::acs::off, false);
-    TEST_ASSERT_EQUAL(sfr::imu::sample, true);
+    // TEST_ASSERT_EQUAL(sfr::imu::sample, true);
 }
 
 void test_low_power_detumble_spin_settings()
 {
     TEST_ASSERT_EQUAL(sfr::rockblock::sleep_mode, true);
     TEST_ASSERT_EQUAL(sfr::acs::off, true);
-    TEST_ASSERT_EQUAL(sfr::imu::sample, false);
+    // TEST_ASSERT_EQUAL(sfr::imu::sample, false);
 }
 
 void reset(MissionManager mission_manager, MissionMode *mode)
@@ -304,6 +304,18 @@ void test_exit_insun_phase(MissionManager mission_manager, MissionMode *currentM
     reset(mission_manager, currentMode);
 }
 
+void test_exit_armed_phase(MissionManager mission_manager, MissionMode *currentMode, MissionMode *nextMode)
+{
+    reset(mission_manager, currentMode);
+
+    // exit if the CubeSat is in sun (Temperature sensor readings are valid and the temperature determines the CubeSat is in sun)
+    sfr::mission::armed->start_time = millis() - sfr::burnwire::armed_time;
+    mission_manager.execute();
+    TEST_ASSERT_EQUAL(nextMode->get_id(), sfr::mission::current_mode->get_id());
+
+    reset(mission_manager, currentMode);
+}
+
 void test_valid_initialization()
 {
     MissionManager mission_manager(0);
@@ -376,6 +388,27 @@ void test_exit_voltageFailure_insun()
     MissionManager mission_manager(0);
     reset(mission_manager, sfr::mission::voltageFailureInSun);
     test_exit_insun_phase(mission_manager, sfr::mission::voltageFailureInSun, sfr::mission::bootCamera);
+}
+
+void test_exit_normal_armed()
+{
+    MissionManager mission_manager(0);
+    reset(mission_manager, sfr::mission::normalArmed);
+    test_exit_armed_phase(mission_manager, sfr::mission::normalArmed, sfr::mission::normalDeployment);
+}
+
+void test_exit_transmit_armed()
+{
+    MissionManager mission_manager(0);
+    reset(mission_manager, sfr::mission::transmitArmed);
+    test_exit_armed_phase(mission_manager, sfr::mission::transmitArmed, sfr::mission::transmitDeployment);
+}
+
+void test_exit_lowPower_armed()
+{
+    MissionManager mission_manager(0);
+    reset(mission_manager, sfr::mission::lowPowerArmed);
+    test_exit_armed_phase(mission_manager, sfr::mission::lowPowerArmed, sfr::mission::lowPowerDeployment);
 }
 
 void test_standard_phase(MissionMode *normalMode, MissionMode *lpMode, MissionMode *transmitMode)
@@ -508,6 +541,9 @@ int test_mission_manager()
     RUN_TEST(test_exit_low_power_alive_signal);
     RUN_TEST(test_exit_detumble_spin);
     RUN_TEST(test_exit_low_power_detumble_spin);
+    RUN_TEST(test_exit_normal_armed);
+    RUN_TEST(test_exit_transmit_armed);
+    RUN_TEST(test_exit_lowPower_armed);
     RUN_TEST(test_standby);
     RUN_TEST(test_deployment);
     RUN_TEST(test_armed);

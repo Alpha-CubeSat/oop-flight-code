@@ -150,6 +150,7 @@ void NormalArmed::dispatch()
 {
     enter_lp(sfr::mission::lowPowerArmed);
     timed_out(sfr::mission::transmitArmed, sfr::acs::on_time);
+    exit_armed_phase(sfr::mission::normalDeployment, sfr::burnwire::armed_time);
 }
 
 void TransmitArmed::transition_to()
@@ -162,6 +163,7 @@ void TransmitArmed::dispatch()
 {
     enter_lp(sfr::mission::lowPowerArmed);
     timed_out(sfr::mission::normalArmed, sfr::mission::acs_transmit_cycle_time - sfr::acs::on_time);
+    exit_armed_phase(sfr::mission::normalDeployment, sfr::burnwire::armed_time);
 }
 
 void LowPowerArmed::transition_to()
@@ -173,6 +175,7 @@ void LowPowerArmed::transition_to()
 void LowPowerArmed::dispatch()
 {
     check_previous(sfr::mission::normalArmed, sfr::mission::transmitArmed);
+    exit_armed_phase(sfr::mission::normalDeployment, sfr::burnwire::armed_time);
 }
 
 void NormalInSun::transition_to()
@@ -325,6 +328,13 @@ void exit_detumble_phase(MissionMode *mode)
 
     // detumble has timed out
     if (millis() - sfr::mission::stabilization->start_time >= sfr::stabilization::max_time) {
+        sfr::mission::current_mode = mode;
+    }
+}
+
+void exit_armed_phase(MissionMode *mode, float max_time)
+{
+    if (millis() - sfr::mission::armed->start_time >= max_time) {
         sfr::mission::current_mode = mode;
     }
 }
