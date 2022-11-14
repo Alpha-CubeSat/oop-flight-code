@@ -11,6 +11,9 @@ void BurnwireControlTask::execute()
 
     switch (mode) {
     case burnwire_mode_type::standby: {
+#ifdef BURNWIRE
+        Serial.println("BURNWIRE: standby");
+#endif
         if (sfr::mission::current_mode->get_type() == mode_type::BURN) {
             dispatch_burn();
         } else {
@@ -19,6 +22,10 @@ void BurnwireControlTask::execute()
         break;
     }
     case burnwire_mode_type::burn: {
+#ifdef BURNWIRE
+        Serial.println("BURNWIRE: burn");
+#endif
+
         if (sfr::mission::current_mode->get_type() == mode_type::BURN) {
             if (millis() - sfr::burnwire::start_time >= (uint32_t)sfr::burnwire::burn_time) {
                 sfr::burnwire::mode = (uint16_t)burnwire_mode_type::delay;
@@ -34,8 +41,12 @@ void BurnwireControlTask::execute()
         break;
     }
     case burnwire_mode_type::delay: {
+#ifdef BURNWIRE
+        Serial.println("BURNWIRE: delay");
+#endif
+
         if (sfr::mission::current_mode->get_type() == mode_type::BURN) {
-            if (millis() - sfr::burnwire::start_time >= constants::burnwire::burn_wait) {
+            if (millis() - sfr::burnwire::start_time >= sfr::burnwire::delay_time) {
                 dispatch_burn();
             } else {
                 Pins::setPinState(constants::burnwire::first_pin, LOW);
