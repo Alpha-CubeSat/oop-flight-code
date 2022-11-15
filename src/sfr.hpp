@@ -321,6 +321,11 @@ namespace sfr {
 
         extern SensorReading *button_pressed;
     } // namespace button
+    namespace pins {
+        // TODO confirm initial pin states are correct FS-159
+        // @ Josh do we need to change this?
+        extern std::map<int, int> pinMap;
+    } // namespace pins
     namespace eeprom {
         // OP Codes 2800
         extern int wait_time_last_write_time;
