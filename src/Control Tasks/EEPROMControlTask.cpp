@@ -1,5 +1,5 @@
 #include "EEPROMControlTask.hpp"
-
+#include "SFRField.hpp"
 EEPROMControlTask::EEPROMControlTask(unsigned int offset)
     : TimedControlTask<void>(offset)
 {

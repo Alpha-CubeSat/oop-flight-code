@@ -74,17 +74,17 @@ public:
         bounded = true;
         opcode = opcode_val;
         resolution = 1;
-        this->setFieldValue((int)value);
+        SFRInterface::setFieldValue((int)value);
         if (sizeof(T) == sizeof(uint32_t))
-            this->setDataType(4);
+            SFRInterface::setDataType(4);
         else if (sizeof(T) == sizeof(uint16_t))
-            this->setDataType(3);
+            SFRInterface::setDataType(3);
         else if (sizeof(T) == sizeof(uint8_t))
-            this->setDataType(2);
+            SFRInterface::setDataType(2);
         else if (sizeof(T) == sizeof(bool))
-            this->setDataType(1);
-        this->setAddressOffset(address_offset);
-        this->setRestore(restore);
+            SFRInterface::setDataType(1);
+        SFRInterface::setAddressOffset(address_offset);
+        SFRInterface::setRestore(restore);
 
         SFRInterface::sfr_fields_vector.push_back(this);
 
@@ -100,17 +100,17 @@ public:
         bounded = false;
         opcode = opcode_val;
         resolution = 1;
-        this->setFieldValue((int)value);
+        SFRInterface::setFieldValue((int)value);
         if (sizeof(T) == sizeof(uint32_t))
-            this->setDataType(4);
+            SFRInterface::setDataType(4);
         else if (sizeof(T) == sizeof(uint16_t))
-            this->setDataType(3);
+            SFRInterface::setDataType(3);
         else if (sizeof(T) == sizeof(uint8_t))
-            this->setDataType(2);
+            SFRInterface::setDataType(2);
         else if (sizeof(T) == sizeof(bool))
-            this->setDataType(1);
-        this->setAddressOffset(address_offset);
-        this->setRestore(restore);
+            SFRInterface::setDataType(1);
+        SFRInterface::setAddressOffset(address_offset);
+        SFRInterface::setRestore(restore);
 
         SFRInterface::sfr_fields_vector.push_back(this);
 
@@ -128,17 +128,17 @@ public:
         bounded = true;
         opcode = opcode_val;
         resolution = resolution;
-        this->setFieldValue((int)value);
+        SFRInterface::setFieldValue((int)value);
         if (sizeof(T) == sizeof(uint32_t))
-            this->setDataType(4);
+            SFRInterface::setDataType(4);
         else if (sizeof(T) == sizeof(uint16_t))
-            this->setDataType(3);
+            SFRInterface::setDataType(3);
         else if (sizeof(T) == sizeof(uint8_t))
-            this->setDataType(2);
+            SFRInterface::setDataType(2);
         else if (sizeof(T) == sizeof(bool))
-            this->setDataType(1);
-        this->setAddressOffset(address_offset);
-        this->setRestore(restore);
+            SFRInterface::setDataType(1);
+        SFRInterface::setAddressOffset(address_offset);
+        SFRInterface::setRestore(restore);
 
         SFRInterface::sfr_fields_vector.push_back(this);
 

@@ -1,4 +1,5 @@
 #include "sfr.hpp"
+#include "SFRField.hpp"
 namespace sfr {
     namespace stabilization {
         // OP Codes 1100`
