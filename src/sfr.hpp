@@ -20,7 +20,6 @@
 #include <vector>
 
 namespace sfr {
-    std::vector<SFRInterface *> sfr_fields_vector;
     namespace stabilization {
         // OP Codes 1100
         extern SFRField<uint32_t> max_time;

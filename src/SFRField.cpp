@@ -1,6 +1,4 @@
 #include "SFRField.hpp"
-#include <cstring>
-#include <map>
 
 std::map<int, SFRInterface *> SFRInterface::opcode_lookup;
 

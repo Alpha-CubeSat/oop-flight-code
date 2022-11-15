@@ -3,6 +3,7 @@
 #include <map>
 #include <stdint.h>
 #include <type_traits>
+#include <vector>
 
 #ifndef _SFRFIELD_HPP_
 #define _SFRFIELD_HPP_
@@ -18,6 +19,7 @@ private:
 
 public:
     static std::map<int, SFRInterface *> opcode_lookup; // </brief Op Code Lookup Map For SFR Field Uplink Override
+    static std::vector<SFRInterface *> sfr_fields_vector;
 #ifdef DEBUG
     static void resetSFR()
     {
@@ -96,8 +98,7 @@ public:
         address_offset = address_offset;
         restore = restore;
 
-        if (restore)
-            sfr::sfr_fields_vector.push_back(this);
+        SFRInterface::sfr_fields_vector.push_back(this);
 
 #ifdef DEBUG
         T inital = default_val;
@@ -123,8 +124,7 @@ public:
         address_offset = address_offset;
         restore = restore;
 
-        if (restore)
-            sfr::sfr_fields_vector.push_back(this);
+        SFRInterface::sfr_fields_vector.push_back(this);
 
 #ifdef DEBUG
         T inital = default_val;
@@ -152,8 +152,7 @@ public:
         address_offset = address_offset;
         restore = restore;
 
-        if (restore)
-            sfr::sfr_fields_vector.push_back(this);
+        SFRInterface::sfr_fields_vector.push_back(this);
 
 #ifdef DEBUG
         T inital = default_val;
