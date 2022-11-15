@@ -1,9 +1,10 @@
+#include "sfr.hpp"
 #include <cstring>
 #include <limits>
 #include <map>
 #include <stdint.h>
 #include <type_traits>
-#include <vector>
+// #include <vector>
 
 #ifndef _SFRFIELD_HPP_
 #define _SFRFIELD_HPP_
@@ -19,7 +20,7 @@ private:
 
 public:
     static std::map<int, SFRInterface *> opcode_lookup; // </brief Op Code Lookup Map For SFR Field Uplink Override
-    static std::vector<SFRInterface *> sfr_fields_vector;
+    // static std::vector<SFRInterface *> sfr_fields_vector;
 
 #ifdef DEBUG
     static void resetSFR()
@@ -86,7 +87,7 @@ public:
         SFRInterface::setAddressOffset(address_offset);
         SFRInterface::setRestore(restore);
 
-        SFRInterface::sfr_fields_vector.push_back(this);
+        sfr::eeprom::sfr_fields_vector.push_back(this);
 
 #ifdef DEBUG
         T inital = default_val;
@@ -112,7 +113,7 @@ public:
         SFRInterface::setAddressOffset(address_offset);
         SFRInterface::setRestore(restore);
 
-        SFRInterface::sfr_fields_vector.push_back(this);
+        sfr::eeprom::sfr_fields_vector.push_back(this);
 
 #ifdef DEBUG
         T inital = default_val;
@@ -140,7 +141,7 @@ public:
         SFRInterface::setAddressOffset(address_offset);
         SFRInterface::setRestore(restore);
 
-        SFRInterface::sfr_fields_vector.push_back(this);
+        sfr::eeprom::sfr_fields_vector.push_back(this);
 
 #ifdef DEBUG
         T inital = default_val;

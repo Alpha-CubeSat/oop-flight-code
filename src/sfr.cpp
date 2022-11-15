@@ -1,5 +1,5 @@
 #include "sfr.hpp"
-#include "SFRField.hpp"
+
 namespace sfr {
     namespace stabilization {
         // OP Codes 1100`
@@ -326,6 +326,7 @@ namespace sfr {
     } // namespace pins
     namespace eeprom {
         // OP Codes 2800
+        std::vector<SFRInterface *> sfr_fields_vector;
 
         // Tracking the initial 2 hour wait time
         int wait_time_last_write_time = 0;                                                                                                                 // the millis() value when the last EEPROM wait time write ocurred, should reset to 0 every boot up cycle
