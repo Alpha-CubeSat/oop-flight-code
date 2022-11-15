@@ -13,7 +13,7 @@ void EEPROMRestore::execute()
         if (restore) {
             uint32_t value;
             EEPROM.get(read_address + 2, value);
-            s->setValue(value);
+            s->setValue(value); // Virtual funciton, will set the SFRField value with the correct type using child class implementation
         }
     }
 }

@@ -68,13 +68,13 @@ void EEPROMControlTask::save_sfr_data()
             if (restore) {
                 int data_type = s->getDataType();
                 if (data_type == 4)
-                    EEPROM.put(write_address + 2, (uint32_t)s->getValue());
+                    EEPROM.put(write_address + 2, (uint32_t)s->getFieldValue());
                 else if (data_type == 3)
-                    EEPROM.put(write_address + 2, (uint16_t)s->getValue());
+                    EEPROM.put(write_address + 2, (uint16_t)s->getFieldValue());
                 else if (data_type == 2)
-                    EEPROM.put(write_address + 2, (uint8_t)s->getValue());
+                    EEPROM.put(write_address + 2, (uint8_t)s->getFieldValue());
                 else if (data_type == 1)
-                    EEPROM.put(write_address + 2, (bool)s->getValue());
+                    EEPROM.put(write_address + 2, (bool)s->getFieldValue());
             }
             sfr::eeprom::sfr_last_write_time += time_since_last_write;
         }

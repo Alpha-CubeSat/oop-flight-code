@@ -20,6 +20,7 @@ private:
 public:
     static std::map<int, SFRInterface *> opcode_lookup; // </brief Op Code Lookup Map For SFR Field Uplink Override
     static std::vector<SFRInterface *> sfr_fields_vector;
+
 #ifdef DEBUG
     static void resetSFR()
     {
@@ -35,31 +36,18 @@ public:
     static void setFieldVal(int opcode, uint32_t arg1);
     virtual void setValue(uint32_t arg1);
 
-    int getValue()
-    {
-        return field_value;
-    }
+    // For setting the SFRInterface members for EEPROM saving and restoring
+    void setFieldValue(int val);
+    int getFieldValue();
 
-    int getDataType()
-    {
-        return data_type;
-    }
+    void setDataType(int type);
+    int getDataType();
 
-    int getAddressOffset()
-    {
-        return address_offset;
-    }
+    void setAddressOffset(int offset);
+    int getAddressOffset();
 
-    void setRestore(bool restore)
-    {
-        // Use this function when processing command to turn off EEPROM saving for a value
-        restore = restore;
-    }
-
-    bool getRestore()
-    {
-        return restore;
-    }
+    void setRestore(bool res);
+    bool getRestore();
 };
 
 template <typename T, typename = typename std::enable_if<std::is_arithmetic<T>::value, T>::type>
@@ -86,17 +74,17 @@ public:
         bounded = true;
         opcode = opcode_val;
         resolution = 1;
-        field_value = (int)value;
+        SFRInterface::setFieldValue((int)value);
         if (sizeof(T) == sizeof(uint32_t))
-            data_type = 4;
+            SFRInterface::setDataType(4);
         else if (sizeof(T) == sizeof(uint16_t))
-            data_type = 3;
+            SFRInterface::setDataType(3);
         else if (sizeof(T) == sizeof(uint8_t))
-            data_type = 2;
+            SFRInterface::setDataType(2);
         else if (sizeof(T) == sizeof(bool))
-            data_type = 1;
-        address_offset = address_offset;
-        restore = restore;
+            SFRInterface::setDataType(1);
+        SFRInterface::setAddressOffset(address_offset);
+        SFRInterface::setRestore(restore);
 
         SFRInterface::sfr_fields_vector.push_back(this);
 
@@ -112,17 +100,17 @@ public:
         bounded = false;
         opcode = opcode_val;
         resolution = 1;
-        field_value = (int)value;
+        SFRInterface::setFieldValue((int)value);
         if (sizeof(T) == sizeof(uint32_t))
-            data_type = 4;
+            SFRInterface::setDataType(4);
         else if (sizeof(T) == sizeof(uint16_t))
-            data_type = 3;
+            SFRInterface::setDataType(3);
         else if (sizeof(T) == sizeof(uint8_t))
-            data_type = 2;
+            SFRInterface::setDataType(2);
         else if (sizeof(T) == sizeof(bool))
-            data_type = 1;
-        address_offset = address_offset;
-        restore = restore;
+            SFRInterface::setDataType(1);
+        SFRInterface::setAddressOffset(address_offset);
+        SFRInterface::setRestore(restore);
 
         SFRInterface::sfr_fields_vector.push_back(this);
 
@@ -140,17 +128,17 @@ public:
         bounded = true;
         opcode = opcode_val;
         resolution = resolution;
-        field_value = (int)value;
+        SFRInterface::setFieldValue((int)value);
         if (sizeof(T) == sizeof(uint32_t))
-            data_type = 4;
+            SFRInterface::setDataType(4);
         else if (sizeof(T) == sizeof(uint16_t))
-            data_type = 3;
+            SFRInterface::setDataType(3);
         else if (sizeof(T) == sizeof(uint8_t))
-            data_type = 2;
+            SFRInterface::setDataType(2);
         else if (sizeof(T) == sizeof(bool))
-            data_type = 1;
-        address_offset = address_offset;
-        restore = restore;
+            SFRInterface::setDataType(1);
+        SFRInterface::setAddressOffset(address_offset);
+        SFRInterface::setRestore(restore);
 
         SFRInterface::sfr_fields_vector.push_back(this);
 
@@ -201,7 +189,7 @@ public:
     // Postfix increment operator.
     void operator++(int)
     {
-        value++;
+        set(value + 1);
     }
 
     // Assignment Operator
