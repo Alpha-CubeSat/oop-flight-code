@@ -1,10 +1,9 @@
-#include "sfr.hpp"
 #include <cstring>
 #include <limits>
 #include <map>
 #include <stdint.h>
 #include <type_traits>
-// #include <vector>
+#include <vector>
 
 #ifndef _SFRFIELD_HPP_
 #define _SFRFIELD_HPP_
@@ -20,7 +19,7 @@ private:
 
 public:
     static std::map<int, SFRInterface *> opcode_lookup; // </brief Op Code Lookup Map For SFR Field Uplink Override
-    // static std::vector<SFRInterface *> sfr_fields_vector;
+    static std::vector<SFRInterface *> sfr_fields_vector;
 
 #ifdef DEBUG
     static void resetSFR()
@@ -86,13 +85,11 @@ public:
             SFRInterface::setDataType(1);
         SFRInterface::setAddressOffset(address_offset);
         SFRInterface::setRestore(restore);
-
-        sfr::eeprom::sfr_fields_vector.push_back(this);
-
 #ifdef DEBUG
         T inital = default_val;
 #endif
         SFRInterface::opcode_lookup[opcode_val] = this;
+        SFRInterface::sfr_fields_vector.push_back(this);
     }
 
     SFRField(T default_val, int opcode_val, int address_offset, bool restore)
@@ -113,12 +110,11 @@ public:
         SFRInterface::setAddressOffset(address_offset);
         SFRInterface::setRestore(restore);
 
-        sfr::eeprom::sfr_fields_vector.push_back(this);
-
 #ifdef DEBUG
         T inital = default_val;
 #endif
         SFRInterface::opcode_lookup[opcode_val] = this;
+        SFRInterface::sfr_fields_vector.push_back(this);
     }
 
     SFRField(float default_val, float min, float max, int opcode_val, float resolution, int address_offset, bool restore)
@@ -141,12 +137,11 @@ public:
         SFRInterface::setAddressOffset(address_offset);
         SFRInterface::setRestore(restore);
 
-        sfr::eeprom::sfr_fields_vector.push_back(this);
-
 #ifdef DEBUG
         T inital = default_val;
 #endif
         SFRInterface::opcode_lookup[opcode_val] = this;
+        SFRInterface::sfr_fields_vector.push_back(this);
     }
 
     operator T()

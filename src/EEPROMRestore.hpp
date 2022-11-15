@@ -1,5 +1,6 @@
 #ifndef EEPROM_RESTORE_HPP_
 #define EEPROM_RESTORE_HPP_
+#include "SFRField.hpp"
 #include "sfr.hpp"
 #include <EEPROM.h>
 

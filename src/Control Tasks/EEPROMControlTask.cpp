@@ -61,7 +61,7 @@ void EEPROMControlTask::save_sfr_data()
         > If the field should not be restored, then don't bother saving the field value.
         > Once the section's write age exceeds the write endurance, the stores move to the next section.
         */
-        for (SFRInterface *s : sfr::eeprom::sfr_fields_vector) {
+        for (SFRInterface *s : SFRInterface::sfr_fields_vector) {
             bool restore = s->getRestore();
             int write_address = sfr_address + s->getAddressOffset();
             EEPROM.put(write_address, restore);

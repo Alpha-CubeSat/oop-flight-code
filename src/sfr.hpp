@@ -328,7 +328,6 @@ namespace sfr {
     } // namespace pins
     namespace eeprom {
         // OP Codes 2800
-        extern std::vector<SFRInterface *> sfr_fields_vector;
         extern int wait_time_last_write_time;
         extern SFRField<uint32_t> wait_time_write_step_time;
         extern SFRField<uint32_t> alloted_time;
