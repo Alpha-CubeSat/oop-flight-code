@@ -89,7 +89,7 @@ public:
         T inital = default_val;
 #endif
         SFRInterface::opcode_lookup[opcode_val] = this;
-        SFRInterface::sfr_fields_vector.push_back(this);
+        // SFRInterface::sfr_fields_vector.push_back(this);
     }
 
     SFRField(T default_val, int opcode_val, int address_offset, bool restore)
@@ -114,7 +114,7 @@ public:
         T inital = default_val;
 #endif
         SFRInterface::opcode_lookup[opcode_val] = this;
-        SFRInterface::sfr_fields_vector.push_back(this);
+        // SFRInterface::sfr_fields_vector.push_back(this);
     }
 
     SFRField(float default_val, float min, float max, int opcode_val, float resolution, int address_offset, bool restore)
@@ -141,7 +141,7 @@ public:
         T inital = default_val;
 #endif
         SFRInterface::opcode_lookup[opcode_val] = this;
-        SFRInterface::sfr_fields_vector.push_back(this);
+        // SFRInterface::sfr_fields_vector.push_back(this);
     }
 
     operator T()
