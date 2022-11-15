@@ -1,6 +1,7 @@
 #include "SFRField.hpp"
 
 std::map<int, SFRInterface *> SFRInterface::opcode_lookup;
+std::vector<SFRInterface *> sfr_fields_vector;
 
 void SFRInterface::setFieldVal(int opcode, uint32_t arg1)
 {
