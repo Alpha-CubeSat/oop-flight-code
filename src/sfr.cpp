@@ -154,20 +154,16 @@ namespace sfr {
         std::deque<int> mode_history;
     } // namespace mission
     namespace burnwire {
-        // OP Code 4444
-        bool fire = false;
-
-        // OP Code 5555
-        bool arm = false;
-
         // OP Codes 1900
         SFRField<uint16_t> attempts = SFRField<uint16_t>(0, 0x1900);
-        SFRField<uint16_t> camera_attempts = SFRField<uint16_t>(0, 0x1901);
         SFRField<uint32_t> start_time = SFRField<uint32_t>(0, 0x1902);
-        SFRField<uint32_t> burn_time = SFRField<uint32_t>(500, 0x1903);
+        SFRField<uint32_t> burn_time = SFRField<uint32_t>(400, 0x1903);
         SFRField<uint32_t> armed_time = SFRField<uint32_t>(2 * constants::time::one_day, 0x1904);
         SFRField<uint16_t> mode = SFRField<uint16_t>((uint16_t)burnwire_mode_type::standby, 0x1905);
-        SFRField<uint16_t> attempts_limit = SFRField<uint16_t>(10, 0x1906);
+        // 1 attempt = 1 burn of 1 wire. Therefore, double the number of attempts if you want an "attempt" to burn both wires
+        SFRField<uint16_t> attempts_limit = SFRField<uint16_t>(20, 0x1906);
+        SFRField<uint16_t> mandatory_attempts_limit = SFRField<uint16_t>(4, 0x1907);
+        SFRField<uint32_t> delay_time = SFRField<uint32_t>(1000, 0x1908);
     } // namespace burnwire
     namespace camera {
         // OP Codes 2000

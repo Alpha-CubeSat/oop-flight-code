@@ -1,5 +1,21 @@
 #include "sfr.hpp"
 
+class DeployCommand : public RockblockCommand
+{
+public:
+    DeployCommand(RawRockblockCommand raw) : RockblockCommand{raw} {};
+
+    void execute()
+    {
+        sfr::mission::current_mode = sfr::mission::normalDeployment;
+    }
+
+    bool isValid()
+    {
+        return sfr::mission::current_phase == sfr::mission::standby;
+    }
+};
+
 class ArmCommand : public RockblockCommand
 {
 public:
@@ -7,7 +23,7 @@ public:
 
     void execute()
     {
-        sfr::burnwire::arm = f_arg_1;
+        sfr::mission::current_mode = sfr::mission::normalArmed;
     }
 
     bool isValid()
@@ -23,7 +39,7 @@ public:
 
     void execute()
     {
-        sfr::burnwire::fire = f_arg_1;
+        sfr::mission::current_mode = sfr::mission::normalInSun;
     }
 
     bool isValid()
