@@ -12,7 +12,7 @@ void CameraReportMonitor::execute()
         sfr::camera::fragment_requested = false;
     }
     // Prepare data from an image taken for downlink
-    else if (sfr::rockblock::camera_report.empty() && sfr::camera::images_written > 0) {
+    else if (sfr::rockblock::camera_report.empty() && sfr::camera::images_written > current_serial) {
 #ifdef VERBOSE
         Serial.println("Report monitor started");
         Serial.println("Current serial: " + String(current_serial));
@@ -26,11 +26,15 @@ void CameraReportMonitor::execute()
         } else {
             fragment_number++;
         }
+    } else if (sfr::rockblock::camera_report.empty() && sfr::camera::images_written == current_serial) {
+        sfr::camera::report_ready = false;
     }
 }
 
 void CameraReportMonitor::create_camera_report(int fragment_number, uint8_t serial_number)
 {
+    Serial.println("DEBUG: fragment #: "+String(fragment_number));
+    Serial.println("DEBUG: serial_number: "+String(serial_number));
     // open image file and read it for specified image/fragment
     String filename = "";
     if (serial_number < 10) {
