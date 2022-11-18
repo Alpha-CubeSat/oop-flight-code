@@ -91,7 +91,7 @@ void CameraControlTask::execute()
         imgFile.close();
         sfr::camera::fragments_written++;
         if (jpglen == 0) {
-            camera_max_fragments[sfr::camera::images_written] = sfr::camera::fragments_written;
+            sfr::rockblock::camera_max_fragments[sfr::camera::images_written] = sfr::camera::fragments_written;
             sfr::camera::images_written++;
             Serial.println("Done writing file");
             sfr::camera::turn_off = true;

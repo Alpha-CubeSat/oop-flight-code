@@ -191,6 +191,10 @@ namespace sfr {
         extern SFRField<uint16_t> failed_times;
         extern SFRField<uint16_t> failed_limit;
 
+        extern boolean fragment_requested;
+        extern SFRField<uint32_t> fragment_number_requested;
+        extern SFRField<uint8_t> serial_requested;
+
         extern boolean report_written;
         extern boolean report_ready;
 

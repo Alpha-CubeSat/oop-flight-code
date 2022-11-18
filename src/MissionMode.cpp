@@ -249,7 +249,7 @@ void MandatoryBurns::transition_to()
 {
     sfr::rockblock::sleep_mode = true;
     sfr::acs::off = true;
-    sfr::imu::turn_off = true;
+    sfr::imu::turn_on = true;
     sfr::mission::possible_uncovered = true;
 }
 
@@ -262,7 +262,7 @@ void RegularBurns::transition_to()
 {
     sfr::rockblock::sleep_mode = true;
     sfr::acs::off = true;
-    sfr::imu::turn_off = true;
+    sfr::imu::turn_on = true;
 }
 void RegularBurns::dispatch()
 {
@@ -278,7 +278,7 @@ void Photo::transition_to()
 {
     sfr::rockblock::sleep_mode = true;
     sfr::acs::off = true;
-    sfr::imu::turn_off = true;
+    sfr::imu::turn_on = true;
     sfr::camera::take_photo = true;
 }
 

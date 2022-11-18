@@ -5,7 +5,7 @@
 void test_camera_valid_initialize()
 {
     CameraControlTask camera_control_task(0);
-    // TEST_ASSERT_EQUAL(false, sfr::camera::powered);
+    // TEST_ASSERT_FALSE(sfr::camera::powered);
     TEST_ASSERT_EQUAL(2, 2);
 }
 
@@ -13,7 +13,7 @@ void test_camera_power_on()
 {
 
     CameraControlTask camera_control_task(0);
-    TEST_ASSERT_EQUAL(false, sfr::camera::powered);
+    TEST_ASSERT_FALSE(sfr::camera::powered);
     TEST_ASSERT_EQUAL(camera_init_mode_type::awaiting, sfr::camera::init_mode);
     sfr::camera::turn_on = true;
 
@@ -33,11 +33,11 @@ void test_camera_power_on()
     TEST_ASSERT_EQUAL(5, sfr::camera::start_progress);
     delay(100);
     camera_control_task.execute();
-    TEST_ASSERT_EQUAL(true, sfr::camera::powered);
+    TEST_ASSERT_TRUE(sfr::camera::powered);
 
     TEST_ASSERT_EQUAL(camera_init_mode_type::complete, sfr::camera::init_mode);
-    TEST_ASSERT_EQUAL(false, sfr::camera::turn_on);
-    TEST_ASSERT_EQUAL(true, sfr::camera::powered);
+    TEST_ASSERT_FALSE(sfr::camera::turn_on);
+    TEST_ASSERT_TRUE(sfr::camera::powered);
     TEST_ASSERT_EQUAL(sensor_mode_type::normal, sfr::camera::mode);
 }
 
@@ -48,7 +48,7 @@ void test_take_picture_and_turn_off()
     for (int i = 0; i< 80; i++) {
         camera_control_task.execute();
     }
-    TEST_ASSERT_EQUAL(true, sfr::camera::report_ready);
+    TEST_ASSERT_TRUE(sfr::camera::report_ready);
     TEST_ASSERT_FALSE(sfr::camera::take_photo);
     TEST_ASSERT_EQUAL(1, sfr::camera::images_written);
     TEST_ASSERT_FALSE(sfr::camera::powered);
@@ -97,10 +97,10 @@ void test_camera_report_prepare()
     CameraReportMonitor camera_report_monitor(0);
     sfr::camera::report_ready = true;
     camera_report_monitor.execute();
-    TEST_ASSERT_EQUAL(false, sfr::camera::report_ready);
+    TEST_ASSERT_TRUE(sfr::camera::report_ready);
     TEST_ASSERT_FALSE(sfr::rockblock::camera_report.empty());
     sfr::rockblock::camera_report.pop_front();
-    TEST_ASSERT_EQUAL(sfr::rockblock::camera_report.front(), sfr::camera::images_written);
+    TEST_ASSERT_EQUAL(sfr::camera::images_written - 1, sfr::rockblock::camera_report.front());
 }
 
 int test_camera()

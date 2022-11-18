@@ -25,7 +25,6 @@ private:
     uint16_t jpglen = 0;
     int image_lengths[255];
     char filename[15];
-    int camera_max_fragments[99] = {};
 };
 
 #endif

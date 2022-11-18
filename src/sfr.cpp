@@ -197,6 +197,10 @@ namespace sfr {
         SFRField<uint16_t> failed_times = SFRField<uint16_t>(0, 0x2017);
         SFRField<uint16_t> failed_limit = SFRField<uint16_t>(5, 0x2018);
 
+        boolean fragment_requested = false;
+        SFRField<uint32_t> fragment_number_requested = SFRField<uint32_t>(0, 0x2019);
+        SFRField<uint8_t> serial_requested = SFRField<uint8_t>(0, 0x2020);
+
         boolean report_written = false;
         boolean report_ready = true;
 
@@ -286,7 +290,7 @@ namespace sfr {
         std::deque<uint8_t> imu_dlink;
 
         boolean report_written = false;
-        boolean report_ready = true;
+        boolean report_ready = false;
 
     } // namespace imu
     namespace temperature {

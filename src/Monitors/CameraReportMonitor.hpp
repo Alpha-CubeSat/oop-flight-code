@@ -14,11 +14,7 @@ public:
     void execute();
     File imgFile;
     void create_camera_report(int fragment_number, uint8_t serial_number);
-    boolean fragment_requested;
-    uint32_t fragment_number_requested;
-    uint8_t serial_requested;
-    boolean images_written = 0;
     uint32_t fragment_number = 0;
-    uint32_t current_serial;
+    uint32_t current_serial = 0;
 };
 #endif
