@@ -61,23 +61,23 @@ void EEPROMControlTask::save_sfr_data()
         > If the field should not be restored, then don't bother saving the field value.
         > Once the section's write age exceeds the write endurance, the stores move to the next section.
         */
-        for (SFRInterface *s : SFRInterface::sfr_fields_vector) {
-            bool restore = s->getRestore();
-            int write_address = sfr_address + s->getAddressOffset();
-            EEPROM.put(write_address, restore);
-            if (restore) {
-                int data_type = s->getDataType();
-                if (data_type == 4)
-                    EEPROM.put(write_address + 2, (uint32_t)s->getFieldValue());
-                else if (data_type == 3)
-                    EEPROM.put(write_address + 2, (uint16_t)s->getFieldValue());
-                else if (data_type == 2)
-                    EEPROM.put(write_address + 2, (uint8_t)s->getFieldValue());
-                else if (data_type == 1)
-                    EEPROM.put(write_address + 2, (bool)s->getFieldValue());
-            }
-            sfr::eeprom::sfr_last_write_time += time_since_last_write;
-        }
+        // for (SFRInterface *s : SFRInterface::sfr_fields_vector) {
+        //     bool restore = s->getRestore();
+        //     int write_address = sfr_address + s->getAddressOffset();
+        //     EEPROM.put(write_address, restore);
+        //     if (restore) {
+        //         int data_type = s->getDataType();
+        //         if (data_type == 4)
+        //             EEPROM.put(write_address + 2, (uint32_t)s->getFieldValue());
+        //         else if (data_type == 3)
+        //             EEPROM.put(write_address + 2, (uint16_t)s->getFieldValue());
+        //         else if (data_type == 2)
+        //             EEPROM.put(write_address + 2, (uint8_t)s->getFieldValue());
+        //         else if (data_type == 1)
+        //             EEPROM.put(write_address + 2, (bool)s->getFieldValue());
+        //     }
+        //     sfr::eeprom::sfr_last_write_time += time_since_last_write;
+        // }
 
         sfr::eeprom::sfr_address_age++;
         if (sfr::eeprom::sfr_address_age > 100000) {
