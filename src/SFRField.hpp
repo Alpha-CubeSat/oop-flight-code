@@ -20,7 +20,7 @@ private:
 public:
     static std::map<int, SFRInterface *> opcode_lookup; // </brief Op Code Lookup Map For SFR Field Uplink Override
     // static std::vector<SFRInterface *> sfr_fields_vector;
-    static std::vector<int> int_vector;
+    static std::map<int, int> int_map;
 
 #ifdef DEBUG
     static void resetSFR()
@@ -90,7 +90,7 @@ public:
         T inital = default_val;
 #endif
         SFRInterface::opcode_lookup[opcode_val] = this;
-        SFRInterface::int_vector.push_back(0);
+        SFRInterface::int_map[0] = 0;
         // SFRInterface::sfr_fields_vector.push_back(this);
     }
 
@@ -116,7 +116,7 @@ public:
         T inital = default_val;
 #endif
         SFRInterface::opcode_lookup[opcode_val] = this;
-        SFRInterface::int_vector.push_back(0);
+        SFRInterface::int_map[0] = 0;
         // SFRInterface::sfr_fields_vector.push_back(this);
     }
 
@@ -144,7 +144,7 @@ public:
         T inital = default_val;
 #endif
         SFRInterface::opcode_lookup[opcode_val] = this;
-        SFRInterface::int_vector.push_back(0);
+        SFRInterface::int_map[0] = 0;
         // SFRInterface::sfr_fields_vector.push_back(this);
     }
 
