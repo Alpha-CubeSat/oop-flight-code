@@ -116,7 +116,7 @@ public:
         T inital = default_val;
 #endif
         SFRInterface::opcode_lookup[opcode_val] = this;
-        SFRInterface::int_map[0] = 0;
+        // SFRInterface::int_map[0] = 0;
         // SFRInterface::sfr_fields_vector.push_back(this);
     }
 
@@ -144,7 +144,7 @@ public:
         T inital = default_val;
 #endif
         SFRInterface::opcode_lookup[opcode_val] = this;
-        SFRInterface::int_map[0] = 0;
+        // SFRInterface::int_map[0] = 0;
         // SFRInterface::sfr_fields_vector.push_back(this);
     }
 
