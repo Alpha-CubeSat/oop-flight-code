@@ -6,8 +6,12 @@ void EEPROMRestore::execute()
     uint8_t boot_counter;
     EEPROM.get(4, boot_counter);
 
-    // On the very first boot up, do not restore anything from EEPROM and use the default values in the SFR
+    // On the very first boot up, place the sfr_address value in the appropriate byte. Do not restore anything from EEPROM and use the default values in the SFR
     // On every boot up after, restore SFR values from EEPROM memory
+    if (boot_counter == 0) {
+        uint16_t sfr_address = sfr::eeprom::sfr_address;
+        EEPROM.put(5, sfr_address);
+    }
     if (boot_counter != 0) {
         uint16_t sfr_address;
         EEPROM.get(5, sfr_address);
