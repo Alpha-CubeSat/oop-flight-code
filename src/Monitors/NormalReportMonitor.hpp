@@ -12,6 +12,7 @@ public:
 
     NormalReportMonitor(unsigned int offset);
     void execute();
+    uint8_t serialize(int index, int value);
 };
 
 #endif
