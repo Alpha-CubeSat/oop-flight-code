@@ -68,13 +68,13 @@ void EEPROMControlTask::save_sfr_data()
             if (restore) {
                 int data_type = s->getDataType();
                 if (data_type == 4)
-                    EEPROM.put(write_address + 2, (uint32_t)s->getFieldValue());
+                    EEPROM.put(write_address + 1, (uint32_t)s->getFieldValue());
                 else if (data_type == 3)
-                    EEPROM.put(write_address + 2, (uint16_t)s->getFieldValue());
+                    EEPROM.put(write_address + 1, (uint16_t)s->getFieldValue());
                 else if (data_type == 2)
-                    EEPROM.put(write_address + 2, (uint8_t)s->getFieldValue());
+                    EEPROM.put(write_address + 1, (uint8_t)s->getFieldValue());
                 else if (data_type == 1)
-                    EEPROM.put(write_address + 2, (bool)s->getFieldValue());
+                    EEPROM.put(write_address + 1, (bool)s->getFieldValue());
             }
             sfr::eeprom::sfr_last_write_time += time_since_last_write;
         }
@@ -82,7 +82,7 @@ void EEPROMControlTask::save_sfr_data()
         sfr::eeprom::sfr_address_age++;
         if (sfr::eeprom::sfr_address_age > 100000) {
             sfr::eeprom::sfr_address += constants::eeprom::full_offset;
-            EEPROM.put(4, sfr::eeprom::sfr_address);
+            EEPROM.put(5, sfr::eeprom::sfr_address);
         }
     }
 }

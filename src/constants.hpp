@@ -263,118 +263,118 @@ namespace constants {
         static constexpr unsigned int mission_manager_offset = 0;
     } // namespace timecontrol
     namespace eeprom {
-        // EEPROM SFR memory offsets, determined by size of the prevoius SFR value type + size of a boolean + offset of the previous SFR value
+        // EEPROM SFR memory offsets, determined by size of the prevoius SFR value type + size of a boolean (1 byte) + offset of the previous SFR value
         // The boolean indicates whether or not to restore the value on bootup
         static constexpr unsigned int stabilization_max_time_offset = 0;
 
-        static constexpr unsigned int boot_max_time_offset = stabilization_max_time_offset + 6;
+        static constexpr unsigned int boot_max_time_offset = stabilization_max_time_offset + 5;
 
-        static constexpr unsigned int simple_max_time_offset = boot_max_time_offset + 6;
+        static constexpr unsigned int simple_max_time_offset = boot_max_time_offset + 5;
 
-        static constexpr unsigned int point_max_time_offset = simple_max_time_offset + 6;
+        static constexpr unsigned int point_max_time_offset = simple_max_time_offset + 5;
 
-        static constexpr unsigned int detumble_start_time_offset = point_max_time_offset + 6;
-        static constexpr unsigned int detumble_max_time_offset = detumble_start_time_offset + 6;
-        static constexpr unsigned int detumble_num_imu_retries_offset = detumble_max_time_offset + 6;
-        static constexpr unsigned int detumble_max_imu_retries_offset = detumble_num_imu_retries_offset + 4;
-        static constexpr unsigned int detumble_min_stable_gyro_z_offset = detumble_max_imu_retries_offset + 4;
-        static constexpr unsigned int detumble_max_stable_gyro_x_offset = detumble_min_stable_gyro_z_offset + 3;
-        static constexpr unsigned int detumble_max_stable_gyro_y_offset = detumble_max_stable_gyro_x_offset + 3;
-        static constexpr unsigned int detumble_min_unstable_gyro_x_offset = detumble_max_stable_gyro_y_offset + 3;
-        static constexpr unsigned int detumble_min_unstable_gyro_y_offset = detumble_min_unstable_gyro_x_offset + 3;
+        static constexpr unsigned int detumble_start_time_offset = point_max_time_offset + 5;
+        static constexpr unsigned int detumble_max_time_offset = detumble_start_time_offset + 5;
+        static constexpr unsigned int detumble_num_imu_retries_offset = detumble_max_time_offset + 5;
+        static constexpr unsigned int detumble_max_imu_retries_offset = detumble_num_imu_retries_offset + 3;
+        static constexpr unsigned int detumble_min_stable_gyro_z_offset = detumble_max_imu_retries_offset + 3;
+        static constexpr unsigned int detumble_max_stable_gyro_x_offset = detumble_min_stable_gyro_z_offset + 2;
+        static constexpr unsigned int detumble_max_stable_gyro_y_offset = detumble_max_stable_gyro_x_offset + 2;
+        static constexpr unsigned int detumble_min_unstable_gyro_x_offset = detumble_max_stable_gyro_y_offset + 2;
+        static constexpr unsigned int detumble_min_unstable_gyro_y_offset = detumble_min_unstable_gyro_x_offset + 2;
 
-        static constexpr unsigned int aliveSignal_max_downlink_hard_faults_offset = detumble_min_unstable_gyro_y_offset + 3;
-        static constexpr unsigned int aliveSignal_downlinked_offset = aliveSignal_max_downlink_hard_faults_offset + 4;
-        static constexpr unsigned int aliveSignal_max_time_offset = aliveSignal_downlinked_offset + 4;
-        static constexpr unsigned int aliveSignal_num_hard_faults_offset = aliveSignal_max_time_offset + 6;
+        static constexpr unsigned int aliveSignal_max_downlink_hard_faults_offset = detumble_min_unstable_gyro_y_offset + 2;
+        static constexpr unsigned int aliveSignal_downlinked_offset = aliveSignal_max_downlink_hard_faults_offset + 3;
+        static constexpr unsigned int aliveSignal_max_time_offset = aliveSignal_downlinked_offset + 2;
+        static constexpr unsigned int aliveSignal_num_hard_faults_offset = aliveSignal_max_time_offset + 5;
 
-        static constexpr unsigned int photoresistor_covered_offset = aliveSignal_num_hard_faults_offset + 4;
+        static constexpr unsigned int photoresistor_covered_offset = aliveSignal_num_hard_faults_offset + 3;
 
-        static constexpr unsigned int mission_acs_transmit_cycle_time_offset = photoresistor_covered_offset + 4;
-        static constexpr unsigned int mission_time_deployed_offset = mission_acs_transmit_cycle_time_offset + 6;
-        static constexpr unsigned int mission_deployed_offset = mission_time_deployed_offset + 6;
-        static constexpr unsigned int mission_already_deployed_offset = mission_deployed_offset + 4;
-        static constexpr unsigned int mission_possible_uncovered_offset = mission_already_deployed_offset + 4;
+        static constexpr unsigned int mission_acs_transmit_cycle_time_offset = photoresistor_covered_offset + 2;
+        static constexpr unsigned int mission_time_deployed_offset = mission_acs_transmit_cycle_time_offset + 5;
+        static constexpr unsigned int mission_deployed_offset = mission_time_deployed_offset + 5;
+        static constexpr unsigned int mission_already_deployed_offset = mission_deployed_offset + 2;
+        static constexpr unsigned int mission_possible_uncovered_offset = mission_already_deployed_offset + 2;
 
-        static constexpr unsigned int burnwire_attempts_offset = mission_possible_uncovered_offset + 4;
-        static constexpr unsigned int burnwire_camera_attempts_offset = burnwire_attempts_offset + 4;
-        static constexpr unsigned int burnwire_start_time_offset = burnwire_camera_attempts_offset + 4;
-        static constexpr unsigned int burnwire_burn_time_offset = burnwire_start_time_offset + 6;
-        static constexpr unsigned int burnwire_armed_time_offset = burnwire_burn_time_offset + 6;
-        static constexpr unsigned int burnwire_mode_offset = burnwire_armed_time_offset + 6;
-        static constexpr unsigned int burnwire_attempts_limit_offset = burnwire_mode_offset + 4;
+        static constexpr unsigned int burnwire_attempts_offset = mission_possible_uncovered_offset + 2;
+        static constexpr unsigned int burnwire_camera_attempts_offset = burnwire_attempts_offset + 3;
+        static constexpr unsigned int burnwire_start_time_offset = burnwire_camera_attempts_offset + 3;
+        static constexpr unsigned int burnwire_burn_time_offset = burnwire_start_time_offset + 5;
+        static constexpr unsigned int burnwire_armed_time_offset = burnwire_burn_time_offset + 5;
+        static constexpr unsigned int burnwire_mode_offset = burnwire_armed_time_offset + 5;
+        static constexpr unsigned int burnwire_attempts_limit_offset = burnwire_mode_offset + 3;
 
-        static constexpr unsigned int camera_photo_taken_sd_failed_offset = burnwire_attempts_limit_offset + 4;
-        static constexpr unsigned int camera_take_photo_offset = camera_photo_taken_sd_failed_offset + 4;
-        static constexpr unsigned int camera_turn_on_offset = camera_take_photo_offset + 4;
-        static constexpr unsigned int camera_turn_off_offset = camera_turn_on_offset + 4;
-        static constexpr unsigned int camera_powered_offset = camera_turn_off_offset + 4;
-        static constexpr unsigned int camera_start_progress_offset = camera_powered_offset + 4;
-        static constexpr unsigned int camera_step_time_offset = camera_start_progress_offset + 3;
-        static constexpr unsigned int camera_init_start_time_offset = camera_step_time_offset + 6;
-        static constexpr unsigned int camera_init_timeout_offset = camera_init_start_time_offset + 6;
-        static constexpr unsigned int camera_begin_delay_offset = camera_init_timeout_offset + 6;
-        static constexpr unsigned int camera_resolution_set_delay_offset = camera_begin_delay_offset + 6;
-        static constexpr unsigned int camera_resolution_get_delay_offset = camera_resolution_set_delay_offset + 6;
-        static constexpr unsigned int camera_init_mode_offset = camera_resolution_get_delay_offset + 6;
-        static constexpr unsigned int camera_mode_offset = camera_init_mode_offset + 4;
-        static constexpr unsigned int camera_images_written_offset = camera_mode_offset + 4;
-        static constexpr unsigned int camera_fragments_written_offset = camera_images_written_offset + 6;
-        static constexpr unsigned int camera_set_res_offset = camera_fragments_written_offset + 6;
-        static constexpr unsigned int camera_failed_times_offset = camera_set_res_offset + 6;
-        static constexpr unsigned int camera_failed_limit_offset = camera_failed_times_offset + 4;
+        static constexpr unsigned int camera_photo_taken_sd_failed_offset = burnwire_attempts_limit_offset + 3;
+        static constexpr unsigned int camera_take_photo_offset = camera_photo_taken_sd_failed_offset + 2;
+        static constexpr unsigned int camera_turn_on_offset = camera_take_photo_offset + 2;
+        static constexpr unsigned int camera_turn_off_offset = camera_turn_on_offset + 2;
+        static constexpr unsigned int camera_powered_offset = camera_turn_off_offset + 2;
+        static constexpr unsigned int camera_start_progress_offset = camera_powered_offset + 2;
+        static constexpr unsigned int camera_step_time_offset = camera_start_progress_offset + 2;
+        static constexpr unsigned int camera_init_start_time_offset = camera_step_time_offset + 5;
+        static constexpr unsigned int camera_init_timeout_offset = camera_init_start_time_offset + 5;
+        static constexpr unsigned int camera_begin_delay_offset = camera_init_timeout_offset + 5;
+        static constexpr unsigned int camera_resolution_set_delay_offset = camera_begin_delay_offset + 5;
+        static constexpr unsigned int camera_resolution_get_delay_offset = camera_resolution_set_delay_offset + 5;
+        static constexpr unsigned int camera_init_mode_offset = camera_resolution_get_delay_offset + 5;
+        static constexpr unsigned int camera_mode_offset = camera_init_mode_offset + 3;
+        static constexpr unsigned int camera_images_written_offset = camera_mode_offset + 3;
+        static constexpr unsigned int camera_fragments_written_offset = camera_images_written_offset + 5;
+        static constexpr unsigned int camera_set_res_offset = camera_fragments_written_offset + 5;
+        static constexpr unsigned int camera_failed_times_offset = camera_set_res_offset + 5;
+        static constexpr unsigned int camera_failed_limit_offset = camera_failed_times_offset + 3;
 
-        static constexpr unsigned int rockblock_ready_status_offset = camera_failed_limit_offset + 4;
-        static constexpr unsigned int rockblock_last_downlink_offset = rockblock_ready_status_offset + 4;
-        static constexpr unsigned int rockblock_downlink_period_offset = rockblock_last_downlink_offset + 6;
-        static constexpr unsigned int rockblock_waiting_message_offset = rockblock_downlink_period_offset + 6;
-        static constexpr unsigned int rockblock_max_commands_count_offset = rockblock_waiting_message_offset + 4;
-        static constexpr unsigned int rockblock_imu_max_fragments_offset = rockblock_max_commands_count_offset + 3;
-        static constexpr unsigned int rockblock_imudownlink_start_time_offset = rockblock_imu_max_fragments_offset + 4;
-        static constexpr unsigned int rockblock_imudownlink_remain_time_offset = rockblock_imudownlink_start_time_offset + 6;
-        static constexpr unsigned int rockblock_imu_first_start_offset = rockblock_imudownlink_remain_time_offset + 6;
-        static constexpr unsigned int rockblock_imu_downlink_on_offset = rockblock_imu_first_start_offset + 4;
-        static constexpr unsigned int rockblock_flush_status_offset = rockblock_imu_downlink_on_offset + 4;
-        static constexpr unsigned int rockblock_waiting_command_offset = rockblock_flush_status_offset + 4;
-        static constexpr unsigned int rockblock_conseq_reads_offset = rockblock_waiting_command_offset + 4;
-        static constexpr unsigned int rockblock_timeout_offset = rockblock_conseq_reads_offset + 6;
-        static constexpr unsigned int rockblock_start_time_offset = rockblock_timeout_offset + 6;
-        static constexpr unsigned int rockblock_start_time_check_signal_offset = rockblock_start_time_offset + 6;
-        static constexpr unsigned int rockblock_max_check_signal_time_offset = rockblock_start_time_check_signal_offset + 6;
-        static constexpr unsigned int rockblock_sleep_mode_offset = rockblock_max_check_signal_time_offset + 6;
-        static constexpr unsigned int rockblock_downlink_report_type_offset = rockblock_sleep_mode_offset + 4;
-        static constexpr unsigned int rockblock_mode_offset = rockblock_downlink_report_type_offset + 4;
+        static constexpr unsigned int rockblock_ready_status_offset = camera_failed_limit_offset + 3;
+        static constexpr unsigned int rockblock_last_downlink_offset = rockblock_ready_status_offset + 2;
+        static constexpr unsigned int rockblock_downlink_period_offset = rockblock_last_downlink_offset + 5;
+        static constexpr unsigned int rockblock_waiting_message_offset = rockblock_downlink_period_offset + 5;
+        static constexpr unsigned int rockblock_max_commands_count_offset = rockblock_waiting_message_offset + 2;
+        static constexpr unsigned int rockblock_imu_max_fragments_offset = rockblock_max_commands_count_offset + 2;
+        static constexpr unsigned int rockblock_imudownlink_start_time_offset = rockblock_imu_max_fragments_offset + 3;
+        static constexpr unsigned int rockblock_imudownlink_remain_time_offset = rockblock_imudownlink_start_time_offset + 5;
+        static constexpr unsigned int rockblock_imu_first_start_offset = rockblock_imudownlink_remain_time_offset + 5;
+        static constexpr unsigned int rockblock_imu_downlink_on_offset = rockblock_imu_first_start_offset + 2;
+        static constexpr unsigned int rockblock_flush_status_offset = rockblock_imu_downlink_on_offset + 2;
+        static constexpr unsigned int rockblock_waiting_command_offset = rockblock_flush_status_offset + 2;
+        static constexpr unsigned int rockblock_conseq_reads_offset = rockblock_waiting_command_offset + 2;
+        static constexpr unsigned int rockblock_timeout_offset = rockblock_conseq_reads_offset + 5;
+        static constexpr unsigned int rockblock_start_time_offset = rockblock_timeout_offset + 5;
+        static constexpr unsigned int rockblock_start_time_check_signal_offset = rockblock_start_time_offset + 5;
+        static constexpr unsigned int rockblock_max_check_signal_time_offset = rockblock_start_time_check_signal_offset + 5;
+        static constexpr unsigned int rockblock_sleep_mode_offset = rockblock_max_check_signal_time_offset + 5;
+        static constexpr unsigned int rockblock_downlink_report_type_offset = rockblock_sleep_mode_offset + 2;
+        static constexpr unsigned int rockblock_mode_offset = rockblock_downlink_report_type_offset + 3;
 
-        static constexpr unsigned int imu_mode_offset = rockblock_mode_offset + 4;
-        static constexpr unsigned int imu_successful_init_offset = imu_mode_offset + 4;
-        static constexpr unsigned int imu_max_fragments_offset = imu_successful_init_offset + 4;
-        static constexpr unsigned int imu_sample_gyro_offset = imu_max_fragments_offset + 6;
-        static constexpr unsigned int imu_turn_on_offset = imu_sample_gyro_offset + 4;
-        static constexpr unsigned int imu_turn_off_offset = imu_turn_on_offset + 4;
-        static constexpr unsigned int imu_powered_offset = imu_turn_off_offset + 4;
+        static constexpr unsigned int imu_mode_offset = rockblock_mode_offset + 3;
+        static constexpr unsigned int imu_successful_init_offset = imu_mode_offset + 3;
+        static constexpr unsigned int imu_max_fragments_offset = imu_successful_init_offset + 2;
+        static constexpr unsigned int imu_sample_gyro_offset = imu_max_fragments_offset + 5;
+        static constexpr unsigned int imu_turn_on_offset = imu_sample_gyro_offset + 2;
+        static constexpr unsigned int imu_turn_off_offset = imu_turn_on_offset + 2;
+        static constexpr unsigned int imu_powered_offset = imu_turn_off_offset + 2;
 
-        static constexpr unsigned int temperature_in_sun_offset = imu_powered_offset + 4;
+        static constexpr unsigned int temperature_in_sun_offset = imu_powered_offset + 2;
 
-        static constexpr unsigned int current_in_sun_offset = temperature_in_sun_offset + 4;
+        static constexpr unsigned int current_in_sun_offset = temperature_in_sun_offset + 2;
 
-        static constexpr unsigned int acs_max_no_communication_offset = current_in_sun_offset + 4;
-        static constexpr unsigned int acs_on_time_offset = acs_max_no_communication_offset + 6;
-        static constexpr unsigned int acs_off_offset = acs_on_time_offset + 6;
-        static constexpr unsigned int acs_mag_offset = acs_off_offset + 4;
+        static constexpr unsigned int acs_max_no_communication_offset = current_in_sun_offset + 2;
+        static constexpr unsigned int acs_on_time_offset = acs_max_no_communication_offset + 5;
+        static constexpr unsigned int acs_off_offset = acs_on_time_offset + 5;
+        static constexpr unsigned int acs_mag_offset = acs_off_offset + 2;
 
-        static constexpr unsigned int battery_acceptable_battery_offset = acs_mag_offset + 4;
-        static constexpr unsigned int battery_min_battery_offset = battery_acceptable_battery_offset + 6;
+        static constexpr unsigned int battery_acceptable_battery_offset = acs_mag_offset + 3;
+        static constexpr unsigned int battery_min_battery_offset = battery_acceptable_battery_offset + 5;
 
-        static constexpr unsigned int button_pressed_offset = battery_min_battery_offset + 6;
+        static constexpr unsigned int button_pressed_offset = battery_min_battery_offset + 5;
 
-        static constexpr unsigned int eeprom_boot_count_offset = button_pressed_offset + 4;
-        static constexpr unsigned int eeprom_wait_time_write_step_time_offset = eeprom_boot_count_offset + 3;
-        static constexpr unsigned int eeprom_alloted_time_offset = eeprom_wait_time_write_step_time_offset + 6;
-        static constexpr unsigned int eeprom_alloted_time_passed_offset = eeprom_alloted_time_offset + 6;
-        static constexpr unsigned int eeprom_sfr_write_step_time_offset = eeprom_alloted_time_passed_offset + 4;
-        static constexpr unsigned int eeprom_sfr_address_age_offset = eeprom_sfr_write_step_time_offset + 6;
+        static constexpr unsigned int eeprom_boot_count_offset = button_pressed_offset + 2;
+        static constexpr unsigned int eeprom_wait_time_write_step_time_offset = eeprom_boot_count_offset + 2;
+        static constexpr unsigned int eeprom_alloted_time_offset = eeprom_wait_time_write_step_time_offset + 5;
+        static constexpr unsigned int eeprom_alloted_time_passed_offset = eeprom_alloted_time_offset + 5;
+        static constexpr unsigned int eeprom_sfr_write_step_time_offset = eeprom_alloted_time_passed_offset + 2;
+        static constexpr unsigned int eeprom_sfr_address_age_offset = eeprom_sfr_write_step_time_offset + 5;
 
-        static constexpr unsigned int full_offset = eeprom_sfr_address_age_offset + 6;
+        static constexpr unsigned int full_offset = eeprom_sfr_address_age_offset + 5;
     } // namespace eeprom
 };    // namespace constants
 
