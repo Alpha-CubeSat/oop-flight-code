@@ -328,6 +328,7 @@ namespace sfr {
     } // namespace pins
     namespace eeprom {
         // OP Codes 2800
+        extern SFRField<uint8_t> boot_counter;
         extern int wait_time_last_write_time;
         extern SFRField<uint32_t> wait_time_write_step_time;
         extern SFRField<uint32_t> alloted_time;

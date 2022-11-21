@@ -326,19 +326,20 @@ namespace sfr {
     } // namespace pins
     namespace eeprom {
         // OP Codes 2800
+        SFRField<uint8_t> boot_count = SFRField<uint8_t>(0, 0x2800, constants::eeprom::eeprom_boot_count_offset, true);
 
         // Tracking the initial 2 hour wait time
         int wait_time_last_write_time = 0;                                                                                                                 // the millis() value when the last EEPROM wait time write ocurred, should reset to 0 every boot up cycle
-        SFRField<uint32_t> wait_time_write_step_time = SFRField<uint32_t>(1000, 0x2800, constants::eeprom::eeprom_wait_time_write_step_time_offset, true); // the amount of time between each write to EEPROM for wait time
-        SFRField<uint32_t> alloted_time = SFRField<uint32_t>(7200000, 0x2801, constants::eeprom::eeprom_alloted_time_offset, true);                        // the amount of time for the EEPROM to count to (7200000 ms = 2 h)
-        SFRField<bool> alloted_time_passed = SFRField<bool>(false, 0x2802, constants::eeprom::eeprom_alloted_time_passed_offset, true);                    // indicates if the EEPROM count has reached the alloted time
+        SFRField<uint32_t> wait_time_write_step_time = SFRField<uint32_t>(1000, 0x2801, constants::eeprom::eeprom_wait_time_write_step_time_offset, true); // the amount of time between each write to EEPROM for wait time
+        SFRField<uint32_t> alloted_time = SFRField<uint32_t>(7200000, 0x2802, constants::eeprom::eeprom_alloted_time_offset, true);                        // the amount of time for the EEPROM to count to (7200000 ms = 2 h)
+        SFRField<bool> alloted_time_passed = SFRField<bool>(false, 0x2803, constants::eeprom::eeprom_alloted_time_passed_offset, true);                    // indicates if the EEPROM count has reached the alloted time
 
         // Saving SFR data
         int sfr_last_write_time = 0;                                                                                                           // the millis() value when the last EEPROM SFR data write ocurred, should reset every boot up cycle
-        SFRField<uint32_t> sfr_write_step_time = SFRField<uint32_t>(1000, 0x2803, constants::eeprom::eeprom_sfr_write_step_time_offset, true); // the amount of time between each write to EEPROM for SFR data
-        int sfr_address = 6;                                                                                                                   // the address of where current SFR data is stored, read from EEPROM and set at the beginning of every boot up cycle
-        SFRField<uint32_t> sfr_address_age = SFRField<uint32_t>(0, 0x2804, constants::eeprom::eeprom_sfr_address_age_offset, true);            // the write age of the current SFR data section in EEPROM
-        // Bytes 0-3 are for the time passed, bytes 4-5 are for the address where values are to be written and stored.
-        // SFR data begins at byte 6 and after. The section of EEPROM bytes where SFR data is stored will change to avoid exceeding the write endurance.
+        SFRField<uint32_t> sfr_write_step_time = SFRField<uint32_t>(1000, 0x2804, constants::eeprom::eeprom_sfr_write_step_time_offset, true); // the amount of time between each write to EEPROM for SFR data
+        int sfr_address = 7;                                                                                                                   // the address of where current SFR data is stored, read from EEPROM and set at the beginning of every boot up cycle
+        SFRField<uint32_t> sfr_address_age = SFRField<uint32_t>(0, 0x2805, constants::eeprom::eeprom_sfr_address_age_offset, true);            // the write age of the current SFR data section in EEPROM
+        // Bytes 0-3 are for the time passed, byte 4 holds the number of reboots, and bytes 5-6 are for the address where values are to be written and stored.
+        // SFR data begins at byte 7 and after. The section of EEPROM bytes where SFR data is stored will change to avoid exceeding the write endurance.
     } // namespace eeprom
 };    // namespace sfr

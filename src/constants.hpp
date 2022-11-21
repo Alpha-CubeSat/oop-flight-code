@@ -367,7 +367,8 @@ namespace constants {
 
         static constexpr unsigned int button_pressed_offset = battery_min_battery_offset + 6;
 
-        static constexpr unsigned int eeprom_wait_time_write_step_time_offset = button_pressed_offset + 4;
+        static constexpr unsigned int eeprom_boot_count_offset = button_pressed_offset + 4;
+        static constexpr unsigned int eeprom_wait_time_write_step_time_offset = eeprom_boot_count_offset + 3;
         static constexpr unsigned int eeprom_alloted_time_offset = eeprom_wait_time_write_step_time_offset + 6;
         static constexpr unsigned int eeprom_alloted_time_passed_offset = eeprom_alloted_time_offset + 6;
         static constexpr unsigned int eeprom_sfr_write_step_time_offset = eeprom_alloted_time_passed_offset + 4;

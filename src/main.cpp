@@ -1,3 +1,4 @@
+#include "EEPROMRestore.hpp"
 #include "MainControlLoop.hpp"
 #include "Pins.hpp"
 
@@ -12,6 +13,7 @@ void setup()
     Serial.begin(9600);
     delay(5000);
     Pins::setInitialPinStates();
+    EEPROMRestore::execute();
 }
 
 void loop()

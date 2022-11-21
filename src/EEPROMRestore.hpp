@@ -7,9 +7,6 @@ class EEPROMRestore
 {
 public:
     static void execute();
-
-private:
-    void set_address();
 };
 
 #endif
