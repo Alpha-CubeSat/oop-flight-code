@@ -507,16 +507,21 @@ RockblockCommand *RockblockControlTask::commandFactory(RawRockblockCommand raw)
         Serial.println("SFR Override Command");
 #endif
         return new SFROverrideCommand(raw);
-    } else if (op_code == constants::rockblock::opcodes::sfr_field_opcode_fire) {
+    } else if (op_code == constants::rockblock::opcodes::sfr_field_opcode_deploy) {
 #ifdef VERBOSE_RB
-        Serial.println("SFR Fire Command");
+        Serial.println("SFR Deploy Command");
 #endif
-        return new FireCommand(raw);
+        return new DeployCommand(raw);
     } else if (op_code == constants::rockblock::opcodes::sfr_field_opcode_arm) {
 #ifdef VERBOSE_RB
         Serial.println("SFR Arm Command");
 #endif
         return new ArmCommand(raw);
+    } else if (op_code == constants::rockblock::opcodes::sfr_field_opcode_fire) {
+#ifdef VERBOSE_RB
+        Serial.println("SFR Fire Command");
+#endif
+        return new FireCommand(raw);
     } else {
 #ifdef VERBOSE_RB
         Serial.print("Unknown Command with opcode: ");
