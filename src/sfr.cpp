@@ -326,7 +326,7 @@ namespace sfr {
     } // namespace pins
     namespace eeprom {
         // OP Codes 2800
-        SFRField<uint8_t> boot_count = SFRField<uint8_t>(0, 0x2800, constants::eeprom::eeprom_boot_count_offset, true);
+        SFRField<uint8_t> boot_counter = SFRField<uint8_t>(0, 0x2800, constants::eeprom::eeprom_boot_count_offset, true);
 
         // Tracking the initial 2 hour wait time
         int wait_time_last_write_time = 0;                                                                                                                 // the millis() value when the last EEPROM wait time write ocurred, should reset to 0 every boot up cycle
