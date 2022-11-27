@@ -19,9 +19,9 @@ void IMUDownlink::execute()
         sfr::imu::gyro_y_value->get_value(&gyro_y);
         sfr::imu::gyro_z_value->get_value(&gyro_z);
 
-        sfr::imu::imu_dlink.push_front((gyro_x+5)*25);
-        sfr::imu::imu_dlink.push_front((gyro_y+5)*25);
-        sfr::imu::imu_dlink.push_front((gyro_z+5)*25);
+        sfr::imu::imu_dlink.push_front((gyro_x + 5) * 25);
+        sfr::imu::imu_dlink.push_front((gyro_y + 5) * 25);
+        sfr::imu::imu_dlink.push_front((gyro_z + 5) * 25);
     }
 
     if (sfr::mission::current_mode->get_id() == sfr::mission::mandatoryBurns->get_id() || sfr::mission::current_mode->get_id() == sfr::mission::regularBurns->get_id()) {

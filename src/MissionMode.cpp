@@ -55,7 +55,7 @@ void DetumbleSpin::dispatch()
         sfr::detumble::num_imu_retries++;
     }
     if (sfr::detumble::num_imu_retries >= sfr::detumble::max_imu_retries) {
-    sfr::mission::current_mode = sfr::mission::normal;
+        sfr::mission::current_mode = sfr::mission::normal;
     }
 }
 
