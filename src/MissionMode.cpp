@@ -154,6 +154,7 @@ void TransmitArmed::transition_to()
     sfr::rockblock::sleep_mode = false;
     sfr::acs::off = true;
     sfr::imu::turn_off = true;
+    sfr::burnwire::attempts = 0;
 }
 void TransmitArmed::dispatch()
 {
@@ -252,7 +253,9 @@ void MandatoryBurns::transition_to()
 
 void MandatoryBurns::dispatch()
 {
-    sfr::mission::current_mode = sfr::mission::regularBurns;
+    if (sfr::burnwire::attempts > sfr::burnwire::mandatory_attempts_limit) {
+        sfr::mission::current_mode = sfr::mission::regularBurns;
+    }
 }
 
 void RegularBurns::transition_to()
