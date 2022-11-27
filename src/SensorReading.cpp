@@ -94,7 +94,6 @@ void SensorReading::set_value(float x)
 void SensorReading::set_valid()
 {
     valid = true;
-
     if (type != fault_index_type::no_fault) {
         // clear fault bit
         if (map_to_reg[this->type] == 1) {
