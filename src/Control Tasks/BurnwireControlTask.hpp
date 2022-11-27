@@ -13,6 +13,7 @@ public:
     void execute();
     void dispatch_burn();
     void transition_to_standby();
+    void transition_to_delay();
 };
 
 #endif
