@@ -157,7 +157,7 @@ namespace sfr {
         // OP Codes 1900
         SFRField<uint16_t> attempts = SFRField<uint16_t>(0, 0x1900);
         SFRField<uint32_t> start_time = SFRField<uint32_t>(0, 0x1902);
-        SFRField<uint32_t> burn_time = SFRField<uint32_t>(400, 0x1903);
+        SFRField<uint32_t> burn_time = SFRField<uint32_t>(600, 0x1903);
         SFRField<uint32_t> armed_time = SFRField<uint32_t>(2 * constants::time::one_day, 0x1904);
         SFRField<uint16_t> mode = SFRField<uint16_t>((uint16_t)burnwire_mode_type::standby, 0x1905);
         // 1 attempt = 1 burn of 1 wire. Therefore, double the number of attempts if you want an "attempt" to burn both wires
