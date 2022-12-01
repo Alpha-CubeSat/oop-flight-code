@@ -52,5 +52,5 @@
         "random": "cpp"
     },
     "C_Cpp.dimInactiveRegions": false,
-    "C_Cpp.formatting": "clangFormat",
+    "C_Cpp.formatting": "clangFormat"
 }
