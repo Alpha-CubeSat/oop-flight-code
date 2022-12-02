@@ -17,6 +17,7 @@
 #include "SensorReading.hpp"
 #include "constants.hpp"
 #include <deque>
+#include <vector>
 
 namespace sfr {
     namespace stabilization {
@@ -39,15 +40,17 @@ namespace sfr {
         // OP Codes 1500
         extern SFRField<uint32_t> start_time;
         extern SFRField<uint32_t> max_time;
-        extern SFRField<uint8_t> min_stable_gyro_z;
-        extern SFRField<uint8_t> max_stable_gyro_x;
-        extern SFRField<uint8_t> max_stable_gyro_y;
-        extern SFRField<uint8_t> min_unstable_gyro_x;
-        extern SFRField<uint8_t> min_unstable_gyro_y;
 
         // TODO
         extern SFRField<uint16_t> num_imu_retries;
         extern SFRField<uint16_t> max_imu_retries;
+
+        extern SFRField<uint8_t> min_stable_gyro_z;
+        extern SFRField<uint8_t> max_stable_gyro_x;
+        extern SFRField<uint8_t> max_stable_gyro_y;
+
+        extern SFRField<uint8_t> min_unstable_gyro_x;
+        extern SFRField<uint8_t> min_unstable_gyro_y;
     } // namespace detumble
     namespace aliveSignal {
         // OP Codes 1600
@@ -56,10 +59,6 @@ namespace sfr {
         extern SFRField<uint32_t> max_time;
         extern SFRField<uint16_t> num_hard_faults;
     } // namespace aliveSignal
-    namespace pins {
-        //@Josh would we need to change this?
-        extern std::map<int, int> pinMap;
-    } // namespace pins
     namespace photoresistor {
         // OP Codes 1700
         extern SFRField<bool> covered;
@@ -186,14 +185,14 @@ namespace sfr {
         extern SFRField<uint16_t> failed_times;
         extern SFRField<uint16_t> failed_limit;
 
-        extern boolean report_written;
-        extern boolean report_downlinked;
-        extern boolean report_ready;
+        extern bool report_written;
+        extern bool report_downlinked;
+        extern bool report_ready;
 
     } // namespace camera
     namespace rockblock {
         // OP Codes 2100
-        extern SFRField<bool> rockblock_ready_status;
+        extern SFRField<bool> ready_status;
 
         extern SFRField<uint32_t> last_downlink;
         extern SFRField<uint32_t> downlink_period;
@@ -275,9 +274,9 @@ namespace sfr {
 
         extern std::deque<uint8_t> imu_dlink;
 
-        extern boolean report_written;
-        extern boolean report_downlinked;
-        extern boolean report_ready;
+        extern bool report_written;
+        extern bool report_downlinked;
+        extern bool report_ready;
 
     } // namespace imu
     namespace temperature {
@@ -317,14 +316,23 @@ namespace sfr {
 
         extern SensorReading *button_pressed;
     } // namespace button
-    namespace EEPROM {
+    namespace pins {
+        // TODO confirm initial pin states are correct FS-159
+        // @ Josh do we need to change this?
+        extern std::map<int, int> pinMap;
+    } // namespace pins
+    namespace eeprom {
         // OP Codes 2800
-        extern SFRField<uint32_t> time_of_last_write;
-        extern SFRField<uint32_t> write_step_time; // the amount of time between each write to EEPROM
-        extern SFRField<uint32_t> alloted_time;    // the amount of time for the EEPROM to count to (7200000 ms = 2 h)
-        extern SFRField<uint32_t> eeprom_value;    // the amount of time that the EEPROM has counted, stops when the alloted time has been reached
+        extern SFRField<uint8_t> boot_counter;
+        extern int wait_time_last_write_time;
+        extern SFRField<uint32_t> wait_time_write_step_time;
+        extern SFRField<uint32_t> alloted_time;
         extern SFRField<bool> alloted_time_passed;
-    } // namespace EEPROM
+        extern int sfr_last_write_time;
+        extern SFRField<uint32_t> sfr_write_step_time;
+        extern int sfr_address;
+        extern SFRField<uint32_t> sfr_address_age;
+    } // namespace eeprom
 };    // namespace sfr
 
 #endif
