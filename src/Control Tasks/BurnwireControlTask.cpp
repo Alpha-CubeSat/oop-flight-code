@@ -38,10 +38,7 @@ void BurnwireControlTask::execute()
 #endif
         if (sfr::mission::current_mode->get_type() == mode_type::BURN) {
             if (millis() - sfr::burnwire::start_time >= sfr::burnwire::burn_time) {
-                sfr::burnwire::mode = (uint16_t)burnwire_mode_type::delay;
-                Pins::setPinState(constants::burnwire::first_pin, LOW);
-                Pins::setPinState(constants::burnwire::second_pin, LOW);
-                sfr::burnwire::start_time = millis();
+                transition_to_delay();
             }
         } else {
             transition_to_standby();
@@ -94,4 +91,12 @@ void BurnwireControlTask::transition_to_standby()
     Pins::setPinState(constants::burnwire::first_pin, LOW);
     Pins::setPinState(constants::burnwire::second_pin, LOW);
     sfr::burnwire::attempts = 0;
+}
+
+void BurnwireControlTask::transition_to_delay()
+{
+    sfr::burnwire::mode = (uint16_t)burnwire_mode_type::delay;
+    Pins::setPinState(constants::burnwire::first_pin, LOW);
+    Pins::setPinState(constants::burnwire::second_pin, LOW);
+    sfr::burnwire::start_time = millis();
 }

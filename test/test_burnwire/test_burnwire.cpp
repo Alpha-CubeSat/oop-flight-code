@@ -1,7 +1,7 @@
-#include "Control Tasks/BurnwireControlTask.hpp"
-#include "MissionManager.hpp"
-#include "sfr.hpp"
 #include <unity.h>
+#include "Control Tasks/BurnwireControlTask.hpp"
+#include "Pins.hpp"
+#include "Arduino.h"
 
 void test_valid_initialization()
 {
@@ -9,6 +9,69 @@ void test_valid_initialization()
     TEST_ASSERT_EQUAL(burnwire_mode_type::standby, sfr::burnwire::mode);
 }
 
+void test_max_attempts()
+{
+    BurnwireControlTask burnwire_control_task(0);
+
+    sfr::button::pressed = true;
+    sfr::photoresistor::covered = true;
+    sfr::mission::current_mode = sfr::mission::mandatoryBurns;
+    TEST_ASSERT_EQUAL(sfr::mission::mandatoryBurns->get_id(), sfr::mission::current_mode->get_id());
+    TEST_ASSERT_EQUAL(burnwire_mode_type::standby, sfr::burnwire::mode);
+
+    int start_time;
+
+    for (int i = 0; i < sfr::burnwire::mandatory_attempts_limit/2; ++i) {
+        // Burn burnwire 1
+        start_time = millis();
+        burnwire_control_task.execute();
+
+        while(millis()-start_time < sfr::burnwire::burn_time){
+            TEST_ASSERT_EQUAL(burnwire_mode_type::burn, sfr::burnwire::mode);
+            TEST_ASSERT_EQUAL(HIGH, Pins::getPinState(constants::burnwire::first_pin));
+            TEST_ASSERT_EQUAL(LOW, Pins::getPinState(constants::burnwire::second_pin));
+            burnwire_control_task.execute();
+        }
+
+        // Delay
+        start_time = millis();
+        burnwire_control_task.execute();
+
+        while(millis()-start_time < sfr::burnwire::delay_time){
+            TEST_ASSERT_EQUAL(burnwire_mode_type::delay, sfr::burnwire::mode);
+            TEST_ASSERT_EQUAL(LOW, Pins::getPinState(constants::burnwire::first_pin));
+            TEST_ASSERT_EQUAL(LOW, Pins::getPinState(constants::burnwire::second_pin));
+            burnwire_control_task.execute();
+        }
+
+        // Burn burnwire 2
+        start_time = millis();
+        burnwire_control_task.execute();
+
+        while(millis()-start_time < sfr::burnwire::burn_time){
+            TEST_ASSERT_EQUAL(burnwire_mode_type::burn, sfr::burnwire::mode);
+            TEST_ASSERT_EQUAL(LOW, Pins::getPinState(constants::burnwire::first_pin));
+            TEST_ASSERT_EQUAL(HIGH, Pins::getPinState(constants::burnwire::second_pin));
+            burnwire_control_task.execute();
+        }
+
+        // Delay
+        start_time = millis();
+        burnwire_control_task.execute();
+
+        while(millis()-start_time < sfr::burnwire::delay_time){
+            TEST_ASSERT_EQUAL(burnwire_mode_type::delay, sfr::burnwire::mode);
+            TEST_ASSERT_EQUAL(LOW, Pins::getPinState(constants::burnwire::first_pin));
+            TEST_ASSERT_EQUAL(LOW, Pins::getPinState(constants::burnwire::second_pin));
+            burnwire_control_task.execute();
+        }
+
+    }
+
+}
+
+
+/* TODO FS-176
 void test_out_of_order_commands()
 {
     BurnwireControlTask burnwire_control_task(0);
@@ -31,44 +94,6 @@ void test_out_of_order_commands()
     sfr::burnwire::fire = true;
     sfr::fault::check_temp_c = false;
     sfr::current::in_sun = false;
-    burnwire_control_task.execute();
-    TEST_ASSERT_EQUAL(burnwire_mode_type::armed, sfr::burnwire::mode);
-
-    sfr::burnwire::fire = true;
-    sfr::temperature::in_sun = true;
-    sfr::fault::check_temp_c = true;
-    burnwire_control_task.execute();
-    TEST_ASSERT_EQUAL(burnwire_mode_type::fire, sfr::burnwire::mode);
-
-    sfr::camera::powered = true;
-    burnwire_control_task.execute();
-    TEST_ASSERT_EQUAL(burnwire_mode_type::burn, sfr::burnwire::mode);
-
-    for (int i = 0; i < constants::burnwire::max_attempts; ++i) {
-        delay(sfr::burnwire::burn_time);
-        burnwire_control_task.execute();
-        TEST_ASSERT_EQUAL(burnwire_mode_type::delay, sfr::burnwire::mode);
-
-        delay(constants::burnwire::burn_wait);
-        burnwire_control_task.execute();
-        TEST_ASSERT_EQUAL(burnwire_mode_type::burn, sfr::burnwire::mode);
-    }
-
-    burnwire_control_task.execute();
-    TEST_ASSERT_EQUAL(burnwire_mode_type::standby, sfr::burnwire::mode);
-}
-
-void test_max_attempts()
-{
-    BurnwireControlTask burnwire_control_task(0);
-
-    sfr::mission::mode = mission_mode_type::standby;
-    burnwire_control_task.execute();
-    TEST_ASSERT_EQUAL(burnwire_mode_type::standby, sfr::burnwire::mode);
-
-    sfr::mission::mode = mission_mode_type::deployment;
-
-    sfr::burnwire::arm = true;
     burnwire_control_task.execute();
     TEST_ASSERT_EQUAL(burnwire_mode_type::armed, sfr::burnwire::mode);
 
@@ -868,22 +893,13 @@ void test_fire_burnwire_logic()
     burnwire_control_task.execute();
     TEST_ASSERT_EQUAL(LOW, Pins::getPinState(constants::burnwire::first_pin));
     TEST_ASSERT_EQUAL(LOW, Pins::getPinState(constants::burnwire::second_pin));
-}
+} */
 
 int test_burnwire()
 {
     UNITY_BEGIN();
-    // Timeout is long- change in constants for testing
-    // RUN_TEST(test_armed_timeout);
     RUN_TEST(test_valid_initialization);
-    RUN_TEST(test_no_solar_current);
-    RUN_TEST(test_out_of_order_commands);
     RUN_TEST(test_max_attempts);
-    RUN_TEST(test_exit_deployment);
-    RUN_TEST(test_sensor);
-    RUN_TEST(test_camera_max_attempts);
-    RUN_TEST(test_camera_some_attempts);
-    RUN_TEST(test_fire_burnwire_logic);
     return UNITY_END();
 }
 
@@ -896,8 +912,9 @@ int main()
 #include <Arduino.h>
 void setup()
 {
-    delay(2000);
+    delay(5000);
     Serial.begin(9600);
+    delay(5000);
     test_burnwire();
 }
 

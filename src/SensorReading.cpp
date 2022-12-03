@@ -60,7 +60,7 @@ SensorReading::SensorReading(uint8_t buffer_size, float max, float min)
     buffer.clear();
 } // constructor
 
-boolean SensorReading::get_value(float *value_location)
+bool SensorReading::get_value(float *value_location)
 {
     // enough values have been accumulated to get the average
     if (buffer.size() == buffer_size && valid) {
@@ -151,7 +151,7 @@ float SensorReading::get_min()
     return min;
 }
 
-boolean SensorReading::is_valid()
+bool SensorReading::is_valid()
 {
     return valid;
 }
