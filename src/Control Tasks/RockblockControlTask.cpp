@@ -339,11 +339,9 @@ void RockblockControlTask::dispatch_process_mt_status()
     case '1':
         Serial.println("SAT INFO: message retrieved");
         if (sfr::rockblock::downlink_report_type == (uint16_t)report_type::camera_report) {
-            sfr::camera::report_downlinked = true;
             sfr::rockblock::camera_report.clear();
         }
         if (sfr::rockblock::downlink_report_type == (uint16_t)report_type::imu_report) {
-            sfr::imu::report_downlinked = true;
             sfr::rockblock::imu_report.clear();
         }
         transition_to(rockblock_mode_type::read_message);
@@ -483,11 +481,9 @@ void RockblockControlTask::dispatch_end_transmission()
         Pins::setPinState(constants::rockblock::sleep_pin, LOW);
     }
     if (sfr::rockblock::downlink_report_type == (uint16_t)report_type::camera_report) {
-        sfr::camera::report_downlinked = true;
         sfr::rockblock::camera_report.clear();
     }
     if (sfr::rockblock::downlink_report_type == (uint16_t)report_type::imu_report) {
-        sfr::imu::report_downlinked = true;
         sfr::rockblock::imu_report.clear();
     }
     transition_to(rockblock_mode_type::standby);

@@ -260,8 +260,10 @@ namespace constants {
         static constexpr unsigned int camera_set_res_offset = camera_fragments_written_offset + 5;
         static constexpr unsigned int camera_failed_times_offset = camera_set_res_offset + 5;
         static constexpr unsigned int camera_failed_limit_offset = camera_failed_times_offset + 3;
+        static constexpr unsigned int camera_fragment_number_requested = camera_failed_limit_offset + 3;
+        static constexpr unsigned int camera_serial_requested = camera_fragment_number_requested + 5;
 
-        static constexpr unsigned int rockblock_ready_status_offset = camera_failed_limit_offset + 3;
+        static constexpr unsigned int rockblock_ready_status_offset = camera_serial_requested + 2;
         static constexpr unsigned int rockblock_last_downlink_offset = rockblock_ready_status_offset + 2;
         static constexpr unsigned int rockblock_downlink_period_offset = rockblock_last_downlink_offset + 5;
         static constexpr unsigned int rockblock_waiting_message_offset = rockblock_downlink_period_offset + 5;

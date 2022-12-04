@@ -26,12 +26,12 @@ void CameraControlTask::execute()
         if (sfr::camera::init_mode == (uint16_t)camera_init_mode_type::complete) {
             transition_to_normal();
         } else if (sfr::camera::init_mode == (uint16_t)camera_init_mode_type::failed) {
-            if (sfr::camera::failed_times = sfr::camera::failed_limit) {
+            if (sfr::camera::failed_times == sfr::camera::failed_limit) {
                 sfr::camera::failed_times = 0; // reset
                 transition_to_abnormal_init();
             } else {
                 sfr::camera::failed_times = sfr::camera::failed_times + 1;
-                Serial.println("failed times: ");
+                Serial.print("failed times: ");
                 Serial.println(sfr::camera::failed_times);
                 sfr::camera::init_mode = (uint16_t)camera_init_mode_type::awaiting;
             }
@@ -49,6 +49,7 @@ void CameraControlTask::execute()
         Pins::setPinState(constants::camera::tx, LOW);
         sfr::camera::powered = false;
         sfr::camera::turn_off = false;
+        sfr::camera::init_mode = (uint16_t)camera_init_mode_type::in_progress;
     }
 
     if (jpglen > 0) {
@@ -90,7 +91,7 @@ void CameraControlTask::execute()
         imgFile.close();
         sfr::camera::fragments_written++;
         if (jpglen == 0) {
-            camera_max_fragments[sfr::camera::images_written] = sfr::camera::fragments_written;
+            sfr::rockblock::camera_max_fragments[sfr::camera::images_written] = sfr::camera::fragments_written;
             sfr::camera::images_written++;
             Serial.println("Done writing file");
             sfr::camera::turn_off = true;

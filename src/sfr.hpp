@@ -185,8 +185,11 @@ namespace sfr {
         extern SFRField<uint16_t> failed_times;
         extern SFRField<uint16_t> failed_limit;
 
+        extern bool fragment_requested;
+        extern SFRField<uint32_t> fragment_number_requested;
+        extern SFRField<uint8_t> serial_requested;
+
         extern bool report_written;
-        extern bool report_downlinked;
         extern bool report_ready;
 
     } // namespace camera
@@ -275,7 +278,6 @@ namespace sfr {
         extern std::deque<uint8_t> imu_dlink;
 
         extern bool report_written;
-        extern bool report_downlinked;
         extern bool report_ready;
 
     } // namespace imu

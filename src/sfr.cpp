@@ -165,8 +165,11 @@ namespace sfr {
         SFRField<uint16_t> failed_times = SFRField<uint16_t>(0, 0x2017, constants::eeprom::camera_failed_times_offset, true);
         SFRField<uint16_t> failed_limit = SFRField<uint16_t>(5, 0x2018, constants::eeprom::camera_failed_limit_offset, true);
 
+        bool fragment_requested = false;
+        SFRField<uint32_t> fragment_number_requested = SFRField<uint32_t>(0, 0x2019, constants::eeprom::camera_fragment_number_requested, true);
+        SFRField<uint8_t> serial_requested = SFRField<uint8_t>(0, 0x2020, constants::eeprom::camera_serial_requested, true);
+
         bool report_written = false;
-        bool report_downlinked = true;
         bool report_ready = true;
 
     } // namespace camera
@@ -253,9 +256,8 @@ namespace sfr {
 
         std::deque<uint8_t> imu_dlink;
 
-        bool report_written = false;
-        bool report_downlinked = true;
-        bool report_ready = true;
+        boolean report_written = false;
+        boolean report_ready = false;
 
     } // namespace imu
     namespace temperature {
