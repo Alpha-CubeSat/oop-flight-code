@@ -187,6 +187,10 @@ namespace sfr {
         std::deque<uint8_t> camera_report;
         std::deque<uint8_t> imu_report;
 
+        uint8_t normal_report_command_curr = 0;
+        uint8_t normal_report_command_max = constants::rockblock::normal_report_command_default_max;
+        std::deque<uint8_t> commands_received;
+
         char buffer[constants::rockblock::buffer_size] = {0};
         int camera_commands[99][constants::rockblock::command_len] = {};
         uint32_t camera_max_fragments[99] = {};

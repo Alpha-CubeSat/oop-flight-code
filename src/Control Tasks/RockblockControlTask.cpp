@@ -170,6 +170,8 @@ void RockblockControlTask::dispatch_send_message_length()
 {
     std::stringstream ss;
     ss << sfr::rockblock::downlink_report.size();
+    // Lock the max amount of reports to be the current amount to ensure size does not change before downlink
+    sfr::rockblock::normal_report_command_max = sfr::rockblock::normal_report_command_curr;
     std::string s = ss.str();
     std::string message_length = "AT+SBDWB=" + s + "\r";
 #ifdef VERBOSE_RB
@@ -232,6 +234,8 @@ void RockblockControlTask::dispatch_send_message()
     sfr::rockblock::serial.write(checksum >> 8);
     sfr::rockblock::serial.write(checksum & 0xFF);
     sfr::rockblock::serial.write('\r');
+    std::deque<uint8_t> empty_commands_received;
+    std::swap(sfr::rockblock::commands_received, empty_commands_received);
     transition_to(rockblock_mode_type::await_message);
 }
 
@@ -243,6 +247,7 @@ void RockblockControlTask::dispatch_await_message()
 #ifdef VERBOSE_RB
             Serial.println("SAT INFO: report accepted");
 #endif
+            sfr::rockblock::normal_report_command_max = constants::rockblock::normal_report_command_default_max;
             transition_to(rockblock_mode_type::send_response);
         } else {
             transition_to(rockblock_mode_type::send_message);
