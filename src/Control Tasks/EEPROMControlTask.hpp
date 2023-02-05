@@ -10,6 +10,10 @@ class EEPROMControlTask : public TimedControlTask<void>
 public:
     EEPROMControlTask(unsigned int offset);
     void execute();
+
+private:
+    void save_wait_time();
+    void save_sfr_data();
 };
 
 #endif

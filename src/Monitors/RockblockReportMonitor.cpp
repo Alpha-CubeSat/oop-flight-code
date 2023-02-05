@@ -44,7 +44,7 @@ void RockblockReportMonitor::execute()
 void RockblockReportMonitor::switch_report_type_to(report_type downlink_report_type)
 {
     sfr::rockblock::downlink_report_type = (uint16_t)downlink_report_type;
-    sfr::rockblock::rockblock_ready_status = true;
+    sfr::rockblock::ready_status = true;
 }
 
 void RockblockReportMonitor::schedule_report()
@@ -54,11 +54,11 @@ void RockblockReportMonitor::schedule_report()
     if (sfr::mission::current_mode->get_type() == mode_type::LP) {
         if (millis() - sfr::rockblock::last_downlink >= sfr::rockblock::downlink_period) {
             sfr::rockblock::downlink_report_type = (uint16_t)report_type::normal_report;
-            sfr::rockblock::rockblock_ready_status = true;
+            sfr::rockblock::ready_status = true;
             return;
         }
 
-        sfr::rockblock::rockblock_ready_status = false;
+        sfr::rockblock::ready_status = false;
         return;
     }
 
@@ -81,7 +81,7 @@ void RockblockReportMonitor::schedule_report()
         }
 
         // None of the reports are ready
-        sfr::rockblock::rockblock_ready_status = false;
+        sfr::rockblock::ready_status = false;
         return;
     case report_type::imu_report:
         if (sfr::camera::report_ready) {
@@ -100,7 +100,7 @@ void RockblockReportMonitor::schedule_report()
         }
 
         // None of the reports are ready
-        sfr::rockblock::rockblock_ready_status = false;
+        sfr::rockblock::ready_status = false;
         return;
     case report_type::camera_report:
         if (millis() - sfr::rockblock::last_downlink >= sfr::rockblock::downlink_period) {
@@ -119,7 +119,7 @@ void RockblockReportMonitor::schedule_report()
         }
 
         // None of the reports are ready
-        sfr::rockblock::rockblock_ready_status = false;
+        sfr::rockblock::ready_status = false;
         return;
     }
 }

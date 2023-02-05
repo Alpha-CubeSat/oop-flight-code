@@ -2,6 +2,7 @@
 #define BURNWIRE_CONTROL_TASK_HPP_
 
 #include "Control Tasks/TimedControlTask.hpp"
+#include "Modes/burnwire_mode_type.enum"
 #include "Pins.hpp"
 #include "sfr.hpp"
 
@@ -11,7 +12,8 @@ public:
     BurnwireControlTask(unsigned int offset);
     void execute();
     void dispatch_burn();
-    static void transition_to_standby();
+    void transition_to_standby();
+    void transition_to_delay();
 };
 
 #endif

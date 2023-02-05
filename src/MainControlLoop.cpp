@@ -34,9 +34,7 @@ void MainControlLoop::execute()
     faults::fault_3 = 0;
 
     clock_manager.execute();
-
     mission_manager.execute_on_time();
-
     battery_monitor.execute_on_time();
     button_monitor.execute_on_time();
     camera_report_monitor.execute_on_time();
@@ -53,5 +51,4 @@ void MainControlLoop::execute()
     camera_control_task.execute_on_time();
     rockblock_control_task.execute_on_time();
     eeprom_control_task.execute_on_time();
-    mission_manager.execute_on_time();
 }

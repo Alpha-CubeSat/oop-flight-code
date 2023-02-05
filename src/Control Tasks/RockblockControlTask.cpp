@@ -85,15 +85,15 @@ void RockblockControlTask::execute()
 
 void RockblockControlTask::dispatch_standby()
 {
-#ifdef VERBOSE_RB
-    if (sfr::rockblock::rockblock_ready_status) {
+#ifdef VERBOSE
+    if (sfr::rockblock::ready_status) {
         Serial.print("Rockblock Ready to Downlink\n");
     } else {
         Serial.print("Rockblock Not Ready to Downlink\n");
     }
 #endif
 
-    if ((sfr::rockblock::rockblock_ready_status || sfr::rockblock::waiting_message) && !sfr::rockblock::sleep_mode) {
+    if ((sfr::rockblock::ready_status || sfr::rockblock::waiting_message) && !sfr::rockblock::sleep_mode) {
         transition_to(rockblock_mode_type::send_at);
         Pins::setPinState(constants::rockblock::sleep_pin, HIGH);
     } else {
@@ -170,6 +170,8 @@ void RockblockControlTask::dispatch_send_message_length()
 {
     std::stringstream ss;
     ss << sfr::rockblock::downlink_report.size();
+    // Lock the max amount of reports to be the current amount to ensure size does not change before downlink
+    sfr::rockblock::normal_report_command_max = sfr::rockblock::normal_report_command_curr;
     std::string s = ss.str();
     std::string message_length = "AT+SBDWB=" + s + "\r";
 #ifdef VERBOSE_RB
@@ -232,6 +234,8 @@ void RockblockControlTask::dispatch_send_message()
     sfr::rockblock::serial.write(checksum >> 8);
     sfr::rockblock::serial.write(checksum & 0xFF);
     sfr::rockblock::serial.write('\r');
+    std::deque<uint8_t> empty_commands_received;
+    std::swap(sfr::rockblock::commands_received, empty_commands_received);
     transition_to(rockblock_mode_type::await_message);
 }
 
@@ -243,6 +247,7 @@ void RockblockControlTask::dispatch_await_message()
 #ifdef VERBOSE_RB
             Serial.println("SAT INFO: report accepted");
 #endif
+            sfr::rockblock::normal_report_command_max = constants::rockblock::normal_report_command_default_max;
             transition_to(rockblock_mode_type::send_response);
         } else {
             transition_to(rockblock_mode_type::send_message); // SBD message write timeout, checksum failed, or size isn't correct
@@ -339,11 +344,9 @@ void RockblockControlTask::dispatch_process_mt_status()
     case '1':
         Serial.println("SAT INFO: message retrieved");
         if (sfr::rockblock::downlink_report_type == (uint16_t)report_type::camera_report) {
-            sfr::camera::report_downlinked = true;
             sfr::rockblock::camera_report.clear();
         }
         if (sfr::rockblock::downlink_report_type == (uint16_t)report_type::imu_report) {
-            sfr::imu::report_downlinked = true;
             sfr::rockblock::imu_report.clear();
         }
         transition_to(rockblock_mode_type::read_message);
@@ -557,11 +560,9 @@ void RockblockControlTask::dispatch_end_transmission()
         Pins::setPinState(constants::rockblock::sleep_pin, LOW);
     }
     if (sfr::rockblock::downlink_report_type == (uint16_t)report_type::camera_report) {
-        sfr::camera::report_downlinked = true;
         sfr::rockblock::camera_report.clear();
     }
     if (sfr::rockblock::downlink_report_type == (uint16_t)report_type::imu_report) {
-        sfr::imu::report_downlinked = true;
         sfr::rockblock::imu_report.clear();
     }
     transition_to(rockblock_mode_type::standby);
@@ -581,16 +582,21 @@ RockblockCommand *RockblockControlTask::commandFactory(RawRockblockCommand raw)
         Serial.println("SFR Override Command");
 #endif
         return new SFROverrideCommand(raw);
-    } else if (op_code == constants::rockblock::opcodes::sfr_field_opcode_fire) {
+    } else if (op_code == constants::rockblock::opcodes::sfr_field_opcode_deploy) {
 #ifdef VERBOSE_RB
-        Serial.println("SFR Fire Command");
+        Serial.println("SFR Deploy Command");
 #endif
-        return new FireCommand(raw);
+        return new DeployCommand(raw);
     } else if (op_code == constants::rockblock::opcodes::sfr_field_opcode_arm) {
 #ifdef VERBOSE_RB
         Serial.println("SFR Arm Command");
 #endif
         return new ArmCommand(raw);
+    } else if (op_code == constants::rockblock::opcodes::sfr_field_opcode_fire) {
+#ifdef VERBOSE_RB
+        Serial.println("SFR Fire Command");
+#endif
+        return new FireCommand(raw);
     } else {
 #ifdef VERBOSE_RB
         Serial.print("Unknown Command with opcode: ");

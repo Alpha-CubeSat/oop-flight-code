@@ -17,19 +17,19 @@ private:
     float max;                // max valid value
     float min;                // min valid value
     std::deque<float> buffer; // buffer used to store the raw values
-    boolean valid;            // if SensorReading is valid
+    bool valid;               // if SensorReading is valid
     bool repeated_values(std::deque<float> buffer, float val);
 
 public:
     SensorReading(fault_index_type type, uint8_t buffer_size, float max, float min); // constructor
     SensorReading(uint8_t buffer_size, float max, float min);                        // constructor
-    boolean get_value(float *value_location);                                        // get SensorReading averaged value
+    bool get_value(float *value_location);                                           // get SensorReading averaged value
     void set_value(float x);                                                         // set SensorReading value
     void set_invalid();
     void set_valid();
     float get_min();
     float get_max();
-    boolean is_valid();
+    bool is_valid();
 };
 
 #endif

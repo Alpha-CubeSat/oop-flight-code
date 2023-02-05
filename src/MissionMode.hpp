@@ -313,7 +313,7 @@ public:
     }
     mode_type get_type()
     {
-        return mode_type::OTHER;
+        return mode_type::BURN;
     }
 };
 
@@ -328,7 +328,7 @@ public:
     }
     mode_type get_type()
     {
-        return mode_type::OTHER;
+        return mode_type::BURN;
     }
 };
 

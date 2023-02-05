@@ -18,7 +18,6 @@ public:
     uint8_t fragment_number = 0;
     bool report_ready = false;
     bool report_downlinked = true;
-    bool full_report_written = false;
 };
 
 #endif

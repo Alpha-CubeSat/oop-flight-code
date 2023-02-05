@@ -57,8 +57,6 @@ void DetumbleSpin::dispatch()
     if (sfr::detumble::num_imu_retries >= sfr::detumble::max_imu_retries) {
         sfr::mission::current_mode = sfr::mission::normal;
     }
-    enter_lp(sfr::mission::lowPowerDetumbleSpin);
-    exit_detumble_phase(sfr::mission::normal);
 }
 
 void LowPowerDetumbleSpin::transition_to()
@@ -99,7 +97,6 @@ void Transmit::transition_to()
 {
     sfr::rockblock::sleep_mode = false;
     sfr::acs::off = true;
-    sfr::imu::turn_off = true;
 }
 void Transmit::dispatch()
 {
@@ -158,6 +155,7 @@ void TransmitArmed::transition_to()
     sfr::rockblock::sleep_mode = false;
     sfr::acs::off = true;
     sfr::imu::turn_off = true;
+    sfr::burnwire::attempts = 0;
 }
 void TransmitArmed::dispatch()
 {
@@ -252,21 +250,24 @@ void MandatoryBurns::transition_to()
 {
     sfr::rockblock::sleep_mode = true;
     sfr::acs::off = true;
-    sfr::imu::turn_off = true;
+    sfr::imu::turn_on = true;
     sfr::mission::possible_uncovered = true;
 }
 
 void MandatoryBurns::dispatch()
 {
-    sfr::mission::current_mode = sfr::mission::regularBurns;
+    if (sfr::burnwire::attempts > sfr::burnwire::mandatory_attempts_limit) {
+        sfr::mission::current_mode = sfr::mission::regularBurns;
+    }
 }
 
 void RegularBurns::transition_to()
 {
     sfr::rockblock::sleep_mode = true;
     sfr::acs::off = true;
-    sfr::imu::turn_off = true;
+    sfr::imu::turn_off = false;
 }
+int regBurnTimes = 0;
 void RegularBurns::dispatch()
 {
     if (!sfr::button::pressed || !sfr::photoresistor::covered) {
@@ -281,7 +282,7 @@ void Photo::transition_to()
 {
     sfr::rockblock::sleep_mode = true;
     sfr::acs::off = true;
-    sfr::imu::turn_off = true;
+    sfr::imu::turn_off = false;
     sfr::camera::take_photo = true;
 }
 
