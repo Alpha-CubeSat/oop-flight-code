@@ -360,7 +360,7 @@ void exit_lp(MissionMode *reg_mode)
 {
     float voltage;
 
-    if (sfr::battery::voltage_average->get_value(&voltage) && voltage >= sfr::battery::acceptable_battery) {
+    if (sfr::battery::voltage_average->get_value(&voltage) && voltage > sfr::battery::acceptable_battery) {
         sfr::mission::current_mode = reg_mode;
     }
 }
