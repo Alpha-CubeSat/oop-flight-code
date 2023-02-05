@@ -9,6 +9,23 @@ void test_set_valid()
     imu_monitor.execute();
     TEST_ASSERT_TRUE(true);
 }
+void test_imu_power_cycle()
+{
+    IMUMonitor imu_monitor(0);
+    TEST_ASSERT_FALSE(sfr::imu::powered);
+    TEST_ASSERT_TRUE(sfr::imu::successful_init);
+    imu_monitor.execute();
+    TEST_ASSERT_TRUE(sfr::imu::powered);
+    TEST_ASSERT_FALSE(sfr::imu::turn_on);
+    TEST_ASSERT_TRUE(sfr::imu::mag_x_average->is_valid());
+
+    sfr::imu::turn_off = true;
+    imu_monitor.execute();
+    TEST_ASSERT_FALSE(Pins::getPinState(constants::imu::CSAG));
+    TEST_ASSERT_FALSE(Pins::getPinState(constants::imu::CSM));
+    TEST_ASSERT_FALSE(sfr::imu::powered);
+    TEST_ASSERT_FALSE(sfr::imu::turn_off)
+}
 
 int test_imu_monitor()
 {
