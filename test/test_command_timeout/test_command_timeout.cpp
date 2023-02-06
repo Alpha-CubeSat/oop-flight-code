@@ -18,7 +18,7 @@ void test_armed_timeout()
     TEST_ASSERT_EQUAL(sfr::mission::armed->get_id(), sfr::mission::current_phase->get_id());
 
     // Check that armed command timed out
-    delay(FAKE_ARMED_TIME);
+    delay(FAKE_ARMED_TIME + 1);
     mission_manager.execute();
     TEST_ASSERT_EQUAL(sfr::mission::deployment->get_id(), sfr::mission::current_phase->get_id());
     

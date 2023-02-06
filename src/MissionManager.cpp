@@ -10,6 +10,10 @@ void MissionManager::execute()
 {
     sfr::mission::current_phase = modeToPhase(sfr::mission::current_mode);
 
+    if (sfr::mission::previous_phase->get_id() != sfr::mission::current_phase->get_id()) {
+        sfr::mission::current_phase->set_start_time(millis());
+    }
+
     if (sfr::mission::current_phase->get_id() == sfr::mission::armed->get_id() && (millis() - sfr::mission::current_phase->start_time) > sfr::burnwire::armed_time) {
         sfr::mission::current_mode = sfr::mission::normalDeployment;
         sfr::mission::current_phase = modeToPhase(sfr::mission::current_mode);
@@ -21,14 +25,11 @@ void MissionManager::execute()
         sfr::mission::mode_history.push_front(sfr::mission::current_mode->get_id());
     }
 
-    if (sfr::mission::previous_phase->get_id() != sfr::mission::current_phase->get_id()) {
-        sfr::mission::current_phase->set_start_time(millis());
-    }
-
     sfr::mission::previous_mode = sfr::mission::current_mode;
     sfr::mission::previous_phase = modeToPhase(sfr::mission::current_mode);
 
     sfr::mission::current_mode->dispatch();
+
 }
 
 Phase *MissionManager::modeToPhase(MissionMode *mission)
