@@ -12,6 +12,7 @@ class MissionManager : public TimedControlTask<void>
 {
 public:
     MissionManager(unsigned int offset);
+    Phase *modeToPhase(MissionMode *mission);
     void execute();
 };
 
