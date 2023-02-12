@@ -96,11 +96,11 @@ void SensorReading::set_valid()
     if (type != fault_index_type::no_fault) {
         // clear fault bit
         if (map_to_reg[this->type] == 1) {
-            faults::fault_1 &= ~map_to_mask[this->type];
+            faults::fault_1_signaled &= ~map_to_mask[this->type];
         } else if (map_to_reg[this->type] == 2) {
-            faults::fault_2 &= ~map_to_mask[this->type];
+            faults::fault_2_signaled &= ~map_to_mask[this->type];
         } else {
-            faults::fault_3 &= ~map_to_mask[this->type];
+            faults::fault_3_signaled &= ~map_to_mask[this->type];
         } // clear the flag in the corresponding fault register
     }
 }
@@ -115,11 +115,11 @@ void SensorReading::set_invalid()
     if (type != fault_index_type::no_fault) {
         // set fault bit
         if (map_to_reg[this->type] == 1) {
-            faults::fault_1 |= map_to_mask[this->type];
+            faults::fault_1_signaled |= map_to_mask[this->type];
         } else if (map_to_reg[this->type] == 2) {
-            faults::fault_2 |= map_to_mask[this->type];
+            faults::fault_2_signaled |= map_to_mask[this->type];
         } else {
-            faults::fault_3 |= map_to_mask[this->type];
+            faults::fault_3_signaled |= map_to_mask[this->type];
         } // set the flag in the corresponding fault register
     }
 }
@@ -161,5 +161,21 @@ float SensorReading::get_min()
 
 bool SensorReading::is_valid()
 {
+    if (type != fault_index_type::no_fault) {
+        // set fault bit
+        if (map_to_reg[this->type] == 1) {
+            if (map_to_mask[this->type] & faults::fault_1_suppressed){
+                return false;
+            }
+        } else if (map_to_reg[this->type] == 2) {
+            if(map_to_mask[this->type] & faults::fault_2_suppressed){
+                return false;
+            }
+        } else {
+            if(map_to_mask[this->type] & faults::fault_3_suppressed){
+                return false;
+            }
+        } // set the flag in the corresponding fault register
+    }
     return valid;
 }
