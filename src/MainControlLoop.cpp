@@ -24,12 +24,13 @@ MainControlLoop::MainControlLoop()
       mission_manager(constants::timecontrol::mission_manager_offset)
 {
     delay(1000);
+    SensorReading * test_values = new SensorReading(10, -100, 100);
 }
 
 void MainControlLoop::execute()
 {
     delay(200); // To prolong the speed of the main control loop to ensure correct RockBlock reads. Can reduce in the future.
-    faults::fault_1 = 0;
+    /*faults::fault_1 = 0;
     faults::fault_2 = 0;
     faults::fault_3 = 0;
 
@@ -50,5 +51,16 @@ void MainControlLoop::execute()
     burnwire_control_task.execute_on_time();
     camera_control_task.execute_on_time();
     rockblock_control_task.execute_on_time();
-    eeprom_control_task.execute_on_time();
+    eeprom_control_task.execute_on_time();*/
+
+    
+
+    test_values->set_value( 50 );
+
+    for (int i = 0; i < test_values->get_; i++) {
+        Serial.println(test_values.pop());
+
+    }
+
+    Serial.println(test_values->get_buffer());
 }

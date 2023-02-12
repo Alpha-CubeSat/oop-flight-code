@@ -30,6 +30,8 @@ public:
     float get_min();
     float get_max();
     bool is_valid();
+    std::deque<float> get_buffer();
+    
 };
 
 #endif

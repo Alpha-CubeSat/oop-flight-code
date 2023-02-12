@@ -156,3 +156,8 @@ bool SensorReading::is_valid()
 {
     return valid;
 }
+
+std::deque<float> SensorReading::get_buffer()
+{
+    return buffer;
+}
