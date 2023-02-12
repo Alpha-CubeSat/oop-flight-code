@@ -128,6 +128,7 @@ void SensorReading::set_invalid()
 bool SensorReading::repeated_values(std::deque<float> buffer, float val)
 {
     if (buffer.empty() || buffer.size() == 1) {
+        buffer.push_front(val);
         return false;
     }
 
