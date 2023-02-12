@@ -38,8 +38,8 @@ namespace sfr {
         // OP Codes 1700
         SFRField<bool> covered = SFRField<bool>(true, 0x1700, constants::eeprom::photoresistor_covered_offset, true);
 
-        SensorReading *light_val_average_standby = new SensorReading(fault_index_type::light_val, 20, 0, 1000);
-        SensorReading *light_val_average_deployment = new SensorReading(fault_index_type::light_val, 1, 0, 1000);
+        SensorReading *light_val_average_standby = new SensorReading(fault_groups::hardware_faults::light_val, 20, 0, 1000);
+        SensorReading *light_val_average_deployment = new SensorReading(fault_groups::hardware_faults::light_val, 1, 0, 1000);
     } // namespace photoresistor
     namespace mission {
         // OP Codes 1800
@@ -251,16 +251,16 @@ namespace sfr {
         SensorReading *gyro_y_value = new SensorReading(1, 0, 0);
         SensorReading *gyro_z_value = new SensorReading(1, 0, 0);
 
-        SensorReading *mag_x_average = new SensorReading(fault_index_type::mag_x, 20, 0, 0);
-        SensorReading *mag_y_average = new SensorReading(fault_index_type::mag_y, 20, 0, 0);
-        SensorReading *mag_z_average = new SensorReading(fault_index_type::mag_z, 20, 0, 0);
+        SensorReading *mag_x_average = new SensorReading(fault_groups::imu_faults::mag_x, 20, 0, 0);
+        SensorReading *mag_y_average = new SensorReading(fault_groups::imu_faults::mag_y, 20, 0, 0);
+        SensorReading *mag_z_average = new SensorReading(fault_groups::imu_faults::mag_z, 20, 0, 0);
 
-        SensorReading *gyro_x_average = new SensorReading(fault_index_type::gyro_x, 20, 0, 0);
-        SensorReading *gyro_y_average = new SensorReading(fault_index_type::gyro_y, 20, 0, 0);
-        SensorReading *gyro_z_average = new SensorReading(fault_index_type::gyro_z, 20, 0, 0);
+        SensorReading *gyro_x_average = new SensorReading(fault_groups::imu_faults::gyro_x, 20, 0, 0);
+        SensorReading *gyro_y_average = new SensorReading(fault_groups::imu_faults::gyro_y, 20, 0, 0);
+        SensorReading *gyro_z_average = new SensorReading(fault_groups::imu_faults::gyro_z, 20, 0, 0);
 
-        SensorReading *acc_x_average = new SensorReading(fault_index_type::acc_x, 20, 0, 0);
-        SensorReading *acc_y_average = new SensorReading(fault_index_type::acc_y, 20, 0, 0);
+        SensorReading *acc_x_average = new SensorReading(fault_groups::imu_faults::acc_x, 20, 0, 0);
+        SensorReading *acc_y_average = new SensorReading(fault_groups::imu_faults::acc_y, 20, 0, 0);
 
         std::deque<uint8_t> imu_dlink;
 
@@ -272,14 +272,14 @@ namespace sfr {
         // OP Codes 2300
         SFRField<bool> in_sun = SFRField<bool>(false, 0x2300, constants::eeprom::temperature_in_sun_offset, true);
 
-        SensorReading *temp_c_average = new SensorReading(fault_index_type::temp_c, 1500, -500, 500);
+        SensorReading *temp_c_average = new SensorReading(fault_groups::power_faults::temp_c, 1500, -500, 500);
         SensorReading *temp_c_value = new SensorReading(1, -500, 500);
     } // namespace temperature
     namespace current {
         // OP Codes 2400
         SFRField<bool> in_sun = SFRField<bool>(false, 0x2400, constants::eeprom::current_in_sun_offset, true);
 
-        SensorReading *solar_current_average = new SensorReading(fault_index_type::solar_current, 1500, 0, 1000);
+        SensorReading *solar_current_average = new SensorReading(fault_groups::power_faults::solar_current, 1500, 0, 1000);
     } // namespace current
     namespace acs {
         // OP Codes 2500
@@ -309,12 +309,12 @@ namespace sfr {
         SFRField<uint32_t> min_battery = SFRField<uint32_t>(0, 0x2601, constants::eeprom::battery_min_battery_offset, true);
 
         SensorReading *voltage_value = new SensorReading(1, 0, 5);
-        SensorReading *voltage_average = new SensorReading(fault_index_type::voltage, 300, 0, 5);
+        SensorReading *voltage_average = new SensorReading(fault_groups::power_faults::voltage, 300, 0, 5);
     } // namespace battery
     namespace button {
         // OP Codes 2700
         SFRField<bool> pressed = SFRField<bool>(true, 0x2700, constants::eeprom::button_pressed_offset, true);
-        SensorReading *button_pressed = new SensorReading(fault_index_type::button, 1, 1, 0);
+        SensorReading *button_pressed = new SensorReading(fault_groups::hardware_faults::button, 1, 1, 0);
     } // namespace button
     namespace pins {
         std::map<int, int> pinMap = {

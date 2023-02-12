@@ -3,6 +3,7 @@
 
 #include "Adafruit_VC0706.h"
 #include "Arduino.h"
+#include "Fault.hpp"
 #include "MissionMode.hpp"
 #include "Modes/burnwire_mode_type.enum"
 #include "Modes/report_type.enum"

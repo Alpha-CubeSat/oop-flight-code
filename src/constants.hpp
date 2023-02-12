@@ -58,15 +58,14 @@ namespace constants {
             constexpr uint16_t sfr_field_opcode_deploy = 0x3333;
 
             // Arm Command
-<<<<<<< HEAD
             constexpr uint16_t sfr_field_opcode_arm = 0x4444;
 
             // Fire Command
             constexpr uint16_t sfr_field_opcode_fire = 0x5555;
-=======
-            constexpr uint16_t sfr_field_opcode_arm = 0x5555;
-            
->>>>>>> 03c2b07... Initial changes for fault reorganization
+
+            //Fault Suppress Commands
+            constexpr uint16_t fault_opcode_min = 0x6000;
+            constexpr uint16_t fault_opcode_max = 0x6100;
 
         } // namespace opcodes
     }     // namespace rockblock
