@@ -42,7 +42,7 @@ std::map<fault_index_type, uint8_t> map_to_mask = {
     {fault_index_type::button, constants::fault::button},
 }; // map from a fault type to the mask
 
-SensorReading::SensorReading(fault_index_type type, uint8_t buffer_size, float max, float min)
+SensorReading::SensorReading(fault_index_type type, uint8_t buffer_size, float min, float max)
 {
     this->type = type;
     this->buffer_size = buffer_size;
@@ -51,7 +51,7 @@ SensorReading::SensorReading(fault_index_type type, uint8_t buffer_size, float m
     buffer.clear();
 } // constructor
 
-SensorReading::SensorReading(uint8_t buffer_size, float max, float min)
+SensorReading::SensorReading(uint8_t buffer_size, float min, float max)
 {
     this->type = fault_index_type::no_fault;
     this->buffer_size = buffer_size;
@@ -108,6 +108,7 @@ void SensorReading::set_valid()
 
 void SensorReading::set_invalid()
 {
+    Serial.println("Call set invalid");
     valid = false;
 
     // clear buffer
@@ -128,17 +129,24 @@ void SensorReading::set_invalid()
 bool SensorReading::repeated_values(std::deque<float> buffer, float val)
 {
     if (buffer.empty() || buffer.size() == 1) {
+        Serial.println("push front empty");
         buffer.push_front(val);
+        for (int i = 0; i < buffer.size(); i++) {
+            Serial.print("Buffer content: ");
+            Serial.println(buffer.front());
+            buffer.push_front(val);
+        }
+
         return false;
     }
 
     for (int i = 0; i < constants::sensor::repeats - 1; i++) {
         if (buffer.at(i) != val) {
+            Serial.println("push front thing");
             buffer.push_front(val);
             return false;
         }
     }
-
     return true;
 }
 
@@ -159,5 +167,7 @@ bool SensorReading::is_valid()
 
 std::deque<float> SensorReading::get_buffer()
 {
+    Serial.println("CALL GET BUFFER");
+    Serial.println(buffer.size());
     return buffer;
 }

@@ -1,6 +1,7 @@
 #include "MainControlLoop.hpp"
 
 int start;
+SensorReading *test_values = new SensorReading(10, -100, 100);
 
 MainControlLoop::MainControlLoop()
     : ControlTask<void>(),
@@ -24,7 +25,7 @@ MainControlLoop::MainControlLoop()
       mission_manager(constants::timecontrol::mission_manager_offset)
 {
     delay(1000);
-    SensorReading * test_values = new SensorReading(10, -100, 100);
+    
 }
 
 void MainControlLoop::execute()
@@ -53,14 +54,13 @@ void MainControlLoop::execute()
     rockblock_control_task.execute_on_time();
     eeprom_control_task.execute_on_time();*/
 
-    
+    test_values->set_value(50);
 
-    test_values->set_value( 50 );
+    std::deque<float> buffer = test_values->get_buffer();
 
-    for (int i = 0; i < test_values->get_; i++) {
-        Serial.println(test_values.pop());
-
+    Serial.println(buffer.size());
+    for (int i = 0; i < buffer.size(); i++) {
+        Serial.println(buffer.front());
     }
 
-    Serial.println(test_values->get_buffer());
 }
