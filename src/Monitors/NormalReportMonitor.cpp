@@ -66,7 +66,7 @@ void NormalReportMonitor::execute()
         {16, serialize(16, gyro_z)},
         {17, serialize(17, photoresistor)},
         {18, serialize(18, temp)},
-        {19, serialize(19, current)},
+        {19, (uint8_t)current},
         {20, (uint8_t)sfr::current::in_sun},
         {21, serialize(21, voltage)},
         {22, (uint8_t)faults::fault_1},
