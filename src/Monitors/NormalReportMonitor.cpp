@@ -86,14 +86,14 @@ void NormalReportMonitor::execute()
     for (int i = 0; i < report_contents.size(); i++) {
         sfr::rockblock::normal_report.push_back(report_contents[i]);
     }
-    
-    int i = 0;
+
+    int j = 0;
     auto current_command = sfr::rockblock::commands_received.cbegin();
-    while (current_command != sfr::rockblock::commands_received.cend() && i < sfr::rockblock::normal_report_command_max) {
+    while (current_command != sfr::rockblock::commands_received.cend() && j < sfr::rockblock::normal_report_command_max) {
         sfr::rockblock::normal_report.push_back(*current_command);
-        i++;
+        j++;
     }
-    sfr::rockblock::normal_report_command_curr = i;
+    sfr::rockblock::normal_report_command_curr = j;
     sfr::rockblock::normal_report.push_back(constants::rockblock::end_of_normal_downlink_flag1);
     sfr::rockblock::normal_report.push_back(constants::rockblock::end_of_normal_downlink_flag2);
 }
