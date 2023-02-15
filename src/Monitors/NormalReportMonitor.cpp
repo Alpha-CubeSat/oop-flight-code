@@ -85,7 +85,6 @@ void NormalReportMonitor::execute()
 
     for (int i = 0; i < report_contents.size(); i++) {
         sfr::rockblock::normal_report.push_back(report_contents[i]);
-        //Serial.println(report_contents[i]);
     }
     
     int i = 0;
