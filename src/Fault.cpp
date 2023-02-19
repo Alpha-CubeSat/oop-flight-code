@@ -6,6 +6,7 @@ Fault::Fault(uint16_t opcode)
     this->base = false;
     this->signaled = false;
     this->suppressed = false;
+    FaultInterface::opcode_lookup[opcode] = this;
 }
 
 void Fault::signal()

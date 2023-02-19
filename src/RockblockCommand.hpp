@@ -87,6 +87,36 @@ private:
     SFRInterface *field;
 };
 
+class FaultSurpressCommand : public RockblockCommand
+{
+public:
+    FaultSurpressCommand(RawRockblockCommand raw) : RockblockCommand{raw}
+    {
+        if (FaultInterface::opcode_lookup.find(f_opcode) != FaultInterface::opcode_lookup.end()) {
+            fault = FaultInterface::opcode_lookup[f_opcode];
+        }
+    };
+
+    void execute()
+    {
+        if (fault) {
+            if (f_arg_1) {
+                fault->suppress();
+            } else {
+                fault->unsuppress();
+            }
+        }
+    }
+
+    bool isValid()
+    {
+        return fault != nullptr;
+    }
+
+private:
+    FaultInterface *fault;
+};
+
 class UnknownCommand : public RockblockCommand
 {
 public:
