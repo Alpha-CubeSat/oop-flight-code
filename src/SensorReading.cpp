@@ -42,7 +42,7 @@ std::map<fault_index_type, uint8_t> map_to_mask = {
     {fault_index_type::button, constants::fault::button},
 }; // map from a fault type to the mask
 
-SensorReading::SensorReading(fault_index_type type, uint8_t buffer_size, float max, float min)
+SensorReading::SensorReading(fault_index_type type, uint8_t buffer_size, float min, float max)
 {
     this->type = type;
     this->buffer_size = buffer_size;
@@ -51,7 +51,7 @@ SensorReading::SensorReading(fault_index_type type, uint8_t buffer_size, float m
     buffer.clear();
 } // constructor
 
-SensorReading::SensorReading(uint8_t buffer_size, float max, float min)
+SensorReading::SensorReading(uint8_t buffer_size, float min, float max)
 {
     this->type = fault_index_type::no_fault;
     this->buffer_size = buffer_size;
@@ -66,7 +66,7 @@ bool SensorReading::get_value(float *value_location)
     if (buffer.size() == buffer_size && valid) {
         // get average value
         float average = (std::accumulate(buffer.begin(), buffer.end(), 0.0)) / buffer_size;
-        value_location = &average;
+        *value_location = average;
         return 1;
     } else {
         return -1;
@@ -78,7 +78,7 @@ void SensorReading::set_value(float x)
     // LJG TODO might need to add whether we want to check for repeated values in the constructor
     // check if value is within expected range
     if (x <= max && x >= min) {
-        if (valid && !repeated_values(buffer, x)) {
+        if (valid && !repeated_values(&buffer, x)) {
             // check if buffer is full
             if (buffer.size() > buffer_size) {
                 // remove oldest value from buffer
@@ -125,15 +125,16 @@ void SensorReading::set_invalid()
     }
 }
 
-bool SensorReading::repeated_values(std::deque<float> buffer, float val)
+bool SensorReading::repeated_values(std::deque<float> *buffer, float val)
 {
-    if (buffer.empty() || buffer.size() == 1) {
+    if (buffer->empty() || buffer->size() == 1) {
+        buffer->push_front(val);
         return false;
     }
 
     for (int i = 0; i < constants::sensor::repeats - 1; i++) {
-        if (buffer.at(i) != val) {
-            buffer.push_front(val);
+        if (buffer->at(i) != val) {
+            buffer->push_front(val);
             return false;
         }
     }
