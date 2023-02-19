@@ -42,7 +42,7 @@ void NormalReportMonitor::execute()
     sfr::imu::mag_x_average->get_value(&gyro_y);
     sfr::imu::mag_x_average->get_value(&gyro_z);
     sfr::photoresistor::light_val_average_deployment->get_value(&photoresistor);
-    sfr::temperature::temp_c_value->get_value(&temp);
+    sfr::temperature::temp_c_average->get_value(&temp);
     sfr::current::solar_current_average->get_value(&current);
     sfr::battery::voltage_average->get_value(&voltage);
 
