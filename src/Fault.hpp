@@ -12,13 +12,13 @@ private:
 public:
     static std::map<int, FaultInterface *> opcode_lookup; // </brief OpCode Lookup Map
 
-    static void signal();
-    static void release();
-    static void suppress();
-    static void unsuppress();
-    static bool get_base();
-    static bool get_signaled();
-    static bool get_supressed();
+    void signal();
+    void release();
+    void suppress();
+    void unsuppress();
+    bool get_base();
+    bool get_signaled();
+    bool get_supressed();
 };
 
 class Fault : public FaultInterface
