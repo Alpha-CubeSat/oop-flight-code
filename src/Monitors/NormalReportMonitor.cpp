@@ -36,11 +36,11 @@ void NormalReportMonitor::execute()
     float voltage;
 
     sfr::imu::mag_x_average->get_value(&mag_x);
-    sfr::imu::mag_x_average->get_value(&mag_y);
-    sfr::imu::mag_x_average->get_value(&mag_z);
-    sfr::imu::mag_x_average->get_value(&gyro_x);
-    sfr::imu::mag_x_average->get_value(&gyro_y);
-    sfr::imu::mag_x_average->get_value(&gyro_z);
+    sfr::imu::mag_y_average->get_value(&mag_y);
+    sfr::imu::mag_z_average->get_value(&mag_z);
+    sfr::imu::gyro_x_average->get_value(&gyro_x);
+    sfr::imu::gyro_y_average->get_value(&gyro_y);
+    sfr::imu::gyro_z_average->get_value(&gyro_z);
     sfr::photoresistor::light_val_average_deployment->get_value(&photoresistor);
     sfr::temperature::temp_c_average->get_value(&temp);
     sfr::current::solar_current_average->get_value(&current);
