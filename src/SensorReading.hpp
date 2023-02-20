@@ -17,7 +17,7 @@ private:
     float max;                // max valid value
     float min;                // min valid value
     std::deque<float> buffer; // buffer used to store the raw values
-    bool valid;               // if SensorReading is valid
+    bool valid = false;               // if SensorReading is valid
     bool repeated_values(std::deque<float> *buffer, float val);
 
 public:

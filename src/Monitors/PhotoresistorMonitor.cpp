@@ -7,6 +7,12 @@ PhotoresistorMonitor::PhotoresistorMonitor(unsigned int offset)
 
 void PhotoresistorMonitor::execute()
 {
+    if(!initialized){
+        sfr::photoresistor::light_val_average_standby->set_valid();
+        sfr::photoresistor::light_val_average_deployment->set_valid();
+        initialized = true;
+    }
+
     float val = analogRead(constants::photoresistor::pin);
     bool possible_uncovered = false;
 

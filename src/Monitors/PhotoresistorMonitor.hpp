@@ -16,6 +16,7 @@ public:
 
 private:
     void capture_photoresistor_value();
+    bool initialized = false;
 };
 
 #endif

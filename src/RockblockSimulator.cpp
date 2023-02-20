@@ -19,6 +19,11 @@ RockblockSimulator::RockblockSimulator()
     // end of command upload flag 1 00
     // end of command upload flag 2 FA
     // insert("1901111111110000000000FA");
+
+    // COMMANDS TO DEPLOY BURNWIRE
+    //insert("3333111111111111111100FA");
+    //insert("4444111111111111111100FA");
+    //insert("5555111111111111111100FA");
 }
 
 void RockblockSimulator::begin(uint32_t baud)
