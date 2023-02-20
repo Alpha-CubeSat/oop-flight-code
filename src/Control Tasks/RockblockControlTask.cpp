@@ -93,6 +93,14 @@ void RockblockControlTask::dispatch_standby()
     }
 #endif
 
+#ifdef VERBOSE_RB
+    if (sfr::rockblock::ready_status) {
+        Serial.print("Rockblock Ready to Downlink\n");
+    } else {
+        Serial.print("Rockblock Not Ready to Downlink\n");
+    }
+#endif
+
     if ((sfr::rockblock::ready_status || sfr::rockblock::waiting_message) && !sfr::rockblock::sleep_mode) {
         transition_to(rockblock_mode_type::send_at);
         Pins::setPinState(constants::rockblock::sleep_pin, HIGH);
