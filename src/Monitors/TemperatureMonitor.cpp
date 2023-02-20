@@ -8,7 +8,7 @@ TemperatureMonitor::TemperatureMonitor(unsigned int offset)
 
 void TemperatureMonitor::execute()
 {
-    if(!initialized){
+    if (!initialized) {
         sfr::temperature::temp_c_average->set_valid();
         sfr::temperature::temp_c_value->set_valid();
         initialized = true;

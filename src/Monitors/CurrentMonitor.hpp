@@ -12,7 +12,6 @@ public:
 
 private:
     bool initialized = false;
-    
 };
 
 #endif

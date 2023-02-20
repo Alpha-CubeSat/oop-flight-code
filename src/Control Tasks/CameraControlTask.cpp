@@ -86,7 +86,7 @@ void CameraControlTask::execute()
         }
 
 #ifdef VERBOSE_CAM
-            Serial.println("");
+        Serial.println("");
 #endif
 
         jpglen -= bytesToRead;
