@@ -51,3 +51,13 @@ bool SFRInterface::getRestore()
 {
     return restore;
 }
+
+void SFRInterface::setDefaultValue(int val)
+{
+    default_value = val;
+}
+
+int SFRInterface::getDefaultValue()
+{
+    return default_value;
+}

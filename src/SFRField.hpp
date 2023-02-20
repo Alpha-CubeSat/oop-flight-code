@@ -12,6 +12,7 @@ class SFRInterface
 {
 private:
     int field_value;    // The value of the field cast to an int
+    int default_value;  // The default value of the field cast to an int
     int data_type;      // An int representing the field's type T, 1 for bool, 2 for uint8_t, 3 for uint16_t, and 4 for uint64_t
     int address_offset; // This field's byte offset from the beginning of the EEPROM section where SFR data is currently stored
                         // sfr_address + address_offset gives this field's location in EEPROM
@@ -36,9 +37,13 @@ public:
     static void setFieldVal(int opcode, uint32_t arg1);
     virtual void setValue(uint32_t arg1);
 
-    // For setting the SFRInterface members for EEPROM saving and restoring
+    // For setting the SFRInterface members for EEPROM saving and restoring, which uses a vector of SFRInterfaces (can't create a vector
+    // using the SFRField<T> template class, which means SFRField members and functions cannot be accessed).
     void setFieldValue(int val);
     int getFieldValue();
+
+    void setDefaultValue(int val);
+    int getDefaultValue();
 
     void setDataType(int type);
     int getDataType();
@@ -62,7 +67,7 @@ private:
     int resolution;
 
 #ifdef DEBUG
-    T inital;
+    T initial;
 #endif
 
 public:
@@ -75,6 +80,7 @@ public:
         opcode = opcode_val;
         resolution = 1;
         SFRInterface::setFieldValue((int)value);
+        SFRInterface::setDefaultValue((int)default_value);
         if (sizeof(T) == sizeof(uint32_t))
             SFRInterface::setDataType(4);
         else if (sizeof(T) == sizeof(uint16_t))
@@ -85,9 +91,11 @@ public:
             SFRInterface::setDataType(1);
         SFRInterface::setAddressOffset(address_offset);
         SFRInterface::setRestore(restore);
+
 #ifdef DEBUG
-        T inital = default_val;
+        T initial = default_val;
 #endif
+
         SFRInterface::opcode_lookup[opcode_val] = this;
         SFRInterface::sfr_fields_vector.push_back(this);
     }
@@ -99,6 +107,7 @@ public:
         opcode = opcode_val;
         resolution = 1;
         SFRInterface::setFieldValue((int)value);
+        SFRInterface::setDefaultValue((int)default_value);
         if (sizeof(T) == sizeof(uint32_t))
             SFRInterface::setDataType(4);
         else if (sizeof(T) == sizeof(uint16_t))
@@ -109,10 +118,10 @@ public:
             SFRInterface::setDataType(1);
         SFRInterface::setAddressOffset(address_offset);
         SFRInterface::setRestore(restore);
-
 #ifdef DEBUG
-        T inital = default_val;
+        T initial = default_val;
 #endif
+
         SFRInterface::opcode_lookup[opcode_val] = this;
         SFRInterface::sfr_fields_vector.push_back(this);
     }
@@ -126,6 +135,7 @@ public:
         opcode = opcode_val;
         this->resolution = resolution;
         SFRInterface::setFieldValue((int)value);
+        SFRInterface::setDefaultValue((int)default_value);
         if (sizeof(T) == sizeof(uint32_t))
             SFRInterface::setDataType(4);
         else if (sizeof(T) == sizeof(uint16_t))
@@ -138,8 +148,9 @@ public:
         SFRInterface::setRestore(restore);
 
 #ifdef DEBUG
-        T inital = default_val;
+        T initial = default_val;
 #endif
+
         SFRInterface::opcode_lookup[opcode_val] = this;
         SFRInterface::sfr_fields_vector.push_back(this);
     }
