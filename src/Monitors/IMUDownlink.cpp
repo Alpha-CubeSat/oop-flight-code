@@ -10,6 +10,7 @@ void IMUDownlink::execute()
     float gyro_x;
     float gyro_y;
     float gyro_z;
+    float collection_time;
 
     if (sfr::imu::sample_gyro) {
 
@@ -18,6 +19,17 @@ void IMUDownlink::execute()
         sfr::imu::gyro_x_value->get_value(&gyro_x);
         sfr::imu::gyro_y_value->get_value(&gyro_y);
         sfr::imu::gyro_z_value->get_value(&gyro_z);
+        sfr::imu::collection_time->get_value(&collection_time);
+
+        // PRINT STATMENTS FOR SENDING OUT IMU DATA
+        Serial.print("X:");
+        Serial.print((gyro_x));
+        Serial.print(" Y:");
+        Serial.print((gyro_y));
+        Serial.print(" Z:");
+        Serial.print((gyro_z));
+        Serial.print(" T:");
+        Serial.println((int)collection_time);
 
         sfr::imu::imu_dlink.push_front((gyro_x + 5) * 25);
         sfr::imu::imu_dlink.push_front((gyro_y + 5) * 25);

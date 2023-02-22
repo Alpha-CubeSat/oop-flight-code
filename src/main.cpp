@@ -6,6 +6,7 @@ MainControlLoop mcl;
 
 #ifndef UNIT_TEST
 
+int start = 0;
 void setup()
 {
     // delay for 2 hours
@@ -19,6 +20,9 @@ void setup()
 
 void loop()
 {
+    if (start) {
+        sfr::mission::current_mode = sfr::mission::bootCamera;
+    }
     mcl.execute();
 }
 #endif

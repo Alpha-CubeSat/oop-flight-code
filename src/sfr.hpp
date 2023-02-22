@@ -267,6 +267,7 @@ namespace sfr {
         extern SensorReading *gyro_x_value;
         extern SensorReading *gyro_y_value;
         extern SensorReading *gyro_z_value;
+        extern SensorReading *collection_time;
 
         extern SensorReading *mag_x_average;
         extern SensorReading *mag_y_average;
@@ -336,7 +337,7 @@ namespace sfr {
         extern SFRField<bool> alloted_time_passed;
         extern int sfr_last_write_time;
         extern SFRField<uint32_t> sfr_write_step_time;
-        extern uint16_t sfr_address;
+        extern int sfr_address;
         extern SFRField<uint32_t> sfr_address_age;
     } // namespace eeprom
 };    // namespace sfr
