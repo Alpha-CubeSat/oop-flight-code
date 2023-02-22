@@ -97,7 +97,7 @@ void IMUMonitor::capture_imu_values()
     sfr::imu::gyro_x_value->set_value(gyro.gyro.x);
     sfr::imu::gyro_y_value->set_value(gyro.gyro.y);
     sfr::imu::gyro_z_value->set_value(gyro.gyro.z);
-
+    sfr::imu::collection_time = millis();
     // Add reading to buffer
 
     sfr::imu::mag_x_average->set_value(mag.magnetic.x);

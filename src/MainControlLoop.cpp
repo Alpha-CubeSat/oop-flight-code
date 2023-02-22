@@ -1,7 +1,5 @@
 #include "MainControlLoop.hpp"
 
-int start;
-
 MainControlLoop::MainControlLoop()
     : ControlTask<void>(),
       clock_manager(constants::timecontrol::control_cycle_time),
