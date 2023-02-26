@@ -8,7 +8,6 @@ IMUMonitor::IMUMonitor(unsigned int offset)
     : TimedControlTask<void>(offset)
 {
     imu = Adafruit_LSM9DS1(constants::imu::CSAG, constants::imu::CSM);
-
     IMUMonitor::IMU_setup();
 }
 
@@ -18,7 +17,7 @@ void IMUMonitor::IMU_setup()
         Serial.println("\n\n\nInitialize failed\n\n\n");
         sfr::imu::successful_init = false;
     } else {
-        Serial.println("\n\n\nInitialize successfully\n\n\n");
+        Serial.println("\n\n\nInitialize successful\n\n\n");
         sfr::imu::successful_init = true;
         imu.setupAccel(imu.LSM9DS1_ACCELRANGE_2G);
         imu.setupMag(imu.LSM9DS1_MAGGAIN_4GAUSS);

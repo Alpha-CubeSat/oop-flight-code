@@ -229,7 +229,7 @@ namespace sfr {
     namespace imu {
         // OP Codes 2200
         SFRField<uint16_t> mode = SFRField<uint16_t>((uint16_t)sensor_mode_type::init, 0x2200, constants::eeprom::imu_mode_offset, true);
-        SFRField<bool> successful_init = SFRField<bool>(true, 0x2201, constants::eeprom::imu_successful_init_offset, true);
+        SFRField<bool> successful_init = SFRField<bool>(false, 0x2201, constants::eeprom::imu_successful_init_offset, true);
 
         SFRField<uint32_t> max_fragments = SFRField<uint32_t>(256, 0x2202, constants::eeprom::imu_max_fragments_offset, true);
 
