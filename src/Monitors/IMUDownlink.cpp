@@ -20,13 +20,13 @@ void IMUDownlink::execute()
         sfr::imu::gyro_z_value->get_value(&gyro_z);
 
         // PRINT STATMENTS FOR SENDING OUT IMU DATA
-        Serial.print("Gyro X:");
+        Serial.print("Gyro_X: ");
         Serial.print((gyro_x));
-        Serial.print(" Gyro Y:");
+        Serial.print(" Gyro_Y: ");
         Serial.print((gyro_y));
-        Serial.print(" Gyro Z:");
+        Serial.print(" Gyro_Z: ");
         Serial.print((gyro_z));
-        Serial.print(" Time:");
+        Serial.print(" Time: ");
         Serial.println(sfr::imu::collection_time);
 
         sfr::imu::imu_dlink.push_front((gyro_x + 5) * 25);
