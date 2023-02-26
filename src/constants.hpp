@@ -57,17 +57,17 @@ namespace constants {
             // Deploy Command
             constexpr uint16_t sfr_field_opcode_deploy = 0x3333;
 
-            // Fire Command
-            constexpr uint16_t sfr_field_opcode_fire = 0x4444;
-
             // Arm Command
-            constexpr uint16_t sfr_field_opcode_arm = 0x5555;
+            constexpr uint16_t sfr_field_opcode_arm = 0x4444;
+
+            // Fire Command
+            constexpr uint16_t sfr_field_opcode_fire = 0x5555;
 
         } // namespace opcodes
     }     // namespace rockblock
     namespace temperature {
         constexpr int pin = 39;
-        constexpr float in_sun_val = 40;
+        constexpr float in_sun_val = 30;
     } // namespace temperature
     namespace current {
         constexpr int pin = 22;
