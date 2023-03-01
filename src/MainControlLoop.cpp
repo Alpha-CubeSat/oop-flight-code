@@ -27,9 +27,9 @@ MainControlLoop::MainControlLoop()
 void MainControlLoop::execute()
 {
     delay(10000); // To prolong the speed of the main control loop to ensure correct RockBlock reads. Can reduce in the future.
-    Serial.println("======================");
-    Adafruit_LSM9DS1 imu = Adafruit_LSM9DS1();
-    Serial.println(imu.begin());
+    // Serial.println("======================");
+    // Adafruit_LSM9DS1 imu = Adafruit_LSM9DS1();
+    // Serial.println(imu.begin());
     faults::fault_1 = 0;
     faults::fault_2 = 0;
     faults::fault_3 = 0;

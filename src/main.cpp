@@ -19,10 +19,9 @@ void setup()
 
 void loop()
 {
-    // int start = 1;
+    int start = 1;
     // if (start) {
-    //     sfr::imu::turn_on == true && sfr::imu::powered == false;
-    //     sfr::mission::current_mode = sfr::mission::bootCamera;
+    //     sfr::mission::current_mode = sfr::mission::mandatoryBurns;
     // }
     mcl.execute();
 }
