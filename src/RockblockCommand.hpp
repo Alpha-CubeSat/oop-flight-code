@@ -3,6 +3,7 @@
 
 #include "Arduino.h"
 #include "SFRField.hpp"
+#include "Fault.hpp"
 #include "constants.hpp"
 #include <stdint.h>
 
@@ -89,6 +90,8 @@ private:
 
 class FaultSurpressCommand : public RockblockCommand
 {
+private:
+    FaultInterface *fault;
 public:
     FaultSurpressCommand(RawRockblockCommand raw) : RockblockCommand{raw}
     {
@@ -112,9 +115,6 @@ public:
     {
         return fault != nullptr;
     }
-
-private:
-    FaultInterface *fault;
 };
 
 class UnknownCommand : public RockblockCommand

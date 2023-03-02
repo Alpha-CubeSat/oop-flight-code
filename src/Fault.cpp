@@ -42,10 +42,19 @@ bool Fault::get_base()
 
 bool Fault::get_signaled()
 {
-    return signal;
+    return signaled;
 }
 
 bool Fault::get_supressed()
 {
     return suppressed;
+}
+
+uint8_t Fault::serialize()
+{
+    uint8_t serialized = 0;
+    serialized += (int8_t)base << 2;
+    serialized += (int8_t)suppressed << 1;
+    serialized += (int8_t)signaled;
+    return serialized;
 }

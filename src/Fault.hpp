@@ -1,6 +1,8 @@
 #include "RockblockCommand.hpp"
 #include <stdint.h>
 
+#ifndef _FAULT_HPP_
+#define _FAULT_HPP_
 class FaultInterface
 {
 private:
@@ -38,4 +40,6 @@ public:
     bool get_base();
     bool get_signaled();
     bool get_supressed();
+    uint8_t serialize();
 };
+#endif
