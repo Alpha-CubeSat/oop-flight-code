@@ -267,7 +267,6 @@ namespace sfr {
         extern SensorReading *gyro_x_value;
         extern SensorReading *gyro_y_value;
         extern SensorReading *gyro_z_value;
-        extern int collection_time;
 
         extern SensorReading *mag_x_average;
         extern SensorReading *mag_y_average;
