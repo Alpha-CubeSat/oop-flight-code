@@ -5,8 +5,7 @@ enum class sensor_mode_type : unsigned char
 {
     init = 0,
     normal,
-    abnormal_init,
-    retry
+    abnormal_init
 };
 
 #endif
