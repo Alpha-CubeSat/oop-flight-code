@@ -30,8 +30,8 @@ void IMUMonitor::execute()
 {
     if (sfr::imu::mode == (uint16_t)sensor_mode_type::init) {
         /* IMPORTANT NOTE:
-        The IMUMonitor::IMU_setup() cannot be called in the constructor! This is due to a constructor 
-        trying to call a class method when the object is still being created. If the code inside 
+        The IMUMonitor::IMU_setup() cannot be called in the constructor! This is due to a constructor
+        trying to call a class method when the object is still being created. If the code inside
         IMUMonitor::IMU_setup() is placed inside the constructor, certain SFR values will not update
         because the header file is not yet loaded in, and the transition_to_normal and transition_to_abnormal
         functions would have to be moved to outside the constructor into the execute function.
@@ -112,7 +112,7 @@ void IMUMonitor::capture_imu_values()
     sfr::imu::gyro_x_value->set_value(gyro.gyro.x);
     sfr::imu::gyro_y_value->set_value(gyro.gyro.y);
     sfr::imu::gyro_z_value->set_value(gyro.gyro.z);
-    
+
     // IMU PRINT STATEMENTS FOR LOGGING AND GRAPHING IMU DATA
     Serial.print("Gyro_X: ");
     Serial.print(gyro.gyro.x);
