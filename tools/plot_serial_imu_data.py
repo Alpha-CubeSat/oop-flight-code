@@ -19,7 +19,7 @@
     Serial.print(" Gyro_Z: ");
     Serial.print((gyro_z));
     Serial.print(" Time: ");
-    Serial.println(sfr::imu::collection_time);
+    Serial.println(millis());
 
     Run the MCL and log the Serial Monitor using PuTTY.
     Instructions are here: https://www.eye4software.com/hydromagic/documentation/articles-and-howtos/serial-port-logging/
