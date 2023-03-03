@@ -28,6 +28,11 @@ void IMUMonitor::IMU_setup()
 void IMUMonitor::execute()
 {
     Serial.println(sfr::imu::successful_init);
+    if (sfr::imu::mode == (uint16_t)sensor_mode_type::init) {
+        IMUMonitor::IMU_setup();
+        sfr::imu::mode == (uint16_t)sensor_mode_type::normal;
+    }
+    Serial.println(sfr::imu::successful_init);
     if (sfr::imu::turn_off == true && sfr::imu::powered == true) {
 #ifdef VERBOSE
         Serial.println("turned off IMU");

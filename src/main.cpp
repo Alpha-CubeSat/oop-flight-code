@@ -19,10 +19,8 @@ void setup()
 
 void loop()
 {
-    int start = 1;
-    // if (start) {
-    //     sfr::mission::current_mode = sfr::mission::mandatoryBurns;
-    // }
+    // Uncomment to run IMU Downlink
+     sfr::mission::current_mode = sfr::mission::mandatoryBurns;
     mcl.execute();
 }
 #endif
