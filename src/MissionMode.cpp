@@ -50,11 +50,14 @@ void DetumbleSpin::transition_to()
 }
 void DetumbleSpin::dispatch()
 {
-    if (sfr::imu::mode == (uint16_t)sensor_mode_type::abnormal_init) {
-        sfr::imu::mode = (uint16_t)sensor_mode_type::retry;
-        sfr::detumble::num_imu_retries++;
-    }
-    if (sfr::detumble::num_imu_retries >= sfr::detumble::max_imu_retries) {
+    // Retry mode is deprecated, the IMU will attempt to initialize every IMUMonitor::execute() call
+    // in the main control loop until the max number of attempts has been reached.
+
+    // if (sfr::imu::mode == (uint16_t)sensor_mode_type::abnormal_init) {
+    //     sfr::imu::mode = (uint16_t)sensor_mode_type::retry;
+    //     sfr::detumble::num_imu_retries++;
+    // }
+    if (sfr::imu::mode == (uint16_t)sensor_mode_type::abnormal_init && sfr::detumble::num_imu_retries >= sfr::detumble::max_imu_retries) {
         sfr::mission::current_mode = sfr::mission::normal;
     }
 }
