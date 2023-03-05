@@ -94,11 +94,6 @@ void NormalReportMonitor::execute()
         std::advance(current_command, 1);
         j++;
     }
-
-    while (j < sfr::rockblock::normal_report_command_max) {
-        sfr::rockblock::normal_report.push_back(0x00);
-        j++;
-    }
     sfr::rockblock::normal_report_command_curr = j;
     sfr::rockblock::normal_report.push_back(constants::rockblock::end_of_normal_downlink_flag1);
     sfr::rockblock::normal_report.push_back(constants::rockblock::end_of_normal_downlink_flag2);
