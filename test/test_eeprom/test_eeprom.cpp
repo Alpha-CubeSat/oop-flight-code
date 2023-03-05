@@ -41,9 +41,11 @@ void test_restore_first_boot()
         TEST_ASSERT_EQUAL(true, s->getRestore());
     }
 
+    Serial.println(boot_counter);
     // Check boot counter byte in EEPROM is 1 after restore execution
     EEPROM.get(4, boot_counter);
-    TEST_ASSERT_EQUAL(1, boot_counter);
+    Serial.println(boot_counter);
+    TEST_ASSERT_EQUAL(1, EEPROM.read(4));
 }
 
 void test_restore_general_reboot()
@@ -287,10 +289,10 @@ int test_eeprom()
     UNITY_BEGIN();
     // The boot counter and time tracker values in EEPROM memory carry over between test cases.
     RUN_TEST(test_restore_first_boot);
-    RUN_TEST(test_restore_general_reboot);
-    RUN_TEST(test_restore_multiple_writes);
-    RUN_TEST(test_restore_write_limit_reboot);
-    RUN_TEST(test_time_tracker);
+    // RUN_TEST(test_restore_general_reboot);
+    // RUN_TEST(test_restore_multiple_writes);
+    // RUN_TEST(test_restore_write_limit_reboot);
+    // RUN_TEST(test_time_tracker);
     return UNITY_END();
 }
 

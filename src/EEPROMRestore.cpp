@@ -29,7 +29,6 @@ void EEPROMRestore::execute()
             }
         }
     }
-
     boot_counter++;
     EEPROM.put(4, boot_counter);
     sfr::eeprom::boot_counter = boot_counter;
