@@ -41,11 +41,14 @@ void test_restore_first_boot()
         TEST_ASSERT_EQUAL(true, s->getRestore());
     }
 
-    Serial.println(boot_counter);
     // Check boot counter byte in EEPROM is 1 after restore execution
     EEPROM.get(4, boot_counter);
-    Serial.println(boot_counter);
-    TEST_ASSERT_EQUAL(1, EEPROM.read(4));
+    TEST_ASSERT_EQUAL(1, boot_counter);
+
+    // Check that the sfr address was correctly set in EEPROM
+    uint16_t sfr_address;
+    EEPROM.get(5, sfr_address);
+    TEST_ASSERT_EQUAL(sfr::eeprom::sfr_address, sfr_address);
 }
 
 void test_restore_general_reboot()
@@ -66,16 +69,25 @@ void test_restore_general_reboot()
     sfr::rockblock::last_downlink = 824;
 
     // Delay for over the write time step
+    sfr::eeprom::sfr_last_write_time = 0;
     delay(2000);
 
     // Execute EEPROM Control Task and check that write endurance increases
     int initial_sfr_address_age = sfr::eeprom::sfr_address_age;
     eeprom_control_task.execute();
+    TEST_ASSERT_TRUE(sfr::eeprom::sfr_last_write_time > 0);
     TEST_ASSERT_TRUE(sfr::eeprom::sfr_address_age > initial_sfr_address_age);
+
+    int read_address = sfr::eeprom::sfr_address + sfr::burnwire::attempts_limit.getAddressOffset();
+    bool value;
+    EEPROM.get(read_address + 1, value);
+    TEST_ASSERT_EQUAL(sfr::photoresistor::covered, false);
+    TEST_ASSERT_EQUAL(value, 15);
 
     // Save the boot_counter before a reboot
     uint8_t boot_counter_before;
     EEPROM.get(4, boot_counter_before);
+    TEST_ASSERT_TRUE(boot_counter_before != 0);
 
     // Set all SFR fields to default values and restore booleans to true (as would happen on a reboot)
     resetSFR();
@@ -83,20 +95,21 @@ void test_restore_general_reboot()
     // Restore SFR values from EEPROM and check that they match from before the delay
     EEPROMRestore::execute();
 
-    for (SFRInterface *s : SFRInterface::sfr_fields_vector) {
-        if (!s == sfr::detumble::num_imu_retries || !s == sfr::aliveSignal::downlinked || !s == sfr::mission::acs_transmit_cycle_time) {
+    for (auto const &kv : SFRInterface::opcode_lookup) {
+        SFRInterface *s = SFRInterface::opcode_lookup[kv.first];
+        if (kv.first == 0x1502 || kv.first == 0x1601 || kv.first == 0x1800) {
             // Fields should not be restored, so they should hold the default value and their restore boolean should be false
             TEST_ASSERT_EQUAL(s->getDefaultValue(), s->getFieldValue());
             TEST_ASSERT_EQUAL(false, s->getRestore());
         }
         // Fields should be restored, so they should hold the written value and their restore boolean should be true
-        else if (!s == sfr::burnwire::attempts_limit) {
+        else if (kv.first == 0x1905) {
             TEST_ASSERT_EQUAL(15, s->getFieldValue());
             TEST_ASSERT_EQUAL(true, s->getRestore());
-        } else if (!s == sfr::photoresistor::covered) {
+        } else if (kv.first == 0x1700) {
             TEST_ASSERT_EQUAL(false, s->getFieldValue());
             TEST_ASSERT_EQUAL(true, s->getRestore());
-        } else if (!s == sfr::rockblock::last_downlink) {
+        } else if (kv.first == 0x2101) {
             TEST_ASSERT_EQUAL(824, s->getFieldValue());
             TEST_ASSERT_EQUAL(true, s->getRestore());
         }
@@ -164,6 +177,7 @@ void test_restore_multiple_writes()
     // Save the boot_counter before a reboot
     uint8_t boot_counter_before;
     EEPROM.get(4, boot_counter_before);
+    TEST_ASSERT_TRUE(boot_counter_before != 0);
 
     // Set all SFR fields to default values and restore booleans to true (as would happen on a reboot)
     resetSFR();
@@ -289,7 +303,7 @@ int test_eeprom()
     UNITY_BEGIN();
     // The boot counter and time tracker values in EEPROM memory carry over between test cases.
     RUN_TEST(test_restore_first_boot);
-    // RUN_TEST(test_restore_general_reboot);
+    RUN_TEST(test_restore_general_reboot);
     // RUN_TEST(test_restore_multiple_writes);
     // RUN_TEST(test_restore_write_limit_reboot);
     // RUN_TEST(test_time_tracker);

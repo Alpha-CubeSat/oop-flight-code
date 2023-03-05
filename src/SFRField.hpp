@@ -13,7 +13,7 @@ class SFRInterface
 private:
     int field_value;    // The value of the field cast to an int
     int default_value;  // The default value of the field cast to an int
-    int data_type;      // An int representing the field's type T, 1 for bool, 2 for uint8_t, 3 for uint16_t, and 4 for uint64_t
+    int data_type;      // An int representing the field's type T, 1 for bool, 2 for uint8_t, 3 for uint16_t, and 4 for uint32_t
     int address_offset; // This field's byte offset from the beginning of the EEPROM section where SFR data is currently stored
                         // sfr_address + address_offset gives this field's location in EEPROM
     bool restore;       // If the field should be restored or not
@@ -80,7 +80,7 @@ public:
         opcode = opcode_val;
         resolution = 1;
         SFRInterface::setFieldValue((int)value);
-        SFRInterface::setDefaultValue((int)default_val);
+        SFRInterface::setDefaultValue((int)value);
         if (sizeof(T) == sizeof(uint32_t))
             SFRInterface::setDataType(4);
         else if (sizeof(T) == sizeof(uint16_t))
@@ -107,7 +107,7 @@ public:
         opcode = opcode_val;
         resolution = 1;
         SFRInterface::setFieldValue((int)value);
-        SFRInterface::setDefaultValue((int)default_val);
+        SFRInterface::setDefaultValue((int)value);
         if (sizeof(T) == sizeof(uint32_t))
             SFRInterface::setDataType(4);
         else if (sizeof(T) == sizeof(uint16_t))
@@ -135,7 +135,7 @@ public:
         opcode = opcode_val;
         this->resolution = resolution;
         SFRInterface::setFieldValue((int)value);
-        SFRInterface::setDefaultValue((int)default_val);
+        SFRInterface::setDefaultValue((int)value);
         if (sizeof(T) == sizeof(uint32_t))
             SFRInterface::setDataType(4);
         else if (sizeof(T) == sizeof(uint16_t))
