@@ -13,6 +13,7 @@ void CommandMonitor::execute()
             RockblockCommand *command = sfr::rockblock::processed_commands.front();
             command->execute(); // Polymorphic Command Execution
             sfr::rockblock::commands_received.push_front(command->f_opcode);
+            sfr::rockblock::commands_received.push_front(command->f_opcode >> 8);
             if (sfr::rockblock::commands_received.size() > constants::rockblock::normal_report_command_default_max) {
                 sfr::rockblock::commands_received.pop_back();
             }

@@ -441,6 +441,7 @@ void RockblockControlTask::dispatch_process_command()
             } else {
                 // Invalid Command Recieved
                 // TODO: What Goes Here @Lauren
+                Serial.println("SAT INFO: invalid command");
             }
         }
 
