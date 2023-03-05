@@ -29,7 +29,7 @@
 import matplotlib.pyplot as plt
 
 if __name__ == "__main__":
-    with open("putty.log", 'r', encoding='utf-8') as file:
+    with open(r"C:\Users\Pawn1st\oop-flight-code\tools\putty.log", 'r', encoding='utf-8') as file:
         data = file.readlines()
 
     file.close()
