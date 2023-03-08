@@ -56,7 +56,7 @@ void test_restore_general_reboot()
     EEPROMControlTask eeprom_control_task(0);
 
     // Set specific sfr fields to be not restored and change their values from default
-    sfr::detumble::num_imu_retries.setRestore(false);
+    sfr::detumble::num_imu_retries.setRestore(false); // Opcode is 
     sfr::detumble::num_imu_retries = 3;
     sfr::aliveSignal::downlinked.setRestore(false);
     sfr::aliveSignal::downlinked = true;
@@ -73,9 +73,10 @@ void test_restore_general_reboot()
     delay(2000);
 
     // Execute EEPROM Control Task and check that write endurance increases
+    TEST_ASSERT_TRUE(millis() - sfr::eeprom::sfr_last_write_time >= sfr::eeprom);
     int initial_sfr_address_age = sfr::eeprom::sfr_address_age;
     eeprom_control_task.execute();
-    TEST_ASSERT_TRUE(sfr::eeprom::sfr_last_write_time > 0);
+    TEST_ASSERT_TRUE(sfr::eeprom::sfr_last_write_time - sfr::eeprom::sfr_write_step_time >= 0);
     TEST_ASSERT_TRUE(sfr::eeprom::sfr_address_age > initial_sfr_address_age);
 
     int read_address = sfr::eeprom::sfr_address + sfr::burnwire::attempts_limit.getAddressOffset();
