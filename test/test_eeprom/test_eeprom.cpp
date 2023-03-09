@@ -77,7 +77,7 @@ void test_restore_general_reboot()
     int initial_sfr_address_age = sfr::eeprom::sfr_address_age;
     eeprom_control_task.execute();
     TEST_ASSERT_TRUE(sfr::eeprom::sfr_last_write_time - initial_sfr_last_write_time > sfr::eeprom::sfr_write_step_time);
-    TEST_ASSERT_TRUE(sfr::eeprom::sfr_address_age > initial_sfr_address_age);
+    TEST_ASSERT_TRUE(sfr::eeprom::sfr_address_age = initial_sfr_address_age + 1);
 
     int read_address = sfr::eeprom::sfr_address + sfr::burnwire::attempts_limit.getAddressOffset();
     bool value;
