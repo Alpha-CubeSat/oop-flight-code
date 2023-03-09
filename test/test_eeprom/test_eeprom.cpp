@@ -72,11 +72,11 @@ void test_restore_general_reboot()
     sfr::eeprom::sfr_last_write_time = 0;
     delay(2000);
 
-    // Execute EEPROM Control Task and check that write endurance increases
-    TEST_ASSERT_TRUE(millis() - sfr::eeprom::sfr_last_write_time >= sfr::eeprom);
+    // Check that the conditions for a write are true, execute EEPROM Control Task and check that write endurance and last write time updates
+    TEST_ASSERT_TRUE(millis() - sfr::eeprom::sfr_last_write_time >= sfr::eeprom::sfr_write_step_time);
     int initial_sfr_address_age = sfr::eeprom::sfr_address_age;
     eeprom_control_task.execute();
-    TEST_ASSERT_TRUE(sfr::eeprom::sfr_last_write_time - sfr::eeprom::sfr_write_step_time >= 0);
+    TEST_ASSERT_TRUE(sfr::eeprom::sfr_last_write_time > sfr::eeprom::sfr_write_step_time);
     TEST_ASSERT_TRUE(sfr::eeprom::sfr_address_age > initial_sfr_address_age);
 
     int read_address = sfr::eeprom::sfr_address + sfr::burnwire::attempts_limit.getAddressOffset();
