@@ -34,7 +34,7 @@ public:
 #endif
 
     virtual ~SFRInterface(){};
-    static void setFieldVal(int opcode, uint32_t arg1);
+    static void setFieldValByOpcode(int opcode, uint32_t arg1);
     virtual void setValue(uint32_t arg1);
 
     // For setting the SFRInterface members for EEPROM saving and restoring, which uses a vector of SFRInterfaces (can't create a vector
@@ -148,7 +148,7 @@ public:
         SFRInterface::setRestore(restore);
 
 #ifdef DEBUG
-        T initial = default_val;
+        T initial = default_val * resolution; // Since value gets set to initial in reset(), initial should be default_val * resolution instead of default_val
 #endif
 
         SFRInterface::opcode_lookup[opcode_val] = this;
@@ -175,12 +175,14 @@ public:
         if ((bounded && input <= max && input >= min) || (!bounded)) {
             value = input;
         }
+        setFieldValue((int)input);
     }
 
 #ifdef DEBUG
     void reset()
     {
         value = initial;
+        setFieldValue((int)initial);
     }
 #endif
     void setValue(uint32_t arg1)

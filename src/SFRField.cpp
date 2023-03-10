@@ -3,7 +3,7 @@
 std::map<int, SFRInterface *> SFRInterface::opcode_lookup;
 std::vector<SFRInterface *> SFRInterface::sfr_fields_vector;
 
-void SFRInterface::setFieldVal(int opcode, uint32_t arg1)
+void SFRInterface::setFieldValByOpcode(int opcode, uint32_t arg1)
 {
     if (opcode_lookup.count(opcode)) {
         // Valid Op Code
