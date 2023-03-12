@@ -124,7 +124,7 @@ void test_restore_general_reboot()
             TEST_ASSERT_EQUAL(boot_counter_before + 1, s->getFieldValue());
             TEST_ASSERT_EQUAL(true, s->getRestore());
         }
-        // The boot counter in the SFR would have increased, and its restore boolean is the default true
+        // The SFR write age would have increased, and its restore boolean is the default true
         else if (kv.first == 0x2805) {
             TEST_ASSERT_EQUAL(initial_sfr_address_age + 1, s-> getFieldValue());
             TEST_ASSERT_EQUAL(true, s->getRestore());

@@ -59,6 +59,8 @@ void EEPROMControlTask::save_sfr_data()
             sfr::eeprom::sfr_address_age = 0;
         }
 
+        sfr::eeprom::sfr_address_age++;
+
         /*
         > Each field is stored in this format: [boolean restore][T value].
         > The restore boolean indicates whether the field should be restored on Teensy boot up.
@@ -83,8 +85,6 @@ void EEPROMControlTask::save_sfr_data()
             }
             sfr::eeprom::sfr_last_write_time += time_since_last_write;
         }
-
-        sfr::eeprom::sfr_address_age++;
     }
 }
 
