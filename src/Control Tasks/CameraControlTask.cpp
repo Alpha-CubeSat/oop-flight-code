@@ -23,9 +23,9 @@ void CameraControlTask::execute()
 
     if (sfr::camera::turn_on == true && sfr::camera::powered == false) {
         camera_init();
-        if (sfr::camera::init_mode == (uint16_t)camera_init_mode_type::complete) {
+        if (sfr::camera::init_mode == (uint16_t)sensor_init_mode_type::complete) {
             transition_to_normal();
-        } else if (sfr::camera::init_mode == (uint16_t)camera_init_mode_type::failed) {
+        } else if (sfr::camera::init_mode == (uint16_t)sensor_init_mode_type::failed) {
             if (sfr::camera::failed_times == sfr::camera::failed_limit) {
                 sfr::camera::failed_times = 0; // reset
                 transition_to_abnormal_init();
@@ -33,7 +33,7 @@ void CameraControlTask::execute()
                 sfr::camera::failed_times = sfr::camera::failed_times + 1;
                 Serial.print("failed times: ");
                 Serial.println(sfr::camera::failed_times);
-                sfr::camera::init_mode = (uint16_t)camera_init_mode_type::awaiting;
+                sfr::camera::init_mode = (uint16_t)sensor_init_mode_type::awaiting;
             }
         }
     }
@@ -49,7 +49,7 @@ void CameraControlTask::execute()
         Pins::setPinState(constants::camera::tx, LOW);
         sfr::camera::powered = false;
         sfr::camera::turn_off = false;
-        sfr::camera::init_mode = (uint16_t)camera_init_mode_type::in_progress;
+        sfr::camera::init_mode = (uint16_t)sensor_init_mode_type::in_progress;
     }
 
     if (jpglen > 0) {
@@ -103,25 +103,25 @@ void CameraControlTask::execute()
 
 void CameraControlTask::camera_init()
 {
-    if (sfr::camera::init_mode == (uint16_t)camera_init_mode_type::awaiting) {
+    if (sfr::camera::init_mode == (uint16_t)sensor_init_mode_type::awaiting) {
         // Called camera_init function and initialization process has not yet started
         sfr::camera::init_start_time = millis();
         sfr::camera::step_time = millis();
-        sfr::camera::init_mode = (uint16_t)camera_init_mode_type::in_progress;
+        sfr::camera::init_mode = (uint16_t)sensor_init_mode_type::in_progress;
     }
-    if (sfr::camera::init_mode == (uint16_t)camera_init_mode_type::in_progress && ((millis() - sfr::camera::init_start_time) > sfr::camera::init_timeout)) {
+    if (sfr::camera::init_mode == (uint16_t)sensor_init_mode_type::in_progress && ((millis() - sfr::camera::init_start_time) > sfr::camera::init_timeout)) {
         // Camera initalization process is in progress but has exceeded timeout duration
-        sfr::camera::init_mode = (uint16_t)camera_init_mode_type::failed;
+        sfr::camera::init_mode = (uint16_t)sensor_init_mode_type::failed;
         Serial.print("Camera intialization failed at step: ");
         Serial.println(sfr::camera::start_progress);
     }
 
-    if (sfr::camera::init_mode == (uint16_t)camera_init_mode_type::in_progress) {
+    if (sfr::camera::init_mode == (uint16_t)sensor_init_mode_type::in_progress) {
         switch (sfr::camera::start_progress) {
         case 0: // step 0 - initialize SD card
             if (!SD.begin(254)) {
                 Serial.println("\n\n\nSD CARD FAILED\n\n\n");
-                sfr::camera::init_mode = (uint16_t)camera_init_mode_type::failed;
+                sfr::camera::init_mode = (uint16_t)sensor_init_mode_type::failed;
             } else {
                 sfr::camera::start_progress++;
             }
@@ -148,7 +148,7 @@ void CameraControlTask::camera_init()
                 if (adaCam.setImageSize(sfr::camera::set_res)) {
                     if (adaCam.getImageSize() != sfr::camera::set_res) {
                         Serial.println("Setting resolution failed");
-                        sfr::camera::init_mode = (uint16_t)camera_init_mode_type::failed;
+                        sfr::camera::init_mode = (uint16_t)sensor_init_mode_type::failed;
                     } else {
                         Serial.println("Setting resolution succeeded");
                         sfr::camera::step_time = millis();
@@ -167,12 +167,12 @@ void CameraControlTask::camera_init()
                     sfr::camera::start_progress++;
                 } else {
                     Serial.println("Resolution fetch error");
-                    sfr::camera::init_mode = (uint16_t)camera_init_mode_type::failed;
+                    sfr::camera::init_mode = (uint16_t)sensor_init_mode_type::failed;
                 }
             }
             break;
         case 5: // completed initialization
-            sfr::camera::init_mode = (uint16_t)camera_init_mode_type::complete;
+            sfr::camera::init_mode = (uint16_t)sensor_init_mode_type::complete;
             sfr::camera::turn_on = false;
             sfr::camera::powered = true;
         }
@@ -203,6 +203,6 @@ void CameraControlTask::transition_to_abnormal_init()
     sfr::camera::powered = false;
     sfr::camera::turn_off = false;
     sfr::camera::turn_on = false;
-    sfr::camera::init_mode = (uint16_t)camera_init_mode_type::awaiting;
+    sfr::camera::init_mode = (uint16_t)sensor_init_mode_type::awaiting;
     sfr::camera::start_progress = 0;
 }
