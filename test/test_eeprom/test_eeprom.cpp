@@ -149,7 +149,6 @@ void test_restore_general_reboot()
 
     // Execute EEPROM Control Task and check that the last write time updates
     int initial_sfr_last_write_time = sfr::eeprom::sfr_last_write_time;
-    int initial_sfr_address_age = sfr::eeprom::sfr_address_age;
     eeprom_control_task.execute();
     TEST_ASSERT_TRUE(sfr::eeprom::sfr_last_write_time - initial_sfr_last_write_time > sfr::eeprom::sfr_write_step_time);
 
@@ -414,7 +413,8 @@ void test_time_tracker()
     TEST_ASSERT_TRUE(wait_time_after > wait_time_before);
 
     // Set wait time in EEPROM to time limit
-    EEPROM.put(0, sfr::eeprom::alloted_time);
+    int alloted_time = sfr::eeprom::alloted_time;
+    EEPROM.put(0, alloted_time);
 
     // Execute EEPROM Control Task and check that the last write time updates
     initial_wait_time_last_write_time = sfr::eeprom::wait_time_last_write_time;
@@ -438,7 +438,6 @@ void test_time_tracker()
 int test_eeprom()
 {
     UNITY_BEGIN();
-    // The boot counter and time tracker values in EEPROM memory carry over between test cases.
     RUN_TEST(test_restore_first_boot);
     RUN_TEST(test_restore_general_reboot);
     RUN_TEST(test_restore_multiple_writes);
