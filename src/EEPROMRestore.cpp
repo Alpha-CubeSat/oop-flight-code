@@ -28,18 +28,15 @@ void EEPROMRestore::execute()
                     uint32_t value;
                     EEPROM.get(read_address + 1, value);
                     s->setValue(value);
-                }
-                else if (data_type == 3) {
+                } else if (data_type == 3) {
                     uint16_t value;
                     EEPROM.get(read_address + 1, value);
                     s->setValue(value);
-                }
-                else if (data_type == 2) {
+                } else if (data_type == 2) {
                     uint8_t value;
                     EEPROM.get(read_address + 1, value);
                     s->setValue(value);
-                }
-                else if (data_type == 1) {
+                } else if (data_type == 1) {
                     bool value;
                     EEPROM.get(read_address + 1, value);
                     s->setValue(value);
