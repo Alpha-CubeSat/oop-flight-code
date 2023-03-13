@@ -314,8 +314,9 @@ namespace constants {
         static constexpr unsigned int eeprom_alloted_time_passed_offset = eeprom_alloted_time_offset + 5;
         static constexpr unsigned int eeprom_sfr_write_step_time_offset = eeprom_alloted_time_passed_offset + 2;
         static constexpr unsigned int eeprom_sfr_address_age_offset = eeprom_sfr_write_step_time_offset + 5;
+        static constexpr unsigned int eeprom_storage_full_offset = eeprom_sfr_address_age_offset + 5;
 
-        static constexpr unsigned int full_offset = eeprom_sfr_address_age_offset + 5;
+        static constexpr unsigned int full_offset = eeprom_storage_full_offset + 2;
     } // namespace eeprom
 };    // namespace constants
 

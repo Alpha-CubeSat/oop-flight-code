@@ -82,12 +82,12 @@ void test_execute_no_write()
     sfr::photoresistor::covered = false; // Opcode is 0x1700
     sfr::rockblock::last_downlink = 824; // Opcode is 0x2101
 
-    // Delay for less than the write time step and save the initial write endurance
+    // Delay for less than the write time step and save the initial write endurance and last write time
     delay(20);
     int initial_sfr_address_age = sfr::eeprom::sfr_address_age;
+    int initial_sfr_last_write_time = sfr::eeprom::sfr_last_write_time;
 
     // Execute EEPROM Control Task and check that the last write time and the write endurance does not change
-    int initial_sfr_last_write_time = sfr::eeprom::sfr_last_write_time;
     eeprom_control_task.execute();
     TEST_ASSERT_EQUAL(sfr::eeprom::sfr_last_write_time, initial_sfr_last_write_time);
     TEST_ASSERT_EQUAL(sfr::eeprom::sfr_address_age, initial_sfr_address_age);
@@ -143,12 +143,12 @@ void test_restore_general_reboot()
     sfr::photoresistor::covered = false; // Opcode is 0x1700
     sfr::rockblock::last_downlink = 824; // Opcode is 0x2101
 
-    // Delay for over the write time step and save the initial write endurance
+    // Delay for over the write time step and save the initial write endurance and last write time
     delay(2000);
     int initial_sfr_address_age = sfr::eeprom::sfr_address_age;
+    int initial_sfr_last_write_time = sfr::eeprom::sfr_last_write_time;
 
     // Execute EEPROM Control Task and check that the last write time updates
-    int initial_sfr_last_write_time = sfr::eeprom::sfr_last_write_time;
     eeprom_control_task.execute();
     TEST_ASSERT_TRUE(sfr::eeprom::sfr_last_write_time - initial_sfr_last_write_time > sfr::eeprom::sfr_write_step_time);
 
@@ -180,7 +180,7 @@ void test_restore_general_reboot()
             TEST_ASSERT_EQUAL(824, s->getFieldValue());
             TEST_ASSERT_EQUAL(true, s->getRestore());
         }
-        // The boot counter in the  SFR would have increased, and its restore boolean is the default true
+        // The boot counter in the SFR would have increased, and its restore boolean is the default true
         else if (kv.first == 0x2800) {
             TEST_ASSERT_EQUAL(boot_counter_before + 1, s->getFieldValue());
             TEST_ASSERT_EQUAL(true, s->getRestore());
@@ -190,7 +190,7 @@ void test_restore_general_reboot()
             TEST_ASSERT_EQUAL(initial_sfr_address_age + 1, s->getFieldValue());
             TEST_ASSERT_EQUAL(true, s->getRestore());
         }
-        // Fields should be restored but their values were unchannged, so they should hold the default valuec and their restore booleans should be true
+        // Fields should be restored but their values were unchannged, so they should hold the default valuec, and their restore booleans should be true
         else {
             TEST_ASSERT_EQUAL(s->getDefaultValue(), s->getFieldValue());
             TEST_ASSERT_EQUAL(s->getDefaultValue(), s->getFieldValue());
@@ -225,12 +225,12 @@ void test_restore_multiple_writes()
     sfr::photoresistor::covered = false; // Opcode is 0x1700
     sfr::rockblock::last_downlink = 824; // Opcode is 0x2101
 
-    // Delay for over the write time step and save the initial write endurance
+    // Delay for over the write time step and save the initial write endurance and last write time
     delay(2000);
     int initial_sfr_address_age = sfr::eeprom::sfr_address_age;
+    int initial_sfr_last_write_time = sfr::eeprom::sfr_last_write_time;
 
     // Check that the conditions for a write are true, execute EEPROM Control Task and check that the last write time updates
-    int initial_sfr_last_write_time = sfr::eeprom::sfr_last_write_time;
     eeprom_control_task.execute();
     TEST_ASSERT_TRUE(sfr::eeprom::sfr_last_write_time - initial_sfr_last_write_time > sfr::eeprom::sfr_write_step_time);
 
@@ -390,6 +390,20 @@ void test_restore_write_limit_reboot()
     }
 }
 
+void test_exceed_eeprom_memory() {
+    // Setup
+    clear_eeprom();
+    resetSFR();
+    EEPROMControlTask eeprom_control_task(0);
+
+    // Set the SFR address to the last byte of the EEPROM memory so there is not enough room for a full store
+    sfr::eeprom::sfr_address = EEPROM.length() - 1;
+
+    // Execute EEPROM Control Task and check that the storage full flag gets flipped
+    eeprom_control_task.execute();
+    TEST_ASSERT_TRUE(sfr::eeprom::storage_full);
+}
+
 void test_time_tracker()
 {
     // Setup, SFR bytes are not tested in this test case
@@ -416,19 +430,19 @@ void test_time_tracker()
     int alloted_time = sfr::eeprom::alloted_time;
     EEPROM.put(0, alloted_time);
 
-    // Execute EEPROM Control Task and check that the last write time updates
+    // Execute EEPROM Control Task and check that the last write time does not update
     initial_wait_time_last_write_time = sfr::eeprom::wait_time_last_write_time;
     eeprom_control_task.execute();
-    TEST_ASSERT_TRUE(sfr::eeprom::wait_time_last_write_time - initial_wait_time_last_write_time > sfr::eeprom::sfr_write_step_time);
+    TEST_ASSERT_EQUAL(sfr::eeprom::wait_time_last_write_time, initial_wait_time_last_write_time);
 
     // Check that time tracking stops
     TEST_ASSERT_TRUE(sfr::eeprom::alloted_time_passed);
 
-    // Check that future executes doesn't change the value
+    // Check that future executes do not change the value
     delay(2000);
     initial_wait_time_last_write_time = sfr::eeprom::wait_time_last_write_time;
     eeprom_control_task.execute();
-    TEST_ASSERT_TRUE(sfr::eeprom::wait_time_last_write_time - initial_wait_time_last_write_time > sfr::eeprom::sfr_write_step_time);
+    TEST_ASSERT_EQUAL(sfr::eeprom::wait_time_last_write_time, initial_wait_time_last_write_time);
 
     TEST_ASSERT_TRUE(sfr::eeprom::alloted_time_passed);
     EEPROM.get(0, wait_time_after);
