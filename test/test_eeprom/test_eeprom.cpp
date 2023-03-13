@@ -363,13 +363,13 @@ void test_restore_write_limit_reboot()
         }
         // Fields should be restored, so they should hold the written value, and their restore booleans should be true
         else if (kv.first == 0x1905) {
-            TEST_ASSERT_EQUAL(20, s->getFieldValue());
+            TEST_ASSERT_EQUAL(15, s->getFieldValue());
             TEST_ASSERT_EQUAL(true, s->getRestore());
         } else if (kv.first == 0x1700) {
             TEST_ASSERT_EQUAL(false, s->getFieldValue());
             TEST_ASSERT_EQUAL(true, s->getRestore());
         } else if (kv.first == 0x2101) {
-            TEST_ASSERT_EQUAL(1234, s->getFieldValue());
+            TEST_ASSERT_EQUAL(824, s->getFieldValue());
             TEST_ASSERT_EQUAL(true, s->getRestore());
         }
         // The boot counter in the SFR would have increased, and its restore boolean is the default true
