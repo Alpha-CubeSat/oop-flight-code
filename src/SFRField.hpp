@@ -176,14 +176,14 @@ public:
         if ((bounded && input <= max && input >= min) || (!bounded)) {
             value = input;
         }
-        setFieldValue((int)input);
+        field_value = (int)input;
     }
 
 #ifdef DEBUG
     void reset()
     {
         value = initial;
-        setFieldValue((int)initial);
+        field_value = (int)initial;
     }
 #endif
     void setValue(uint32_t arg1)
