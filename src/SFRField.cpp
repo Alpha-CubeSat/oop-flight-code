@@ -12,19 +12,14 @@ void SFRInterface::setFieldValByOpcode(int opcode, uint32_t arg1)
     }
 }
 
-void SFRInterface::setFieldValue(int val)
-{
-    field_value = val;
-}
-
 int SFRInterface::getFieldValue()
 {
     return field_value;
 }
 
-void SFRInterface::setDataType(int type)
+int SFRInterface::getDefaultValue()
 {
-    data_type = type;
+    return default_value;
 }
 
 int SFRInterface::getDataType()
@@ -32,32 +27,17 @@ int SFRInterface::getDataType()
     return data_type;
 }
 
-void SFRInterface::setAddressOffset(int offset)
-{
-    address_offset = offset;
-}
-
 int SFRInterface::getAddressOffset()
 {
     return address_offset;
 }
 
-void SFRInterface::setRestore(bool res)
+void SFRInterface::setRestore(bool restore_on_boot)
 {
-    restore = res;
+    restore = restore_on_boot;
 }
 
 bool SFRInterface::getRestore()
 {
     return restore;
-}
-
-void SFRInterface::setDefaultValue(int val)
-{
-    default_value = val;
-}
-
-int SFRInterface::getDefaultValue()
-{
-    return default_value;
 }

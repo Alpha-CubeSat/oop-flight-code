@@ -23,7 +23,7 @@ void EEPROMControlTask::save_wait_time()
         Serial.println("Current wait time value: " + String(wait_time));
 #endif
         if (wait_time >= sfr::eeprom::alloted_time) {
-            // The newly read eeprom value exceeds the two hour wait time
+            // The newly read eeprom value reaches the two hour wait time
             sfr::eeprom::alloted_time_passed = true;
 #ifdef VERBOSE
             Serial.println("EEPROM time tracking finished!");
@@ -31,8 +31,8 @@ void EEPROMControlTask::save_wait_time()
         } else {
             int time_since_last_write = millis() - sfr::eeprom::wait_time_last_write_time;
 
-            if (time_since_last_write > sfr::eeprom::wait_time_write_step_time) {
-                // The time since the last EEPROM write exceeds the interval between writes, so update the EEPROM value
+            if (time_since_last_write >= sfr::eeprom::wait_time_write_step_time) {
+                // The time since the last EEPROM write reaches the interval between writes, so update the EEPROM value
                 int write_value = wait_time + time_since_last_write;
 #ifdef VERBOSE
                 Serial.println("New value to write: " + String(write_value));
@@ -50,8 +50,8 @@ void EEPROMControlTask::save_sfr_data()
     // SAVING SFR DATA
     int time_since_last_write = millis() - sfr::eeprom::sfr_last_write_time;
 
-    if (time_since_last_write > sfr::eeprom::sfr_write_step_time) {
-        // The last EEPROM write exceeds the interval between writes, so update the EEPROM values
+    if (time_since_last_write >= sfr::eeprom::sfr_write_step_time) {
+        // The last EEPROM write reaches the interval between writes, so update the EEPROM values
 
         if (sfr::eeprom::sfr_address_age == 99000) { // Programmed write limit is less than the actual endurance of 100000 to create a safety buffer
             sfr::eeprom::sfr_address += constants::eeprom::full_offset;
