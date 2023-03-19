@@ -101,7 +101,6 @@ namespace constants {
     } // namespace acs
     namespace battery {
         constexpr int voltage_value_pin = 32;
-        constexpr int allow_measurement_pin = 36;
         constexpr float voltage_ref = 3.3;
         constexpr int resolution = 1023;
         constexpr int r1 = 4700;
