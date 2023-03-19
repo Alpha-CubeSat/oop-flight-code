@@ -22,10 +22,13 @@ MainControlLoop::MainControlLoop()
       mission_manager(constants::timecontrol::mission_manager_offset)
 {
     delay(1000);
+
+    start = 1;
 }
 
 void MainControlLoop::execute()
 {
+    
     delay(200); // To prolong the speed of the main control loop to ensure correct RockBlock reads. Can reduce in the future.
 
     faults::fault_1 = 0;
@@ -50,4 +53,31 @@ void MainControlLoop::execute()
     camera_control_task.execute_on_time();
     rockblock_control_task.execute_on_time();
     eeprom_control_task.execute_on_time();
+
+
+
+
+
+    if(start)
+    {
+        sfr::mission::current_mode = sfr::mission::transmit;
+        start = false;
+        for (int i = 0; i<100; i++) {
+            sfr::imu::imu_dlink.push_front(i);
+        }
+
+        IMUDownlinkReportMonitor monitor(0);
+        monitor.create_imu_downlink_report(0);
+        monitor.create_imu_downlink_report(1);     
+    }
+
+    if(sfr::imu::report_ready)
+    {
+        
+    }
+
+
+    
+    sfr::imu::report_ready = true;
+
 }

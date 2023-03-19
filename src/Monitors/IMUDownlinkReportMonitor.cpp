@@ -17,6 +17,7 @@ void IMUDownlinkReportMonitor::execute()
 
 void IMUDownlinkReportMonitor::create_imu_downlink_report(int fragment_number)
 {
+
     // imu_dlink empty and all fragments have been downlinked
     if (sfr::imu::imu_dlink.size() == 0 && sfr::rockblock::imu_report.size() == 0) {
         sfr::imu::report_ready = false;
@@ -34,12 +35,31 @@ void IMUDownlinkReportMonitor::create_imu_downlink_report(int fragment_number)
     int pop_size = min(min(constants::imu::max_gyro_imu_report_size,
                            constants::rockblock::content_length),
                        sfr::imu::imu_dlink.size());
+    
+
+
+    // Serial.println("the pop size is :" );
+    // Serial.println(pop_size);
+    
+    Serial.print("Here is the buffer content before the for loop");
+    for (auto v : sfr::imu::imu_dlink){
+        Serial.print(v, HEX);
+        Serial.print(" ");
+    }
+    Serial.print("\n");
 
     // add actual gyro content to imu report
     for (int i = 0; i < pop_size; i++) {
         sfr::rockblock::imu_report.push_back(sfr::imu::imu_dlink.back());
         sfr::imu::imu_dlink.pop_back();
     }
+
+    Serial.print("Here is the buffer content after the for loop");
+    for (auto v : sfr::imu::imu_dlink){
+        Serial.print(v, HEX);
+        Serial.print(" ");
+    }
+    Serial.print("\n");
 
     // for the next downlink cycle
     sfr::imu::report_ready = true;
