@@ -1,5 +1,7 @@
 #include "Fault.hpp"
+
 std::map<uint16_t, FaultInterface *> FaultInterface::opcode_lookup;
+
 Fault::Fault(uint16_t opcode)
 {
     this->opcode = opcode;
