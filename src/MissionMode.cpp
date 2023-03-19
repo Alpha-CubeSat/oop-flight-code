@@ -27,7 +27,7 @@ void AliveSignal::transition_to()
 }
 void AliveSignal::dispatch()
 {
-    enter_lp(sfr::mission::lowPowerAliveSignal);
+    // enter_lp(sfr::mission::lowPowerAliveSignal);
     exit_signal_phase(sfr::mission::detumbleSpin);
 }
 
@@ -57,6 +57,8 @@ void DetumbleSpin::dispatch()
     if (sfr::detumble::num_imu_retries >= sfr::detumble::max_imu_retries) {
         sfr::mission::current_mode = sfr::mission::normal;
     }
+    // enter_lp(sfr::mission::lowPowerDetumbleSpin);
+    timed_out(sfr::mission::normal, sfr::acs::detumble_timeout);
 }
 
 void LowPowerDetumbleSpin::transition_to()
@@ -360,7 +362,7 @@ void exit_lp(MissionMode *reg_mode)
 {
     float voltage;
 
-    if (sfr::battery::voltage_average->get_value(&voltage) && voltage > sfr::battery::acceptable_battery) {
+    if (sfr::battery::voltage_average->is_valid() && sfr::battery::voltage_average->get_value(&voltage) && voltage > sfr::battery::acceptable_battery) {
         sfr::mission::current_mode = reg_mode;
     }
 }

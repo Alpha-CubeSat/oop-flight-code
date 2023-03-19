@@ -101,7 +101,6 @@ void RockblockControlTask::dispatch_standby()
     Serial.print("sleep mode: ");
     Serial.println(sfr::rockblock::sleep_mode);
     if ((sfr::rockblock::ready_status || sfr::rockblock::waiting_message) && !sfr::rockblock::sleep_mode) {
-        Serial.println("Transitioning to send at");
         transition_to(rockblock_mode_type::send_at);
         Pins::setPinState(constants::rockblock::sleep_pin, HIGH);
     } else {

@@ -285,6 +285,7 @@ namespace sfr {
         SFRField<bool> off = SFRField<bool>(true, 0x2502, constants::eeprom::acs_off_offset, true);
 
         SFRField<uint16_t> mag = SFRField<uint16_t>((uint16_t)simple_acs_type::x, 0x2503, constants::eeprom::acs_mag_offset, true);
+        SFRField<uint32_t> detumble_timeout = SFRField<uint32_t>(30 * constants::time::one_second, 0x2504, constants::eeprom::acs_detumble_timeout_offset, true);
     } // namespace acs
     namespace battery {
         // OP Codes 2600

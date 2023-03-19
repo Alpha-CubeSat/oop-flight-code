@@ -306,6 +306,8 @@ namespace sfr {
         extern SFRField<bool> off;
 
         extern SFRField<uint16_t> mag;
+
+        extern SFRField<uint32_t> detumble_timeout;
     } // namespace acs
     namespace battery {
         // OP Codes 2600
