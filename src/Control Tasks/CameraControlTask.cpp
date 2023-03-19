@@ -31,7 +31,7 @@ void CameraControlTask::execute()
                 transition_to_abnormal_init();
             } else {
                 sfr::camera::failed_times = sfr::camera::failed_times + 1;
-                Serial.print("failed times: ");
+                Serial.print("Camera initialization failed times: ");
                 Serial.println(sfr::camera::failed_times);
                 sfr::camera::init_mode = (uint16_t)sensor_init_mode_type::awaiting;
             }

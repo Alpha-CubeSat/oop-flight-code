@@ -291,7 +291,7 @@ namespace sfr {
     namespace battery {
         // OP Codes 2600
         // TODO
-        SFRField<uint32_t> acceptable_battery = SFRField<uint32_t>(0, 0x2600, constants::eeprom::battery_acceptable_battery_offset, true);
+        SFRField<uint32_t> acceptable_battery = SFRField<uint32_t>(3.75, 0x2600, constants::eeprom::battery_acceptable_battery_offset, true);
         SFRField<uint32_t> min_battery = SFRField<uint32_t>(0, 0x2601, constants::eeprom::battery_min_battery_offset, true);
 
         SensorReading *voltage_value = new SensorReading(1, 0, 5);

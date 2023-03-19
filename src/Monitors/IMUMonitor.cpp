@@ -27,16 +27,10 @@ void IMUMonitor::IMU_init()
             imu.setupGyro(imu.LSM9DS1_GYROSCALE_245DPS);
         }
     }
-
-    Serial.println("gets here");
 }
 
 void IMUMonitor::execute()
 {
-    Serial.println("executing");
-    Serial.println(sfr::imu::turn_on);
-    Serial.println(sfr::imu::powered);
-
     if (sfr::imu::turn_on == true && sfr::imu::powered == false) {
 #ifdef VERBOSE
         Serial.println("turned on IMU");
@@ -50,7 +44,7 @@ void IMUMonitor::execute()
                 transition_to_abnormal_init();
             } else {
                 sfr::imu::failed_times = sfr::imu::failed_times + 1;
-                Serial.print("failed times: ");
+                Serial.print("IMU initialization failed times: ");
                 Serial.println(sfr::imu::failed_times);
                 sfr::imu::init_mode = (uint16_t)sensor_init_mode_type::awaiting;
             }
@@ -147,4 +141,9 @@ void IMUMonitor::transition_to_abnormal_init()
     sfr::imu::gyro_z_average->set_invalid();
     sfr::imu::acc_x_average->set_invalid();
     sfr::imu::acc_y_average->set_invalid();
+
+    sfr::imu::turn_on = false;
+    sfr::imu::powered = false;
+    sfr::imu::turn_off = false;
+    sfr::imu::init_mode = (uint16_t)sensor_init_mode_type::awaiting;
 }

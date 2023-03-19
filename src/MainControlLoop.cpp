@@ -50,6 +50,4 @@ void MainControlLoop::execute()
     camera_control_task.execute_on_time();
     rockblock_control_task.execute_on_time();
     eeprom_control_task.execute_on_time();
-
-    Serial.println("hello");
 }
