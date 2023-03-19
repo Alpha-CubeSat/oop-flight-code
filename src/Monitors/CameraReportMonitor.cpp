@@ -90,4 +90,5 @@ void CameraReportMonitor::create_camera_report(int fragment_number, uint8_t seri
         sfr::rockblock::camera_report.push_back(parsedbuffer[i]);
     }
     sfr::camera::report_ready = true;
+    Serial.println("camera report ready");
 }

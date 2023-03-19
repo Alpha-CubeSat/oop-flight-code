@@ -26,12 +26,21 @@ MainControlLoop::MainControlLoop()
     delay(1000);
 }
 
+bool first_iter = true;
+
 void MainControlLoop::execute()
 {
     delay(200); // To prolong the speed of the main control loop to ensure correct RockBlock reads. Can reduce in the future.
     faults::fault_1 = 0;
     faults::fault_2 = 0;
     faults::fault_3 = 0;
+
+    if (first_iter) {
+        first_iter = false;
+        sfr::mission::current_mode = sfr::mission::photo;
+        sfr::camera::turn_on = true;
+        Serial.println("Set to photo");        
+    }
 
     clock_manager.execute();
     mission_manager.execute_on_time();

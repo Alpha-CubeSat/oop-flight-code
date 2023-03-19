@@ -11,9 +11,11 @@ void RockblockReportMonitor::execute()
     switch (static_cast<rockblock_mode_type>(sfr::rockblock::mode.get())) {
     // Report scheduling is only performed in `rockblock_mode_type::standby` mode
     case rockblock_mode_type::standby:
+        // Serial.println("in standby. Going to schedule repport");
         schedule_report();
         break;
     default:
+        // Serial.println("not in standby");
         break;
     }
 
@@ -23,6 +25,7 @@ void RockblockReportMonitor::execute()
         for (auto &data : sfr::rockblock::camera_report) {
             sfr::rockblock::downlink_report.push_back(data);
         }
+        Serial.println("Added Camera Report to buffer");
         return;
 
     case report_type::normal_report:
@@ -30,6 +33,7 @@ void RockblockReportMonitor::execute()
         for (auto &data : sfr::rockblock::normal_report) {
             sfr::rockblock::downlink_report.push_back(data);
         }
+        // Serial.println("Sent Normal Report");
         return;
 
     case report_type::imu_report:
@@ -45,13 +49,18 @@ void RockblockReportMonitor::switch_report_type_to(report_type downlink_report_t
 {
     sfr::rockblock::downlink_report_type = (uint16_t)downlink_report_type;
     sfr::rockblock::ready_status = true;
+    if ((uint16_t)downlink_report_type == 2) {
+        // Serial.println("Switched report type to camera.");
+    }
 }
 
 void RockblockReportMonitor::schedule_report()
 {
+    // Serial.println("In schedule report");
 
     // Check if in a low-power mode; if so, only enable normal report downlink
     if (sfr::mission::current_mode->get_type() == mode_type::LP) {
+        Serial.println("Low power");
         if (millis() - sfr::rockblock::last_downlink >= sfr::rockblock::downlink_period) {
             sfr::rockblock::downlink_report_type = (uint16_t)report_type::normal_report;
             sfr::rockblock::ready_status = true;
@@ -65,6 +74,7 @@ void RockblockReportMonitor::schedule_report()
     // Not in low-power mode; report type cycle order: normal report, IMU report, camera report
     switch (static_cast<report_type>(sfr::rockblock::downlink_report_type.get())) {
     case report_type::normal_report:
+        
         if (sfr::imu::report_ready) {
             switch_report_type_to(report_type::imu_report);
             return;
@@ -72,6 +82,7 @@ void RockblockReportMonitor::schedule_report()
 
         if (sfr::camera::report_ready) {
             switch_report_type_to(report_type::camera_report);
+            // Serial.println("last report was normal, now setting to camera");
             return;
         }
 
@@ -86,6 +97,7 @@ void RockblockReportMonitor::schedule_report()
     case report_type::imu_report:
         if (sfr::camera::report_ready) {
             switch_report_type_to(report_type::camera_report);
+            Serial.println("last report was imu, now setting to camera");
             return;
         }
 
