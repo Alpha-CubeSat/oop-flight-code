@@ -94,6 +94,14 @@ void RockblockControlTask::dispatch_standby()
         Serial.print("Rockblock Not Ready to Downlink\n");
     }
 #endif
+
+#ifdef VERBOSE_RB
+    if (sfr::rockblock::ready_status) {
+        Serial.print("Rockblock Ready to Downlink\n");
+    } else {
+        Serial.print("Rockblock Not Ready to Downlink\n");
+    }
+#endif
     Serial.print("ready status: ");
     Serial.println(sfr::rockblock::ready_status);
     Serial.print("waiting message: ");
@@ -440,6 +448,7 @@ void RockblockControlTask::dispatch_process_command()
             } else {
                 // Invalid Command Recieved
                 // TODO: What Goes Here @Lauren
+                Serial.println("SAT INFO: invalid command");
             }
         }
 

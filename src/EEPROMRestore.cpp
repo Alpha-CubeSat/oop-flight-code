@@ -9,7 +9,7 @@ void EEPROMRestore::execute()
     // On the very first boot up, place the sfr_address value in the appropriate byte. Do not restore anything from EEPROM and use the default values in the SFR
     // On every boot up after, restore SFR values from EEPROM memory
     if (boot_counter == 0) {
-        uint16_t sfr_address = sfr::eeprom::sfr_address;
+        uint16_t sfr_address = sfr::eeprom::sfr_address; // By default, the sfr_address field in the SFR poitns to the beginning of the first byt section.
         EEPROM.put(5, sfr_address);
     }
     if (boot_counter != 0) {
@@ -20,11 +20,12 @@ void EEPROMRestore::execute()
         for (SFRInterface *s : SFRInterface::sfr_fields_vector) {
             int read_address = sfr_address + s->getAddressOffset();
             bool restore;
+            s->setRestore(restore);
             EEPROM.get(read_address, restore);
             if (restore) {
                 uint32_t value;
                 EEPROM.get(read_address + 1, value);
-                s->setValue(value); // Virtual funciton, will set the SFRField value with the correct type using child class implementation
+                s->setValue(value); // Virtual function, will set the SFRField value with the correct type using child class implementation
             }
         }
     }
