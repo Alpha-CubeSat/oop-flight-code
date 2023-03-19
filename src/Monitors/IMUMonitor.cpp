@@ -27,10 +27,15 @@ void IMUMonitor::IMU_init()
             imu.setupGyro(imu.LSM9DS1_GYROSCALE_245DPS);
         }
     }
+
+    Serial.println("gets here");
 }
 
 void IMUMonitor::execute()
 {
+    Serial.println("executing");
+    Serial.println(sfr::imu::turn_on);
+    Serial.println(sfr::imu::powered);
 
     if (sfr::imu::turn_on == true && sfr::imu::powered == false) {
 #ifdef VERBOSE
