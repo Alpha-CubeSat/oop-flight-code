@@ -85,8 +85,6 @@ void test_serialize()
     normal_report_monitor.serialize(18, 1 / 3);
     normal_report_monitor.serialize(18, 50.987654321);
     normal_report_monitor.serialize(18, 100000000.);
-    TEST_ASSERT_EQUAL(true, true);
-    Serial.print("hello");
 }
 
 int test_out_of_bounds_values()
