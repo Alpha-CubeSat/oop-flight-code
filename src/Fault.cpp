@@ -1,12 +1,12 @@
 #include "Fault.hpp"
-
+std::map<uint16_t, FaultInterface *> FaultInterface::opcode_lookup;
 Fault::Fault(uint16_t opcode)
 {
     this->opcode = opcode;
     this->base = false;
     this->signaled = false;
     this->suppressed = false;
-    FaultInterface::opcode_lookup[opcode] = this;
+    opcode_lookup[opcode] = this;
 }
 
 void Fault::signal()

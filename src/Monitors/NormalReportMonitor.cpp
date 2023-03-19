@@ -69,9 +69,9 @@ void NormalReportMonitor::execute()
         {19, (uint8_t)current},
         {20, (uint8_t)sfr::current::in_sun},
         {21, serialize(21, voltage)},
-        {22, (uint8_t)faults::fault_1},
-        {23, (uint8_t)faults::fault_2},
-        {24, (uint8_t)faults::fault_3},
+        {22, 0},
+        {23, 0},
+        {24, 0},
         {25, (uint8_t)sfr::camera::powered},
         {26, (uint8_t)sfr::eeprom::boot_counter},
         {27, (uint8_t)(sfr::imu::mag_x_average->is_valid() | (sfr::imu::mag_y_average->is_valid() << 1) | (sfr::imu::mag_z_average->is_valid() << 2) | (sfr::imu::gyro_x_average->is_valid() << 3) |
