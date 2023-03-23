@@ -35,14 +35,12 @@ void IMUDownlinkReportMonitor::create_imu_downlink_report(int fragment_number)
     int pop_size = min(min(constants::imu::max_gyro_imu_report_size,
                            constants::rockblock::content_length),
                        sfr::imu::imu_dlink.size());
-    
-
 
     // Serial.println("the pop size is :" );
     // Serial.println(pop_size);
-    
+
     Serial.print("Here is the buffer content before the for loop");
-    for (auto v : sfr::imu::imu_dlink){
+    for (auto v : sfr::imu::imu_dlink) {
         Serial.print(v, HEX);
         Serial.print(" ");
     }
@@ -55,7 +53,7 @@ void IMUDownlinkReportMonitor::create_imu_downlink_report(int fragment_number)
     }
 
     Serial.print("Here is the buffer content after the for loop");
-    for (auto v : sfr::imu::imu_dlink){
+    for (auto v : sfr::imu::imu_dlink) {
         Serial.print(v, HEX);
         Serial.print(" ");
     }
