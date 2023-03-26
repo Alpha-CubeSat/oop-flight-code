@@ -50,11 +50,38 @@ void EEPROMControlTask::save_sfr_data()
     // SAVING SFR DATA
     int time_since_last_write = millis() - sfr::eeprom::sfr_last_write_time;
 
-    if (time_since_last_write >= sfr::eeprom::sfr_write_step_time) {
-        // The last EEPROM write reaches the interval between writes, so update the EEPROM values
+    if (time_since_last_write > sfr::eeprom::sfr_write_step_time) {
+        // The last EEPROM write exceeds the interval between writes, so update the EEPROM value
+        int sfr_address = (int)sfr::eeprom::sfr_address;
 
-        if (sfr::eeprom::sfr_address_age == 99000) { // Programmed write limit is less than the actual endurance of 100000 to create a safety buffer
-            sfr::eeprom::sfr_address += constants::eeprom::full_offset;
+        /*
+        > Each field is stored in this format: [boolean restore][T value].
+        > The restore boolean indicates whether the field should be restored on Teensy boot up.
+        > The value is the field's actual value and takes up the memory of type T.
+        > If the field should not be restored, then don't bother saving the field value.
+        > Once the section's write age exceeds the write endurance, the stores move to the next section.
+        */
+        for (SFRInterface *s : SFRInterface::sfr_fields_vector) {
+            bool restore = s->getRestore();
+            int write_address = sfr_address + s->getAddressOffset();
+            EEPROM.put(write_address, restore);
+            if (restore) {
+                int data_type = s->getDataType();
+                if (data_type == 4)
+                    EEPROM.put(write_address + 1, (uint32_t)s->getFieldValue());
+                else if (data_type == 3)
+                    EEPROM.put(write_address + 1, (uint16_t)s->getFieldValue());
+                else if (data_type == 2)
+                    EEPROM.put(write_address + 1, (uint8_t)s->getFieldValue());
+                else if (data_type == 1)
+                    EEPROM.put(write_address + 1, (bool)s->getFieldValue());
+            }
+            sfr::eeprom::sfr_last_write_time += time_since_last_write;
+        }
+
+        sfr::eeprom::sfr_address_age++;
+        if (sfr::eeprom::sfr_address_age > 99000) { // Programmed write limit is less than the actual endurance of 100000 to create a safety buffer
+            sfr::eeprom::sfr_address += (uint16_t)constants::eeprom::full_offset;
             EEPROM.put(5, sfr::eeprom::sfr_address);
             sfr::eeprom::sfr_address_age = 0;
         }

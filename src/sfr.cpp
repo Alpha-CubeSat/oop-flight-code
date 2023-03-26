@@ -21,9 +21,6 @@ namespace sfr {
         // OP Codes 1500
         SFRField<uint32_t> start_time = SFRField<uint32_t>(0UL, 0x1500, constants::eeprom::detumble_start_time_offset, true);
         SFRField<uint32_t> max_time = SFRField<uint32_t>(2 * constants::time::one_hour, 0x1501, constants::eeprom::detumble_max_time_offset, true);
-        // TODO
-        SFRField<uint16_t> num_imu_retries = SFRField<uint16_t>(0, 0x1502, constants::eeprom::detumble_num_imu_retries_offset, true);
-        SFRField<uint16_t> max_imu_retries = SFRField<uint16_t>(5, 0x1503, constants::eeprom::detumble_max_imu_retries_offset, true);
 
         SFRField<uint8_t> min_stable_gyro_z = SFRField<uint8_t>(1, 0, 2, 0x1504, 10, constants::eeprom::detumble_min_stable_gyro_z_offset, true);
         SFRField<uint8_t> max_stable_gyro_x = SFRField<uint8_t>(.2, 0, 1, 0x1505, 10, constants::eeprom::detumble_max_stable_gyro_x_offset, true);
@@ -154,7 +151,7 @@ namespace sfr {
         SFRField<uint32_t> resolution_set_delay = SFRField<uint32_t>(500, 0x2010, constants::eeprom::camera_resolution_set_delay_offset, true);
         SFRField<uint32_t> resolution_get_delay = SFRField<uint32_t>(200, 0x2011, constants::eeprom::camera_resolution_get_delay_offset, true);
 
-        SFRField<uint16_t> init_mode = SFRField<uint16_t>((uint16_t)camera_init_mode_type::awaiting, 0x2012, constants::eeprom::camera_init_mode_offset, true);
+        SFRField<uint16_t> init_mode = SFRField<uint16_t>((uint16_t)sensor_init_mode_type::awaiting, 0x2012, constants::eeprom::camera_init_mode_offset, true);
         SFRField<uint16_t> mode = SFRField<uint16_t>((uint16_t)sensor_mode_type::normal, 0x2013, constants::eeprom::camera_mode_offset, true);
 
         SFRField<uint32_t> images_written = SFRField<uint32_t>(0, 0x2014, constants::eeprom::camera_images_written_offset, true);
@@ -229,7 +226,9 @@ namespace sfr {
     namespace imu {
         // OP Codes 2200
         SFRField<uint16_t> mode = SFRField<uint16_t>((uint16_t)sensor_mode_type::init, 0x2200, constants::eeprom::imu_mode_offset, true);
-        SFRField<bool> successful_init = SFRField<bool>(true, 0x2201, constants::eeprom::imu_successful_init_offset, true);
+
+        // change to init mode
+        SFRField<uint16_t> init_mode = SFRField<uint16_t>((uint16_t)sensor_init_mode_type::awaiting, 0x2201, constants::eeprom::imu_init_mode_offset, true);
 
         SFRField<uint32_t> max_fragments = SFRField<uint32_t>(256, 0x2202, constants::eeprom::imu_max_fragments_offset, true);
 
@@ -238,6 +237,9 @@ namespace sfr {
         SFRField<bool> turn_on = SFRField<bool>(false, 0x2204, constants::eeprom::imu_turn_on_offset, true);
         SFRField<bool> turn_off = SFRField<bool>(false, 0x2205, constants::eeprom::imu_turn_off_offset, true);
         SFRField<bool> powered = SFRField<bool>(false, 0x2206, constants::eeprom::imu_powered_offset, true);
+
+        SFRField<uint16_t> failed_times = SFRField<uint16_t>(0, 0x2207, constants::eeprom::imu_failed_times_offset, true);
+        SFRField<uint16_t> failed_limit = SFRField<uint16_t>(5, 0x2208, constants::eeprom::imu_failed_limit_offset, true);
 
         SensorReading *mag_x_value = new SensorReading(1, 0, 0);
         SensorReading *mag_y_value = new SensorReading(1, 0, 0);
@@ -289,7 +291,7 @@ namespace sfr {
     namespace battery {
         // OP Codes 2600
         // TODO
-        SFRField<uint32_t> acceptable_battery = SFRField<uint32_t>(0, 0x2600, constants::eeprom::battery_acceptable_battery_offset, true);
+        SFRField<uint32_t> acceptable_battery = SFRField<uint32_t>(3.75, 0x2600, constants::eeprom::battery_acceptable_battery_offset, true);
         SFRField<uint32_t> min_battery = SFRField<uint32_t>(0, 0x2601, constants::eeprom::battery_min_battery_offset, true);
 
         SensorReading *voltage_value = new SensorReading(1, 0, 5);
@@ -302,12 +304,6 @@ namespace sfr {
     } // namespace button
     namespace pins {
         std::map<int, int> pinMap = {
-            {constants::photoresistor::pin, LOW},
-            {constants::burnwire::first_pin, LOW},
-            {constants::burnwire::second_pin, LOW},
-            {constants::rockblock::sleep_pin, LOW},
-            {constants::temperature::pin, LOW},
-            {constants::current::pin, LOW},
             {constants::acs::xPWMpin, LOW},
             {constants::acs::yPWMpin, LOW},
             {constants::acs::zPWMpin, LOW},
@@ -317,14 +313,20 @@ namespace sfr {
             {constants::acs::xout2, LOW},
             {constants::acs::zout1, LOW},
             {constants::acs::zout2, LOW},
-            {constants::acs::STBXYpin, LOW},
-            {constants::acs::STBZpin, LOW},
-            {constants::battery::voltage_value_pin, LOW},
-            {constants::battery::allow_measurement_pin, HIGH},
             {constants::camera::power_on_pin, LOW},
             {constants::camera::rx, LOW},
             {constants::camera::tx, LOW},
-            {constants::button::button_pin, LOW}};
+            {constants::button::button_pin, HIGH},
+            {constants::battery::voltage_value_pin, LOW},
+            {constants::acs::STBXYpin, LOW},
+            {constants::acs::STBZpin, LOW},
+            {constants::photoresistor::pin, LOW},
+            {constants::temperature::pin, LOW},
+            {constants::current::pin, LOW},
+            {constants::burnwire::first_pin, LOW},
+            {constants::burnwire::second_pin, LOW},
+            {constants::rockblock::sleep_pin, LOW}};
+
     } // namespace pins
     namespace eeprom {
         // OP Codes 2800

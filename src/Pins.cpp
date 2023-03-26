@@ -33,7 +33,6 @@ void Pins::setInitialPinStates()
     pinMode(constants::temperature::pin, INPUT);
     pinMode(constants::current::pin, INPUT);
     pinMode(constants::burnwire::first_pin, OUTPUT);
-    pinMode(constants::battery::allow_measurement_pin, OUTPUT);
     pinMode(constants::burnwire::second_pin, OUTPUT);
     pinMode(constants::rockblock::sleep_pin, OUTPUT);
 
@@ -52,7 +51,6 @@ void Pins::setInitialPinStates()
     Pins::setPinState(constants::acs::STBXYpin, LOW);
     Pins::setPinState(constants::acs::STBZpin, LOW);
     Pins::setPinState(constants::burnwire::first_pin, LOW);
-    Pins::setPinState(constants::battery::allow_measurement_pin, HIGH);
     Pins::setPinState(constants::burnwire::second_pin, LOW);
     Pins::setPinState(constants::rockblock::sleep_pin, HIGH);
 }

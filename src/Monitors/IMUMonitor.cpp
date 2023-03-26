@@ -8,26 +8,49 @@ IMUMonitor::IMUMonitor(unsigned int offset)
     : TimedControlTask<void>(offset)
 {
     imu = Adafruit_LSM9DS1(constants::imu::CSAG, constants::imu::CSM);
-
-    IMUMonitor::IMU_setup();
 }
 
-void IMUMonitor::IMU_setup()
+void IMUMonitor::IMU_init()
 {
-    if (!imu.begin()) {
-        Serial.println("\n\n\nInitialize failed\n\n\n");
-        sfr::imu::successful_init = false;
-    } else {
-        Serial.println("\n\n\nInitialize successfully\n\n\n");
-        sfr::imu::successful_init = true;
-        imu.setupAccel(imu.LSM9DS1_ACCELRANGE_2G);
-        imu.setupMag(imu.LSM9DS1_MAGGAIN_4GAUSS);
-        imu.setupGyro(imu.LSM9DS1_GYROSCALE_245DPS);
+    if (sfr::imu::init_mode == (uint16_t)sensor_init_mode_type::awaiting) {
+        // Called imu_init function and initialization process has not yet started
+        sfr::imu::init_mode = (uint16_t)sensor_init_mode_type::in_progress;
+    }
+
+    if (sfr::imu::init_mode == (uint16_t)sensor_init_mode_type::in_progress) {
+        if (!imu.begin()) {
+            sfr::imu::init_mode = (uint16_t)sensor_init_mode_type::failed;
+        } else {
+            sfr::imu::init_mode = (uint16_t)sensor_init_mode_type::complete;
+            imu.setupAccel(imu.LSM9DS1_ACCELRANGE_2G);
+            imu.setupMag(imu.LSM9DS1_MAGGAIN_4GAUSS);
+            imu.setupGyro(imu.LSM9DS1_GYROSCALE_245DPS);
+        }
     }
 }
 
 void IMUMonitor::execute()
 {
+    if (sfr::imu::turn_on == true && sfr::imu::powered == false) {
+#ifdef VERBOSE
+        Serial.println("turned on IMU");
+#endif
+        IMUMonitor::IMU_init();
+        if (sfr::imu::init_mode == (uint16_t)sensor_init_mode_type::complete) {
+            transition_to_normal();
+        } else {
+            if (sfr::imu::failed_times == sfr::imu::failed_limit) {
+                sfr::imu::failed_times = 0; // reset
+                transition_to_abnormal_init();
+            } else {
+                sfr::imu::failed_times = sfr::imu::failed_times + 1;
+                Serial.print("IMU initialization failed times: ");
+                Serial.println(sfr::imu::failed_times);
+                sfr::imu::init_mode = (uint16_t)sensor_init_mode_type::awaiting;
+            }
+        }
+    }
+
     if (sfr::imu::turn_off == true && sfr::imu::powered == true) {
 #ifdef VERBOSE
         Serial.println("turned off IMU");
@@ -41,43 +64,12 @@ void IMUMonitor::execute()
         sfr::imu::turn_off = false;
     }
 
-    if (sfr::imu::turn_on == true && sfr::imu::powered == false) {
-#ifdef VERBOSE
-        Serial.println("turned on IMU");
-#endif
-        sfr::imu::turn_on = false; // we don't want to initialize every time
-
-        if (sfr::imu::successful_init) {
-            sfr::imu::powered = true;
-            transition_to_normal();
-        } else {
-            transition_to_abnormal_init();
-            IMUMonitor::IMU_setup();
-        }
-    }
-
     if (sfr::imu::powered == true) {
 #ifdef VERBOSE
         Serial.println("IMU is on");
 #endif
         capture_imu_values();
     }
-}
-
-bool check_repeated_values(std::deque<float> buffer)
-{
-    if (buffer.empty() || buffer.size() == 1) {
-        return false;
-    }
-
-    int first_val = buffer[0];
-    for (float val : buffer) {
-        if (first_val != val) {
-            return false;
-        }
-    }
-
-    return true;
 }
 
 void IMUMonitor::capture_imu_values()
@@ -89,7 +81,6 @@ void IMUMonitor::capture_imu_values()
     imu.setupGyro(imu.LSM9DS1_GYROSCALE_245DPS);
 
     // Save most recent readings
-
     sfr::imu::mag_x_value->set_value(mag.magnetic.x);
     sfr::imu::mag_y_value->set_value(mag.magnetic.y);
     sfr::imu::mag_z_value->set_value(mag.magnetic.z);
@@ -98,8 +89,19 @@ void IMUMonitor::capture_imu_values()
     sfr::imu::gyro_y_value->set_value(gyro.gyro.y);
     sfr::imu::gyro_z_value->set_value(gyro.gyro.z);
 
-    // Add reading to buffer
+// IMU PRINT STATEMENTS FOR LOGGING AND GRAPHING IMU DATA
+#ifdef IMU_TESTING
+    Serial.print("Gyro_X: ");
+    Serial.print(gyro.gyro.x);
+    Serial.print(" Gyro_Y: ");
+    Serial.print(gyro.gyro.y);
+    Serial.print(" Gyro_Z: ");
+    Serial.print(gyro.gyro.z);
+    Serial.print(" Time: ");
+    Serial.println(millis());
+#endif
 
+    // Add reading to buffer
     sfr::imu::mag_x_average->set_value(mag.magnetic.x);
     sfr::imu::mag_y_average->set_value(mag.magnetic.y);
     sfr::imu::mag_z_average->set_value(mag.magnetic.z);
@@ -114,6 +116,7 @@ void IMUMonitor::transition_to_normal()
     // updates imu mode to normal
     // faults are cleared
     // all check flags are set to true
+    sfr::imu::mode = (uint16_t)sensor_mode_type::normal;
     sfr::imu::mag_x_average->set_valid();
     sfr::imu::mag_y_average->set_valid();
     sfr::imu::mag_z_average->set_valid();
@@ -129,6 +132,7 @@ void IMUMonitor::transition_to_abnormal_init()
     // updates imu mode to abnormal_init
     // trips fault
     // all check flags are set to false
+    sfr::imu::mode = (uint16_t)sensor_mode_type::abnormal_init;
     sfr::imu::mag_x_average->set_invalid();
     sfr::imu::mag_y_average->set_invalid();
     sfr::imu::mag_z_average->set_invalid();
@@ -137,4 +141,9 @@ void IMUMonitor::transition_to_abnormal_init()
     sfr::imu::gyro_z_average->set_invalid();
     sfr::imu::acc_x_average->set_invalid();
     sfr::imu::acc_y_average->set_invalid();
+
+    sfr::imu::turn_on = false;
+    sfr::imu::powered = false;
+    sfr::imu::turn_off = false;
+    sfr::imu::init_mode = (uint16_t)sensor_init_mode_type::awaiting;
 }

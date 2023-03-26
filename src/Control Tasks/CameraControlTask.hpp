@@ -21,7 +21,6 @@ private:
     void camera_init();
     void transition_to_normal();
     void transition_to_abnormal_init();
-    void transition_to_retry();
     uint16_t jpglen = 0;
     int image_lengths[255];
     char filename[15];
