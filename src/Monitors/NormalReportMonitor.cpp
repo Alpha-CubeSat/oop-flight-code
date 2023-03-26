@@ -100,5 +100,8 @@ void NormalReportMonitor::execute()
 
 uint8_t NormalReportMonitor::serialize(int index, float value)
 {
+    if (value < mapping_bounds[index][0] || value > mapping_bounds[index][1]) {
+        return 255;
+    }
     return round(value - mapping_bounds[index][0]) * (255 / (mapping_bounds[index][1] - mapping_bounds[index][0]));
 }
