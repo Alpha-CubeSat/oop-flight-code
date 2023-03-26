@@ -341,7 +341,7 @@ namespace sfr {
         // Saving SFR data
         int sfr_last_write_time = 0;                                                                                                           // the millis() value when the last EEPROM SFR data write ocurred, should reset every boot up cycle
         SFRField<uint32_t> sfr_write_step_time = SFRField<uint32_t>(1000, 0x2804, constants::eeprom::eeprom_sfr_write_step_time_offset, true); // the amount of time between each write to EEPROM for SFR data
-        int sfr_address = 7;                                                                                                                   // the address of where current SFR data is stored, read from EEPROM and set at the beginning of every boot up cycle
+        uint16_t sfr_address = 7;                                                                                                              // the address of where current SFR data is stored, read from EEPROM and set at the beginning of every boot up cycle
         SFRField<uint32_t> sfr_address_age = SFRField<uint32_t>(0, 0x2805, constants::eeprom::eeprom_sfr_address_age_offset, true);            // the write age of the current SFR data section in EEPROM
         // Bytes 0-3 are for the time passed, byte 4 holds the number of reboots, and bytes 5-6 are for the address where values are to be written and stored.
         // SFR data begins at byte 7 and after. The section of EEPROM bytes where SFR data is stored will change to avoid exceeding the write endurance.

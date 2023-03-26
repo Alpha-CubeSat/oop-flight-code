@@ -24,14 +24,18 @@
     Run the MCL and log the Serial Monitor using PuTTY.
     Instructions are here: https://www.eye4software.com/hydromagic/documentation/articles-and-howtos/serial-port-logging/
 
-    Update this file to include the correct file path of the putty log
+    Update this file to include the correct log file name if it is different from the "putty.log" default.
 
-    Finally, run this file (type [python plot_serial_imu_data.py] into terminal) to see the plots
+    Finally, run this file (type [python plot_serial_imu_data.py] into terminal) to see the plots.
 """
 import matplotlib.pyplot as plt
+import os
 
 if __name__ == "__main__":
-    with open(r"C:\Users\Pawn1st\oop-flight-code\tools\putty.log", 'r', encoding='utf-8') as file:
+
+    dirname = os.path.dirname(os.path.abspath(__file__))
+    filename = "putty.log" # CHANGE ME IF NECESSARY
+    with open(dirname + "/" + filename, 'r', encoding='utf-8') as file:
         data = file.readlines()
 
     file.close()
