@@ -13,8 +13,7 @@ void setup()
     Serial.begin(9600);
     delay(5000);
     Pins::setInitialPinStates();
-    // TODO FS-175: test and uncomment line below
-    // EEPROMRestore::execute();
+    EEPROMRestore::execute();
 }
 
 void loop()
