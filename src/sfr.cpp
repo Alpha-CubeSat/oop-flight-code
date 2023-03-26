@@ -314,7 +314,7 @@ namespace sfr {
     namespace button {
         // OP Codes 2700
         SFRField<bool> pressed = SFRField<bool>(true, 0x2700, constants::eeprom::button_pressed_offset, true);
-        SensorReading *button_pressed = new SensorReading(fault_groups::hardware_faults::button, 1, 1, 0);
+        SensorReading *button_pressed = new SensorReading(fault_groups::hardware_faults::button, 1, 0, 1);
     } // namespace button
     namespace pins {
         std::map<int, int> pinMap = {

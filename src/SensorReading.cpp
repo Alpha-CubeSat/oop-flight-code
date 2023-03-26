@@ -1,8 +1,8 @@
 #include "SensorReading.hpp"
 
-SensorReading::SensorReading(Fault *type, uint8_t buffer_size, float min, float max)
+SensorReading::SensorReading(Fault *fault, uint8_t buffer_size, float min, float max)
 {
-    this->type = type;
+    this->fault = fault;
     this->buffer_size = buffer_size;
     this->max = max;
     this->min = min;
@@ -11,7 +11,7 @@ SensorReading::SensorReading(Fault *type, uint8_t buffer_size, float min, float 
 
 SensorReading::SensorReading(uint8_t buffer_size, float min, float max)
 {
-    this->type = NULL;
+    this->fault = NULL;
     this->buffer_size = buffer_size;
     this->max = max;
     this->min = min;
@@ -49,20 +49,18 @@ void SensorReading::set_value(float x)
 } // mutator for buffer
 
 void SensorReading::set_valid()
-// set_valid changes the signal to valid?
 {
     valid = true;
-    // what does this check against?
-    if (type != NULL) {
-        type->release();
+    if (fault != NULL) {
+        fault->release();
     }
 }
 
 void SensorReading::set_invalid()
 {
     valid = false;
-    if (type != NULL) {
-        type->signal();
+    if (fault != NULL) {
+        fault->signal();
     }
 }
 
@@ -103,8 +101,8 @@ float SensorReading::get_min()
 
 bool SensorReading::is_valid()
 {
-    if (type != NULL) {
-        return !(type->get_base());
+    if (fault != NULL) {
+        return !(fault->get_base());
     }
     return true;
 }
