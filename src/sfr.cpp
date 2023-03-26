@@ -345,5 +345,6 @@ namespace sfr {
         SFRField<uint32_t> sfr_address_age = SFRField<uint32_t>(0, 0x2805, constants::eeprom::eeprom_sfr_address_age_offset, true);            // the write age of the current SFR data section in EEPROM
         // Bytes 0-3 are for the time passed, byte 4 holds the number of reboots, and bytes 5-6 are for the address where values are to be written and stored.
         // SFR data begins at byte 7 and after. The section of EEPROM bytes where SFR data is stored will change to avoid exceeding the write endurance.
+        SFRField<boolean> storage_full = SFRField<boolean>(false, 0x2806, constants::eeprom::eeprom_storage_full_offset, true);
     } // namespace eeprom
 };    // namespace sfr
