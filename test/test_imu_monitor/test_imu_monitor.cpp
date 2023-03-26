@@ -7,7 +7,6 @@ void test_set_valid()
     sfr::imu::turn_on = true;
     sfr::imu::powered = false;
     imu_monitor.execute();
-    TEST_ASSERT_TRUE(true);
 }
 
 int test_imu_monitor()

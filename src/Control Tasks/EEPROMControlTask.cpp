@@ -52,7 +52,7 @@ void EEPROMControlTask::save_sfr_data()
 
     if (time_since_last_write > sfr::eeprom::sfr_write_step_time) {
         // The last EEPROM write exceeds the interval between writes, so update the EEPROM value
-        int sfr_address = sfr::eeprom::sfr_address;
+        int sfr_address = (int)sfr::eeprom::sfr_address;
 
         /*
         > Each field is stored in this format: [boolean restore][T value].
@@ -81,7 +81,7 @@ void EEPROMControlTask::save_sfr_data()
 
         sfr::eeprom::sfr_address_age++;
         if (sfr::eeprom::sfr_address_age > 99000) { // Programmed write limit is less than the actual endurance of 100000 to create a safety buffer
-            sfr::eeprom::sfr_address += constants::eeprom::full_offset;
+            sfr::eeprom::sfr_address += (uint16_t)constants::eeprom::full_offset;
             EEPROM.put(5, sfr::eeprom::sfr_address);
         }
     }

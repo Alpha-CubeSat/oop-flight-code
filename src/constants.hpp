@@ -212,9 +212,7 @@ namespace constants {
 
         static constexpr unsigned int detumble_start_time_offset = point_max_time_offset + 5;
         static constexpr unsigned int detumble_max_time_offset = detumble_start_time_offset + 5;
-        static constexpr unsigned int detumble_num_imu_retries_offset = detumble_max_time_offset + 5;
-        static constexpr unsigned int detumble_max_imu_retries_offset = detumble_num_imu_retries_offset + 3;
-        static constexpr unsigned int detumble_min_stable_gyro_z_offset = detumble_max_imu_retries_offset + 3;
+        static constexpr unsigned int detumble_min_stable_gyro_z_offset = detumble_max_time_offset + 5;
         static constexpr unsigned int detumble_max_stable_gyro_x_offset = detumble_min_stable_gyro_z_offset + 2;
         static constexpr unsigned int detumble_max_stable_gyro_y_offset = detumble_max_stable_gyro_x_offset + 2;
         static constexpr unsigned int detumble_min_unstable_gyro_x_offset = detumble_max_stable_gyro_y_offset + 2;
@@ -286,14 +284,16 @@ namespace constants {
         static constexpr unsigned int rockblock_mode_offset = rockblock_downlink_report_type_offset + 3;
 
         static constexpr unsigned int imu_mode_offset = rockblock_mode_offset + 3;
-        static constexpr unsigned int imu_successful_init_offset = imu_mode_offset + 3;
-        static constexpr unsigned int imu_max_fragments_offset = imu_successful_init_offset + 2;
+        static constexpr unsigned int imu_init_mode_offset = imu_mode_offset + 3;
+        static constexpr unsigned int imu_max_fragments_offset = imu_init_mode_offset + 3;
         static constexpr unsigned int imu_sample_gyro_offset = imu_max_fragments_offset + 5;
         static constexpr unsigned int imu_turn_on_offset = imu_sample_gyro_offset + 2;
         static constexpr unsigned int imu_turn_off_offset = imu_turn_on_offset + 2;
         static constexpr unsigned int imu_powered_offset = imu_turn_off_offset + 2;
+        static constexpr unsigned int imu_failed_times_offset = imu_powered_offset + 2;
+        static constexpr unsigned int imu_failed_limit_offset = imu_failed_times_offset + 3;
 
-        static constexpr unsigned int temperature_in_sun_offset = imu_powered_offset + 2;
+        static constexpr unsigned int temperature_in_sun_offset = imu_failed_limit_offset + 3;
 
         static constexpr unsigned int current_in_sun_offset = temperature_in_sun_offset + 2;
 

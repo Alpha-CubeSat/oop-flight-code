@@ -1,7 +1,5 @@
 #include "MainControlLoop.hpp"
 
-int start;
-
 MainControlLoop::MainControlLoop()
     : ControlTask<void>(),
       clock_manager(constants::timecontrol::control_cycle_time),
@@ -29,6 +27,7 @@ MainControlLoop::MainControlLoop()
 void MainControlLoop::execute()
 {
     delay(200); // To prolong the speed of the main control loop to ensure correct RockBlock reads. Can reduce in the future.
+
     faults::fault_1 = 0;
     faults::fault_2 = 0;
     faults::fault_3 = 0;

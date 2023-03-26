@@ -5,9 +5,9 @@
 #include "Arduino.h"
 #include "MissionMode.hpp"
 #include "Modes/burnwire_mode_type.enum"
-#include "Modes/camera_init_mode_type.enum"
 #include "Modes/report_type.enum"
 #include "Modes/rockblock_mode_type.enum"
+#include "Modes/sensor_init_mode_type.enum"
 #include "Modes/sensor_mode_type.enum"
 #include "Modes/simple_acs_type.enum"
 #include "Phase.hpp"
@@ -40,10 +40,6 @@ namespace sfr {
         // OP Codes 1500
         extern SFRField<uint32_t> start_time;
         extern SFRField<uint32_t> max_time;
-
-        // TODO
-        extern SFRField<uint16_t> num_imu_retries;
-        extern SFRField<uint16_t> max_imu_retries;
 
         extern SFRField<uint8_t> min_stable_gyro_z;
         extern SFRField<uint8_t> max_stable_gyro_x;
@@ -250,7 +246,8 @@ namespace sfr {
     namespace imu {
         // OP Codes 2200
         extern SFRField<uint16_t> mode;
-        extern SFRField<bool> successful_init;
+
+        extern SFRField<uint16_t> init_mode;
 
         extern SFRField<uint32_t> max_fragments;
 
@@ -259,6 +256,9 @@ namespace sfr {
         extern SFRField<bool> turn_on;
         extern SFRField<bool> turn_off;
         extern SFRField<bool> powered;
+
+        extern SFRField<uint16_t> failed_times;
+        extern SFRField<uint16_t> failed_limit;
 
         extern SensorReading *mag_x_value;
         extern SensorReading *mag_y_value;

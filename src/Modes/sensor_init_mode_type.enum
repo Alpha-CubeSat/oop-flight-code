@@ -1,0 +1,12 @@
+#ifndef sensor_init_mode_type_enum_
+#define sensor_init_mode_type_enum_
+
+enum class sensor_init_mode_type : unsigned char
+{
+    awaiting = 0,
+    in_progress,
+    failed,
+    complete
+};
+
+#endif
