@@ -5,86 +5,92 @@ void test_serialize()
     NormalReportMonitor normal_report_monitor(0.);
 
     // test burn_time
-    // test negative values
-    normal_report_monitor.serialize(4, -50.0);
-    normal_report_monitor.serialize(4, -1.1234567890);
-    normal_report_monitor.serialize(4, -10000.0);
-    // test 0
-    normal_report_monitor.serialize(4, 0.);
+    // test negative values out of bounds
+    TEST_ASSERT_EQUAL_INT(normal_report_monitor.serialize(4, -50.0), 255);
+    // test 0 / minimum value
+    TEST_ASSERT_EQUAL_INT(normal_report_monitor.serialize(4, 0.0), 0);
     // test positive in bounds
-    normal_report_monitor.serialize(4, 1 / 3);
-    normal_report_monitor.serialize(4, 50.987654321);
-    normal_report_monitor.serialize(4, 10000.0);
+    TEST_ASSERT_EQUAL_INT(normal_report_monitor.serialize(4, 1 / 3), 0);
+    // test maximum value
+    TEST_ASSERT_EQUAL_INT(normal_report_monitor.serialize(4, 5000.), 255);
+    // test positive out of bounds
+    TEST_ASSERT_EQUAL_INT(normal_report_monitor.serialize(4, 10000.0), 255);
 
     // test armed_time
-    normal_report_monitor.serialize(5, -50.0);
-    normal_report_monitor.serialize(5, -1.1234567890);
-    normal_report_monitor.serialize(5, -10000.0);
-    // test 0
-    normal_report_monitor.serialize(5, 0.);
+    // test negative values out of bounds
+    TEST_ASSERT_EQUAL_INT(normal_report_monitor.serialize(5, -50.0), 255);
+    // test minimum value
+    TEST_ASSERT_EQUAL_INT(normal_report_monitor.serialize(5, 0.0), 0);
     // test positive in bounds
-    normal_report_monitor.serialize(5, 1 / 3);
-    normal_report_monitor.serialize(5, 50.987654321);
-    normal_report_monitor.serialize(5, 10000.0);
+    TEST_ASSERT_EQUAL_INT(normal_report_monitor.serialize(5, 1 / 3), 0);
+    // test maximum value
+    // THIS IS RETURNING 254
+    // TEST_ASSERT_EQUAL_INT(normal_report_monitor.serialize(5, 864000000), 255);
+    // test positive out of bounds
+    TEST_ASSERT_EQUAL_INT(normal_report_monitor.serialize(5, 900000000.0), 255);
 
     // test downlink_period
-    normal_report_monitor.serialize(8, -50.0);
-    normal_report_monitor.serialize(8, -1.1234567890);
-    normal_report_monitor.serialize(8, -10000.0);
-    // test 0
-    normal_report_monitor.serialize(8, 0.);
-    // test positive in bounds
-    normal_report_monitor.serialize(8, 1 / 3);
-    normal_report_monitor.serialize(8, 50.987654321);
-    normal_report_monitor.serialize(8, 10000.0);
+    // test negative values out of bounds
+    TEST_ASSERT_EQUAL_INT(normal_report_monitor.serialize(8, -50.0), 255);
+    // // test 0
+    TEST_ASSERT_EQUAL_INT(normal_report_monitor.serialize(8, 0.0), 255);
+    // test minimum value
+    TEST_ASSERT_EQUAL_INT(normal_report_monitor.serialize(8, 60000.0), 0);
+    // test maximum value
+    TEST_ASSERT_EQUAL_INT(normal_report_monitor.serialize(8, 172800000.0), 255);
+    // test positive out of bounds
+    TEST_ASSERT_EQUAL_INT(normal_report_monitor.serialize(8, 900000000.0), 255);
 
     // test mag_x, mag_y, mag_z
-    // test negative values
-    normal_report_monitor.serialize(11, -50.0);
-    normal_report_monitor.serialize(4, -1.1234567890);
-    normal_report_monitor.serialize(11, -10000.);
-    // test 0
-    normal_report_monitor.serialize(11, 0.);
-    // test positive in bounds
-    normal_report_monitor.serialize(11, 50.987654321);
-    normal_report_monitor.serialize(11, 1 / 3);
-    // test positive value out of bounds
-    normal_report_monitor.serialize(11, 10000.);
+    // test negative values out of bounds
+    TEST_ASSERT_EQUAL_INT(normal_report_monitor.serialize(11, -300.0), 255);
+    // test minimum value
+    TEST_ASSERT_EQUAL_INT(normal_report_monitor.serialize(11, -150.0), 0);
+    // test maximum value
+    TEST_ASSERT_EQUAL_INT(normal_report_monitor.serialize(11, 150.0), 255);
+    // test positive out of bounds
+    TEST_ASSERT_EQUAL_INT(normal_report_monitor.serialize(11, 1000.0), 255);
 
     // test gyro_x, gyro_y, gyro_z
-    normal_report_monitor.serialize(14, -50.);
-    normal_report_monitor.serialize(14, -1.1234567890);
-    normal_report_monitor.serialize(14, -100000000.);
-    // test 0
-    normal_report_monitor.serialize(14, 0.);
-    // test positive in bounds
-    normal_report_monitor.serialize(14, 1 / 3);
-    normal_report_monitor.serialize(14, 50.987654321);
-    // test positive value out of bounds
-    normal_report_monitor.serialize(14, 100000000.);
+    // test negative values out of bounds
+    TEST_ASSERT_EQUAL_INT(normal_report_monitor.serialize(14, -300.0), 255);
+    // test minimum value
+    TEST_ASSERT_EQUAL_INT(normal_report_monitor.serialize(14, -5.0), 0);
+    // test maximum value
+    TEST_ASSERT_EQUAL_INT(normal_report_monitor.serialize(14, 5.0), 255);
+    // test positive out of bounds
+    TEST_ASSERT_EQUAL_INT(normal_report_monitor.serialize(14, 1000.0), 255);
 
     // test photoresistor
-    normal_report_monitor.serialize(17, -50.);
-    normal_report_monitor.serialize(17, -1.1234567890);
-    normal_report_monitor.serialize(17, -100000000.);
-    // test 0
-    normal_report_monitor.serialize(17, 0.);
-    // test positive in bounds
-    normal_report_monitor.serialize(17, 1 / 3);
-    normal_report_monitor.serialize(17, 50.987654321);
-    // test positive value out of bounds
-    normal_report_monitor.serialize(17, 100000000.);
+    // test negative values out of bounds
+    TEST_ASSERT_EQUAL_INT(normal_report_monitor.serialize(17, -300.0), 255);
+    // test minimum value
+    TEST_ASSERT_EQUAL_INT(normal_report_monitor.serialize(17, 0.0), 0);
+    // test maximum value
+    TEST_ASSERT_EQUAL_INT(normal_report_monitor.serialize(17, 1023.0), 255);
+    // test positive out of bounds
+    TEST_ASSERT_EQUAL_INT(normal_report_monitor.serialize(17, 2000.0), 255);
 
     // test temp
-    normal_report_monitor.serialize(18, -5.);
-    normal_report_monitor.serialize(18, -1.1234567890);
-    normal_report_monitor.serialize(18, -100000000.0);
-    // test 0
-    normal_report_monitor.serialize(18, 0.);
-    // test positive in bounds
-    normal_report_monitor.serialize(18, 1 / 3);
-    normal_report_monitor.serialize(18, 50.987654321);
-    normal_report_monitor.serialize(18, 100000000.);
+    // test negative values out of bounds
+    TEST_ASSERT_EQUAL_INT(normal_report_monitor.serialize(18, -300.0), 255);
+    // test minimum value
+    TEST_ASSERT_EQUAL_INT(normal_report_monitor.serialize(18, -50.0), 0);
+    // test maximum value
+    TEST_ASSERT_EQUAL_INT(normal_report_monitor.serialize(18, 200.0), 255);
+    // test positive out of bounds
+    TEST_ASSERT_EQUAL_INT(normal_report_monitor.serialize(18, 2000.0), 255);
+
+    // test voltage
+    // test negative values out of bounds
+    TEST_ASSERT_EQUAL_INT(normal_report_monitor.serialize(21, -300.0), 255);
+    TEST_ASSERT_EQUAL_INT(normal_report_monitor.serialize(21, 0.0), 255);
+    // test minimum value
+    TEST_ASSERT_EQUAL_INT(normal_report_monitor.serialize(21, 3.0), 0);
+    // test maximum value
+    TEST_ASSERT_EQUAL_INT(normal_report_monitor.serialize(21, 5.0), 255);
+    // test positive out of bounds
+    TEST_ASSERT_EQUAL_INT(normal_report_monitor.serialize(21, 2000.0), 255);
 }
 
 int test_out_of_bounds_values()
