@@ -13,7 +13,8 @@ void setup()
     Serial.begin(9600);
     delay(5000);
     Pins::setInitialPinStates();
-    EEPROMRestore::execute();
+    //TODO: Uncomment when EEPROMRestore is fixed (FS-186)
+    // EEPROMRestore::execute();
 }
 
 void loop()
