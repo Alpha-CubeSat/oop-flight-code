@@ -334,7 +334,7 @@ void exit_detumble_phase(MissionMode *mode)
 
 void exit_insun_phase(MissionMode *mode)
 {
-    if ((sfr::temperature::temp_c_average->is_valid() && sfr::temperature::in_sun) ||
+    if ((sfr::temperature::temp_c_average->is_valid() && true) || // should be & sfr::temperature::in_sun
         (!sfr::temperature::temp_c_average->is_valid() && sfr::current::solar_current_average->is_valid() && sfr::current::in_sun)) {
         sfr::mission::current_mode = mode;
     }
@@ -346,6 +346,9 @@ void enter_lp(MissionMode *lp_mode)
 
     if (!sfr::battery::voltage_average->is_valid() || (sfr::battery::voltage_average->get_value(&voltage) && voltage <= sfr::battery::min_battery)) {
         sfr::mission::current_mode = lp_mode;
+        Serial.println("enter lp");
+        Serial.println((uint8_t)voltage);
+        Serial.println((uint8_t)sfr::battery::min_battery);
     }
 }
 

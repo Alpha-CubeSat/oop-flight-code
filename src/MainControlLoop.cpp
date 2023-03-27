@@ -37,10 +37,11 @@ void MainControlLoop::execute()
 
     if (first_iter) {
         first_iter = false;
-        sfr::mission::current_mode = sfr::mission::photo;
-        sfr::camera::turn_on = true;
-        Serial.println("Set to photo");        
+        sfr::mission::current_mode = sfr::mission::normal;
+        //sfr::camera::turn_on = true;
+        //Serial.println("Set to photo");        
     }
+
 
     clock_manager.execute();
     mission_manager.execute_on_time();

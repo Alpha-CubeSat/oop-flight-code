@@ -69,7 +69,7 @@ bool SensorReading::get_value(float *value_location)
         *value_location = average;
         return 1;
     } else {
-        return -1;
+        return 0;
     }
 }
 
