@@ -31,12 +31,21 @@ void IMUMonitor::IMU_init()
 
 void IMUMonitor::execute()
 {
+    // handle latent turn on / turn off variables
+    if (sfr::imu::turn_off == true && sfr::imu::powered == false) {
+        sfr::imu::turn_off = false;
+    }
+    if (sfr::imu::turn_on == true && sfr::imu::powered == true) {
+        sfr::imu::turn_on = false;
+    }
+
     if (sfr::imu::turn_on == true && sfr::imu::powered == false) {
 #ifdef VERBOSE
         Serial.println("turned on IMU");
 #endif
         IMUMonitor::IMU_init();
         if (sfr::imu::init_mode == (uint16_t)sensor_init_mode_type::complete) {
+            sfr::imu::turn_on = false;
             transition_to_normal();
         } else {
             if (sfr::imu::failed_times == sfr::imu::failed_limit) {
