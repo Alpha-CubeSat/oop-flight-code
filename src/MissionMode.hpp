@@ -287,7 +287,7 @@ public:
     }
 };
 
-class BootIMU: public MissionMode
+class BootIMU : public MissionMode
 {
 public:
     void transition_to();
