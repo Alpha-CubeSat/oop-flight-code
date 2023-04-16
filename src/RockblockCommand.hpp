@@ -36,6 +36,15 @@ public:
     uint32_t f_arg_1;
     uint32_t f_arg_2;
 
+    RockblockCommand(uint16_t f_opcode,
+                     uint32_t f_arg_1,
+                     uint32_t f_arg_2)
+    {
+        this->f_opcode = f_opcode;
+        this->f_arg_1 = f_arg_1;
+        this->f_arg_2 = f_arg_2;
+    };
+
     RockblockCommand(RawRockblockCommand raw)
     {
         this->f_opcode = raw.get_f_opcode();

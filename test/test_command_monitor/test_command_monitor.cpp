@@ -43,15 +43,14 @@ void test_initialize()
 void test_burnwire()
 {
     CommandMonitor command_monitor(0);
-
     // burnwire arm = on
-    uint16_t f_opcode = command_monitor.get_decimal_opcode(constants::rockblock::burnwire_arm);
-    uint32_t f_arg_1 = command_monitor.get_decimal_opcode(constants::rockblock::true_arg);
-    RockblockCommand command = RockblockCommand(f_opcode, f_arg_1, 0);
-    sfr::rockblock::processed_commands.push_back(command);
+    uint16_t f_opcode = RockblockCommand::get_decimal_opcode((u_int8_t *)constants::rockblock::opcodes::sfr_field_opcode_arm);
+    // uint32_t f_arg_1 = command_monitor.get_decimal_opcode(constants::rockblock::true_arg);
+    RockblockCommand *command = &RockblockCommand(f_opcode, 0, 0);
+    sfr::rockblock::processed_commands.push_back((RockblockCommand *)command);
     sfr::rockblock::waiting_command = true;
     command_monitor.execute();
-    TEST_ASSERT(sfr::burnwire::arm == true);
+    TEST_ASSERT(sfr::mission::current_mode == sfr::mission::normalArmed);
 
     // burnwire arm = off
     f_opcode = command_monitor.get_decimal_opcode(constants::rockblock::burnwire_arm);
