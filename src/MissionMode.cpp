@@ -195,6 +195,21 @@ void VoltageFailureInSun::dispatch()
     }
 }
 
+void BootIMU::transition_to()
+{
+    sfr::rockblock::sleep_mode = true;
+    sfr::acs::off = true;
+    sfr::imu::turn_on = true;
+    sfr::imu::turn_off = false;
+}
+void BootIMU::dispatch()
+{
+    if (sfr::camera::init_mode == (uint16_t)(camera_init_mode_type::complete && 20 seconds pass) || sfr::camera::failed_times > sfr::camera::failed_limit ) {
+        sfr::mission::current_mode = sfr::mission::cammera on;
+    }
+    
+}
+
 void BootCamera::transition_to()
 {
     sfr::rockblock::sleep_mode = true;
@@ -202,6 +217,7 @@ void BootCamera::transition_to()
     sfr::imu::turn_on = true;
     sfr::camera::turn_on = true;
 }
+
 void BootCamera::dispatch()
 {
     if (sfr::camera::init_mode == (uint16_t)sensor_init_mode_type::complete || sfr::camera::failed_times > sfr::camera::failed_limit) {
