@@ -130,16 +130,13 @@ void CameraControlTask::camera_init()
             Pins::setPinState(constants::camera::power_on_pin, HIGH);
             sfr::camera::start_progress++;
             break;
-        case 2:                                                                // step 2 - call begin method
-            if (millis() - sfr::camera::step_time >= sfr::camera::begin_delay) // need to determine this delay
-            {
-                if (adaCam.begin()) {
-                    Serial.println("powered on camera");
-                    sfr::camera::step_time = millis();
-                    sfr::camera::start_progress++;
-                } else {
-                    Serial.println("not receiving serial response");
-                }
+        case 2: // step 2 - call begin method
+            if (adaCam.begin()) {
+                Serial.println("powered on camera");
+                sfr::camera::step_time = millis();
+                sfr::camera::start_progress++;
+            } else {
+                Serial.println("not receiving serial response");
             }
             break;
         case 3: // step 3  - set resolution
