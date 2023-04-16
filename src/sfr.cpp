@@ -1,6 +1,25 @@
 #include "sfr.hpp"
 
 namespace sfr {
+    namespace timing{
+        unsigned int mission_manager_offset;
+        unsigned int battery_monitor_offset;
+        unsigned int button_monitor_offset;
+        unsigned int camera_report_monitor_offset;
+        unsigned int command_monitor_offset;
+        unsigned int current_monitor_offset;
+        unsigned int imu_monitor_offset;
+        unsigned int imu_downlink_offset;
+        unsigned int imudownlink_report_monitor_offset;
+        unsigned int normal_report_monitor_offset;
+        unsigned int photoresistor_monitor_offset;
+        unsigned int rockblock_report_monitor_offset;
+        unsigned int temperature_monitor_offset;
+        unsigned int burnwire_control_task_offset;
+        unsigned int camera_control_task_offset;
+        unsigned int rockblock_control_task_offset;
+        unsigned int eeprom_control_task_offset;
+    }
     namespace stabilization {
         // OP Codes 1100`
         SFRField<uint32_t> max_time = SFRField<uint32_t>(30 * constants::time::one_minute, 0UL, 5 * constants::time::one_hour, 0x1100, constants::eeprom::stabilization_max_time_offset, true);

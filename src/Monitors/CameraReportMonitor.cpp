@@ -29,6 +29,11 @@ void CameraReportMonitor::execute()
     } else if (sfr::rockblock::camera_report.empty() && sfr::camera::images_written == current_serial) {
         sfr::camera::report_ready = false;
     }
+    systime_duration_t duration = get_system_time() - TimedControlTaskBase::control_cycle_start_time;
+    unsigned int dur = TimedControlTask::duration_to_us(duration);
+    Serial.print("CT - CAMERA_REPORT_MONITOR: ");
+    sfr::timing::command_monitor_offset = dur;
+    Serial.println(dur-sfr::timing::camera_report_monitor_offset);
 }
 
 void CameraReportMonitor::create_camera_report(int fragment_number, uint8_t serial_number)

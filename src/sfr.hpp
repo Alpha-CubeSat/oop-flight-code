@@ -243,6 +243,25 @@ namespace sfr {
 #endif
 
     } // namespace rockblock
+    namespace timing{
+        extern unsigned int mission_manager_offset;
+        extern unsigned int battery_monitor_offset;
+        extern unsigned int button_monitor_offset;
+        extern unsigned int camera_report_monitor_offset;
+        extern unsigned int command_monitor_offset;
+        extern unsigned int current_monitor_offset;
+        extern unsigned int imu_monitor_offset;
+        extern unsigned int imu_downlink_offset;
+        extern unsigned int imudownlink_report_monitor_offset;
+        extern unsigned int normal_report_monitor_offset;
+        extern unsigned int photoresistor_monitor_offset;
+        extern unsigned int rockblock_report_monitor_offset;
+        extern unsigned int temperature_monitor_offset;
+        extern unsigned int burnwire_control_task_offset;
+        extern unsigned int camera_control_task_offset;
+        extern unsigned int rockblock_control_task_offset;
+        extern unsigned int eeprom_control_task_offset;
+    }
     namespace imu {
         // OP Codes 2200
         extern SFRField<uint16_t> mode;

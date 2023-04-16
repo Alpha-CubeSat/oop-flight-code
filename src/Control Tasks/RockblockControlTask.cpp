@@ -81,6 +81,11 @@ void RockblockControlTask::execute()
         dispatch_end_transmission();
         break;
     }
+    systime_duration_t duration = get_system_time() - TimedControlTaskBase::control_cycle_start_time;
+    unsigned int dur = TimedControlTask::duration_to_us(duration);
+    Serial.print("CT - ROCKBLOCK_CONTROL_TASK: ");
+    sfr::timing::rockblock_control_task_offset = dur;
+    Serial.println(dur-sfr::timing::camera_control_task_offset);
 }
 
 void RockblockControlTask::dispatch_standby()

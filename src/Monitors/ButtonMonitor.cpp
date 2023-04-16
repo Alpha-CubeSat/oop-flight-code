@@ -36,4 +36,8 @@ void ButtonMonitor::execute()
         Serial.println("false");
     }
 #endif
+systime_duration_t duration = get_system_time() - TimedControlTaskBase::control_cycle_start_time;
+    unsigned int dur = TimedControlTask::duration_to_us(duration);
+    Serial.print("CT - BUTTON_MONITOR: ");
+    Serial.println(dur);
 }

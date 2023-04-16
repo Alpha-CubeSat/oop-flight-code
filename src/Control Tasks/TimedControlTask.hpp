@@ -151,7 +151,7 @@ public:
         // Serial.print("start time: ");
         // Serial.println(earliest_start_time);
         return this->execute();
-    }
+        }
 
     /**
      * @brief Cause the system to pause operation until a system time is reached.

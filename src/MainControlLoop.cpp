@@ -33,6 +33,7 @@ void MainControlLoop::execute()
     faults::fault_3 = 0;
 
     clock_manager.execute();
+    sfr::timing::mission_manager_offset = 0;
     mission_manager.execute_on_time();
     battery_monitor.execute_on_time();
     button_monitor.execute_on_time();

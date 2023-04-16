@@ -97,6 +97,11 @@ void NormalReportMonitor::execute()
     sfr::rockblock::normal_report_command_curr = j;
     sfr::rockblock::normal_report.push_back(constants::rockblock::end_of_normal_downlink_flag1);
     sfr::rockblock::normal_report.push_back(constants::rockblock::end_of_normal_downlink_flag2);
+    systime_duration_t duration = get_system_time() - TimedControlTaskBase::control_cycle_start_time;
+    unsigned int dur = TimedControlTask::duration_to_us(duration);
+    Serial.print("CT - NORMAL REPORT MONITOR: ");
+    sfr::timing::normal_report_monitor_offset = dur;
+    Serial.println(dur-sfr::timing::imudownlink_report_monitor_offset);
 }
 
 uint8_t NormalReportMonitor::serialize(int index, float value)

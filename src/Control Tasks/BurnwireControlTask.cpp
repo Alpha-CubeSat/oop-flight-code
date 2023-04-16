@@ -62,6 +62,11 @@ void BurnwireControlTask::execute()
         break;
     }
     }
+    systime_duration_t duration = get_system_time() - TimedControlTaskBase::control_cycle_start_time;
+    unsigned int dur = TimedControlTask::duration_to_us(duration);
+    Serial.print("CT - BURNWIRE_CONTROL_TASK: ");
+    sfr::timing::burnwire_control_task_offset = dur;
+    Serial.println(dur-sfr::timing::temperature_monitor_offset);
 }
 
 void BurnwireControlTask::dispatch_burn()

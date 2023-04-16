@@ -29,6 +29,12 @@ void MissionManager::execute()
     sfr::mission::previous_phase = modeToPhase(sfr::mission::current_mode);
 
     sfr::mission::current_mode->dispatch();
+    systime_duration_t duration = get_system_time() - TimedControlTaskBase::control_cycle_start_time;
+
+    unsigned int dur = TimedControlTask::duration_to_us(duration);
+    Serial.print("CT - MISSION_MANAGER: ");
+    sfr::timing::battery_monitor_offset = dur;
+    Serial.println(dur-sfr::timing::mission_manager_offset);
 }
 
 Phase *MissionManager::modeToPhase(MissionMode *mission)

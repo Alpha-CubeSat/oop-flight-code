@@ -21,4 +21,9 @@ void CommandMonitor::execute()
         }
         sfr::rockblock::waiting_command = false;
     }
+    systime_duration_t duration = get_system_time() - TimedControlTaskBase::control_cycle_start_time;
+    unsigned int dur = TimedControlTask::duration_to_us(duration);
+    Serial.print("CT - COMMAND_MONITOR: ");
+    sfr::timing::current_monitor_offset = dur;
+    Serial.println(dur-sfr::timing::command_monitor_offset);
 }
