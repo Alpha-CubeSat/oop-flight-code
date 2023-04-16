@@ -204,10 +204,12 @@ void BootIMU::transition_to()
 }
 void BootIMU::dispatch()
 {
-    if (sfr::camera::init_mode == (uint16_t)(camera_init_mode_type::complete && 20 seconds pass) || sfr::camera::failed_times > sfr::camera::failed_limit ) {
-        sfr::mission::current_mode = sfr::mission::cammera on;
-    }
-    
+    sfr::mission::current_mode = sfr::mission::bootCamera;
+
+    // this is where we need to do the 20 seconds
+    // if (sfr::camera::init_mode == (uint16_t)(camera_init_mode_type::complete && 20 seconds pass) || sfr::camera::failed_times > sfr::camera::failed_limit ) {
+    // sfr::mission::current_mode = sfr::mission::bootCamera;
+    // }
 }
 
 void BootCamera::transition_to()
