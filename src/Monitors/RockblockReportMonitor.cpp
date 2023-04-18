@@ -25,7 +25,7 @@ void RockblockReportMonitor::execute()
         for (auto &data : sfr::rockblock::camera_report) {
             sfr::rockblock::downlink_report.push_back(data);
         }
-        Serial.println("Added Camera Report to buffer");
+        // Serial.println("Added Camera Report to buffer");
         return;
 
     case report_type::normal_report:
@@ -74,7 +74,7 @@ void RockblockReportMonitor::schedule_report()
     // Not in low-power mode; report type cycle order: normal report, IMU report, camera report
     switch (static_cast<report_type>(sfr::rockblock::downlink_report_type.get())) {
     case report_type::normal_report:
-        
+
         if (sfr::imu::report_ready) {
             switch_report_type_to(report_type::imu_report);
             return;
@@ -97,7 +97,6 @@ void RockblockReportMonitor::schedule_report()
     case report_type::imu_report:
         if (sfr::camera::report_ready) {
             switch_report_type_to(report_type::camera_report);
-            Serial.println("last report was imu, now setting to camera");
             return;
         }
 

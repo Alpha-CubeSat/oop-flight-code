@@ -10,10 +10,10 @@ RockblockControlTask::RockblockControlTask(unsigned int offset)
 void RockblockControlTask::execute()
 {
     rockblock_mode_type mode = static_cast<rockblock_mode_type>(sfr::rockblock::mode.get());
-    Serial.print("Mode: ");
-    Serial.println((uint16_t)sfr::rockblock::mode.get());
-    Serial.print("Mission Mode: ");
-    Serial.println(sfr::mission::current_mode->get_id());
+    // Serial.print("Mode: ");
+    // Serial.println((uint16_t)sfr::rockblock::mode.get());
+    // Serial.print("Mission Mode: ");
+    // Serial.println(sfr::mission::current_mode->get_id());
     switch (mode) {
     case rockblock_mode_type::standby:
         dispatch_standby();
@@ -104,12 +104,6 @@ void RockblockControlTask::dispatch_standby()
         Serial.print("Rockblock Not Ready to Downlink\n");
     }
 #endif
-    Serial.print("ready status: ");
-    Serial.println(sfr::rockblock::ready_status);
-    Serial.print("waiting message: ");
-    Serial.println(sfr::rockblock::waiting_message);
-    Serial.print("sleep mode: ");
-    Serial.println(sfr::rockblock::sleep_mode);
     if ((sfr::rockblock::ready_status || sfr::rockblock::waiting_message) && !sfr::rockblock::sleep_mode) {
         transition_to(rockblock_mode_type::send_at);
         Pins::setPinState(constants::rockblock::sleep_pin, HIGH);

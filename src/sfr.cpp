@@ -281,7 +281,7 @@ namespace sfr {
         // OP Codes 2500
         SFRField<uint32_t> max_no_communication = SFRField<uint32_t>(0, 0x2500, constants::eeprom::acs_max_no_communication_offset, true);
 
-        SFRField<uint32_t> on_time = SFRField<uint32_t>(5 * constants::time::one_minute, 0x2501, constants::eeprom::acs_on_time_offset, true);
+        SFRField<uint32_t> on_time = SFRField<uint32_t>(5 * constants::time::one_second, 0x2501, constants::eeprom::acs_on_time_offset, true);
         SFRField<bool> off = SFRField<bool>(true, 0x2502, constants::eeprom::acs_off_offset, true);
 
         SFRField<uint16_t> mag = SFRField<uint16_t>((uint16_t)simple_acs_type::x, 0x2503, constants::eeprom::acs_mag_offset, true);

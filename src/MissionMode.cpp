@@ -251,6 +251,7 @@ void MandatoryBurns::transition_to()
     sfr::acs::off = true;
     sfr::imu::turn_on = true;
     sfr::mission::possible_uncovered = true;
+    sfr::rockblock::downlink_period = 30*constants::time::one_minute;
 }
 
 void MandatoryBurns::dispatch()
