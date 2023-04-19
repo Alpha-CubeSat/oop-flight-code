@@ -38,6 +38,8 @@ void IMUMonitor::execute()
         IMUMonitor::IMU_init();
         if (sfr::imu::init_mode == (uint16_t)sensor_init_mode_type::complete) {
             transition_to_normal();
+            // get the start time for the collection of data
+            sfr::imu::collection_start_time = millis();
         } else {
             if (sfr::imu::failed_times == sfr::imu::failed_limit) {
                 sfr::imu::failed_times = 0; // reset

@@ -22,9 +22,17 @@ void IMUDownlink::execute()
         sfr::imu::imu_dlink.push_front((gyro_x + 5) * 25);
         sfr::imu::imu_dlink.push_front((gyro_y + 5) * 25);
         sfr::imu::imu_dlink.push_front((gyro_z + 5) * 25);
+
+        // NOTE: For the down link we are enforcing a FIFO to keep the amound of data we send down low.
+        // We want about 30 seconds of data which comes out to be around 108 bytes so we are enforcing that here.
+        if (sfr::imu::imu_dlink.size() > constants::imu_downlink::downlink_FIFO_byte_length) {
+            // if greater than the max size shrink the buffer
+            sfr::imu::imu_dlink.pop_back();
+        }
     }
 
-    if (sfr::mission::current_mode->get_id() == sfr::mission::mandatoryBurns->get_id() || sfr::mission::current_mode->get_id() == sfr::mission::regularBurns->get_id()) {
+    // added to or statment for the IMU booting
+    if (sfr::mission::current_mode->get_id() == sfr::mission::bootImu->get_id() || sfr::mission::current_mode->get_id() == sfr::mission::mandatoryBurns->get_id() || sfr::mission::current_mode->get_id() == sfr::mission::regularBurns->get_id()) {
         sfr::imu::sample_gyro = true;
     }
 

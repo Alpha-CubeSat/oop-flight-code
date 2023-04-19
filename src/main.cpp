@@ -19,6 +19,7 @@ void setup()
 
 void loop()
 {
+    Serial.println("Has Started\n");
     mcl.execute();
 }
 #endif

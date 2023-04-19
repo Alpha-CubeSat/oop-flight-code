@@ -166,6 +166,10 @@ namespace constants {
 
         constexpr int max_gyro_imu_report_size = 66;
     } // namespace imu
+
+    namespace imu_downlink {
+        constexpr int downlink_FIFO_byte_length = 108;
+    } // namespace imu_downlink
     namespace timecontrol {
         // Environment-based initializations of the control loop time.
         // control_cycle_time is the value actually used for timing. The
