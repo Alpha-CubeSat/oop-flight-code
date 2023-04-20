@@ -283,7 +283,8 @@ namespace sfr {
 
         extern std::deque<uint8_t> imu_dlink;
 
-        extern SFRField<uint16_t> collection_start_time;
+        extern SFRField<uint16_t> imu_boot_collection_start_time;
+        extern SFRField<uint16_t> door_open__collection_start_time;
 
         extern bool report_written;
         extern bool report_ready;
