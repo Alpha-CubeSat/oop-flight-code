@@ -26,9 +26,12 @@ void IMUDownlink::execute()
         // NOTE: For the down link we are enforcing a FIFO to keep the amound of data we send down low.
         // We want about 30 seconds of data which comes out to be around 108 bytes so we are enforcing that here.
         if (sfr::imu::imu_dlink.size() > constants::imu_downlink::downlink_FIFO_byte_length) {
-            // if greater than the max size shrink the buffer
-            sfr::imu::imu_dlink.pop_back();
+            // if greater than the max size shrink the buffer.
+            for (int i = 0; i < 3; i++) {
+                sfr::imu::imu_dlink.pop_back();
+            }
         }
+        // Serial.print(sfr::imu::imu_dlink.size());
     }
 
     // added to or statment for the IMU booting

@@ -204,10 +204,9 @@ void BootIMU::transition_to()
 }
 void BootIMU::dispatch()
 {
-    sfr::mission::current_mode = sfr::mission::bootCamera;
-
+    // sfr::mission::current_mode = sfr::mission::bootImu;
     // this is where we need to do the 20 seconds
-    if (sfr::imu::init_mode == ((uint16_t)sensor_init_mode_type::complete && (millis() >= (sfr::imu::collection_start_time + 20000))) || sfr::imu::failed_times >= sfr::camera::failed_limit) {
+    if (((sfr::imu::init_mode == (uint16_t)sensor_init_mode_type::complete) && (millis() >= (sfr::imu::collection_start_time + constants::imu::bootIMU_min_run_time))) || sfr::imu::failed_times >= sfr::camera::failed_limit) {
         sfr::mission::current_mode = sfr::mission::bootCamera;
         // reset failed times once we transition
         sfr::imu::failed_times = 0;
@@ -220,8 +219,6 @@ void BootCamera::transition_to()
     sfr::acs::off = true;
     sfr::imu::turn_on = true;
     sfr::camera::turn_on = true;
-    Serial.println("Transitioning to IMU Boot\n");
-    
 }
 
 void BootCamera::dispatch()

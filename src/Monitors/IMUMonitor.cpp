@@ -25,6 +25,8 @@ void IMUMonitor::IMU_init()
             imu.setupAccel(imu.LSM9DS1_ACCELRANGE_2G);
             imu.setupMag(imu.LSM9DS1_MAGGAIN_4GAUSS);
             imu.setupGyro(imu.LSM9DS1_GYROSCALE_245DPS);
+            // get the start time for the collection of data
+            sfr::imu::collection_start_time = millis();
         }
     }
 }
@@ -38,8 +40,6 @@ void IMUMonitor::execute()
         IMUMonitor::IMU_init();
         if (sfr::imu::init_mode == (uint16_t)sensor_init_mode_type::complete) {
             transition_to_normal();
-            // get the start time for the collection of data
-            sfr::imu::collection_start_time = millis();
         } else {
             if (sfr::imu::failed_times == sfr::imu::failed_limit) {
                 sfr::imu::failed_times = 0; // reset
