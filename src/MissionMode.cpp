@@ -46,6 +46,7 @@ void DetumbleSpin::dispatch()
     if (sfr::imu::failed_times > sfr::imu::failed_limit) {
         sfr::mission::current_mode = sfr::mission::normal;
     }
+    exit_detumble_phase(sfr::mission::normal);
 }
 
 void LowPowerDetumbleSpin::transition_to()
@@ -64,8 +65,8 @@ void Normal::transition_to()
 }
 void Normal::dispatch()
 {
-    enter_lp(sfr::mission::lowPower);
-    timed_out(sfr::mission::transmit, sfr::acs::on_time);
+
+    timed_out(sfr::mission::transmit, 0);
 }
 
 void LowPower::transition_to()
@@ -83,7 +84,7 @@ void Transmit::transition_to()
 }
 void Transmit::dispatch()
 {
-    enter_lp(sfr::mission::lowPower);
+    // enter_lp(sfr::mission::lowPower);
     timed_out(sfr::mission::normal, sfr::mission::acs_transmit_cycle_time - sfr::acs::on_time);
 }
 
@@ -197,7 +198,6 @@ void VoltageFailureInSun::dispatch()
 
 void BootIMU::transition_to()
 {
-    Serial.println("Start imu");
     sfr::rockblock::sleep_mode = true;
     sfr::acs::off = true;
     sfr::imu::turn_on = true;
@@ -270,7 +270,6 @@ void Photo::dispatch()
 {
     // Only go onto the next state until the IMU finished collecting all of the data
     if (millis() > sfr::imu::door_open__collection_start_time + constants::imu::after_door_opens_min_run_time) {
-        Serial.print("transitioning to detuble\n");
         sfr::mission::current_mode = sfr::mission::detumbleSpin;
         sfr::imu::turn_off = true;
     }

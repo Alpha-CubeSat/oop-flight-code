@@ -8,6 +8,7 @@ void IMUDownlinkReportMonitor::execute()
     if (fragment_number >= sfr::imu::max_fragments) {
         sfr::imu::report_ready = false;
     }
+
     if (fragment_number < sfr::imu::max_fragments && sfr::rockblock::imu_report.empty() && sfr::imu::report_written) {
         create_imu_downlink_report(fragment_number);
         fragment_number++;
@@ -34,28 +35,17 @@ void IMUDownlinkReportMonitor::create_imu_downlink_report(int fragment_number)
                            constants::rockblock::content_length),
                        sfr::imu::imu_dlink.size());
 
-    // Serial.println("the pop size is :" );
-    // Serial.println(pop_size);
-
-    // Serial.print("Here is the buffer content before the for loop");
-    // for (auto v : sfr::imu::imu_dlink) {
-    //     Serial.print(v, HEX);
-    //     Serial.print(" ");
-    // }
-    // Serial.print("\n");
-
     // add actual gyro content to imu report
     for (int i = 0; i < pop_size; i++) {
         sfr::rockblock::imu_report.push_back(sfr::imu::imu_dlink.back());
         sfr::imu::imu_dlink.pop_back();
     }
 
-    // Serial.print("Here is the buffer content after the for loop");
-    // for (auto v : sfr::imu::imu_dlink) {
-    //     Serial.print(v, HEX);
-    //     Serial.print(" ");
-    // }
-    // Serial.print("\n");
+    // place the endflag at the end of the message
+    if (fragment_number >= (int)(constants::imu_downlink::downlink_FIFO_byte_length / pop_size - 1)) {
+        sfr::rockblock::imu_report.push_back(constants::imu_downlink::imu_report_endflag1);
+        sfr::rockblock::imu_report.push_back(constants::imu_downlink::imu_report_endflag2);
+    }
 
     // for the next downlink cycle
     sfr::imu::report_ready = true;

@@ -52,23 +52,4 @@ void MainControlLoop::execute()
     camera_control_task.execute_on_time();
     rockblock_control_task.execute_on_time();
     eeprom_control_task.execute_on_time();
-
-    // used for testing transition to IMU state
-    if (start) {
-        sfr::mission::current_mode = sfr::mission::bootImu;
-        start = false;
-        // setup things to go into the the imu Boot
-        // for (int i = 0; i < 100; i++) {
-        //     sfr::imu::imu_dlink.push_front(i);
-        // }
-
-        // IMUDownlinkReportMonitor monitor(0);
-        // monitor.create_imu_downlink_report(0);
-        // monitor.create_imu_downlink_report(1);
-    }
-
-    // if (sfr::imu::report_ready) {
-    // }
-
-    // sfr::imu::report_ready = true;
 }

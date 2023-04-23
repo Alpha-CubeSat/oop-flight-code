@@ -355,6 +355,7 @@ void RockblockControlTask::dispatch_process_mt_status()
             sfr::rockblock::camera_report.clear();
         }
         if (sfr::rockblock::downlink_report_type == (uint16_t)report_type::imu_report) {
+            Serial.print("IMU report sent\n");
             sfr::rockblock::imu_report.clear();
         }
         transition_to(rockblock_mode_type::read_message);
@@ -489,7 +490,6 @@ void RockblockControlTask::dispatch_await_flush()
 
 void RockblockControlTask::dispatch_end_transmission()
 {
-    // Serial.println("dispatch_end_transmission");
     sfr::rockblock::last_downlink = millis();
     if (sfr::rockblock::downlink_period > constants::rockblock::min_sleep_period) {
         Pins::setPinState(constants::rockblock::sleep_pin, LOW);

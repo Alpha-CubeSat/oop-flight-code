@@ -14,7 +14,6 @@ void IMUDownlink::execute()
     if (sfr::imu::sample_gyro) {
         // collect the time where door opened
         if (prev_pressed != sfr::button::pressed) {
-            Serial.println("The door was opened now collecting data for after");
             sfr::imu::door_open__collection_start_time = millis();
         }
 
@@ -32,17 +31,12 @@ void IMUDownlink::execute()
 
             // NOTE: For the down link we are enforcing a FIFO to keep the amound of data we send down low.
             // We want about 30 seconds of data which comes out to be around 462 bytes so we are enforcing that here.
-            // Serial.println(sfr::imu::imu_dlink.size());
             if (sfr::imu::imu_dlink.size() > constants::imu_downlink::downlink_FIFO_byte_length) {
                 // if greater than the max size shrink the buffer.
                 for (int i = 0; i < 3; i++) {
                     sfr::imu::imu_dlink.pop_back();
                 }
             }
-            // Serial.print("buffer size: ");
-            // Serial.println(sfr::imu::imu_dlink.size());
-            // Serial.print("The current buffer length is: ");
-            // Serial.println(sfr::imu::imu_dlink.size());
             prev_pressed = sfr::button::pressed;
         }
 
