@@ -27,5 +27,8 @@ void TemperatureMonitor::execute()
         sfr::temperature::in_sun = val >= constants::temperature::in_sun_val;
     } else {
         sfr::temperature::in_sun = false;
+#ifdef E2E_TESTING
+        sfr::temperature::in_sun = true;
+#endif
     }
 }
