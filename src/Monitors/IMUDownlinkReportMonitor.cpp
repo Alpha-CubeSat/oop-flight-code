@@ -8,9 +8,6 @@ void IMUDownlinkReportMonitor::execute()
     if (fragment_number >= sfr::imu::max_fragments) {
         sfr::imu::report_ready = false;
     }
-    Serial.println(fragment_number < sfr::imu::max_fragments);
-    Serial.println(sfr::rockblock::imu_report.empty());
-    Serial.println(sfr::imu::report_written);
     if (fragment_number < sfr::imu::max_fragments && sfr::rockblock::imu_report.empty() && sfr::imu::report_written) {
         create_imu_downlink_report(fragment_number);
         fragment_number++;
@@ -48,14 +45,10 @@ void IMUDownlinkReportMonitor::create_imu_downlink_report(int fragment_number)
     // Serial.print("\n");
 
     // add actual gyro content to imu report
-    Serial.print("send size is before: ");
-    Serial.print(sfr::imu::imu_dlink.size());
     for (int i = 0; i < pop_size; i++) {
         sfr::rockblock::imu_report.push_back(sfr::imu::imu_dlink.back());
         sfr::imu::imu_dlink.pop_back();
     }
-    Serial.print("send size is after: ");
-    Serial.print(sfr::imu::imu_dlink.size());
 
     // Serial.print("Here is the buffer content after the for loop");
     // for (auto v : sfr::imu::imu_dlink) {

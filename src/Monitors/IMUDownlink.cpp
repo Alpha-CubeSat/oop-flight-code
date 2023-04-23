@@ -39,8 +39,8 @@ void IMUDownlink::execute()
                     sfr::imu::imu_dlink.pop_back();
                 }
             }
-            Serial.print("buffer size: ");
-            Serial.println(sfr::imu::imu_dlink.size());
+            // Serial.print("buffer size: ");
+            // Serial.println(sfr::imu::imu_dlink.size());
             // Serial.print("The current buffer length is: ");
             // Serial.println(sfr::imu::imu_dlink.size());
             prev_pressed = sfr::button::pressed;
