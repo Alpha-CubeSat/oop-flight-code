@@ -27,6 +27,7 @@ void IMUMonitor::IMU_init()
             imu.setupGyro(imu.LSM9DS1_GYROSCALE_245DPS);
             // get the start time for the collection of data
             sfr::imu::imu_boot_collection_start_time = millis();
+            sfr::imu::sample_gyro = true;
         }
     }
 }

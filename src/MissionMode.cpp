@@ -197,6 +197,7 @@ void VoltageFailureInSun::dispatch()
 
 void BootIMU::transition_to()
 {
+    Serial.println("Start imu");
     sfr::rockblock::sleep_mode = true;
     sfr::acs::off = true;
     sfr::imu::turn_on = true;
@@ -206,12 +207,10 @@ void BootIMU::dispatch()
 {
     // sfr::mission::current_mode = sfr::mission::bootImu;
     // this is where we need to do the 20 seconds
-    if (((sfr::imu::init_mode == (uint16_t)sensor_init_mode_type::complete) && (millis() >= (sfr::imu::imu_boot_collection_start_time + constants::imu::bootIMU_min_run_time))) || sfr::imu::failed_times >= sfr::camera::failed_limit) {
+    if (((sfr::imu::init_mode == (uint16_t)sensor_init_mode_type::complete) && ((millis() - sfr::imu::imu_boot_collection_start_time) >= constants::imu::bootIMU_min_run_time)) || sfr::imu::failed_times >= sfr::camera::failed_limit) {
         sfr::mission::current_mode = sfr::mission::bootCamera;
         // reset failed times once we transition
         sfr::imu::failed_times = 0;
-        Serial.print("##################BUTTON ARTIFICIALLY SET FALSE####################\n");
-        sfr::button::pressed = false;
     }
 }
 

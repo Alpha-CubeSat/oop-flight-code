@@ -165,7 +165,7 @@ namespace constants {
         constexpr int CSM = 20;
 
         constexpr int max_gyro_imu_report_size = 66;
-        constexpr int bootIMU_min_run_time = 5000;           // 20 seconds before transition to bootCamera.
+        constexpr int bootIMU_min_run_time = 20000;          // 20 seconds before transition to bootCamera.
         constexpr int after_door_opens_min_run_time = 10000; // 10 seconds after the door opens
     }                                                        // namespace imu
 
