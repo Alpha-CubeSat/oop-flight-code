@@ -66,7 +66,6 @@ void RockblockReportMonitor::schedule_report()
     switch (static_cast<report_type>(sfr::rockblock::downlink_report_type.get())) {
     case report_type::normal_report:
         if (sfr::imu::report_ready) {
-            Serial.println("switching to imu downlink");
             switch_report_type_to(report_type::imu_report);
             return;
         }

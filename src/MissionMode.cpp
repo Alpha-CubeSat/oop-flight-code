@@ -66,7 +66,8 @@ void Normal::transition_to()
 void Normal::dispatch()
 {
 
-    timed_out(sfr::mission::transmit, 0);
+    enter_lp(sfr::mission::lowPower);
+    timed_out(sfr::mission::transmit, sfr::acs::on_time);
 }
 
 void LowPower::transition_to()
@@ -84,7 +85,7 @@ void Transmit::transition_to()
 }
 void Transmit::dispatch()
 {
-    // enter_lp(sfr::mission::lowPower);
+    enter_lp(sfr::mission::lowPower);
     timed_out(sfr::mission::normal, sfr::mission::acs_transmit_cycle_time - sfr::acs::on_time);
 }
 
