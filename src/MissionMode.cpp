@@ -269,8 +269,12 @@ void Photo::transition_to()
 
 void Photo::dispatch()
 {
-    sfr::mission::current_mode = sfr::mission::detumbleSpin;
-    sfr::imu::turn_off = true;
+    // Only go onto the next state until the IMU finished collecting all of the data
+    if (millis() > sfr::imu::door_open__collection_start_time + constants::imu::after_door_opens_min_run_time) {
+        Serial.print("transitioning to detuble\n");
+        sfr::mission::current_mode = sfr::mission::detumbleSpin;
+        sfr::imu::turn_off = true;
+    }
 }
 
 void exit_signal_phase(MissionMode *mode)

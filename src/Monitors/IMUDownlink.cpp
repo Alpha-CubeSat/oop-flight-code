@@ -23,7 +23,7 @@ void IMUDownlink::execute()
         }
 
         // this stops the data from being collected 10 seconds after the door opens.
-        if (sfr::button::pressed || millis() < sfr::imu::door_open__collection_start_time + constants::imu::after_door_opens_min_run_time) {
+        if (sfr::button::pressed || millis() - sfr::imu::door_open__collection_start_time < constants::imu::after_door_opens_min_run_time) {
             if (!sfr::button::pressed) {
                 Serial.print("Time since opened is: ");
                 Serial.println((millis() - sfr::imu::door_open__collection_start_time) / 1000);
@@ -58,15 +58,9 @@ void IMUDownlink::execute()
 
     // need to be stored in sfr later (time to record imu data after deployment)
     // 60 seconds is about 14 packets
-    if ((sfr::mission::current_mode == sfr::mission::photo || sfr::mission::already_deployed) && millis() - sfr::mission::time_deployed > 10 * constants::time::one_second) {
+    if ((sfr::mission::current_mode == sfr::mission::photo || !sfr::button::pressed) && millis() - sfr::imu::door_open__collection_start_time > constants::imu::after_door_opens_min_run_time) {
         sfr::imu::sample_gyro = false;
         sfr::imu::turn_off = true;
         sfr::imu::report_written = true;
-    } else if (sfr::mission::current_mode == sfr::mission::photo) {
-        if (!sfr::mission::already_deployed) {
-            sfr::mission::time_deployed = millis();
-            sfr::mission::already_deployed = true;
-        }
-        sfr::imu::sample_gyro = true;
     }
 }
