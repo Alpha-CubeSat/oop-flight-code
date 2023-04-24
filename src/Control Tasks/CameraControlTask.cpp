@@ -7,6 +7,14 @@ CameraControlTask::CameraControlTask(unsigned int offset)
 
 void CameraControlTask::execute()
 {
+    // handle latent turn on / turn off variables
+    if (sfr::camera::turn_off == true && sfr::camera::powered == false) {
+        sfr::camera::turn_off = false;
+    }
+    if (sfr::camera::turn_on == true && sfr::camera::powered == true) {
+        sfr::camera::turn_on = false;
+    }
+
     if (sfr::camera::take_photo == true && sfr::camera::powered == true) {
         if (!adaCam.takePicture()) {
             Serial.println("Failed to snap!");
