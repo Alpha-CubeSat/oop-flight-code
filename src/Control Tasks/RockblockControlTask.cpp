@@ -493,7 +493,6 @@ void RockblockControlTask::dispatch_await_flush()
 
 void RockblockControlTask::dispatch_end_transmission()
 {
-    // Serial.println("dispatch_end_transmission");
     sfr::rockblock::last_downlink = millis();
     if (sfr::rockblock::downlink_period > constants::rockblock::min_sleep_period) {
         Pins::setPinState(constants::rockblock::sleep_pin, LOW);

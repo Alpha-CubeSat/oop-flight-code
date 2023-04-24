@@ -31,7 +31,6 @@ void MissionManager::execute()
 
     sfr::mission::previous_mode = sfr::mission::current_mode;
     sfr::mission::previous_phase = modeToPhase(sfr::mission::current_mode);
-
     sfr::mission::current_mode->dispatch();
 }
 

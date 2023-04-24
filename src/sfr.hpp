@@ -90,6 +90,7 @@ namespace sfr {
         extern TransmitInSun transmitInSun_class;
         extern LowPowerInSun lowPowerInSun_class;
         extern VoltageFailureInSun voltageFailureInSun_class;
+        extern BootIMU bootImu_class;
         extern BootCamera bootCamera_class;
         extern MandatoryBurns mandatoryBurns_class;
         extern RegularBurns regularBurns_class;
@@ -121,6 +122,7 @@ namespace sfr {
         extern MissionMode *transmitInSun;
         extern MissionMode *lowPowerInSun;
         extern MissionMode *voltageFailureInSun;
+        extern MissionMode *bootImu;
         extern MissionMode *bootCamera;
         extern MissionMode *mandatoryBurns;
         extern MissionMode *regularBurns;
@@ -280,6 +282,9 @@ namespace sfr {
         extern SensorReading *acc_y_average;
 
         extern std::deque<uint8_t> imu_dlink;
+
+        extern SFRField<uint16_t> imu_boot_collection_start_time;
+        extern SFRField<uint16_t> door_open__collection_start_time;
 
         extern bool report_written;
         extern bool report_ready;

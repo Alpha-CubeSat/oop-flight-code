@@ -46,6 +46,7 @@ void DetumbleSpin::dispatch()
     if (sfr::imu::failed_times > sfr::imu::failed_limit) {
         sfr::mission::current_mode = sfr::mission::normal;
     }
+    exit_detumble_phase(sfr::mission::normal);
     timed_out(sfr::mission::normal, sfr::acs::detumble_timeout);
 }
 
@@ -65,6 +66,7 @@ void Normal::transition_to()
 }
 void Normal::dispatch()
 {
+
     enter_lp(sfr::mission::lowPower);
     timed_out(sfr::mission::transmit, sfr::acs::on_time);
 }
@@ -155,7 +157,7 @@ void NormalInSun::dispatch()
 {
     timed_out(sfr::mission::transmitInSun, sfr::acs::on_time);
     enter_lp_insun();
-    exit_insun_phase(sfr::mission::bootCamera);
+    exit_insun_phase(sfr::mission::bootImu);
 }
 
 void TransmitInSun::transition_to()
@@ -166,7 +168,7 @@ void TransmitInSun::dispatch()
 {
     timed_out(sfr::mission::normalInSun, sfr::mission::acs_transmit_cycle_time - sfr::acs::on_time);
     enter_lp_insun();
-    exit_insun_phase(sfr::mission::bootCamera);
+    exit_insun_phase(sfr::mission::bootImu);
 }
 
 void LowPowerInSun::transition_to()
@@ -192,7 +194,25 @@ void VoltageFailureInSun::dispatch()
     if (sfr::battery::voltage_average->is_valid()) {
         sfr::mission::current_mode = sfr::mission::normalInSun;
     } else {
-        exit_insun_phase(sfr::mission::bootCamera);
+        exit_insun_phase(sfr::mission::bootImu);
+    }
+}
+
+void BootIMU::transition_to()
+{
+    sfr::rockblock::sleep_mode = true;
+    sfr::acs::off = true;
+    sfr::imu::turn_on = true;
+    sfr::imu::turn_off = false;
+}
+void BootIMU::dispatch()
+{
+    // sfr::mission::current_mode = sfr::mission::bootImu;
+    // this is where we need to do the 20 seconds
+    if (((sfr::imu::init_mode == (uint16_t)sensor_init_mode_type::complete) && ((millis() - sfr::imu::imu_boot_collection_start_time) >= constants::imu::bootIMU_min_run_time)) || sfr::imu::failed_times >= sfr::camera::failed_limit) {
+        sfr::mission::current_mode = sfr::mission::bootCamera;
+        // reset failed times once we transition
+        sfr::imu::failed_times = 0;
     }
 }
 
@@ -203,6 +223,7 @@ void BootCamera::transition_to()
     sfr::imu::turn_on = true;
     sfr::camera::turn_on = true;
 }
+
 void BootCamera::dispatch()
 {
     if (sfr::camera::init_mode == (uint16_t)sensor_init_mode_type::complete || sfr::camera::failed_times > sfr::camera::failed_limit) {
@@ -252,7 +273,11 @@ void Photo::transition_to()
 
 void Photo::dispatch()
 {
-    sfr::mission::current_mode = sfr::mission::detumbleSpin;
+    // Only go onto the next state until the IMU finished collecting all of the data
+    if (millis() > sfr::imu::door_open__collection_start_time + constants::imu::after_door_opens_min_run_time) {
+        sfr::mission::current_mode = sfr::mission::detumbleSpin;
+        sfr::imu::turn_off = true;
+    }
 }
 
 void exit_signal_phase(MissionMode *mode)

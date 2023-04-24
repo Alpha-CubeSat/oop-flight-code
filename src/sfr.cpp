@@ -70,6 +70,7 @@ namespace sfr {
         TransmitInSun transmitInSun_class;
         LowPowerInSun lowPowerInSun_class;
         VoltageFailureInSun voltageFailureInSun_class;
+        BootIMU bootImu_class;
         BootCamera bootCamera_class;
         MandatoryBurns mandatoryBurns_class;
         RegularBurns regularBurns_class;
@@ -101,6 +102,7 @@ namespace sfr {
         MissionMode *transmitInSun = &transmitInSun_class;
         MissionMode *lowPowerInSun = &lowPowerInSun_class;
         MissionMode *voltageFailureInSun = &voltageFailureInSun_class;
+        MissionMode *bootImu = &bootImu_class;
         MissionMode *bootCamera = &bootCamera_class;
         MissionMode *mandatoryBurns = &mandatoryBurns_class;
         MissionMode *regularBurns = &regularBurns_class;
@@ -240,6 +242,9 @@ namespace sfr {
 
         SFRField<uint16_t> failed_times = SFRField<uint16_t>(0, 0x2207, constants::eeprom::imu_failed_times_offset, true);
         SFRField<uint16_t> failed_limit = SFRField<uint16_t>(5, 0x2208, constants::eeprom::imu_failed_limit_offset, true);
+
+        SFRField<uint16_t> imu_boot_collection_start_time = SFRField<uint16_t>(0, 0x2209, 0, true);
+        SFRField<uint16_t> door_open__collection_start_time = SFRField<uint16_t>(0, 0x220a, 0, true);
 
         SensorReading *mag_x_value = new SensorReading(1, 0, 0);
         SensorReading *mag_y_value = new SensorReading(1, 0, 0);

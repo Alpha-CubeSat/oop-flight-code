@@ -165,7 +165,16 @@ namespace constants {
         constexpr int CSM = 20;
 
         constexpr int max_gyro_imu_report_size = 66;
-    } // namespace imu
+        constexpr int bootIMU_min_run_time = 20000;          // 20 seconds before transition to bootCamera.
+        constexpr int after_door_opens_min_run_time = 10000; // 10 seconds after the door opens
+    }                                                        // namespace imu
+
+    namespace imu_downlink {
+        // Note this is how much data correlates to 30 seconds
+        constexpr int downlink_FIFO_byte_length = 462;
+        constexpr uint8_t imu_report_endflag1 = 0xFE;
+        constexpr uint8_t imu_report_endflag2 = 0x92;
+    } // namespace imu_downlink
     namespace timecontrol {
         // Environment-based initializations of the control loop time.
         // control_cycle_time is the value actually used for timing. The
