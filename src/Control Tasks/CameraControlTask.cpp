@@ -22,7 +22,7 @@ void CameraControlTask::execute()
             Serial.println("\n\n\nPicture taken!\n\n\n");
             jpglen = adaCam.frameLength();
             Serial.println("Camera frame length: " + String(jpglen));
-            Serial.println("##### Start wrting the picture to SD card #####");
+            Serial.println("##### Start writing the picture to SD card #####");
             if (jpglen > 0) {
                 sfr::camera::take_photo = false;
             }
@@ -192,8 +192,8 @@ void CameraControlTask::transition_to_normal()
     // updates camera mode to normal
     sfr::camera::mode = (uint16_t)sensor_mode_type::normal;
 #ifdef VERBOSE
-    Serial.println("camera initialization successful");
 #endif
+    Serial.println("camera initialization successful");
 }
 
 void CameraControlTask::transition_to_abnormal_init()

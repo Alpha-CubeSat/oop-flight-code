@@ -90,6 +90,7 @@ namespace sfr {
         extern TransmitInSun transmitInSun_class;
         extern LowPowerInSun lowPowerInSun_class;
         extern VoltageFailureInSun voltageFailureInSun_class;
+        extern BootIMU bootImu_class;
         extern BootCamera bootCamera_class;
         extern MandatoryBurns mandatoryBurns_class;
         extern RegularBurns regularBurns_class;
@@ -121,6 +122,7 @@ namespace sfr {
         extern MissionMode *transmitInSun;
         extern MissionMode *lowPowerInSun;
         extern MissionMode *voltageFailureInSun;
+        extern MissionMode *bootImu;
         extern MissionMode *bootCamera;
         extern MissionMode *mandatoryBurns;
         extern MissionMode *regularBurns;
@@ -281,6 +283,9 @@ namespace sfr {
 
         extern std::deque<uint8_t> imu_dlink;
 
+        extern SFRField<uint16_t> imu_boot_collection_start_time;
+        extern SFRField<uint16_t> door_open__collection_start_time;
+
         extern bool report_written;
         extern bool report_ready;
 
@@ -306,6 +311,8 @@ namespace sfr {
         extern SFRField<bool> off;
 
         extern SFRField<uint16_t> mag;
+
+        extern SFRField<uint32_t> detumble_timeout;
     } // namespace acs
     namespace battery {
         // OP Codes 2600
