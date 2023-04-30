@@ -134,10 +134,9 @@ bool SensorReading::repeated_values(std::deque<float> *buffer, float val)
 
     int min_loop_max;
 
-    if(buffer->size()>constants::sensor::repeats){
+    if (buffer->size() > constants::sensor::repeats) {
         min_loop_max = constants::sensor::repeats;
-    }
-    else{
+    } else {
         min_loop_max = buffer->size();
     }
 

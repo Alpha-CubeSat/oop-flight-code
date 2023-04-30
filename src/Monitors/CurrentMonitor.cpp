@@ -31,9 +31,8 @@ void CurrentMonitor::execute()
         sfr::current::in_sun = milliamps >= constants::current::in_sun_val;
     } else {
         sfr::current::in_sun = false;
-        #ifdef E2E_TESTING
+#ifdef E2E_TESTING
         sfr::current::in_sun = true;
-        #endif
+#endif
     }
-
 }
