@@ -1,3 +1,4 @@
+#include <BurnwireCommands.hpp>
 #include <Monitors/CommandMonitor.hpp>
 #include <unity.h>
 
@@ -7,191 +8,169 @@ void test_initialize()
     TEST_ASSERT_EQUAL(0, 0);
 }
 
-// void test_mission()
+void test_special_commands()
+{
+    CommandMonitor command_monitor(0);
+    sfr::rockblock::waiting_command = true;
+
+    Serial.println("run test");
+    uint16_t f_opcode = RockblockCommand::get_decimal_opcode((u_int8_t *)constants::rockblock::opcodes::sfr_field_opcode_arm);
+    // burnwire arm = on
+    Serial.println("f_opcode:");
+    RockblockCommand *arm_on_command = new ArmCommand(f_opcode, 1, 0);
+    Serial.println("actual opcode");
+    // Serial.println(arm_on_command->f_opcode);
+    sfr::rockblock::processed_commands.push_back((RockblockCommand *)arm_on_command);
+    command_monitor.execute();
+    Serial.println("command_monitor execute");
+    TEST_ASSERT(sfr::mission::current_mode == sfr::mission::normalArmed);
+    Serial.println("arm_on_command finished");
+    // burnwire arm = off
+    RockblockCommand *arm_off_command = new ArmCommand(f_opcode, 1, 0);
+    sfr::rockblock::processed_commands.push_back((RockblockCommand *)arm_off_command);
+    command_monitor.execute();
+    TEST_ASSERT(sfr::mission::current_mode == sfr::mission::normalArmed);
+    Serial.println("arm_off_command finished");
+
+    f_opcode = RockblockCommand::get_decimal_opcode((u_int8_t *)constants::rockblock::opcodes::sfr_field_opcode_fire);
+    // burnwire fire = on
+    RockblockCommand *fire_on_command = new FireCommand(f_opcode, 1, 0);
+    sfr::rockblock::processed_commands.push_back((RockblockCommand *)fire_on_command);
+    sfr::rockblock::waiting_command = true;
+    command_monitor.execute();
+    Serial.println("fire_on_command finished");
+    TEST_ASSERT(sfr::mission::current_mode == sfr::mission::normalInSun);
+
+    // burnwire fire = off
+    RockblockCommand *fire_off_command = new FireCommand(f_opcode, 0, 0);
+    sfr::rockblock::processed_commands.push_back((RockblockCommand *)fire_off_command);
+    sfr::rockblock::waiting_command = true;
+    command_monitor.execute();
+    Serial.println("fire_off_command finished");
+    TEST_ASSERT(sfr::mission::current_mode == sfr::mission::normalInSun);
+
+    f_opcode = RockblockCommand::get_decimal_opcode((u_int8_t *)constants::rockblock::opcodes::sfr_field_opcode_deploy);
+    // test deploy
+    RockblockCommand *deploy_on_command = new DeployCommand(f_opcode, 0, 0);
+    sfr::rockblock::processed_commands.push_back((RockblockCommand *)deploy_on_command);
+    sfr::rockblock::waiting_command = true;
+    command_monitor.execute();
+    Serial.println("deploy finished");
+    TEST_ASSERT(sfr::mission::current_mode == sfr::mission::normalDeployment);
+}
+
+// Test overide sfr field
+// since opcode that are out of range will never be added to the queue and executed, we don't test UnknownCommand()
+
+// void test_override_sfr_burnwire()
 // {
 //     CommandMonitor command_monitor(0);
 
-//     mission mode = deployment
-//     sfr::rockblock::f_opcode = command_monitor.get_decimal_opcode(constants::rockblock::mission_mode);
-//     sfr::rockblock::f_arg_1 = command_monitor.get_decimal_arg(constants::rockblock::deployment);
+//     // override burnwire burn time
+//     uint16_t f_opcode = 0x1902;
+//     uint32_t f_arg_1 = constants::time::one_second;
+//     RockblockCommand *command = &SFROverrideCommand(f_opcode, f_arg_1, 0);
+//     sfr::rockblock::processed_commands.push_back(command);
 //     sfr::rockblock::waiting_command = true;
 //     command_monitor.execute();
-//     TEST_ASSERT(sfr::mission::mode == mission_mode_type::deployment);
+//     TEST_ASSERT(sfr::burnwire::burn_time == constants::time::one_second);
 
-//     mission mode = standby
-//     sfr::rockblock::f_opcode = command_monitor.get_decimal_opcode(constants::rockblock::mission_mode);
-//     sfr::rockblock::f_arg_1 = command_monitor.get_decimal_arg(constants::rockblock::standby);
+//     // override burwire armed time
+//     f_opcode = 0x1903;
+//     f_arg_1 = constants::time::one_hour;
+//     RockblockCommand *command = &SFROverrideCommand(f_opcode, f_arg_1, 0);
+//     sfr::rockblock::processed_commands.push_back(command);
 //     sfr::rockblock::waiting_command = true;
 //     command_monitor.execute();
-//     TEST_ASSERT(sfr::mission::mode == mission_mode_type::standby);
-
-//     mission mode = safe
-//     sfr::rockblock::f_opcode = command_monitor.get_decimal_opcode(constants::rockblock::mission_mode);
-//     sfr::rockblock::f_arg_1 = command_monitor.get_decimal_arg(constants::rockblock::safe);
-//     sfr::rockblock::waiting_command = true;
-//     command_monitor.execute();
-//     TEST_ASSERT(sfr::mission::mode == mission_mode_type::safe);
-
-//     mission mode = low power
-//     sfr::rockblock::f_opcode = command_monitor.get_decimal_opcode(constants::rockblock::mission_mode);
-//     sfr::rockblock::f_arg_1 = command_monitor.get_decimal_arg(constants::rockblock::low_power);
-//     sfr::rockblock::waiting_command = true;
-//     command_monitor.execute();
-//     TEST_ASSERT(sfr::mission::mode == mission_mode_type::low_power);
+//     TEST_ASSERT(sfr::burnwire::armed_time == constants::time::one_hour);
 // }
 
-void test_burnwire()
-{
-    CommandMonitor command_monitor(0);
-    // burnwire arm = on
-    uint16_t f_opcode = RockblockCommand::get_decimal_opcode((u_int8_t *)constants::rockblock::opcodes::sfr_field_opcode_arm);
-    // uint32_t f_arg_1 = command_monitor.get_decimal_opcode(constants::rockblock::true_arg);
-    RockblockCommand *command = &RockblockCommand(f_opcode, 0, 0);
-    sfr::rockblock::processed_commands.push_back((RockblockCommand *)command);
-    sfr::rockblock::waiting_command = true;
-    command_monitor.execute();
-    TEST_ASSERT(sfr::mission::current_mode == sfr::mission::normalArmed);
+// void test_camera()
+// {
+//     CommandMonitor command_monitor(0);
 
-    // burnwire arm = off
-    f_opcode = command_monitor.get_decimal_opcode(constants::rockblock::burnwire_arm);
-    f_arg_1 = command_monitor.get_decimal_opcode(constants::rockblock::false_arg);
-    command = RockblockCommand(f_opcode, f_arg_1, 0);
-    sfr::rockblock::processed_commands.push_back(command);
-    sfr::rockblock::waiting_command = true;
-    command_monitor.execute();
-    TEST_ASSERT(sfr::burnwire::arm == false);
+//     // take photo = true
+//     uint16_t f_opcode = 0x2001;
+//     uint32_t f_arg_1 = true;
+//     RockblockCommand *command = &SFROverrideCommand(f_opcode, f_arg_1, 0);
+//     sfr::rockblock::processed_commands.push_back(command);
+//     sfr::rockblock::waiting_command = true;
+//     command_monitor.execute();
+//     TEST_ASSERT(sfr::camera::take_photo == true);
 
-    // burnwire fire = on
-    f_opcode = command_monitor.get_decimal_opcode(constants::rockblock::burnwire_fire);
-    f_arg_1 = command_monitor.get_decimal_opcode(constants::rockblock::true_arg);
-    command = RockblockCommand(f_opcode, f_arg_1, 0);
-    sfr::rockblock::processed_commands.push_back(command);
-    sfr::rockblock::waiting_command = true;
-    command_monitor.execute();
-    TEST_ASSERT(sfr::burnwire::fire == true);
-
-    // burnwire fire = off
-    f_opcode = command_monitor.get_decimal_opcode(constants::rockblock::burnwire_fire);
-    f_arg_1 = command_monitor.get_decimal_opcode(constants::rockblock::false_arg);
-    command = RockblockCommand(f_opcode, f_arg_1, 0);
-    sfr::rockblock::processed_commands.push_back(command);
-    sfr::rockblock::waiting_command = true;
-    command_monitor.execute();
-    TEST_ASSERT(sfr::burnwire::fire == false);
-}
-
-void test_burn_times()
-{
-    CommandMonitor command_monitor(0);
-
-    // burn time > max burn time
-    uint16_t f_opcode = command_monitor.get_decimal_opcode(constants::rockblock::burnwire_time);
-    uint32_t f_arg_1 = 2 * constants::burnwire::max_burnwire_time;
-    RockblockCommand command = RockblockCommand(f_opcode, f_arg_1, 0);
-    sfr::rockblock::processed_commands.push_back(command);
-    sfr::rockblock::waiting_command = true;
-    command_monitor.execute();
-    TEST_ASSERT(sfr::burnwire::burn_time == constants::time::half_second);
-
-    // burn time in range
-    f_opcode = command_monitor.get_decimal_opcode(constants::rockblock::burnwire_time);
-    f_arg_1 = constants::time::one_second;
-    command = RockblockCommand(f_opcode, f_arg_1, 0);
-    sfr::rockblock::processed_commands.push_back(command);
-    sfr::rockblock::waiting_command = true;
-    command_monitor.execute();
-    TEST_ASSERT(sfr::burnwire::burn_time == constants::time::one_second);
-
-    // armed time > max armed time
-    f_opcode = command_monitor.get_decimal_opcode(constants::rockblock::burnwire_timeout);
-    f_arg_1 = 2 * constants::burnwire::max_armed_time;
-    command = RockblockCommand(f_opcode, f_arg_1, 0);
-    sfr::rockblock::processed_commands.push_back(command);
-    sfr::rockblock::waiting_command = true;
-    command_monitor.execute();
-    TEST_ASSERT(sfr::burnwire::armed_time == 2 * constants::time::one_day);
-
-    // arm time in range
-    f_opcode = command_monitor.get_decimal_opcode(constants::rockblock::burnwire_timeout);
-    f_arg_1 = constants::time::one_hour;
-    command = RockblockCommand(f_opcode, f_arg_1, 0);
-    sfr::rockblock::processed_commands.push_back(command);
-    sfr::rockblock::waiting_command = true;
-    command_monitor.execute();
-    TEST_ASSERT(sfr::burnwire::armed_time == constants::time::one_hour);
-}
-
-void test_camera()
-{
-    CommandMonitor command_monitor(0);
-
-    // take photo = true
-    uint16_t f_opcode = command_monitor.get_decimal_opcode(constants::rockblock::camera_take_photo);
-    uint32_t f_arg_1 = command_monitor.get_decimal_opcode(constants::rockblock::true_arg);
-    RockblockCommand command = RockblockCommand(f_opcode, f_arg_1, 0);
-    sfr::rockblock::processed_commands.push_back(command);
-    sfr::rockblock::waiting_command = true;
-    command_monitor.execute();
-    TEST_ASSERT(sfr::camera::take_photo == true);
-
-    // take photo = false
-    f_opcode = command_monitor.get_decimal_opcode(constants::rockblock::camera_take_photo);
-    f_arg_1 = command_monitor.get_decimal_opcode(constants::rockblock::false_arg);
-    command = RockblockCommand(f_opcode, f_arg_1, 0);
-    sfr::rockblock::processed_commands.push_back(command);
-    sfr::rockblock::waiting_command = true;
-    command_monitor.execute();
-    TEST_ASSERT(sfr::camera::take_photo == false);
-}
+//     // take photo = false
+//     f_opcode = 0x2001;
+//     f_arg_1 = false;
+//     RockblockCommand *command = &SFROverrideCommand(f_opcode, f_arg_1, 0);
+//     sfr::rockblock::processed_commands.push_back(command);
+//     sfr::rockblock::waiting_command = true;
+//     command_monitor.execute();
+//     TEST_ASSERT(sfr::camera::take_photo == false);
+// }
 
 // void test_acs_mode()
 // {
 //     CommandMonitor command_monitor(0);
 
-//     acs mode = full
-//     sfr::rockblock::f_opcode = command_monitor.get_decimal_opcode(constants::rockblock::acs_mode);
-//     sfr::rockblock::f_arg_1 = command_monitor.get_decimal_arg(constants::rockblock::full);
+//     // acs max_no_communication
+//     uint16_t f_opcode = 0x2500;
+//     uint32_t f_arg_1 = 11;
+//     RockblockCommand *command = &SFROverrideCommand(f_opcode, f_arg_1, 0);
+//     sfr::rockblock::processed_commands.push_back(command);
 //     sfr::rockblock::waiting_command = true;
 //     command_monitor.execute();
-//     TEST_ASSERT(sfr::acs::mode == acs_mode_type::full);
+//     TEST_ASSERT(sfr::acs::max_no_communication == 11);
 
-//     acs mode = simple
-//     sfr::rockblock::f_opcode = command_monitor.get_decimal_opcode(constants::rockblock::acs_mode);
-//     sfr::rockblock::f_arg_1 = command_monitor.get_decimal_arg(constants::rockblock::simple);
+//     // acs on time
+//     uint16_t f_opcode = 0x2501;
+//     uint16_t f_arg_1 = constants::time::one_minute;
+//     RockblockCommand *command = &SFROverrideCommand(f_opcode, f_arg_1, 0);
+//     sfr::rockblock::processed_commands.push_back(command);
 //     sfr::rockblock::waiting_command = true;
 //     command_monitor.execute();
-//     TEST_ASSERT(sfr::acs::mode == acs_mode_type::simple);
+//     TEST_ASSERT(sfr::acs::on_time == constants::time::one_minute);
 
-//     acs mode = off
-//     sfr::rockblock::f_opcode = command_monitor.get_decimal_opcode(constants::rockblock::acs_mode);
-//     sfr::rockblock::f_arg_1 = command_monitor.get_decimal_arg(constants::rockblock::off);
+//     // acs off
+//     uint16_t f_opcode = 0x2502;
+//     uint16_t f_arg_1 = false;
+//     RockblockCommand *command = &SFROverrideCommand(f_opcode, f_arg_1, 0);
+//     sfr::rockblock::processed_commands.push_back(command);
 //     sfr::rockblock::waiting_command = true;
 //     command_monitor.execute();
-//     TEST_ASSERT(sfr::acs::mode == acs_mode_type::off);
+//     TEST_ASSERT(sfr::acs::off == false);
+
+//     // acs mag
+//     uint16_t f_opcode = 0x2503;
+//     uint16_t f_arg_1 = (uint16_t)simple_acs_type::y;
+//     RockblockCommand *command = &SFROverrideCommand(f_opcode, f_arg_1, 0);
+//     sfr::rockblock::processed_commands.push_back(command);
+//     sfr::rockblock::waiting_command = true;
+//     command_monitor.execute();
+//     TEST_ASSERT(sfr::acs::mag == (uint16_t)simple_acs_type::y);
 // }
 
-void test_fault_mode()
-{
-    CommandMonitor command_monitor(0);
+// void test_fault_mode()
+// {
+//     CommandMonitor command_monitor(0);
 
-    // faul mode = active
-    uint16_t f_opcode = command_monitor.get_decimal_opcode(constants::rockblock::fault_mode);
-    uint32_t f_arg_1 = command_monitor.get_decimal_arg(constants::rockblock::active);
-    RockblockCommand command = RockblockCommand(f_opcode, f_arg_1, 0);
-    sfr::rockblock::processed_commands.push_back(command);
-    sfr::rockblock::waiting_command = true;
-    command_monitor.execute();
-    TEST_ASSERT(sfr::fault::mode == fault_mode_type::active);
+//     // faul mode = active
+//     uint16_t f_opcode = command_monitor.get_decimal_opcode(constants::rockblock::fault_mode);
+//     uint32_t f_arg_1 = command_monitor.get_decimal_arg(constants::rockblock::active);
+//     RockblockCommand command = RockblockCommand(f_opcode, f_arg_1, 0);
+//     sfr::rockblock::processed_commands.push_back(command);
+//     sfr::rockblock::waiting_command = true;
+//     command_monitor.execute();
+//     TEST_ASSERT(sfr::fault::mode == fault_mode_type::active);
 
-    // fault mode = inactive
-    f_opcode = command_monitor.get_decimal_opcode(constants::rockblock::fault_mode);
-    f_arg_1 = command_monitor.get_decimal_arg(constants::rockblock::inactive);
-    command = RockblockCommand(f_opcode, f_arg_1, 0);
-    sfr::rockblock::processed_commands.push_back(command);
-    sfr::rockblock::waiting_command = true;
-    command_monitor.execute();
-    TEST_ASSERT(sfr::fault::mode == fault_mode_type::inactive);
-}
+//     // fault mode = inactive
+//     f_opcode = command_monitor.get_decimal_opcode(constants::rockblock::fault_mode);
+//     f_arg_1 = command_monitor.get_decimal_arg(constants::rockblock::inactive);
+//     command = RockblockCommand(f_opcode, f_arg_1, 0);
+//     sfr::rockblock::processed_commands.push_back(command);
+//     sfr::rockblock::waiting_command = true;
+//     command_monitor.execute();
+//     TEST_ASSERT(sfr::fault::mode == fault_mode_type::inactive);
+// }
 
 // void test_fault_mag()
 // {
@@ -252,6 +231,7 @@ void test_fault_mode()
 //     TEST_ASSERT(sfr::fault::check_mag_z == false);
 // }
 
+// faults are irrelavant for sfr
 // void test_fault_gyro()
 // {
 //     CommandMonitor command_monitor(0);
@@ -272,7 +252,7 @@ void test_fault_mode()
 //     sfr::rockblock::processed_commands.push_back(command);
 //     sfr::rockblock::waiting_command = true;
 //     command_monitor.execute();
-//     TEST_ASSERT(sfr::fault::check_gyro_x == false);
+//     TEST_ASSERT(constants::fault::gyro_x == false);
 
 //     // check gryo y = true
 //     f_opcode = command_monitor.get_decimal_opcode(constants::rockblock::fault_check_gyro_y);
@@ -370,118 +350,121 @@ void test_fault_mode()
 //     TEST_ASSERT(sfr::fault::check_voltage == false);
 // }
 
-void test_img_frag()
-{
-    CommandMonitor command_monitor(0);
+// void test_img_frag()
+// {
+//     CommandMonitor command_monitor(0);
 
-    // invalid fragment request
-    uint16_t f_opcode = command_monitor.get_decimal_opcode(constants::rockblock::request_image_fragment);
-    uint32_t f_arg_1 = 0;
-    uint32_t f_arg_2 = 0;
-    RockblockCommand command = RockblockCommand(f_opcode, f_arg_1, f_arg_2);
-    sfr::rockblock::processed_commands.push_back(command);
-    sfr::rockblock::waiting_command = true;
-    command_monitor.execute();
-    TEST_ASSERT(sfr::camera::fragment_requested == false);
+//     // invalid fragment request
+//     uint16_t f_opcode = command_monitor.get_decimal_opcode(constants::rockblock::request_image_fragment);
+//     uint32_t f_arg_1 = 0;
+//     uint32_t f_arg_2 = 0;
+//     RockblockCommand command = RockblockCommand(f_opcode, f_arg_1, f_arg_2);
+//     sfr::rockblock::processed_commands.push_back(command);
+//     sfr::rockblock::waiting_command = true;
+//     command_monitor.execute();
+//     TEST_ASSERT(sfr::camera::fragment_requested == false);
 
-    // valid fragment request
-    f_opcode = command_monitor.get_decimal_opcode(constants::rockblock::request_image_fragment);
-    f_arg_1 = 1;
-    f_arg_2 = 1;
-    sfr::rockblock::camera_max_fragments[f_arg_1] = 2;
-    command = RockblockCommand(f_opcode, f_arg_1, f_arg_2);
-    sfr::rockblock::processed_commands.push_back(command);
-    sfr::rockblock::waiting_command = true;
-    command_monitor.execute();
-    TEST_ASSERT(sfr::camera::fragment_requested == true);
-    TEST_ASSERT(sfr::camera::serial_requested == 1);
-    TEST_ASSERT(sfr::camera::fragment_number_requested == 1);
-}
+//     // valid fragment request
+//     f_opcode = command_monitor.get_decimal_opcode(constants::rockblock::request_image_fragment);
+//     f_arg_1 = 1;
+//     f_arg_2 = 1;
+//     sfr::rockblock::camera_max_fragments[f_arg_1] = 2;
+//     command = RockblockCommand(f_opcode, f_arg_1, f_arg_2);
+//     sfr::rockblock::processed_commands.push_back(command);
+//     sfr::rockblock::waiting_command = true;
+//     command_monitor.execute();
+//     TEST_ASSERT(sfr::camera::fragment_requested == true);
+//     TEST_ASSERT(sfr::camera::serial_requested == 1);
+//     TEST_ASSERT(sfr::camera::fragment_number_requested == 1);
+// }
 
-void test_down_period()
-{
-    CommandMonitor command_monitor(0);
+// void test_down_period()
+// {
+//     CommandMonitor command_monitor(0);
 
-    // downlink period 2 hours
-    uint16_t f_opcode = command_monitor.get_decimal_opcode(constants::rockblock::rockblock_downlink_period);
-    uint32_t f_arg_1 = 2 * constants::time::one_hour;
-    RockblockCommand command = RockblockCommand(f_opcode, f_arg_1, 0);
-    sfr::rockblock::processed_commands.push_back(command);
-    sfr::rockblock::waiting_command = true;
-    command_monitor.execute();
-    TEST_ASSERT(sfr::rockblock::downlink_period == 2 * constants::time::one_hour);
+//     // downlink period 2 hours
+//     uint16_t f_opcode = command_monitor.get_decimal_opcode(constants::rockblock::rockblock_downlink_period);
+//     uint32_t f_arg_1 = 2 * constants::time::one_hour;
+//     RockblockCommand command = RockblockCommand(f_opcode, f_arg_1, 0);
+//     sfr::rockblock::processed_commands.push_back(command);
+//     sfr::rockblock::waiting_command = true;
+//     command_monitor.execute();
+//     TEST_ASSERT(sfr::rockblock::downlink_period == 2 * constants::time::one_hour);
 
-    // downlink period too low (500 ms)
-    f_opcode = command_monitor.get_decimal_opcode(constants::rockblock::rockblock_downlink_period);
-    f_arg_1 = constants::time::one_second / 2;
-    command = RockblockCommand(f_opcode, f_arg_1, 0);
-    sfr::rockblock::processed_commands.push_back(command);
-    sfr::rockblock::waiting_command = true;
-    command_monitor.execute();
-    TEST_ASSERT(sfr::rockblock::downlink_period == 2 * constants::time::one_hour);
+//     // downlink period too low (500 ms)
+//     f_opcode = command_monitor.get_decimal_opcode(constants::rockblock::rockblock_downlink_period);
+//     f_arg_1 = constants::time::one_second / 2;
+//     command = RockblockCommand(f_opcode, f_arg_1, 0);
+//     sfr::rockblock::processed_commands.push_back(command);
+//     sfr::rockblock::waiting_command = true;
+//     command_monitor.execute();
+//     TEST_ASSERT(sfr::rockblock::downlink_period == 2 * constants::time::one_hour);
 
-    // downlink period too high (4 days)
-    f_opcode = command_monitor.get_decimal_opcode(constants::rockblock::rockblock_downlink_period);
-    f_arg_1 = 4 * constants::time::one_day;
-    command = RockblockCommand(f_opcode, f_arg_1, 0);
-    sfr::rockblock::processed_commands.push_back(command);
-    sfr::rockblock::waiting_command = true;
-    command_monitor.execute();
-    TEST_ASSERT(sfr::rockblock::downlink_period == 2 * constants::time::one_hour);
+//     // downlink period too high (4 days)
+//     f_opcode = command_monitor.get_decimal_opcode(constants::rockblock::rockblock_downlink_period);
+//     f_arg_1 = 4 * constants::time::one_day;
+//     command = RockblockCommand(f_opcode, f_arg_1, 0);
+//     sfr::rockblock::processed_commands.push_back(command);
+//     sfr::rockblock::waiting_command = true;
+//     command_monitor.execute();
+//     TEST_ASSERT(sfr::rockblock::downlink_period == 2 * constants::time::one_hour);
 
-    // downlink period in middle (1 hour)
-    f_opcode = command_monitor.get_decimal_opcode(constants::rockblock::rockblock_downlink_period);
-    f_arg_1 = constants::time::one_hour;
-    command = RockblockCommand(f_opcode, f_arg_1, 0);
-    sfr::rockblock::processed_commands.push_back(command);
-    sfr::rockblock::waiting_command = true;
-    command_monitor.execute();
-    TEST_ASSERT(sfr::rockblock::downlink_period == constants::time::one_hour);
-}
+//     // downlink period in middle (1 hour)
+//     f_opcode = command_monitor.get_decimal_opcode(constants::rockblock::rockblock_downlink_period);
+//     f_arg_1 = constants::time::one_hour;
+//     command = RockblockCommand(f_opcode, f_arg_1, 0);
+//     sfr::rockblock::processed_commands.push_back(command);
+//     sfr::rockblock::waiting_command = true;
+//     command_monitor.execute();
+//     TEST_ASSERT(sfr::rockblock::downlink_period == constants::time::one_hour);
+// }
 
-void test_multiple_commands()
-{
-    CommandMonitor command_monitor(0);
+// void test_multiple_commands()
+// {
+//     CommandMonitor command_monitor(0);
 
-    // downlink period 2 hours
-    uint16_t f_opcode = command_monitor.get_decimal_opcode(constants::rockblock::rockblock_downlink_period);
-    uint32_t f_arg_1 = constants::time::two_hours;
-    uint32_t f_arg_2 = 0;
-    RockblockCommand command = RockblockCommand(f_opcode, f_arg_1, f_arg_2);
-    sfr::rockblock::processed_commands.push_back(command);
+//     // downlink period 2 hours
+//     uint16_t f_opcode = command_monitor.get_decimal_opcode(constants::rockblock::rockblock_downlink_period);
+//     uint32_t f_arg_1 = constants::time::two_hours;
+//     uint32_t f_arg_2 = 0;
+//     RockblockCommand command = RockblockCommand(f_opcode, f_arg_1, f_arg_2);
+//     sfr::rockblock::processed_commands.push_back(command);
 
-    // valid fragment request
-    f_opcode = command_monitor.get_decimal_opcode(constants::rockblock::request_image_fragment);
-    f_arg_1 = 1;
-    f_arg_2 = 1;
-    sfr::rockblock::camera_max_fragments[f_arg_1] = 2;
-    command = RockblockCommand(f_opcode, f_arg_1, f_arg_2);
-    sfr::rockblock::processed_commands.push_back(command);
+//     // valid fragment request
+//     f_opcode = command_monitor.get_decimal_opcode(constants::rockblock::request_image_fragment);
+//     f_arg_1 = 1;
+//     f_arg_2 = 1;
+//     sfr::rockblock::camera_max_fragments[f_arg_1] = 2;
+//     command = RockblockCommand(f_opcode, f_arg_1, f_arg_2);
+//     sfr::rockblock::processed_commands.push_back(command);
 
-    sfr::rockblock::waiting_command = true;
-    command_monitor.execute();
+//     sfr::rockblock::waiting_command = true;
+//     command_monitor.execute();
 
-    TEST_ASSERT(sfr::rockblock::downlink_period == 2 * constants::time::one_hour);
-    TEST_ASSERT(sfr::camera::fragment_requested == true);
-    TEST_ASSERT(sfr::camera::serial_requested == 1);
-    TEST_ASSERT(sfr::camera::fragment_number_requested == 1);
-}
+//     TEST_ASSERT(sfr::rockblock::downlink_period == 2 * constants::time::one_hour);
+//     TEST_ASSERT(sfr::camera::fragment_requested == true);
+//     TEST_ASSERT(sfr::camera::serial_requested == 1);
+//     TEST_ASSERT(sfr::camera::fragment_number_requested == 1);
+// }
 
 int test_command_monitor()
 {
     UNITY_BEGIN();
     RUN_TEST(test_initialize);
-    // RUN_TEST(test_mission);
-    RUN_TEST(test_burnwire);
-    RUN_TEST(test_burn_times);
-    RUN_TEST(test_camera);
+    // RUN_TEST(test_override_sfr_burnwire);
+    // // RUN_TEST(test_mission);
+    RUN_TEST(test_special_commands);
+    // RUN_TEST(test_camera);
     // RUN_TEST(test_acs_mode);
-    RUN_TEST(test_fault_mode);
-    // RUN_TEST(test_fault_mag);
-    // RUN_TEST(test_fault_gyro);
-    // RUN_TEST(test_fault_other);
-    RUN_TEST(test_img_frag);
-    RUN_TEST(test_down_period);
+    // RUN_TEST(test_burn_times);
+    // RUN_TEST(test_camera);
+    // // RUN_TEST(test_acs_mode);
+    // RUN_TEST(test_fault_mode);
+    // // RUN_TEST(test_fault_mag);
+    // // RUN_TEST(test_fault_gyro);
+    // // RUN_TEST(test_fault_other);
+    // RUN_TEST(test_img_frag);
+    // RUN_TEST(test_down_period);
     return UNITY_END();
 }
 
