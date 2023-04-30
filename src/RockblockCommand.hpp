@@ -80,6 +80,13 @@ public:
         }
     };
 
+    SFROverrideCommand(uint16_t f_opcode, uint32_t arg_1, uint32_t arg_2) : RockblockCommand(f_opcode, arg_1, arg_2)
+    {
+        if (SFRInterface::opcode_lookup.find(f_opcode) != SFRInterface::opcode_lookup.end()) {
+            field = SFRInterface::opcode_lookup[f_opcode];
+        }
+    };
+
     void execute()
     {
         if (field) {
