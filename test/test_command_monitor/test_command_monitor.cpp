@@ -13,24 +13,17 @@ void test_special_commands()
     CommandMonitor command_monitor(0);
     sfr::rockblock::waiting_command = true;
 
-    Serial.println("run test");
     uint16_t f_opcode = RockblockCommand::get_decimal_opcode((u_int8_t *)constants::rockblock::opcodes::sfr_field_opcode_arm);
     // burnwire arm = on
-    Serial.println("f_opcode:");
     RockblockCommand *arm_on_command = new ArmCommand(f_opcode, 1, 0);
-    Serial.println("actual opcode");
-    // Serial.println(arm_on_command->f_opcode);
     sfr::rockblock::processed_commands.push_back((RockblockCommand *)arm_on_command);
     command_monitor.execute();
-    Serial.println("command_monitor execute");
     TEST_ASSERT(sfr::mission::current_mode == sfr::mission::normalArmed);
-    Serial.println("arm_on_command finished");
     // burnwire arm = off
     RockblockCommand *arm_off_command = new ArmCommand(f_opcode, 1, 0);
     sfr::rockblock::processed_commands.push_back((RockblockCommand *)arm_off_command);
     command_monitor.execute();
     TEST_ASSERT(sfr::mission::current_mode == sfr::mission::normalArmed);
-    Serial.println("arm_off_command finished");
 
     f_opcode = RockblockCommand::get_decimal_opcode((u_int8_t *)constants::rockblock::opcodes::sfr_field_opcode_fire);
     // burnwire fire = on
@@ -38,7 +31,6 @@ void test_special_commands()
     sfr::rockblock::processed_commands.push_back((RockblockCommand *)fire_on_command);
     sfr::rockblock::waiting_command = true;
     command_monitor.execute();
-    Serial.println("fire_on_command finished");
     TEST_ASSERT(sfr::mission::current_mode == sfr::mission::normalInSun);
 
     // burnwire fire = off
@@ -46,7 +38,6 @@ void test_special_commands()
     sfr::rockblock::processed_commands.push_back((RockblockCommand *)fire_off_command);
     sfr::rockblock::waiting_command = true;
     command_monitor.execute();
-    Serial.println("fire_off_command finished");
     TEST_ASSERT(sfr::mission::current_mode == sfr::mission::normalInSun);
 
     f_opcode = RockblockCommand::get_decimal_opcode((u_int8_t *)constants::rockblock::opcodes::sfr_field_opcode_deploy);
@@ -55,99 +46,98 @@ void test_special_commands()
     sfr::rockblock::processed_commands.push_back((RockblockCommand *)deploy_on_command);
     sfr::rockblock::waiting_command = true;
     command_monitor.execute();
-    Serial.println("deploy finished");
     TEST_ASSERT(sfr::mission::current_mode == sfr::mission::normalDeployment);
 }
 
 // Test overide sfr field
 // since opcode that are out of range will never be added to the queue and executed, we don't test UnknownCommand()
 
-// void test_override_sfr_burnwire()
-// {
-//     CommandMonitor command_monitor(0);
+void test_override_sfr_burnwire()
+{
+    CommandMonitor command_monitor(0);
 
-//     // override burnwire burn time
-//     uint16_t f_opcode = 0x1902;
-//     uint32_t f_arg_1 = constants::time::one_second;
-//     RockblockCommand *command = &SFROverrideCommand(f_opcode, f_arg_1, 0);
-//     sfr::rockblock::processed_commands.push_back(command);
-//     sfr::rockblock::waiting_command = true;
-//     command_monitor.execute();
-//     TEST_ASSERT(sfr::burnwire::burn_time == constants::time::one_second);
+    // override burnwire burn time
+    uint16_t f_opcode = 0x1902;
+    uint32_t f_arg_1 = constants::time::one_second;
+    RockblockCommand *short_command = new SFROverrideCommand(f_opcode, f_arg_1, 0);
+    sfr::rockblock::processed_commands.push_back(short_command);
+    sfr::rockblock::waiting_command = true;
+    command_monitor.execute();
+    TEST_ASSERT(sfr::burnwire::burn_time == constants::time::one_second);
 
-//     // override burwire armed time
-//     f_opcode = 0x1903;
-//     f_arg_1 = constants::time::one_hour;
-//     RockblockCommand *command = &SFROverrideCommand(f_opcode, f_arg_1, 0);
-//     sfr::rockblock::processed_commands.push_back(command);
-//     sfr::rockblock::waiting_command = true;
-//     command_monitor.execute();
-//     TEST_ASSERT(sfr::burnwire::armed_time == constants::time::one_hour);
-// }
+    // override burwire armed time
+    f_opcode = 0x1903;
+    f_arg_1 = constants::time::one_hour;
+    RockblockCommand *long_command = new SFROverrideCommand(f_opcode, f_arg_1, 0);
+    sfr::rockblock::processed_commands.push_back(long_command);
+    sfr::rockblock::waiting_command = true;
+    command_monitor.execute();
+    TEST_ASSERT(sfr::burnwire::armed_time == constants::time::one_hour);
+}
 
-// void test_camera()
-// {
-//     CommandMonitor command_monitor(0);
+void test_camera()
+{
+    CommandMonitor command_monitor(0);
 
-//     // take photo = true
-//     uint16_t f_opcode = 0x2001;
-//     uint32_t f_arg_1 = true;
-//     RockblockCommand *command = &SFROverrideCommand(f_opcode, f_arg_1, 0);
-//     sfr::rockblock::processed_commands.push_back(command);
-//     sfr::rockblock::waiting_command = true;
-//     command_monitor.execute();
-//     TEST_ASSERT(sfr::camera::take_photo == true);
+    // take photo = true
+    uint16_t f_opcode = 0x2001;
+    uint32_t f_arg_1 = true;
+    RockblockCommand *true_command = new SFROverrideCommand(f_opcode, f_arg_1, 0);
+    sfr::rockblock::processed_commands.push_back(true_command);
+    sfr::rockblock::waiting_command = true;
+    command_monitor.execute();
+    TEST_ASSERT(sfr::camera::take_photo == true);
 
-//     // take photo = false
-//     f_opcode = 0x2001;
-//     f_arg_1 = false;
-//     RockblockCommand *command = &SFROverrideCommand(f_opcode, f_arg_1, 0);
-//     sfr::rockblock::processed_commands.push_back(command);
-//     sfr::rockblock::waiting_command = true;
-//     command_monitor.execute();
-//     TEST_ASSERT(sfr::camera::take_photo == false);
-// }
+    // take photo = false
+    f_opcode = 0x2001;
+    f_arg_1 = false;
+    RockblockCommand *false_command = new SFROverrideCommand(f_opcode, f_arg_1, 0);
+    sfr::rockblock::processed_commands.push_back(false_command);
+    sfr::rockblock::waiting_command = true;
+    command_monitor.execute();
+    TEST_ASSERT(sfr::camera::take_photo == false);
+}
 
-// void test_acs_mode()
-// {
-//     CommandMonitor command_monitor(0);
+void test_acs_mode()
+{
+    CommandMonitor command_monitor(0);
 
-//     // acs max_no_communication
-//     uint16_t f_opcode = 0x2500;
-//     uint32_t f_arg_1 = 11;
-//     RockblockCommand *command = &SFROverrideCommand(f_opcode, f_arg_1, 0);
-//     sfr::rockblock::processed_commands.push_back(command);
-//     sfr::rockblock::waiting_command = true;
-//     command_monitor.execute();
-//     TEST_ASSERT(sfr::acs::max_no_communication == 11);
+    // acs max_no_communication
+    uint16_t f_opcode = 0x2500;
+    uint32_t f_arg_1 = 11;
+    RockblockCommand *max_no_communication_command = new SFROverrideCommand(f_opcode, f_arg_1, 0);
+    sfr::rockblock::processed_commands.push_back(max_no_communication_command);
+    sfr::rockblock::waiting_command = true;
+    command_monitor.execute();
+    TEST_ASSERT(sfr::acs::max_no_communication == 11);
 
-//     // acs on time
-//     uint16_t f_opcode = 0x2501;
-//     uint16_t f_arg_1 = constants::time::one_minute;
-//     RockblockCommand *command = &SFROverrideCommand(f_opcode, f_arg_1, 0);
-//     sfr::rockblock::processed_commands.push_back(command);
-//     sfr::rockblock::waiting_command = true;
-//     command_monitor.execute();
-//     TEST_ASSERT(sfr::acs::on_time == constants::time::one_minute);
+    // acs on time
+    f_opcode = 0x2501;
+    uint32_t f_arg_time = constants::time::one_minute;
+    RockblockCommand *on_time_command = new SFROverrideCommand(f_opcode, f_arg_time, 0);
+    sfr::rockblock::processed_commands.push_back(on_time_command);
+    sfr::rockblock::waiting_command = true;
+    command_monitor.execute();
+    TEST_ASSERT(sfr::acs::on_time == constants::time::one_minute);
 
-//     // acs off
-//     uint16_t f_opcode = 0x2502;
-//     uint16_t f_arg_1 = false;
-//     RockblockCommand *command = &SFROverrideCommand(f_opcode, f_arg_1, 0);
-//     sfr::rockblock::processed_commands.push_back(command);
-//     sfr::rockblock::waiting_command = true;
-//     command_monitor.execute();
-//     TEST_ASSERT(sfr::acs::off == false);
+    // acs off
+    f_opcode = 0x2502;
+    uint32_t f_arg_false = false;
+    RockblockCommand *off_command = new SFROverrideCommand(f_opcode, f_arg_false, 0);
+    sfr::rockblock::processed_commands.push_back(off_command);
+    sfr::rockblock::waiting_command = true;
+    command_monitor.execute();
+    TEST_ASSERT(sfr::acs::off == false);
 
-//     // acs mag
-//     uint16_t f_opcode = 0x2503;
-//     uint16_t f_arg_1 = (uint16_t)simple_acs_type::y;
-//     RockblockCommand *command = &SFROverrideCommand(f_opcode, f_arg_1, 0);
-//     sfr::rockblock::processed_commands.push_back(command);
-//     sfr::rockblock::waiting_command = true;
-//     command_monitor.execute();
-//     TEST_ASSERT(sfr::acs::mag == (uint16_t)simple_acs_type::y);
-// }
+    // acs mag
+    f_opcode = 0x2503;
+    uint32_t f_arg_acs = (uint16_t)simple_acs_type::y;
+    RockblockCommand *mag_command = new SFROverrideCommand(f_opcode, f_arg_acs, 0);
+    sfr::rockblock::processed_commands.push_back(mag_command);
+    sfr::rockblock::waiting_command = true;
+    command_monitor.execute();
+    TEST_ASSERT(sfr::acs::mag == (uint16_t)simple_acs_type::y);
+}
 
 // void test_fault_mode()
 // {
@@ -451,11 +441,11 @@ int test_command_monitor()
 {
     UNITY_BEGIN();
     RUN_TEST(test_initialize);
-    // RUN_TEST(test_override_sfr_burnwire);
+    RUN_TEST(test_override_sfr_burnwire);
     // // RUN_TEST(test_mission);
     RUN_TEST(test_special_commands);
-    // RUN_TEST(test_camera);
-    // RUN_TEST(test_acs_mode);
+    RUN_TEST(test_camera);
+    RUN_TEST(test_acs_mode);
     // RUN_TEST(test_burn_times);
     // RUN_TEST(test_camera);
     // // RUN_TEST(test_acs_mode);
