@@ -13,7 +13,7 @@ void setup()
     Serial.begin(9600);
     delay(5000);
     Pins::setInitialPinStates();
-    EEPROMRestore::execute();
+    // EEPROMRestore::execute();
 }
 
 void loop()
