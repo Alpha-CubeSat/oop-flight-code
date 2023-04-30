@@ -4,7 +4,7 @@ class DeployCommand : public RockblockCommand
 {
 public:
     DeployCommand(RawRockblockCommand raw) : RockblockCommand{raw} {};
-
+    DeployCommand(uint16_t f_opcode, uint32_t arg_1, uint32_t arg_2) : RockblockCommand(f_opcode, arg_1, arg_2){};
     void execute()
     {
         sfr::mission::current_mode = sfr::mission::normalDeployment;
@@ -20,6 +20,7 @@ class ArmCommand : public RockblockCommand
 {
 public:
     ArmCommand(RawRockblockCommand raw) : RockblockCommand{raw} {};
+    ArmCommand(uint16_t f_opcode, uint32_t arg_1, uint32_t arg_2) : RockblockCommand(f_opcode, arg_1, arg_2){};
 
     void execute()
     {
@@ -36,6 +37,7 @@ class FireCommand : public RockblockCommand
 {
 public:
     FireCommand(RawRockblockCommand raw) : RockblockCommand{raw} {};
+    FireCommand(uint16_t f_opcode, uint32_t arg_1, uint32_t arg_2) : RockblockCommand(f_opcode, arg_1, arg_2){};
 
     void execute()
     {
