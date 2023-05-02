@@ -3,6 +3,7 @@
 
 void test_transition_to_normal_init()
 {
+    // tests the imu will transition to normal state correctly
     IMUMonitor imu_monitor(0);
     sfr::imu::turn_on = true;
     sfr::imu::powered = false;
@@ -52,6 +53,7 @@ void test_transition_to_abnormal_init()
 
 void test_turn_off()
 {
+    // Test the imu turns off correctly
     IMUMonitor imu_monitor(0);
     sfr::imu::turn_off = true;
     sfr::imu::powered = true;
