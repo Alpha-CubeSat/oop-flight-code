@@ -6,8 +6,6 @@ void test_transition_to_normal_init()
     IMUMonitor imu_monitor(0);
     sfr::imu::turn_on = true;
     sfr::imu::powered = false;
-    // sfr::imu::failed_times = 0;
-    // sfr::imu::failed_limit = 1;
     sfr::imu::init_mode = (uint16_t)sensor_init_mode_type::complete;
     imu_monitor.execute();
     TEST_ASSERT_EQUAL((uint16_t)sensor_mode_type::normal, sfr::imu::mode);
