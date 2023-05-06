@@ -165,7 +165,16 @@ namespace constants {
         constexpr int CSM = 20;
 
         constexpr int max_gyro_imu_report_size = 66;
-    } // namespace imu
+        constexpr int bootIMU_min_run_time = 20000;          // 20 seconds before transition to bootCamera.
+        constexpr int after_door_opens_min_run_time = 10000; // 10 seconds after the door opens
+    }                                                        // namespace imu
+
+    namespace imu_downlink {
+        // Note this is how much data correlates to 30 seconds
+        constexpr int downlink_FIFO_byte_length = 462;
+        constexpr uint8_t imu_report_endflag1 = 0xFE;
+        constexpr uint8_t imu_report_endflag2 = 0x92;
+    } // namespace imu_downlink
     namespace timecontrol {
         // Environment-based initializations of the control loop time.
         // control_cycle_time is the value actually used for timing. The
@@ -301,10 +310,10 @@ namespace constants {
         static constexpr unsigned int acs_on_time_offset = acs_max_no_communication_offset + 5;
         static constexpr unsigned int acs_off_offset = acs_on_time_offset + 5;
         static constexpr unsigned int acs_mag_offset = acs_off_offset + 2;
+        static constexpr unsigned int acs_detumble_timeout_offset = acs_mag_offset + 3;
 
-        static constexpr unsigned int battery_acceptable_battery_offset = acs_mag_offset + 3;
+        static constexpr unsigned int battery_acceptable_battery_offset = acs_detumble_timeout_offset + 5;
         static constexpr unsigned int battery_min_battery_offset = battery_acceptable_battery_offset + 5;
-
         static constexpr unsigned int button_pressed_offset = battery_min_battery_offset + 5;
 
         static constexpr unsigned int eeprom_boot_count_offset = button_pressed_offset + 2;

@@ -69,7 +69,7 @@ bool SensorReading::get_value(float *value_location)
         *value_location = average;
         return 1;
     } else {
-        return -1;
+        return 0;
     }
 }
 
@@ -132,7 +132,15 @@ bool SensorReading::repeated_values(std::deque<float> *buffer, float val)
         return false;
     }
 
-    for (int i = 0; i < constants::sensor::repeats - 1; i++) {
+    int min_loop_max;
+
+    if (buffer->size() > constants::sensor::repeats) {
+        min_loop_max = constants::sensor::repeats;
+    } else {
+        min_loop_max = buffer->size();
+    }
+
+    for (int i = 0; i < min_loop_max; i++) {
         if (buffer->at(i) != val) {
             buffer->push_front(val);
             return false;

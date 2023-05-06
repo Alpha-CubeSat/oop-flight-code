@@ -89,5 +89,8 @@ void CameraReportMonitor::create_camera_report(int fragment_number, uint8_t seri
     for (int i = 0; i < constants::camera::content_length; i++) {
         sfr::rockblock::camera_report.push_back(parsedbuffer[i]);
     }
+#ifdef E2E_TESTNG
+    Serial.println("Camera report ready");
+#endif
     sfr::camera::report_ready = true;
 }

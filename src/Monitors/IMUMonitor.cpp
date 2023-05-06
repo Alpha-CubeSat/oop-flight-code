@@ -25,19 +25,32 @@ void IMUMonitor::IMU_init()
             imu.setupAccel(imu.LSM9DS1_ACCELRANGE_2G);
             imu.setupMag(imu.LSM9DS1_MAGGAIN_4GAUSS);
             imu.setupGyro(imu.LSM9DS1_GYROSCALE_245DPS);
+            // get the start time for the collection of data
+            sfr::imu::imu_boot_collection_start_time = millis();
+            sfr::imu::sample_gyro = true;
         }
     }
 }
 
 void IMUMonitor::execute()
 {
+    // handle latent turn on / turn off variables
+    if (sfr::imu::turn_off == true && sfr::imu::powered == false) {
+        sfr::imu::turn_off = false;
+    }
+    if (sfr::imu::turn_on == true && sfr::imu::powered == true) {
+        sfr::imu::turn_on = false;
+    }
+
     if (sfr::imu::turn_on == true && sfr::imu::powered == false) {
 #ifdef VERBOSE
-        Serial.println("turned on IMU");
+        Serial.println("Turned on IMU");
 #endif
         IMUMonitor::IMU_init();
         if (sfr::imu::init_mode == (uint16_t)sensor_init_mode_type::complete) {
+            sfr::imu::turn_on = false;
             transition_to_normal();
+            sfr::imu::powered = true;
         } else {
             if (sfr::imu::failed_times == sfr::imu::failed_limit) {
                 sfr::imu::failed_times = 0; // reset

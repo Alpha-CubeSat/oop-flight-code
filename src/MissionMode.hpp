@@ -287,7 +287,7 @@ public:
     }
 };
 
-class BootCamera : public MissionMode
+class BootIMU : public MissionMode
 {
 public:
     void transition_to();
@@ -302,7 +302,7 @@ public:
     }
 };
 
-class MandatoryBurns : public MissionMode
+class BootCamera : public MissionMode
 {
 public:
     void transition_to();
@@ -313,11 +313,11 @@ public:
     }
     mode_type get_type()
     {
-        return mode_type::BURN;
+        return mode_type::OTHER;
     }
 };
 
-class RegularBurns : public MissionMode
+class MandatoryBurns : public MissionMode
 {
 public:
     void transition_to();
@@ -332,7 +332,7 @@ public:
     }
 };
 
-class Photo : public MissionMode
+class RegularBurns : public MissionMode
 {
 public:
     void transition_to();
@@ -340,6 +340,21 @@ public:
     int get_id()
     {
         return 21;
+    }
+    mode_type get_type()
+    {
+        return mode_type::BURN;
+    }
+};
+
+class Photo : public MissionMode
+{
+public:
+    void transition_to();
+    void dispatch();
+    int get_id()
+    {
+        return 22;
     }
     mode_type get_type()
     {
