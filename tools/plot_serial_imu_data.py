@@ -24,12 +24,18 @@
     Run the MCL and log the Serial Monitor using PuTTY.
     Instructions are here: https://www.eye4software.com/hydromagic/documentation/articles-and-howtos/serial-port-logging/
 
-    Finally, run this file (type [python plot_serial_imu_data.py] into terminal) to see the plots
+    Update this file to include the correct log file name if it is different from the "putty.log" default.
+
+    Finally, run this file (type [python plot_serial_imu_data.py] into terminal) to see the plots.
 """
 import matplotlib.pyplot as plt
+import os
 
 if __name__ == "__main__":
-    with open(r"C:\Users\Pawn1st\oop-flight-code\tools\putty.log", 'r', encoding='utf-8') as file:
+
+    dirname = os.path.dirname(os.path.abspath(__file__))
+    filename = "putty.log"  # CHANGE ME IF NECESSARY
+    with open(dirname + "/" + filename, 'r', encoding='utf-8') as file:
         data = file.readlines()
 
     file.close()
@@ -47,9 +53,20 @@ if __name__ == "__main__":
             gyro_z_values.append(float(line_array[5]))
             time_values.append(float(line_array[7]))
 
-    plt.plot(time_values, gyro_x_values, label = "Gyro X")
-    plt.plot(time_values, gyro_y_values, label = "Gyro Y")
-    plt.plot(time_values, gyro_z_values, label = "Gyro Z")
+    print(len(gyro_x_values))
+
+    plt.plot(time_values, gyro_x_values, label="Gyro X")
+    plt.plot(time_values, gyro_y_values, label="Gyro Y")
+    plt.plot(time_values, gyro_z_values, label="Gyro Z")
+    plt.title('IMU Gyroscope Values vs Time')
+    plt.xlabel('Time (ms)')
+    plt.ylabel('Gyroscope Values')
+    plt.legend()
+    plt.show()
+
+    plt.plot(time_values, gyro_x_values, label="Gyro X")
+    plt.plot(time_values, gyro_y_values, label="Gyro Y")
+    plt.plot(time_values, gyro_z_values, label="Gyro Z")
     plt.title('IMU Gyroscope Values vs Time')
     plt.xlabel('Time (ms)')
     plt.ylabel('Gyroscope Values')

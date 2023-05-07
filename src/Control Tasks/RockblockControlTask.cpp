@@ -10,6 +10,10 @@ RockblockControlTask::RockblockControlTask(unsigned int offset)
 void RockblockControlTask::execute()
 {
     rockblock_mode_type mode = static_cast<rockblock_mode_type>(sfr::rockblock::mode.get());
+#ifdef E2E_TESTING
+    Serial.print("Mission Mode: ");
+    Serial.println(sfr::mission::current_mode->get_id());
+#endif
     switch (mode) {
     case rockblock_mode_type::standby:
         dispatch_standby();
@@ -441,6 +445,7 @@ void RockblockControlTask::dispatch_process_command()
             } else {
                 // Invalid Command Recieved
                 // TODO: What Goes Here @Lauren
+                Serial.println("SAT INFO: invalid command");
             }
         }
 
@@ -488,7 +493,6 @@ void RockblockControlTask::dispatch_await_flush()
 
 void RockblockControlTask::dispatch_end_transmission()
 {
-    // Serial.println("dispatch_end_transmission");
     sfr::rockblock::last_downlink = millis();
     if (sfr::rockblock::downlink_period > constants::rockblock::min_sleep_period) {
         Pins::setPinState(constants::rockblock::sleep_pin, LOW);

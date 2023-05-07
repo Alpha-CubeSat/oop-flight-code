@@ -91,6 +91,7 @@ void NormalReportMonitor::execute()
     auto current_command = sfr::rockblock::commands_received.cbegin();
     while (current_command != sfr::rockblock::commands_received.cend() && j < sfr::rockblock::normal_report_command_max) {
         sfr::rockblock::normal_report.push_back(*current_command);
+        std::advance(current_command, 1);
         j++;
     }
     sfr::rockblock::normal_report_command_curr = j;

@@ -13,7 +13,7 @@ void setup()
     Serial.begin(9600);
     delay(5000);
     Pins::setInitialPinStates();
-    // TODO FS-175: test and uncomment line below
+    // TODO: Uncomment when EEPROMRestore is fixed (FS-186)
     // EEPROMRestore::execute();
 }
 

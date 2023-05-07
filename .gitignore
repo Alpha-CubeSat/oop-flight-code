@@ -4,5 +4,6 @@
 .vscode/launch.json
 .vscode/ipch
 .vscode/settings.json
+tools/putty.log
 
 .DS_Store

@@ -5,9 +5,9 @@
 #include "Arduino.h"
 #include "MissionMode.hpp"
 #include "Modes/burnwire_mode_type.enum"
-#include "Modes/camera_init_mode_type.enum"
 #include "Modes/report_type.enum"
 #include "Modes/rockblock_mode_type.enum"
+#include "Modes/sensor_init_mode_type.enum"
 #include "Modes/sensor_mode_type.enum"
 #include "Modes/simple_acs_type.enum"
 #include "Phase.hpp"
@@ -40,10 +40,6 @@ namespace sfr {
         // OP Codes 1500
         extern SFRField<uint32_t> start_time;
         extern SFRField<uint32_t> max_time;
-
-        // TODO
-        extern SFRField<uint16_t> num_imu_retries;
-        extern SFRField<uint16_t> max_imu_retries;
 
         extern SFRField<uint8_t> min_stable_gyro_z;
         extern SFRField<uint8_t> max_stable_gyro_x;
@@ -94,6 +90,7 @@ namespace sfr {
         extern TransmitInSun transmitInSun_class;
         extern LowPowerInSun lowPowerInSun_class;
         extern VoltageFailureInSun voltageFailureInSun_class;
+        extern BootIMU bootImu_class;
         extern BootCamera bootCamera_class;
         extern MandatoryBurns mandatoryBurns_class;
         extern RegularBurns regularBurns_class;
@@ -125,6 +122,7 @@ namespace sfr {
         extern MissionMode *transmitInSun;
         extern MissionMode *lowPowerInSun;
         extern MissionMode *voltageFailureInSun;
+        extern MissionMode *bootImu;
         extern MissionMode *bootCamera;
         extern MissionMode *mandatoryBurns;
         extern MissionMode *regularBurns;
@@ -250,7 +248,8 @@ namespace sfr {
     namespace imu {
         // OP Codes 2200
         extern SFRField<uint16_t> mode;
-        extern SFRField<bool> successful_init;
+
+        extern SFRField<uint16_t> init_mode;
 
         extern SFRField<uint32_t> max_fragments;
 
@@ -259,6 +258,9 @@ namespace sfr {
         extern SFRField<bool> turn_on;
         extern SFRField<bool> turn_off;
         extern SFRField<bool> powered;
+
+        extern SFRField<uint16_t> failed_times;
+        extern SFRField<uint16_t> failed_limit;
 
         extern SensorReading *mag_x_value;
         extern SensorReading *mag_y_value;
@@ -280,6 +282,9 @@ namespace sfr {
         extern SensorReading *acc_y_average;
 
         extern std::deque<uint8_t> imu_dlink;
+
+        extern SFRField<uint16_t> imu_boot_collection_start_time;
+        extern SFRField<uint16_t> door_open__collection_start_time;
 
         extern bool report_written;
         extern bool report_ready;
@@ -306,6 +311,8 @@ namespace sfr {
         extern SFRField<bool> off;
 
         extern SFRField<uint16_t> mag;
+
+        extern SFRField<uint32_t> detumble_timeout;
     } // namespace acs
     namespace battery {
         // OP Codes 2600
@@ -338,6 +345,7 @@ namespace sfr {
         extern SFRField<uint32_t> sfr_write_step_time;
         extern int sfr_address;
         extern SFRField<uint32_t> sfr_address_age;
+        extern SFRField<boolean> storage_full;
     } // namespace eeprom
 };    // namespace sfr
 

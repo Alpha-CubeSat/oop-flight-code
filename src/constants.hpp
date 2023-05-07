@@ -101,7 +101,6 @@ namespace constants {
     } // namespace acs
     namespace battery {
         constexpr int voltage_value_pin = 32;
-        constexpr int allow_measurement_pin = 36;
         constexpr float voltage_ref = 3.3;
         constexpr int resolution = 1023;
         constexpr int r1 = 4700;
@@ -166,7 +165,16 @@ namespace constants {
         constexpr int CSM = 20;
 
         constexpr int max_gyro_imu_report_size = 66;
-    } // namespace imu
+        constexpr int bootIMU_min_run_time = 20000;          // 20 seconds before transition to bootCamera.
+        constexpr int after_door_opens_min_run_time = 10000; // 10 seconds after the door opens
+    }                                                        // namespace imu
+
+    namespace imu_downlink {
+        // Note this is how much data correlates to 30 seconds
+        constexpr int downlink_FIFO_byte_length = 462;
+        constexpr uint8_t imu_report_endflag1 = 0xFE;
+        constexpr uint8_t imu_report_endflag2 = 0x92;
+    } // namespace imu_downlink
     namespace timecontrol {
         // Environment-based initializations of the control loop time.
         // control_cycle_time is the value actually used for timing. The
@@ -213,9 +221,7 @@ namespace constants {
 
         static constexpr unsigned int detumble_start_time_offset = point_max_time_offset + 5;
         static constexpr unsigned int detumble_max_time_offset = detumble_start_time_offset + 5;
-        static constexpr unsigned int detumble_num_imu_retries_offset = detumble_max_time_offset + 5;
-        static constexpr unsigned int detumble_max_imu_retries_offset = detumble_num_imu_retries_offset + 3;
-        static constexpr unsigned int detumble_min_stable_gyro_z_offset = detumble_max_imu_retries_offset + 3;
+        static constexpr unsigned int detumble_min_stable_gyro_z_offset = detumble_max_time_offset + 5;
         static constexpr unsigned int detumble_max_stable_gyro_x_offset = detumble_min_stable_gyro_z_offset + 2;
         static constexpr unsigned int detumble_max_stable_gyro_y_offset = detumble_max_stable_gyro_x_offset + 2;
         static constexpr unsigned int detumble_min_unstable_gyro_x_offset = detumble_max_stable_gyro_y_offset + 2;
@@ -287,14 +293,16 @@ namespace constants {
         static constexpr unsigned int rockblock_mode_offset = rockblock_downlink_report_type_offset + 3;
 
         static constexpr unsigned int imu_mode_offset = rockblock_mode_offset + 3;
-        static constexpr unsigned int imu_successful_init_offset = imu_mode_offset + 3;
-        static constexpr unsigned int imu_max_fragments_offset = imu_successful_init_offset + 2;
+        static constexpr unsigned int imu_init_mode_offset = imu_mode_offset + 3;
+        static constexpr unsigned int imu_max_fragments_offset = imu_init_mode_offset + 3;
         static constexpr unsigned int imu_sample_gyro_offset = imu_max_fragments_offset + 5;
         static constexpr unsigned int imu_turn_on_offset = imu_sample_gyro_offset + 2;
         static constexpr unsigned int imu_turn_off_offset = imu_turn_on_offset + 2;
         static constexpr unsigned int imu_powered_offset = imu_turn_off_offset + 2;
+        static constexpr unsigned int imu_failed_times_offset = imu_powered_offset + 2;
+        static constexpr unsigned int imu_failed_limit_offset = imu_failed_times_offset + 3;
 
-        static constexpr unsigned int temperature_in_sun_offset = imu_powered_offset + 2;
+        static constexpr unsigned int temperature_in_sun_offset = imu_failed_limit_offset + 3;
 
         static constexpr unsigned int current_in_sun_offset = temperature_in_sun_offset + 2;
 
@@ -302,10 +310,10 @@ namespace constants {
         static constexpr unsigned int acs_on_time_offset = acs_max_no_communication_offset + 5;
         static constexpr unsigned int acs_off_offset = acs_on_time_offset + 5;
         static constexpr unsigned int acs_mag_offset = acs_off_offset + 2;
+        static constexpr unsigned int acs_detumble_timeout_offset = acs_mag_offset + 3;
 
-        static constexpr unsigned int battery_acceptable_battery_offset = acs_mag_offset + 3;
+        static constexpr unsigned int battery_acceptable_battery_offset = acs_detumble_timeout_offset + 5;
         static constexpr unsigned int battery_min_battery_offset = battery_acceptable_battery_offset + 5;
-
         static constexpr unsigned int button_pressed_offset = battery_min_battery_offset + 5;
 
         static constexpr unsigned int eeprom_boot_count_offset = button_pressed_offset + 2;
@@ -314,8 +322,9 @@ namespace constants {
         static constexpr unsigned int eeprom_alloted_time_passed_offset = eeprom_alloted_time_offset + 5;
         static constexpr unsigned int eeprom_sfr_write_step_time_offset = eeprom_alloted_time_passed_offset + 2;
         static constexpr unsigned int eeprom_sfr_address_age_offset = eeprom_sfr_write_step_time_offset + 5;
+        static constexpr unsigned int eeprom_storage_full_offset = eeprom_sfr_address_age_offset + 5;
 
-        static constexpr unsigned int full_offset = eeprom_sfr_address_age_offset + 5;
+        static constexpr unsigned int full_offset = eeprom_storage_full_offset + 2;
     } // namespace eeprom
 };    // namespace constants
 

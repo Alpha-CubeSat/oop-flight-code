@@ -1,19 +1,91 @@
 #include "Monitors/IMUMonitor.hpp"
 #include <unity.h>
 
-void test_set_valid()
+void test_transition_to_normal_init()
 {
     IMUMonitor imu_monitor(0);
     sfr::imu::turn_on = true;
     sfr::imu::powered = false;
+    sfr::imu::init_mode = (uint16_t)sensor_init_mode_type::complete;
     imu_monitor.execute();
-    TEST_ASSERT_TRUE(true);
+    TEST_ASSERT_EQUAL((uint16_t)sensor_mode_type::normal, sfr::imu::mode);
+    TEST_ASSERT_EQUAL(true, sfr::imu::mag_x_average->is_valid());
+    TEST_ASSERT_EQUAL(true, sfr::imu::mag_y_average->is_valid());
+    TEST_ASSERT_EQUAL(true, sfr::imu::mag_z_average->is_valid());
+    TEST_ASSERT_EQUAL(true, sfr::imu::gyro_x_average->is_valid());
+    TEST_ASSERT_EQUAL(true, sfr::imu::gyro_y_average->is_valid());
+    TEST_ASSERT_EQUAL(true, sfr::imu::gyro_z_average->is_valid());
+    TEST_ASSERT_EQUAL(true, sfr::imu::acc_x_average->is_valid());
+    TEST_ASSERT_EQUAL(true, sfr::imu::acc_y_average->is_valid());
+}
+void test_transition_to_abnormal_init()
+{
+    IMUMonitor imu_monitor(0);
+    sfr::imu::turn_on = true;
+    sfr::imu::powered = false;
+    sfr::imu::failed_times = 0;
+    sfr::imu::failed_limit = 1;
+    // fail the first time
+    sfr::imu::init_mode = (uint16_t)sensor_init_mode_type::awaiting;
+    imu_monitor.execute();
+    TEST_ASSERT_EQUAL(1, sfr::imu::failed_times);
+    TEST_ASSERT_EQUAL((uint16_t)sensor_init_mode_type::awaiting, sfr::imu::init_mode);
+    TEST_ASSERT_EQUAL(sfr::imu::failed_times, sfr::imu::failed_limit);
+    // failed_limit reached, transition_to_abnormal_init
+    imu_monitor.execute();
+    TEST_ASSERT_EQUAL(0, sfr::imu::failed_times);
+    TEST_ASSERT_EQUAL((uint16_t)sensor_mode_type::abnormal_init, sfr::imu::mode);
+    TEST_ASSERT_EQUAL(false, sfr::imu::mag_x_average->is_valid());
+    TEST_ASSERT_EQUAL(false, sfr::imu::mag_y_average->is_valid());
+    TEST_ASSERT_EQUAL(false, sfr::imu::mag_z_average->is_valid());
+    TEST_ASSERT_EQUAL(false, sfr::imu::gyro_x_average->is_valid());
+    TEST_ASSERT_EQUAL(false, sfr::imu::gyro_y_average->is_valid());
+    TEST_ASSERT_EQUAL(false, sfr::imu::gyro_z_average->is_valid());
+    TEST_ASSERT_EQUAL(false, sfr::imu::acc_x_average->is_valid());
+    TEST_ASSERT_EQUAL(false, sfr::imu::acc_y_average->is_valid());
+    TEST_ASSERT_EQUAL(false, sfr::imu::turn_on);
+    TEST_ASSERT_EQUAL(false, sfr::imu::powered);
+    TEST_ASSERT_EQUAL(false, sfr::imu::turn_off);
+    TEST_ASSERT_EQUAL((uint16_t)sensor_init_mode_type::awaiting, sfr::imu::init_mode);
+}
+
+void test_turn_off()
+{
+    IMUMonitor imu_monitor(0);
+    sfr::imu::turn_off = true;
+    sfr::imu::powered = true;
+    imu_monitor.execute();
+    TEST_ASSERT_EQUAL(false, sfr::imu::powered);
+    TEST_ASSERT_EQUAL(false, sfr::imu::turn_off);
+    TEST_ASSERT_EQUAL(OUTPUT, *portModeRegister(constants::imu::CSAG));
+    TEST_ASSERT_EQUAL(OUTPUT, *portModeRegister(constants::imu::CSM));
+    TEST_ASSERT_EQUAL(LOW, sfr::pins::pinMap[constants::imu::CSAG]);
+    TEST_ASSERT_EQUAL(LOW, sfr::pins::pinMap[constants::imu::CSM]);
+}
+
+void test_imu_power_cycle()
+{
+    IMUMonitor imu_monitor(0);
+    TEST_ASSERT_FALSE(sfr::imu::powered);
+    imu_monitor.execute();
+    TEST_ASSERT_TRUE(sfr::imu::powered);
+    TEST_ASSERT_FALSE(sfr::imu::turn_on);
+    TEST_ASSERT_TRUE(sfr::imu::mag_x_average->is_valid());
+
+    sfr::imu::turn_off = true;
+    imu_monitor.execute();
+    TEST_ASSERT_FALSE(Pins::getPinState(constants::imu::CSAG));
+    TEST_ASSERT_FALSE(Pins::getPinState(constants::imu::CSM));
+    TEST_ASSERT_FALSE(sfr::imu::powered);
+    TEST_ASSERT_FALSE(sfr::imu::turn_off);
 }
 
 int test_imu_monitor()
 {
     UNITY_BEGIN();
-    RUN_TEST(test_set_valid);
+    RUN_TEST(test_transition_to_normal_init);
+    RUN_TEST(test_transition_to_abnormal_init);
+    RUN_TEST(test_turn_off);
     return UNITY_END();
 }
 
