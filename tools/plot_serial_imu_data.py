@@ -52,6 +52,8 @@ if __name__ == "__main__":
             gyro_y_values.append(float(line_array[3]))
             gyro_z_values.append(float(line_array[5]))
             time_values.append(float(line_array[7]))
+    
+    print(len(gyro_x_values))
 
     plt.plot(time_values, gyro_x_values, label = "Gyro X")
     plt.plot(time_values, gyro_y_values, label = "Gyro Y")

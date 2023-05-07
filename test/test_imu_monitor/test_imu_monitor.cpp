@@ -63,6 +63,23 @@ void test_turn_off()
     TEST_ASSERT_EQUAL(LOW, sfr::pins::pinMap[constants::imu::CSM]);
 }
 
+void test_imu_power_cycle()
+{
+    IMUMonitor imu_monitor(0);
+    TEST_ASSERT_FALSE(sfr::imu::powered);
+    imu_monitor.execute();
+    TEST_ASSERT_TRUE(sfr::imu::powered);
+    TEST_ASSERT_FALSE(sfr::imu::turn_on);
+    TEST_ASSERT_TRUE(sfr::imu::mag_x_average->is_valid());
+
+    sfr::imu::turn_off = true;
+    imu_monitor.execute();
+    TEST_ASSERT_FALSE(Pins::getPinState(constants::imu::CSAG));
+    TEST_ASSERT_FALSE(Pins::getPinState(constants::imu::CSM));
+    TEST_ASSERT_FALSE(sfr::imu::powered);
+    TEST_ASSERT_FALSE(sfr::imu::turn_off);
+}
+
 int test_imu_monitor()
 {
     UNITY_BEGIN();
