@@ -1,5 +1,4 @@
 #include "MainControlLoop.hpp"
-bool start = true;
 
 MainControlLoop::MainControlLoop()
     : ControlTask<void>(),
