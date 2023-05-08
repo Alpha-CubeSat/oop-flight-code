@@ -36,10 +36,6 @@ void MainControlLoop::execute()
     faults::fault_1 = 0;
     faults::fault_2 = 0;
     faults::fault_3 = 0;
-    if (start) {
-        start = false;
-        sfr::mission::current_mode = sfr::mission::detumbleSpin;
-    }
 
 #ifdef E2E_TESTING
     if (first_iter) {
