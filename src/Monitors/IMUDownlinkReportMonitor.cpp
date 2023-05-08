@@ -41,6 +41,12 @@ void IMUDownlinkReportMonitor::create_imu_downlink_report(int fragment_number)
         sfr::imu::imu_dlink.pop_back();
     }
 
+    // place the endflag at the end of the message
+    if (fragment_number >= (int)(constants::imu_downlink::downlink_FIFO_byte_length / pop_size - 1)) {
+        sfr::rockblock::imu_report.push_back(constants::imu_downlink::imu_report_endflag1);
+        sfr::rockblock::imu_report.push_back(constants::imu_downlink::imu_report_endflag2);
+    }
+
     // for the next downlink cycle
     sfr::imu::report_ready = true;
 }

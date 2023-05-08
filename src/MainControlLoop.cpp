@@ -25,6 +25,10 @@ MainControlLoop::MainControlLoop()
     delay(1000);
 }
 
+#ifdef E2E_TESTING
+bool first_iter = true;
+#endif
+
 void MainControlLoop::execute()
 {
     delay(200); // To prolong the speed of the main control loop to ensure correct RockBlock reads. Can reduce in the future.
@@ -37,6 +41,12 @@ void MainControlLoop::execute()
         sfr::mission::current_mode = sfr::mission::detumbleSpin;
     }
 
+#ifdef E2E_TESTING
+    if (first_iter) {
+        first_iter = false;
+        sfr::mission::current_mode = sfr::mission::normal;
+    }
+#endif
     clock_manager.execute();
     mission_manager.execute_on_time();
     battery_monitor.execute_on_time();
