@@ -27,7 +27,7 @@ RockblockSimulator::RockblockSimulator()
 
     // command to downlink second image fragment of first image
     // opcode 6010
-    insert("0x6010000000010000000200FA");
+    insert("601000000000000000100FA");
 }
 
 void RockblockSimulator::begin(uint32_t baud)
