@@ -19,13 +19,6 @@ void setup()
 
 void loop()
 {
-    // Uncomment the next line to do IMU Downlink test for sail deployment
-    sfr::mission::current_mode = sfr::mission::mandatoryBurns;
-    int start = 1;
-    if (start) {
-        sfr::imu::powered = true; // Assuming initialization went correctly
-        sfr::mission::current_mode = sfr::mission::bootCamera;
-    }
     mcl.execute();
 }
 #endif

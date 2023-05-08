@@ -343,7 +343,7 @@ namespace sfr {
         extern SFRField<bool> alloted_time_passed;
         extern int sfr_last_write_time;
         extern SFRField<uint32_t> sfr_write_step_time;
-        extern int sfr_address;
+        extern uint16_t sfr_address;
         extern SFRField<uint32_t> sfr_address_age;
         extern SFRField<boolean> storage_full;
     } // namespace eeprom
