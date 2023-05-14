@@ -101,9 +101,9 @@ void CameraControlTask::execute()
     }
     systime_duration_t duration = get_system_time() - TimedControlTaskBase::control_cycle_start_time;
     unsigned int dur = TimedControlTask::duration_to_us(duration);
-    Serial.print("CT - CAMERA_CONTROL_TASK: ");
+    //Serial.print("CT - CAMERA_CONTROL_TASK: ");
     sfr::timing::camera_control_task_offset = dur;
-    Serial.println(dur-sfr::timing::burnwire_control_task_offset);
+    //Serial.println(dur-sfr::timing::burnwire_control_task_offset);
 }
 
 void CameraControlTask::camera_init()

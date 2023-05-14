@@ -1,0 +1,108 @@
+{
+  "commands": [
+    {
+      "name": "read",
+      "description": "Prints the timestamp and value for the requested sfr field",
+      "params": [
+        {
+          "name": "field",
+          "options":"sfr_fields",
+          "optional": false,
+          "required_by": "all"
+        }
+      ]
+    },
+    {
+      "name": "uplink",
+      "description": "Pushes a command to the satellite",
+      "params": [
+        {
+          "name": "type",
+          "options": [
+            "sfr_override",
+            "deploy",
+            "arm",
+            "fire"
+          ],
+          "optional": false,
+          "required_by":"all"
+        },
+        {
+          "name": "field",
+          "options": "sfr_fields",
+          "optional": false,
+          "required_by": {
+            "param": "type",
+            "value": "sfr_override"
+          }
+        }
+      ]
+    },
+    {
+      "name": "log",
+      "description": "Marks a field for automatic logging and plotting",
+      "params": [
+        {
+          "name": "field",
+          "options": "sfr_fields",
+          "optional": false,
+          "required_by": "all"
+        }
+      ]
+    },
+    {
+      "name": "debug",
+      "description": "Adds a certain log group to the debug output",
+      "params":[
+        {
+          "name": "operation",
+          "options": [
+            "list",
+            "add",
+            "remove"
+          ],
+          "optional":false,
+          "required_by":"all"
+        },
+        {
+          "name": "group",
+          "options": [
+            "button",
+            "camera",
+            "battery",
+            "current",
+            "imu",
+            "photoresistor",
+            "temp"
+          ],
+          "optional":false
+        }
+        
+      ]
+    },
+    {
+      "name": "help",
+      "description": "Gives information about the specified command type.",
+      "params": [
+        {
+          "name": "cmd",
+          "options": [
+            "read",
+            "uplink",
+            "log",
+            "debug",
+            "help",
+            "exit"
+          ],
+          "optional": true,
+          "required_by": []
+        }
+      ]
+    },
+    {
+      "name": "exit",
+      "description": "Exits the Alpha Logger Test Utility.",
+      "params":[]
+    }
+  ]
+}

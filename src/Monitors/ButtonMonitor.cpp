@@ -29,7 +29,7 @@ void ButtonMonitor::execute()
     Serial.print("Button: ");
     Serial.print(sfr::button::pressed);
     Serial.println("(1 yes, 0 no)");
-    Serial.print("Button valid: ");
+    Serial.print("Button: valid: ");
     if (sfr::button::button_pressed->is_valid()) {
         Serial.println("true");
     } else {
@@ -38,6 +38,6 @@ void ButtonMonitor::execute()
 #endif
 systime_duration_t duration = get_system_time() - TimedControlTaskBase::control_cycle_start_time;
     unsigned int dur = TimedControlTask::duration_to_us(duration);
-    Serial.print("CT - BUTTON_MONITOR: ");
-    Serial.println(dur);
+    //Serial.print("CT - BUTTON_MONITOR: ");
+    // Serial.println(dur);
 }

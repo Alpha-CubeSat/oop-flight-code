@@ -3,6 +3,7 @@
 MainControlLoop::MainControlLoop()
     : ControlTask<void>(),
       clock_manager(constants::timecontrol::control_cycle_time),
+      serial_talk(),
       battery_monitor(constants::timecontrol::battery_monitor_offset),
       button_monitor(constants::timecontrol::button_monitor_offset),
       camera_report_monitor(constants::timecontrol::camera_report_monitor_offset),
@@ -33,6 +34,7 @@ void MainControlLoop::execute()
     faults::fault_3 = 0;
 
     clock_manager.execute();
+    serial_talk.execute();
     sfr::timing::mission_manager_offset = 0;
     mission_manager.execute_on_time();
     battery_monitor.execute_on_time();

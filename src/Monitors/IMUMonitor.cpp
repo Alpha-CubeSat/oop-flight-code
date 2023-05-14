@@ -33,7 +33,7 @@ void IMUMonitor::execute()
 {
     if (sfr::imu::turn_on == true && sfr::imu::powered == false) {
 #ifdef VERBOSE
-        Serial.println("turned on IMU");
+        Serial.println("IMU: turned on IMU");
 #endif
         IMUMonitor::IMU_init();
         if (sfr::imu::init_mode == (uint16_t)sensor_init_mode_type::complete) {
@@ -44,7 +44,7 @@ void IMUMonitor::execute()
                 transition_to_abnormal_init();
             } else {
                 sfr::imu::failed_times = sfr::imu::failed_times + 1;
-                Serial.print("IMU initialization failed times: ");
+                Serial.print("IMU: initialization failed times: ");
                 Serial.println(sfr::imu::failed_times);
                 sfr::imu::init_mode = (uint16_t)sensor_init_mode_type::awaiting;
             }
@@ -53,7 +53,7 @@ void IMUMonitor::execute()
 
     if (sfr::imu::turn_off == true && sfr::imu::powered == true) {
 #ifdef VERBOSE
-        Serial.println("turned off IMU");
+        Serial.println("IMU: turned off IMU");
 #endif
         pinMode(constants::imu::CSAG, OUTPUT);
         pinMode(constants::imu::CSM, OUTPUT);
@@ -66,16 +66,16 @@ void IMUMonitor::execute()
 
     if (sfr::imu::powered == true) {
 #ifdef VERBOSE
-        Serial.println("IMU is on");
+        Serial.println("IMU: is on");
 #endif
         capture_imu_values();
     }
 
     systime_duration_t duration = get_system_time() - TimedControlTaskBase::control_cycle_start_time;
     unsigned int dur = TimedControlTask::duration_to_us(duration);
-    Serial.print("CT - COMMAND_MONITOR: ");
+    //Serial.print("CT - COMMAND_MONITOR: ");
     sfr::timing::imu_monitor_offset = dur;
-    Serial.println(dur-sfr::timing::current_monitor_offset);
+    //Serial.println(dur-sfr::timing::current_monitor_offset);
 }
 
 void IMUMonitor::capture_imu_values()

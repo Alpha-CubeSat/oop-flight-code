@@ -34,7 +34,7 @@ void CurrentMonitor::execute()
     }
     systime_duration_t duration = get_system_time() - TimedControlTaskBase::control_cycle_start_time;
     unsigned int dur = TimedControlTask::duration_to_us(duration);
-    Serial.print("CT - CURRENT_MONITOR: ");
+    //Serial.print("CT - CURRENT_MONITOR: ");
     sfr::timing::imu_monitor_offset = dur;
-    Serial.println(dur-sfr::timing::current_monitor_offset);
+    //Serial.println(dur-sfr::timing::current_monitor_offset);
 }

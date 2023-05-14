@@ -2,6 +2,7 @@
 #define MAIN_CONTROL_LOOP_HPP_
 
 #include "ClockManager.hpp"
+#include "SerialTalk.hpp"
 #include "Control Tasks/BurnwireControlTask.hpp"
 #include "Control Tasks/CameraControlTask.hpp"
 #include "Control Tasks/EEPROMControlTask.hpp"
@@ -25,6 +26,7 @@ class MainControlLoop : ControlTask<void>
 {
 protected:
     ClockManager clock_manager;
+    SerialTalk serial_talk;
 
     BatteryMonitor battery_monitor;
     ButtonMonitor button_monitor;

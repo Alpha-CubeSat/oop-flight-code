@@ -323,10 +323,10 @@ void exit_lp(MissionMode *reg_mode)
 {
     float voltage;
 
-    Serial.println(sfr::battery::voltage_average->get_value(&voltage));
+    // Serial.println(sfr::battery::voltage_average->get_value(&voltage));
 
     if (sfr::battery::voltage_average->get_value(&voltage) && voltage > sfr::battery::acceptable_battery) {
-        Serial.println(voltage);
+        // Serial.println(voltage);
         sfr::mission::current_mode = reg_mode;
     }
 }

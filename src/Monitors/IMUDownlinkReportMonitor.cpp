@@ -15,9 +15,9 @@ void IMUDownlinkReportMonitor::execute()
     }
     systime_duration_t duration = get_system_time() - TimedControlTaskBase::control_cycle_start_time;
     unsigned int dur = TimedControlTask::duration_to_us(duration);
-    Serial.print("CT - IMU DOWNLINK REPORT MONITOR: ");
+    //Serial.print("CT - IMU DOWNLINK REPORT MONITOR: ");
     sfr::timing::imudownlink_report_monitor_offset = dur;
-    Serial.println(dur-sfr::timing::imu_downlink_offset);
+    //Serial.println(dur-sfr::timing::imu_downlink_offset);
 }
 
 void IMUDownlinkReportMonitor::create_imu_downlink_report(int fragment_number)

@@ -41,9 +41,9 @@ void RockblockReportMonitor::execute()
     }
     systime_duration_t duration = get_system_time() - TimedControlTaskBase::control_cycle_start_time;
     unsigned int dur = TimedControlTask::duration_to_us(duration);
-    Serial.print("CT - ROCKBLOCK REPORT MONITOR: ");
+    //Serial.print("CT - ROCKBLOCK REPORT MONITOR: ");
     sfr::timing::rockblock_report_monitor_offset = dur;
-    Serial.println(dur-sfr::timing::photoresistor_monitor_offset);
+    //Serial.println(dur-sfr::timing::photoresistor_monitor_offset);
 }
 
 void RockblockReportMonitor::switch_report_type_to(report_type downlink_report_type)

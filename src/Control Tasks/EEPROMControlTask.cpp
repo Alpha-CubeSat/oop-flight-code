@@ -11,11 +11,11 @@ void EEPROMControlTask::execute()
     EEPROMControlTask::save_sfr_data();
     systime_duration_t duration = get_system_time() - TimedControlTaskBase::control_cycle_start_time;
     unsigned int dur = TimedControlTask::duration_to_us(duration);
-    Serial.print("CT - EEPROM_CONTROL_TASK: ");
+    //Serial.print("CT - EEPROM_CONTROL_TASK: ");
     sfr::timing::eeprom_control_task_offset = dur;
-    Serial.println(dur-sfr::timing::rockblock_control_task_offset);
-    Serial.print("CYCLE: ");
-    Serial.print(dur);
+    //Serial.println(dur-sfr::timing::rockblock_control_task_offset);
+    //Serial.print("CYCLE: ");
+    // Serial.print(dur);
 }
 
 void EEPROMControlTask::save_wait_time()

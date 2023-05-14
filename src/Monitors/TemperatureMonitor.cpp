@@ -30,7 +30,7 @@ void TemperatureMonitor::execute()
     }
     systime_duration_t duration = get_system_time() - TimedControlTaskBase::control_cycle_start_time;
     unsigned int dur = TimedControlTask::duration_to_us(duration);
-    Serial.print("CT - COMMAND_MONITOR: ");
+    //Serial.print("CT - COMMAND_MONITOR: ");
     sfr::timing::temperature_monitor_offset = dur;
-    Serial.println(dur-sfr::timing::rockblock_report_monitor_offset);
+    //Serial.println(dur-sfr::timing::rockblock_report_monitor_offset);
 }

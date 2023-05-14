@@ -1,0 +1,2 @@
+curses
+windows-curses

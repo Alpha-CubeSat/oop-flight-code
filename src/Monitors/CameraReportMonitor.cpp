@@ -14,9 +14,9 @@ void CameraReportMonitor::execute()
     // Prepare data from an image taken for downlink
     else if (sfr::rockblock::camera_report.empty() && sfr::camera::images_written > current_serial) {
 #ifdef VERBOSE
-        Serial.println("Report monitor started");
-        Serial.println("Current serial: " + String(current_serial));
-        Serial.println("Current fragment: " + String(fragment_number));
+        Serial.println("Camera: Report monitor started");
+        Serial.println("Camera: Current serial: " + String(current_serial));
+        Serial.println("Camera: Current fragment: " + String(fragment_number));
 #endif
         create_camera_report(fragment_number, current_serial);
         if (fragment_number == sfr::rockblock::camera_max_fragments[current_serial]) {
@@ -31,15 +31,15 @@ void CameraReportMonitor::execute()
     }
     systime_duration_t duration = get_system_time() - TimedControlTaskBase::control_cycle_start_time;
     unsigned int dur = TimedControlTask::duration_to_us(duration);
-    Serial.print("CT - CAMERA_REPORT_MONITOR: ");
+    //Serial.print("CT - CAMERA_REPORT_MONITOR: ");
     sfr::timing::command_monitor_offset = dur;
-    Serial.println(dur-sfr::timing::camera_report_monitor_offset);
+    //Serial.println(dur-sfr::timing::camera_report_monitor_offset);
 }
 
 void CameraReportMonitor::create_camera_report(int fragment_number, uint8_t serial_number)
 {
-    Serial.println("DEBUG: fragment #: " + String(fragment_number));
-    Serial.println("DEBUG: serial_number: " + String(serial_number));
+    Serial.println("Camera: DEBUG: fragment #: " + String(fragment_number));
+    Serial.println("Camera: DEBUG: serial_number: " + String(serial_number));
     // open image file and read it for specified image/fragment
     String filename = "";
     if (serial_number < 10) {
