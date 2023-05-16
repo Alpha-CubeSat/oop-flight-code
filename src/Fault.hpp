@@ -1,6 +1,6 @@
 #include "RockblockCommand.hpp"
-#include <stdint.h>
 #include <map>
+#include <stdint.h>
 
 #ifndef _FAULT_HPP_
 #define _FAULT_HPP_

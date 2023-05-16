@@ -1,6 +1,6 @@
 #include "NormalReportMonitor.hpp"
-#include "sfr.hpp"
 #include "Faults.hpp"
+#include "sfr.hpp"
 
 NormalReportMonitor::NormalReportMonitor(unsigned int offset)
     : TimedControlTask<void>(offset)
@@ -70,14 +70,14 @@ void NormalReportMonitor::execute()
         {19, (uint8_t)current},
         {20, (uint8_t)sfr::current::in_sun},
         {21, serialize(21, voltage)},
-        {22, fault_groups::imu_faults::mag_x->serialize() <<4 + fault_groups::imu_faults::gyro_x->serialize()},
-        {23, fault_groups::imu_faults::mag_y->serialize() <<4 + fault_groups::imu_faults::gyro_y->serialize()},
-        {24, fault_groups::imu_faults::mag_z->serialize() <<4 + fault_groups::imu_faults::gyro_z->serialize()},
-        {25,fault_groups::imu_faults::acc_x->serialize() <<4 + fault_groups::imu_faults::acc_y->serialize()},
-        {26,fault_groups::power_faults::temp_c->serialize() <<4 + fault_groups::power_faults::solar_current->serialize()},
-        {27,fault_groups::power_faults::voltage->serialize() <<4 + fault_groups::hardware_faults::burn_wire->serialize()},
-        {28,fault_groups::hardware_faults::sd_card->serialize() <<4 + fault_groups::hardware_faults::camera_on_failed->serialize()},
-        {29,fault_groups::hardware_faults::light_val->serialize() <<4 + fault_groups::hardware_faults::button->serialize()},
+        {22, fault_groups::imu_faults::mag_x->serialize() << 4 + fault_groups::imu_faults::gyro_x->serialize()},
+        {23, fault_groups::imu_faults::mag_y->serialize() << 4 + fault_groups::imu_faults::gyro_y->serialize()},
+        {24, fault_groups::imu_faults::mag_z->serialize() << 4 + fault_groups::imu_faults::gyro_z->serialize()},
+        {25, fault_groups::imu_faults::acc_x->serialize() << 4 + fault_groups::imu_faults::acc_y->serialize()},
+        {26, fault_groups::power_faults::temp_c->serialize() << 4 + fault_groups::power_faults::solar_current->serialize()},
+        {27, fault_groups::power_faults::voltage->serialize() << 4 + fault_groups::hardware_faults::burn_wire->serialize()},
+        {28, fault_groups::hardware_faults::sd_card->serialize() << 4 + fault_groups::hardware_faults::camera_on_failed->serialize()},
+        {29, fault_groups::hardware_faults::light_val->serialize() << 4 + fault_groups::hardware_faults::button->serialize()},
         {30, (uint8_t)sfr::camera::powered},
         {31, (uint8_t)sfr::eeprom::boot_counter},
         {32, (uint8_t)(sfr::imu::mag_x_average->is_valid() | (sfr::imu::mag_y_average->is_valid() << 1) | (sfr::imu::mag_z_average->is_valid() << 2) | (sfr::imu::gyro_x_average->is_valid() << 3) |
