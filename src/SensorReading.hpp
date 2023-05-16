@@ -16,13 +16,12 @@
 class SensorReading
 {
 private:
-
     /**
      * @brief Pointer to the fault
      * 
      */
     Fault *fault;
-    
+
     /**
      * @brief Size of the buffer, the amount of values that should be averaged
      * 
@@ -65,7 +64,7 @@ public:
      * @param max Maximum valid value
      */
     SensorReading(Fault *fault, uint8_t buffer_size, float min, float max);
-    
+
     /**
      * @brief Construct a new Sensor Reading object with no associated fault
      * 
@@ -74,7 +73,7 @@ public:
      * @param max Maximum valid value
      */
     SensorReading(uint8_t buffer_size, float min, float max);
-    
+
     /**
      * @brief Get sensor reading average value
      * 
@@ -83,7 +82,7 @@ public:
      * @return false otherwise
      */
     bool get_value(float *value_location);
-    
+
     /**
      * @brief Set the sensor reading value
      * 

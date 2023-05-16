@@ -41,9 +41,8 @@ void SensorReading::set_value(float x)
             if (buffer.size() > buffer_size) {
                 // remove oldest value from buffer
                 buffer.pop_back();
-                
             }
-        } 
+        }
     } else {
         set_invalid();
     }

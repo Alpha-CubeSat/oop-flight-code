@@ -2,8 +2,8 @@
 #define _ROCKBLOCKCOMMAND_HPP_
 
 #include "Arduino.h"
-#include "SFRField.hpp"
 #include "Fault.hpp"
+#include "SFRField.hpp"
 #include "constants.hpp"
 #include <stdint.h>
 
@@ -92,6 +92,7 @@ class FaultSurpressCommand : public RockblockCommand
 {
 private:
     FaultInterface *fault;
+
 public:
     FaultSurpressCommand(RawRockblockCommand raw) : RockblockCommand{raw}
     {
