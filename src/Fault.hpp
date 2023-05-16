@@ -47,7 +47,7 @@ private:
 
 public:
     /**
-     * @brief Construct a new Fault object and adds it to the Fault registry using the opcode. 
+     * @brief Construct a new Fault object and adds it to the Fault registry using the opcode.
      * Sets all initial states to false.
      *
      * @param opcode The command opcode corresponding to the fault
