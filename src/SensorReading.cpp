@@ -35,13 +35,15 @@ void SensorReading::set_value(float x)
 {
     // check if value is within expected range
     if (x <= max && x >= min) {
+        set_valid();
         if (valid && !repeated_values(&buffer, x)) {
             // check if buffer is full
             if (buffer.size() > buffer_size) {
                 // remove oldest value from buffer
                 buffer.pop_back();
+                
             }
-        }
+        } 
     } else {
         set_invalid();
     }
@@ -85,7 +87,7 @@ bool SensorReading::repeated_values(std::deque<float> *buffer, float val)
             return false;
         }
     }
-
+    set_invalid();
     return true;
 }
 

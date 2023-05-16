@@ -23,13 +23,13 @@ public:
      */
     static std::map<uint16_t, FaultInterface *> opcode_lookup;
 
-    void signal();
-    void release();
-    void suppress();
-    void unsuppress();
-    bool get_base();
-    bool get_signaled();
-    bool get_supressed();
+    virtual void signal();
+    virtual void release();
+    virtual void suppress();
+    virtual void unsuppress();
+    virtual bool get_base();
+    virtual bool get_signaled();
+    virtual bool get_supressed();
 };
 
 /**

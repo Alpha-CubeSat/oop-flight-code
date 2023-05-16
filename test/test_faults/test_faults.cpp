@@ -3,7 +3,7 @@
 #include <sfr.hpp>
 #include <unity.h>
 
-void test_fault_base_suppress()
+void test_basic_fault_states()
 {
   // setup
   Fault* f = fault_groups::hardware_faults::burn_wire;
@@ -50,7 +50,10 @@ void test_sensor_reading_is_valid(){
 void test_low_power_transission(){
   SensorReading* s = sfr::battery::voltage_average;
   Fault* f = fault_groups::power_faults::voltage;
+  TEST_ASSERT_TRUE(s->is_valid());
   s->set_value(6);
+  TEST_ASSERT_FALSE(s->is_valid());
+  s->set_value(3);
   TEST_ASSERT_TRUE(s->is_valid());
 }
 
@@ -58,7 +61,7 @@ void test_low_power_transission(){
 int test_faults()
 {
   UNITY_BEGIN();
-  RUN_TEST(test_fault_base_suppress);
+  RUN_TEST(test_basic_fault_states);
   RUN_TEST(test_sensor_reading_is_valid);
   RUN_TEST(test_low_power_transission);
   return UNITY_END();
