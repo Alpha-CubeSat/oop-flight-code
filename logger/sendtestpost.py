@@ -3,6 +3,7 @@ import time
 
 times = range(50)
 
+# Test Data for the plotter
 for t in times:
   time.sleep(1)
   data = {"time": t, "current.in_sun": t, "temp.in_sun": 2*t+1}

@@ -14,6 +14,8 @@ class SerialTalker:
     self.write_queue = collections.deque()
     self.read_queue = collections.deque()
 
+    # Tries to establish serial connection 
+    # DAM342 TODO: Gracefully Handle failures and connection retries upon loss of signal
     try:
       self.ser = serial.Serial(self.port, self.baud)
       self.write_thread = threading.Thread(target=self.talk_to_sat)
@@ -28,17 +30,20 @@ class SerialTalker:
     self.debug_starts = set([])
     self.logger = logger
     
-
+  # Stops serial
   def stop_serial_connection(self):
     self.stop = True
     self.ser.cancel_read()
     self.ser.cancel_write()
     self.ser.close()
 
+  # Restarts serial
   def restart_serial_connection(self):
     self.stop = False
     self.ser = serial.Serial(self.port, self.baud)
 
+  # reads messages from serial and checks if it is a valid message for printing
+  # and if so, adds it to the read queue
   def listen_to_sat(self):
     while not self.stop:
       if self.ser.isOpen():
@@ -51,6 +56,7 @@ class SerialTalker:
         if(line.lower().startswith("response")):
           self.read_queue.append(line)
 
+  # sends any queued messages to the satellite over serial
   def talk_to_sat(self):
     while not self.stop:
       if(len(self.write_queue)>0):
@@ -58,15 +64,20 @@ class SerialTalker:
           self.logger.queue_output_for_printing("SENDING")
           self.ser.write(self.write_queue.pop().encode('utf-8'))
 
+  # Queues message for sending
   def write(self, message):
     self.write_queue.append(message)
 
+  # Returns the oldest valid message received
   def read(self):
     if(len(self.read_queue)>0):
       return self.read_queue.pop()
 
+  # Adds a subsystem to the allowed groups for debug prints
   def add_debug(self, debug_group):
     self.debug_starts.add(debug_group)
+  
+  # Removes a subsystem from the allowed groups for debug prints
   def remove_debug(self, debug_group):
     if debug_group in self.debug_starts:
       self.debug_starts.remove(debug_group)

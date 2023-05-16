@@ -2,12 +2,17 @@ class SFRLookup:
   def __init__(self, sfr_debug=False):
     self.debug = sfr_debug
     self.parse_sfr_fields()
+
+
+  # Parses the sfr.cpp file for all the sfr fields building LUTs for both opcode
+  # to sfr field name and sfr field name to opcode
   def parse_sfr_fields(self):
     d = {}
     d2 = {}
     path = 'src/sfr.cpp'
     if(self.debug):
       path = '../src/sfr.cpp'
+
     with open(path) as f:
       sfr_fields = []
       curr_namespace = ""
@@ -30,6 +35,7 @@ class SFRLookup:
     self.sfr_to_opcode_lut = d
     self.opcode_to_sfr_lut = d2
 
+  # gets opcode from sfr field name (Using the pre-built LUT)
   def get_opcode(self, sfr_field):
     try:
       [namespace, field] = sfr_field.split('.')
@@ -40,6 +46,8 @@ class SFRLookup:
     except:
       return None
     return None
+  
+  # gets sfr field name from opcode (Using the pre-built LUT)
   def get_sfr_field(self, opcode):
     try:
       return self.opcode_to_sfr_lut[opcode]
@@ -47,6 +55,7 @@ class SFRLookup:
       return None
     return None
 
+# Runs just the SFR Loader (Used for testing)
 if __name__ == '__main__':
     lookup = SFRLookup()
     print(lookup.sfr_to_opcode_lut)

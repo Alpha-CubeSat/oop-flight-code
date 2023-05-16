@@ -1,2 +1,7 @@
 curses
 windows-curses
+requests
+dash
+plotly
+flask
+datetime

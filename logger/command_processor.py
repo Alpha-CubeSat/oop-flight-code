@@ -8,6 +8,8 @@ import json
 import collections
 
 class Command:
+  # Factory for a Command
+  # DAM342 TODO: Make more graceful by using inheritance
   def __init__(self, command_def, commands):
     self.commands = commands
 
@@ -40,6 +42,7 @@ class Command:
               curr_param = curr_param + 1
 
   
+  # RETURN EACH PART OF A COMMAND
   def getCommmandType(self):
     return self.command_type
   def getParam1(self):
@@ -57,14 +60,17 @@ class CommandProcessor:
     self.to_remove = set([])
     self.serial_messages = collections.deque()
 
+  # Whether or not wer should be printing debug messages
   def get_debug_toggle_status(self):
     return self.debug_toggled
   
+  # What has been added to the allowed debug subsystem list
   def get_adds(self):
     s = self.to_add.copy()
     self.to_add.clear()
     return s
   
+  # What has been removed to the allowed debug subsystem list
   def get_removes(self):
     s = self.to_remove.copy()
     self.to_add.clear()
@@ -75,9 +81,9 @@ class CommandProcessor:
 
   def process_command(self, command):
     response = []
-    # print(command.getCommmandType())
-    # print(command.getParam1())
-    # print(command.getParam2())
+    
+    # PROCESS READS
+    # DAM342 TODO: fix bug with threads where sometimes the read isn't processed
     if(command.getCommmandType() == "read"):
       if command.getParam1() == "invalid":
         response.append("Please specify which SFRField to read.")
@@ -88,6 +94,8 @@ class CommandProcessor:
           self.serial_messages.append("debug_console.read."+opcode)
         else:
           response.append(command.getParam1() + " is not a valid SFRField")
+    
+    # DAM342 TODO: IMPLEMENT PROCESSING UPLINKS
     elif(command.getCommmandType() == "uplink"):
       if command.getParam1() == "invalid":
         response.append("Invalid Uplink Command")
@@ -100,6 +108,8 @@ class CommandProcessor:
             response.append("Uplinking " + command.getParam1() + " (opcode " + opcode + ")" + " - TODO: ADD VALUE PARAM")
           else:
             response.append(command.getParam2() + " is not a valid SFRField")
+    
+    # DAM342 TODO: IMPLEMENT PROCESSING LOGGING
     elif(command.getCommmandType() == "log"):
       if command.getParam1() == "invalid":
         response.append("Please specify which SFRField to log and plot.")
@@ -109,6 +119,8 @@ class CommandProcessor:
           response.append("Logging " + command.getParam1() + " (opcode " + opcode + ")")
         else:
           response.append(command.getParam1() + " is not a valid SFRField")
+    
+    # PROCESS DEBUG PRINT TOGGLES
     elif(command.getCommmandType() == "debug"):
       if command.getParam1() == "list":
         l = ""
@@ -127,7 +139,8 @@ class CommandProcessor:
       elif command.getParam1() == "remove":
         self.to_remove.add(command.getParam2())
         response.append("Removed " + command.getParam2() + " from debug")
-        
+
+    # PROCESS HELP    
     elif(command.getCommmandType() == "help"):
       if command.getParam1() == "invalid":
         response.append("~~~ WELCOME TO ALPHA LOGGER TEST UTILITY ~~~")
@@ -153,16 +166,22 @@ class CommandProcessor:
         for param in command_info['params']:
           response.append(param['name'] + " options: " + str(param["options"]))
 
+    # PROCESS EXIT
     elif(command.getCommmandType() == "exit"):
       quit()
+    
+    # INVALID COMMAND
     else:
       response.append("Command Invalid. Please enter a valid command.")
 
+    # returns all of the responses (Here response acts as a list of info to be queued for output)
     return response
 
+  # updates the debug list
   def push_debug_list(self, debug_list):
     self.current_debug_list = debug_list
 
+# Runs command processor on its own for testing purposes
 if __name__ == '__main__':
     f = open('console_commands.json', 'r')
     console_commands = json.load(f)
