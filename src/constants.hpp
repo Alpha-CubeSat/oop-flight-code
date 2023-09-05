@@ -239,6 +239,7 @@ namespace constants {
         static constexpr unsigned int mission_deployed_offset = mission_time_deployed_offset + 5;
         static constexpr unsigned int mission_already_deployed_offset = mission_deployed_offset + 2;
         static constexpr unsigned int mission_possible_uncovered_offset = mission_already_deployed_offset + 2;
+        static constexpr unsigned int mission_mode_history_length_offset = mission_possible_uncovered_offset + 2;
 
         static constexpr unsigned int burnwire_attempts_offset = mission_possible_uncovered_offset + 2;
         static constexpr unsigned int burnwire_start_time_offset = burnwire_attempts_offset + 3;

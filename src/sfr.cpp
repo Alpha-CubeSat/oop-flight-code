@@ -51,6 +51,7 @@ namespace sfr {
         SFRField<bool> deployed = SFRField<bool>(false, 0x1802, constants::eeprom::mission_deployed_offset, true);
         SFRField<bool> already_deployed = SFRField<bool>(false, 0x1803, constants::eeprom::mission_already_deployed_offset, true);
         SFRField<bool> possible_uncovered = SFRField<bool>(false, 0x1804, constants::eeprom::mission_possible_uncovered_offset, true);
+        SFRField<uint32_t> mission_mode_hist_length = SFRField<uint32_t>(20, 0x1805, constants::eeprom::mission_mode_history_length_offset, true);
 
         Boot boot_class;
         AliveSignal aliveSignal_class;

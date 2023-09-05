@@ -87,6 +87,21 @@ void NormalReportMonitor::execute()
         sfr::rockblock::normal_report.push_back(report_contents[i]);
     }
 
+    // push the most recent 20 mission modes switches, starting with most recent
+    int k = 0;
+    auto hist_mode = sfr::mission::mode_history.cbegin();
+    auto prev_hist_mode = sfr::mission::mode_history.cbegin();
+    while (hist_mode != sfr::mission::mode_history.cend() && k <= sfr::mission::mission_mode_hist_length) {
+        if (*hist_mode != *prev_hist_mode || hist_mode == sfr::mission::mode_history.cbegin()) {
+            sfr::rockblock::normal_report.push_back(*hist_mode);
+            k++;
+        }
+        if (hist_mode != sfr::mission::mode_history.cbegin()) {
+            std::advance(prev_hist_mode, 1);
+        }
+        std::advance(hist_mode, 1);
+    }
+
     int j = 0;
     auto current_command = sfr::rockblock::commands_received.cbegin();
     while (current_command != sfr::rockblock::commands_received.cend() && j < sfr::rockblock::normal_report_command_max) {
