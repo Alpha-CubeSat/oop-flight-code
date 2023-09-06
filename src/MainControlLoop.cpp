@@ -89,7 +89,11 @@ void MainControlLoop::execute()
     }
 
     // IMU
-
+    if (sfr::imu::powered) {
+        Serial.println("IMU powered");
+    } else {
+        Serial.println("IMU UNpowered");
+    }
     if (sfr::imu::mag_x_value->get_value(&val)) {
         Serial.print("MAG X: ");
         Serial.println(val);
@@ -126,6 +130,13 @@ void MainControlLoop::execute()
         Serial.println(" C");
     } else {
         Serial.println("Temp INvalid");
+    }
+
+    // RockBLOCK
+    if (sfr::rockblock::sleep_mode) {
+        Serial.println("RockBLOCK sleeping");
+    } else {
+        Serial.println("RockBLOCK NOT sleeping");
     }
 
 #endif

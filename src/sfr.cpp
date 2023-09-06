@@ -7,7 +7,9 @@ namespace sfr {
     } // namespace stabilization
     namespace boot {
         // OP Codes 1200
-        SFRField<uint32_t> max_time = SFRField<uint32_t>(2 * constants::time::one_hour, 10UL, 5 * constants::time::one_hour, 0x1200, constants::eeprom::boot_max_time_offset, true);
+        // Boot mode currently set to immediately time out
+        SFRField<uint32_t> max_time = SFRField<uint32_t>(1, 10UL, 5 * constants::time::one_hour, 0x1200, constants::eeprom::boot_max_time_offset, true);
+        // SFRField<uint32_t> max_time = SFRField<uint32_t>(2 * constants::time::one_hour, 10UL, 5 * constants::time::one_hour, 0x1200, constants::eeprom::boot_max_time_offset, true);
     } // namespace boot
     namespace point {
         // OP Codes 1400
@@ -214,7 +216,7 @@ namespace sfr {
         SFRField<uint16_t> downlink_report_type = SFRField<uint16_t>((uint16_t)report_type::normal_report, 0x2118, constants::eeprom::rockblock_downlink_report_type_offset, true);
         SFRField<uint16_t> mode = SFRField<uint16_t>((uint16_t)rockblock_mode_type::send_at, 0x2119, constants::eeprom::rockblock_mode_offset, true);
 
-        SFRField<uint32_t> on_time = SFRField<uint32_t>(0, 0x211A, 0, true);
+        SFRField<uint32_t> on_time = SFRField<uint32_t>(20 * constants::time::one_minute, 0x211A, 0, true);
 #ifndef SIMULATOR
         HardwareSerial serial = Serial1;
 #else
@@ -287,7 +289,7 @@ namespace sfr {
         SFRField<uint8_t> mode = SFRField<uint8_t>((uint8_t)acs_mode_type::detumble, 0x2502, 0, true);
         SFRField<uint8_t> simple_mag = SFRField<uint8_t>(false, 0x2503, 0, true);
         SFRField<uint32_t> simple_current = SFRField<uint32_t>(false, 0x2504, 0, true);
-        SFRField<uint32_t> on_time = SFRField<uint32_t>(false, 0x2505, 0, true);
+        SFRField<uint32_t> on_time = SFRField<uint32_t>(20 * constants::time::one_minute, 0x2505, 0, true);
         SFRField<uint32_t> detumble_timeout = SFRField<uint32_t>(false, 0x2506, 0, true);
 
         // Starshot parameters
