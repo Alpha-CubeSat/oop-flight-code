@@ -25,24 +25,114 @@ MainControlLoop::MainControlLoop()
     delay(1000);
 }
 
-#ifdef E2E_TESTING
-bool first_iter = true;
-#endif
-
 void MainControlLoop::execute()
 {
-    delay(200); // To prolong the speed of the main control loop to ensure correct RockBlock reads. Can reduce in the future.
+    delay(50);
+
+#ifdef VERBOSE
+    Serial.println("--------------------START LOOP--------------------");
+    // mission mode
+    Serial.print("Current Mission Mode: ");
+    Serial.println(sfr::mission::current_mode->get_name().c_str());
+
+    // button
+    if (sfr::button::pressed) {
+        Serial.println("Button pressed");
+    } else {
+        Serial.println("Button UNpressed");
+    }
+    if (sfr::button::button_pressed->is_valid()) {
+        Serial.println("Button valid");
+    } else {
+        Serial.println("Button INvalid");
+    }
+
+    // photoresistor
+    if (sfr::photoresistor::covered) {
+        Serial.println("Photoresistor covered");
+    } else {
+        Serial.println("Photoresistor UNcovered");
+    }
+    if (sfr::photoresistor::light_val_average_standby->is_valid()) {
+        Serial.println("Photoresistor valid");
+    } else {
+        Serial.println("Photoresistor INvalid");
+    }
+
+    // ACS
+    Serial.print("ACS Mode: ");
+    switch (sfr::acs::mode) {
+    case (0):
+        Serial.println("SIMPLE");
+        break;
+    case (1):
+        Serial.println("POINT");
+        break;
+    case (2):
+        Serial.println("DETUMBLE");
+        break;
+    }
+
+    if (sfr::acs::off) {
+        Serial.println("ACS OFF");
+    } else {
+        Serial.println("ACS ON");
+    }
+
+    // battery
+    if (sfr::battery::voltage_average->get_value(&val)) {
+        Serial.print("Battery Voltage: ");
+        Serial.print(val);
+        Serial.println(" V");
+    } else {
+        Serial.println("Battery INvalid");
+    }
+
+    // IMU
+
+    if (sfr::imu::mag_x_value->get_value(&val)) {
+        Serial.print("MAG X: ");
+        Serial.println(val);
+    }
+    if (sfr::imu::mag_y_value->get_value(&val)) {
+        Serial.print("MAG Y: ");
+        Serial.println(val);
+    }
+    if (sfr::imu::mag_z_value->get_value(&val)) {
+        Serial.print("MAG Z: ");
+        Serial.println(val);
+    }
+    if (sfr::imu::gyro_x_value->get_value(&val)) {
+        Serial.print("GYRO X: ");
+        Serial.println(val);
+    }
+    if (sfr::imu::gyro_y_value->get_value(&val)) {
+        Serial.print("GYRO Y: ");
+        Serial.println(val);
+    }
+    if (sfr::imu::gyro_z_value->get_value(&val)) {
+        Serial.print("GYRO Z: ");
+        Serial.println(val);
+    }
+    val = sfr::imu::gyro_x_value->get_value(&val) && sfr::imu::gyro_y_value->get_value(&val) && sfr::imu::gyro_z_value->get_value(&val) && sfr::imu::mag_x_value->get_value(&val) && sfr::imu::mag_y_value->get_value(&val) && sfr::imu::mag_z_value->get_value(&val);
+    if (!val) {
+        Serial.println("IMU INvalid");
+    }
+
+    // Temp
+    if (sfr::temperature::temp_c_average->get_value(&val)) {
+        Serial.print("Temp: ");
+        Serial.print(val);
+        Serial.println(" C");
+    } else {
+        Serial.println("Temp INvalid");
+    }
+
+#endif
 
     faults::fault_1 = 0;
     faults::fault_2 = 0;
     faults::fault_3 = 0;
-
-#ifdef E2E_TESTING
-    if (first_iter) {
-        first_iter = false;
-        sfr::mission::current_mode = sfr::mission::normal;
-    }
-#endif
 
     clock_manager.execute();
     burnwire_control_task.execute_on_time();
@@ -65,4 +155,9 @@ void MainControlLoop::execute()
     camera_control_task.execute_on_time();
 
     eeprom_control_task.execute_on_time();
+
+#ifdef VERBOSE
+    Serial.println("--------------------END LOOP--------------------");
+    Serial.println(" ");
+#endif
 }

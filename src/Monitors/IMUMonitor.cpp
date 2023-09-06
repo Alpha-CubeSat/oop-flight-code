@@ -66,7 +66,7 @@ void IMUMonitor::execute()
 
     if (sfr::imu::turn_off == true && sfr::imu::powered == true) {
 #ifdef VERBOSE
-        Serial.println("turned off IMU");
+        Serial.println("Turned off IMU");
 #endif
         pinMode(constants::imu::CSAG, OUTPUT);
         pinMode(constants::imu::CSM, OUTPUT);

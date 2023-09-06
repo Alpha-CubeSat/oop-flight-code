@@ -23,27 +23,6 @@ ACSControlTask::ACSControlTask(unsigned int offset)
 
 void ACSControlTask::execute()
 {
-#ifdef VERBOSE
-    Serial.print("ACS Mode: ");
-    switch (sfr::acs::mode) {
-    case (0):
-        Serial.println("SIMPLE");
-        break;
-    case (1):
-        Serial.println("POINT");
-        break;
-    case (2):
-        Serial.println("DETUMBLE");
-        break;
-    }
-
-    if (sfr::acs::off) {
-        Serial.println("ACS OFF");
-    } else {
-        Serial.println("ACS ON");
-    }
-
-#endif
     if (sfr::acs::reinitialize) {
         starshotObj.initialize(constants::acs::step_size_input, constants::acs::A_input, sfr::acs::Id_input, sfr::acs::Kd_input, sfr::acs::Kp_input, sfr::acs::c_input, constants::acs::i_max_input, constants::acs::k_input, constants::acs::n_input);
         sfr::acs::reinitialize = false;

@@ -51,6 +51,9 @@ protected:
 public:
     MainControlLoop();
     void execute() override;
+
+private:
+    float val;
 };
 
 #endif

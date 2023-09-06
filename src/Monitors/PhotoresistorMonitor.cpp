@@ -45,10 +45,4 @@ void PhotoresistorMonitor::execute()
     } else {
         sfr::photoresistor::covered = true;
     }
-
-#ifdef VERBOSE
-    Serial.print("Photoresistor: ");
-    Serial.print(val);
-    Serial.println(" (0-1023 scale)");
-#endif
 }

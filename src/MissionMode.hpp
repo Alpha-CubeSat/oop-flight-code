@@ -3,6 +3,7 @@
 
 #include "Modes/acs_mode_type.enum"
 #include "Modes/mode_type.enum"
+#include <string>
 
 class MissionMode
 {
@@ -15,6 +16,7 @@ public:
         start_time = new_start_time;
     }
     virtual int get_id();
+    virtual std::string get_name();
     virtual mode_type get_type();
 };
 
@@ -26,6 +28,10 @@ public:
     int get_id()
     {
         return 0;
+    }
+    std::string get_name()
+    {
+        return "Boot";
     }
     mode_type get_type()
     {
@@ -42,6 +48,10 @@ public:
     {
         return 1;
     }
+    std::string get_name()
+    {
+        return "Alive Signal";
+    }
     mode_type get_type()
     {
         return mode_type::TRANSMIT;
@@ -56,6 +66,10 @@ public:
     int get_id()
     {
         return 2;
+    }
+    std::string get_name()
+    {
+        return "Low Power Alive Signal";
     }
     mode_type get_type()
     {
@@ -72,6 +86,10 @@ public:
     {
         return 3;
     }
+    std::string get_name()
+    {
+        return "Detumble Spin";
+    }
     mode_type get_type()
     {
         return mode_type::NORMAL;
@@ -86,6 +104,10 @@ public:
     int get_id()
     {
         return 4;
+    }
+    std::string get_name()
+    {
+        return "Low Power Detumble Spin";
     }
     mode_type get_type()
     {
@@ -102,6 +124,10 @@ public:
     {
         return 5;
     }
+    std::string get_name()
+    {
+        return "Normal";
+    }
     mode_type get_type()
     {
         return mode_type::NORMAL;
@@ -116,6 +142,10 @@ public:
     int get_id()
     {
         return 6;
+    }
+    std::string get_name()
+    {
+        return "Transmit";
     }
     mode_type get_type()
     {
@@ -132,6 +162,10 @@ public:
     {
         return 7;
     }
+    std::string get_name()
+    {
+        return "Low Power";
+    }
     mode_type get_type()
     {
         return mode_type::LP;
@@ -146,6 +180,10 @@ public:
     int get_id()
     {
         return 8;
+    }
+    std::string get_name()
+    {
+        return "Normal Deployment";
     }
     mode_type get_type()
     {
@@ -162,6 +200,10 @@ public:
     {
         return 9;
     }
+    std::string get_name()
+    {
+        return "Transmit Deployment";
+    }
     mode_type get_type()
     {
         return mode_type::TRANSMIT;
@@ -176,6 +218,10 @@ public:
     int get_id()
     {
         return 10;
+    }
+    std::string get_name()
+    {
+        return "Low Power Deployment";
     }
     mode_type get_type()
     {
@@ -192,6 +238,10 @@ public:
     {
         return 11;
     }
+    std::string get_name()
+    {
+        return "Normal Armed";
+    }
     mode_type get_type()
     {
         return mode_type::NORMAL;
@@ -206,6 +256,10 @@ public:
     int get_id()
     {
         return 12;
+    }
+    std::string get_name()
+    {
+        return "Transmit Armed";
     }
     mode_type get_type()
     {
@@ -222,6 +276,10 @@ public:
     {
         return 13;
     }
+    std::string get_name()
+    {
+        return "Low Power Armed";
+    }
     mode_type get_type()
     {
         return mode_type::LP;
@@ -236,6 +294,10 @@ public:
     int get_id()
     {
         return 14;
+    }
+    std::string get_name()
+    {
+        return "Normal In Sun";
     }
     mode_type get_type()
     {
@@ -252,6 +314,10 @@ public:
     {
         return 15;
     }
+    std::string get_name()
+    {
+        return "Transmit In Sun";
+    }
     mode_type get_type()
     {
         return mode_type::TRANSMIT;
@@ -266,6 +332,10 @@ public:
     int get_id()
     {
         return 16;
+    }
+    std::string get_name()
+    {
+        return "Low Power In Sun";
     }
     mode_type get_type()
     {
@@ -282,6 +352,10 @@ public:
     {
         return 17;
     }
+    std::string get_name()
+    {
+        return "Voltage Failure In Sun";
+    }
     mode_type get_type()
     {
         return mode_type::LP;
@@ -296,6 +370,10 @@ public:
     int get_id()
     {
         return 18;
+    }
+    std::string get_name()
+    {
+        return "Boot IMU";
     }
     mode_type get_type()
     {
@@ -312,6 +390,10 @@ public:
     {
         return 19;
     }
+    std::string get_name()
+    {
+        return "Boot Camera";
+    }
     mode_type get_type()
     {
         return mode_type::OTHER;
@@ -326,6 +408,10 @@ public:
     int get_id()
     {
         return 20;
+    }
+    std::string get_name()
+    {
+        return "Mandatory Burns";
     }
     mode_type get_type()
     {
@@ -342,6 +428,10 @@ public:
     {
         return 21;
     }
+    std::string get_name()
+    {
+        return "Regular Burns";
+    }
     mode_type get_type()
     {
         return mode_type::BURN;
@@ -356,6 +446,10 @@ public:
     int get_id()
     {
         return 22;
+    }
+    std::string get_name()
+    {
+        return "Photo";
     }
     mode_type get_type()
     {

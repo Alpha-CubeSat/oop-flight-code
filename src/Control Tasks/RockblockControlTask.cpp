@@ -10,10 +10,6 @@ RockblockControlTask::RockblockControlTask(unsigned int offset)
 void RockblockControlTask::execute()
 {
     rockblock_mode_type mode = static_cast<rockblock_mode_type>(sfr::rockblock::mode.get());
-#ifdef E2E_TESTING
-    Serial.print("Mission Mode: ");
-    Serial.println(sfr::mission::current_mode->get_id());
-#endif
     switch (mode) {
     case rockblock_mode_type::standby:
         dispatch_standby();

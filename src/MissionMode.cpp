@@ -236,9 +236,6 @@ void MandatoryBurns::transition_to()
     sfr::rockblock::sleep_mode = true;
     sfr::acs::off = true;
     sfr::mission::possible_uncovered = true;
-#ifdef E2E_TESTING
-    sfr::rockblock::downlink_period = 30 * constants::time::one_minute;
-#endif
 }
 
 void MandatoryBurns::dispatch()
@@ -337,17 +334,9 @@ void enter_lp(MissionMode *lp_mode)
 {
     float voltage;
 
-#ifndef E2E_TESTING
     if (!sfr::battery::voltage_average->is_valid() || (sfr::battery::voltage_average->get_value(&voltage) && voltage <= sfr::battery::min_battery)) {
         sfr::mission::current_mode = lp_mode;
     }
-#endif
-
-#ifdef E2E_TESTING
-    if (!sfr::battery::voltage_average->is_valid() || (sfr::battery::voltage_value->get_value(&voltage) && voltage <= sfr::battery::min_battery)) {
-        sfr::mission::current_mode = lp_mode;
-    }
-#endif
 }
 
 void check_previous(MissionMode *normal_mode, MissionMode *transmit_mode)

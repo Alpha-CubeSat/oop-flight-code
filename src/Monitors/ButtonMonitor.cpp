@@ -23,16 +23,4 @@ void ButtonMonitor::execute()
     } else {
         sfr::button::pressed = true;
     }
-
-#ifdef VERBOSE
-    Serial.print("Button: ");
-    Serial.print(sfr::button::pressed);
-    Serial.println("(1 yes, 0 no)");
-    Serial.print("Button valid: ");
-    if (sfr::button::button_pressed->is_valid()) {
-        Serial.println("true");
-    } else {
-        Serial.println("false");
-    }
-#endif
 }

@@ -284,7 +284,7 @@ namespace sfr {
         // OP Codes 2500
         SFRField<bool> off = SFRField<bool>(false, 0x2500, 0, true);
         SFRField<bool> reinitialize = SFRField<bool>(false, 0x2501, 0, true);
-        SFRField<uint8_t> mode = SFRField<uint8_t>(false, 0x2502, 0, true);
+        SFRField<uint8_t> mode = SFRField<uint8_t>((uint8_t)acs_mode_type::detumble, 0x2502, 0, true);
         SFRField<uint8_t> simple_mag = SFRField<uint8_t>(false, 0x2503, 0, true);
         SFRField<uint32_t> simple_current = SFRField<uint32_t>(false, 0x2504, 0, true);
         SFRField<uint32_t> on_time = SFRField<uint32_t>(false, 0x2505, 0, true);
