@@ -75,7 +75,6 @@ bool SensorReading::get_value(float *value_location)
 
 void SensorReading::set_value(float x)
 {
-    // LJG TODO might need to add whether we want to check for repeated values in the constructor
     // check if value is within expected range
     if (x <= max && x >= min) {
         if (valid && !repeated_values(&buffer, x)) {

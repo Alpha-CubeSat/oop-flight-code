@@ -1,6 +1,7 @@
 #ifndef MISSION_MODE_HPP_
 #define MISSION_MODE_HPP_
 
+#include "Modes/acs_mode_type.enum"
 #include "Modes/mode_type.enum"
 
 class MissionMode

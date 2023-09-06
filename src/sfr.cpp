@@ -9,10 +9,6 @@ namespace sfr {
         // OP Codes 1200
         SFRField<uint32_t> max_time = SFRField<uint32_t>(2 * constants::time::one_hour, 10UL, 5 * constants::time::one_hour, 0x1200, constants::eeprom::boot_max_time_offset, true);
     } // namespace boot
-    namespace simple {
-        // OP Codes 1300
-        SFRField<uint32_t> max_time = SFRField<uint32_t>(5 * constants::time::one_minute, 10UL, 5 * constants::time::one_hour, 0x1300, constants::eeprom::simple_max_time_offset, true);
-    } // namespace simple
     namespace point {
         // OP Codes 1400
         SFRField<uint32_t> max_time = SFRField<uint32_t>(5 * constants::time::one_minute, 0x1400, constants::eeprom::point_max_time_offset, true);
@@ -45,8 +41,6 @@ namespace sfr {
     } // namespace photoresistor
     namespace mission {
         // OP Codes 1800
-        SFRField<uint32_t> acs_transmit_cycle_time = SFRField<uint32_t>(100 * constants::time::one_minute, 0x1800, constants::eeprom::mission_acs_transmit_cycle_time_offset, true);
-
         SFRField<uint32_t> time_deployed = SFRField<uint32_t>(0, 0x1801, constants::eeprom::mission_time_deployed_offset, true);
         SFRField<bool> deployed = SFRField<bool>(false, 0x1802, constants::eeprom::mission_deployed_offset, true);
         SFRField<bool> already_deployed = SFRField<bool>(false, 0x1803, constants::eeprom::mission_already_deployed_offset, true);
@@ -219,6 +213,7 @@ namespace sfr {
         SFRField<uint16_t> downlink_report_type = SFRField<uint16_t>((uint16_t)report_type::normal_report, 0x2118, constants::eeprom::rockblock_downlink_report_type_offset, true);
         SFRField<uint16_t> mode = SFRField<uint16_t>((uint16_t)rockblock_mode_type::send_at, 0x2119, constants::eeprom::rockblock_mode_offset, true);
 
+        SFRField<uint32_t> on_time = SFRField<uint32_t>(0, 0x211A, 0, true);
 #ifndef SIMULATOR
         HardwareSerial serial = Serial1;
 #else
@@ -286,18 +281,24 @@ namespace sfr {
     } // namespace current
     namespace acs {
         // OP Codes 2500
-        SFRField<uint32_t> max_no_communication = SFRField<uint32_t>(0, 0x2500, constants::eeprom::acs_max_no_communication_offset, true);
+        SFRField<bool> off = SFRField<bool>(false, 0x2500, 0, true);
+        SFRField<bool> reinitialize = SFRField<bool>(false, 0x2501, 0, true);
+        SFRField<uint8_t> mode = SFRField<uint8_t>(false, 0x2502, 0, true);
+        SFRField<uint8_t> simple_mag = SFRField<uint8_t>(false, 0x2503, 0, true);
+        SFRField<uint32_t> simple_current = SFRField<uint32_t>(false, 0x2504, 0, true);
+        SFRField<uint32_t> on_time = SFRField<uint32_t>(false, 0x2505, 0, true);
+        SFRField<uint32_t> detumble_timeout = SFRField<uint32_t>(false, 0x2506, 0, true);
 
-#ifndef E2E_TESTING
-        SFRField<uint32_t> on_time = SFRField<uint32_t>(5 * constants::time::one_minute, 0x2501, constants::eeprom::acs_on_time_offset, true);
-#endif
-        SFRField<bool> off = SFRField<bool>(true, 0x2502, constants::eeprom::acs_off_offset, true);
+        // Starshot parameters
 
-        SFRField<uint16_t> mag = SFRField<uint16_t>((uint16_t)simple_acs_type::x, 0x2503, constants::eeprom::acs_mag_offset, true);
-        SFRField<uint32_t> detumble_timeout = SFRField<uint32_t>(30 * constants::time::one_second, 0x2504, constants::eeprom::acs_detumble_timeout_offset, true);
-#ifdef E2E_TESTING
-        SFRField<uint32_t> on_time = SFRField<uint32_t>(5 * constants::time::one_second, 0x2501, constants::eeprom::acs_on_time_offset, true);
-#endif
+        SFRField<uint32_t> Id_input = SFRField<uint32_t>(0.0021, 0x2507, 0, true);
+        SFRField<uint32_t> Kd_input = SFRField<uint32_t>(0.0007935279615795299, 0x2508, 0, true);
+        SFRField<uint32_t> Kp_input = SFRField<uint32_t>(5.2506307629097953E-10, 0x2509, 0, true);
+        SFRField<uint32_t> c_input = SFRField<uint32_t>(0.004, 0x250A, 0, true);
+
+        // simulation only
+        uint32_t last_time = 0;
+
     } // namespace acs
     namespace battery {
         // OP Codes 2600

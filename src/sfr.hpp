@@ -9,7 +9,6 @@
 #include "Modes/rockblock_mode_type.enum"
 #include "Modes/sensor_init_mode_type.enum"
 #include "Modes/sensor_mode_type.enum"
-#include "Modes/simple_acs_type.enum"
 #include "Phase.hpp"
 #include "RockblockCommand.hpp"
 #include "RockblockSimulator.hpp"
@@ -28,10 +27,6 @@ namespace sfr {
         // OP Codes 1200
         extern SFRField<uint32_t> max_time;
     } // namespace boot
-    namespace simple {
-        // OP Codes 1300
-        extern SFRField<uint32_t> max_time;
-    } // namespace simple
     namespace point {
         // OP Codes 1400
         extern SFRField<uint32_t> max_time;
@@ -65,8 +60,6 @@ namespace sfr {
     } // namespace photoresistor
     namespace mission {
         // OP Codes 1800
-        extern SFRField<uint32_t> acs_transmit_cycle_time;
-
         extern SFRField<uint32_t> time_deployed;
         extern SFRField<bool> deployed;
         extern SFRField<bool> already_deployed;
@@ -238,6 +231,8 @@ namespace sfr {
         extern SFRField<uint16_t> downlink_report_type;
         extern SFRField<uint16_t> mode;
 
+        extern SFRField<uint32_t> on_time;
+
 #ifndef SIMULATOR
         extern HardwareSerial serial;
 #else
@@ -305,14 +300,23 @@ namespace sfr {
     } // namespace current
     namespace acs {
         // OP Codes 2500
-        extern SFRField<uint32_t> max_no_communication;
-
-        extern SFRField<uint32_t> on_time;
         extern SFRField<bool> off;
-
-        extern SFRField<uint16_t> mag;
-
+        extern SFRField<bool> reinitialize;
+        extern SFRField<uint8_t> mode;
+        extern SFRField<uint8_t> simple_mag;
+        extern SFRField<uint32_t> simple_current;
+        extern SFRField<uint32_t> on_time;
         extern SFRField<uint32_t> detumble_timeout;
+
+        // Starshot parameters
+        extern SFRField<uint32_t> Id_input;
+        extern SFRField<uint32_t> Kd_input;
+        extern SFRField<uint32_t> Kp_input;
+        extern SFRField<uint32_t> c_input;
+
+        // simulation only
+        extern uint32_t last_time;
+
     } // namespace acs
     namespace battery {
         // OP Codes 2600
@@ -322,6 +326,7 @@ namespace sfr {
 
         extern SensorReading *voltage_value;
         extern SensorReading *voltage_average;
+
     } // namespace battery
     namespace button {
         // OP Codes 2700

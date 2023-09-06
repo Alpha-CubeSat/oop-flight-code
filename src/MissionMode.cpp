@@ -40,6 +40,7 @@ void LowPowerAliveSignal::dispatch()
 void DetumbleSpin::transition_to()
 {
     acs_mode_settings();
+    sfr::acs::mode = (uint8_t)acs_mode_type::detumble;
 }
 void DetumbleSpin::dispatch()
 {
@@ -66,7 +67,6 @@ void Normal::transition_to()
 }
 void Normal::dispatch()
 {
-
     enter_lp(sfr::mission::lowPower);
     timed_out(sfr::mission::transmit, sfr::acs::on_time);
 }
@@ -87,7 +87,7 @@ void Transmit::transition_to()
 void Transmit::dispatch()
 {
     enter_lp(sfr::mission::lowPower);
-    timed_out(sfr::mission::normal, sfr::mission::acs_transmit_cycle_time - sfr::acs::on_time);
+    timed_out(sfr::mission::normal, sfr::rockblock::on_time);
 }
 
 void NormalDeployment::transition_to()
@@ -107,7 +107,7 @@ void TransmitDeployment::transition_to()
 void TransmitDeployment::dispatch()
 {
     enter_lp(sfr::mission::lowPowerDeployment);
-    timed_out(sfr::mission::normalDeployment, sfr::mission::acs_transmit_cycle_time - sfr::acs::on_time);
+    timed_out(sfr::mission::normalDeployment, sfr::rockblock::on_time);
 }
 
 void LowPowerDeployment::transition_to()
@@ -137,7 +137,7 @@ void TransmitArmed::transition_to()
 void TransmitArmed::dispatch()
 {
     enter_lp(sfr::mission::lowPowerArmed);
-    timed_out(sfr::mission::normalArmed, sfr::mission::acs_transmit_cycle_time - sfr::acs::on_time);
+    timed_out(sfr::mission::normalArmed, sfr::rockblock::on_time);
 }
 
 void LowPowerArmed::transition_to()
@@ -155,7 +155,7 @@ void NormalInSun::transition_to()
 }
 void NormalInSun::dispatch()
 {
-    timed_out(sfr::mission::transmitInSun, sfr::acs::on_time);
+    (sfr::mission::transmitInSun, sfr::acs::on_time);
     enter_lp_insun();
     exit_insun_phase(sfr::mission::bootImu);
 }
@@ -166,7 +166,7 @@ void TransmitInSun::transition_to()
 }
 void TransmitInSun::dispatch()
 {
-    timed_out(sfr::mission::normalInSun, sfr::mission::acs_transmit_cycle_time - sfr::acs::on_time);
+    (sfr::mission::normalInSun, sfr::rockblock::on_time);
     enter_lp_insun();
     exit_insun_phase(sfr::mission::bootImu);
 }
@@ -307,6 +307,7 @@ void exit_detumble_phase(MissionMode *mode)
         sfr::imu::gyro_x_average->get_value(&gyro_x) && gyro_x <= sfr::detumble::max_stable_gyro_x.get_float() &&
         sfr::imu::gyro_y_average->get_value(&gyro_y) && gyro_y <= sfr::detumble::max_stable_gyro_y.get_float()) {
         sfr::mission::current_mode = mode;
+        sfr::acs::mode = (uint8_t)acs_mode_type::point;
     }
 
     // cubesat will never stabilize: x gyro or y gyro are greater than 0.7 rad/s
@@ -314,11 +315,13 @@ void exit_detumble_phase(MissionMode *mode)
         ((sfr::imu::gyro_x_average->get_value(&gyro_x) && gyro_x >= sfr::detumble::min_unstable_gyro_x.get_float()) ||
          (sfr::imu::gyro_y_average->get_value(&gyro_y) && gyro_y >= sfr::detumble::min_unstable_gyro_y.get_float()))) {
         sfr::mission::current_mode = mode;
+        sfr::acs::mode = (uint8_t)acs_mode_type::point;
     }
 
     // detumble has timed out
     if (millis() - sfr::mission::stabilization->start_time >= sfr::stabilization::max_time) {
         sfr::mission::current_mode = mode;
+        sfr::acs::mode = (uint8_t)acs_mode_type::point;
     }
 }
 

@@ -19,7 +19,8 @@ MainControlLoop::MainControlLoop()
       camera_control_task(constants::timecontrol::camera_control_task_offset),
       rockblock_control_task(constants::timecontrol::rockblock_control_task_offset),
       eeprom_control_task(constants::timecontrol::eeprom_control_task_offset),
-      mission_manager(constants::timecontrol::mission_manager_offset)
+      mission_manager(constants::timecontrol::mission_manager_offset),
+      acs_control_task(constants::timecontrol::acs_monitor_offset)
 {
     delay(1000);
 }
@@ -42,12 +43,16 @@ void MainControlLoop::execute()
         sfr::mission::current_mode = sfr::mission::normal;
     }
 #endif
+
     clock_manager.execute();
+    burnwire_control_task.execute_on_time();
+    rockblock_control_task.execute_on_time();
+    command_monitor.execute_on_time();
     mission_manager.execute_on_time();
+
     battery_monitor.execute_on_time();
     button_monitor.execute_on_time();
     camera_report_monitor.execute_on_time();
-    command_monitor.execute_on_time();
     current_monitor.execute_on_time();
     imu_monitor.execute_on_time();
     imu_downlink.execute_on_time();
@@ -56,8 +61,8 @@ void MainControlLoop::execute()
     photoresistor_monitor.execute_on_time();
     rockblock_report_monitor.execute_on_time();
     temperature_monitor.execute_on_time();
-    burnwire_control_task.execute_on_time();
+    acs_control_task.execute_on_time();
     camera_control_task.execute_on_time();
-    rockblock_control_task.execute_on_time();
+
     eeprom_control_task.execute_on_time();
 }

@@ -1,0 +1,11 @@
+#ifndef mag_type_enum_
+#define mag_type_enum_
+
+enum class mag_type : unsigned char
+{
+    x = 0,
+    y,
+    z
+};
+
+#endif

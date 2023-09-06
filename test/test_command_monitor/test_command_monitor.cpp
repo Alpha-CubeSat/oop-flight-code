@@ -156,13 +156,6 @@ void test_camera()
 //     command_monitor.execute();
 //     TEST_ASSERT(sfr::acs::mode == acs_mode_type::full);
 
-//     acs mode = simple
-//     sfr::rockblock::f_opcode = command_monitor.get_decimal_opcode(constants::rockblock::acs_mode);
-//     sfr::rockblock::f_arg_1 = command_monitor.get_decimal_arg(constants::rockblock::simple);
-//     sfr::rockblock::waiting_command = true;
-//     command_monitor.execute();
-//     TEST_ASSERT(sfr::acs::mode == acs_mode_type::simple);
-
 //     acs mode = off
 //     sfr::rockblock::f_opcode = command_monitor.get_decimal_opcode(constants::rockblock::acs_mode);
 //     sfr::rockblock::f_arg_1 = command_monitor.get_decimal_arg(constants::rockblock::off);
