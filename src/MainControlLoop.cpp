@@ -31,6 +31,8 @@ void MainControlLoop::execute()
 
 #ifdef VERBOSE
     Serial.println("--------------------START LOOP--------------------");
+    // TODO print time on here
+
     // mission mode
     Serial.print("Current Mission Mode: ");
     Serial.println(sfr::mission::current_mode->get_name().c_str());
@@ -62,13 +64,13 @@ void MainControlLoop::execute()
     // ACS
     Serial.print("ACS Mode: ");
     switch (sfr::acs::mode) {
-    case (0):
+    case ((uint8_t)acs_mode_type::simple):
         Serial.println("SIMPLE");
         break;
-    case (1):
+    case ((uint8_t)acs_mode_type::point):
         Serial.println("POINT");
         break;
-    case (2):
+    case ((uint8_t)acs_mode_type::detumble):
         Serial.println("DETUMBLE");
         break;
     }

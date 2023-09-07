@@ -155,7 +155,7 @@ void NormalInSun::transition_to()
 }
 void NormalInSun::dispatch()
 {
-    (sfr::mission::transmitInSun, sfr::acs::on_time);
+    timed_out(sfr::mission::transmitInSun, sfr::acs::on_time);
     enter_lp_insun();
     exit_insun_phase(sfr::mission::bootImu);
 }
@@ -293,14 +293,14 @@ void exit_signal_phase(MissionMode *mode)
 
 void exit_detumble_phase(MissionMode *mode)
 {
+
     // TODO min stable/unstable gyro and max stable gyro are SFR fields with resolution. FS-160
     float gyro_x;
     float gyro_y;
     float gyro_z;
 
     // cubesat has stabilized: gyro z > 1 rad/s && gyro x and gyro y are below 0.2 rad/s
-    if (sfr::imu::gyro_z_average->is_valid() && sfr::imu::gyro_x_average->is_valid() && sfr::imu::gyro_y_average->is_valid() &&
-        sfr::imu::gyro_z_average->get_value(&gyro_z) && gyro_z >= sfr::detumble::min_stable_gyro_z.get_float() &&
+    if (sfr::imu::gyro_z_average->get_value(&gyro_z) && gyro_z >= sfr::detumble::min_stable_gyro_z.get_float() &&
         sfr::imu::gyro_x_average->get_value(&gyro_x) && gyro_x <= sfr::detumble::max_stable_gyro_x.get_float() &&
         sfr::imu::gyro_y_average->get_value(&gyro_y) && gyro_y <= sfr::detumble::max_stable_gyro_y.get_float()) {
         sfr::mission::current_mode = mode;
@@ -308,9 +308,8 @@ void exit_detumble_phase(MissionMode *mode)
     }
 
     // cubesat will never stabilize: x gyro or y gyro are greater than 0.7 rad/s
-    if (sfr::imu::gyro_x_average->is_valid() && sfr::imu::gyro_y_average->is_valid() &&
-        ((sfr::imu::gyro_x_average->get_value(&gyro_x) && gyro_x >= sfr::detumble::min_unstable_gyro_x.get_float()) ||
-         (sfr::imu::gyro_y_average->get_value(&gyro_y) && gyro_y >= sfr::detumble::min_unstable_gyro_y.get_float()))) {
+    if ((sfr::imu::gyro_x_average->get_value(&gyro_x) && gyro_x >= sfr::detumble::min_unstable_gyro_x.get_float()) ||
+        (sfr::imu::gyro_y_average->get_value(&gyro_y) && gyro_y >= sfr::detumble::min_unstable_gyro_y.get_float())) {
         sfr::mission::current_mode = mode;
         sfr::acs::mode = (uint8_t)acs_mode_type::point;
     }
@@ -319,6 +318,8 @@ void exit_detumble_phase(MissionMode *mode)
     if (millis() - sfr::mission::stabilization->start_time >= sfr::stabilization::max_time) {
         sfr::mission::current_mode = mode;
         sfr::acs::mode = (uint8_t)acs_mode_type::point;
+        while (true) {
+        };
     }
 }
 

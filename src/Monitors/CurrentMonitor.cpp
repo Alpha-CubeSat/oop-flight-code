@@ -18,7 +18,7 @@ void CurrentMonitor::execute()
     float voltage = (val * constants::current::voltage_ref) / constants::current::resolution;
     float milliamps = 1000 * voltage / (constants::current::load * constants::current::shunt);
 
-    sfr::current::solar_current_average->set_value(milliamps);
+    sfr::current::solar_current_average->set_value(milliamps, false);
 
     if (sfr::current::solar_current_average->get_value(&milliamps)) {
 

@@ -22,9 +22,9 @@ private:
 
 public:
     SensorReading(fault_index_type type, uint8_t buffer_size, float max, float min); // constructor
-    SensorReading(uint8_t buffer_size, float max, float min);                        // constructor
+    SensorReading(uint8_t buffer_size, float min, float max);                        // constructor
     bool get_value(float *value_location);                                           // get SensorReading averaged value
-    void set_value(float x);                                                         // set SensorReading value
+    void set_value(float x, bool override_valid);                                    // set SensorReading value
     void set_invalid();
     void set_valid();
     float get_min();
