@@ -353,8 +353,7 @@ namespace constants {
         static constexpr unsigned int camera_step_time_offset = camera_start_progress_offset + 2;
         static constexpr unsigned int camera_init_start_time_offset = camera_step_time_offset + 5;
         static constexpr unsigned int camera_init_timeout_offset = camera_init_start_time_offset + 5;
-        static constexpr unsigned int camera_begin_delay_offset = camera_init_timeout_offset + 5;
-        static constexpr unsigned int camera_resolution_set_delay_offset = camera_begin_delay_offset + 5;
+        static constexpr unsigned int camera_resolution_set_delay_offset = camera_init_start_time_offset + 5;
         static constexpr unsigned int camera_resolution_get_delay_offset = camera_resolution_set_delay_offset + 5;
         static constexpr unsigned int camera_init_mode_offset = camera_resolution_get_delay_offset + 5;
         static constexpr unsigned int camera_mode_offset = camera_init_mode_offset + 3;

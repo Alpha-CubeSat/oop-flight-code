@@ -162,7 +162,6 @@ namespace sfr {
         extern SFRField<uint32_t> step_time;
         extern SFRField<uint32_t> init_start_time;
         extern SFRField<uint32_t> init_timeout;
-        extern SFRField<uint32_t> begin_delay;
         extern SFRField<uint32_t> resolution_set_delay;
         extern SFRField<uint32_t> resolution_get_delay;
 

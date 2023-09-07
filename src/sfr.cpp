@@ -146,7 +146,6 @@ namespace sfr {
         SFRField<uint32_t> step_time = SFRField<uint32_t>(0, 0x2006, constants::eeprom::camera_step_time_offset, true);
         SFRField<uint32_t> init_start_time = SFRField<uint32_t>(0, 0x2007, constants::eeprom::camera_init_start_time_offset, true);
         SFRField<uint32_t> init_timeout = SFRField<uint32_t>(12000, 0x2008, constants::eeprom::camera_init_timeout_offset, true);
-        SFRField<uint32_t> begin_delay = SFRField<uint32_t>(100, 0x2009, constants::eeprom::camera_begin_delay_offset, true);
         SFRField<uint32_t> resolution_set_delay = SFRField<uint32_t>(500, 0x2010, constants::eeprom::camera_resolution_set_delay_offset, true);
         SFRField<uint32_t> resolution_get_delay = SFRField<uint32_t>(200, 0x2011, constants::eeprom::camera_resolution_get_delay_offset, true);
 
