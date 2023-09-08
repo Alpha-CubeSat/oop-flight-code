@@ -14,6 +14,11 @@ void setup()
     delay(5000);
     Pins::setInitialPinStates();
     EEPROMRestore::execute();
+
+#ifdef NO_ACS
+    sfr::acs::on_time = 0;
+    sfr::acs::detumble_timeout = 0;
+#endif
 }
 
 void loop()

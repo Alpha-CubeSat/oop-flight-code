@@ -155,7 +155,7 @@ void NormalInSun::transition_to()
 }
 void NormalInSun::dispatch()
 {
-    (sfr::mission::transmitInSun, sfr::acs::on_time);
+    timed_out(sfr::mission::transmitInSun, sfr::acs::on_time);
     enter_lp_insun();
     exit_insun_phase(sfr::mission::bootImu);
 }

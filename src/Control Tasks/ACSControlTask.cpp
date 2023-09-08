@@ -18,14 +18,11 @@ ACSControlTask::ACSControlTask(unsigned int offset)
     plantObj.initialize(altitude_input, I_input, inclination_input, m_input, q0_input, wx_input, wy_input, wz_input);
 #endif
 
-#ifdef ACS
     starshotObj.initialize(constants::acs::step_size_input, constants::acs::A_input, sfr::acs::Id_input, sfr::acs::Kd_input, sfr::acs::Kp_input, sfr::acs::c_input, constants::acs::i_max_input, constants::acs::k_input, constants::acs::n_input);
-#endif
 }
 
 void ACSControlTask::execute()
 {
-#ifdef ACS
     if (sfr::acs::reinitialize) {
         starshotObj.initialize(constants::acs::step_size_input, constants::acs::A_input, sfr::acs::Id_input, sfr::acs::Kd_input, sfr::acs::Kp_input, sfr::acs::c_input, constants::acs::i_max_input, constants::acs::k_input, constants::acs::n_input);
         sfr::acs::reinitialize = false;
@@ -109,7 +106,6 @@ void ACSControlTask::execute()
     ACSWrite(constants::acs::xtorqorder, current_x, constants::acs::xout1, constants::acs::xout2, constants::acs::xPWMpin);
     ACSWrite(constants::acs::ytorqorder, current_y, constants::acs::yout1, constants::acs::yout2, constants::acs::yPWMpin);
     ACSWrite(constants::acs::ztorqorder, current_z, constants::acs::zout1, constants::acs::zout2, constants::acs::zPWMpin);
-#endif
 }
 
 int ACSControlTask::current2PWM(float current)

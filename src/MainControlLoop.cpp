@@ -60,7 +60,6 @@ void MainControlLoop::execute()
     }
 
     // ACS
-#ifdef ACS
     Serial.print("ACS Mode: ");
     switch (sfr::acs::mode) {
     case (0):
@@ -79,7 +78,6 @@ void MainControlLoop::execute()
     } else {
         Serial.println("ACS ON");
     }
-#endif
 
     // battery
     if (sfr::battery::voltage_average->get_value(&val)) {
