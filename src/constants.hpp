@@ -45,6 +45,7 @@ namespace constants {
         constexpr size_t command_len = opcode_len + arg1_len + arg2_len;
         constexpr size_t max_conseq_read = 3;
 
+        constexpr uint8_t normal_report_delimiter = 170;
         constexpr uint8_t end_of_normal_downlink_flag1 = 254;
         constexpr uint8_t end_of_normal_downlink_flag2 = 255;
         constexpr uint8_t end_of_command_upload_flag1 = 0;
