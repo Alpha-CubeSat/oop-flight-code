@@ -13,6 +13,7 @@ class FaultInterface
 {
 private:
     bool suppressed;
+    bool forced;
     bool signaled;
     bool base;
     uint16_t opcode;
@@ -26,8 +27,9 @@ public:
 
     virtual void signal();
     virtual void release();
+    virtual void force();
     virtual void suppress();
-    virtual void unsuppress();
+    virtual void restore();
     virtual bool get_base();
     virtual bool get_signaled();
     virtual bool get_supressed();
@@ -41,6 +43,7 @@ class Fault : public FaultInterface
 {
 private:
     bool suppressed;
+    bool forced;
     bool signaled;
     bool base;
     uint16_t opcode;
@@ -67,16 +70,23 @@ public:
     void release();
 
     /**
+     * @brief Force the fault, overwriting the current base flag with high, no matter the signal.
+     *
+     * Unsuppresses the fault if it was suppressed.
+     */
+    void force();
+
+    /**
      * @brief Suppresses the fault, overwriting the current base flag with low, no matter the signal.
      *
+     * Unforces the fault if it was forced.
      */
     void suppress();
 
     /**
-     * @brief Unsuppresses the fault, setting the current base flag to the current fault signal.
-     *
+     * @brief Restore the fault base to the raw sensor data. Unsuppresses and unforces the fault.
      */
-    void unsuppress();
+    void restore();
 
     /**
      * @brief The current value of the fault
@@ -95,6 +105,14 @@ public:
     bool get_signaled();
 
     /**
+     * @brief Whether the fault is currently being forced.
+     *
+     * @return true when the fault is being forced.
+     * @return false when the fault is not being forced.
+     */
+    bool get_forced();
+
+    /**
      * @brief Whether the fault is currently being supressed.
      *
      * @return true when the fault is being supressed.
@@ -103,13 +121,14 @@ public:
     bool get_supressed();
 
     /**
-     * @brief Serializes the three main control booleans.
+     * @brief Serializes the four main control booleans.
      *
-     * Bit 2 - Base (B),
+     * Bit 3 - Base (B),
+     * Bit 2 - Forced (F)
      * Bit 1 - Supressed (Su),
      * Bit 0 - Signaled (Si)
      *
-     * @return uint8_t - The three major indicators of fault status. 00000BSuSi
+     * @return uint8_t - The four major indicators of fault status. 0000BFSuSi
      */
     uint8_t serialize();
 };
