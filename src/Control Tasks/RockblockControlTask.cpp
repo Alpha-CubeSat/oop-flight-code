@@ -519,9 +519,9 @@ RockblockCommand *RockblockControlTask::commandFactory(RawRockblockCommand raw)
         return new SFROverrideCommand(raw);
     } else if (op_code <= constants::rockblock::opcodes::fault_opcode_max && op_code >= constants::rockblock::opcodes::fault_opcode_min) {
 #ifdef VERBOSE_RB
-        Serial.println("Surpress Fault Command");
+        Serial.println("Fault Override Command");
 #endif
-        return new FaultSurpressCommand(raw);
+        return new FaultOverrideCommand(raw);
     }
 
     else if (op_code == constants::rockblock::opcodes::sfr_field_opcode_deploy) {

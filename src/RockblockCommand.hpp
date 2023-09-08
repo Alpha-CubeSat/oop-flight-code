@@ -88,13 +88,13 @@ private:
     SFRInterface *field;
 };
 
-class FaultSurpressCommand : public RockblockCommand
+class FaultOverrideCommand : public RockblockCommand
 {
 private:
     FaultInterface *fault;
 
 public:
-    FaultSurpressCommand(RawRockblockCommand raw) : RockblockCommand{raw}
+    FaultOverrideCommand(RawRockblockCommand raw) : RockblockCommand{raw}
     {
         if (FaultInterface::opcode_lookup.find(f_opcode) != FaultInterface::opcode_lookup.end()) {
             fault = FaultInterface::opcode_lookup[f_opcode];
@@ -104,10 +104,12 @@ public:
     void execute()
     {
         if (fault) {
-            if (f_arg_1) {
+            if (f_arg_1 && !f_arg_2) {
+                fault->force();
+            } else if (!f_arg_1 && f_arg_2) {
                 fault->suppress();
-            } else {
-                fault->unsuppress();
+            } else if (!f_arg_1 && !f_arg_2) {
+                fault->restore();
             }
         }
     }
