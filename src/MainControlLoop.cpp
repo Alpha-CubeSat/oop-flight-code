@@ -141,10 +141,6 @@ void MainControlLoop::execute()
 
 #endif
 
-    faults::fault_1_signaled = 0;
-    faults::fault_2_signaled = 0;
-    faults::fault_3_signaled = 0;
-
     clock_manager.execute();
     burnwire_control_task.execute_on_time();
     rockblock_control_task.execute_on_time();
