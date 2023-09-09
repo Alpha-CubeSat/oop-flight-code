@@ -2,6 +2,7 @@
 #include <EEPROM.h>
 
 // Script for zeroing out all EERPOM bytes
+// Set PlatformIO environment to `env:clear_eeprom` then upload.
 
 void setup()
 {
