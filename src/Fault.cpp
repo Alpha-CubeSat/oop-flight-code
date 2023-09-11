@@ -64,7 +64,7 @@ bool Fault::get_forced()
     return forced;
 }
 
-bool Fault::get_supressed()
+bool Fault::get_suppressed()
 {
     return suppressed;
 }

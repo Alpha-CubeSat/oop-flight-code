@@ -32,7 +32,7 @@ public:
     virtual void restore();
     virtual bool get_base();
     virtual bool get_signaled();
-    virtual bool get_supressed();
+    virtual bool get_suppressed();
 };
 
 /**
@@ -113,19 +113,19 @@ public:
     bool get_forced();
 
     /**
-     * @brief Whether the fault is currently being supressed.
+     * @brief Whether the fault is currently being suppressed.
      *
-     * @return true when the fault is being supressed.
-     * @return false when the fault is not being supressed
+     * @return true when the fault is being suppressed.
+     * @return false when the fault is not being suppressed
      */
-    bool get_supressed();
+    bool get_suppressed();
 
     /**
      * @brief Serializes the four main control booleans.
      *
      * Bit 3 - Base (B),
      * Bit 2 - Forced (F)
-     * Bit 1 - Supressed (Su),
+     * Bit 1 - suppressed (Su),
      * Bit 0 - Signaled (Si)
      *
      * @return uint8_t - The four major indicators of fault status. 0000BFSuSi
