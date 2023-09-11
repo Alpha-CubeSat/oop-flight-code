@@ -515,11 +515,20 @@ RockblockCommand *RockblockControlTask::commandFactory(RawRockblockCommand raw)
 #ifdef VERBOSE_RB
         Serial.println("SFR Override Command");
 #endif
+
         return new SFROverrideCommand(raw);
-    } else if (op_code == constants::rockblock::opcodes::sfr_field_opcode_deploy) {
+    } else if (op_code <= constants::rockblock::opcodes::fault_opcode_max && op_code >= constants::rockblock::opcodes::fault_opcode_min) {
+#ifdef VERBOSE_RB
+        Serial.println("Fault Override Command");
+#endif
+        return new FaultOverrideCommand(raw);
+    }
+
+    else if (op_code == constants::rockblock::opcodes::sfr_field_opcode_deploy) {
 #ifdef VERBOSE_RB
         Serial.println("SFR Deploy Command");
 #endif
+
         return new DeployCommand(raw);
     } else if (op_code == constants::rockblock::opcodes::sfr_field_opcode_arm) {
 #ifdef VERBOSE_RB

@@ -63,6 +63,10 @@ namespace constants {
             // Fire Command
             constexpr uint16_t sfr_field_opcode_fire = 0x5555;
 
+            // Fault Suppress Commands
+            constexpr uint16_t fault_opcode_min = 0x6000;
+            constexpr uint16_t fault_opcode_max = 0x6100;
+
         } // namespace opcodes
     }     // namespace rockblock
     namespace temperature {

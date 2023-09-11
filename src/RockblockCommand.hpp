@@ -2,6 +2,7 @@
 #define _ROCKBLOCKCOMMAND_HPP_
 
 #include "Arduino.h"
+#include "Fault.hpp"
 #include "SFRField.hpp"
 #include "constants.hpp"
 #include <stdint.h>
@@ -85,6 +86,38 @@ public:
 
 private:
     SFRInterface *field;
+};
+
+class FaultOverrideCommand : public RockblockCommand
+{
+private:
+    FaultInterface *fault;
+
+public:
+    FaultOverrideCommand(RawRockblockCommand raw) : RockblockCommand{raw}
+    {
+        if (FaultInterface::opcode_lookup.find(f_opcode) != FaultInterface::opcode_lookup.end()) {
+            fault = FaultInterface::opcode_lookup[f_opcode];
+        }
+    };
+
+    void execute()
+    {
+        if (fault) {
+            if (f_arg_1 && !f_arg_2) {
+                fault->force();
+            } else if (!f_arg_1 && f_arg_2) {
+                fault->suppress();
+            } else if (!f_arg_1 && !f_arg_2) {
+                fault->restore();
+            }
+        }
+    }
+
+    bool isValid()
+    {
+        return fault != nullptr;
+    }
 };
 
 class UnknownCommand : public RockblockCommand

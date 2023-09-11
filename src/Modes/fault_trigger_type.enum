@@ -1,0 +1,13 @@
+#ifndef fault_trigger_type_enum_
+#define fault_trigger_type_enum_
+
+enum class fault_trigger_type : unsigned char
+{
+    // FAULT1
+    repeated_values,
+    out_of_bounds,
+    other
+
+};
+
+#endif
