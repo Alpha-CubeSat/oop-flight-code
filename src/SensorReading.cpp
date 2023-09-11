@@ -59,9 +59,15 @@ void SensorReading::set_valid()
 
 void SensorReading::set_invalid()
 {
+
     valid = false;
     if (fault != NULL) {
+        if (!fault->get_suppressed()) {
+            buffer.clear();
+        }
         fault->signal();
+    } else {
+        buffer.clear();
     }
 }
 
