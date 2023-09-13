@@ -45,6 +45,7 @@ namespace constants {
         constexpr size_t command_len = opcode_len + arg1_len + arg2_len;
         constexpr size_t max_conseq_read = 3;
 
+        constexpr uint8_t normal_report_delimiter = 170;
         constexpr uint8_t end_of_normal_downlink_flag1 = 254;
         constexpr uint8_t end_of_normal_downlink_flag2 = 255;
         constexpr uint8_t end_of_command_upload_flag1 = 0;
@@ -408,9 +409,8 @@ namespace constants {
         static constexpr unsigned int acs_on_time_offset = acs_max_no_communication_offset + 5;
         static constexpr unsigned int acs_off_offset = acs_on_time_offset + 5;
         static constexpr unsigned int acs_mag_offset = acs_off_offset + 2;
-        static constexpr unsigned int acs_detumble_timeout_offset = acs_mag_offset + 3;
 
-        static constexpr unsigned int battery_acceptable_battery_offset = acs_detumble_timeout_offset + 5;
+        static constexpr unsigned int battery_acceptable_battery_offset = acs_mag_offset + 5;
         static constexpr unsigned int battery_min_battery_offset = battery_acceptable_battery_offset + 5;
         static constexpr unsigned int button_pressed_offset = battery_min_battery_offset + 5;
 

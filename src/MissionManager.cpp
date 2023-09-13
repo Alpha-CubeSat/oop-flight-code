@@ -3,11 +3,14 @@
 MissionManager::MissionManager(unsigned int offset)
     : TimedControlTask<void>(offset)
 {
-    boot_initialization();
 }
 
 void MissionManager::execute()
 {
+    if (first) {
+        boot_initialization();
+        first = false;
+    }
     sfr::mission::current_phase = modeToPhase(sfr::mission::current_mode);
 
     if (sfr::mission::previous_phase->get_id() != sfr::mission::current_phase->get_id()) {

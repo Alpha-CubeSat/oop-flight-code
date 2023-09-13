@@ -8,8 +8,7 @@ namespace sfr {
     namespace boot {
         // OP Codes 1200
         // Boot mode currently set to immediately time out
-        SFRField<uint32_t> max_time = SFRField<uint32_t>(1, 10UL, 5 * constants::time::one_hour, 0x1200, constants::eeprom::boot_max_time_offset, true);
-        // SFRField<uint32_t> max_time = SFRField<uint32_t>(2 * constants::time::one_hour, 10UL, 5 * constants::time::one_hour, 0x1200, constants::eeprom::boot_max_time_offset, true);
+        SFRField<uint32_t> max_time = SFRField<uint32_t>(2 * constants::time::one_hour, 10UL, 5 * constants::time::one_hour, 0x1200, constants::eeprom::boot_max_time_offset, true);
     } // namespace boot
     namespace point {
         // OP Codes 1400
@@ -17,9 +16,6 @@ namespace sfr {
     } // namespace point
     namespace detumble {
         // OP Codes 1500
-        SFRField<uint32_t> start_time = SFRField<uint32_t>(0UL, 0x1500, constants::eeprom::detumble_start_time_offset, true);
-        SFRField<uint32_t> max_time = SFRField<uint32_t>(2 * constants::time::one_hour, 0x1501, constants::eeprom::detumble_max_time_offset, true);
-
         SFRField<uint8_t> min_stable_gyro_z = SFRField<uint8_t>(1, 0, 2, 0x1504, 10, constants::eeprom::detumble_min_stable_gyro_z_offset, true);
         SFRField<uint8_t> max_stable_gyro_x = SFRField<uint8_t>(.2, 0, 1, 0x1505, 10, constants::eeprom::detumble_max_stable_gyro_x_offset, true);
         SFRField<uint8_t> max_stable_gyro_y = SFRField<uint8_t>(.2, 0, 1, 0x1506, 10, constants::eeprom::detumble_max_stable_gyro_y_offset, true);
@@ -243,13 +239,15 @@ namespace sfr {
         SFRField<uint16_t> imu_boot_collection_start_time = SFRField<uint16_t>(0, 0x2209, 0, true);
         SFRField<uint16_t> door_open__collection_start_time = SFRField<uint16_t>(0, 0x220a, 0, true);
 
-        SensorReading *mag_x_value = new SensorReading(1, 0, 0);
-        SensorReading *mag_y_value = new SensorReading(1, 0, 0);
-        SensorReading *mag_z_value = new SensorReading(1, 0, 0);
+        // MIN/MAX placeholders --->
+        SensorReading *mag_x_value = new SensorReading(1, -100, 100);
+        SensorReading *mag_y_value = new SensorReading(1, -100, 100);
+        SensorReading *mag_z_value = new SensorReading(1, -100, 100);
 
-        SensorReading *gyro_x_value = new SensorReading(1, 0, 0);
-        SensorReading *gyro_y_value = new SensorReading(1, 0, 0);
-        SensorReading *gyro_z_value = new SensorReading(1, 0, 0);
+        SensorReading *gyro_x_value = new SensorReading(1, -100, 100);
+        SensorReading *gyro_y_value = new SensorReading(1, -100, 100);
+        SensorReading *gyro_z_value = new SensorReading(1, -100, 100);
+        // MIN/MAX placeholders <--
 
         SensorReading *mag_x_average = new SensorReading(fault_groups::imu_faults::mag_x, 20, 0, 0);
         SensorReading *mag_y_average = new SensorReading(fault_groups::imu_faults::mag_y, 20, 0, 0);
@@ -289,7 +287,6 @@ namespace sfr {
         SFRField<uint8_t> simple_mag = SFRField<uint8_t>(false, 0x2503, 0, true);
         SFRField<uint32_t> simple_current = SFRField<uint32_t>(false, 0x2504, 0, true);
         SFRField<uint32_t> on_time = SFRField<uint32_t>(20 * constants::time::one_minute, 0x2505, 0, true);
-        SFRField<uint32_t> detumble_timeout = SFRField<uint32_t>(false, 0x2506, 0, true);
 
         // Starshot parameters
 
