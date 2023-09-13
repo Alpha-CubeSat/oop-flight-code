@@ -3,29 +3,21 @@
 ACSControlTask::ACSControlTask(unsigned int offset)
     : TimedControlTask<void>(offset)
 {
-#ifdef ACS_SIM
-    double altitude_input = 400;
-    double I_input[9] = {0.00195761450869, -5.836632382E-5, 2.27638093E-6,
-                         -5.836632382E-5, 0.00196346658902, 8.8920475E-7, 2.27638093E-6, 8.8920475E-7,
-                         0.00204697265884};
-
-    double inclination_input = 0.90058989402907408; // 51.6 deg in rad
-    double m_input = 1.3;                           // kg
-    double q0_input[4] = {0.5, 0.5, -0.18301270189221924, 0.6830127018922193};
-    double wx_input = 0.0;
-    double wy_input = 0.0;
-    double wz_input = 1.0;
-    plantObj.initialize(altitude_input, I_input, inclination_input, m_input, q0_input, wx_input, wy_input, wz_input);
-#endif
-
-    starshotObj.initialize(constants::acs::step_size_input, constants::acs::A_input, sfr::acs::Id_input, sfr::acs::Kd_input, sfr::acs::Kp_input, sfr::acs::c_input, constants::acs::i_max_input, constants::acs::k_input, constants::acs::n_input);
 }
 
 void ACSControlTask::execute()
 {
-    if (sfr::acs::reinitialize) {
-        starshotObj.initialize(constants::acs::step_size_input, constants::acs::A_input, sfr::acs::Id_input, sfr::acs::Kd_input, sfr::acs::Kp_input, sfr::acs::c_input, constants::acs::i_max_input, constants::acs::k_input, constants::acs::n_input);
+
+#ifdef ACS_SIM
+    if (first) {
+        plantObj.initialize(altitude_input, I_input, inclination_input, m_input, q0_input, wx_input, wy_input, wz_input);
+#endif
+    }
+
+    if (sfr::acs::reinitialize || first) {
+        starshotObj.initialize(constants::acs::step_size_input, constants::acs::A_input, sfr::acs::Id_input.get_float(), sfr::acs::Kd_input.get_float(), sfr::acs::Kp_input, sfr::acs::c_input.get_float(), constants::acs::i_max_input, constants::acs::k_input, constants::acs::n_input);
         sfr::acs::reinitialize = false;
+        first = false;
     }
 
     imu_valid = sfr::imu::gyro_x_value->get_value(&gyro_x) && sfr::imu::gyro_y_value->get_value(&gyro_y) && sfr::imu::gyro_z_value->get_value(&gyro_z) && sfr::imu::mag_x_value->get_value(&mag_x) && sfr::imu::mag_y_value->get_value(&mag_y) && sfr::imu::mag_z_value->get_value(&mag_z);
