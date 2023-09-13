@@ -11,8 +11,8 @@ void ACSControlTask::execute()
 #ifdef ACS_SIM
     if (first) {
         plantObj.initialize(altitude_input, I_input, inclination_input, m_input, q0_input, wx_input, wy_input, wz_input);
-#endif
     }
+#endif
 
     if (sfr::acs::reinitialize || first) {
         starshotObj.initialize(constants::acs::step_size_input, constants::acs::A_input, sfr::acs::Id_input.get_float(), sfr::acs::Kd_input.get_float(), sfr::acs::Kp_input, sfr::acs::c_input.get_float(), constants::acs::i_max_input, constants::acs::k_input, constants::acs::n_input);
