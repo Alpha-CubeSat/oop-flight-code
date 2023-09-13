@@ -16,8 +16,8 @@ void PhotoresistorMonitor::execute()
     float val = analogRead(constants::photoresistor::pin);
     bool possible_uncovered = false;
 
-    sfr::photoresistor::light_val_average_standby->set_value(val, false);
-    sfr::photoresistor::light_val_average_deployment->set_value(val, false);
+    sfr::photoresistor::light_val_average_standby->set_value(val);
+    sfr::photoresistor::light_val_average_deployment->set_value(val);
 
     // photoresistor is recognized as uncovered
     if ((sfr::photoresistor::light_val_average_standby->get_value(&val) || sfr::photoresistor::light_val_average_deployment->get_value(&val)) && val > constants::photoresistor::light_val) {

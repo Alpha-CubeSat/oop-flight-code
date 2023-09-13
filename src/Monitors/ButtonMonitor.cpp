@@ -8,7 +8,7 @@ ButtonMonitor::ButtonMonitor(unsigned int offset)
 void ButtonMonitor::execute()
 {
     float val = digitalRead(constants::button::button_pin);
-    sfr::button::button_pressed->set_value(val, false);
+    sfr::button::button_pressed->set_value(val);
 
     // button is recognized as not pressed
     if (val == 0) {

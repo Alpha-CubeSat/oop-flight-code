@@ -94,13 +94,13 @@ void IMUMonitor::capture_imu_values()
     imu.setupGyro(imu.LSM9DS1_GYROSCALE_245DPS);
 
     // Save most recent readings
-    sfr::imu::mag_x_value->set_value(mag.magnetic.x, true);
-    sfr::imu::mag_y_value->set_value(mag.magnetic.y, true);
-    sfr::imu::mag_z_value->set_value(mag.magnetic.z, true);
+    sfr::imu::mag_x_value->set_value(mag.magnetic.x);
+    sfr::imu::mag_y_value->set_value(mag.magnetic.y);
+    sfr::imu::mag_z_value->set_value(mag.magnetic.z);
 
-    sfr::imu::gyro_x_value->set_value(gyro.gyro.x, true);
-    sfr::imu::gyro_y_value->set_value(gyro.gyro.y, true);
-    sfr::imu::gyro_z_value->set_value(gyro.gyro.z, true);
+    sfr::imu::gyro_x_value->set_value(gyro.gyro.x);
+    sfr::imu::gyro_y_value->set_value(gyro.gyro.y);
+    sfr::imu::gyro_z_value->set_value(gyro.gyro.z);
 
 // IMU PRINT STATEMENTS FOR LOGGING AND GRAPHING IMU DATA
 #ifdef IMU_TESTING
@@ -115,13 +115,13 @@ void IMUMonitor::capture_imu_values()
 #endif
 
     // Add reading to buffer
-    sfr::imu::mag_x_average->set_value(mag.magnetic.x, true);
-    sfr::imu::mag_y_average->set_value(mag.magnetic.y, true);
-    sfr::imu::mag_z_average->set_value(mag.magnetic.z, true);
+    sfr::imu::mag_x_average->set_value(mag.magnetic.x);
+    sfr::imu::mag_y_average->set_value(mag.magnetic.y);
+    sfr::imu::mag_z_average->set_value(mag.magnetic.z);
 
-    sfr::imu::gyro_x_average->set_value(gyro.gyro.x, true);
-    sfr::imu::gyro_y_average->set_value(gyro.gyro.y, true);
-    sfr::imu::gyro_z_average->set_value(gyro.gyro.z, true);
+    sfr::imu::gyro_x_average->set_value(gyro.gyro.x);
+    sfr::imu::gyro_y_average->set_value(gyro.gyro.y);
+    sfr::imu::gyro_z_average->set_value(gyro.gyro.z);
 }
 
 void IMUMonitor::transition_to_normal()

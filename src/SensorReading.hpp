@@ -9,26 +9,119 @@
 #include <map>
 #include <numeric>
 
+/**
+ * @brief Represents the readings coming from a sensor
+ *
+ */
 class SensorReading
 {
 private:
-    fault_index_type type;    // type of reading
-    uint8_t buffer_size;      // amount of values that should be averaged
-    float max;                // max valid value
-    float min;                // min valid value
-    std::deque<float> buffer; // buffer used to store the raw values
-    bool valid = false;       // if SensorReading is valid
+    /**
+     * @brief Pointer to the fault
+     *
+     */
+    Fault *fault;
+
+    /**
+     * @brief Size of the buffer, the amount of values that should be averaged
+     *
+     */
+    uint8_t buffer_size;
+
+    /**
+     * @brief Max valid value
+     *
+     */
+    float max;
+
+    /**
+     * @brief Min valid value
+     *
+     */
+    float min;
+
+    /**
+     * @brief Buffer used to store the raw values
+     *
+     */
+    std::deque<float> buffer;
+
+    /**
+     * @brief If SensorReading is valid
+     *
+     */
+    bool valid = false;
+
     bool repeated_values(std::deque<float> *buffer, float val);
 
 public:
-    SensorReading(fault_index_type type, uint8_t buffer_size, float max, float min); // constructor
-    SensorReading(uint8_t buffer_size, float min, float max);                        // constructor
-    bool get_value(float *value_location);                                           // get SensorReading averaged value
-    void set_value(float x, bool override_valid);                                    // set SensorReading value
+    /**
+     * @brief Construct a new Sensor Reading object with an associated fault
+     *
+     * @param fault Pointer to the fault associated with the sensor
+     * @param buffer_size Size of the buffer, the amount of values that should be averaged
+     * @param min Minimum valid value
+     * @param max Maximum valid value
+     */
+    SensorReading(Fault *fault, uint8_t buffer_size, float min, float max);
+
+    /**
+     * @brief Construct a new Sensor Reading object with no associated fault
+     *
+     * @param buffer_size Size of the buffer, the amount of values that should be averaged
+     * @param min Minimum valid value
+     * @param max Maximum valid value
+     */
+    SensorReading(uint8_t buffer_size, float min, float max);
+
+    /**
+     * @brief Get sensor reading average value
+     *
+     * @param value_location Where to store the average value
+     * @return true when the buffer is full and the sensor is valid,
+     * @return false otherwise
+     */
+    bool get_value(float *value_location);
+
+    /**
+     * @brief Set the sensor reading value
+     *
+     * @param x The value to set the sensor reading to
+     */
+    void set_value(float x);
+
+    /**
+     * @brief Set the sensor to invalid
+     *
+     */
     void set_invalid();
+
+    /**
+     * @brief Set the sensor to valid
+     *
+     */
     void set_valid();
+
+    /**
+     * @brief Get the minimum valid value of the sensor
+     *
+     * @return float The minimum valid value
+     */
     float get_min();
+
+    /**
+     * @brief Get the maximum valid value of the sensor
+     *
+     * @return float The maximum valid value
+     */
     float get_max();
+
+    /**
+     * @brief Whether the sensor readings are valid
+     *
+     * @return true when the sensor readings are valid,
+     * @return false otherwise
+     */
     bool is_valid();
 };
 

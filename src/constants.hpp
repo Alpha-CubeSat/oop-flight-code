@@ -64,6 +64,10 @@ namespace constants {
             // Fire Command
             constexpr uint16_t sfr_field_opcode_fire = 0x5555;
 
+            // Fault Suppress Commands
+            constexpr uint16_t fault_opcode_min = 0x6000;
+            constexpr uint16_t fault_opcode_max = 0x6100;
+
         } // namespace opcodes
     }     // namespace rockblock
     namespace temperature {
@@ -354,8 +358,7 @@ namespace constants {
         static constexpr unsigned int camera_step_time_offset = camera_start_progress_offset + 2;
         static constexpr unsigned int camera_init_start_time_offset = camera_step_time_offset + 5;
         static constexpr unsigned int camera_init_timeout_offset = camera_init_start_time_offset + 5;
-        static constexpr unsigned int camera_begin_delay_offset = camera_init_timeout_offset + 5;
-        static constexpr unsigned int camera_resolution_set_delay_offset = camera_begin_delay_offset + 5;
+        static constexpr unsigned int camera_resolution_set_delay_offset = camera_init_start_time_offset + 5;
         static constexpr unsigned int camera_resolution_get_delay_offset = camera_resolution_set_delay_offset + 5;
         static constexpr unsigned int camera_init_mode_offset = camera_resolution_get_delay_offset + 5;
         static constexpr unsigned int camera_mode_offset = camera_init_mode_offset + 3;
