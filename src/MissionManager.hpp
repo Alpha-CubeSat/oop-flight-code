@@ -14,6 +14,9 @@ public:
     MissionManager(unsigned int offset);
     Phase *modeToPhase(MissionMode *mission);
     void execute();
+
+private:
+    bool first = true;
 };
 
 #endif

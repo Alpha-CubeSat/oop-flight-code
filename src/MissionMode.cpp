@@ -46,9 +46,9 @@ void DetumbleSpin::dispatch()
 {
     if (sfr::imu::failed_times > sfr::imu::failed_limit) {
         sfr::mission::current_mode = sfr::mission::normal;
+        sfr::acs::mode = (uint8_t)acs_mode_type::point;
     }
     exit_detumble_phase(sfr::mission::normal);
-    timed_out(sfr::mission::normal, sfr::acs::detumble_timeout);
 }
 
 void LowPowerDetumbleSpin::transition_to()
@@ -318,8 +318,6 @@ void exit_detumble_phase(MissionMode *mode)
     if (millis() - sfr::mission::stabilization->start_time >= sfr::stabilization::max_time) {
         sfr::mission::current_mode = mode;
         sfr::acs::mode = (uint8_t)acs_mode_type::point;
-        while (true) {
-        };
     }
 }
 

@@ -307,7 +307,6 @@ namespace sfr {
         extern SFRField<uint8_t> simple_mag;
         extern SFRField<uint32_t> simple_current;
         extern SFRField<uint32_t> on_time;
-        extern SFRField<uint32_t> detumble_timeout;
 
         // Starshot parameters
         extern SFRField<uint32_t> Id_input;

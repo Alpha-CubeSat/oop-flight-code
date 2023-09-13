@@ -28,6 +28,8 @@ void ACSControlTask::execute()
         sfr::acs::reinitialize = false;
     }
 
+    imu_valid = sfr::imu::gyro_x_value->get_value(&gyro_x) && sfr::imu::gyro_y_value->get_value(&gyro_y) && sfr::imu::gyro_z_value->get_value(&gyro_z) && sfr::imu::mag_x_value->get_value(&mag_x) && sfr::imu::mag_y_value->get_value(&mag_y) && sfr::imu::mag_z_value->get_value(&mag_z);
+
 #ifdef ACS_SIM
     gyro_x = plantObj.rtY.angularvelocity[0];
     gyro_y = plantObj.rtY.angularvelocity[1];
@@ -47,9 +49,7 @@ void ACSControlTask::execute()
     sfr::acs::last_time = millis();
 #endif
 
-    if (!sfr::acs::off) {
-        imu_valid = sfr::imu::gyro_x_value->get_value(&gyro_x) && sfr::imu::gyro_y_value->get_value(&gyro_y) && sfr::imu::gyro_z_value->get_value(&gyro_z) && sfr::imu::mag_x_value->get_value(&mag_x) && sfr::imu::mag_y_value->get_value(&mag_y) && sfr::imu::mag_z_value->get_value(&mag_z);
-
+    if (!sfr::acs::off && (sfr::imu::failed_times == sfr::imu::failed_limit)) {
         if (!imu_valid) {
             sfr::acs::mode = (uint8_t)acs_mode_type::simple;
         }

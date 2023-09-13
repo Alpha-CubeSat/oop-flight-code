@@ -123,6 +123,8 @@ void MainControlLoop::execute()
     val = sfr::imu::gyro_x_value->get_value(&val) && sfr::imu::gyro_y_value->get_value(&val) && sfr::imu::gyro_z_value->get_value(&val) && sfr::imu::mag_x_value->get_value(&val) && sfr::imu::mag_y_value->get_value(&val) && sfr::imu::mag_z_value->get_value(&val);
     if (!val) {
         Serial.println("IMU INvalid");
+    } else {
+        Serial.println("IMU valid");
     }
 
     // Temp
