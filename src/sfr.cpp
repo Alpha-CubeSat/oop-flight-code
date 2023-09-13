@@ -16,9 +16,6 @@ namespace sfr {
     } // namespace point
     namespace detumble {
         // OP Codes 1500
-        SFRField<uint32_t> start_time = SFRField<uint32_t>(0UL, 0x1500, constants::eeprom::detumble_start_time_offset, true);
-        SFRField<uint32_t> max_time = SFRField<uint32_t>(2 * constants::time::one_hour, 0x1501, constants::eeprom::detumble_max_time_offset, true);
-
         SFRField<uint8_t> min_stable_gyro_z = SFRField<uint8_t>(1, 0, 2, 0x1504, 10, constants::eeprom::detumble_min_stable_gyro_z_offset, true);
         SFRField<uint8_t> max_stable_gyro_x = SFRField<uint8_t>(.2, 0, 1, 0x1505, 10, constants::eeprom::detumble_max_stable_gyro_x_offset, true);
         SFRField<uint8_t> max_stable_gyro_y = SFRField<uint8_t>(.2, 0, 1, 0x1506, 10, constants::eeprom::detumble_max_stable_gyro_y_offset, true);
