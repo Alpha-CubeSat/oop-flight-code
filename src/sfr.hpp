@@ -28,10 +28,6 @@ namespace sfr {
         // OP Codes 1200
         extern SFRField<uint32_t> max_time;
     } // namespace boot
-    namespace point {
-        // OP Codes 1400
-        extern SFRField<uint32_t> max_time;
-    } // namespace point
     namespace detumble {
         // OP Codes 1500
         extern SFRField<uint8_t> min_stable_gyro_z;
@@ -299,17 +295,16 @@ namespace sfr {
     namespace acs {
         // OP Codes 2500
         extern SFRField<bool> off;
-        extern SFRField<bool> reinitialize;
         extern SFRField<uint8_t> mode;
         extern SFRField<uint8_t> simple_mag;
         extern SFRField<uint32_t> simple_current;
         extern SFRField<uint32_t> on_time;
 
         // Starshot parameters
-        extern SFRField<uint32_t> Id_input;
-        extern SFRField<uint32_t> Kd_input;
-        extern SFRField<uint32_t> Kp_input;
-        extern SFRField<uint32_t> c_input;
+        extern SFRField<uint32_t> Id_index;
+        extern SFRField<uint32_t> Kd_index;
+        extern SFRField<uint32_t> Kp_index;
+        extern SFRField<uint32_t> c_index;
 
         // simulation only
         extern uint32_t last_time;

@@ -127,6 +127,9 @@ void MainControlLoop::execute()
         Serial.println("IMU valid");
     }
 
+    Serial.print("IMU initialization failed attempts: ");
+    Serial.println(sfr::imu::failed_times);
+
     // Temp
     if (sfr::temperature::temp_c_average->get_value(&val)) {
         Serial.print("Temp: ");

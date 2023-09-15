@@ -3,17 +3,13 @@
 namespace sfr {
     namespace stabilization {
         // OP Codes 1100`
-        SFRField<uint32_t> max_time = SFRField<uint32_t>(30 * constants::time::one_minute, 0UL, 5 * constants::time::one_hour, 0x1100, constants::eeprom::stabilization_max_time_offset, true);
+        SFRField<uint32_t> max_time = SFRField<uint32_t>(constants::time::one_minute, 0UL, 5 * constants::time::one_hour, 0x1100, constants::eeprom::stabilization_max_time_offset, true);
     } // namespace stabilization
     namespace boot {
         // OP Codes 1200
         // Boot mode currently set to immediately time out
-        SFRField<uint32_t> max_time = SFRField<uint32_t>(2 * constants::time::one_hour, 10UL, 5 * constants::time::one_hour, 0x1200, constants::eeprom::boot_max_time_offset, true);
+        SFRField<uint32_t> max_time = SFRField<uint32_t>(30000, 10UL, 5 * constants::time::one_hour, 0x1200, constants::eeprom::boot_max_time_offset, true);
     } // namespace boot
-    namespace point {
-        // OP Codes 1400
-        SFRField<uint32_t> max_time = SFRField<uint32_t>(5 * constants::time::one_minute, 0x1400, constants::eeprom::point_max_time_offset, true);
-    } // namespace point
     namespace detumble {
         // OP Codes 1500
         SFRField<uint8_t> min_stable_gyro_z = SFRField<uint8_t>(1, 0, 2, 0x1504, 10, constants::eeprom::detumble_min_stable_gyro_z_offset, true);
@@ -27,7 +23,7 @@ namespace sfr {
         // OP Codes 1600
         SFRField<uint16_t> max_downlink_hard_faults = SFRField<uint16_t>(3, 0x1600, constants::eeprom::aliveSignal_max_downlink_hard_faults_offset, true);
         SFRField<bool> downlinked = SFRField<bool>(false, 0x1601, constants::eeprom::aliveSignal_downlinked_offset, true);
-        SFRField<uint32_t> max_time = SFRField<uint32_t>(2 * constants::time::one_hour, 0x1602, constants::eeprom::aliveSignal_max_time_offset, true);
+        SFRField<uint32_t> max_time = SFRField<uint32_t>(30000, 0x1602, constants::eeprom::aliveSignal_max_time_offset, true);
         SFRField<uint16_t> num_hard_faults = SFRField<uint16_t>(0, 0x1603, constants::eeprom::aliveSignal_num_hard_faults_offset, true);
     } // namespace aliveSignal
     namespace photoresistor {
@@ -211,7 +207,7 @@ namespace sfr {
         SFRField<uint16_t> downlink_report_type = SFRField<uint16_t>((uint16_t)report_type::normal_report, 0x2118, constants::eeprom::rockblock_downlink_report_type_offset, true);
         SFRField<uint16_t> mode = SFRField<uint16_t>((uint16_t)rockblock_mode_type::send_at, 0x2119, constants::eeprom::rockblock_mode_offset, true);
 
-        SFRField<uint32_t> on_time = SFRField<uint32_t>(20 * constants::time::one_minute, 0x211A, 0, true);
+        SFRField<uint32_t> on_time = SFRField<uint32_t>(constants::time::one_minute, 0x211A, 0, true);
 #ifndef SIMULATOR
         HardwareSerial serial = Serial1;
 #else
@@ -282,18 +278,16 @@ namespace sfr {
     namespace acs {
         // OP Codes 2500
         SFRField<bool> off = SFRField<bool>(false, 0x2500, 0, true);
-        SFRField<bool> reinitialize = SFRField<bool>(false, 0x2501, 0, true);
         SFRField<uint8_t> mode = SFRField<uint8_t>((uint8_t)acs_mode_type::detumble, 0x2502, 0, true);
         SFRField<uint8_t> simple_mag = SFRField<uint8_t>(false, 0x2503, 0, true);
         SFRField<uint32_t> simple_current = SFRField<uint32_t>(false, 0x2504, 0, true);
-        SFRField<uint32_t> on_time = SFRField<uint32_t>(20 * constants::time::one_minute, 0x2505, 0, true);
+        SFRField<uint32_t> on_time = SFRField<uint32_t>(constants::time::one_minute, 0x2505, 0, true);
 
         // Starshot parameters
-
-        SFRField<uint32_t> Id_input = SFRField<uint32_t>(0.0021, 0x2507, 0, true);
-        SFRField<uint32_t> Kd_input = SFRField<uint32_t>(0.0007935279615795299, 0x2508, 0, true);
-        SFRField<uint32_t> Kp_input = SFRField<uint32_t>(5.2506307629097953E-10, 0x2509, 0, true);
-        SFRField<uint32_t> c_input = SFRField<uint32_t>(0.004, 0x250A, 0, true);
+        SFRField<uint32_t> Id_index = SFRField<uint32_t>(0, 0, (sizeof(constants::acs::Id_values) / sizeof(constants::acs::Id_values[0])) - 1, 0x2507, 0, true);
+        SFRField<uint32_t> Kd_index = SFRField<uint32_t>(0, 0, (sizeof(constants::acs::Kd_values) / sizeof(constants::acs::Kd_values[0])) - 1, 0x2508, 0, true);
+        SFRField<uint32_t> Kp_index = SFRField<uint32_t>(0, 0, (sizeof(constants::acs::Kp_values) / sizeof(constants::acs::Kp_values[0])) - 1, 0x2509, 0, true);
+        SFRField<uint32_t> c_index = SFRField<uint32_t>(0, 0, (sizeof(constants::acs::c_values) / sizeof(constants::acs::c_values[0])) - 1, 0x250A, 0, true);
 
         // simulation only
         uint32_t last_time = 0;

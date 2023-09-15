@@ -14,11 +14,18 @@ void ACSControlTask::execute()
     }
 #endif
 
-    if (sfr::acs::reinitialize || first) {
-        starshotObj.initialize(constants::acs::step_size_input, constants::acs::A_input, sfr::acs::Id_input.get_float(), sfr::acs::Kd_input.get_float(), sfr::acs::Kp_input, sfr::acs::c_input.get_float(), constants::acs::i_max_input, constants::acs::k_input, constants::acs::n_input);
-        sfr::acs::reinitialize = false;
+    if ((old_Id != constants::acs::Id_values[sfr::acs::Id_index] || old_Kd != constants::acs::Kd_values[sfr::acs::Kd_index] || old_Kp != constants::acs::Kp_values[sfr::acs::Kp_index] || old_c != constants::acs::c_values[sfr::acs::c_index]) || first) {
+#ifdef VERBOSE
+        Serial.println("Initialize starshot library");
+        starshotObj.initialize(constants::acs::step_size_input, constants::acs::A_input, constants::acs::Id_values[sfr::acs::Id_index], constants::acs::Kd_values[sfr::acs::Kd_index], constants::acs::Kp_values[sfr::acs::Kp_index], constants::acs::c_values[sfr::acs::c_index], constants::acs::i_max_input, constants::acs::k_input, constants::acs::n_input);
+#endif
         first = false;
     }
+
+    old_Id = constants::acs::Id_values[sfr::acs::Id_index];
+    old_Kd = constants::acs::Kd_values[sfr::acs::Kd_index];
+    old_Kp = constants::acs::Kp_values[sfr::acs::Kp_index];
+    old_c = constants::acs::c_values[sfr::acs::c_index];
 
     imu_valid = sfr::imu::gyro_x_value->get_value(&gyro_x) && sfr::imu::gyro_y_value->get_value(&gyro_y) && sfr::imu::gyro_z_value->get_value(&gyro_z) && sfr::imu::mag_x_value->get_value(&mag_x) && sfr::imu::mag_y_value->get_value(&mag_y) && sfr::imu::mag_z_value->get_value(&mag_z);
 
@@ -42,9 +49,9 @@ void ACSControlTask::execute()
 #endif
 
     if (!sfr::acs::off) {
-        if (!imu_valid && (sfr::imu::failed_times == sfr::imu::failed_limit)) {
+        if ((!imu_valid && (sfr::imu::mode == (uint16_t)sensor_mode_type::abnormal_init)) || (!imu_valid && (sfr::imu::mode == (uint16_t)sensor_mode_type::normal))) {
             sfr::acs::mode = (uint8_t)acs_mode_type::simple;
-            // consider IMU valid since it is not needed for simple mode
+            //  consider IMU valid since it is not needed for simple mode
             imu_valid = true;
         }
 
