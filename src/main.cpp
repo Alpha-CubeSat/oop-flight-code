@@ -13,11 +13,11 @@ void setup()
     Serial.begin(9600);
     delay(5000);
     Pins::setInitialPinStates();
-    EEPROMRestore::execute();
+    // EEPROMRestore::execute();
 
 #ifdef NO_ACS
     sfr::acs::on_time = 0;
-    sfr::acs::detumble_timeout = 0;
+    sfr::stabilization::max_time = 0;
 #endif
 }
 

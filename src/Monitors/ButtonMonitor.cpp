@@ -12,12 +12,10 @@ void ButtonMonitor::execute()
 
     // button is recognized as not pressed
     if (val == 0) {
-
         // it is possible for the button to be unpressed
         if (sfr::mission::possible_uncovered) {
             sfr::button::pressed = false;
         } else {
-            sfr::button::pressed = true;
             sfr::button::button_pressed->set_invalid();
         }
     } else {

@@ -75,6 +75,11 @@ void IMUMonitor::execute()
 
         sfr::imu::powered = false;
         sfr::imu::turn_off = false;
+
+        invalidate_data();
+
+        // reset number of failed imu initialization attempts every time IMU is turned off
+        sfr::imu::failed_times = 0;
     }
 
     if (sfr::imu::powered == true) {
@@ -138,6 +143,13 @@ void IMUMonitor::transition_to_normal()
     sfr::imu::gyro_z_average->set_valid();
     sfr::imu::acc_x_average->set_valid();
     sfr::imu::acc_y_average->set_valid();
+
+    sfr::imu::mag_x_value->set_valid();
+    sfr::imu::mag_y_value->set_valid();
+    sfr::imu::mag_z_value->set_valid();
+    sfr::imu::gyro_x_value->set_valid();
+    sfr::imu::gyro_y_value->set_valid();
+    sfr::imu::gyro_z_value->set_valid();
 }
 
 void IMUMonitor::transition_to_abnormal_init()
@@ -146,6 +158,16 @@ void IMUMonitor::transition_to_abnormal_init()
     // trips fault
     // all check flags are set to false
     sfr::imu::mode = (uint16_t)sensor_mode_type::abnormal_init;
+    invalidate_data();
+
+    sfr::imu::turn_on = false;
+    sfr::imu::powered = false;
+    sfr::imu::turn_off = false;
+    sfr::imu::init_mode = (uint16_t)sensor_init_mode_type::awaiting;
+}
+
+void IMUMonitor::invalidate_data()
+{
     sfr::imu::mag_x_average->set_invalid();
     sfr::imu::mag_y_average->set_invalid();
     sfr::imu::mag_z_average->set_invalid();
@@ -155,8 +177,10 @@ void IMUMonitor::transition_to_abnormal_init()
     sfr::imu::acc_x_average->set_invalid();
     sfr::imu::acc_y_average->set_invalid();
 
-    sfr::imu::turn_on = false;
-    sfr::imu::powered = false;
-    sfr::imu::turn_off = false;
-    sfr::imu::init_mode = (uint16_t)sensor_init_mode_type::awaiting;
+    sfr::imu::mag_x_value->set_invalid();
+    sfr::imu::mag_y_value->set_invalid();
+    sfr::imu::mag_z_value->set_invalid();
+    sfr::imu::gyro_x_value->set_invalid();
+    sfr::imu::gyro_y_value->set_invalid();
+    sfr::imu::gyro_z_value->set_invalid();
 }

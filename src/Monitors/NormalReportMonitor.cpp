@@ -108,6 +108,9 @@ void NormalReportMonitor::execute()
         std::advance(hist_mode, 1);
     }
 
+    // add delimeter between mission mode history and processed opcodes
+    sfr::rockblock::normal_report.push_back(constants::rockblock::normal_report_delimiter);
+
     int j = 0;
     auto current_command = sfr::rockblock::commands_received.cbegin();
     while (current_command != sfr::rockblock::commands_received.cend() && j < sfr::rockblock::normal_report_command_max) {
