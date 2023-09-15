@@ -12,7 +12,7 @@ namespace sfr {
     } // namespace boot
     namespace point {
         // OP Codes 1400
-        SFRField<uint32_t> max_time = SFRField<uint32_t>(5 * constants::time::one_minute, 0x1400, constants::eeprom::point_max_time_offset, true);
+        //       SFRField<uint32_t> max_time = SFRField<uint32_t>(5 * constants::time::one_minute, 0x1400, constants::eeprom::point_max_time_offset, true);
     } // namespace point
     namespace detumble {
         // OP Codes 1500
@@ -39,9 +39,9 @@ namespace sfr {
     } // namespace photoresistor
     namespace mission {
         // OP Codes 1800
-        SFRField<uint32_t> time_deployed = SFRField<uint32_t>(0, 0x1801, constants::eeprom::mission_time_deployed_offset, true);
+        //      SFRField<uint32_t> time_deployed = SFRField<uint32_t>(0, 0x1801, constants::eeprom::mission_time_deployed_offset, true);
         SFRField<bool> deployed = SFRField<bool>(false, 0x1802, constants::eeprom::mission_deployed_offset, true);
-        SFRField<bool> already_deployed = SFRField<bool>(false, 0x1803, constants::eeprom::mission_already_deployed_offset, true);
+        //      SFRField<bool> already_deployed = SFRField<bool>(false, 0x1803, constants::eeprom::mission_already_deployed_offset, true);
         SFRField<bool> possible_uncovered = SFRField<bool>(false, 0x1804, constants::eeprom::mission_possible_uncovered_offset, true);
         SFRField<uint32_t> mission_mode_hist_length = SFRField<uint32_t>(20, 0x1805, constants::eeprom::mission_mode_history_length_offset, true);
 
@@ -119,10 +119,10 @@ namespace sfr {
     } // namespace mission
     namespace burnwire {
         // OP Codes 1900
-        SFRField<uint16_t> attempts = SFRField<uint16_t>(0, 0x1900, constants::eeprom::burnwire_attempts_offset, true);
+        SFRField<uint16_t> attempts = SFRField<uint16_t>(0, 0, 10, 0x1900, constants::eeprom::burnwire_attempts_offset, true);
         SFRField<uint32_t> start_time = SFRField<uint32_t>(0, 0x1901, constants::eeprom::burnwire_start_time_offset, true);
-        SFRField<uint32_t> burn_time = SFRField<uint32_t>(600, 0x1902, constants::eeprom::burnwire_burn_time_offset, true);
-        SFRField<uint32_t> armed_time = SFRField<uint32_t>(2 * constants::time::one_day, 0x1903, constants::eeprom::burnwire_armed_time_offset, true);
+        SFRField<uint32_t> burn_time = SFRField<uint32_t>(600, 0, 5000, 0x1902, constants::eeprom::burnwire_burn_time_offset, true);
+        SFRField<uint32_t> armed_time = SFRField<uint32_t>(2 * constants::time::one_day, 0, 864000000, 0x1903, constants::eeprom::burnwire_armed_time_offset, true);
         SFRField<uint16_t> mode = SFRField<uint16_t>((uint16_t)burnwire_mode_type::standby, 0x1904, constants::eeprom::burnwire_mode_offset, true);
         // 1 attempt = 1 burn of 1 wire. Therefore, double the number of attempts if you want an "attempt" to burn both wires
         SFRField<uint16_t> attempts_limit = SFRField<uint16_t>(10, 0x1905, constants::eeprom::burnwire_attempts_limit_offset, true);
@@ -169,7 +169,7 @@ namespace sfr {
         SFRField<bool> ready_status = SFRField<bool>(false, 0x2100, constants::eeprom::rockblock_ready_status_offset, true);
 
         SFRField<uint32_t> last_downlink = SFRField<uint32_t>(0, 0x2101, constants::eeprom::rockblock_last_downlink_offset, true);
-        SFRField<uint32_t> downlink_period = SFRField<uint32_t>(0, 0x2102, constants::eeprom::rockblock_downlink_period_offset, true);
+        SFRField<uint32_t> downlink_period = SFRField<uint32_t>(0, 60000, 172800000, 0x2102, constants::eeprom::rockblock_downlink_period_offset, true);
 
         SFRField<bool> waiting_message = SFRField<bool>(false, 0x2103, constants::eeprom::rockblock_waiting_message_offset, true);
 
@@ -194,16 +194,15 @@ namespace sfr {
 
         SFRField<uint16_t> imu_max_fragments = SFRField<uint16_t>(256, 0x2105, constants::eeprom::rockblock_imu_max_fragments_offset, true);
 
-        SFRField<uint32_t> imudownlink_start_time = SFRField<uint32_t>(0, 0x2106, constants::eeprom::rockblock_imudownlink_start_time_offset, true);
-        SFRField<uint32_t> imudownlink_remain_time = SFRField<uint32_t>(constants::time::one_minute, 0x2107, constants::eeprom::rockblock_imudownlink_remain_time_offset, true);
-        SFRField<bool> imu_first_start = SFRField<bool>(true, 0x2108, constants::eeprom::rockblock_imu_first_start_offset, true);
-        SFRField<bool> imu_downlink_on = SFRField<bool>(true, 0x2109, constants::eeprom::rockblock_imu_downlink_on_offset, true);
-
+        //     SFRField<uint32_t> imudownlink_start_time = SFRField<uint32_t>(0, 0x2106, constants::eeprom::rockblock_imudownlink_start_time_offset, true);
+        //       SFRField<uint32_t> imudownlink_remain_time = SFRField<uint32_t>(constants::time::one_minute, 0x2107, constants::eeprom::rockblock_imudownlink_remain_time_offset, true);
+        //    SFRField<bool> imu_first_start = SFRField<bool>(true, 0x2108, constants::eeprom::rockblock_imu_first_start_offset, true);
+        //     SFRField<bool> imu_downlink_on = SFRField<bool>(true, 0x2109, constants::eeprom::rockblock_imu_downlink_on_offset, true);
         SFRField<bool> flush_status = SFRField<bool>(false, 0x2110, constants::eeprom::rockblock_flush_status_offset, true);
         SFRField<bool> waiting_command = SFRField<bool>(false, 0x2111, constants::eeprom::rockblock_waiting_command_offset, true);
         SFRField<uint32_t> conseq_reads = SFRField<uint32_t>(0, 0x2112, constants::eeprom::rockblock_conseq_reads_offset, true);
-        SFRField<uint32_t> timeout = SFRField<uint32_t>(10 * constants::time::one_minute, 0x2113, constants::eeprom::rockblock_timeout_offset, true);
-        SFRField<uint32_t> start_time = SFRField<uint32_t>(0, 0x2114, constants::eeprom::rockblock_start_time_offset, true);
+        //     SFRField<uint32_t> timeout = SFRField<uint32_t>(10 * constants::time::one_minute, 0x2113, constants::eeprom::rockblock_timeout_offset, true);
+        //     SFRField<uint32_t> start_time = SFRField<uint32_t>(0, 0x2114, constants::eeprom::rockblock_start_time_offset, true);
         SFRField<uint32_t> start_time_check_signal = SFRField<uint32_t>(0, 0x2115, constants::eeprom::rockblock_start_time_check_signal_offset, true);
         SFRField<uint32_t> max_check_signal_time = SFRField<uint32_t>(constants::time::one_minute, 0x2116, constants::eeprom::rockblock_max_check_signal_time_offset, true);
         SFRField<bool> sleep_mode = SFRField<bool>(false, 0x2117, constants::eeprom::rockblock_sleep_mode_offset, true);
@@ -270,14 +269,14 @@ namespace sfr {
         // OP Codes 2300
         SFRField<bool> in_sun = SFRField<bool>(false, 0x2300, constants::eeprom::temperature_in_sun_offset, true);
 
-        SensorReading *temp_c_average = new SensorReading(fault_groups::power_faults::temp_c, 1500, -500, 500);
+        SensorReading *temp_c_average = new SensorReading(fault_groups::power_faults::temp_c, 1500, -100, 200);
         SensorReading *temp_c_value = new SensorReading(1, -500, 500);
     } // namespace temperature
     namespace current {
         // OP Codes 2400
         SFRField<bool> in_sun = SFRField<bool>(false, 0x2400, constants::eeprom::current_in_sun_offset, true);
 
-        SensorReading *solar_current_average = new SensorReading(fault_groups::power_faults::solar_current, 1500, 0, 1000);
+        SensorReading *solar_current_average = new SensorReading(fault_groups::power_faults::solar_current, 1500, -75, 500);
     } // namespace current
     namespace acs {
         // OP Codes 2500
@@ -290,10 +289,10 @@ namespace sfr {
 
         // Starshot parameters
 
-        SFRField<uint32_t> Id_input = SFRField<uint32_t>(0.0021, 0x2507, 0, true);
-        SFRField<uint32_t> Kd_input = SFRField<uint32_t>(0.0007935279615795299, 0x2508, 0, true);
-        SFRField<uint32_t> Kp_input = SFRField<uint32_t>(5.2506307629097953E-10, 0x2509, 0, true);
-        SFRField<uint32_t> c_input = SFRField<uint32_t>(0.004, 0x250A, 0, true);
+        SFRField<uint32_t> Id_input = SFRField<uint32_t>(0.0021, 0, .1, 0x2507, 10000, 0, true);
+        SFRField<uint32_t> Kd_input = SFRField<uint32_t>(0.0007935279615795299, 0, .1, 0x2508, 1E13, 0, true);
+        SFRField<uint32_t> Kp_input = SFRField<uint32_t>(5.2506307629097953E-10, 0, 0.1, 0x2509, 1E20, 0, true);
+        SFRField<uint32_t> c_input = SFRField<uint32_t>(0.004, 0, 0.1, 0x250A, 1000, 0, true);
 
         // simulation only
         uint32_t last_time = 0;
@@ -302,11 +301,11 @@ namespace sfr {
     namespace battery {
         // OP Codes 2600
         // TODO
-        SFRField<uint32_t> acceptable_battery = SFRField<uint32_t>(3.75, 0x2600, constants::eeprom::battery_acceptable_battery_offset, true);
+        SFRField<uint32_t> acceptable_battery = SFRField<uint32_t>(3.75, 3, 4, 0x2600, 100, constants::eeprom::battery_acceptable_battery_offset, true);
         SFRField<uint32_t> min_battery = SFRField<uint32_t>(0, 0x2601, constants::eeprom::battery_min_battery_offset, true);
 
-        SensorReading *voltage_value = new SensorReading(1, 0, 5);
-        SensorReading *voltage_average = new SensorReading(fault_groups::power_faults::voltage, 300, 0, 5);
+        SensorReading *voltage_value = new SensorReading(1, 0, 5.5);
+        SensorReading *voltage_average = new SensorReading(fault_groups::power_faults::voltage, 300, 0, 5.5);
     } // namespace battery
     namespace button {
         // OP Codes 2700
