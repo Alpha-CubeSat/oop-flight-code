@@ -200,6 +200,11 @@ namespace constants {
         constexpr float i_max_input = 0.25;
         constexpr float k_input = 13.5;
         constexpr float n_input = 500.0;
+        constexpr float Id_values[1] = {0.0021};
+        constexpr float Kd_values[1] = {0.0007935279615795299};
+        constexpr float Kp_values[1] = {5.2506307629097953E-10};
+        constexpr float c_values[1] = {0.004};
+
     } // namespace acs
     namespace battery {
         constexpr int voltage_value_pin = 32;

@@ -38,6 +38,10 @@ private:
     bool imu_valid;
     float num_steps;
     bool first = true;
+    float old_Id;
+    float old_Kd;
+    float old_Kp;
+    float old_c;
 
 #ifdef ACS_SIM
     double altitude_input = 400;

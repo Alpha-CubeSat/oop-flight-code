@@ -18,7 +18,7 @@ void EEPROMRestore::execute()
         sfr::eeprom::sfr_address = sfr_address;
 
         for (SFRInterface *s : SFRInterface::sfr_fields_vector) {
-            int read_address = sfr_address + s->getAddressOffset();
+            /*int read_address = sfr_address + s->getAddressOffset();
             bool restore;
             EEPROM.get(read_address, restore);
             s->setRestore(restore);
@@ -41,7 +41,7 @@ void EEPROMRestore::execute()
                     EEPROM.get(read_address + 1, value);
                     s->setValue(value);
                 }
-            }
+            }*/
         }
     }
     boot_counter++;

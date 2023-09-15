@@ -14,12 +14,10 @@ protected:
     /* EEPROM saving and restoring uses a vector of SFRInterfaces, since C++ does not allow creating a vector
     using the SFRField<T> template class, which means SFRField members and functions cannot be accessed. So,
     we pass the SFRField data to the SFRInterface parent class cast to generic integers and booleans. */
-    int field_value;    // The value of the field cast to an int
-    int default_value;  // The default value of the field cast to an int
-    int data_type;      // An int representing the field's type T, 1 for bool, 2 for uint8_t, 3 for uint16_t, and 4 for uint32_t
-    int address_offset; // This field's byte offset from the beginning of the EEPROM section where SFR data is currently stored
-                        // sfr_address + address_offset gives this field's location in EEPROM
-    bool restore;       // If the field should be restored or not
+    int field_value;   // The value of the field cast to an int
+    int default_value; // The default value of the field cast to an int
+    int data_type;     // An int representing the field's type T, 1 for bool, 2 for uint8_t, 3 for uint16_t, and 4 for uint32_t
+    bool restore;      // If the field should be restored or not
 
 public:
     static std::map<int, SFRInterface *> opcode_lookup; // </brief Op Code Lookup Map For SFR Field Uplink Override
@@ -46,8 +44,6 @@ public:
 
     int getDataType();
 
-    int getAddressOffset();
-
     void setRestore(bool restore_on_boot);
     bool getRestore();
 };
@@ -68,7 +64,7 @@ private:
 #endif
 
 public:
-    SFRField(T default_val, T min, T max, int opcode_val, int addr_offset, bool restore_on_boot)
+    SFRField(T default_val, T min, T max, int opcode_val)
     {
         value = default_val;
         this->min = min;
@@ -87,8 +83,7 @@ public:
             data_type = 2;
         else if (sizeof(T) == sizeof(bool))
             data_type = 1;
-        address_offset = addr_offset;
-        restore = restore_on_boot;
+        restore = true;
 
 #ifdef DEBUG
         T initial = default_val;
@@ -98,7 +93,7 @@ public:
         SFRInterface::sfr_fields_vector.push_back(this);
     }
 
-    SFRField(T default_val, int opcode_val, int addr_offset, bool restore_on_boot)
+    SFRField(T default_val, int opcode_val)
     {
         value = default_val;
         bounded = false;
@@ -115,8 +110,7 @@ public:
             data_type = 2;
         else if (sizeof(T) == sizeof(bool))
             data_type = 1;
-        address_offset = addr_offset;
-        restore = restore_on_boot;
+        restore = true;
 
 #ifdef DEBUG
         T initial = default_val;
@@ -126,7 +120,7 @@ public:
         SFRInterface::sfr_fields_vector.push_back(this);
     }
 
-    SFRField(float default_val, float min, float max, int opcode_val, float resolution, int addr_offset, bool restore_on_boot)
+    SFRField(float default_val, float min, float max, int opcode_val, float resolution)
     {
         value = default_val * resolution;
         this->min = min;
@@ -145,8 +139,7 @@ public:
             data_type = 2;
         else if (sizeof(T) == sizeof(bool))
             data_type = 1;
-        address_offset = addr_offset;
-        restore = restore_on_boot;
+        restore = true;
 
 #ifdef DEBUG
         T initial = default_val * resolution; // Since value gets set to initial in reset(), initial should be default_val * resolution instead of default_val

@@ -27,11 +27,6 @@ int SFRInterface::getDataType()
     return data_type;
 }
 
-int SFRInterface::getAddressOffset()
-{
-    return address_offset;
-}
-
 void SFRInterface::setRestore(bool restore_on_boot)
 {
     restore = restore_on_boot;
