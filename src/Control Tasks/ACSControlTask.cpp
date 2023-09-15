@@ -37,6 +37,19 @@ void ACSControlTask::execute()
     mag_y = plantObj.rtY.magneticfield[1];
     mag_z = plantObj.rtY.magneticfield[2];
 
+    Serial.print("Simulated MAG_X: ");
+    Serial.println(mag_x);
+    Serial.print("Simulated MAG_Y: ");
+    Serial.println(mag_y);
+    Serial.print("Simulated MAG_Z: ");
+    Serial.println(mag_z);
+    Serial.print("Simulated GYRO_X: ");
+    Serial.println(gyro_x);
+    Serial.print("Simulated GYRO_Y: ");
+    Serial.println(gyro_y);
+    Serial.print("Simulated GYRO_Z: ");
+    Serial.println(gyro_z);
+
     if (sfr::acs::last_time == 0) {
         plantObj.step();
     } else {
