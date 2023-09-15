@@ -63,7 +63,7 @@ void EEPROMControlTask::save_sfr_data()
         */
         for (SFRInterface *s : SFRInterface::sfr_fields_vector) {
             bool restore = s->getRestore();
-            int write_address = sfr_address + s->getAddressOffset();
+            /*int write_address = sfr_address + s->getAddressOffset();
             EEPROM.put(write_address, restore);
             if (restore) {
                 int data_type = s->getDataType();
@@ -75,7 +75,7 @@ void EEPROMControlTask::save_sfr_data()
                     EEPROM.put(write_address + 1, (uint8_t)s->getFieldValue());
                 else if (data_type == 1)
                     EEPROM.put(write_address + 1, (bool)s->getFieldValue());
-            }
+            }*/
             sfr::eeprom::sfr_last_write_time += time_since_last_write;
         }
 
@@ -101,7 +101,7 @@ void EEPROMControlTask::save_sfr_data()
             */
             for (SFRInterface *s : SFRInterface::sfr_fields_vector) {
                 bool restore = s->getRestore();
-                int write_address = sfr::eeprom::sfr_address + s->getAddressOffset();
+                /*int write_address = sfr::eeprom::sfr_address + s->getAddressOffset();
                 EEPROM.put(write_address, restore);
                 if (restore) {
                     int data_type = s->getDataType();
@@ -113,7 +113,7 @@ void EEPROMControlTask::save_sfr_data()
                         EEPROM.put(write_address + 1, (uint8_t)s->getFieldValue());
                     else if (data_type == 1)
                         EEPROM.put(write_address + 1, (bool)s->getFieldValue());
-                }
+                }*/
                 sfr::eeprom::sfr_last_write_time += time_since_last_write;
             }
         }
