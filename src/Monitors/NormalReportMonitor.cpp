@@ -103,6 +103,9 @@ void NormalReportMonitor::execute()
         sfr::rockblock::normal_report.push_back(report_contents[i]);
     }
 
+    // TODO: ensure mission mode history and command opcode history are constant length
+    // pack mission mode hist into 10 bytes
+
     // push the most recent 20 mission modes switches, starting with most recent
     int k = 0;
     auto hist_mode = sfr::mission::mode_history.cbegin();

@@ -35,7 +35,7 @@ namespace sfr {
         // OP Codes 1800
         SFRField<bool> deployed = SFRField<bool>(false, 0x1800);
         SFRField<bool> possible_uncovered = SFRField<bool>(false, 0x1801);
-        SFRField<uint32_t> mission_mode_hist_length = SFRField<uint32_t>(20, 0x1802);
+        SFRField<uint32_t> mission_mode_hist_length = SFRField<uint32_t>(16, 0x1802);
 
         Boot boot_class;
         AliveSignal aliveSignal_class;
