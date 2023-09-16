@@ -10,7 +10,7 @@ class NormalReportMonitor : public TimedControlTask<void>
 public:
     NormalReportMonitor(unsigned int offset);
     void execute();
-    uint8_t serialize(int index, float value);
+    uint8_t serialize(float value, float min, float max);
 };
 
 #endif

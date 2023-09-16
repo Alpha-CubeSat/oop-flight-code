@@ -7,70 +7,93 @@ NormalReportMonitor::NormalReportMonitor(unsigned int offset)
 {
 }
 
-std::map<uint8_t, std::vector<float>> mapping_bounds = {
-    // normal report index: min, max
-    {4, {0, 5000}},
-    {5, {0, 864000000}},
-    {8, {60000, 172800000}},
-    {11, {-150, 150}},
-    {12, {-150, 150}},
-    {13, {-150, 150}},
-    {14, {-5, 5}},
-    {15, {-5, 5}},
-    {16, {-5, 5}},
-    {17, {0, 1023}},
-    {18, {-50, 200}},
-    {21, {3, 5}},
-};
-
 void NormalReportMonitor::execute()
 {
+    float light_avg_standby;
+    float light_avg_deploy;
     float mag_x;
     float mag_y;
     float mag_z;
     float gyro_x;
     float gyro_y;
     float gyro_z;
-    float photoresistor;
+    float mag_x_avg;
+    float mag_y_avg;
+    float mag_z_avg;
+    float gyro_x_avg;
+    float gyro_y_avg;
+    float gyro_z_avg;
     float temp;
-    float current;
+    float temp_avg;
+    float current_avg;
     float voltage;
+    float voltage_avg;
 
-    sfr::imu::mag_x_average->get_value(&mag_x);
-    sfr::imu::mag_y_average->get_value(&mag_y);
-    sfr::imu::mag_z_average->get_value(&mag_z);
-    sfr::imu::gyro_x_average->get_value(&gyro_x);
-    sfr::imu::gyro_y_average->get_value(&gyro_y);
-    sfr::imu::gyro_z_average->get_value(&gyro_z);
-    sfr::photoresistor::light_val_average_deployment->get_value(&photoresistor);
-    sfr::temperature::temp_c_average->get_value(&temp);
-    sfr::current::solar_current_average->get_value(&current);
-    sfr::battery::voltage_average->get_value(&voltage);
+    sfr::photoresistor::light_val_average_standby->get_value(&light_avg_standby);
+    sfr::photoresistor::light_val_average_deployment->get_value(&light_avg_deploy);
+    sfr::imu::mag_x_value->get_value(&mag_x);
+    sfr::imu::mag_y_value->get_value(&mag_y);
+    sfr::imu::mag_z_value->get_value(&mag_z);
+    sfr::imu::gyro_x_value->get_value(&gyro_x);
+    sfr::imu::gyro_y_value->get_value(&gyro_y);
+    sfr::imu::gyro_z_value->get_value(&gyro_z);
+    sfr::imu::mag_x_average->get_value(&mag_x_avg);
+    sfr::imu::mag_y_average->get_value(&mag_y_avg);
+    sfr::imu::mag_z_average->get_value(&mag_z_avg);
+    sfr::imu::gyro_x_average->get_value(&gyro_x_avg);
+    sfr::imu::gyro_y_average->get_value(&gyro_y_avg);
+    sfr::imu::gyro_z_average->get_value(&gyro_z_avg);
+    sfr::temperature::temp_c_value->get_value(&temp);
+    sfr::temperature::temp_c_average->get_value(&temp_avg);
+    sfr::current::solar_current_average->get_value(&current_avg);
+    sfr::battery::voltage_value->get_value(&voltage);
+    sfr::battery::voltage_average->get_value(&voltage_avg);
 
     std::map<uint8_t, uint8_t> report_contents = {
         {0, 99},
-        {1, sfr::photoresistor::covered},
-        {2, sfr::button::pressed},
-        {3, sfr::mission::current_mode->get_id()},
+        {1, (uint8_t)sfr::photoresistor::covered},
+        {2, serialize(sfr::burnwire::burn_time, 0, 5000)},
+        {3, serialize(sfr::burnwire::armed_time, 0, 864000000)},
+        {4, (uint8_t)sfr::camera::powered},
+        {5, (uint8_t)sfr::rockblock::waiting_message},
+        {6, (uint8_t)sfr::rockblock::waiting_command},
+        {7, serialize(sfr::rockblock::downlink_period, 60000, 172800000)},
+        {8, (uint8_t)sfr::temperature::in_sun},
+        {9, (uint8_t)sfr::current::in_sun},
+        {10, (uint8_t)sfr::button::pressed},
+        {11, (uint8_t)sfr::eeprom::boot_counter},
 
-        // TODO
+        {12, serialize(light_avg_standby, 0, 1000)},
+        {13, serialize(light_avg_deploy, 0, 1000)},
+        {14, serialize(mag_x, -100, 100)},
+        {15, serialize(mag_y, -100, 100)},
+        {16, serialize(mag_z, -100, 100)},
+        {17, serialize(gyro_x, -100, 100)},
+        {18, serialize(gyro_y, -100, 100)},
+        {19, serialize(gyro_z, -100, 100)},
+        {20, serialize(mag_x_avg, -100, 100)},
+        {21, serialize(mag_y_avg, -100, 100)},
+        {22, serialize(mag_z_avg, -100, 100)},
+        {23, serialize(gyro_x_avg, -100, 100)},
+        {24, serialize(gyro_y_avg, -100, 100)},
+        {25, serialize(gyro_z_avg, -100, 100)},
+        {26, serialize(temp, -500, 500)},
+        {27, serialize(temp_avg, -100, 200)},
+        {28, serialize(current_avg, -75, 500)},
+        {29, serialize(voltage, 0, 5.5)},
+        {30, serialize(voltage_avg, 0, 5.5)},
 
-        // All SensorReading values. If there is an average version, that is included.
-
-        // All SensorReading Faults
-        {22, (fault_groups::imu_faults::mag_x_value->serialize() << 4) + fault_groups::imu_faults::mag_x_average->serialize()},
-        {23, (fault_groups::imu_faults::mag_y_value->serialize() << 4) + fault_groups::imu_faults::mag_y_average->serialize()},
-        {24, (fault_groups::imu_faults::mag_z_value->serialize() << 4) + fault_groups::imu_faults::mag_z_average->serialize()},
-        {25, (fault_groups::imu_faults::gyro_x_value->serialize() << 4) + fault_groups::imu_faults::gyro_x_average->serialize()},
-        {26, (fault_groups::imu_faults::gyro_y_value->serialize() << 4) + fault_groups::imu_faults::gyro_y_average->serialize()},
-        {27, (fault_groups::imu_faults::gyro_z_value->serialize() << 4) + fault_groups::imu_faults::gyro_z_average->serialize()},
-        {28, (fault_groups::imu_faults::acc_x_average->serialize() << 4) + fault_groups::imu_faults::acc_y_average->serialize()},
-        {29, (fault_groups::power_faults::temp_c_value->serialize() << 4) + fault_groups::power_faults::temp_c_average->serialize()},
-        {30, (fault_groups::power_faults::voltage_value->serialize() << 4) + fault_groups::power_faults::voltage_average->serialize()},
-        {31, (fault_groups::power_faults::solar_current_average->serialize() << 4)},
-
-        {32, (fault_groups::hardware_faults::light_val->serialize() << 4) + fault_groups::hardware_faults::button->serialize()},
-    };
+        {31, (fault_groups::imu_faults::mag_x_value->serialize() << 4) + fault_groups::imu_faults::mag_x_average->serialize()}, 
+        {32, (fault_groups::imu_faults::mag_y_value->serialize() << 4) + fault_groups::imu_faults::mag_y_average->serialize()}, 
+        {33, (fault_groups::imu_faults::mag_z_value->serialize() << 4) + fault_groups::imu_faults::mag_z_average->serialize()}, 
+        {34, (fault_groups::imu_faults::gyro_x_value->serialize() << 4) + fault_groups::imu_faults::gyro_x_average->serialize()},
+        {35, (fault_groups::imu_faults::gyro_y_value->serialize() << 4) + fault_groups::imu_faults::gyro_y_average->serialize()}, 
+        {36, (fault_groups::imu_faults::gyro_z_value->serialize() << 4) + fault_groups::imu_faults::gyro_z_average->serialize()}, 
+        {37, (fault_groups::power_faults::temp_c_value->serialize() << 4) + fault_groups::power_faults::temp_c_average->serialize()}, 
+        {38, (fault_groups::power_faults::voltage_value->serialize() << 4) + fault_groups::power_faults::voltage_average->serialize()}, 
+        {39, (fault_groups::power_faults::solar_current_average->serialize() << 4)}, 
+        {40, (fault_groups::hardware_faults::light_val->serialize() << 4) + fault_groups::hardware_faults::button->serialize()}
+    };    
 
     std::deque<uint8_t> empty_normal_report;
     std::swap(sfr::rockblock::normal_report, empty_normal_report);
@@ -109,9 +132,9 @@ void NormalReportMonitor::execute()
     sfr::rockblock::normal_report.push_back(constants::rockblock::end_of_normal_downlink_flag2);
 }
 
-uint8_t NormalReportMonitor::serialize(int index, float value)
+uint8_t NormalReportMonitor::serialize(float value, float min, float max)
 {
-    return round(value - mapping_bounds[index][0]) * (255 / (mapping_bounds[index][1] - mapping_bounds[index][0]));
+    return round(value - min) * (255 / (max - min));
 }
 
 uint8_t NormalReportMonitor::serialize(bool values[])
