@@ -141,8 +141,6 @@ void IMUMonitor::transition_to_normal()
     sfr::imu::gyro_x_average->set_valid();
     sfr::imu::gyro_y_average->set_valid();
     sfr::imu::gyro_z_average->set_valid();
-    sfr::imu::acc_x_average->set_valid();
-    sfr::imu::acc_y_average->set_valid();
 
     sfr::imu::mag_x_value->set_valid();
     sfr::imu::mag_y_value->set_valid();
@@ -174,8 +172,6 @@ void IMUMonitor::invalidate_data()
     sfr::imu::gyro_x_average->set_invalid();
     sfr::imu::gyro_y_average->set_invalid();
     sfr::imu::gyro_z_average->set_invalid();
-    sfr::imu::acc_x_average->set_invalid();
-    sfr::imu::acc_y_average->set_invalid();
 
     sfr::imu::mag_x_value->set_invalid();
     sfr::imu::mag_y_value->set_invalid();

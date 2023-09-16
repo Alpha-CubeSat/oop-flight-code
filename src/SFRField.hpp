@@ -149,6 +149,35 @@ public:
         SFRInterface::sfr_fields_vector.push_back(this);
     }
 
+    SFRField(float default_val, int opcode_val, float resolution)
+    {
+        value = default_val * resolution;
+        this->min = min;
+        this->max = max;
+        bounded = true;
+        opcode = opcode_val;
+        this->resolution = resolution;
+
+        field_value = (int)value;
+        default_value = (int)value;
+        if (sizeof(T) == sizeof(uint32_t))
+            data_type = 4;
+        else if (sizeof(T) == sizeof(uint16_t))
+            data_type = 3;
+        else if (sizeof(T) == sizeof(uint8_t))
+            data_type = 2;
+        else if (sizeof(T) == sizeof(bool))
+            data_type = 1;
+        restore = true;
+
+#ifdef DEBUG
+        T initial = default_val * resolution; // Since value gets set to initial in reset(), initial should be default_val * resolution instead of default_val
+#endif
+
+        SFRInterface::opcode_lookup[opcode_val] = this;
+        SFRInterface::sfr_fields_vector.push_back(this);
+    }
+
     operator T()
     {
         return value;

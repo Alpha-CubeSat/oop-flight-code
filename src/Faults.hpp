@@ -17,8 +17,6 @@ namespace fault_groups {
         extern Fault *gyro_y_average;
         extern Fault *gyro_z_value;
         extern Fault *gyro_z_average;
-        extern Fault *acc_x_average;
-        extern Fault *acc_y_average;
     } // namespace imu_faults
     namespace power_faults {
         extern Fault *temp_c_value;

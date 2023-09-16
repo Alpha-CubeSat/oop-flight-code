@@ -150,6 +150,8 @@ namespace sfr {
         extern SFRField<bool> turn_on;
         extern SFRField<bool> turn_off;
         extern SFRField<bool> powered;
+        extern SFRField<bool> report_ready;
+        extern SFRField<bool> fragment_requested;
         extern SFRField<uint8_t> serial_requested;
         extern SFRField<uint8_t> start_progress;
         extern SFRField<uint16_t> failed_times;
@@ -165,10 +167,6 @@ namespace sfr {
         extern SFRField<uint32_t> fragments_written;
         extern SFRField<uint32_t> set_res;
         extern SFRField<uint32_t> fragment_number_requested;
-
-        extern bool fragment_requested;
-        extern bool report_written;
-        extern bool report_ready;
     } // namespace camera
     namespace rockblock {
         // OP Codes 2100
@@ -178,10 +176,8 @@ namespace sfr {
         extern SFRField<bool> waiting_command;
         extern SFRField<bool> sleep_mode;
         extern SFRField<uint8_t> max_commands_count;
-        extern std::deque<uint8_t> downlink_report;
-        extern std::deque<uint8_t> normal_report;
-        extern std::deque<uint8_t> camera_report;
-        extern std::deque<uint8_t> imu_report;
+        extern SFRField<uint8_t> normal_report_command_curr;
+        extern SFRField<uint8_t> normal_report_command_max;
         extern SFRField<uint16_t> imu_max_fragments;
         extern SFRField<uint16_t> downlink_report_type;
         extern SFRField<uint16_t> mode;
@@ -192,15 +188,17 @@ namespace sfr {
         extern SFRField<uint32_t> max_check_signal_time;
         extern SFRField<uint32_t> on_time;
 
-        extern uint8_t normal_report_command_curr;
-        extern uint8_t normal_report_command_max;
-        extern uint32_t camera_max_fragments[99];
-        extern std::deque<uint8_t> commands_received;
         extern char buffer[constants::rockblock::buffer_size];
         extern int camera_commands[99][constants::rockblock::command_len];
         extern int commas[constants::rockblock::num_commas];
+        extern uint32_t camera_max_fragments[99];
+        extern std::deque<uint8_t> commands_received;
         extern std::deque<RawRockblockCommand> raw_commands;
         extern std::deque<RockblockCommand *> processed_commands;
+        extern std::deque<uint8_t> downlink_report;
+        extern std::deque<uint8_t> normal_report;
+        extern std::deque<uint8_t> camera_report;
+        extern std::deque<uint8_t> imu_report;
 
 #ifndef SIMULATOR
         extern HardwareSerial serial;
@@ -214,6 +212,8 @@ namespace sfr {
         extern SFRField<bool> turn_on;
         extern SFRField<bool> turn_off;
         extern SFRField<bool> powered;
+        extern SFRField<bool> report_written;
+        extern SFRField<bool> report_ready;
         extern SFRField<uint16_t> mode;
         extern SFRField<uint16_t> init_mode;
         extern SFRField<uint16_t> failed_times;
@@ -234,12 +234,8 @@ namespace sfr {
         extern SensorReading *gyro_x_average;
         extern SensorReading *gyro_y_average;
         extern SensorReading *gyro_z_average;
-        extern SensorReading *acc_x_average;
-        extern SensorReading *acc_y_average;
 
         extern std::deque<uint8_t> imu_dlink;
-        extern bool report_written;
-        extern bool report_ready;
     } // namespace imu
     namespace temperature {
         // OP Codes 2300
@@ -265,8 +261,6 @@ namespace sfr {
         extern SFRField<uint32_t> Kd_index;
         extern SFRField<uint32_t> Kp_index;
         extern SFRField<uint32_t> c_index;
-
-        extern uint32_t last_time;
     } // namespace acs
     namespace battery {
         // OP Codes 2600
@@ -293,7 +287,9 @@ namespace sfr {
         extern SFRField<uint32_t> sfr_write_step_time;
         extern SFRField<uint32_t> sfr_address_age;
 
-        extern int sfr_last_write_cycle;
+        // @ERIC fix if needed
+        extern int wait_time_last_write_time;
+        extern int sfr_last_write_time;
         extern uint16_t sfr_address;
     } // namespace eeprom
 };    // namespace sfr

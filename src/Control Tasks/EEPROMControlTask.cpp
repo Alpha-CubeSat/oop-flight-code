@@ -26,7 +26,8 @@ void EEPROMControlTask::check_wait_time()
 void EEPROMControlTask::save_sfr_data()
 {
     // SAVING SFR DATA
-    int cycles_since_last_write = sfr::mission::cycle_no - sfr::eeprom::sfr_last_write_cycle;
+    // int cycles_since_last_write = sfr::mission::cycle_no - sfr::eeprom::sfr_last_write_cycle;
+    int cycles_since_last_write = sfr::mission::cycle_no;
 
     if (cycles_since_last_write * constants::timecontrol::control_cycle_time_ms > sfr::eeprom::sfr_write_step_time) {
         // The last EEPROM write exceeds the interval between writes, so update the EEPROM value
@@ -53,8 +54,8 @@ void EEPROMControlTask::save_sfr_data()
                     EEPROM.put(write_address + 1, (uint8_t)s->getFieldValue());
                 else if (data_type == 1)
                     EEPROM.put(write_address + 1, (bool)s->getFieldValue());
-            }*/
-            sfr::eeprom::sfr_last_write_cycle = sfr::mission::cycle_no;
+            }
+            sfr::eeprom::sfr_last_write_cycle = sfr::mission::cycle_no;*/
         }
 
         sfr::eeprom::sfr_address_age++;
@@ -92,8 +93,8 @@ void EEPROMControlTask::save_sfr_data()
                         EEPROM.put(write_address + 1, (uint8_t)s->getFieldValue());
                     else if (data_type == 1)
                         EEPROM.put(write_address + 1, (bool)s->getFieldValue());
-                }*/
-                sfr::eeprom::sfr_last_write_cycle = sfr::mission::cycle_no;
+                }
+                sfr::eeprom::sfr_last_write_cycle = sfr::mission::cycle_no;*/
             }
         }
     }

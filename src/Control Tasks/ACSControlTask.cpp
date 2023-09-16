@@ -50,15 +50,15 @@ void ACSControlTask::execute()
     Serial.print("Simulated GYRO_Z: ");
     Serial.println(gyro_z);
 
-    if (sfr::acs::last_time == 0) {
+    if (last_time == 0) {
         plantObj.step();
     } else {
-        num_steps = millis() - sfr::acs::last_time;
+        num_steps = millis() - last_time;
         for (int i = 0; i < num_steps; i++) {
             plantObj.step();
         }
     }
-    sfr::acs::last_time = millis();
+    last_time = millis();
 #endif
 
     if (!sfr::acs::off) {
