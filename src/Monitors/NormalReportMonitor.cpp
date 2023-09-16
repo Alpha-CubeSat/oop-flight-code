@@ -114,15 +114,15 @@ uint8_t NormalReportMonitor::serialize(int index, float value)
     return round(value - mapping_bounds[index][0]) * (255 / (mapping_bounds[index][1] - mapping_bounds[index][0]));
 }
 
-uint8_t NormalReportMonitor::serialize(bool values[]) 
+uint8_t NormalReportMonitor::serialize(bool values[])
 {
-  uint8_t result = 0;
+    uint8_t result = 0;
 
-  for (int i = 0; i < 8; i++) {
-    if (values[i]) {
-      result |= (1 << i);
+    for (int i = 0; i < 8; i++) {
+        if (values[i]) {
+            result |= (1 << i);
+        }
     }
-  }
 
-  return result;
+    return result;
 }
