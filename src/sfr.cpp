@@ -199,20 +199,20 @@ namespace sfr {
         SFRField<uint16_t> door_open__collection_start_time = SFRField<uint16_t>(0, 0x2209);
         SFRField<uint32_t> max_fragments = SFRField<uint32_t>(256, 0x2210);
 
-        SensorReading *mag_x_value = new SensorReading(1, -100, 100);
-        SensorReading *mag_y_value = new SensorReading(1, -100, 100);
-        SensorReading *mag_z_value = new SensorReading(1, -100, 100);
-        SensorReading *gyro_x_value = new SensorReading(1, -100, 100);
-        SensorReading *gyro_y_value = new SensorReading(1, -100, 100);
-        SensorReading *gyro_z_value = new SensorReading(1, -100, 100);
-        SensorReading *mag_x_average = new SensorReading(fault_groups::imu_faults::mag_x, 20, 0, 0);
-        SensorReading *mag_y_average = new SensorReading(fault_groups::imu_faults::mag_y, 20, 0, 0);
-        SensorReading *mag_z_average = new SensorReading(fault_groups::imu_faults::mag_z, 20, 0, 0);
-        SensorReading *gyro_x_average = new SensorReading(fault_groups::imu_faults::gyro_x, 20, 0, 0);
-        SensorReading *gyro_y_average = new SensorReading(fault_groups::imu_faults::gyro_y, 20, 0, 0);
-        SensorReading *gyro_z_average = new SensorReading(fault_groups::imu_faults::gyro_z, 20, 0, 0);
-        SensorReading *acc_x_average = new SensorReading(fault_groups::imu_faults::acc_x, 20, 0, 0);
-        SensorReading *acc_y_average = new SensorReading(fault_groups::imu_faults::acc_y, 20, 0, 0);
+        SensorReading *mag_x_value = new SensorReading(fault_groups::imu_faults::mag_x_value, 1, -100, 100);
+        SensorReading *mag_y_value = new SensorReading(fault_groups::imu_faults::mag_y_value, 1, -100, 100);
+        SensorReading *mag_z_value = new SensorReading(fault_groups::imu_faults::mag_z_value, 1, -100, 100);
+        SensorReading *gyro_x_value = new SensorReading(fault_groups::imu_faults::gyro_x_value, 1, -100, 100);
+        SensorReading *gyro_y_value = new SensorReading(fault_groups::imu_faults::gyro_y_value, 1, -100, 100);
+        SensorReading *gyro_z_value = new SensorReading(fault_groups::imu_faults::gyro_z_value, 1, -100, 100);
+        SensorReading *mag_x_average = new SensorReading(fault_groups::imu_faults::mag_x_average, 20, 0, 0);
+        SensorReading *mag_y_average = new SensorReading(fault_groups::imu_faults::mag_y_average, 20, 0, 0);
+        SensorReading *mag_z_average = new SensorReading(fault_groups::imu_faults::mag_z_average, 20, 0, 0);
+        SensorReading *gyro_x_average = new SensorReading(fault_groups::imu_faults::gyro_x_average, 20, 0, 0);
+        SensorReading *gyro_y_average = new SensorReading(fault_groups::imu_faults::gyro_y_average, 20, 0, 0);
+        SensorReading *gyro_z_average = new SensorReading(fault_groups::imu_faults::gyro_z_average, 20, 0, 0);
+        SensorReading *acc_x_average = new SensorReading(fault_groups::imu_faults::acc_x_average, 20, 0, 0);
+        SensorReading *acc_y_average = new SensorReading(fault_groups::imu_faults::acc_y_average, 20, 0, 0);
 
         bool report_written = false;
         bool report_ready = false;
@@ -222,14 +222,14 @@ namespace sfr {
         // OP Codes 2300
         SFRField<bool> in_sun = SFRField<bool>(false, 0x2300);
 
-        SensorReading *temp_c_average = new SensorReading(fault_groups::power_faults::temp_c, 1500, -100, 200);
-        SensorReading *temp_c_value = new SensorReading(1, -500, 500);
+        SensorReading *temp_c_average = new SensorReading(fault_groups::power_faults::temp_c_average, 1500, -100, 200);
+        SensorReading *temp_c_value = new SensorReading(fault_groups::power_faults::temp_c_value, 1, -500, 500);
     } // namespace temperature
     namespace current {
         // OP Codes 2400
         SFRField<bool> in_sun = SFRField<bool>(false, 0x2400);
 
-        SensorReading *solar_current_average = new SensorReading(fault_groups::power_faults::solar_current, 1500, -75, 500);
+        SensorReading *solar_current_average = new SensorReading(fault_groups::power_faults::solar_current_average, 1500, -75, 500);
     } // namespace current
     namespace acs {
         // OP Codes 2500
@@ -250,8 +250,8 @@ namespace sfr {
         SFRField<uint32_t> acceptable_battery = SFRField<uint32_t>(3.75, 3, 4, 0x2600, 100);
         SFRField<uint32_t> min_battery = SFRField<uint32_t>(0, 0x2601);
 
-        SensorReading *voltage_value = new SensorReading(1, 0, 5.5);
-        SensorReading *voltage_average = new SensorReading(fault_groups::power_faults::voltage, 300, 0, 5.5);
+        SensorReading *voltage_value = new SensorReading(fault_groups::power_faults::voltage_value, 1, 0, 5.5);
+        SensorReading *voltage_average = new SensorReading(fault_groups::power_faults::voltage_average, 300, 0, 5.5);
     } // namespace battery
     namespace button {
         // OP Codes 2700

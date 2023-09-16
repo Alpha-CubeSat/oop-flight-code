@@ -81,12 +81,13 @@ void EEPROMControlTask::save_sfr_data()
 
         sfr::eeprom::sfr_address_age++;
         if (sfr::eeprom::sfr_address_age > 99000) { // Programmed write limit is less than the actual endurance of 100000 to create a safety buffer
-            sfr::eeprom::sfr_address += (uint16_t)constants::eeprom::full_offset;
+            // sfr::eeprom::sfr_address += (uint16_t)constants::eeprom::full_offset;
             EEPROM.put(5, sfr::eeprom::sfr_address);
             sfr::eeprom::sfr_address_age = 0;
         }
 
-        if (sfr::eeprom::sfr_address + constants::eeprom::full_offset - 1 >= EEPROM.length()) {
+        // if (sfr::eeprom::sfr_address + constants::eeprom::full_offset - 1 >= EEPROM.length()) {
+        if (sfr::eeprom::sfr_address - 1 >= EEPROM.length()) {
             // The last byte of the current SFR section would exceed EEPROM memory, so there is not enough room for a full SFR store
             sfr::eeprom::storage_full = true;
         } else {
