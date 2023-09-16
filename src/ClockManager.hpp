@@ -4,6 +4,7 @@
 #define CLOCK_MANAGER_HPP_
 
 #include "Control Tasks/TimedControlTask.hpp"
+#include "sfr.hpp"
 
 class ClockManager : public TimedControlTask<void>
 {

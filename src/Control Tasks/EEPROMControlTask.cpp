@@ -93,7 +93,7 @@ void EEPROMControlTask::save_sfr_data()
                     else if (data_type == 1)
                         EEPROM.put(write_address + 1, (bool)s->getFieldValue());
                 }*/
-                sfr::eeprom::sfr_last_write_cycle = sfr::mission::;
+                sfr::eeprom::sfr_last_write_cycle = sfr::mission::cycle_no;
             }
         }
     }
