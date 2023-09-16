@@ -49,51 +49,60 @@ void NormalReportMonitor::execute()
     sfr::battery::voltage_value->get_value(&voltage);
     sfr::battery::voltage_average->get_value(&voltage_avg);
 
+    bool sfr_packed_bools[] = {
+        sfr::photoresistor::covered, sfr::mission::possible_uncovered, sfr::camera::powered,
+        sfr::rockblock::waiting_message, sfr::rockblock::waiting_command,
+        sfr::temperature::in_sun, sfr::current::in_sun, sfr::button::pressed};
+
     std::map<uint8_t, uint8_t> report_contents = {
         {0, 99},
-        {1, (uint8_t)sfr::photoresistor::covered},
-        {2, serialize(sfr::burnwire::burn_time, 0, 5000)},
-        {3, serialize(sfr::burnwire::armed_time, 0, 864000000)},
-        {4, (uint8_t)sfr::camera::powered},
-        {5, (uint8_t)sfr::rockblock::waiting_message},
-        {6, (uint8_t)sfr::rockblock::waiting_command},
-        {7, serialize(sfr::rockblock::downlink_period, 60000, 172800000)},
-        {8, (uint8_t)sfr::temperature::in_sun},
-        {9, (uint8_t)sfr::current::in_sun},
-        {10, (uint8_t)sfr::button::pressed},
-        {11, (uint8_t)sfr::eeprom::boot_counter},
+        // SFR fields
+        {1, serialize(sfr::burnwire::burn_time, 0, 5000)},
+        {2, serialize(sfr::burnwire::armed_time, 0, 864000000)},
+        {3, serialize(sfr::rockblock::downlink_period, 60000, 172800000)},
+        {4, (uint8_t)sfr::eeprom::boot_counter},
+        {5, serialize(sfr_packed_bools)},
 
-        {12, serialize(light_avg_standby, 0, 1000)},
-        {13, serialize(light_avg_deploy, 0, 1000)},
-        {14, serialize(mag_x, -100, 100)},
-        {15, serialize(mag_y, -100, 100)},
-        {16, serialize(mag_z, -100, 100)},
-        {17, serialize(gyro_x, -100, 100)},
-        {18, serialize(gyro_y, -100, 100)},
-        {19, serialize(gyro_z, -100, 100)},
-        {20, serialize(mag_x_avg, -100, 100)},
-        {21, serialize(mag_y_avg, -100, 100)},
-        {22, serialize(mag_z_avg, -100, 100)},
-        {23, serialize(gyro_x_avg, -100, 100)},
-        {24, serialize(gyro_y_avg, -100, 100)},
-        {25, serialize(gyro_z_avg, -100, 100)},
-        {26, serialize(temp, -500, 500)},
-        {27, serialize(temp_avg, -100, 200)},
-        {28, serialize(current_avg, -75, 500)},
-        {29, serialize(voltage, 0, 5.5)},
-        {30, serialize(voltage_avg, 0, 5.5)},
+        {6, (uint8_t)sfr::photoresistor::covered},
+        {7, (uint8_t)sfr::camera::powered},
+        {8, (uint8_t)sfr::rockblock::waiting_message},
+        {9, (uint8_t)sfr::rockblock::waiting_command},
+        {10, (uint8_t)sfr::temperature::in_sun},
+        {11, (uint8_t)sfr::current::in_sun},
+        {12, (uint8_t)sfr::button::pressed},
 
-        {31, (fault_groups::imu_faults::mag_x_value->serialize() << 4) + fault_groups::imu_faults::mag_x_average->serialize()}, 
-        {32, (fault_groups::imu_faults::mag_y_value->serialize() << 4) + fault_groups::imu_faults::mag_y_average->serialize()}, 
-        {33, (fault_groups::imu_faults::mag_z_value->serialize() << 4) + fault_groups::imu_faults::mag_z_average->serialize()}, 
-        {34, (fault_groups::imu_faults::gyro_x_value->serialize() << 4) + fault_groups::imu_faults::gyro_x_average->serialize()},
-        {35, (fault_groups::imu_faults::gyro_y_value->serialize() << 4) + fault_groups::imu_faults::gyro_y_average->serialize()}, 
-        {36, (fault_groups::imu_faults::gyro_z_value->serialize() << 4) + fault_groups::imu_faults::gyro_z_average->serialize()}, 
-        {37, (fault_groups::power_faults::temp_c_value->serialize() << 4) + fault_groups::power_faults::temp_c_average->serialize()}, 
-        {38, (fault_groups::power_faults::voltage_value->serialize() << 4) + fault_groups::power_faults::voltage_average->serialize()}, 
-        {39, (fault_groups::power_faults::solar_current_average->serialize() << 4)}, 
-        {40, (fault_groups::hardware_faults::light_val->serialize() << 4) + fault_groups::hardware_faults::button->serialize()}
-    };    
+        // Sensor readings
+        {13, serialize(light_avg_standby, 0, 1000)},
+        {14, serialize(light_avg_deploy, 0, 1000)},
+        {15, serialize(mag_x, -100, 100)},
+        {16, serialize(mag_y, -100, 100)},
+        {17, serialize(mag_z, -100, 100)},
+        {18, serialize(gyro_x, -100, 100)},
+        {19, serialize(gyro_y, -100, 100)},
+        {20, serialize(gyro_z, -100, 100)},
+        {21, serialize(mag_x_avg, -100, 100)},
+        {22, serialize(mag_y_avg, -100, 100)},
+        {23, serialize(mag_z_avg, -100, 100)},
+        {24, serialize(gyro_x_avg, -100, 100)},
+        {25, serialize(gyro_y_avg, -100, 100)},
+        {26, serialize(gyro_z_avg, -100, 100)},
+        {27, serialize(temp, -500, 500)},
+        {28, serialize(temp_avg, -100, 200)},
+        {29, serialize(current_avg, -75, 500)},
+        {30, serialize(voltage, 0, 5.5)},
+        {31, serialize(voltage_avg, 0, 5.5)},
+
+        // Faults
+        {32, (fault_groups::imu_faults::mag_x_value->serialize() << 4) + fault_groups::imu_faults::mag_x_average->serialize()},
+        {33, (fault_groups::imu_faults::mag_y_value->serialize() << 4) + fault_groups::imu_faults::mag_y_average->serialize()},
+        {34, (fault_groups::imu_faults::mag_z_value->serialize() << 4) + fault_groups::imu_faults::mag_z_average->serialize()},
+        {35, (fault_groups::imu_faults::gyro_x_value->serialize() << 4) + fault_groups::imu_faults::gyro_x_average->serialize()},
+        {36, (fault_groups::imu_faults::gyro_y_value->serialize() << 4) + fault_groups::imu_faults::gyro_y_average->serialize()},
+        {37, (fault_groups::imu_faults::gyro_z_value->serialize() << 4) + fault_groups::imu_faults::gyro_z_average->serialize()},
+        {38, (fault_groups::power_faults::temp_c_value->serialize() << 4) + fault_groups::power_faults::temp_c_average->serialize()},
+        {39, (fault_groups::power_faults::voltage_value->serialize() << 4) + fault_groups::power_faults::voltage_average->serialize()},
+        {40, (fault_groups::power_faults::solar_current_average->serialize() << 4)},
+        {41, (fault_groups::hardware_faults::light_val->serialize() << 4) + fault_groups::hardware_faults::button->serialize()}};
 
     std::deque<uint8_t> empty_normal_report;
     std::swap(sfr::rockblock::normal_report, empty_normal_report);
