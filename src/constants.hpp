@@ -83,6 +83,13 @@ namespace constants {
         constexpr float load = 30;   // load resister value (kOhm)
         constexpr float shunt = 0.1; // shunt resistor value (Ohm)
     }                                // namespace current
+    namespace masks {
+        constexpr uint32_t uint32_byte1_mask = 0b11111111000000000000000000000000;
+        constexpr uint32_t uint32_byte2_mask = 0b00000000111111110000000000000000;
+        constexpr uint32_t uint32_byte3_mask = 0b00000000000000001111111100000000;
+        constexpr uint32_t uint32_byte4_mask = 0b00000000000000000000000011111111;
+
+    } // namespace masks
     namespace acs {
         constexpr int xPWMpin = 10;
         constexpr int yPWMpin = 6;
