@@ -55,6 +55,10 @@ namespace sfr {
         extern SFRField<bool> deployed;
         extern SFRField<bool> possible_uncovered;
         extern SFRField<uint32_t> mission_mode_hist_length;
+        extern SFRField<uint32_t> cycle_no;
+        extern SFRField<uint32_t> cycle_dur;
+        extern SFRField<uint32_t> mission_time;
+        extern SFRField<uint32_t> boot_time;
 
         extern Boot boot_class;
         extern AliveSignal aliveSignal_class;
@@ -283,16 +287,13 @@ namespace sfr {
     } // namespace pins
     namespace eeprom {
         // OP Codes 2800
-        extern SFRField<bool> alloted_time_passed;
+        extern SFRField<bool> allotted_time_passed;
         extern SFRField<bool> storage_full;
         extern SFRField<uint8_t> boot_counter;
-        extern SFRField<uint32_t> wait_time_write_step_time;
-        extern SFRField<uint32_t> alloted_time;
         extern SFRField<uint32_t> sfr_write_step_time;
         extern SFRField<uint32_t> sfr_address_age;
 
-        extern int wait_time_last_write_time;
-        extern int sfr_last_write_time;
+        extern int sfr_last_write_cycle;
         extern uint16_t sfr_address;
     } // namespace eeprom
 };    // namespace sfr

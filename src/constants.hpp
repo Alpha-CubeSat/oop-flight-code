@@ -262,9 +262,11 @@ namespace constants {
         // Environment-based initializations of the control loop time.
         // control_cycle_time is the value actually used for timing. The
         // other constants are just informational.
-        constexpr unsigned int control_cycle_time_ms = 250;
+        constexpr unsigned int control_cycle_time_ms = 100;
         constexpr unsigned int control_cycle_time_us = control_cycle_time_ms * 1000;
         constexpr unsigned int control_cycle_time = control_cycle_time_us;
+
+        constexpr unsigned int allotted_time = 7200000;
 
         // number being added is the time length of the previous function
         // battery monitor takes max 60 us, so button monitor will start 60us after

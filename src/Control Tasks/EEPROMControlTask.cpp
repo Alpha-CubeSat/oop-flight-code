@@ -7,50 +7,28 @@ EEPROMControlTask::EEPROMControlTask(unsigned int offset)
 
 void EEPROMControlTask::execute()
 {
-    EEPROMControlTask::save_wait_time();
     EEPROMControlTask::save_sfr_data();
+    EEPROMControlTask::check_wait_time();
 }
 
-void EEPROMControlTask::save_wait_time()
+void EEPROMControlTask::check_wait_time()
 {
-    // WAIT TIME TRACKING
-    if (!sfr::eeprom::alloted_time_passed) {
-        /* The wait time of two hours was not reached at the previous EEPROM read. Since then, the wait time
-        has increased and re-written to EEPROM, and will be read again in the next lines. */
-        int wait_time;
-        EEPROM.get(0, wait_time);
+    // WAIT TIME CHECK
+    if (!sfr::eeprom::allotted_time_passed && sfr::mission::mission_time >= constants::timecontrol::allotted_time) {
+        // The newly read eeprom value reaches the two hour wait time
+        sfr::eeprom::allotted_time_passed = true;
 #ifdef VERBOSE
-        Serial.println("Current wait time value: " + String(wait_time));
+        Serial.println("EEPROM time tracking finished!");
 #endif
-        if (wait_time >= sfr::eeprom::alloted_time) {
-            // The newly read eeprom value reaches the two hour wait time
-            sfr::eeprom::alloted_time_passed = true;
-#ifdef VERBOSE
-            Serial.println("EEPROM time tracking finished!");
-#endif
-        } else {
-            int time_since_last_write = millis() - sfr::eeprom::wait_time_last_write_time;
-
-            if (time_since_last_write >= sfr::eeprom::wait_time_write_step_time) {
-                // The time since the last EEPROM write reaches the interval between writes, so update the EEPROM value
-                int write_value = wait_time + time_since_last_write;
-#ifdef VERBOSE
-                Serial.println("New value to write: " + String(write_value));
-#endif
-                EEPROM.put(0, write_value);
-
-                sfr::eeprom::wait_time_last_write_time += time_since_last_write;
-            }
-        }
     }
 }
 
 void EEPROMControlTask::save_sfr_data()
 {
     // SAVING SFR DATA
-    int time_since_last_write = millis() - sfr::eeprom::sfr_last_write_time;
+    int cycles_since_last_write = sfr::mission::cycle_no - sfr::eeprom::sfr_last_write_cycle;
 
-    if (time_since_last_write > sfr::eeprom::sfr_write_step_time) {
+    if (cycles_since_last_write * constants::timecontrol::control_cycle_time_ms > sfr::eeprom::sfr_write_step_time) {
         // The last EEPROM write exceeds the interval between writes, so update the EEPROM value
         int sfr_address = (int)sfr::eeprom::sfr_address;
 
@@ -76,7 +54,7 @@ void EEPROMControlTask::save_sfr_data()
                 else if (data_type == 1)
                     EEPROM.put(write_address + 1, (bool)s->getFieldValue());
             }*/
-            sfr::eeprom::sfr_last_write_time += time_since_last_write;
+            sfr::eeprom::sfr_last_write_cycle = sfr::mission::cycle_no;
         }
 
         sfr::eeprom::sfr_address_age++;
@@ -115,7 +93,7 @@ void EEPROMControlTask::save_sfr_data()
                     else if (data_type == 1)
                         EEPROM.put(write_address + 1, (bool)s->getFieldValue());
                 }*/
-                sfr::eeprom::sfr_last_write_time += time_since_last_write;
+                sfr::eeprom::sfr_last_write_cycle = sfr::mission::cycle_no;
             }
         }
     }
