@@ -49,27 +49,15 @@ void NormalReportMonitor::execute()
 
     std::map<uint8_t, uint8_t> report_contents = {
         {0, 99},
-        {1, (uint8_t)sfr::photoresistor::covered},
-        {2, (uint8_t)sfr::button::pressed},
-        {3, (uint8_t)sfr::mission::current_mode->get_id()},
-        {4, serialize(4, sfr::burnwire::burn_time)},
-        {5, serialize(5, sfr::burnwire::armed_time)},
-        {6, (uint8_t)sfr::burnwire::mode},
-        {7, (uint8_t)sfr::burnwire::attempts},
-        {8, serialize(8, sfr::rockblock::downlink_period)},
-        {9, (uint8_t)sfr::rockblock::waiting_message},
-        {10, (uint8_t)sfr::rockblock::waiting_command},
-        {11, serialize(11, mag_x)},
-        {12, serialize(12, mag_y)},
-        {13, serialize(13, mag_z)},
-        {14, serialize(14, gyro_x)},
-        {15, serialize(15, gyro_y)},
-        {16, serialize(16, gyro_z)},
-        {17, serialize(17, photoresistor)},
-        {18, serialize(18, temp)},
-        {19, (uint8_t)current},
-        {20, (uint8_t)sfr::current::in_sun},
-        {21, serialize(21, voltage)},
+        {1, sfr::photoresistor::covered},
+        {2, sfr::button::pressed},
+        {3, sfr::mission::current_mode->get_id()},
+
+        // TODO
+
+        // All SensorReading values. If there is an average version, that is included.
+
+        // All SensorReading Faults
         {22, (fault_groups::imu_faults::mag_x_value->serialize() << 4) + fault_groups::imu_faults::mag_x_average->serialize()},
         {23, (fault_groups::imu_faults::mag_y_value->serialize() << 4) + fault_groups::imu_faults::mag_y_average->serialize()},
         {24, (fault_groups::imu_faults::mag_z_value->serialize() << 4) + fault_groups::imu_faults::mag_z_average->serialize()},
@@ -80,9 +68,9 @@ void NormalReportMonitor::execute()
         {29, (fault_groups::power_faults::temp_c_value->serialize() << 4) + fault_groups::power_faults::temp_c_average->serialize()},
         {30, (fault_groups::power_faults::voltage_value->serialize() << 4) + fault_groups::power_faults::voltage_average->serialize()},
         {31, (fault_groups::power_faults::solar_current_average->serialize() << 4)},
+
         {32, (fault_groups::hardware_faults::light_val->serialize() << 4) + fault_groups::hardware_faults::button->serialize()},
-        {33, (uint8_t)sfr::camera::powered},
-        {34, (uint8_t)sfr::eeprom::boot_counter}};
+    };
 
     std::deque<uint8_t> empty_normal_report;
     std::swap(sfr::rockblock::normal_report, empty_normal_report);
