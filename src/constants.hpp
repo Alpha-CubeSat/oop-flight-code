@@ -254,7 +254,7 @@ namespace constants {
 
     namespace imu_downlink {
         // Note this is how much data correlates to 30 seconds
-        constexpr int downlink_FIFO_byte_length = 462;
+        constexpr int downlink_FIFO_byte_length = 1188;
         constexpr uint8_t imu_report_endflag1 = 0xFE;
         constexpr uint8_t imu_report_endflag2 = 0x92;
     } // namespace imu_downlink
