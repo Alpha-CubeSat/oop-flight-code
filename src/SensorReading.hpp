@@ -66,15 +66,6 @@ public:
     SensorReading(Fault *fault, uint8_t buffer_size, float min, float max);
 
     /**
-     * @brief Construct a new Sensor Reading object with no associated fault
-     *
-     * @param buffer_size Size of the buffer, the amount of values that should be averaged
-     * @param min Minimum valid value
-     * @param max Maximum valid value
-     */
-    SensorReading(uint8_t buffer_size, float min, float max);
-
-    /**
      * @brief Get sensor reading average value
      *
      * @param value_location Where to store the average value

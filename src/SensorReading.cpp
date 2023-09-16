@@ -9,15 +9,6 @@ SensorReading::SensorReading(Fault *fault, uint8_t buffer_size, float min, float
     buffer.clear();
 } // constructor
 
-SensorReading::SensorReading(uint8_t buffer_size, float min, float max)
-{
-    this->fault = NULL;
-    this->buffer_size = buffer_size;
-    this->max = max;
-    this->min = min;
-    buffer.clear();
-} // constructor
-
 bool SensorReading::get_value(float *value_location)
 {
     // enough values have been accumulated to get the average
