@@ -72,8 +72,8 @@ public:
 
         field_value = (int)value;
         default_value = (int)value;
-        min = (float)min;
-        max = (float)max;
+        this->min = min;
+        this->max = max;
 
         if (sizeof(T) == sizeof(uint32_t))
             data_type = 4;
@@ -99,8 +99,8 @@ public:
 
         field_value = (int)value;
         default_value = (int)value;
-        min = (float)std::numeric_limits<T>::min();
-        max = (float)std::numeric_limits<T>::max();
+        min = std::numeric_limits<T>::min();
+        max = std::numeric_limits<T>::max();
 
         if (sizeof(T) == sizeof(uint32_t))
             data_type = 4;
@@ -127,8 +127,8 @@ public:
 
         field_value = (int)value;
         default_value = (int)value;
-        min = (float)min;
-        max = (float)max;
+        this->min = min;
+        this->max = max;
 
         if (sizeof(T) == sizeof(uint32_t))
             data_type = 4;
@@ -155,8 +155,8 @@ public:
 
         field_value = (int)value;
         default_value = (int)value;
-        min = (float)min;
-        max = (float)max;
+        this->min = min;
+        this->max = max;
 
         if (sizeof(T) == sizeof(uint32_t))
             data_type = 4;
