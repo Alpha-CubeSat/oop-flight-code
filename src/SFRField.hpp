@@ -17,7 +17,9 @@ protected:
     int field_value;   // The value of the field cast to an int
     int default_value; // The default value of the field cast to an int
     int data_type;     // An int representing the field's type T, 1 for bool, 2 for uint8_t, 3 for uint16_t, and 4 for uint32_t
-    bool restore;      // If the field should be restored or not
+    float min;
+    float max;
+    bool restore = false; // If the field should be restored or not
 
 public:
     static std::map<int, SFRInterface *> opcode_lookup; // </brief Op Code Lookup Map For SFR Field Uplink Override
@@ -46,19 +48,18 @@ public:
 
     void setRestore(bool restore_on_boot);
     bool getRestore();
+
+    float getMin();
+    float getMax();
 };
 
 template <typename T, typename = typename std::enable_if<std::is_arithmetic<T>::value, T>::type>
 class SFRField : public SFRInterface
 {
 private:
-    T value;      // </brief Field Value, Only Arithmetic Types Allowed
-    T max;        // </brief Inclusive Minium Value
-    T min;        // </brief Inclusive Maximum Value
-    bool bounded; // </brief If max and min are bounded beyond data type
-    int opcode;   // </brief Uplink Op Code to set this field
-    int resolution;
-
+    T value;    // </brief Field Value, Only Arithmetic Types Allowed
+    int opcode; // </brief Uplink Op Code to set this field
+    int resolution = 1;
 #ifdef DEBUG
     T initial;
 #endif
@@ -67,14 +68,13 @@ public:
     SFRField(T default_val, T min, T max, int opcode_val)
     {
         value = default_val;
-        this->min = min;
-        this->max = max;
-        bounded = true;
         opcode = opcode_val;
-        resolution = 1;
 
         field_value = (int)value;
         default_value = (int)value;
+        min = (float)min;
+        max = (float)max;
+
         if (sizeof(T) == sizeof(uint32_t))
             data_type = 4;
         else if (sizeof(T) == sizeof(uint16_t))
@@ -83,7 +83,6 @@ public:
             data_type = 2;
         else if (sizeof(T) == sizeof(bool))
             data_type = 1;
-        restore = true;
 
 #ifdef DEBUG
         T initial = default_val;
@@ -96,12 +95,13 @@ public:
     SFRField(T default_val, int opcode_val)
     {
         value = default_val;
-        bounded = false;
         opcode = opcode_val;
-        resolution = 1;
 
         field_value = (int)value;
         default_value = (int)value;
+        min = (float)std::numeric_limits<T>::min();
+        max = (float)std::numeric_limits<T>::max();
+
         if (sizeof(T) == sizeof(uint32_t))
             data_type = 4;
         else if (sizeof(T) == sizeof(uint16_t))
@@ -110,7 +110,6 @@ public:
             data_type = 2;
         else if (sizeof(T) == sizeof(bool))
             data_type = 1;
-        restore = true;
 
 #ifdef DEBUG
         T initial = default_val;
@@ -123,14 +122,14 @@ public:
     SFRField(float default_val, float min, float max, int opcode_val, float resolution)
     {
         value = default_val * resolution;
-        this->min = min;
-        this->max = max;
-        bounded = true;
         opcode = opcode_val;
-        this->resolution = resolution;
+        resolution = resolution;
 
         field_value = (int)value;
         default_value = (int)value;
+        min = (float)min;
+        max = (float)max;
+
         if (sizeof(T) == sizeof(uint32_t))
             data_type = 4;
         else if (sizeof(T) == sizeof(uint16_t))
@@ -139,7 +138,34 @@ public:
             data_type = 2;
         else if (sizeof(T) == sizeof(bool))
             data_type = 1;
-        restore = true;
+
+#ifdef DEBUG
+        T initial = default_val * resolution; // Since value gets set to initial in reset(), initial should be default_val * resolution instead of default_val
+#endif
+
+        SFRInterface::opcode_lookup[opcode_val] = this;
+        SFRInterface::sfr_fields_vector.push_back(this);
+    }
+
+    SFRField(float default_val, int opcode_val, float resolution)
+    {
+        value = default_val * resolution;
+        opcode = opcode_val;
+        resolution = resolution;
+
+        field_value = (int)value;
+        default_value = (int)value;
+        min = (float)min;
+        max = (float)max;
+
+        if (sizeof(T) == sizeof(uint32_t))
+            data_type = 4;
+        else if (sizeof(T) == sizeof(uint16_t))
+            data_type = 3;
+        else if (sizeof(T) == sizeof(uint8_t))
+            data_type = 2;
+        else if (sizeof(T) == sizeof(bool))
+            data_type = 1;
 
 #ifdef DEBUG
         T initial = default_val * resolution; // Since value gets set to initial in reset(), initial should be default_val * resolution instead of default_val
@@ -166,7 +192,7 @@ public:
 
     void set(T input)
     {
-        if ((bounded && input <= max && input >= min) || (!bounded)) {
+        if (input <= max && input >= min) {
             value = input;
         }
         field_value = (int)input;

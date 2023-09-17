@@ -3,7 +3,6 @@
 
 #include "Arduino.h"  // allows Serial.println() calls
 #include "Faults.hpp" // Cannot include sfr.hpp in this file without creating circular dependency since SensorReading objects are declared in sfr.hpp
-#include "Modes/fault_index_type.enum"
 #include "constants.hpp"
 #include <deque>
 #include <map>

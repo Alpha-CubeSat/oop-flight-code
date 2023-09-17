@@ -16,16 +16,17 @@ void NormalReportMonitor::execute()
         sfr::temperature::in_sun, sfr::current::in_sun, sfr::button::pressed};
 
     std::vector<uint8_t> report_contents{
-        99,
+        constants::rockblock::start_of_normal_downlink,
+
         // SFR fields
-        serialize(sfr::burnwire::burn_time),
-        serialize(sfr::burnwire::armed_time),
-        serialize(sfr::rockblock::downlink_period),
+        serialize(0x1905), // sfr::burnwire::burn_time
+        serialize(0x1906), // sfr::burnwire::armed_time
+        serialize(0x2112), // sfr::rockblock::downlink_period
         sfr::eeprom::boot_counter,
-        serialize(sfr::acs::Id_index),
-        serialize(sfr::acs::Kd_index),
-        serialize(sfr::acs::Kp_index),
-        serialize(sfr::acs::c_index),
+        serialize(0x2505), // sfr::acs::Id_index
+        serialize(0x2506), // sfr::acs::Kd_index
+        serialize(0x2507), // sfr::acs::Kp_index
+        serialize(0x2508), // sfr::acs::c_index
         serialize(sfr_packed_bools),
 
         // Sensor readings
@@ -67,8 +68,6 @@ void NormalReportMonitor::execute()
     for (size_t i = 0; i < report_contents.size(); i++) {
         sfr::rockblock::normal_report.push_back(report_contents[i]);
     }
-
-    // TODO: ensure mission mode history is constant length and pack into 10 bytes
 
     // push the most recent 16 mission modes switches, packed into 5 bits
     int k = 0;
@@ -114,9 +113,21 @@ uint8_t NormalReportMonitor::serialize(SensorReading *valueObj)
     return serialize(value, valueObj->get_min(), valueObj->get_max());
 }
 
-uint8_t NormalReportMonitor::serialize(SFRField valueObj)
+uint8_t NormalReportMonitor::serialize(int opcode)
 {
-    return serialize(valueObj.getFieldValue(), valueObj.getFieldMin(), valueObj.getFieldMax());
+    SFRInterface *valueObj = SFRInterface::opcode_lookup[opcode];
+    float value;
+    int data_type = valueObj->getDataType();
+    if (data_type == 4)
+        value = (uint32_t)valueObj->getFieldValue();
+    else if (data_type == 3)
+        value = (uint16_t)valueObj->getFieldValue();
+    else if (data_type == 2)
+        value = (uint8_t)valueObj->getFieldValue();
+    else if (data_type == 1)
+        value = (bool)valueObj->getFieldValue();
+
+    return serialize(value, valueObj->getMin(), valueObj->getMax());
 }
 
 uint8_t NormalReportMonitor::serialize(float value, float min, float max)

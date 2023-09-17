@@ -20,6 +20,8 @@ namespace constants {
     namespace photoresistor {
         constexpr int pin = 38;
         constexpr int light_val = 200;
+        constexpr int min_light_val = 0;
+        constexpr int max_light_val = 1023;
     } // namespace photoresistor
     namespace burnwire {
         constexpr int first_pin = 14;
@@ -37,7 +39,6 @@ namespace constants {
 
         constexpr int baud = 19200;
         constexpr size_t buffer_size = 63;
-        constexpr size_t packet_size = 70;
         constexpr size_t num_commas = 5;
         constexpr size_t opcode_len = 2;
         constexpr size_t arg1_len = 4;
@@ -45,11 +46,11 @@ namespace constants {
         constexpr size_t command_len = opcode_len + arg1_len + arg2_len;
         constexpr size_t max_conseq_read = 3;
 
-        constexpr uint8_t normal_report_delimiter = 170;
         constexpr uint8_t end_of_normal_downlink_flag1 = 254;
         constexpr uint8_t end_of_normal_downlink_flag2 = 255;
         constexpr uint8_t end_of_command_upload_flag1 = 0;
         constexpr uint8_t end_of_command_upload_flag2 = 250;
+        constexpr uint8_t start_of_normal_downlink = 99;
         namespace opcodes {
             // SFRField Commands
             constexpr uint16_t sfr_field_opcode_min = 0x1100;
@@ -73,16 +74,24 @@ namespace constants {
     namespace temperature {
         constexpr int pin = 39;
         constexpr float in_sun_val = 30;
+        constexpr int min_temp_c = -100;
+        constexpr int max_temp_c = 200;
     } // namespace temperature
     namespace current {
         constexpr int pin = 22;
-        // TODO: finalize in_sun_val
         constexpr int in_sun_val = 70;
         constexpr float voltage_ref = 3.3;
         constexpr int resolution = 1024;
         constexpr float load = 30;   // load resister value (kOhm)
         constexpr float shunt = 0.1; // shunt resistor value (Ohm)
     }                                // namespace current
+    namespace masks {
+        constexpr uint32_t uint32_byte1_mask = 0b11111111000000000000000000000000;
+        constexpr uint32_t uint32_byte2_mask = 0b00000000111111110000000000000000;
+        constexpr uint32_t uint32_byte3_mask = 0b00000000000000001111111100000000;
+        constexpr uint32_t uint32_byte4_mask = 0b00000000000000000000000011111111;
+
+    } // namespace masks
     namespace acs {
         constexpr int xPWMpin = 10;
         constexpr int yPWMpin = 6;
@@ -212,6 +221,9 @@ namespace constants {
         constexpr int resolution = 1023;
         constexpr int r1 = 4700;
         constexpr int r2 = 10000;
+        constexpr int min_voltage = 0;
+        constexpr int max_voltage = 6;
+        constexpr int sfr_resolution = 100;
     } // namespace battery
     namespace camera {
         constexpr int power_on_pin = 31;
@@ -225,24 +237,11 @@ namespace constants {
         constexpr int button_pin = 37;
     } // namespace button
     namespace imu {
-        constexpr float gravity = 9.80665;
-        constexpr float two_g = 2 * gravity;
-        constexpr float four_g = 4 * gravity;
-        constexpr float eight_g = 8 * gravity;
+        constexpr float min_mag = -150;
+        constexpr float max_mag = 150;
 
-        constexpr float min_mag_x = 0.0;
-        constexpr float max_mag_x = 100;
-        constexpr float min_mag_y = 0.0;
-        constexpr float max_mag_y = 100;
-        constexpr float min_mag_z = -100;
-        constexpr float max_mag_z = 100;
-
-        constexpr float min_gyro_x = 0.0;
-        constexpr float max_gyro_x = 10;
-        constexpr float min_gyro_y = 0.0;
-        constexpr float max_gyro_y = 10;
-        constexpr float min_gyro_z = 0.0;
-        constexpr float max_gyro_z = 10;
+        constexpr float min_gyro = -5;
+        constexpr float max_gyro = 5;
 
         constexpr int CSAG = 21;
         constexpr int CSM = 20;
@@ -250,11 +249,13 @@ namespace constants {
         constexpr int max_gyro_imu_report_size = 66;
         constexpr int bootIMU_min_run_time = 20000;          // 20 seconds before transition to bootCamera.
         constexpr int after_door_opens_min_run_time = 10000; // 10 seconds after the door opens
-    }                                                        // namespace imu
+
+        constexpr int sfr_resolution = 10;
+    } // namespace imu
 
     namespace imu_downlink {
         // Note this is how much data correlates to 30 seconds
-        constexpr int downlink_FIFO_byte_length = 462;
+        constexpr int downlink_FIFO_byte_length = 1188;
         constexpr uint8_t imu_report_endflag1 = 0xFE;
         constexpr uint8_t imu_report_endflag2 = 0x92;
     } // namespace imu_downlink

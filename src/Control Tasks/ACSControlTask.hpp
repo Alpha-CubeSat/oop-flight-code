@@ -55,6 +55,7 @@ private:
     double wx_input = 0.0;
     double wy_input = 0.0;
     double wz_input = 1.0;
+    float last_time = 0;
 #endif
 };
 

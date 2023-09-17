@@ -10,6 +10,9 @@ class ButtonMonitor : public TimedControlTask<void>
 public:
     ButtonMonitor(unsigned int offset);
     void execute();
+
+private:
+    float val;
 };
 
 #endif

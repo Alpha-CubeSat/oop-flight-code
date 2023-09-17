@@ -13,7 +13,7 @@ public:
     NormalReportMonitor(unsigned int offset);
     void execute();
     uint8_t serialize(SensorReading *valueObj);
-    uint8_t serialize(SFRField valueObj);
+    uint8_t serialize(int opcode);
     uint8_t serialize(float value, float min, float max);
     uint8_t serialize(bool values[]);
 };

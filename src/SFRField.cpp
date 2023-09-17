@@ -17,6 +17,16 @@ int SFRInterface::getFieldValue()
     return field_value;
 }
 
+float SFRInterface::getMax()
+{
+    return max;
+}
+
+float SFRInterface::getMin()
+{
+    return min;
+}
+
 int SFRInterface::getDefaultValue()
 {
     return default_value;
