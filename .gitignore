@@ -1,4 +1,4 @@
 .pio
-.vscode*
+.vscode/
 tools/putty.log
 .DS_Store
