@@ -9,25 +9,6 @@ NormalReportMonitor::NormalReportMonitor(unsigned int offset)
 
 void NormalReportMonitor::execute()
 {
-    float light_avg_standby;
-    float light_avg_deploy;
-    float mag_x;
-    float mag_y;
-    float mag_z;
-    float gyro_x;
-    float gyro_y;
-    float gyro_z;
-    float mag_x_avg;
-    float mag_y_avg;
-    float mag_z_avg;
-    float gyro_x_avg;
-    float gyro_y_avg;
-    float gyro_z_avg;
-    float temp;
-    float temp_avg;
-    float current_avg;
-    float voltage;
-    float voltage_avg;
 
     sfr::photoresistor::light_val_average_standby->get_value(&light_avg_standby);
     sfr::photoresistor::light_val_average_deployment->get_value(&light_avg_deploy);
@@ -54,7 +35,7 @@ void NormalReportMonitor::execute()
         sfr::rockblock::waiting_message, sfr::rockblock::waiting_command,
         sfr::temperature::in_sun, sfr::current::in_sun, sfr::button::pressed};
 
-    std::vector<uint8_t> report_contents{
+    std::vector<uint8_t> report_contents {
         99,
         // SFR fields
         serialize(sfr::burnwire::burn_time, 0, 5000),
