@@ -70,23 +70,26 @@ void NormalReportMonitor::execute()
 
     // TODO: ensure mission mode history is constant length and pack into 10 bytes
 
-    // push the most recent 16 mission modes switches, starting with most recent
-    size_t k = 0;
+    // push the most recent 16 mission modes switches, packed into 5 bits
+    int k = 0;
+    bool packed_commands[80] = {false};
     auto hist_mode = sfr::mission::mode_history.cbegin();
-    auto prev_hist_mode = sfr::mission::mode_history.cbegin();
     while (hist_mode != sfr::mission::mode_history.cend() && k <= sfr::mission::mission_mode_hist_length) {
-        if (*hist_mode != *prev_hist_mode || hist_mode == sfr::mission::mode_history.cbegin()) {
-            sfr::rockblock::normal_report.push_back(*hist_mode);
-            k++;
-        }
-        if (hist_mode != sfr::mission::mode_history.cbegin()) {
-            std::advance(prev_hist_mode, 1);
+        for (int i = 4; i >= 0; i--) {
+            packed_commands[k * 5 + (4 - i)] = (*hist_mode >> i) & 1;
         }
         std::advance(hist_mode, 1);
+        k++;
     }
 
-    // add delimeter between mission mode history and processed opcodes
-    sfr::rockblock::normal_report.push_back(constants::rockblock::normal_report_delimiter);
+    // read bool array
+    for (int m = 0; m <= 10; m++) {
+        uint8_t packed_mode = 0;
+        for (int n = 0; n < 8; n++) {
+            packed_mode += packed_commands[m * 8 + n] << n;
+        }
+        sfr::rockblock::normal_report.push_back(packed_mode);
+    }
 
     // push the most recent 10 command opcodes, starting with most recent
     // if less than 10 commands have been recieved, fill with empty opcodes
