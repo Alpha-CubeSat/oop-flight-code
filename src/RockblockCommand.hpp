@@ -75,10 +75,10 @@ public:
     void execute()
     {
         if (field) {
-            
-            uint8_t set_value = (constants::masks::uint32_byte1_mask & f_arg_2) >> 24; // Whether to override SFR
+
+            uint8_t set_value = (constants::masks::uint32_byte1_mask & f_arg_2) >> 24;   // Whether to override SFR
             uint8_t set_restore = (constants::masks::uint32_byte2_mask & f_arg_2) >> 16; // Whether to override resore bit
-            uint8_t restore_value = constants::masks::uint32_byte4_mask & f_arg_2; // Restore bit value
+            uint8_t restore_value = constants::masks::uint32_byte4_mask & f_arg_2;       // Restore bit value
 
             if ((bool)set_value) {
                 field->setValue(f_arg_1);

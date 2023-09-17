@@ -46,11 +46,11 @@ namespace constants {
         constexpr size_t command_len = opcode_len + arg1_len + arg2_len;
         constexpr size_t max_conseq_read = 3;
 
-        constexpr uint8_t normal_report_delimiter = 170;
         constexpr uint8_t end_of_normal_downlink_flag1 = 254;
         constexpr uint8_t end_of_normal_downlink_flag2 = 255;
         constexpr uint8_t end_of_command_upload_flag1 = 0;
         constexpr uint8_t end_of_command_upload_flag2 = 250;
+        constexpr uint8_t start_of_normal_downlink = 99;
         namespace opcodes {
             // SFRField Commands
             constexpr uint16_t sfr_field_opcode_min = 0x1100;

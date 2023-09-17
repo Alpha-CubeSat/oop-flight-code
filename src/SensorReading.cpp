@@ -42,22 +42,16 @@ void SensorReading::set_value(float x)
 void SensorReading::set_valid()
 {
     valid = true;
-    if (fault != NULL) {
-        fault->release();
-    }
+    fault->release();
 }
 
 void SensorReading::set_invalid()
 {
     valid = false;
-    if (fault != NULL) {
-        if (!fault->get_suppressed()) {
-            buffer.clear();
-        }
-        fault->signal();
-    } else {
+    if (!fault->get_suppressed()) {
         buffer.clear();
     }
+    fault->signal();
 }
 
 bool SensorReading::repeated_values(std::deque<float> *buffer, float val)
@@ -85,8 +79,15 @@ bool SensorReading::repeated_values(std::deque<float> *buffer, float val)
 
 bool SensorReading::is_valid()
 {
-    if (fault != NULL) {
-        return !(fault->get_base());
-    }
-    return true;
+    return !(fault->get_base());
+}
+
+float SensorReading::get_min()
+{
+    return min;
+}
+
+float SensorReading::get_max()
+{
+    return max;
 }
