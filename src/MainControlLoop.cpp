@@ -27,8 +27,6 @@ MainControlLoop::MainControlLoop()
 
 void MainControlLoop::execute()
 {
-    delay(50);
-
 #ifdef VERBOSE
     Serial.println("--------------------START LOOP--------------------");
     // TODO print time on here
@@ -154,19 +152,22 @@ void MainControlLoop::execute()
     command_monitor.execute_on_time();
     mission_manager.execute_on_time();
 
+    camera_control_task.execute_on_time();
+    acs_control_task.execute_on_time();
+
+    imu_monitor.execute_on_time();
     battery_monitor.execute_on_time();
     button_monitor.execute_on_time();
-    camera_report_monitor.execute_on_time();
     current_monitor.execute_on_time();
-    imu_monitor.execute_on_time();
-    imu_downlink.execute_on_time();
-    imudownlink_report_monitor.execute_on_time();
-    normal_report_monitor.execute_on_time();
     photoresistor_monitor.execute_on_time();
     rockblock_report_monitor.execute_on_time();
     temperature_monitor.execute_on_time();
-    acs_control_task.execute_on_time();
-    camera_control_task.execute_on_time();
+
+    imu_downlink.execute_on_time();
+
+    normal_report_monitor.execute_on_time();
+    camera_report_monitor.execute_on_time();
+    imudownlink_report_monitor.execute_on_time();
 
     eeprom_control_task.execute_on_time();
 

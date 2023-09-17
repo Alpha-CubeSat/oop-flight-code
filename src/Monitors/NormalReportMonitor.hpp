@@ -3,6 +3,8 @@
 
 #include "Control Tasks/TimedControlTask.hpp"
 #include "Faults.hpp"
+#include "SFRField.hpp"
+#include "SensorReading.hpp"
 #include <queue>
 
 class NormalReportMonitor : public TimedControlTask<void>
@@ -10,7 +12,10 @@ class NormalReportMonitor : public TimedControlTask<void>
 public:
     NormalReportMonitor(unsigned int offset);
     void execute();
-    uint8_t serialize(int index, float value);
+    uint8_t serialize(SensorReading *valueObj);
+    uint8_t serialize(int opcode);
+    uint8_t serialize(float value, float min, float max);
+    uint8_t serialize(bool values[]);
 };
 
 #endif

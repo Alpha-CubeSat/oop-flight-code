@@ -22,7 +22,7 @@ namespace sfr {
         SFRField<bool> downlinked = SFRField<bool>(false, 0x1600);
         SFRField<uint16_t> max_downlink_hard_faults = SFRField<uint16_t>(3, 0x1601);
         SFRField<uint16_t> num_hard_faults = SFRField<uint16_t>(0, 0x1602);
-        SFRField<uint32_t> max_time = SFRField<uint32_t>(30000, 0x1603);
+        SFRField<uint32_t> max_time = SFRField<uint32_t>(2 * constants::time::one_hour, 0x1603);
     } // namespace aliveSignal
     namespace photoresistor {
         // OP Codes 1700
@@ -167,14 +167,14 @@ namespace sfr {
         SFRField<uint32_t> conseq_reads = SFRField<uint32_t>(0, 0x2113);
         SFRField<uint32_t> start_time_check_signal = SFRField<uint32_t>(0, 0x2114);
         SFRField<uint32_t> max_check_signal_time = SFRField<uint32_t>(constants::time::one_minute, 0x2115);
-        SFRField<uint32_t> on_time = SFRField<uint32_t>(constants::time::one_minute, 0x2116);
+        SFRField<uint32_t> on_time = SFRField<uint32_t>(20 * constants::time::one_minute, 0x2116);
 
         char buffer[constants::rockblock::buffer_size] = {0};
         int camera_commands[99][constants::rockblock::command_len] = {0};
         int commas[constants::rockblock::num_commas] = {0};
         uint32_t camera_max_fragments[99] = {0};
         std::deque<RawRockblockCommand> raw_commands;
-        std::deque<uint8_t> commands_received;
+        std::deque<uint16_t> commands_received;
         std::deque<RockblockCommand *> processed_commands;
         std::deque<uint8_t> downlink_report;
         std::deque<uint8_t> normal_report;

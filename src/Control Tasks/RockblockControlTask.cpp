@@ -242,7 +242,7 @@ void RockblockControlTask::dispatch_send_message()
     sfr::rockblock::serial.write(checksum >> 8);
     sfr::rockblock::serial.write(checksum & 0xFF);
     sfr::rockblock::serial.write('\r');
-    std::deque<uint8_t> empty_commands_received;
+    std::deque<uint16_t> empty_commands_received;
     std::swap(sfr::rockblock::commands_received, empty_commands_received);
     transition_to(rockblock_mode_type::await_message);
 }
@@ -310,6 +310,9 @@ void RockblockControlTask::dispatch_process_mo_status()
     if (sfr::rockblock::commas[0] > 1) {
         Serial.println("SAT INFO: there is another character");
         if (sfr::mission::current_mode->get_id() == sfr::mission::aliveSignal->get_id()) {
+#ifdef VERBOSE
+            Serial.println("ROCKBLOCK HARD FAULT");
+#endif
             sfr::aliveSignal::num_hard_faults++;
         }
         transition_to(rockblock_mode_type::send_signal_strength_mo);
