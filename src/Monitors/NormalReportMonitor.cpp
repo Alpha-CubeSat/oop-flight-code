@@ -82,7 +82,7 @@ void NormalReportMonitor::execute()
         serialize(gyro_x_avg, -100, 100),
         serialize(gyro_y_avg, -100, 100),
         serialize(gyro_z_avg, -100, 100),
-        serialize(temp, -500, 500),
+        serialize(temp, -100, 200),
         serialize(temp_avg, -100, 200),
         serialize(current_avg, -75, 500),
         serialize(voltage, 0, 5.5),
@@ -107,10 +107,9 @@ void NormalReportMonitor::execute()
         sfr::rockblock::normal_report.push_back(report_contents[i]);
     }
 
-    // TODO: ensure mission mode history and command opcode history are constant length
-    // pack mission mode hist into 10 bytes
+    // TODO: ensure mission mode history is constant length and pack into 10 bytes
 
-    // push the most recent 20 mission modes switches, starting with most recent
+    // push the most recent 16 mission modes switches, starting with most recent
     size_t k = 0;
     auto hist_mode = sfr::mission::mode_history.cbegin();
     auto prev_hist_mode = sfr::mission::mode_history.cbegin();
@@ -128,16 +127,20 @@ void NormalReportMonitor::execute()
     // add delimeter between mission mode history and processed opcodes
     sfr::rockblock::normal_report.push_back(constants::rockblock::normal_report_delimiter);
 
+    // push the most recent 10 command opcodes, starting with most recent
+    // if less than 10 commands have been recieved, fill with empty opcodes
     size_t j = 0;
     auto current_command = sfr::rockblock::commands_received.cbegin();
-    while (current_command != sfr::rockblock::commands_received.cend() && j < sfr::rockblock::normal_report_command_max) {
-        sfr::rockblock::normal_report.push_back(*current_command);
-        std::advance(current_command, 1);
+    while (j < sfr::rockblock::normal_report_command_max) {
+        if (current_command != sfr::rockblock::commands_received.cend()) {
+            sfr::rockblock::normal_report.push_back(*current_command);
+            std::advance(current_command, 1);
+        } else {
+            sfr::rockblock::normal_report.push_back(0);
+        }
         j++;
     }
     sfr::rockblock::normal_report_command_curr = j;
-    sfr::rockblock::normal_report.push_back(constants::rockblock::end_of_normal_downlink_flag1);
-    sfr::rockblock::normal_report.push_back(constants::rockblock::end_of_normal_downlink_flag2);
 }
 
 uint8_t NormalReportMonitor::serialize(float value, float min, float max)

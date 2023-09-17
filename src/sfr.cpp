@@ -192,7 +192,7 @@ namespace sfr {
         int commas[constants::rockblock::num_commas] = {0};
         uint32_t camera_max_fragments[99] = {0};
         std::deque<RawRockblockCommand> raw_commands;
-        std::deque<uint8_t> commands_received;
+        std::deque<uint16_t> commands_received;
         std::deque<RockblockCommand *> processed_commands;
         std::deque<uint8_t> downlink_report;
         std::deque<uint8_t> normal_report;
