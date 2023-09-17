@@ -35,7 +35,7 @@ void NormalReportMonitor::execute()
         sfr::rockblock::waiting_message, sfr::rockblock::waiting_command,
         sfr::temperature::in_sun, sfr::current::in_sun, sfr::button::pressed};
 
-    std::vector<uint8_t> report_contents {
+    std::vector<uint8_t> report_contents{
         99,
         // SFR fields
         serialize(sfr::burnwire::burn_time, 0, 5000),
