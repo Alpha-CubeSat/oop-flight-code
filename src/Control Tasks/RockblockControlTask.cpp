@@ -310,6 +310,9 @@ void RockblockControlTask::dispatch_process_mo_status()
     if (sfr::rockblock::commas[0] > 1) {
         Serial.println("SAT INFO: there is another character");
         if (sfr::mission::current_mode->get_id() == sfr::mission::aliveSignal->get_id()) {
+#ifdef VERBOSE
+            Serial.println("ROCKBLOCK HARD FAULT");
+#endif
             sfr::aliveSignal::num_hard_faults++;
         }
         transition_to(rockblock_mode_type::send_signal_strength_mo);
