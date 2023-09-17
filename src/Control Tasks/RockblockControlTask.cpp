@@ -242,7 +242,7 @@ void RockblockControlTask::dispatch_send_message()
     sfr::rockblock::serial.write(checksum >> 8);
     sfr::rockblock::serial.write(checksum & 0xFF);
     sfr::rockblock::serial.write('\r');
-    std::deque<uint8_t> empty_commands_received;
+    std::deque<uint16_t> empty_commands_received;
     std::swap(sfr::rockblock::commands_received, empty_commands_received);
     transition_to(rockblock_mode_type::await_message);
 }

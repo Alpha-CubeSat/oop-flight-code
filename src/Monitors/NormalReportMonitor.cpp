@@ -129,18 +129,18 @@ void NormalReportMonitor::execute()
 
     // push the most recent 10 command opcodes, starting with most recent
     // if less than 10 commands have been recieved, fill with empty opcodes
-    size_t j = 0;
+    size_t commands = 0;
     auto current_command = sfr::rockblock::commands_received.cbegin();
-    while (j < sfr::rockblock::normal_report_command_max) {
+    for (size_t j = 0; j < sfr::rockblock::normal_report_command_max; j++) {
         if (current_command != sfr::rockblock::commands_received.cend()) {
             sfr::rockblock::normal_report.push_back(*current_command);
             std::advance(current_command, 1);
+            commands++;
         } else {
             sfr::rockblock::normal_report.push_back(0);
         }
-        j++;
     }
-    sfr::rockblock::normal_report_command_curr = j;
+    sfr::rockblock::normal_report_command_curr = commands;
 }
 
 uint8_t NormalReportMonitor::serialize(float value, float min, float max)
