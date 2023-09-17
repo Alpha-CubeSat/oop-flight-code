@@ -12,8 +12,8 @@ public:
     void execute();
 
 private:
-    void save_wait_time();
     void save_sfr_data();
+    void check_wait_time();
 };
 
 #endif
