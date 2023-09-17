@@ -1,6 +1,9 @@
 #ifndef SFR_HPP_
 #define SFR_HPP_
 
+#include <deque>
+#include <vector>
+
 #include "Adafruit_VC0706.h"
 #include "Arduino.h"
 #include "Faults.hpp"
@@ -16,8 +19,6 @@
 #include "SFRField.hpp"
 #include "SensorReading.hpp"
 #include "constants.hpp"
-#include <deque>
-#include <vector>
 
 namespace sfr {
     namespace stabilization {
@@ -289,13 +290,7 @@ namespace sfr {
         extern SFRField<uint32_t> sfr_write_step_time;
         extern SFRField<uint32_t> sfr_address_age;
 
-<<<<<<< HEAD
-        // @ERIC fix if needed
-        extern int wait_time_last_write_time;
-        extern int sfr_last_write_time;
-=======
         extern int sfr_last_write_cycle;
->>>>>>> main
         extern uint16_t sfr_address;
     } // namespace eeprom
 };    // namespace sfr

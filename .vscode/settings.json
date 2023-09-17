@@ -53,5 +53,5 @@
     },
     "C_Cpp.dimInactiveRegions": false,
     "C_Cpp.formatting": "clangFormat",
-    "editor.formatOnSave": true
+    "editor.formatOnSave": false
 }
