@@ -21,7 +21,7 @@ void NormalReportMonitor::execute()
         // SFR fields
         serialize(0x1905), // sfr::burnwire::burn_time
         serialize(0x1906), // sfr::burnwire::armed_time
-        serialize(0x2111), // sfr::rockblock::downlink_period
+        serialize(0x2110), // sfr::rockblock::downlink_period
         sfr::eeprom::boot_counter,
         serialize(0x2505), // sfr::acs::Id_index
         serialize(0x2506), // sfr::acs::Kd_index
@@ -82,7 +82,7 @@ void NormalReportMonitor::execute()
     }
 
     // read bool array
-    for (int m = 0; m <= 10; m++) {
+    for (int m = 0; m < 10; m++) {
         uint8_t packed_mode = 0;
         for (int n = 0; n < 8; n++) {
             packed_mode += packed_commands[m * 8 + n] << n;
@@ -94,7 +94,7 @@ void NormalReportMonitor::execute()
     // if less than 10 commands have been recieved, fill with empty opcodes
     size_t commands = 0;
     auto current_command = sfr::rockblock::commands_received.cbegin();
-    for (size_t j = 0; j < sfr::rockblock::normal_report_command_max; j++) {
+    for (size_t j = 0; j < constants::rockblock::normal_report_command_max; j++) {
         if (current_command != sfr::rockblock::commands_received.cend()) {
             sfr::rockblock::normal_report.push_back(*current_command);
             std::advance(current_command, 1);

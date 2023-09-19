@@ -253,7 +253,6 @@ void RockblockControlTask::dispatch_await_message()
 #ifdef VERBOSE_RB
             Serial.println("SAT INFO: report accepted");
 #endif
-            sfr::rockblock::normal_report_command_max = constants::rockblock::normal_report_command_default_max;
             transition_to(rockblock_mode_type::send_response);
         } else {
             transition_to(rockblock_mode_type::send_message);

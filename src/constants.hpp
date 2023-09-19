@@ -29,7 +29,7 @@ namespace constants {
         constexpr int camera_max_attempts = 50;
     } // namespace burnwire
     namespace rockblock {
-        constexpr int normal_report_command_default_max = 10;
+        constexpr int normal_report_command_max = 10;
 
         constexpr int content_length = 68;
 
