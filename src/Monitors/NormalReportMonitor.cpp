@@ -97,8 +97,8 @@ void NormalReportMonitor::execute()
     for (size_t j = 0; j < constants::rockblock::normal_report_command_max; j++) {
         if (current_command != sfr::rockblock::commands_received.cend()) {
             // each opcode is two bytes
-            sfr::rockblock::normal_report.push_back(*current_command & 0xff);
             sfr::rockblock::normal_report.push_back(*current_command >> 8);
+            sfr::rockblock::normal_report.push_back(*current_command & 0xff);
             std::advance(current_command, 1);
             commands++;
         } else {
