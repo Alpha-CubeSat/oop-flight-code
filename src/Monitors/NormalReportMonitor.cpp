@@ -21,7 +21,7 @@ void NormalReportMonitor::execute()
         // SFR fields
         serialize(0x1905), // sfr::burnwire::burn_time
         serialize(0x1906), // sfr::burnwire::armed_time
-        serialize(0x2112), // sfr::rockblock::downlink_period
+        serialize(0x2111), // sfr::rockblock::downlink_period
         sfr::eeprom::boot_counter,
         serialize(0x2505), // sfr::acs::Id_index
         serialize(0x2506), // sfr::acs::Kd_index
@@ -103,7 +103,6 @@ void NormalReportMonitor::execute()
             sfr::rockblock::normal_report.push_back(0);
         }
     }
-    sfr::rockblock::normal_report_command_curr = commands;
 }
 
 uint8_t NormalReportMonitor::serialize(SensorReading *valueObj)

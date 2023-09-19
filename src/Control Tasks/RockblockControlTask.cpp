@@ -178,8 +178,6 @@ void RockblockControlTask::dispatch_send_message_length()
 {
     std::stringstream ss;
     ss << sfr::rockblock::downlink_report.size();
-    // Lock the max amount of reports to be the current amount to ensure size does not change before downlink
-    sfr::rockblock::normal_report_command_max = sfr::rockblock::normal_report_command_curr;
     std::string s = ss.str();
     std::string message_length = "AT+SBDWB=" + s + "\r";
 #ifdef VERBOSE_RB

@@ -37,6 +37,7 @@ void ACSControlTask::execute()
     mag_y = plantObj.rtY.magneticfield[1];
     mag_z = plantObj.rtY.magneticfield[2];
 
+#ifdef VERBOSE
     Serial.print("Simulated MAG_X: ");
     Serial.println(mag_x);
     Serial.print("Simulated MAG_Y: ");
@@ -49,6 +50,7 @@ void ACSControlTask::execute()
     Serial.println(gyro_y);
     Serial.print("Simulated GYRO_Z: ");
     Serial.println(gyro_z);
+#endif
 
     if (last_time == 0) {
         plantObj.step();
