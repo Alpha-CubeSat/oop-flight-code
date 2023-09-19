@@ -96,10 +96,13 @@ void NormalReportMonitor::execute()
     auto current_command = sfr::rockblock::commands_received.cbegin();
     for (size_t j = 0; j < constants::rockblock::normal_report_command_max; j++) {
         if (current_command != sfr::rockblock::commands_received.cend()) {
-            sfr::rockblock::normal_report.push_back(*current_command);
+            // each opcode is two bytes
+            sfr::rockblock::normal_report.push_back(*current_command & 0xff);
+            sfr::rockblock::normal_report.push_back(*current_command >> 8);
             std::advance(current_command, 1);
             commands++;
         } else {
+            sfr::rockblock::normal_report.push_back(0);
             sfr::rockblock::normal_report.push_back(0);
         }
     }
