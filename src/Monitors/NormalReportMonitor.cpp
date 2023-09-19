@@ -85,7 +85,7 @@ void NormalReportMonitor::execute()
     for (int m = 0; m < 10; m++) {
         uint8_t packed_mode = 0;
         for (int n = 0; n < 8; n++) {
-            packed_mode += packed_commands[m * 8 + n] << n;
+            packed_mode += packed_commands[m * 8 + n] << (7 - n);
         }
         sfr::rockblock::normal_report.push_back(packed_mode);
     }
