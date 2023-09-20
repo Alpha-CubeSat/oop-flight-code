@@ -361,7 +361,7 @@ void exit_lp(MissionMode *reg_mode)
 
 void timed_out(MissionMode *next_mode, float max_time)
 {
-    if (millis() - sfr::mission::current_mode->start_time >= max_time) {
+    if (sfr::eeprom::time_alive - sfr::mission::current_mode->start_time >= max_time) {
         sfr::mission::current_mode = next_mode;
     }
 }
