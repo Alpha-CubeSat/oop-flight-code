@@ -1,16 +1,7 @@
 #include <Control Tasks/EEPROMControlTask.hpp>
 #include <EEPROMRestore.hpp>
+#include <SFRField.hpp>
 #include <unity.h>
-
-/* Sets SFR fields to their default values and their restore boolean as true. */
-void resetSFR()
-{
-    for (auto const &kv : SFRInterface::opcode_lookup) {
-        int default_value = SFRInterface::opcode_lookup[kv.first]->getDefaultValue();
-        SFRInterface::opcode_lookup[kv.first]->setValue(default_value);
-        SFRInterface::opcode_lookup[kv.first]->setRestore(true);
-    }
-}
 
 /* Zeroes out all EEPROM bytes. */
 void clear_eeprom()
@@ -25,7 +16,7 @@ void test_restore_first_boot()
 {
     // Setup
     clear_eeprom();
-    resetSFR();
+    SFRInterface::resetSFR();
     EEPROMControlTask eeprom_control_task(0);
 
     // Check the boot counter byte in EEPROM is 0 before the first restore execution
@@ -64,7 +55,7 @@ void test_execute_no_write()
 {
     // Setup
     clear_eeprom();
-    resetSFR();
+    SFRInterface::resetSFR();
     EEPROMControlTask eeprom_control_task(0);
     EEPROM.write(4, 1);                      // Change the 4th byte (the boot counter) to non-zero
     EEPROM.put(5, sfr::eeprom::sfr_address); // Change the 5-6 bytes to point to the SFR data section in EEPROM
@@ -97,7 +88,7 @@ void test_execute_no_write()
     EEPROM.get(4, boot_counter_before);
 
     // Set all SFR fields to default values and restore booleans to true (as would happen on a reboot)
-    resetSFR();
+    SFRInterface::resetSFR();
 
     // Restore SFR values from EEPROM and check their values and restore booleans
     EEPROMRestore::execute();
@@ -125,7 +116,7 @@ void test_restore_general_reboot()
 {
     // Setup
     clear_eeprom();
-    resetSFR();
+    SFRInterface::resetSFR();
     EEPROMControlTask eeprom_control_task(0);
     EEPROM.write(4, 1);                      // Change the 4th byte (the boot counter) to non-zero
     EEPROM.put(5, sfr::eeprom::sfr_address); // Change the 5-6 bytes to point to the SFR section in EEPROM
@@ -157,7 +148,7 @@ void test_restore_general_reboot()
     EEPROM.get(4, boot_counter_before);
 
     // Set all SFR fields to default values and restore booleans to true (as would happen on a reboot)
-    resetSFR();
+    SFRInterface::resetSFR();
 
     // Restore SFR values from EEPROM and check their values and restore booleans
     EEPROMRestore::execute();
@@ -207,7 +198,7 @@ void test_restore_multiple_writes()
 {
     // Setup
     clear_eeprom();
-    resetSFR();
+    SFRInterface::resetSFR();
     EEPROMControlTask eeprom_control_task(0);
     EEPROM.write(4, 1);                      // Change the 4th byte (the boot counter) to non-zero
     EEPROM.put(5, sfr::eeprom::sfr_address); // Change the 5-6 bytes to point to the SFR section in EEPROM
@@ -262,7 +253,7 @@ void test_restore_multiple_writes()
     EEPROM.get(4, boot_counter_before);
 
     // Set all SFR fields to default values and restore booleans to true (as would happen on a reboot)
-    resetSFR();
+    SFRInterface::resetSFR();
 
     // Restore SFR values from EEPROM and check that they match the final write
     EEPROMRestore::execute();
@@ -312,7 +303,7 @@ void test_restore_write_limit_reboot()
 {
     // Setup
     clear_eeprom();
-    resetSFR();
+    SFRInterface::resetSFR();
     EEPROMControlTask eeprom_control_task(0);
     EEPROM.write(4, 1);                      // Change the 4th byte (the boot counter) to non-zero
     EEPROM.put(5, sfr::eeprom::sfr_address); // Change the 5-6 bytes to point to the SFR section in EEPROM
@@ -349,7 +340,7 @@ void test_restore_write_limit_reboot()
     EEPROM.get(4, boot_counter_before);
 
     // Set all SFR fields to default values and restore booleans to true (as would happen on a reboot)
-    resetSFR();
+    SFRInterface::resetSFR();
 
     // Restore SFR values from EEPROM and check their values and restore booleans
     EEPROMRestore::execute();
@@ -390,10 +381,11 @@ void test_restore_write_limit_reboot()
     }
 }
 
-void test_exceed_eeprom_memory() {
+void test_exceed_eeprom_memory()
+{
     // Setup
     clear_eeprom();
-    resetSFR();
+    SFRInterface::resetSFR();
     EEPROMControlTask eeprom_control_task(0);
 
     // Set the SFR address to the last byte of the EEPROM memory so there is not enough room for a full store
@@ -408,7 +400,7 @@ void test_time_tracker()
 {
     // Setup, SFR bytes are not tested in this test case
     clear_eeprom();
-    resetSFR();
+    SFRInterface::resetSFR();
     EEPROMControlTask eeprom_control_task(0);
 
     // Delay for over the write time step, save the initial time count from EEPROM

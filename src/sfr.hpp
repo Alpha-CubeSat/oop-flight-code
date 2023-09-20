@@ -279,16 +279,18 @@ namespace sfr {
     } // namespace pins
     namespace eeprom {
         // OP Codes 2800
-        extern SFRField<bool> allotted_time_passed;
-        extern SFRField<bool> storage_full;
-        extern SFRField<uint8_t> boot_counter;
-        extern SFRField<uint32_t> sfr_write_step_time;
-        extern SFRField<uint32_t> sfr_address_age;
-
-        // @ERIC fix if needed
-        extern int wait_time_last_write_time;
-        extern int sfr_last_write_time;
-        extern uint16_t sfr_address;
+        extern SFRField<bool> boot_mode;
+        extern SFRField<uint16_t> boot_counter;
+        extern SFRField<bool> error_mode;
+        extern SFRField<uint16_t> dynamic_data_addr;
+        extern SFRField<uint16_t> sfr_data_addr;
+        extern SFRField<bool> light_switch;
+        extern SFRField<uint32_t> time_alive;
+        extern SFRField<uint32_t> dynamic_data_age;
+        extern SFRField<uint32_t> sfr_data_age;
+        extern SFRField<bool> sfr_save_completed;
+        extern uint32_t last_fast_save_time;
+        extern uint32_t last_sfr_save_time;
     } // namespace eeprom
 };    // namespace sfr
 

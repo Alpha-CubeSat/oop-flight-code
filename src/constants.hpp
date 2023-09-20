@@ -2,8 +2,8 @@
 #define CONSTANTS_HPP_
 
 #include <cstddef>
-#include <map>
 #include <stdint.h>
+#include <vector>
 
 namespace constants {
     namespace time {
@@ -294,6 +294,31 @@ namespace constants {
         static constexpr unsigned int eeprom_control_task_offset = 0;
         static constexpr unsigned int mission_manager_offset = 0;
     } // namespace timecontrol
+    namespace eeprom {
+        // Byte locations of the EEPROM blue moon data
+        static constexpr unsigned int boot_time_loc1 = 0;
+        static constexpr unsigned int boot_counter_loc1 = 4;
+        static constexpr unsigned int light_switch_loc1 = 6;
+        static constexpr unsigned int dynamic_data_addr_loc1 = 7;
+        static constexpr unsigned int sfr_data_addr_loc1 = 9;
+
+        static constexpr unsigned int boot_time_loc2 = 4085;
+        static constexpr unsigned int boot_counter_loc2 = 4089;
+        static constexpr unsigned int light_switch_loc2 = 4091;
+        static constexpr unsigned int dynamic_data_addr_loc2 = 4092;
+        static constexpr unsigned int sfr_data_addr_loc2 = 4094;
+
+        // Constants for saving data to EEPROM
+        static constexpr unsigned int dynamic_data_full_offset = 8;
+        static constexpr unsigned int dynamic_data_start = 99;
+        static constexpr unsigned int sfr_data_start = 99;
+        static constexpr unsigned int sfr_store_size = 5;
+        static constexpr unsigned int sfr_num_fields = 100; // Number of fields
+        static constexpr unsigned int sfr_data_full_offset = sfr_num_fields * sfr_store_size + 8;
+
+        static constexpr unsigned int fast_write_interval = 30 * constants::time::one_second;
+        static constexpr unsigned int slow_write_interval = 5 * constants::time::one_minute;
+    } // namespace eeprom
 };    // namespace constants
 
 #endif

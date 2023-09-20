@@ -282,20 +282,18 @@ namespace sfr {
     } // namespace pins
     namespace eeprom {
         // OP Codes 2800
-        SFRField<bool> allotted_time_passed = SFRField<bool>(false, 0x2800); // indicates if the EEPROM count has reached the alloted time
-        SFRField<bool> storage_full = SFRField<bool>(false, 0x2801);
-        // TODO need MIN and MAX
-        SFRField<uint8_t> boot_counter = SFRField<uint8_t>(0, 0, 0, 0x2802);
-        SFRField<uint32_t> wait_time_write_step_time = SFRField<uint32_t>(1000, 0x2803); // the amount of time between each write to EEPROM for wait time
-        SFRField<uint32_t> alloted_time = SFRField<uint32_t>(7200000, 0x2804);           // the amount of time for the EEPROM to count to (7200000 ms = 2 h)
-        SFRField<uint32_t> sfr_write_step_time = SFRField<uint32_t>(1000, 0x2805);       // the amount of time between each write to EEPROM for SFR data
-        SFRField<uint32_t> sfr_address_age = SFRField<uint32_t>(0, 0x2806);              // the write age of the current SFR data section in EEPROM
+        SFRField<bool> boot_mode = SFRField<bool>(true, 0x2800);
+        SFRField<uint16_t> boot_counter = SFRField<uint16_t>(0, 0x2801);
+        SFRField<bool> error_mode = SFRField<bool>(true, 0x2802);
+        SFRField<uint16_t> dynamic_data_addr = SFRField<uint16_t>(constants::eeprom::dynamic_data_start, 0x2803);
+        SFRField<uint16_t> sfr_data_addr = SFRField<uint16_t>(constants::eeprom::sfr_data_start, 0x2804);
+        SFRField<bool> light_switch = SFRField<bool>(false, 0x2805);
+        SFRField<uint32_t> time_alive = SFRField<uint32_t>(0, 0x2806);
+        SFRField<uint32_t> dynamic_data_age = SFRField<uint32_t>(0, 0x2807);
+        SFRField<uint32_t> sfr_data_age = SFRField<uint32_t>(0, 0x2808);
+        SFRField<bool> sfr_save_completed = SFRField<bool>(false, 0x2809);
 
-        // @ERIC fix if needed
-        int wait_time_last_write_time = 0; // the millis() value when the last EEPROM wait time write ocurred, should reset to 0 every boot up cycle
-        int sfr_last_write_time = 0;       // the millis() value when the last EEPROM SFR data write ocurred, should reset every boot up cycle
-        uint16_t sfr_address = 7;          // the address of where current SFR data is stored, read from EEPROM and set at the beginning of every boot up cycle
-        // Bytes 0-3 are for the time passed, byte 4 holds the number of reboots, and bytes 5-6 are for the address where values are to be written and stored.
-        // SFR data begins at byte 7 and after. The section of EEPROM bytes where SFR data is stored will change to avoid exceeding the write endurance.
+        uint32_t last_fast_save_time = 0;
+        uint32_t last_sfr_save_time = 0;
     } // namespace eeprom
 };    // namespace sfr

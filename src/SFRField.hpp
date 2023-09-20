@@ -122,7 +122,7 @@ public:
     void reset()
     {
         value = initial;
-        restore = true;
+        restore = false;
     }
 
     void setFieldValue(uint32_t arg1)
