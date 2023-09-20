@@ -1,5 +1,4 @@
 #include "EEPROMRestore.hpp"
-// #include <algorithm> // find
 
 void EEPROMRestore::execute()
 {

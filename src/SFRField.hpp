@@ -32,6 +32,9 @@ public:
 
     virtual uint32_t getDefaultValue();
 
+    virtual uint32_t getMin();
+    virtual uint32_t getMax();
+
     virtual void setRestoreOnBoot(bool restore_on_boot);
     virtual bool getRestoreOnBoot();
 };
@@ -142,6 +145,16 @@ public:
     uint32_t getDefaultValue()
     {
         return (uint32_t)initial;
+    }
+
+    uint32_t getMin()
+    {
+        return (uint32_t)min;
+    }
+
+    uint32_t getMax()
+    {
+        return (uint32_t)max;
     }
 
     void setRestoreOnBoot(bool restore_on_boot)
