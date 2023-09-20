@@ -37,8 +37,8 @@ void PhotoresistorMonitor::execute()
         } else {
             // photoresistor is recognized as uncovered (via 4 second buffer)
             if (sfr::photoresistor::light_val_average_standby->get_value(&val) && val > constants::photoresistor::light_val) {
-                sfr::photoresistor::covered = true;
                 sfr::photoresistor::light_val_average_standby->set_invalid();
+                fault_groups::hardware_faults::light_val->force();
             }
         }
 

@@ -17,6 +17,7 @@ void ButtonMonitor::execute()
             sfr::button::pressed = false;
         } else {
             sfr::button::button_pressed->set_invalid();
+            fault_groups::hardware_faults::button->force();
         }
     } else {
         sfr::button::pressed = true;
