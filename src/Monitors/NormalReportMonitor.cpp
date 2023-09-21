@@ -15,6 +15,8 @@ void NormalReportMonitor::execute()
         sfr::rockblock::waiting_message, sfr::rockblock::waiting_command,
         sfr::temperature::in_sun, sfr::current::in_sun, sfr::button::pressed};
 
+    bool eeprom_bools[] = {0, 0, 0, 0, sfr::eeprom::boot_mode, sfr::eeprom::error_mode, sfr::eeprom::light_switch, sfr::eeprom::sfr_save_completed};
+
     std::vector<uint8_t> report_contents{
         constants::rockblock::start_of_normal_downlink,
 
@@ -22,22 +24,21 @@ void NormalReportMonitor::execute()
         serialize(0x1905), // sfr::burnwire::burn_time
         serialize(0x1906), // sfr::burnwire::armed_time
         serialize(0x2110), // sfr::rockblock::downlink_period
-        sfr::eeprom::boot_counter,
         serialize(0x2505), // sfr::acs::Id_index
         serialize(0x2506), // sfr::acs::Kd_index
         serialize(0x2507), // sfr::acs::Kp_index
         serialize(0x2508), // sfr::acs::c_index
+        serialize(0x2804), // sfr::eemprom::boot_counter
+        serialize(0x2805), // sfr::eemprom::dynamic_data_addr
+        serialize(0x2806), // sfr::eemprom::sfr_data_addr
+        serialize(0x2807), // sfr::eemprom::time_alive
+        serialize(0x2808), // sfr::eemprom::dynamic_data_age
+        serialize(0x2809), // sfr::eemprom::sfr_data_age
         serialize(sfr_packed_bools),
 
         // Sensor readings
         serialize(sfr::photoresistor::light_val_average_standby),
         serialize(sfr::photoresistor::light_val_average_deployment),
-        serialize(sfr::imu::mag_x_value),
-        serialize(sfr::imu::mag_y_value),
-        serialize(sfr::imu::mag_z_value),
-        serialize(sfr::imu::gyro_x_value),
-        serialize(sfr::imu::gyro_y_value),
-        serialize(sfr::imu::gyro_z_value),
         serialize(sfr::imu::mag_x_average),
         serialize(sfr::imu::mag_y_average),
         serialize(sfr::imu::mag_z_average),
@@ -59,8 +60,8 @@ void NormalReportMonitor::execute()
         (uint8_t)((fault_groups::imu_faults::gyro_z_value->serialize() << 4) + fault_groups::imu_faults::gyro_z_average->serialize()),
         (uint8_t)((fault_groups::power_faults::temp_c_value->serialize() << 4) + fault_groups::power_faults::temp_c_average->serialize()),
         (uint8_t)((fault_groups::power_faults::voltage_value->serialize() << 4) + fault_groups::power_faults::voltage_average->serialize()),
-        (uint8_t)((fault_groups::power_faults::solar_current_average->serialize() << 4)),
-        (uint8_t)((fault_groups::hardware_faults::light_val->serialize() << 4) + fault_groups::hardware_faults::button->serialize())};
+        (uint8_t)((fault_groups::hardware_faults::light_val->serialize() << 4) + fault_groups::hardware_faults::button->serialize()),
+        (uint8_t)((fault_groups::power_faults::solar_current_average->serialize() << 4) + serialize(eeprom_bools))};
 
     std::deque<uint8_t> empty_normal_report;
     std::swap(sfr::rockblock::normal_report, empty_normal_report);
