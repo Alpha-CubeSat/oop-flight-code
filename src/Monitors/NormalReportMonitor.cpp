@@ -118,9 +118,7 @@ uint8_t NormalReportMonitor::serialize(SensorReading *valueObj)
 uint8_t NormalReportMonitor::serialize(int opcode)
 {
     SFRInterface *valueObj = SFRInterface::opcode_lookup[opcode];
-    float value = valueObj->getFieldValue();
-
-    return serialize(value, valueObj->getMin(), valueObj->getMax());
+    return serialize(valueObj->getFieldValue(), valueObj->getMin(), valueObj->getMax());
 }
 
 uint8_t NormalReportMonitor::serialize(float value, float min, float max)
