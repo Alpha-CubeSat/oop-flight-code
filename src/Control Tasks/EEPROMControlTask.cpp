@@ -7,102 +7,87 @@ EEPROMControlTask::EEPROMControlTask(unsigned int offset)
 
 void EEPROMControlTask::execute()
 {
-    EEPROMControlTask::save_sfr_data();
-    EEPROMControlTask::check_wait_time();
+    sfr::eeprom::time_alive = millis();
+
+    if (sfr::eeprom::time_alive - last_boot_counter_save_time > constants::eeprom::fast_write_interval && sfr::eeprom::boot_mode) {
+        // Adequate time has passed for a new write, and EEPROM is counting time in boot
+        EEPROMControlTask::save_boot_time();
+        last_boot_counter_save_time = sfr::eeprom::time_alive;
+    }
+
+    if (sfr::eeprom::time_alive - last_dynamic_save_time > constants::eeprom::fast_write_interval && !sfr::eeprom::boot_mode && !sfr::eeprom::error_mode) {
+        // Adequate time has passed for a new write, and EEPROM has finished counting time in boot, and EEPROM is valid
+        EEPROMControlTask::save_dynamic_data();
+        last_dynamic_save_time = sfr::eeprom::time_alive;
+    }
+
+    unsigned int write_interval = constants::eeprom::slow_write_interval;
+    if (sfr::eeprom::light_switch) {
+        // Save SFR at a faster rate if the light switch is on
+        write_interval = constants::eeprom::fast_write_interval;
+    }
+
+    if (sfr::eeprom::time_alive - last_sfr_save_time > write_interval && !sfr::eeprom::boot_mode && !sfr::eeprom::error_mode) {
+        // Adequate time has passed for a new write, and EEPROM has finished counting time in boot, and EEPROM is valid
+        EEPROMControlTask::save_sfr_data();
+        last_sfr_save_time = sfr::eeprom::time_alive;
+    }
 }
 
-void EEPROMControlTask::check_wait_time()
+void EEPROMControlTask::save_boot_time()
 {
-    // WAIT TIME CHECK
-    if (!sfr::eeprom::allotted_time_passed && sfr::mission::mission_time >= constants::timecontrol::allotted_time) {
-        // The newly read eeprom value reaches the two hour wait time
-        sfr::eeprom::allotted_time_passed = true;
-#ifdef VERBOSE
-        Serial.println("EEPROM time tracking finished!");
-#endif
+    EEPROM.put(constants::eeprom::boot_time_loc1, sfr::eeprom::time_alive.get());
+    EEPROM.put(constants::eeprom::boot_time_loc2, sfr::eeprom::time_alive.get());
+}
+
+void EEPROMControlTask::save_dynamic_data()
+{
+    if (sfr::eeprom::dynamic_data_age == 95000) {
+        // If write age reached, shift and save the dynamic data address
+        sfr::eeprom::dynamic_data_addr += constants::eeprom::dynamic_data_full_offset;
+        EEPROM.put(constants::eeprom::dynamic_data_addr_loc1, sfr::eeprom::dynamic_data_addr.get());
+        EEPROM.put(constants::eeprom::dynamic_data_addr_loc2, sfr::eeprom::dynamic_data_addr.get());
+        sfr::eeprom::dynamic_data_age = 0;
+    }
+
+    if (sfr::eeprom::dynamic_data_addr + constants::eeprom::dynamic_data_full_offset > constants::eeprom::sfr_data_start) {
+        // There is enough memory for another cycle of dynamic data
+        sfr::eeprom::dynamic_data_age++;
+        EEPROM.put(sfr::eeprom::dynamic_data_addr, sfr::eeprom::time_alive.get());
+        EEPROM.put(sfr::eeprom::dynamic_data_addr + 4, sfr::eeprom::dynamic_data_age.get());
     }
 }
 
 void EEPROMControlTask::save_sfr_data()
 {
-    // SAVING SFR DATA
-    // int cycles_since_last_write = sfr::mission::cycle_no - sfr::eeprom::sfr_last_write_cycle;
-    int cycles_since_last_write = sfr::mission::cycle_no;
+    if (sfr::eeprom::sfr_data_age == 95000) {
+        // If write age reached, shift and save the SFR data address
+        sfr::eeprom::sfr_data_age += constants::eeprom::sfr_data_full_offset;
+        EEPROM.put(constants::eeprom::sfr_data_addr_loc1, sfr::eeprom::sfr_data_addr.get());
+        EEPROM.put(constants::eeprom::sfr_data_addr_loc2, sfr::eeprom::sfr_data_addr.get());
+        sfr::eeprom::sfr_data_age = 0;
+    }
 
-    if (cycles_since_last_write * constants::timecontrol::control_cycle_time_ms > sfr::eeprom::sfr_write_step_time) {
-        // The last EEPROM write exceeds the interval between writes, so update the EEPROM value
-        int sfr_address = (int)sfr::eeprom::sfr_address;
+    if (sfr::eeprom::sfr_data_addr + constants::eeprom::sfr_data_full_offset > constants::eeprom::boot_counter_loc2) {
+        // There is enough memory for another cycle of SFR data
 
-        /*
-        > Each field is stored in this format: [boolean restore][T value].
-        > The restore boolean indicates whether the field should be restored on Teensy boot up.
-        > The value is the field's actual value and takes up the memory of type T.
-        > If the field should not be restored, then don't bother saving the field value.
-        > Once the section's write age exceeds the write endurance, the stores move to the next section.
-        */
-        for (SFRInterface *s : SFRInterface::sfr_fields_vector) {
-            bool restore = s->getRestore();
-            /*int write_address = sfr_address + s->getAddressOffset();
-            EEPROM.put(write_address, restore);
-            if (restore) {
-                int data_type = s->getDataType();
-                if (data_type == 4)
-                    EEPROM.put(write_address + 1, (uint32_t)s->getFieldValue());
-                else if (data_type == 3)
-                    EEPROM.put(write_address + 1, (uint16_t)s->getFieldValue());
-                else if (data_type == 2)
-                    EEPROM.put(write_address + 1, (uint8_t)s->getFieldValue());
-                else if (data_type == 1)
-                    EEPROM.put(write_address + 1, (bool)s->getFieldValue());
-            }
-            sfr::eeprom::sfr_last_write_cycle = sfr::mission::cycle_no;*/
+        // Update and write SFR data age
+        sfr::eeprom::sfr_data_age++;
+        EEPROM.put(sfr::eeprom::sfr_data_addr, sfr::eeprom::sfr_data_age.get());
+
+        // Save each SFR field's restore boolean and value as a uint32_t
+        uint16_t sfr_write_address = sfr::eeprom::sfr_data_addr + 4;
+        for (const auto &pair : SFRInterface::opcode_lookup) {
+            EEPROM.put(sfr_write_address, pair.second->getRestoreOnBoot());
+            EEPROM.put(sfr_write_address + 1, pair.second->getFieldValue());
+            sfr_write_address += constants::eeprom::sfr_store_size;
         }
 
-        sfr::eeprom::sfr_address_age++;
-        if (sfr::eeprom::sfr_address_age > 99000) { // Programmed write limit is less than the actual endurance of 100000 to create a safety buffer
-            // sfr::eeprom::sfr_address += (uint16_t)constants::eeprom::full_offset;
-            EEPROM.put(5, sfr::eeprom::sfr_address);
-            sfr::eeprom::sfr_address_age = 0;
-        }
-
-        // if (sfr::eeprom::sfr_address + constants::eeprom::full_offset - 1 >= EEPROM.length()) {
-        if (sfr::eeprom::sfr_address - 1 >= EEPROM.length()) {
-            // The last byte of the current SFR section would exceed EEPROM memory, so there is not enough room for a full SFR store
-            sfr::eeprom::storage_full = true;
-        } else {
-            sfr::eeprom::sfr_address_age++;
-
-            /*
-            > Each field is stored in this format: [boolean restore][T value].
-            > The restore boolean indicates whether the field should be restored on Teensy boot up.
-            > The value is the field's actual value and takes up the memory of type T.
-            > If the field should not be restored, then don't bother saving the field value.
-            > Once the section's write age exceeds the write endurance, the stores move to the next section.
-            */
-            for (SFRInterface *s : SFRInterface::sfr_fields_vector) {
-                bool restore = s->getRestore();
-                /*int write_address = sfr::eeprom::sfr_address + s->getAddressOffset();
-                EEPROM.put(write_address, restore);
-                if (restore) {
-                    int data_type = s->getDataType();
-                    if (data_type == 4)
-                        EEPROM.put(write_address + 1, (uint32_t)s->getFieldValue());
-                    else if (data_type == 3)
-                        EEPROM.put(write_address + 1, (uint16_t)s->getFieldValue());
-                    else if (data_type == 2)
-                        EEPROM.put(write_address + 1, (uint8_t)s->getFieldValue());
-                    else if (data_type == 1)
-                        EEPROM.put(write_address + 1, (bool)s->getFieldValue());
-                }
-                sfr::eeprom::sfr_last_write_cycle = sfr::mission::cycle_no;*/
-            }
-        }
+        // Write SFR data age again. EEPROM restore will check that these ages match to determine if the last SFR save was completed.
+        EEPROM.put(sfr_write_address, sfr::eeprom::sfr_data_age.get());
     }
 }
 
 /* NOTES:
-> wait_time_last_write_time and sfr_last_write_time hold the millis() count
-      of the last write for the current powered session.
-> wait_time holds the total accumulated time tracked by EEPROM for the initial 2 hour wait.
-> EEPROM write endurance: https://www.pjrc.com/teensy/td_libs_EEPROM.html
-*/
+ * EEPROM write endurance: https://www.pjrc.com/teensy/td_libs_EEPROM.html
+ */

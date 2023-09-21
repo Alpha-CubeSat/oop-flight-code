@@ -12,8 +12,13 @@ public:
     void execute();
 
 private:
+    void save_boot_time();
+    void save_dynamic_data();
     void save_sfr_data();
-    void check_wait_time();
+
+    uint32_t last_boot_counter_save_time;
+    uint32_t last_dynamic_save_time;
+    uint32_t last_sfr_save_time;
 };
 
 #endif

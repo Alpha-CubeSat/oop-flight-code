@@ -81,10 +81,10 @@ public:
             uint8_t restore_value = constants::masks::uint32_byte4_mask & f_arg_2;       // Restore bit value
 
             if ((bool)set_value) {
-                field->setValue(f_arg_1);
+                field->setFieldValue(f_arg_1);
             }
             if ((bool)set_restore) {
-                field->setRestore((bool)restore_value);
+                field->setRestoreOnBoot((bool)restore_value);
             }
         }
     }
