@@ -36,8 +36,8 @@ void EEPROMControlTask::execute()
 
 void EEPROMControlTask::save_boot_time()
 {
-    EEPROM.put(constants::eeprom::boot_time_loc1, sfr::eeprom::time_alive);
-    EEPROM.put(constants::eeprom::boot_time_loc2, sfr::eeprom::time_alive);
+    EEPROM.put(constants::eeprom::boot_time_loc1, sfr::eeprom::time_alive.get());
+    EEPROM.put(constants::eeprom::boot_time_loc2, sfr::eeprom::time_alive.get());
 }
 
 void EEPROMControlTask::save_dynamic_data()
@@ -45,16 +45,16 @@ void EEPROMControlTask::save_dynamic_data()
     if (sfr::eeprom::dynamic_data_age == 95000) {
         // If write age reached, shift and save the dynamic data address
         sfr::eeprom::dynamic_data_addr += constants::eeprom::dynamic_data_full_offset;
-        EEPROM.put(constants::eeprom::dynamic_data_addr_loc1, sfr::eeprom::dynamic_data_addr);
-        EEPROM.put(constants::eeprom::dynamic_data_addr_loc2, sfr::eeprom::dynamic_data_addr);
+        EEPROM.put(constants::eeprom::dynamic_data_addr_loc1, sfr::eeprom::dynamic_data_addr.get());
+        EEPROM.put(constants::eeprom::dynamic_data_addr_loc2, sfr::eeprom::dynamic_data_addr.get());
         sfr::eeprom::dynamic_data_age = 0;
     }
 
     if (sfr::eeprom::dynamic_data_addr + constants::eeprom::dynamic_data_full_offset > constants::eeprom::sfr_data_start) {
         // There is enough memory for another cycle of dynamic data
         sfr::eeprom::dynamic_data_age++;
-        EEPROM.put(sfr::eeprom::dynamic_data_addr, sfr::eeprom::time_alive);
-        EEPROM.put(sfr::eeprom::dynamic_data_addr + 4, sfr::eeprom::dynamic_data_age);
+        EEPROM.put(sfr::eeprom::dynamic_data_addr, sfr::eeprom::time_alive.get());
+        EEPROM.put(sfr::eeprom::dynamic_data_addr + 4, sfr::eeprom::dynamic_data_age.get());
     }
 }
 
@@ -63,8 +63,8 @@ void EEPROMControlTask::save_sfr_data()
     if (sfr::eeprom::sfr_data_age == 95000) {
         // If write age reached, shift and save the SFR data address
         sfr::eeprom::sfr_data_age += constants::eeprom::sfr_data_full_offset;
-        EEPROM.put(constants::eeprom::sfr_data_addr_loc1, sfr::eeprom::sfr_data_addr);
-        EEPROM.put(constants::eeprom::sfr_data_addr_loc2, sfr::eeprom::sfr_data_addr);
+        EEPROM.put(constants::eeprom::sfr_data_addr_loc1, sfr::eeprom::sfr_data_addr.get());
+        EEPROM.put(constants::eeprom::sfr_data_addr_loc2, sfr::eeprom::sfr_data_addr.get());
         sfr::eeprom::sfr_data_age = 0;
     }
 
@@ -73,7 +73,7 @@ void EEPROMControlTask::save_sfr_data()
 
         // Update and write SFR data age
         sfr::eeprom::sfr_data_age++;
-        EEPROM.put(sfr::eeprom::sfr_data_addr, sfr::eeprom::sfr_data_age);
+        EEPROM.put(sfr::eeprom::sfr_data_addr, sfr::eeprom::sfr_data_age.get());
 
         // Save each SFR field's restore boolean and value as a uint32_t
         uint16_t sfr_write_address = sfr::eeprom::sfr_data_addr + 4;
@@ -84,7 +84,7 @@ void EEPROMControlTask::save_sfr_data()
         }
 
         // Write SFR data age again. EEPROM restore will check that these ages match to determine if the last SFR save was completed.
-        EEPROM.put(sfr_write_address, sfr::eeprom::sfr_data_age);
+        EEPROM.put(sfr_write_address, sfr::eeprom::sfr_data_age.get());
     }
 }
 

@@ -54,8 +54,8 @@ void EEPROMRestore::execute()
             // EEPROM data is valid
             sfr::eeprom::error_mode = false;
             sfr::eeprom::boot_counter = boot_counter1 + 1;
-            EEPROM.put(constants::eeprom::boot_counter_loc1, sfr::eeprom::boot_counter);
-            EEPROM.put(constants::eeprom::boot_counter_loc2, sfr::eeprom::boot_counter);
+            EEPROM.put(constants::eeprom::boot_counter_loc1, sfr::eeprom::boot_counter.get());
+            EEPROM.put(constants::eeprom::boot_counter_loc2, sfr::eeprom::boot_counter.get());
             sfr::eeprom::dynamic_data_addr = dynamic_data_addr1;
             sfr::eeprom::sfr_data_addr = sfr_data_addr1;
             sfr::eeprom::light_switch = light_switch1;
