@@ -30,9 +30,9 @@ void EEPROMRestore::execute()
         // Not in boot mode, and boot time check didn't indicate EEPROM error
 
         // Fetch blue moon data
-        uint16_t boot_counter1;
+        uint8_t boot_counter1;
         EEPROM.get(constants::eeprom::boot_counter_loc1, boot_counter1);
-        uint16_t boot_counter2;
+        uint8_t boot_counter2;
         EEPROM.get(constants::eeprom::boot_counter_loc2, boot_counter2);
 
         uint16_t dynamic_data_addr1;
@@ -54,8 +54,8 @@ void EEPROMRestore::execute()
             // EEPROM data is valid
             sfr::eeprom::error_mode = false;
             sfr::eeprom::boot_counter = boot_counter1 + 1;
-            EEPROM.put(constants::eeprom::boot_counter_loc1, sfr::eeprom::boot_counter.getFieldValue());
-            EEPROM.put(constants::eeprom::boot_counter_loc2, sfr::eeprom::boot_counter.getFieldValue());
+            EEPROM.put(constants::eeprom::boot_counter_loc1, sfr::eeprom::boot_counter);
+            EEPROM.put(constants::eeprom::boot_counter_loc2, sfr::eeprom::boot_counter);
             sfr::eeprom::dynamic_data_addr = dynamic_data_addr1;
             sfr::eeprom::sfr_data_addr = sfr_data_addr1;
             sfr::eeprom::light_switch = light_switch1;
