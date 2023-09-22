@@ -16,9 +16,8 @@ private:
     void save_dynamic_data();
     void save_sfr_data();
 
-    uint32_t last_boot_counter_save_time;
-    uint32_t last_dynamic_save_time;
-    uint32_t last_sfr_save_time;
+    uint8_t fast_cycle_counter; // Counts to constants::eeprom::fast_write_interval before going to 0 and repeating
+    uint8_t slow_cycle_counter; // Counts to constants::eeprom::slow_write_interval before going to 0 and repeating
 };
 
 #endif

@@ -169,7 +169,7 @@ void MainControlLoop::execute()
     camera_report_monitor.execute_on_time();
     imudownlink_report_monitor.execute_on_time();
 
-    // eeprom_control_task.execute_on_time();
+    eeprom_control_task.execute_on_time();
 
 #ifdef VERBOSE
     Serial.println("--------------------END LOOP--------------------");

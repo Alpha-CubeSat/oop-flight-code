@@ -57,15 +57,21 @@ void EEPROMRestore::execute()
             EEPROM.put(constants::eeprom::boot_counter_loc1, sfr::eeprom::boot_counter.get());
             EEPROM.put(constants::eeprom::boot_counter_loc2, sfr::eeprom::boot_counter.get());
             sfr::eeprom::dynamic_data_addr = dynamic_data_addr1;
+
             sfr::eeprom::sfr_data_addr = sfr_data_addr1;
-            sfr::eeprom::light_switch = light_switch1;
+            if (sfr::eeprom::sfr_data_addr + constants::eeprom::sfr_data_full_offset > constants::eeprom::boot_time_loc2) {
+                // EEPROM has been filled up and no more saves have been done, so do not attempt to restore
+                sfr::eeprom::light_switch = false;
+            } else {
+                sfr::eeprom::light_switch = light_switch1;
+            }
         } else {
             // EEPROM data is invalid
             sfr::eeprom::error_mode = true;
         }
 
-        if (!sfr::eeprom::error_mode && sfr::eeprom::light_switch) {
-            // EEPROM data is still valid after checks and light switch is on
+        if (!sfr::eeprom::error_mode) {
+            // EEPROM data is still valid after checks
 
             // Fetch dynamic metadata
             uint32_t time_alive;
@@ -76,30 +82,36 @@ void EEPROMRestore::execute()
             EEPROM.get(sfr::eeprom::dynamic_data_addr + 4, dynamic_data_age);
             sfr::eeprom::dynamic_data_age = dynamic_data_age;
 
-            uint32_t sfr_data_age1;
-            EEPROM.get(sfr::eeprom::sfr_data_addr, sfr_data_age1);
+            if (sfr::eeprom::light_switch) {
+                // Light switch is on, so SFR restoring is desired
 
-            uint32_t sfr_data_age2;
-            EEPROM.get(sfr::eeprom::sfr_data_addr + constants::eeprom::sfr_data_full_offset - 4, sfr_data_age2);
+                uint32_t sfr_data_age1;
+                EEPROM.get(sfr::eeprom::sfr_data_addr, sfr_data_age1);
 
-            sfr::eeprom::sfr_save_completed = sfr_data_age1 == sfr_data_age2; // Inequality means SFR didn't finish saving
-            sfr::eeprom::sfr_data_age = sfr_data_age1;                        // First age is the more accurate count
+                uint32_t sfr_data_age2;
+                EEPROM.get(sfr::eeprom::sfr_data_addr + constants::eeprom::sfr_data_full_offset - 4, sfr_data_age2);
 
-            // If last SFR save was completed, restore desired SFR fields
-            if (sfr::eeprom::sfr_save_completed) {
-                uint16_t sfr_read_address = sfr::eeprom::sfr_data_addr + 4;
-                for (const auto &pair : SFRInterface::opcode_lookup) {
-                    bool restore;
-                    EEPROM.get(sfr_read_address, restore);
-                    pair.second->setRestoreOnBoot(restore);
+                sfr::eeprom::sfr_save_completed = sfr_data_age1 == sfr_data_age2; // Inequality means SFR didn't finish saving
+                sfr::eeprom::sfr_data_age = sfr_data_age1;                        // First SFR age is more accurate
 
-                    if (restore) {
-                        uint32_t value;
-                        EEPROM.get(sfr_read_address + 1, value);
-                        pair.second->setFieldValue(value);
+                if (sfr::eeprom::sfr_save_completed) {
+                    // Last SFR save was completed
+
+                    uint16_t sfr_read_address = sfr::eeprom::sfr_data_addr + 4;
+
+                    for (const auto &pair : SFRInterface::opcode_lookup) {
+                        bool restore;
+                        EEPROM.get(sfr_read_address, restore);
+                        pair.second->setRestoreOnBoot(restore);
+
+                        if (restore) {
+                            uint32_t value;
+                            EEPROM.get(sfr_read_address + 1, value);
+                            pair.second->setFieldValue(value);
+                        }
+
+                        sfr_read_address += constants::eeprom::sfr_store_size;
                     }
-
-                    sfr_read_address += constants::eeprom::sfr_store_size;
                 }
             }
         }

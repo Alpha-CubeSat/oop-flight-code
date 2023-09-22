@@ -13,7 +13,6 @@ class SFRInterface
 public:
     static std::map<int, SFRInterface *> opcode_lookup; // </brief Op Code Lookup Map For SFR Field Uplink Override
 
-#ifdef DEBUG
     static void resetSFR()
     {
         for (auto const &kv : SFRInterface::opcode_lookup) {
@@ -22,7 +21,6 @@ public:
     }
 
     virtual void reset();
-#endif
 
     virtual ~SFRInterface(){};
     static void setFieldValByOpcode(int opcode, uint32_t arg1);

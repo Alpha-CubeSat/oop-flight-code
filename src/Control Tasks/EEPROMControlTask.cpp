@@ -3,34 +3,43 @@
 EEPROMControlTask::EEPROMControlTask(unsigned int offset)
     : TimedControlTask<void>(offset)
 {
+    fast_cycle_counter = 0;
+    slow_cycle_counter = 0;
 }
 
 void EEPROMControlTask::execute()
 {
-    sfr::eeprom::time_alive = millis();
+    sfr::eeprom::time_alive += millis();
 
-    if (sfr::eeprom::time_alive - last_boot_counter_save_time > constants::eeprom::fast_write_interval && sfr::eeprom::boot_mode) {
+    if (fast_cycle_counter == 0 && sfr::eeprom::boot_mode) {
         // Adequate time has passed for a new write, and EEPROM is counting time in boot
         EEPROMControlTask::save_boot_time();
-        last_boot_counter_save_time = sfr::eeprom::time_alive;
     }
 
-    if (sfr::eeprom::time_alive - last_dynamic_save_time > constants::eeprom::fast_write_interval && !sfr::eeprom::boot_mode && !sfr::eeprom::error_mode) {
+    if (fast_cycle_counter == 0 > constants::eeprom::fast_write_interval && !sfr::eeprom::boot_mode && !sfr::eeprom::error_mode) {
         // Adequate time has passed for a new write, and EEPROM has finished counting time in boot, and EEPROM is valid
         EEPROMControlTask::save_dynamic_data();
-        last_dynamic_save_time = sfr::eeprom::time_alive;
     }
 
-    unsigned int write_interval = constants::eeprom::slow_write_interval;
+    uint8_t sfr_cycle_counter = slow_cycle_counter;
     if (sfr::eeprom::light_switch) {
         // Save SFR at a faster rate if the light switch is on
-        write_interval = constants::eeprom::fast_write_interval;
+        sfr_cycle_counter = fast_cycle_counter;
     }
 
-    if (sfr::eeprom::time_alive - last_sfr_save_time > write_interval && !sfr::eeprom::boot_mode && !sfr::eeprom::error_mode) {
+    if (sfr_cycle_counter == 0 && !sfr::eeprom::boot_mode && !sfr::eeprom::error_mode) {
         // Adequate time has passed for a new write, and EEPROM has finished counting time in boot, and EEPROM is valid
         EEPROMControlTask::save_sfr_data();
-        last_sfr_save_time = sfr::eeprom::time_alive;
+    }
+
+    fast_cycle_counter++;
+    if (fast_cycle_counter == constants::eeprom::fast_write_interval) {
+        fast_cycle_counter = 0;
+    }
+
+    slow_cycle_counter++;
+    if (slow_cycle_counter == constants::eeprom::slow_write_interval) {
+        slow_cycle_counter = 0;
     }
 }
 

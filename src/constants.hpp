@@ -311,13 +311,14 @@ namespace constants {
         // Constants for saving data to EEPROM
         static constexpr unsigned int dynamic_data_full_offset = 8;
         static constexpr unsigned int dynamic_data_start = 10;
-        static constexpr unsigned int sfr_data_start = 90;
+        static constexpr unsigned int sfr_data_start = 490;
         static constexpr unsigned int sfr_store_size = 5;
         static constexpr unsigned int sfr_num_fields = 101;
         static constexpr unsigned int sfr_data_full_offset = sfr_num_fields * sfr_store_size + 8;
 
-        static constexpr unsigned int fast_write_interval = 30 * constants::time::one_second;
-        static constexpr unsigned int slow_write_interval = 5 * constants::time::one_minute;
+        // Measured in MCL cycles. Fast is ~ every 10 sec, slow is ~ every 60 sec
+        static constexpr unsigned int fast_write_interval = 100;
+        static constexpr unsigned int slow_write_interval = 600;
     } // namespace eeprom
 };    // namespace constants
 
