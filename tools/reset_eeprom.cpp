@@ -12,13 +12,8 @@ void setup()
 void loop()
 {
     Serial.println("Beginning EEPROM reset!");
-    int eeprom_length = EEPROM.length();
-    for (int i = 0; i < eeprom_length; i++) {
-        EEPROM.write(i, 0);
-    }
-
-    int eeprom_length = EEPROM.length();
-    for (int i = 0; i < eeprom_length; i++) {
+    uint16_t eeprom_length = EEPROM.length();
+    for (unsigned int i = 0; i < eeprom_length; i++) {
         EEPROM.write(i, 0);
     }
 

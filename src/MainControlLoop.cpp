@@ -144,6 +144,10 @@ void MainControlLoop::execute()
         Serial.println("RockBLOCK NOT sleeping");
     }
 
+    // EEPROM
+    Serial.print("Total time alive (across all boots): ");
+    Serial.println(sfr::eeprom::time_alive);
+
 #endif
 
     clock_manager.execute();
