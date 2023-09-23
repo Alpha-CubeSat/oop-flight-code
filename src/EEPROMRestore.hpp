@@ -12,6 +12,9 @@ private:
     static void restore_and_check_boot_vals();
     static void try_restore_and_check_blue_moon_data();
     static void try_restore_dynamic_and_sfr_data();
+
+    bool dynamic_data_space_filled;
+    bool sfr_data_space_filled;
 };
 
 #endif

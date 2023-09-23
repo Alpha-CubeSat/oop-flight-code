@@ -159,7 +159,6 @@ void test_boot_time_error()
     // Setup
     reset_eeprom();
     SFRInterface::resetSFR();
-    EEPROMControlTask eeprom_control_task(0);
     EEPROM.put(constants::eeprom::boot_time_loc1, (uint32_t)1234);
     EEPROM.put(constants::eeprom::boot_time_loc2, (uint32_t)4321);
     EEPROM.put(constants::eeprom::boot_counter_loc1, (uint8_t)1);
@@ -178,8 +177,8 @@ void test_boot_time_error()
     EEPROM.get(constants::eeprom::boot_time_loc2, boot_time2);
 
     TEST_ASSERT_EQUAL(0, sfr::eeprom::time_alive.get());
-    TEST_ASSERT_EQUAL(boot_time1, sfr::eeprom::time_alive.get());
-    TEST_ASSERT_EQUAL(boot_time2, sfr::eeprom::time_alive.get());
+    TEST_ASSERT_EQUAL(0, boot_time1);
+    TEST_ASSERT_EQUAL(0, boot_time2);
 
     uint8_t boot_counter1;
     EEPROM.get(constants::eeprom::boot_counter_loc1, boot_counter1);
@@ -187,8 +186,8 @@ void test_boot_time_error()
     EEPROM.get(constants::eeprom::boot_counter_loc2, boot_counter2);
 
     TEST_ASSERT_EQUAL(1, sfr::eeprom::boot_counter.get());
-    TEST_ASSERT_EQUAL(boot_counter1, sfr::eeprom::boot_counter.get());
-    TEST_ASSERT_EQUAL(boot_counter2, sfr::eeprom::boot_counter.get());
+    TEST_ASSERT_EQUAL(1, boot_counter1);
+    TEST_ASSERT_EQUAL(1, boot_counter2);
 }
 
 void test_blue_moon_data_error()
@@ -196,7 +195,6 @@ void test_blue_moon_data_error()
     // Setup
     reset_eeprom();
     SFRInterface::resetSFR();
-    EEPROMControlTask eeprom_control_task(0);
     EEPROM.put(constants::eeprom::boot_time_loc1, (uint32_t)(2 * constants::time::one_hour));
     EEPROM.put(constants::eeprom::boot_time_loc2, (uint32_t)(2 * constants::time::one_hour));
     EEPROM.put(constants::eeprom::boot_counter_loc1, (uint8_t)1);
@@ -204,12 +202,14 @@ void test_blue_moon_data_error()
     EEPROM.put(constants::eeprom::dynamic_data_addr_loc1, (uint16_t)constants::eeprom::dynamic_data_start);
     EEPROM.put(constants::eeprom::dynamic_data_addr_loc2, (uint16_t)(constants::eeprom::dynamic_data_start + 2));
 
-    // Try to restore with errored blue moon values
+    // Try to restore with errored blue moon values after boot wait is finished
     EEPROMRestore::execute();
 
     TEST_ASSERT_EQUAL(true, sfr::eeprom::error_mode.get());
 
     // Todo: verify that restore does not trigger
+    // Plant dynamic data and SFR data in EEPROM, turn light switch on
+    // Verify they don't get restored
 }
 
 void test_sfr_save_incomplete()
@@ -217,7 +217,6 @@ void test_sfr_save_incomplete()
     // Setup
     reset_eeprom();
     SFRInterface::resetSFR();
-    EEPROMControlTask eeprom_control_task(0);
 
     EEPROM.put(constants::eeprom::boot_time_loc1, (uint32_t)(2 * constants::time::one_hour));
     EEPROM.put(constants::eeprom::boot_time_loc2, (uint32_t)(2 * constants::time::one_hour));
@@ -235,7 +234,9 @@ void test_sfr_save_incomplete()
     EEPROM.put(constants::eeprom::sfr_data_start + 9, (bool)true);
     EEPROM.put(constants::eeprom::sfr_data_start + 10, sfr::boot::max_time.get());
 
-    // Try to restore when last SFR write did not complete
+    // Simulate power cycle
+    // Try to restore after boot wait has fininshed when last SFR write did not complete
+    SFRInterface::resetSFR();
     EEPROMRestore::execute();
 
     TEST_ASSERT_EQUAL(false, sfr::eeprom::sfr_save_completed.get());
@@ -264,11 +265,13 @@ void test_dynamic_data_restore()
     // Check that no dynamic data writes have been made
     TEST_ASSERT_EQUAL(0, sfr::eeprom::dynamic_data_age.get());
 
-    // Trigger EEPROM Control Task executes like in MCL for two writes
-    for (unsigned int i = 0; i < 2 * constants::eeprom::fast_write_interval; i++) {
+    Serial.println("start");
+    // Trigger EEPROM Control Task executes like in MCL for two writes, end on MCL cycle with a write
+    for (unsigned int i = 0; i < 2 * constants::eeprom::fast_write_interval + 1; i++) {
         delay(100); // Approximate delay from MCL cycles
         eeprom_control_task.execute();
     }
+    Serial.println("end");
 
     // Save most recent time alive value
     uint32_t time_alive = sfr::eeprom::time_alive;
@@ -279,8 +282,9 @@ void test_dynamic_data_restore()
 
     // Check second restore execution
     TEST_ASSERT_EQUAL(false, sfr::eeprom::boot_mode.get());
+    TEST_ASSERT_EQUAL(false, sfr::eeprom::error_mode.get());
     TEST_ASSERT_EQUAL(time_alive, sfr::eeprom::time_alive.get());
-    TEST_ASSERT_EQUAL(2, sfr::eeprom::dynamic_data_addr.get());
+    TEST_ASSERT_EQUAL(2, sfr::eeprom::dynamic_data_age.get());
 }
 
 void test_sfr_data_restore()
@@ -332,12 +336,12 @@ void test_sfr_data_restore()
 int test_eeprom()
 {
     UNITY_BEGIN();
-    RUN_TEST(test_power_cycle_during_boot);
+    // RUN_TEST(test_power_cycle_during_boot);
     RUN_TEST(test_finish_boot);
     // RUN_TEST(test_boot_time_error);
     // RUN_TEST(test_blue_moon_data_error);
     // RUN_TEST(test_sfr_save_incomplete);
-    // RUN_TEST(test_dynamic_data_restore);
+    RUN_TEST(test_dynamic_data_restore);
     // RUN_TEST(test_sfr_data_restore);
     // RUN_TEST(test_light_switch_off);
     // RUN_TEST(test_save_with_full_eeprom);

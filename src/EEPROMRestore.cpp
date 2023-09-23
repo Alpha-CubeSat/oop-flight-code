@@ -5,17 +5,18 @@ void EEPROMRestore::execute()
     // Determines if satellite is still in boot mode
     restore_and_check_boot_vals();
 
-    // If not in boot mode and boot checks did not indicate EEPROM error,
+    // If boot checks did not indicate EEPROM error,
     // restore blue moon data and check if they indicate an EEPROM error
     try_restore_and_check_blue_moon_data();
 
-    // If EEPROM data is still valid after blue moon data checks,
+    // If EEPROM data is still valid after blue moon data checks and boot wait is over,
     // restore dynamic data and try restoring SFR data
     try_restore_dynamic_and_sfr_data();
 }
 
 void EEPROMRestore::restore_and_check_boot_vals()
 {
+    Serial.println("WoRK BITCH");
     uint32_t boot_time1;
     EEPROM.get(constants::eeprom::boot_time_loc1, boot_time1);
     uint32_t boot_time2;
@@ -26,14 +27,26 @@ void EEPROMRestore::restore_and_check_boot_vals()
     uint8_t boot_counter2;
     EEPROM.get(constants::eeprom::boot_counter_loc2, boot_counter2);
 
+    Serial.println("in restore");
+    Serial.println(constants::eeprom::boot_time_loc1);
+    Serial.println(constants::eeprom::boot_time_loc2);
+    Serial.println(constants::eeprom::boot_counter_loc1);
+    Serial.println(constants::eeprom::boot_counter_loc2);
+
+    Serial.println(boot_time1);
+    Serial.println(boot_time2);
+    Serial.println(boot_counter1);
+    Serial.println(boot_counter2);
+    Serial.println("-----");
+
     if (boot_time1 == boot_time2 && boot_counter1 == boot_counter2) {
         // Boot time counters and boot counters are valid
         sfr::eeprom::error_mode = false;
 
         sfr::eeprom::boot_counter = boot_counter1 + 1;
+        Serial.println(sfr::eeprom::boot_counter);
         EEPROM.put(constants::eeprom::boot_counter_loc1, sfr::eeprom::boot_counter.get());
         EEPROM.put(constants::eeprom::boot_counter_loc2, sfr::eeprom::boot_counter.get());
-
         if (boot_time1 < 2 * constants::time::one_hour) {
             // The initial two hour wait has not passed, still in boot mode
             sfr::eeprom::boot_mode = true;
@@ -61,7 +74,7 @@ void EEPROMRestore::restore_and_check_boot_vals()
 
 void EEPROMRestore::try_restore_and_check_blue_moon_data()
 {
-    if (!sfr::eeprom::boot_mode && !sfr::eeprom::error_mode) {
+    if (!sfr::eeprom::error_mode) {
         // Fetch the blue moon data for restoring dynamic and SFR data
         bool light_switch1;
         EEPROM.get(constants::eeprom::light_switch_loc1, light_switch1);
@@ -80,15 +93,9 @@ void EEPROMRestore::try_restore_and_check_blue_moon_data()
 
         if (light_switch1 == light_switch2 && dynamic_data_addr1 == dynamic_data_addr2 && sfr_data_addr1 == sfr_data_addr2) {
             // EEPROM data is still valid
-
             sfr::eeprom::dynamic_data_addr = dynamic_data_addr1;
             sfr::eeprom::sfr_data_addr = sfr_data_addr1;
-            if (sfr::eeprom::sfr_data_addr + constants::eeprom::sfr_data_full_offset > sfr::eeprom::sfr_data_addr.getMax()) {
-                // EEPROM has been filled up and no more saves have been done, so do not attempt to restore
-                sfr::eeprom::light_switch = false;
-            } else {
-                sfr::eeprom::light_switch = light_switch1;
-            }
+            sfr::eeprom::light_switch = light_switch1;
         } else {
             // EEPROM data is invalid
             sfr::eeprom::error_mode = true;
@@ -98,18 +105,34 @@ void EEPROMRestore::try_restore_and_check_blue_moon_data()
 
 void EEPROMRestore::try_restore_dynamic_and_sfr_data()
 {
-    if (!sfr::eeprom::boot_mode && !sfr::eeprom::error_mode) {
-        // Fetch dynamic metadata
-        uint32_t time_alive;
-        EEPROM.get(sfr::eeprom::dynamic_data_addr, time_alive);
-        sfr::eeprom::time_alive = time_alive;
+    if (!sfr::eeprom::error_mode) {
 
-        uint32_t dynamic_data_age;
-        EEPROM.get(sfr::eeprom::dynamic_data_addr + 4, dynamic_data_age);
-        sfr::eeprom::dynamic_data_age = dynamic_data_age;
+        bool dynamic_data_space_filled = false;
+        bool sfr_data_space_filled = false;
+        if (sfr::eeprom::dynamic_data_addr + constants::eeprom::dynamic_data_full_offset > sfr::eeprom::dynamic_data_addr.getMax()) {
+            // EEPROM has been filled up and no more dynamic data saves have been done, so do not attempt to restore
+            dynamic_data_space_filled = true;
+        }
+        if (sfr::eeprom::sfr_data_addr + constants::eeprom::sfr_data_full_offset > sfr::eeprom::sfr_data_addr.getMax()) {
+            // EEPROM has been filled up and no more SFR data saves have been done, so do not attempt to restore
+            sfr_data_space_filled = true;
+        }
+        
+        if (!sfr::eeprom::boot_mode && !dynamic_data_space_filled)
+        {
+            // EEPROM for dynamic data is not full, so fetch dynamic metadata
+            uint32_t time_alive;
+            EEPROM.get(sfr::eeprom::dynamic_data_addr, time_alive);
+            sfr::eeprom::time_alive = time_alive;
 
-        if (sfr::eeprom::light_switch) {
-            // Light switch is on, so try to restore SFR fields according to their restore booleans
+            uint32_t dynamic_data_age;
+            EEPROM.get(sfr::eeprom::dynamic_data_addr + 4, dynamic_data_age);
+            sfr::eeprom::dynamic_data_age = dynamic_data_age;
+        }
+
+        if (sfr::eeprom::light_switch && !sfr_data_space_filled) {
+            // Light switch is on, EEPROM for SFR is not full
+            // Try to restore SFR fields according to their restore booleans
 
             uint32_t sfr_data_age1;
             EEPROM.get(sfr::eeprom::sfr_data_addr, sfr_data_age1);

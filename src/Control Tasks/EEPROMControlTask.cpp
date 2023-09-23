@@ -25,7 +25,7 @@ void EEPROMControlTask::execute()
         EEPROMControlTask::save_boot_time();
     }
 
-    if (fast_cycle_counter == 0 > constants::eeprom::fast_write_interval && !sfr::eeprom::boot_mode && !sfr::eeprom::error_mode) {
+    if (fast_cycle_counter == 0 && !sfr::eeprom::boot_mode && !sfr::eeprom::error_mode) {
         // Adequate time has passed for a new write, and EEPROM has finished counting time in boot, and EEPROM is valid
         EEPROMControlTask::save_dynamic_data();
     }
@@ -57,7 +57,7 @@ void EEPROMControlTask::save_boot_time()
     EEPROM.put(constants::eeprom::boot_time_loc1, sfr::eeprom::time_alive.get());
     EEPROM.put(constants::eeprom::boot_time_loc2, sfr::eeprom::time_alive.get());
 
-    if (sfr::eeprom::time_alive > 2 * constants::time::one_hour) {
+    if (sfr::eeprom::time_alive >= 2 * constants::time::one_hour) {
         sfr::eeprom::boot_mode = false;
     }
 }
@@ -72,7 +72,7 @@ void EEPROMControlTask::save_dynamic_data()
         sfr::eeprom::dynamic_data_age = 0;
     }
 
-    if (sfr::eeprom::dynamic_data_addr + constants::eeprom::dynamic_data_full_offset > constants::eeprom::sfr_data_start) {
+    if (sfr::eeprom::dynamic_data_addr + constants::eeprom::dynamic_data_full_offset <= sfr::eeprom::dynamic_data_addr.getMax()) {
         // There is enough memory for another cycle of dynamic data
         sfr::eeprom::dynamic_data_age++;
         EEPROM.put(sfr::eeprom::dynamic_data_addr, sfr::eeprom::time_alive.get());
@@ -90,7 +90,7 @@ void EEPROMControlTask::save_sfr_data()
         sfr::eeprom::sfr_data_age = 0;
     }
 
-    if (sfr::eeprom::sfr_data_addr + constants::eeprom::sfr_data_full_offset > constants::eeprom::boot_counter_loc2) {
+    if (sfr::eeprom::sfr_data_addr + constants::eeprom::sfr_data_full_offset <= sfr::eeprom::sfr_data_addr.getMax()) {
         // There is enough memory for another cycle of SFR data
 
         // Update and write SFR data age
