@@ -15,7 +15,7 @@ void NormalReportMonitor::execute()
         sfr::rockblock::waiting_message, sfr::rockblock::waiting_command,
         sfr::temperature::in_sun, sfr::current::in_sun, sfr::button::pressed};
 
-    bool eeprom_bools[] = {0, 0, 0, 0, sfr::eeprom::boot_mode, sfr::eeprom::error_mode, sfr::eeprom::light_switch, sfr::eeprom::sfr_save_completed};
+    bool eeprom_bools[] = {0, 0, 0, 0, sfr::eeprom::boot_restarted, sfr::eeprom::error_mode, sfr::eeprom::light_switch, sfr::eeprom::sfr_save_completed};
 
     std::vector<uint8_t> report_contents{
         constants::rockblock::start_of_normal_downlink,
@@ -29,12 +29,12 @@ void NormalReportMonitor::execute()
         serialize(0x2506), // sfr::acs::Kd_index
         serialize(0x2507), // sfr::acs::Kp_index
         serialize(0x2508), // sfr::acs::c_index
-        serialize(0x2804), // sfr::eemprom::boot_counter
-        serialize(0x2805), // sfr::eemprom::dynamic_data_addr
-        serialize(0x2806), // sfr::eemprom::sfr_data_addr
-        serialize(0x2807), // sfr::eemprom::time_alive
-        serialize(0x2808), // sfr::eemprom::dynamic_data_age
-        serialize(0x2809), // sfr::eemprom::sfr_data_age
+        serialize(0x2805), // sfr::eeprom::boot_counter
+        serialize(0x2806), // sfr::eeprom::dynamic_data_addr
+        serialize(0x2807), // sfr::eeprom::sfr_data_addr
+        serialize(0x2808), // sfr::eeprom::time_alive
+        serialize(0x2809), // sfr::eeprom::dynamic_data_age
+        serialize(0x2810), // sfr::eeprom::sfr_data_age
         serialize(sfr_packed_bools),
 
         // Sensor readings

@@ -11,6 +11,11 @@ void EEPROMControlTask::execute()
 {
     sfr::eeprom::time_alive += millis();
 
+    if (sfr::eeprom::light_switch != last_light_switch) {
+        EEPROM.put(constants::eeprom::light_switch_loc1, sfr::eeprom::light_switch.get());
+        EEPROM.put(constants::eeprom::light_switch_loc2, sfr::eeprom::light_switch.get());
+    }
+
     if (fast_cycle_counter == 0 && sfr::eeprom::boot_mode) {
         // Adequate time has passed for a new write, and EEPROM is counting time in boot
         EEPROMControlTask::save_boot_time();
@@ -47,6 +52,10 @@ void EEPROMControlTask::save_boot_time()
 {
     EEPROM.put(constants::eeprom::boot_time_loc1, sfr::eeprom::time_alive.get());
     EEPROM.put(constants::eeprom::boot_time_loc2, sfr::eeprom::time_alive.get());
+
+    if (sfr::eeprom::time_alive > 2 * constants::time::one_hour) {
+        sfr::eeprom::boot_mode = false;
+    }
 }
 
 void EEPROMControlTask::save_dynamic_data()

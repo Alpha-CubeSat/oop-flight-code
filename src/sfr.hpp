@@ -282,6 +282,7 @@ namespace sfr {
     namespace eeprom {
         // OP Codes 2800
         extern SFRField<bool> boot_mode;
+        extern SFRField<bool> boot_restarted;
         extern SFRField<bool> error_mode;
         extern SFRField<bool> light_switch;
         extern SFRField<bool> sfr_save_completed;

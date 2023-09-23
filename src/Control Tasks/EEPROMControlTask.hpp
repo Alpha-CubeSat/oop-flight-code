@@ -16,6 +16,7 @@ private:
     void save_dynamic_data();
     void save_sfr_data();
 
+    bool last_light_switch = false;
     uint8_t fast_cycle_counter; // Counts to constants::eeprom::fast_write_interval before going to 0 and repeating
     uint8_t slow_cycle_counter; // Counts to constants::eeprom::slow_write_interval before going to 0 and repeating
 };
