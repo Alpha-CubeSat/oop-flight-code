@@ -279,6 +279,7 @@ void test_dynamic_data_restore()
     // Simulate power cycle
     SFRInterface::resetSFR();
     EEPROMRestore::execute();
+    Serial.println(sfr::eeprom::boot_counter);
 
     // Check second restore execution
     TEST_ASSERT_EQUAL(false, sfr::eeprom::boot_mode.get());

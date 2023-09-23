@@ -12,6 +12,8 @@ void EEPROMRestore::execute()
     // If EEPROM data is still valid after blue moon data checks and boot wait is over,
     // restore dynamic data and try restoring SFR data
     try_restore_dynamic_and_sfr_data();
+
+    Serial.println(sfr::eeprom::boot_counter);
 }
 
 void EEPROMRestore::restore_and_check_boot_vals()
