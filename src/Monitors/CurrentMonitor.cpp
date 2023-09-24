@@ -9,8 +9,7 @@ CurrentMonitor::CurrentMonitor(unsigned int offset)
 void CurrentMonitor::execute()
 {
     if (!initialized) {
-        sfr::photoresistor::light_val_average_standby->set_valid();
-        sfr::photoresistor::light_val_average_deployment->set_valid();
+        sfr::current::solar_current_average->set_valid();
         initialized = true;
     }
 
