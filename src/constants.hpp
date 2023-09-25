@@ -315,6 +315,7 @@ namespace constants {
         static constexpr unsigned int sfr_store_size = 5;
         static constexpr unsigned int sfr_num_fields = 102;
         static constexpr unsigned int sfr_data_full_offset = sfr_num_fields * sfr_store_size + 8;
+        static constexpr unsigned int write_age_limit = 95000; // Must be less than 100000
 
         // Measured in MCL cycles. Fast is ~ every 10 sec, slow is ~ every 60 sec
         static constexpr unsigned int fast_write_interval = 100;
