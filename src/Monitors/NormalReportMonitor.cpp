@@ -72,7 +72,7 @@ void NormalReportMonitor::execute()
     }
 
     // push the most recent 16 mission modes switches, packed into 5 bits
-    int k = 0;
+    uint32_t k = 0;
     bool packed_commands[80] = {false};
     auto hist_mode = sfr::mission::mode_history.cbegin();
     while (hist_mode != sfr::mission::mode_history.cend() && k <= sfr::mission::mission_mode_hist_length) {
