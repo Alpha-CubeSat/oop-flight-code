@@ -1,6 +1,10 @@
+#ifndef _EEPROMRESETCOMMAND_HPP_
+#define _EEPROMRESETCOMMAND_HPP_
+
 #include "SFRField.hpp"
 #include "constants.hpp"
 #include "sfr.hpp"
+#include <EEPROM.h>
 
 class EEPROMResetCommand : public RockblockCommand
 {
@@ -38,20 +42,23 @@ public:
         EEPROM.put(constants::eeprom::sfr_data_addr_loc2, (uint32_t)sfr_data_addr);
 
         // Write to the relevant SFRFields
-        SFRField::setFieldValByOpcode(0x2800, boot_count);
-        SFRField::setFieldValByOpcode(0x2802, light_switch);
+        SFRInterface::setFieldValByOpcode(0x2800, boot_count);
+        SFRInterface::setFieldValByOpcode(0x2802, light_switch);
 
-        SFRField::setFieldValByOpcode(0x2805, dynamic_data_addr);
-        SFRField::setFieldValByOpcode(0x2806, sfr_data_addr);
+        SFRInterface::setFieldValByOpcode(0x2805, dynamic_data_addr);
+        SFRInterface::setFieldValByOpcode(0x2806, sfr_data_addr);
 
-        SFRField::setFieldValByOpcode(0x2808, round(map(dynamic_data_age, 0, 255, 0, 95000)));
-        SFRField::setFieldValByOpcode(0x2809, round(map(sfr_data_age, 0, 255, 0, 95000)));
+        SFRInterface::setFieldValByOpcode(0x2808, round(map(dynamic_data_age, 0, 255, 0, 95000)));
+        SFRInterface::setFieldValByOpcode(0x2809, round(map(sfr_data_age, 0, 255, 0, 95000)));
 
         // Set the error mode to false
-        SFRField::setFieldValByOpcode(0x2801, false);
+        SFRInterface::setFieldValByOpcode(0x2801, false);
     }
 
     bool isValid()
     {
+        return sfr::eeprom::error_mode.get();
     }
-}
+};
+
+#endif
