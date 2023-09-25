@@ -253,7 +253,7 @@ void RegularBurns::transition_to()
 
 void RegularBurns::dispatch()
 {
-    if (!sfr::button::pressed || !sfr::photoresistor::covered) {
+    if ((!sfr::button::pressed && !fault_groups::hardware_faults::button->get_signaled()) || (!sfr::photoresistor::covered && !fault_groups::hardware_faults::light_val->get_signaled())) {
         sfr::mission::current_mode = sfr::mission::photo;
 
     } else if (sfr::burnwire::attempts > sfr::burnwire::attempts_limit) {
