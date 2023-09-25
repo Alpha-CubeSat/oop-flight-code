@@ -23,7 +23,8 @@ void NormalReportMonitor::execute()
         // SFR fields
         serialize(0x1905), // sfr::burnwire::burn_time
         serialize(0x1906), // sfr::burnwire::armed_time
-        serialize(0x2110), // sfr::rockblock::downlink_period
+        serialize(0x2111), // sfr::rockblock::lp_downlink_period
+        serialize(0x2112), // sfr::rockblock::transmit_downlink_period
         serialize(0x2505), // sfr::acs::Id_index
         serialize(0x2506), // sfr::acs::Kd_index
         serialize(0x2507), // sfr::acs::Kp_index

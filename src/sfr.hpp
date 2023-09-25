@@ -181,6 +181,8 @@ namespace sfr {
         extern SFRField<uint16_t> mode;
         extern SFRField<uint32_t> last_downlink;
         extern SFRField<uint32_t> downlink_period;
+        extern SFRField<uint32_t> lp_downlink_period;
+        extern SFRField<uint32_t> transmit_downlink_period;
         extern SFRField<uint32_t> conseq_reads;
         extern SFRField<uint32_t> start_time_check_signal;
         extern SFRField<uint32_t> max_check_signal_time;
