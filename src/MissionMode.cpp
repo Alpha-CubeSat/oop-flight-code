@@ -19,7 +19,7 @@ void Boot::dispatch()
 
 void AliveSignal::transition_to()
 {
-    transmit_mode_settings();
+    transmit_mode_settings(false);
 }
 void AliveSignal::dispatch()
 {
@@ -29,7 +29,7 @@ void AliveSignal::dispatch()
 
 void LowPowerAliveSignal::transition_to()
 {
-    transmit_mode_settings();
+    transmit_mode_settings(true);
 }
 void LowPowerAliveSignal::dispatch()
 {
@@ -53,7 +53,9 @@ void DetumbleSpin::dispatch()
 
 void LowPowerDetumbleSpin::transition_to()
 {
-    transmit_mode_settings();
+    sfr::rockblock::sleep_mode = true;
+    sfr::acs::off = true;
+    sfr::imu::turn_off = true;
 }
 void LowPowerDetumbleSpin::dispatch()
 {
@@ -73,7 +75,7 @@ void Normal::dispatch()
 
 void LowPower::transition_to()
 {
-    transmit_mode_settings();
+    transmit_mode_settings(true);
 }
 void LowPower::dispatch()
 {
@@ -82,7 +84,7 @@ void LowPower::dispatch()
 
 void Transmit::transition_to()
 {
-    transmit_mode_settings();
+    transmit_mode_settings(false);
 }
 void Transmit::dispatch()
 {
@@ -102,7 +104,7 @@ void NormalDeployment::dispatch()
 
 void TransmitDeployment::transition_to()
 {
-    transmit_mode_settings();
+    transmit_mode_settings(false);
 }
 void TransmitDeployment::dispatch()
 {
@@ -112,7 +114,7 @@ void TransmitDeployment::dispatch()
 
 void LowPowerDeployment::transition_to()
 {
-    transmit_mode_settings();
+    transmit_mode_settings(true);
 }
 void LowPowerDeployment::dispatch()
 {
@@ -131,7 +133,7 @@ void NormalArmed::dispatch()
 
 void TransmitArmed::transition_to()
 {
-    transmit_mode_settings();
+    transmit_mode_settings(false);
     sfr::burnwire::attempts = 0;
 }
 void TransmitArmed::dispatch()
@@ -142,7 +144,7 @@ void TransmitArmed::dispatch()
 
 void LowPowerArmed::transition_to()
 {
-    transmit_mode_settings();
+    transmit_mode_settings(true);
 }
 void LowPowerArmed::dispatch()
 {
@@ -162,7 +164,7 @@ void NormalInSun::dispatch()
 
 void TransmitInSun::transition_to()
 {
-    transmit_mode_settings();
+    transmit_mode_settings(false);
 }
 void TransmitInSun::dispatch()
 {
@@ -173,7 +175,7 @@ void TransmitInSun::dispatch()
 
 void LowPowerInSun::transition_to()
 {
-    transmit_mode_settings();
+    transmit_mode_settings(true);
 }
 void LowPowerInSun::dispatch()
 {
@@ -186,7 +188,7 @@ void LowPowerInSun::dispatch()
 
 void VoltageFailureInSun::transition_to()
 {
-    transmit_mode_settings();
+    transmit_mode_settings(true);
 }
 
 void VoltageFailureInSun::dispatch()
@@ -379,11 +381,16 @@ void enter_lp_insun()
     }
 }
 
-void transmit_mode_settings()
+void transmit_mode_settings(bool lp)
 {
     sfr::rockblock::sleep_mode = false;
     sfr::acs::off = true;
     sfr::imu::turn_off = true;
+    if (lp) {
+        sfr::rockblock::downlink_period = sfr::rockblock::lp_downlink_period;
+    } else {
+        sfr::rockblock::downlink_period = sfr::rockblock::transmit_downlink_period;
+    }
 }
 
 void acs_mode_settings()

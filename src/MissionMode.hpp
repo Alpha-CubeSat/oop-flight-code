@@ -466,7 +466,7 @@ void timed_out(MissionMode *next_mode, float max_time);
 void boot_initialization();
 void check_previous(MissionMode *normal_mode, MissionMode *transmit_mode);
 void enter_lp_insun();
-void transmit_mode_settings();
+void transmit_mode_settings(bool lp);
 void acs_mode_settings();
 
 #endif
