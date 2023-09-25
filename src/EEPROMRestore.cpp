@@ -95,7 +95,7 @@ void EEPROMRestore::restore_blue_moon_data()
 void EEPROMRestore::restore_dynamic_data()
 {
     bool has_dynamic_data_space = sfr::eeprom::dynamic_data_addr + constants::eeprom::dynamic_data_full_offset - 1 <= sfr::eeprom::dynamic_data_addr.getMax();
-    
+
     if (has_dynamic_data_space) {
         // EEPROM for dynamic data is not full, so fetch dynamic metadata
         uint32_t time_alive;
@@ -110,7 +110,7 @@ void EEPROMRestore::restore_dynamic_data()
 
 void EEPROMRestore::restore_sfr_data()
 {
-    bool has_sfr_data_space = sfr::eeprom::sfr_data_addr + constants::eeprom::sfr_data_full_offset  - 1 <= sfr::eeprom::sfr_data_addr.getMax();
+    bool has_sfr_data_space = sfr::eeprom::sfr_data_addr + constants::eeprom::sfr_data_full_offset - 1 <= sfr::eeprom::sfr_data_addr.getMax();
     if (sfr::eeprom::light_switch && has_sfr_data_space) {
         // Light switch is on, EEPROM for SFR is not full
         // Try to restore SFR fields according to their restore booleans
