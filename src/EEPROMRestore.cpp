@@ -31,18 +31,6 @@ void EEPROMRestore::check_boot_vals()
     uint8_t boot_counter2;
     EEPROM.get(constants::eeprom::boot_counter_loc2, boot_counter2);
 
-    // Serial.println("in restore");
-    // Serial.println(constants::eeprom::boot_time_loc1);
-    // Serial.println(constants::eeprom::boot_time_loc2);
-    // Serial.println(constants::eeprom::boot_counter_loc1);
-    // Serial.println(constants::eeprom::boot_counter_loc2);
-
-    // Serial.println(boot_time1);
-    // Serial.println(boot_time2);
-    // Serial.println(boot_counter1);
-    // Serial.println(boot_counter2);
-    // Serial.println("-----");
-
     if (boot_time1 == boot_time2 && boot_counter1 == boot_counter2) {
         // Boot time counters and boot counters are valid
         sfr::eeprom::error_mode = false;
@@ -123,11 +111,9 @@ void EEPROMRestore::restore_dynamic_data()
 void EEPROMRestore::restore_sfr_data()
 {
     bool has_sfr_data_space = sfr::eeprom::sfr_data_addr + constants::eeprom::sfr_data_full_offset  - 1 <= sfr::eeprom::sfr_data_addr.getMax();
-
     if (sfr::eeprom::light_switch && has_sfr_data_space) {
         // Light switch is on, EEPROM for SFR is not full
         // Try to restore SFR fields according to their restore booleans
-
         uint32_t sfr_data_age1;
         EEPROM.get(sfr::eeprom::sfr_data_addr, sfr_data_age1);
 

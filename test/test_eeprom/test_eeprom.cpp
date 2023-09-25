@@ -299,13 +299,15 @@ void test_sfr_data_restore()
 
     // Change some SFR fields
     sfr::burnwire::attempts_limit = 11;
+    sfr::burnwire::attempts_limit.setRestoreOnBoot(true);
     sfr::acs::on_time = 0;
+    sfr::acs::on_time.setRestoreOnBoot(true);
 
     // Check that no SFR data writes have been made
     TEST_ASSERT_EQUAL(0, sfr::eeprom::sfr_data_age.get());
 
-    // Trigger EEPROM Control Task executes like in MCL for two writes
-    for (unsigned int i = 0; i < 2 * constants::eeprom::fast_write_interval; i++) {
+    // Trigger EEPROM Control Task executes like in MCL for two writes, end on MCL cycle with a write
+    for (unsigned int i = 0; i < constants::eeprom::fast_write_interval + 1; i++) {
         delay(100); // Approximate delay from MCL cycles
         eeprom_control_task.execute();
     }
@@ -317,6 +319,59 @@ void test_sfr_data_restore()
 
     TEST_ASSERT_EQUAL(true, light_switch1);
     TEST_ASSERT_EQUAL(true, light_switch2);
+
+    // Simulate power cycle
+    SFRInterface::resetSFR();
+    EEPROMRestore::execute();
+
+    // Check that all SFR values are still their defaults except for
+    for (auto const &pair : SFRInterface::opcode_lookup) {
+        if (!is_eeprom_opcode(pair.first) && pair.first != 0x1902 && pair.first != 0x2504) {
+            // SFR field is not an EEPROM field or one of changed ones
+            TEST_ASSERT_EQUAL(pair.second->getDefaultValue(), pair.second->getFieldValue());
+            TEST_ASSERT_EQUAL(false, pair.second->getRestoreOnBoot());
+        }
+    }
+
+    TEST_ASSERT_EQUAL(11, sfr::burnwire::attempts_limit.get());
+    TEST_ASSERT_EQUAL(0, sfr::acs::on_time.get());
+    TEST_ASSERT_EQUAL(2, sfr::eeprom::sfr_data_age);
+}
+
+void test_light_switch_off()
+{
+    // Setup
+    reset_eeprom();
+    SFRInterface::resetSFR();
+    EEPROMControlTask eeprom_control_task(0);
+
+    // First boot cycle, fastfoward to past boot wait time, turn off light switch
+    EEPROMRestore::execute();
+    sfr::eeprom::time_alive = 2 * constants::time::one_hour;
+    sfr::eeprom::light_switch = false;
+
+    // Change some SFR fields
+    sfr::burnwire::attempts_limit = 5;
+    sfr::burnwire::attempts_limit.setRestoreOnBoot(true);
+    sfr::acs::on_time = 20;
+    sfr::acs::on_time.setRestoreOnBoot(true);
+
+    // Check that no SFR data writes have been made
+    TEST_ASSERT_EQUAL(0, sfr::eeprom::sfr_data_age.get());
+
+    // Trigger EEPROM Control Task executes like in MCL for two writes
+    for (unsigned int i = 0; i < constants::eeprom::fast_write_interval + 1; i++) {
+        delay(100); // Approximate delay from MCL cycles
+        eeprom_control_task.execute();
+    }
+
+    bool light_switch1;
+    EEPROM.get(constants::eeprom::light_switch_loc1, light_switch1);
+    bool light_switch2;
+    EEPROM.get(constants::eeprom::light_switch_loc2, light_switch2);
+
+    TEST_ASSERT_EQUAL(false, light_switch1);
+    TEST_ASSERT_EQUAL(false, light_switch2);
 
     // Simulate power cycle
     SFRInterface::resetSFR();
@@ -341,7 +396,7 @@ int test_eeprom()
     RUN_TEST(test_sfr_save_incomplete);
     RUN_TEST(test_dynamic_data_restore);
     RUN_TEST(test_sfr_data_restore);
-    // RUN_TEST(test_light_switch_off);
+    RUN_TEST(test_light_switch_off);
     // RUN_TEST(test_save_with_full_eeprom);
     // RUN_TEST(test_restore_after_full_eeprom);
 

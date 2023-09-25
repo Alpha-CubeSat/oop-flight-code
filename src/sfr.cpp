@@ -39,7 +39,7 @@ namespace sfr {
         SFRField<uint32_t> cycle_no = SFRField<uint32_t>(0, 0x1803);
         SFRField<uint32_t> cycle_dur = SFRField<uint32_t>(0, 0x1804);
         SFRField<uint32_t> mission_time = SFRField<uint32_t>(0, 0x1805);
-        SFRField<uint32_t> boot_time = SFRField<uint32_t>(0, 0x1805);
+        SFRField<uint32_t> boot_time = SFRField<uint32_t>(0, 0x1806);
 
         Boot boot_class;
         AliveSignal aliveSignal_class;
