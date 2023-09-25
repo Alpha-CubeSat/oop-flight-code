@@ -64,26 +64,29 @@ public:
 
 class SFROverrideCommand : public RockblockCommand
 {
+private:
+    bool set_value = false;
+    bool set_restore = false;
+    bool restore_value = false;
+
 public:
     SFROverrideCommand(RawRockblockCommand raw) : RockblockCommand{raw}
     {
         if (SFRInterface::opcode_lookup.find(f_opcode) != SFRInterface::opcode_lookup.end()) {
             field = SFRInterface::opcode_lookup[f_opcode];
+            set_value = (bool)((constants::masks::uint32_byte1_mask & f_arg_2) >> 24);   // Whether to override SFR
+            set_restore = (bool)((constants::masks::uint32_byte2_mask & f_arg_2) >> 16); // Whether to override resore bit
+            restore_value = (bool)(constants::masks::uint32_byte4_mask & f_arg_2);       // Restore bit value
         }
     };
 
     void execute()
     {
-        if (field) {
-
-            uint8_t set_value = (constants::masks::uint32_byte1_mask & f_arg_2) >> 24;   // Whether to override SFR
-            uint8_t set_restore = (constants::masks::uint32_byte2_mask & f_arg_2) >> 16; // Whether to override resore bit
-            uint8_t restore_value = constants::masks::uint32_byte4_mask & f_arg_2;       // Restore bit value
-
-            if ((bool)set_value) {
+        if (isValid()) {
+            if (set_value) {
                 field->setFieldValue(f_arg_1);
             }
-            if ((bool)set_restore) {
+            if (set_restore) {
                 field->setRestoreOnBoot((bool)restore_value);
             }
         }
@@ -91,7 +94,12 @@ public:
 
     bool isValid()
     {
-        return field != nullptr;
+        if (field != nullptr) {
+            if (set_value && f_arg_1 >= field->getMin() && f_arg_2 <= field->getMax()) {
+                return true;
+            }
+        }
+        return false;
     }
 
 private:
