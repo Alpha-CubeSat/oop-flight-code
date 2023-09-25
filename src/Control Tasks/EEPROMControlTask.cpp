@@ -72,7 +72,7 @@ void EEPROMControlTask::save_dynamic_data()
         sfr::eeprom::dynamic_data_age = 0;
     }
 
-    if (sfr::eeprom::dynamic_data_addr + constants::eeprom::dynamic_data_full_offset <= sfr::eeprom::dynamic_data_addr.getMax()) {
+    if (sfr::eeprom::dynamic_data_addr + constants::eeprom::dynamic_data_full_offset - 1 <= sfr::eeprom::dynamic_data_addr.getMax()) {
         // There is enough memory for another cycle of dynamic data
         sfr::eeprom::dynamic_data_age++;
         EEPROM.put(sfr::eeprom::dynamic_data_addr, sfr::eeprom::time_alive.get());
@@ -90,7 +90,7 @@ void EEPROMControlTask::save_sfr_data()
         sfr::eeprom::sfr_data_age = 0;
     }
 
-    if (sfr::eeprom::sfr_data_addr + constants::eeprom::sfr_data_full_offset <= sfr::eeprom::sfr_data_addr.getMax()) {
+    if (sfr::eeprom::sfr_data_addr + constants::eeprom::sfr_data_full_offset - 1 <= sfr::eeprom::sfr_data_addr.getMax()) {
         // There is enough memory for another cycle of SFR data
 
         // Update and write SFR data age

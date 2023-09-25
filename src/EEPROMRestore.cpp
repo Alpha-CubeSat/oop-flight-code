@@ -31,24 +31,23 @@ void EEPROMRestore::check_boot_vals()
     uint8_t boot_counter2;
     EEPROM.get(constants::eeprom::boot_counter_loc2, boot_counter2);
 
-    Serial.println("in restore");
-    Serial.println(constants::eeprom::boot_time_loc1);
-    Serial.println(constants::eeprom::boot_time_loc2);
-    Serial.println(constants::eeprom::boot_counter_loc1);
-    Serial.println(constants::eeprom::boot_counter_loc2);
+    // Serial.println("in restore");
+    // Serial.println(constants::eeprom::boot_time_loc1);
+    // Serial.println(constants::eeprom::boot_time_loc2);
+    // Serial.println(constants::eeprom::boot_counter_loc1);
+    // Serial.println(constants::eeprom::boot_counter_loc2);
 
-    Serial.println(boot_time1);
-    Serial.println(boot_time2);
-    Serial.println(boot_counter1);
-    Serial.println(boot_counter2);
-    Serial.println("-----");
+    // Serial.println(boot_time1);
+    // Serial.println(boot_time2);
+    // Serial.println(boot_counter1);
+    // Serial.println(boot_counter2);
+    // Serial.println("-----");
 
     if (boot_time1 == boot_time2 && boot_counter1 == boot_counter2) {
         // Boot time counters and boot counters are valid
         sfr::eeprom::error_mode = false;
 
         sfr::eeprom::boot_counter = boot_counter1 + 1;
-        Serial.println(sfr::eeprom::boot_counter);
         EEPROM.put(constants::eeprom::boot_counter_loc1, sfr::eeprom::boot_counter.get());
         EEPROM.put(constants::eeprom::boot_counter_loc2, sfr::eeprom::boot_counter.get());
         if (boot_time1 < 2 * constants::time::one_hour) {
@@ -107,7 +106,9 @@ void EEPROMRestore::restore_blue_moon_data()
 
 void EEPROMRestore::restore_dynamic_data()
 {
-    if (sfr::eeprom::dynamic_data_addr + constants::eeprom::dynamic_data_full_offset > sfr::eeprom::dynamic_data_addr.getMax()) {
+    bool has_dynamic_data_space = sfr::eeprom::dynamic_data_addr + constants::eeprom::dynamic_data_full_offset - 1 <= sfr::eeprom::dynamic_data_addr.getMax();
+    
+    if (has_dynamic_data_space) {
         // EEPROM for dynamic data is not full, so fetch dynamic metadata
         uint32_t time_alive;
         EEPROM.get(sfr::eeprom::dynamic_data_addr, time_alive);
@@ -121,9 +122,9 @@ void EEPROMRestore::restore_dynamic_data()
 
 void EEPROMRestore::restore_sfr_data()
 {
-    bool sfr_data_space_filled = sfr::eeprom::sfr_data_addr + constants::eeprom::sfr_data_full_offset > sfr::eeprom::sfr_data_addr.getMax();
+    bool has_sfr_data_space = sfr::eeprom::sfr_data_addr + constants::eeprom::sfr_data_full_offset  - 1 <= sfr::eeprom::sfr_data_addr.getMax();
 
-    if (sfr::eeprom::light_switch && !sfr_data_space_filled) {
+    if (sfr::eeprom::light_switch && has_sfr_data_space) {
         // Light switch is on, EEPROM for SFR is not full
         // Try to restore SFR fields according to their restore booleans
 

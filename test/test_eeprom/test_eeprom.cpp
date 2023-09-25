@@ -265,13 +265,11 @@ void test_dynamic_data_restore()
     // Check that no dynamic data writes have been made
     TEST_ASSERT_EQUAL(0, sfr::eeprom::dynamic_data_age.get());
 
-    Serial.println("start");
     // Trigger EEPROM Control Task executes like in MCL for two writes, end on MCL cycle with a write
-    for (unsigned int i = 0; i < 2 * constants::eeprom::fast_write_interval + 1; i++) {
+    for (unsigned int i = 0; i < constants::eeprom::fast_write_interval + 1; i++) {
         delay(100); // Approximate delay from MCL cycles
         eeprom_control_task.execute();
     }
-    Serial.println("end");
 
     // Save most recent time alive value
     uint32_t time_alive = sfr::eeprom::time_alive;
@@ -279,7 +277,6 @@ void test_dynamic_data_restore()
     // Simulate power cycle
     SFRInterface::resetSFR();
     EEPROMRestore::execute();
-    Serial.println(sfr::eeprom::boot_counter);
 
     // Check second restore execution
     TEST_ASSERT_EQUAL(false, sfr::eeprom::boot_mode.get());
@@ -337,13 +334,13 @@ void test_sfr_data_restore()
 int test_eeprom()
 {
     UNITY_BEGIN();
-    // RUN_TEST(test_power_cycle_during_boot);
+    RUN_TEST(test_power_cycle_during_boot);
     RUN_TEST(test_finish_boot);
-    // RUN_TEST(test_boot_time_error);
-    // RUN_TEST(test_blue_moon_data_error);
-    // RUN_TEST(test_sfr_save_incomplete);
+    RUN_TEST(test_boot_time_error);
+    RUN_TEST(test_blue_moon_data_error);
+    RUN_TEST(test_sfr_save_incomplete);
     RUN_TEST(test_dynamic_data_restore);
-    // RUN_TEST(test_sfr_data_restore);
+    RUN_TEST(test_sfr_data_restore);
     // RUN_TEST(test_light_switch_off);
     // RUN_TEST(test_save_with_full_eeprom);
     // RUN_TEST(test_restore_after_full_eeprom);
