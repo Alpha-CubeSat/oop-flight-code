@@ -98,6 +98,9 @@ public:
             if (set_value && f_arg_1 >= field->getMin() && f_arg_2 <= field->getMax()) {
                 return true;
             }
+            if (!set_value) {
+                return true;
+            }
         }
         return false;
     }
