@@ -386,12 +386,11 @@ void transmit_mode_settings(bool lp)
     sfr::rockblock::sleep_mode = false;
     sfr::acs::off = true;
     sfr::imu::turn_off = true;
-    if(lp){
+    if (lp) {
         sfr::rockblock::downlink_period = sfr::rockblock::lp_downlink_period;
-    } else{
+    } else {
         sfr::rockblock::downlink_period = sfr::rockblock::transmit_downlink_period;
     }
-    
 }
 
 void acs_mode_settings()
