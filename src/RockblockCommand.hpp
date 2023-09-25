@@ -82,13 +82,11 @@ public:
 
     void execute()
     {
-        if (isValid()) {
-            if (set_value) {
-                field->setFieldValue(f_arg_1);
-            }
-            if (set_restore) {
-                field->setRestoreOnBoot((bool)restore_value);
-            }
+        if (isValid() && set_value) {
+            field->setFieldValue(f_arg_1);
+        }
+        if (isValid() && set_restore) {
+            field->setRestoreOnBoot((bool)restore_value);
         }
     }
 
