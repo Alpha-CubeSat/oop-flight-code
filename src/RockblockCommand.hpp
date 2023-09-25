@@ -74,9 +74,9 @@ public:
     {
         if (SFRInterface::opcode_lookup.find(f_opcode) != SFRInterface::opcode_lookup.end()) {
             field = SFRInterface::opcode_lookup[f_opcode];
-            set_value = (bool)((constants::masks::uint32_byte1_mask & f_arg_2) >> 24);   // Whether to override SFR
-            set_restore = (bool)((constants::masks::uint32_byte2_mask & f_arg_2) >> 16); // Whether to override resore bit
-            restore_value = (bool)(constants::masks::uint32_byte4_mask & f_arg_2);       // Restore bit value
+            set_value = !!((constants::masks::uint32_byte1_mask & f_arg_2) >> 24);   // Whether to override SFR
+            set_restore = !!((constants::masks::uint32_byte2_mask & f_arg_2) >> 16); // Whether to override resore bit
+            restore_value = !!(constants::masks::uint32_byte4_mask & f_arg_2);       // Restore bit value
         }
     };
 
