@@ -29,17 +29,17 @@ public:
         uint16_t dynamic_data_addr = dynamic_data_addr_1 | dynamic_data_addr_2;
 
         // Write to EEPROM
-        EEPROM.put(constants::eeprom::boot_time_loc1, (uint32_t)boot_count);
-        EEPROM.put(constants::eeprom::boot_time_loc2, (uint32_t)boot_count);
+        EEPROM.put(constants::eeprom::boot_time_loc1, (uint8_t)boot_count);
+        EEPROM.put(constants::eeprom::boot_time_loc2, (uint8_t)boot_count);
 
         EEPROM.put(constants::eeprom::light_switch_loc1, light_switch);
         EEPROM.put(constants::eeprom::light_switch_loc2, light_switch);
 
-        EEPROM.put(constants::eeprom::dynamic_data_addr_loc1, (uint32_t)dynamic_data_addr);
-        EEPROM.put(constants::eeprom::dynamic_data_addr_loc2, (uint32_t)dynamic_data_addr);
+        EEPROM.put(constants::eeprom::dynamic_data_addr_loc1, (uint16_t)dynamic_data_addr);
+        EEPROM.put(constants::eeprom::dynamic_data_addr_loc2, (uint16_t)dynamic_data_addr);
 
-        EEPROM.put(constants::eeprom::sfr_data_addr_loc1, (uint32_t)sfr_data_addr);
-        EEPROM.put(constants::eeprom::sfr_data_addr_loc2, (uint32_t)sfr_data_addr);
+        EEPROM.put(constants::eeprom::sfr_data_addr_loc1, (uint16_t)sfr_data_addr);
+        EEPROM.put(constants::eeprom::sfr_data_addr_loc2, (uint16_t)sfr_data_addr);
 
         // Write to the relevant SFRFields
         SFRInterface::setFieldValByOpcode(0x2800, boot_count);
