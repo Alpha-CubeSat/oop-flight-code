@@ -26,7 +26,6 @@ namespace constants {
     namespace burnwire {
         constexpr int first_pin = 14;
         constexpr int second_pin = 15;
-        constexpr int camera_max_attempts = 50;
     } // namespace burnwire
     namespace rockblock {
         constexpr int normal_report_command_max = 10;
@@ -44,11 +43,8 @@ namespace constants {
         constexpr size_t command_len = opcode_len + arg1_len + arg2_len;
         constexpr size_t max_conseq_read = 3;
 
-        constexpr uint8_t end_of_normal_downlink_flag1 = 254;
-        constexpr uint8_t end_of_normal_downlink_flag2 = 255;
         constexpr uint8_t end_of_command_upload_flag1 = 0;
         constexpr uint8_t end_of_command_upload_flag2 = 250;
-        constexpr uint8_t start_of_normal_downlink = 99;
         namespace opcodes {
             // SFRField Commands
             constexpr uint16_t sfr_field_opcode_min = 0x1100;
@@ -74,7 +70,7 @@ namespace constants {
     }     // namespace rockblock
     namespace temperature {
         constexpr int pin = 39;
-        constexpr float in_sun_val = 30;
+        constexpr int in_sun_val = 30;
         constexpr int min_temp_c = -100;
         constexpr int max_temp_c = 200;
     } // namespace temperature
@@ -83,7 +79,7 @@ namespace constants {
         constexpr int in_sun_val = 70;
         constexpr float voltage_ref = 3.3;
         constexpr int resolution = 1024;
-        constexpr float load = 30;   // load resister value (kOhm)
+        constexpr int load = 30;     // load resister value (kOhm)
         constexpr float shunt = 0.1; // shunt resistor value (Ohm)
     }                                // namespace current
     namespace masks {
@@ -248,8 +244,8 @@ namespace constants {
         constexpr int CSM = 20;
 
         constexpr int max_gyro_imu_report_size = 66;
-        constexpr int bootIMU_min_run_time = 20000;          // 20 seconds before transition to bootCamera.
-        constexpr int after_door_opens_min_run_time = 10000; // 10 seconds after the door opens
+        constexpr int boot_IMU_min_run_time = 20 * time::one_second;         // 20 seconds before transition to bootCamera.
+        constexpr int after_door_opens_min_run_time = 10 * time::one_second; // 10 seconds after the door opens
 
         constexpr int sfr_resolution = 10;
     } // namespace imu
@@ -267,8 +263,6 @@ namespace constants {
         constexpr unsigned int control_cycle_time_ms = 100;
         constexpr unsigned int control_cycle_time_us = control_cycle_time_ms * 1000;
         constexpr unsigned int control_cycle_time = control_cycle_time_us;
-
-        constexpr unsigned int allotted_time = 7200000;
 
         // number being added is the time length of the previous function
         // battery monitor takes max 60 us, so button monitor will start 60us after
