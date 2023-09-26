@@ -144,6 +144,10 @@ void MainControlLoop::execute()
         Serial.println("RockBLOCK NOT sleeping");
     }
 
+    // EEPROM
+    Serial.print("Total time alive (across all boots): ");
+    Serial.println(sfr::eeprom::time_alive);
+
 #endif
 
     clock_manager.execute();
@@ -169,7 +173,7 @@ void MainControlLoop::execute()
     camera_report_monitor.execute_on_time();
     imudownlink_report_monitor.execute_on_time();
 
-    // eeprom_control_task.execute_on_time();
+    eeprom_control_task.execute_on_time();
 
 #ifdef VERBOSE
     Serial.println("--------------------END LOOP--------------------");

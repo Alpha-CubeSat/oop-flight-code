@@ -7,6 +7,12 @@ class EEPROMRestore
 {
 public:
     static void execute();
+
+private:
+    static void check_boot_vals();
+    static void restore_blue_moon_data();
+    static void restore_dynamic_data();
+    static void restore_sfr_data();
 };
 
 #endif

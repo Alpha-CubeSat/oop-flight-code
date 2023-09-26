@@ -17,8 +17,6 @@ void ClockManager::execute()
     }
     has_executed = true;
     TimedControlTaskBase::control_cycle_start_time = get_system_time();
-    sfr::mission::mission_time += constants::timecontrol::control_cycle_time_ms;
-    sfr::mission::boot_time += constants::timecontrol::control_cycle_time_ms;
     control_cycle_count++;
     sfr::mission::cycle_no++;
     sfr::mission::cycle_dur = constants::timecontrol::control_cycle_time - cycle_dt;

@@ -57,8 +57,6 @@ namespace sfr {
         extern SFRField<uint32_t> mission_mode_hist_length;
         extern SFRField<uint32_t> cycle_no;
         extern SFRField<uint32_t> cycle_dur;
-        extern SFRField<uint32_t> mission_time;
-        extern SFRField<uint32_t> boot_time;
 
         extern Boot boot_class;
         extern AliveSignal aliveSignal_class;
@@ -282,6 +280,7 @@ namespace sfr {
     namespace eeprom {
         // OP Codes 2800
         extern SFRField<bool> boot_mode;
+        extern SFRField<bool> boot_restarted;
         extern SFRField<bool> error_mode;
         extern SFRField<bool> light_switch;
         extern SFRField<bool> sfr_save_completed;

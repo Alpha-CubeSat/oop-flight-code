@@ -38,8 +38,6 @@ namespace sfr {
         SFRField<uint32_t> mission_mode_hist_length = SFRField<uint32_t>(20, 0x1802);
         SFRField<uint32_t> cycle_no = SFRField<uint32_t>(0, 0x1803);
         SFRField<uint32_t> cycle_dur = SFRField<uint32_t>(0, 0x1804);
-        SFRField<uint32_t> mission_time = SFRField<uint32_t>(0, 0x1805);
-        SFRField<uint32_t> boot_time = SFRField<uint32_t>(0, 0x1805);
 
         Boot boot_class;
         AliveSignal aliveSignal_class;
@@ -287,14 +285,15 @@ namespace sfr {
     namespace eeprom {
         // OP Codes 2800
         SFRField<bool> boot_mode = SFRField<bool>(true, 0x2800);
-        SFRField<bool> error_mode = SFRField<bool>(true, 0x2801);
-        SFRField<bool> light_switch = SFRField<bool>(false, 0x2802);
-        SFRField<bool> sfr_save_completed = SFRField<bool>(false, 0x2803);
-        SFRField<uint8_t> boot_counter = SFRField<uint8_t>(0, 0x2804);
-        SFRField<uint16_t> dynamic_data_addr = SFRField<uint16_t>(constants::eeprom::dynamic_data_start, 0x2805);
-        SFRField<uint16_t> sfr_data_addr = SFRField<uint16_t>(constants::eeprom::sfr_data_start, 0x2806);
-        SFRField<uint32_t> time_alive = SFRField<uint32_t>(0, 0x2807);
-        SFRField<uint32_t> dynamic_data_age = SFRField<uint32_t>(0, 0x2808);
-        SFRField<uint32_t> sfr_data_age = SFRField<uint32_t>(0, 0x2809);
+        SFRField<bool> boot_restarted = SFRField<bool>(false, 0x2801);
+        SFRField<bool> error_mode = SFRField<bool>(false, 0x2802);
+        SFRField<bool> light_switch = SFRField<bool>(false, 0x2803);
+        SFRField<bool> sfr_save_completed = SFRField<bool>(false, 0x2804);
+        SFRField<uint8_t> boot_counter = SFRField<uint8_t>(0, 0x2805);
+        SFRField<uint16_t> dynamic_data_addr = SFRField<uint16_t>(constants::eeprom::dynamic_data_start, constants::eeprom::dynamic_data_start, constants::eeprom::sfr_data_start - 1, 0x2806);
+        SFRField<uint16_t> sfr_data_addr = SFRField<uint16_t>(constants::eeprom::sfr_data_start, constants::eeprom::sfr_data_start, constants::eeprom::boot_time_loc2 - 1, 0x2807);
+        SFRField<uint32_t> time_alive = SFRField<uint32_t>(0, 0x2808);
+        SFRField<uint32_t> dynamic_data_age = SFRField<uint32_t>(0, 0x2809);
+        SFRField<uint32_t> sfr_data_age = SFRField<uint32_t>(0, 0x2810);
     } // namespace eeprom
 };    // namespace sfr
