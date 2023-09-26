@@ -59,7 +59,6 @@ namespace sfr {
         extern SFRField<uint32_t> cycle_dur;
         extern SFRField<uint8_t> boot_time_mins;
 
-
         extern Boot boot_class;
         extern AliveSignal aliveSignal_class;
         extern LowPowerAliveSignal lowPowerAliveSignal_class;
