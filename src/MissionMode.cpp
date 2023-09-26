@@ -275,7 +275,7 @@ void Photo::transition_to()
 void Photo::dispatch()
 {
     // Only go onto the next state until the IMU finished collecting all of the data
-    if (millis() > sfr::imu::door_open__collection_start_time + constants::imu::after_door_opens_min_run_time) {
+    if (millis() > sfr::imu::door_open_collection_start_time + constants::imu::after_door_opens_min_run_time) {
         sfr::mission::current_mode = sfr::mission::detumbleSpin;
         sfr::imu::turn_off = true;
     }
@@ -288,7 +288,7 @@ void exit_signal_phase(MissionMode *mode)
         sfr::mission::current_mode = mode;
     }
     // if rockblock cannot get signal in one minute exit alive signal
-    if (millis() - sfr::rockblock::start_time_check_signal >= sfr::rockblock::max_check_signal_time) {
+    if (millis() - sfr::rockblock::start_time_check_signal >= constants::rockblock::max_check_signal_time) {
         sfr::mission::current_mode = mode;
     }
     // if signal phase has timed out

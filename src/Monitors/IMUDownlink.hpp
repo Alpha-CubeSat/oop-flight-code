@@ -10,6 +10,8 @@ class IMUDownlink : public TimedControlTask<void>
 public:
     IMUDownlink(unsigned int offset);
     void execute();
+
+private:
     Adafruit_LSM9DS1 imu;
 };
 
