@@ -70,13 +70,13 @@ void BurnwireControlTask::dispatch_burn()
     sfr::burnwire::start_time = millis();
 
     if (sfr::burnwire::attempts % 2 == 0) {
-#ifdef BURNWIRE
+#ifdef VERBOSE
         Serial.println("BURNWIRE: wire 1");
 #endif
         Pins::setPinState(constants::burnwire::first_pin, HIGH);
         Pins::setPinState(constants::burnwire::second_pin, LOW);
     } else {
-#ifdef BURNWIRE
+#ifdef VERBOSE
         Serial.println("BURNWIRE: wire 2");
 #endif
         Pins::setPinState(constants::burnwire::first_pin, LOW);

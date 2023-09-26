@@ -12,6 +12,8 @@ class NormalReportMonitor : public TimedControlTask<void>
 public:
     NormalReportMonitor(unsigned int offset);
     void execute();
+
+private:
     uint8_t serialize(SensorReading *valueObj);
     uint8_t serialize(int opcode);
     uint8_t serialize(float value, float min, float max);

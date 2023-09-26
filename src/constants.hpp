@@ -30,12 +30,10 @@ namespace constants {
     } // namespace burnwire
     namespace rockblock {
         constexpr int normal_report_command_max = 10;
-
         constexpr int content_length = 68;
-
         constexpr int sleep_pin = 19;
-
         constexpr int min_sleep_period = 2 * time::one_minute;
+        constexpr int max_check_signal_time = time::one_minute;
 
         constexpr int baud = 19200;
         constexpr size_t buffer_size = 63;

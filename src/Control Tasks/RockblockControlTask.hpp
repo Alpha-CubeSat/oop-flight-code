@@ -40,6 +40,8 @@ private:
     void dispatch_end_transmission();
     void transition_to(rockblock_mode_type new_mode);
     RockblockCommand *commandFactory(RawRockblockCommand raw);
+    uint32_t conseq_reads = 0;
+    uint32_t start_time_check_signal = 0;
 };
 
 #endif

@@ -13,7 +13,6 @@ class IMUMonitor : public TimedControlTask<void>
 public:
     IMUMonitor(unsigned int offset);
     void execute();
-    Adafruit_LSM9DS1 imu;
 
 private:
     void IMU_init();
@@ -23,6 +22,8 @@ private:
     void invalidate_data();
 
     sensor_mode_type mode;
+
+    Adafruit_LSM9DS1 imu;
 };
 
 #endif

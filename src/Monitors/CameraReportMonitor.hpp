@@ -12,9 +12,11 @@ class CameraReportMonitor : public TimedControlTask<void>
 public:
     CameraReportMonitor(unsigned int offset);
     void execute();
-    File imgFile;
+
+private:
     void create_camera_report(int fragment_number, uint8_t serial_number);
     uint32_t fragment_number = 0;
     uint32_t current_serial = 0;
+    File imgFile;
 };
 #endif

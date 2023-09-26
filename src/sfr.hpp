@@ -6,6 +6,7 @@
 #include "Faults.hpp"
 #include "MissionMode.hpp"
 #include "Modes/burnwire_mode_type.enum"
+#include "Modes/mag_type.enum"
 #include "Modes/report_type.enum"
 #include "Modes/rockblock_mode_type.enum"
 #include "Modes/sensor_init_mode_type.enum"
@@ -157,11 +158,8 @@ namespace sfr {
         extern SFRField<uint16_t> failed_limit;
         extern SFRField<uint16_t> init_mode;
         extern SFRField<uint16_t> mode;
-        extern SFRField<uint32_t> step_time;
         extern SFRField<uint32_t> init_start_time;
         extern SFRField<uint32_t> init_timeout;
-        extern SFRField<uint32_t> resolution_set_delay;
-        extern SFRField<uint32_t> resolution_get_delay;
         extern SFRField<uint32_t> images_written;
         extern SFRField<uint32_t> fragments_written;
         extern SFRField<uint32_t> set_res;
@@ -175,16 +173,13 @@ namespace sfr {
         extern SFRField<bool> waiting_command;
         extern SFRField<bool> sleep_mode;
         extern SFRField<uint8_t> max_commands_count;
-        extern SFRField<uint16_t> imu_max_fragments;
         extern SFRField<uint16_t> downlink_report_type;
         extern SFRField<uint16_t> mode;
         extern SFRField<uint32_t> last_downlink;
         extern SFRField<uint32_t> downlink_period;
         extern SFRField<uint32_t> lp_downlink_period;
         extern SFRField<uint32_t> transmit_downlink_period;
-        extern SFRField<uint32_t> conseq_reads;
         extern SFRField<uint32_t> start_time_check_signal;
-        extern SFRField<uint32_t> max_check_signal_time;
         extern SFRField<uint32_t> on_time;
 
         extern char buffer[constants::rockblock::buffer_size];
@@ -218,7 +213,7 @@ namespace sfr {
         extern SFRField<uint16_t> failed_times;
         extern SFRField<uint16_t> failed_limit;
         extern SFRField<uint16_t> imu_boot_collection_start_time;
-        extern SFRField<uint16_t> door_open__collection_start_time;
+        extern SFRField<uint16_t> door_open_collection_start_time;
         extern SFRField<uint32_t> max_fragments;
 
         extern SensorReading *mag_x_value;

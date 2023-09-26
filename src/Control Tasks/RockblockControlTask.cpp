@@ -104,7 +104,7 @@ void RockblockControlTask::dispatch_standby()
 
 void RockblockControlTask::dispatch_send_at()
 {
-    sfr::rockblock::conseq_reads = 0;
+    conseq_reads = 0;
 #ifdef VERBOSE_RB
     Serial.println("SENT: ATr");
 #endif
@@ -438,7 +438,7 @@ void RockblockControlTask::dispatch_process_command()
             }
         }
 
-        sfr::rockblock::conseq_reads++;
+        conseq_reads++;
         transition_to(rockblock_mode_type::queue_check);
     }
 }
@@ -452,7 +452,7 @@ void RockblockControlTask::dispatch_queue_check()
     Serial.print(queued);
     Serial.println(" waiting");
     // check if in cycle before limit
-    bool cycle_boundary = sfr::rockblock::conseq_reads >= (constants::rockblock::max_conseq_read - 1);
+    bool cycle_boundary = conseq_reads >= (constants::rockblock::max_conseq_read - 1);
     // check if enough messages are waiting
     bool queue_limit = queued > 1;
     if (cycle_boundary && queue_limit && !sfr::rockblock::flush_status) {
