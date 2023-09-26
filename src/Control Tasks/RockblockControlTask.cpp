@@ -1,5 +1,6 @@
 #include "RockblockControlTask.hpp"
 #include "BurnwireCommands.hpp"
+#include "EEPROMResetCommand.hpp"
 
 RockblockControlTask::RockblockControlTask(unsigned int offset)
     : TimedControlTask<void>(offset)
@@ -532,6 +533,11 @@ RockblockCommand *RockblockControlTask::commandFactory(RawRockblockCommand raw)
         Serial.println("SFR Fire Command");
 #endif
         return new FireCommand(raw);
+    } else if (op_code == constants::rockblock::opcodes::eeprom_reset_opcode) {
+#ifdef VERBOSE_RB
+        Serial.println("EEPROM Reset Command");
+#endif
+        return new EEPROMResetCommand(raw);
     } else {
 #ifdef VERBOSE_RB
         Serial.print("Unknown Command with opcode: ");
