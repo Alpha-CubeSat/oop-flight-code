@@ -70,7 +70,7 @@ void BurnwireControlTask::dispatch_burn()
     sfr::burnwire::start_time = millis();
 
     if (sfr::burnwire::attempts % 2 == 0) {
-#ifdef VEROSE
+#ifdef VERBOSE
         Serial.println("BURNWIRE: wire 1");
 #endif
         Pins::setPinState(constants::burnwire::first_pin, HIGH);
