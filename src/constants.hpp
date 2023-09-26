@@ -81,7 +81,7 @@ namespace constants {
         constexpr int in_sun_val = 70;
         constexpr float voltage_ref = 3.3;
         constexpr int resolution = 1024;
-        constexpr int load = 30;   // load resister value (kOhm)
+        constexpr int load = 30;     // load resister value (kOhm)
         constexpr float shunt = 0.1; // shunt resistor value (Ohm)
     }                                // namespace current
     namespace masks {
@@ -246,7 +246,7 @@ namespace constants {
         constexpr int CSM = 20;
 
         constexpr int max_gyro_imu_report_size = 66;
-        constexpr int boot_IMU_min_run_time = 20 * time::one_second; // 20 seconds before transition to bootCamera.
+        constexpr int boot_IMU_min_run_time = 20 * time::one_second;         // 20 seconds before transition to bootCamera.
         constexpr int after_door_opens_min_run_time = 10 * time::one_second; // 10 seconds after the door opens
 
         constexpr int sfr_resolution = 10;
