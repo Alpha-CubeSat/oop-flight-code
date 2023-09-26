@@ -35,10 +35,10 @@ namespace sfr {
         // OP Codes 1800
         SFRField<bool> deployed = SFRField<bool>(false, 0x1800);
         SFRField<bool> possible_uncovered = SFRField<bool>(false, 0x1801);
-        SFRField<uint32_t> mission_mode_hist_length = SFRField<uint32_t>(20, 0x1802);
-        SFRField<uint32_t> cycle_no = SFRField<uint32_t>(0, 0x1803);
-        SFRField<uint32_t> cycle_dur = SFRField<uint32_t>(0, 0x1804);
-        SFRField<uint8_t> boot_time_mins = SFRField<uint8_t>(0, 0x1805);
+        SFRField<uint8_t> boot_time_mins = SFRField<uint8_t>(0, 0x1802);
+        SFRField<uint32_t> mission_mode_hist_length = SFRField<uint32_t>(20, 0x1803);
+        SFRField<uint32_t> cycle_no = SFRField<uint32_t>(0, 0x1804);
+        SFRField<uint32_t> cycle_dur = SFRField<uint32_t>(0, 0x1805);
 
         Boot boot_class;
         AliveSignal aliveSignal_class;

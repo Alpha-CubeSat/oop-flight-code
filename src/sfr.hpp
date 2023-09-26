@@ -54,10 +54,10 @@ namespace sfr {
         // OP Codes 1800
         extern SFRField<bool> deployed;
         extern SFRField<bool> possible_uncovered;
+        extern SFRField<uint8_t> boot_time_mins;
         extern SFRField<uint32_t> mission_mode_hist_length;
         extern SFRField<uint32_t> cycle_no;
         extern SFRField<uint32_t> cycle_dur;
-        extern SFRField<uint8_t> boot_time_mins;
 
         extern Boot boot_class;
         extern AliveSignal aliveSignal_class;
