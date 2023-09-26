@@ -3,19 +3,22 @@
 namespace sfr {
     namespace stabilization {
         // OP Codes 1100
-        SFRField<uint32_t> max_time = SFRField<uint32_t>(constants::time::one_minute, 0x1100);
+        // TODO actual default value
+        SFRField<uint32_t> max_time = SFRField<uint32_t>(30 * constants::time::one_minute, 0x1100);
     } // namespace stabilization
     namespace boot {
         // OP Codes 1200
-        SFRField<uint32_t> max_time = SFRField<uint32_t>(30000, 0x1200);
+        SFRField<uint32_t> max_time = SFRField<uint32_t>(2 * constants::time::one_hour, 0x1200);
     } // namespace boot
     namespace detumble {
         // OP Codes 1500
+        // TODO actual default values
         SFRField<uint8_t> min_stable_gyro_z = SFRField<uint8_t>((1 / constants::imu::sfr_resolution), 0x1500, constants::imu::sfr_resolution);
         SFRField<uint8_t> max_stable_gyro_x = SFRField<uint8_t>((.2 / constants::imu::sfr_resolution), 0x1501, constants::imu::sfr_resolution);
         SFRField<uint8_t> max_stable_gyro_y = SFRField<uint8_t>((.2 / constants::imu::sfr_resolution), 0x1502, constants::imu::sfr_resolution);
         SFRField<uint8_t> min_unstable_gyro_x = SFRField<uint8_t>((.7 / constants::imu::sfr_resolution), 0x1503, constants::imu::sfr_resolution);
         SFRField<uint8_t> min_unstable_gyro_y = SFRField<uint8_t>((.7 / constants::imu::sfr_resolution), 0x1504, constants::imu::sfr_resolution);
+        // END TODO
     } // namespace detumble
     namespace aliveSignal {
         // OP Codes 1600
@@ -35,7 +38,7 @@ namespace sfr {
         // OP Codes 1800
         SFRField<bool> deployed = SFRField<bool>(false, 0x1800);
         SFRField<bool> possible_uncovered = SFRField<bool>(false, 0x1801);
-        SFRField<uint32_t> mission_mode_hist_length = SFRField<uint32_t>(20, 0x1802);
+        SFRField<uint32_t> mission_mode_hist_length = SFRField<uint32_t>(16, 0x1802);
         SFRField<uint32_t> cycle_no = SFRField<uint32_t>(0, 0x1803);
         SFRField<uint32_t> cycle_dur = SFRField<uint32_t>(0, 0x1804);
 
@@ -119,8 +122,8 @@ namespace sfr {
         SFRField<uint16_t> mandatory_attempts_limit = SFRField<uint16_t>(4, 0x1903);
         SFRField<uint32_t> start_time = SFRField<uint32_t>(0, 0x1904);
         SFRField<uint32_t> burn_time = SFRField<uint32_t>(600, 0, 5 * constants::time::one_second, 0x1905);
-        SFRField<uint32_t> armed_time = SFRField<uint32_t>(12 * constants::time::one_hour, 0, 12 * constants::time::one_hour, 0x1906);
-        SFRField<uint32_t> delay_time = SFRField<uint32_t>(1000, 0x1907);
+        SFRField<uint32_t> armed_time = SFRField<uint32_t>(48 * constants::time::one_hour, 0, 12 * constants::time::one_hour, 0x1906);
+        SFRField<uint32_t> delay_time = SFRField<uint32_t>(constants::time::one_second, 0x1907);
     } // namespace burnwire
     namespace camera {
         // OP Codes 2000
@@ -129,7 +132,7 @@ namespace sfr {
         SFRField<bool> turn_on = SFRField<bool>(false, 0x2002);
         SFRField<bool> turn_off = SFRField<bool>(false, 0x2003);
         SFRField<bool> powered = SFRField<bool>(false, 0x2004);
-        SFRField<bool> report_ready = SFRField<bool>(true, 0x2005);
+        SFRField<bool> report_ready = SFRField<bool>(false, 0x2005);
         SFRField<bool> fragment_requested = SFRField<bool>(false, 0x2006);
         SFRField<uint8_t> start_progress = SFRField<uint8_t>(0, 0x2007);
         SFRField<uint8_t> serial_requested = SFRField<uint8_t>(0, 0x2008);
@@ -137,15 +140,12 @@ namespace sfr {
         SFRField<uint16_t> failed_times = SFRField<uint16_t>(0, 0x2010);
         SFRField<uint16_t> failed_limit = SFRField<uint16_t>(5, 0x2011);
         SFRField<uint16_t> init_mode = SFRField<uint16_t>((uint16_t)sensor_init_mode_type::awaiting, 0x2012);
-        SFRField<uint32_t> step_time = SFRField<uint32_t>(0, 0x2013);
-        SFRField<uint32_t> init_start_time = SFRField<uint32_t>(0, 0x2014);
-        SFRField<uint32_t> init_timeout = SFRField<uint32_t>(12000, 0x2015);
-        SFRField<uint32_t> resolution_set_delay = SFRField<uint32_t>(500, 0x2016);
-        SFRField<uint32_t> resolution_get_delay = SFRField<uint32_t>(200, 0x2017);
-        SFRField<uint32_t> images_written = SFRField<uint32_t>(0, 0x2018);
-        SFRField<uint32_t> fragments_written = SFRField<uint32_t>(0, 0x2019);
-        SFRField<uint32_t> set_res = SFRField<uint32_t>(VC0706_160x120, 0x2020);
-        SFRField<uint32_t> fragment_number_requested = SFRField<uint32_t>(0, 0x2021);
+        SFRField<uint32_t> init_start_time = SFRField<uint32_t>(0, 0x2013);
+        SFRField<uint32_t> init_timeout = SFRField<uint32_t>(12 * constants::time::one_second, 0x2014);
+        SFRField<uint32_t> images_written = SFRField<uint32_t>(0, 0x2015);
+        SFRField<uint32_t> fragments_written = SFRField<uint32_t>(0, 0x2016);
+        SFRField<uint32_t> set_res = SFRField<uint32_t>(VC0706_160x120, 0x2017);
+        SFRField<uint32_t> fragment_number_requested = SFRField<uint32_t>(0, 0x2018);
     } // namespace camera
     namespace rockblock {
         // OP Codes 2100
@@ -155,19 +155,16 @@ namespace sfr {
         SFRField<bool> flush_status = SFRField<bool>(false, 0x2103);
         SFRField<bool> sleep_mode = SFRField<bool>(false, 0x2104);
         SFRField<uint8_t> max_commands_count = SFRField<uint8_t>(10, 0x2105);
-        SFRField<uint16_t> imu_max_fragments = SFRField<uint16_t>(256, 0x2106);
-        SFRField<uint16_t> downlink_report_type = SFRField<uint16_t>((uint16_t)report_type::normal_report, 0x2107);
-        SFRField<uint16_t> mode = SFRField<uint16_t>((uint16_t)rockblock_mode_type::send_at, 0x2108);
-        SFRField<uint32_t> last_downlink = SFRField<uint32_t>(0, 0x2109);
-        // TODO add defaults for downlink periods
-        SFRField<uint32_t> downlink_period = SFRField<uint32_t>(0, constants::time::one_second, 2 * constants::time::one_day, 0x2110);
-        SFRField<uint32_t> lp_downlink_period = SFRField<uint32_t>(0, constants::time::one_second, 2 * constants::time::one_day, 0x2111);
-        SFRField<uint32_t> transmit_downlink_period = SFRField<uint32_t>(0, constants::time::one_second, 2 * constants::time::one_day, 0x2112);
+        SFRField<uint16_t> downlink_report_type = SFRField<uint16_t>((uint16_t)report_type::normal_report, 0x2106);
+        SFRField<uint16_t> mode = SFRField<uint16_t>((uint16_t)rockblock_mode_type::send_at, 0x2107);
+        SFRField<uint32_t> last_downlink = SFRField<uint32_t>(0, 0x2108);
+        // TODO actual default values
+        SFRField<uint32_t> downlink_period = SFRField<uint32_t>(20 * constants::time::one_minute, constants::time::one_second, 2 * constants::time::one_day, 0x2109);
+        SFRField<uint32_t> lp_downlink_period = SFRField<uint32_t>(2 * constants::time::one_hour, constants::time::one_second, 2 * constants::time::one_day, 0x2110);
+        SFRField<uint32_t> transmit_downlink_period = SFRField<uint32_t>(20 * constants::time::one_minute, constants::time::one_second, 2 * constants::time::one_day, 0x2111);
         // END TODO
-        SFRField<uint32_t> conseq_reads = SFRField<uint32_t>(0, 0x2113);
-        SFRField<uint32_t> start_time_check_signal = SFRField<uint32_t>(0, 0x2114);
-        SFRField<uint32_t> max_check_signal_time = SFRField<uint32_t>(constants::time::one_minute, 0x2115);
-        SFRField<uint32_t> on_time = SFRField<uint32_t>(20 * constants::time::one_minute, 0x2116);
+        SFRField<uint32_t> on_time = SFRField<uint32_t>(20 * constants::time::one_minute, 0x2112);
+        SFRField<uint32_t> start_time_check_signal = SFRField<uint32_t>(0, 0x2113);
 
         char buffer[constants::rockblock::buffer_size] = {0};
         int camera_commands[99][constants::rockblock::command_len] = {0};
@@ -200,7 +197,7 @@ namespace sfr {
         SFRField<uint16_t> failed_times = SFRField<uint16_t>(0, 0x2208);
         SFRField<uint16_t> failed_limit = SFRField<uint16_t>(5, 0x2209);
         SFRField<uint16_t> imu_boot_collection_start_time = SFRField<uint16_t>(0, 0x2210);
-        SFRField<uint16_t> door_open__collection_start_time = SFRField<uint16_t>(0, 0x2211);
+        SFRField<uint16_t> door_open_collection_start_time = SFRField<uint16_t>(0, 0x2211);
         SFRField<uint32_t> max_fragments = SFRField<uint32_t>(256, 0x2212);
 
         SensorReading *mag_x_value = new SensorReading(fault_groups::imu_faults::mag_x_value, 1, constants::imu::min_mag, constants::imu::max_mag);
@@ -233,11 +230,12 @@ namespace sfr {
     } // namespace current
     namespace acs {
         // OP Codes 2500
-        SFRField<bool> off = SFRField<bool>(false, 0x2500);
+        SFRField<bool> off = SFRField<bool>(true, 0x2500);
         SFRField<uint8_t> mode = SFRField<uint8_t>((uint8_t)acs_mode_type::detumble, 0x2501);
-        SFRField<uint8_t> simple_mag = SFRField<uint8_t>(false, 0x2502);
-        SFRField<uint32_t> simple_current = SFRField<uint32_t>(false, 0x2503);
-        SFRField<uint32_t> on_time = SFRField<uint32_t>(constants::time::one_minute, 0x2504);
+        SFRField<uint8_t> simple_mag = SFRField<uint8_t>((uint8_t)mag_type::z, 0x2502);
+        SFRField<uint32_t> simple_current = SFRField<uint32_t>(0, 0x2503);
+        // TODO actual default value
+        SFRField<uint32_t> on_time = SFRField<uint32_t>(20 * constants::time::one_minute, 0x2504);
         SFRField<uint32_t> Id_index = SFRField<uint32_t>(0, 0, (sizeof(constants::acs::Id_values) / sizeof(constants::acs::Id_values[0])) - 1, 0x2505);
         SFRField<uint32_t> Kd_index = SFRField<uint32_t>(0, 0, (sizeof(constants::acs::Kd_values) / sizeof(constants::acs::Kd_values[0])) - 1, 0x2506);
         SFRField<uint32_t> Kp_index = SFRField<uint32_t>(0, 0, (sizeof(constants::acs::Kp_values) / sizeof(constants::acs::Kp_values[0])) - 1, 0x2507);
@@ -245,8 +243,8 @@ namespace sfr {
     } // namespace acs
     namespace battery {
         // OP Codes 2600
-        SFRField<uint32_t> acceptable_battery = SFRField<uint32_t>((3.75 / constants::battery::sfr_resolution), 0x2600, constants::battery::sfr_resolution);
-        SFRField<uint32_t> min_battery = SFRField<uint32_t>(0, 0x2601);
+        SFRField<uint32_t> acceptable_battery = SFRField<uint32_t>((3.9 / constants::battery::sfr_resolution), 0x2600, constants::battery::sfr_resolution);
+        SFRField<uint32_t> min_battery = SFRField<uint32_t>((3.75 / constants::battery::sfr_resolution), 0x2601, constants::battery::sfr_resolution);
 
         SensorReading *voltage_value = new SensorReading(fault_groups::power_faults::voltage_value, 1, constants::battery::min_voltage, constants::battery::max_voltage);
         SensorReading *voltage_average = new SensorReading(fault_groups::power_faults::voltage_average, 300, constants::battery::min_voltage, constants::battery::max_voltage);
