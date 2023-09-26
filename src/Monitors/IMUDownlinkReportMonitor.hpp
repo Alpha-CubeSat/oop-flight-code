@@ -11,6 +11,8 @@ class IMUDownlinkReportMonitor : public TimedControlTask<void>
 public:
     IMUDownlinkReportMonitor(unsigned int offset);
     void execute();
+
+private:
     void create_imu_downlink_report(int fragment_number);
     bool start_timing_deployed = false;
     uint8_t current_sample = 0;
