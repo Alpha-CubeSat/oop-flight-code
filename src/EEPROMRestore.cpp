@@ -45,7 +45,7 @@ void EEPROMRestore::check_boot_vals()
         } else {
             sfr::eeprom::boot_mode = false;
             // Do not set time alive, boot time only counts up to two hours
-            // It will be restored with the dynamic data dnow that the boot phase is over
+            // It will be restored with the dynamic data now that the boot phase is over
         }
     } else {
         // Boot time counters or boot counters are invalid, restart initial two hour wait
