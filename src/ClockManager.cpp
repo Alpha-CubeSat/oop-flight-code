@@ -19,6 +19,7 @@ void ClockManager::execute()
     TimedControlTaskBase::control_cycle_start_time = get_system_time();
     control_cycle_count++;
     sfr::mission::cycle_no++;
+    sfr::mission::boot_time_mins = sfr::mission::cycle_no % (constants::time::one_minute / constants::timecontrol::control_cycle_time_ms);
     sfr::mission::cycle_dur = constants::timecontrol::control_cycle_time - cycle_dt;
 }
 

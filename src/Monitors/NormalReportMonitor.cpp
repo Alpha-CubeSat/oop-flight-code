@@ -18,9 +18,8 @@ void NormalReportMonitor::execute()
     bool eeprom_bools[] = {0, 0, 0, 0, sfr::eeprom::boot_restarted, sfr::eeprom::error_mode, sfr::eeprom::light_switch, sfr::eeprom::sfr_save_completed};
 
     std::vector<uint8_t> report_contents{
-        constants::rockblock::start_of_normal_downlink,
-
         // SFR fields
+        serialize(0x1802), // sfr::mission::boot_time_mins
         serialize(0x1905), // sfr::burnwire::burn_time
         serialize(0x1906), // sfr::burnwire::armed_time
         serialize(0x2111), // sfr::rockblock::lp_downlink_period
