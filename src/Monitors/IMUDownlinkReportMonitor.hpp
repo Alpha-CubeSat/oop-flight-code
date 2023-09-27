@@ -14,16 +14,14 @@ public:
     void execute();
 
 private:
-    void create_imu_downlink_report(int fragment_number);
-    void write_imu_report_to_SD(int fragment_number);
+    void create_imu_downlink_report(uint8_t fragment_number);
+    void create_imu_downlink_report_from_SD(uint8_t fragment_number);
+    void write_imu_report_to_SD(uint8_t fragment_number);
     bool start_timing_deployed = false;
     uint8_t current_sample = 0;
     uint8_t fragment_number = 0;
     bool report_ready = false;
     bool report_downlinked = true;
-    // Sets the amount of values that go into the report.
-    int pop_size = min(constants::imu::max_gyro_imu_report_size, sfr::imu::imu_dlink.size());
-    File imgFile;
 };
 
 #endif
