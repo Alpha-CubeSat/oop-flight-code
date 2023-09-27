@@ -28,19 +28,23 @@ void IMUDownlinkReportMonitor::create_imu_downlink_report(uint8_t fragment_numbe
         return;
     }
 
+    // pushed imu report id
+    sfr::rockblock::imu_report.push_back(24);
+
+    // Push fragment number to the report
+    sfr::rockblock::imu_report.push_back(fragment_number);
+
+    // set pop_size to the minimum of the content_length limit,
+    // the number of readings ready in the queue, and the max report size
+    int pop_size = min(min(constants::imu::max_gyro_imu_report_size,
+                           constants::rockblock::content_length),
+                       sfr::imu::imu_dlink.size());
+
     // Set up fragment save to SD card
     String filename = "imu_frag_" + String(fragment_number) + ".txt";
     File txtFile = SD.open(filename.c_str(), FILE_WRITE);
 
-    // pushed imu report id
-    sfr::rockblock::imu_report.push_back(24);
-    txtFile.print(24, HEX);
-
-    // Push fragment number to the report
-    sfr::rockblock::imu_report.push_back(fragment_number);
-    txtFile.print(24, HEX);
-
-    // Add values to the report and delete from buffer.
+    // add actual gyro content to imu report
     for (int i = 0; i < pop_size; i++) {
         uint8_t data = sfr::imu::imu_dlink.back();
         sfr::rockblock::imu_report.push_back(data);
@@ -51,15 +55,14 @@ void IMUDownlinkReportMonitor::create_imu_downlink_report(uint8_t fragment_numbe
     sfr::rockblock::imu_report.push_back(constants::imu_downlink::imu_report_endflag1);
     sfr::rockblock::imu_report.push_back(constants::imu_downlink::imu_report_endflag2);
 
+    txtFile.close();
+
     // place the endflag at the end of the message
     if (fragment_number >= (int)(constants::imu_downlink::downlink_FIFO_byte_length / pop_size - 1)) {
         sfr::rockblock::imu_report.push_back(constants::imu_downlink::imu_report_endflag1);
         sfr::rockblock::imu_report.push_back(constants::imu_downlink::imu_report_endflag2);
-        txtFile.print(constants::imu_downlink::imu_report_endflag1, HEX);
-        txtFile.print(constants::imu_downlink::imu_report_endflag2, HEX);
     }
 
-    txtFile.close();
     // write_imu_report_to_SD(fragment_number);
     // for the next downlink cycle
     sfr::imu::report_ready = true;
@@ -73,51 +76,27 @@ void IMUDownlinkReportMonitor::create_imu_downlink_report_from_SD(uint8_t fragme
 
     // parse hex stored as chars into actual hex
     uint8_t tempbuffer[constants::imu::max_gyro_imu_report_size];
-    uint8_t parsedbuffer[constants::camera::content_length];
     for (size_t i = 0; i < sizeof(tempbuffer); i++) {
         tempbuffer[i] = txtFile.read();
     }
 
-    txtFile.read(tempbuffer, constants::camera::content_length);
-    int x = 0;
-    for (size_t i = 0; i < sizeof(tempbuffer); i++) {
-        int byte_0;
-        int byte_1;
-        if (tempbuffer[i] <= 90 && tempbuffer[i] >= 65) {
-            byte_0 = tempbuffer[i] - 55;
-        } else {
-            byte_0 = tempbuffer[i] - 48;
-        }
-        if (tempbuffer[i + 1] <= 90 && tempbuffer[i + 1] >= 65) {
-            byte_1 = tempbuffer[i + 1] - 55;
-        } else {
-            byte_1 = tempbuffer[i + 1] - 48;
-        }
-        parsedbuffer[x] = byte_1 + (byte_0 * 16);
-        x++;
-        i++;
-    }
-    imgFile.close();
+    txtFile.close();
 
-    sfr::rockblock::camera_report.push_back(42);
-    // get each byte of serial number and add to camera report
-    sfr::rockblock::camera_report.push_back(serial_number);
+    sfr::rockblock::imu_report.push_back(24);
+    sfr::rockblock::imu_report.push_back(fragment_number);
 
-    // get each byte of fragment number
-    std::vector<unsigned char> fragment(constants::camera::bytes_allocated_fragment);
-    for (size_t i = 0; i < constants::camera::bytes_allocated_fragment; i++) {
-        fragment[3 - i] = (fragment_number >> (i * 8));
-        sfr::rockblock::camera_report.push_back(fragment[i]);
-    }
-
-    // add actual image content to camera report
+    // add fragment data to imu report
     for (int i = 0; i < constants::camera::content_length; i++) {
-        sfr::rockblock::camera_report.push_back(parsedbuffer[i]);
+        sfr::rockblock::imu_report.push_back(tempbuffer[i]);
     }
+
+    sfr::rockblock::imu_report.push_back(constants::imu_downlink::imu_report_endflag1);
+    sfr::rockblock::imu_report.push_back(constants::imu_downlink::imu_report_endflag2);
+
 #ifdef E2E_TESTNG
-    Serial.println("Camera report ready");
+    Serial.println("IMU report ready");
 #endif
-    sfr::camera::report_ready = true;
+    sfr::imu::report_ready = true;
 }
 
 // SD write is already done as report is being made, but can be factored out in this function if that is safer
