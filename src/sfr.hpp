@@ -206,6 +206,8 @@ namespace sfr {
         extern SFRField<bool> powered;
         extern SFRField<bool> report_written;
         extern SFRField<bool> report_ready;
+        extern SFRField<bool> fragment_requested;
+        extern SFRField<uint8_t> fragment_number_requested;
         extern SFRField<uint16_t> mode;
         extern SFRField<uint16_t> init_mode;
         extern SFRField<uint16_t> failed_times;

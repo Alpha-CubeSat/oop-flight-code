@@ -43,3 +43,9 @@ void IMUDownlinkReportMonitor::create_imu_downlink_report(int fragment_number)
     // Set report is ready for the next downlink
     sfr::imu::report_ready = true;
 }
+
+void IMUDownlinkReportMonitor::write_imu_report_to_SD(int fragment_number)
+{
+    String filename = "imu_frag_" + String(fragment_number) + ".txt";
+    imgFile = SD.open(filename.c_str(), FILE_WRITE);
+}

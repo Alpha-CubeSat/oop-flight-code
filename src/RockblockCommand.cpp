@@ -20,10 +20,16 @@ bool CameraFragmentCommand::isValid()
 
 void IMUFragmentCommand::execute()
 {
-    // TODO: implement
+    sfr::imu::fragment_requested = true;
+    sfr::imu::fragment_number_requested = f_arg_1;
 }
 
 bool IMUFragmentCommand::isValid()
 {
-    return true;
+    for (int mission_mode : sfr::mission::mode_history) {
+        if (mission_mode == 22) {
+            return true;
+        }
+    }
+    return false;
 }
