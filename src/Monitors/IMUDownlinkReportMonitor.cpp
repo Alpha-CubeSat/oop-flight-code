@@ -63,7 +63,6 @@ void IMUDownlinkReportMonitor::create_imu_downlink_report(uint8_t fragment_numbe
         sfr::rockblock::imu_report.push_back(constants::imu_downlink::imu_report_endflag2);
     }
 
-    // write_imu_report_to_SD(fragment_number);
     // for the next downlink cycle
     sfr::imu::report_ready = true;
 }
@@ -97,17 +96,4 @@ void IMUDownlinkReportMonitor::create_imu_downlink_report_from_SD(uint8_t fragme
     Serial.println("IMU report ready");
 #endif
     sfr::imu::report_ready = true;
-}
-
-// SD write is already done as report is being made, but can be factored out in this function if that is safer
-void IMUDownlinkReportMonitor::write_imu_report_to_SD(uint8_t fragment_number)
-{
-    String filename = "imu_frag_" + String(fragment_number) + ".txt";
-    File txtFile = SD.open(filename.c_str(), FILE_WRITE);
-
-    for (uint8_t &data : sfr::rockblock::imu_report) {
-        txtFile.print(data, HEX);
-    }
-
-    txtFile.close();
 }
