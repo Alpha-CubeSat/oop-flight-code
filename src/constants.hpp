@@ -12,6 +12,7 @@ namespace constants {
         constexpr unsigned long one_hour = 60 * one_minute;
         constexpr unsigned long one_day = 24 * one_hour;
         constexpr unsigned long half_second = one_second / 2;
+        constexpr float one_revolution = 90 * one_minute;
     } // namespace time
     namespace sensor {
         constexpr int collect = 3;

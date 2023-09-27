@@ -34,11 +34,12 @@ void NormalReportMonitor::execute()
         serialize(0x2808), // sfr::eeprom::time_alive
         serialize(0x2809), // sfr::eeprom::dynamic_data_age
         serialize(0x2810), // sfr::eeprom::sfr_data_age
+        serialize(0x2504), // sfr::acs::on_time
+        serialize(0x2112), // sfr::rockblock::on_time
         serialize(sfr_packed_bools),
 
         // Sensor readings
         serialize(sfr::photoresistor::light_val_average_standby),
-        serialize(sfr::photoresistor::light_val_average_deployment),
         serialize(sfr::imu::mag_x_average),
         serialize(sfr::imu::mag_y_average),
         serialize(sfr::imu::mag_z_average),
