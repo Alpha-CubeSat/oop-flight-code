@@ -7,22 +7,16 @@ BurnwireControlTask::BurnwireControlTask(unsigned int offset)
 
 void BurnwireControlTask::execute()
 {
-#ifdef BURNWIRE
+#ifdef VERBOSE
     Serial.print("BURNWIRE: attempts ");
     Serial.println(sfr::burnwire::attempts);
-
-    Serial.print("BURNWIRE: photoresistor covered ");
-    Serial.println(sfr::photoresistor::covered);
-
-    Serial.print("BURNWIRE: button pressed ");
-    Serial.println(sfr::button::pressed);
 #endif
 
     burnwire_mode_type mode = (burnwire_mode_type)sfr::burnwire::mode.get();
 
     switch (mode) {
     case burnwire_mode_type::standby: {
-#ifdef BURNWIRE
+#ifdef VERBOSE
         Serial.println("BURNWIRE: standby");
 #endif
         if (sfr::mission::current_mode->get_type() == mode_type::BURN) {
@@ -33,7 +27,7 @@ void BurnwireControlTask::execute()
         break;
     }
     case burnwire_mode_type::burn: {
-#ifdef BURNWIRE
+#ifdef VERBOSE
         Serial.println("BURNWIRE: burn");
 #endif
         if (sfr::mission::current_mode->get_type() == mode_type::BURN) {
@@ -46,7 +40,7 @@ void BurnwireControlTask::execute()
         break;
     }
     case burnwire_mode_type::delay: {
-#ifdef BURNWIRE
+#ifdef VERBOSE
         Serial.println("BURNWIRE: delay");
 #endif
         if (sfr::mission::current_mode->get_type() == mode_type::BURN) {
