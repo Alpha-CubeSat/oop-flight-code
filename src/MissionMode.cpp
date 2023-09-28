@@ -259,6 +259,7 @@ void RegularBurns::dispatch()
 {
     if ((!sfr::button::pressed && !fault_groups::hardware_faults::button->get_signaled()) || (!sfr::photoresistor::covered && !fault_groups::hardware_faults::light_val->get_signaled())) {
         sfr::mission::current_mode = sfr::mission::photo;
+        sfr::mission::deployed = true;
 
     } else if (sfr::burnwire::attempts > sfr::burnwire::attempts_limit) {
         sfr::mission::current_mode = sfr::mission::transmitArmed;

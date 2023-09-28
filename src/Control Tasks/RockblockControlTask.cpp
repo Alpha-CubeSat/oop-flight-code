@@ -94,7 +94,7 @@ void RockblockControlTask::dispatch_standby()
     }
 #endif
 
-    if ((sfr::rockblock::ready_status || sfr::rockblock::waiting_message) && !sfr::rockblock::sleep_mode) {
+    if ((sfr::rockblock::ready_status) && !sfr::rockblock::sleep_mode) {
         transition_to(rockblock_mode_type::send_at);
         Pins::setPinState(constants::rockblock::sleep_pin, HIGH);
     } else {

@@ -12,7 +12,7 @@ void NormalReportMonitor::execute()
 
     bool sfr_packed_bools[] = {
         sfr::photoresistor::covered, sfr::mission::possible_uncovered, sfr::camera::powered,
-        sfr::rockblock::waiting_message, sfr::rockblock::waiting_command,
+        sfr::mission::deployed, sfr::rockblock::waiting_command,
         sfr::temperature::in_sun, sfr::current::in_sun, sfr::button::pressed};
 
     bool eeprom_bools[] = {0, 0, 0, 0, sfr::eeprom::boot_restarted, sfr::eeprom::error_mode, sfr::eeprom::light_switch, sfr::eeprom::sfr_save_completed};
@@ -22,8 +22,8 @@ void NormalReportMonitor::execute()
         serialize(0x1802), // sfr::mission::boot_time_mins
         serialize(0x1905), // sfr::burnwire::burn_time
         serialize(0x1906), // sfr::burnwire::armed_time
-        serialize(0x2110), // sfr::rockblock::lp_downlink_period
-        serialize(0x2111), // sfr::rockblock::transmit_downlink_period
+        serialize(0x2109), // sfr::rockblock::lp_downlink_period
+        serialize(0x2110), // sfr::rockblock::transmit_downlink_period
         serialize(0x2505), // sfr::acs::Id_index
         serialize(0x2506), // sfr::acs::Kd_index
         serialize(0x2507), // sfr::acs::Kp_index
@@ -35,7 +35,7 @@ void NormalReportMonitor::execute()
         serialize(0x2809), // sfr::eeprom::dynamic_data_age
         serialize(0x2810), // sfr::eeprom::sfr_data_age
         serialize(0x2504), // sfr::acs::on_time
-        serialize(0x2112), // sfr::rockblock::on_time
+        serialize(0x2111), // sfr::rockblock::on_time
         serialize(sfr_packed_bools),
 
         // Sensor readings
