@@ -151,10 +151,10 @@ void MainControlLoop::execute()
 #endif
 
     clock_manager.execute();
+    mission_manager.execute_on_time();
     burnwire_control_task.execute_on_time();
     rockblock_control_task.execute_on_time();
     command_monitor.execute_on_time();
-    mission_manager.execute_on_time();
 
     camera_control_task.execute_on_time();
     acs_control_task.execute_on_time();
