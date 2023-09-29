@@ -10,7 +10,7 @@ void IMUDownlink::execute()
     float gyro_x;
     float gyro_y;
     float gyro_z;
-    static bool prev_deployed = true;
+    static bool prev_deployed = false;
     if (sfr::imu::sample_gyro) {
         // collect the time where door opened
         if (prev_deployed != sfr::mission::deployed) {
