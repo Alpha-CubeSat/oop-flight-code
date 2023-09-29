@@ -168,7 +168,6 @@ namespace sfr {
     namespace rockblock {
         // OP Codes 2100
         extern SFRField<bool> ready_status;
-        extern SFRField<bool> waiting_message;
         extern SFRField<bool> flush_status;
         extern SFRField<bool> waiting_command;
         extern SFRField<bool> sleep_mode;

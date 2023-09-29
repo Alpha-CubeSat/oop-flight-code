@@ -10,15 +10,15 @@ void IMUDownlink::execute()
     float gyro_x;
     float gyro_y;
     float gyro_z;
-    static bool prev_pressed = true;
+    static bool prev_deployed = false;
     if (sfr::imu::sample_gyro) {
         // collect the time where door opened
-        if (prev_pressed != sfr::button::pressed) {
+        if (prev_deployed != sfr::mission::deployed) {
             sfr::imu::door_open_collection_start_time = millis();
         }
 
         // this stops the data from being collected 10 seconds after the door opens.
-        if (sfr::button::pressed || (millis() - sfr::imu::door_open_collection_start_time < constants::imu::after_door_opens_min_run_time)) {
+        if (!sfr::mission::deployed || (millis() - sfr::imu::door_open_collection_start_time < constants::imu::after_door_opens_min_run_time)) {
 
             // Add reading to imu downlink buffer
             sfr::imu::gyro_x_value->get_value(&gyro_x);
@@ -37,7 +37,7 @@ void IMUDownlink::execute()
                     sfr::imu::imu_dlink.pop_back();
                 }
             }
-            prev_pressed = sfr::button::pressed;
+            prev_deployed = sfr::mission::deployed;
         }
 
         // added to or statment for the IMU booting
@@ -47,7 +47,7 @@ void IMUDownlink::execute()
 
         // need to be stored in sfr later (time to record imu data after deployment)
         // 60 seconds is about 14 packets
-        if ((sfr::mission::current_mode == sfr::mission::photo || (!sfr::button::pressed && sfr::button::button_pressed->is_valid())) && millis() - sfr::imu::door_open_collection_start_time > constants::imu::after_door_opens_min_run_time) {
+        if (sfr::mission::deployed && (millis() - sfr::imu::door_open_collection_start_time) > constants::imu::after_door_opens_min_run_time) {
             sfr::imu::sample_gyro = false;
             sfr::imu::turn_off = true;
             sfr::imu::report_written = true;
