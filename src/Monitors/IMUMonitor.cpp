@@ -136,6 +136,21 @@ void IMUMonitor::transition_to_normal()
     // faults are cleared
     // all check flags are set to true
     sfr::imu::mode = (uint16_t)sensor_mode_type::normal;
+
+    fault_groups::imu_faults::mag_x_average->restore();
+    fault_groups::imu_faults::mag_y_average->restore();
+    fault_groups::imu_faults::mag_z_average->restore();
+    fault_groups::imu_faults::gyro_x_average->restore();
+    fault_groups::imu_faults::gyro_y_average->restore();
+    fault_groups::imu_faults::gyro_z_average->restore();
+
+    fault_groups::imu_faults::mag_x_value->restore();
+    fault_groups::imu_faults::mag_y_value->restore();
+    fault_groups::imu_faults::mag_z_value->restore();
+    fault_groups::imu_faults::gyro_x_value->restore();
+    fault_groups::imu_faults::gyro_y_value->restore();
+    fault_groups::imu_faults::gyro_z_value->restore();
+
     sfr::imu::mag_x_average->set_valid();
     sfr::imu::mag_y_average->set_valid();
     sfr::imu::mag_z_average->set_valid();
@@ -167,17 +182,17 @@ void IMUMonitor::transition_to_abnormal_init()
 
 void IMUMonitor::invalidate_data()
 {
-    sfr::imu::mag_x_average->set_invalid();
-    sfr::imu::mag_y_average->set_invalid();
-    sfr::imu::mag_z_average->set_invalid();
-    sfr::imu::gyro_x_average->set_invalid();
-    sfr::imu::gyro_y_average->set_invalid();
-    sfr::imu::gyro_z_average->set_invalid();
+    fault_groups::imu_faults::mag_x_average->force();
+    fault_groups::imu_faults::mag_y_average->force();
+    fault_groups::imu_faults::mag_z_average->force();
+    fault_groups::imu_faults::gyro_x_average->force();
+    fault_groups::imu_faults::gyro_y_average->force();
+    fault_groups::imu_faults::gyro_z_average->force();
 
-    sfr::imu::mag_x_value->set_invalid();
-    sfr::imu::mag_y_value->set_invalid();
-    sfr::imu::mag_z_value->set_invalid();
-    sfr::imu::gyro_x_value->set_invalid();
-    sfr::imu::gyro_y_value->set_invalid();
-    sfr::imu::gyro_z_value->set_invalid();
+    fault_groups::imu_faults::mag_x_value->force();
+    fault_groups::imu_faults::mag_y_value->force();
+    fault_groups::imu_faults::mag_z_value->force();
+    fault_groups::imu_faults::gyro_x_value->force();
+    fault_groups::imu_faults::gyro_y_value->force();
+    fault_groups::imu_faults::gyro_z_value->force();
 }
