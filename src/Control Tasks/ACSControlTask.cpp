@@ -26,8 +26,7 @@ void ACSControlTask::execute()
     old_Kd = constants::acs::Kd_values[sfr::acs::Kd_index];
     old_Kp = constants::acs::Kp_values[sfr::acs::Kp_index];
     old_c = constants::acs::c_values[sfr::acs::c_index];
-    
-    Serial.println("ACS checking IMU valid");
+
     imu_valid = sfr::imu::gyro_x_value->get_value(&gyro_x) && sfr::imu::gyro_y_value->get_value(&gyro_y) && sfr::imu::gyro_z_value->get_value(&gyro_z) && sfr::imu::mag_x_value->get_value(&mag_x) && sfr::imu::mag_y_value->get_value(&mag_y) && sfr::imu::mag_z_value->get_value(&mag_z);
     
 #ifdef ACS_SIM
