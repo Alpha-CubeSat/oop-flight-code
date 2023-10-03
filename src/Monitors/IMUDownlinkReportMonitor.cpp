@@ -31,11 +31,6 @@ void IMUDownlinkReportMonitor::create_imu_downlink_report(int fragment_number)
     // Push fragment number to the report
     sfr::rockblock::imu_report.push_back(fragment_number);
 
-    // set pop_size to the minimum of the content_length limit,
-    // the number of readings ready in the queue, and the max report size
-    // Sets the amount of values that go into the report.
-    int pop_size = min(constants::imu::max_gyro_imu_report_size, sfr::imu::imu_dlink.size());
-
     // Add values to the report and delete from buffer.
     for (int i = 0; i < pop_size; i++) {
         sfr::rockblock::imu_report.push_back(sfr::imu::imu_dlink.back());

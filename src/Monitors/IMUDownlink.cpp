@@ -22,16 +22,15 @@ void IMUDownlink::execute()
         if (!sfr::mission::deployed || ((millis() - sfr::imu::door_open_start_time) < constants::imu::door_open_end_time)) {
 
             // Checks if IMU Values are valid
-            if(sfr::imu::gyro_x_value->get_value(&gyro_x) && sfr::imu::gyro_y_value->get_value(&gyro_y) && sfr::imu::gyro_z_value->get_value(&gyro_z))
-            {
+            if (sfr::imu::gyro_x_value->get_value(&gyro_x) && sfr::imu::gyro_y_value->get_value(&gyro_y) && sfr::imu::gyro_z_value->get_value(&gyro_z)) {
                 // Add gyro values to the buffer as rad/s
                 sfr::imu::imu_dlink.push_front((gyro_x + 5) * 25);
                 sfr::imu::imu_dlink.push_front((gyro_y + 5) * 25);
                 sfr::imu::imu_dlink.push_front((gyro_z + 5) * 25);
             }
-            
+
             // Delete older values if the dlink is larger then the maximum bytes dowlinked
-            if (sfr::imu::imu_dlink.size() > constants::imu_downlink::max_IMU_report_length) {
+            if (sfr::imu::imu_dlink.size() > constants::imu_downlink::max_imu_report_length) {
                 // if greater than the max size shrink the buffer.
                 for (int i = 0; i < 3; i++) {
                     sfr::imu::imu_dlink.pop_back();
@@ -41,12 +40,9 @@ void IMUDownlink::execute()
         }
 
         // Determine when it should sample_gyro
-        if (sfr::mission::current_mode->get_id() == sfr::mission::bootImu->get_id() || sfr::mission::current_mode->get_id() == sfr::mission::bootCamera->get_id() 
-            || sfr::mission::current_mode->get_id() == sfr::mission::mandatoryBurns->get_id() || sfr::mission::current_mode->get_id() == sfr::mission::regularBurns->get_id()
-            || sfr::mission::current_mode->get_id() == sfr::mission::photo->get_id()) {
+        if (sfr::mission::current_mode->get_id() == sfr::mission::bootImu->get_id() || sfr::mission::current_mode->get_id() == sfr::mission::bootCamera->get_id() || sfr::mission::current_mode->get_id() == sfr::mission::mandatoryBurns->get_id() || sfr::mission::current_mode->get_id() == sfr::mission::regularBurns->get_id() || sfr::mission::current_mode->get_id() == sfr::mission::photo->get_id()) {
             sfr::imu::sample_gyro = true;
-        }
-        else
+        } else
             sfr::imu::sample_gyro = false;
 
         // Turn IMU off if it has deployed and the time alloted time has finished.
