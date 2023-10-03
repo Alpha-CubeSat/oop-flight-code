@@ -186,7 +186,7 @@ namespace sfr {
     } // namespace rockblock
     namespace imu {
         // OP Codes 2200
-        SFRField<bool> sample_gyro = SFRField<bool>(true, 0x2200);
+        SFRField<bool> sample_gyro = SFRField<bool>(false, 0x2200);
         SFRField<bool> turn_on = SFRField<bool>(false, 0x2201);
         SFRField<bool> turn_off = SFRField<bool>(false, 0x2202);
         SFRField<bool> powered = SFRField<bool>(false, 0x2203);
@@ -197,7 +197,7 @@ namespace sfr {
         SFRField<uint16_t> failed_times = SFRField<uint16_t>(0, 0x2208);
         SFRField<uint16_t> failed_limit = SFRField<uint16_t>(5, 0x2209);
         SFRField<uint16_t> imu_boot_collection_start_time = SFRField<uint16_t>(0, 0x2210);
-        SFRField<uint16_t> door_open_collection_start_time = SFRField<uint16_t>(0, 0x2211);
+        SFRField<uint16_t> door_open_start_time = SFRField<uint16_t>(0, 0x2211);
         SFRField<uint32_t> max_fragments = SFRField<uint32_t>(256, 0x2212);
 
         SensorReading *mag_x_value = new SensorReading(fault_groups::imu_faults::mag_x_value, 1, constants::imu::min_mag, constants::imu::max_mag);

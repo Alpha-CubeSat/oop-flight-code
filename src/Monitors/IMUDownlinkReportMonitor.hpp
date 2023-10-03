@@ -16,7 +16,6 @@ private:
     void create_imu_downlink_report(int fragment_number);
     bool start_timing_deployed = false;
     uint8_t current_sample = 0;
-    bool sample_gyro = false;
     uint8_t fragment_number = 0;
     bool report_ready = false;
     bool report_downlinked = true;
