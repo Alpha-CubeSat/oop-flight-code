@@ -39,12 +39,6 @@ void IMUDownlink::execute()
             prev_deployed = sfr::mission::deployed;
         }
 
-        // Determine when it should sample_gyro
-        if (sfr::mission::current_mode->get_id() == sfr::mission::bootImu->get_id() || sfr::mission::current_mode->get_id() == sfr::mission::bootCamera->get_id() || sfr::mission::current_mode->get_id() == sfr::mission::mandatoryBurns->get_id() || sfr::mission::current_mode->get_id() == sfr::mission::regularBurns->get_id() || sfr::mission::current_mode->get_id() == sfr::mission::photo->get_id()) {
-            sfr::imu::sample_gyro = true;
-        } else
-            sfr::imu::sample_gyro = false;
-
         // Turn IMU off if it has deployed and the time alloted time has finished.
         if (sfr::mission::deployed && (millis() - sfr::imu::door_open_start_time) > constants::imu::door_open_end_time) {
             sfr::imu::sample_gyro = false;

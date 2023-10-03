@@ -208,6 +208,7 @@ void BootIMU::transition_to()
     sfr::acs::off = true;
     sfr::imu::turn_on = true;
     sfr::imu::turn_off = false;
+    sfr::imu::sample_gyro = true;
 }
 void BootIMU::dispatch()
 {
