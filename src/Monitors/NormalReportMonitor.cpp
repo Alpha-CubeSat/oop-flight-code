@@ -64,8 +64,7 @@ void NormalReportMonitor::execute()
         (uint8_t)((fault_groups::hardware_faults::light_val->serialize() << 4) + fault_groups::hardware_faults::button->serialize()),
         (uint8_t)((fault_groups::power_faults::solar_current_average->serialize() << 4) + serialize(eeprom_bools))};
 
-    std::deque<uint8_t> empty_normal_report;
-    std::swap(sfr::rockblock::normal_report, empty_normal_report);
+    sfr::rockblock::normal_report.clear();
 
     for (size_t i = 0; i < report_contents.size(); i++) {
         sfr::rockblock::normal_report.push_back(report_contents[i]);
