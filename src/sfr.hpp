@@ -186,7 +186,6 @@ namespace sfr {
         extern int commas[constants::rockblock::num_commas];
         extern uint32_t camera_max_fragments[99];
         extern std::deque<uint16_t> commands_received;
-        extern std::deque<RawRockblockCommand> raw_commands;
         extern std::deque<RockblockCommand *> processed_commands;
         extern std::deque<uint8_t> downlink_report;
         extern std::deque<uint8_t> normal_report;
