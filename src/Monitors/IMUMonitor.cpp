@@ -25,8 +25,6 @@ void IMUMonitor::IMU_init()
             imu.setupAccel(imu.LSM9DS1_ACCELRANGE_2G);
             imu.setupMag(imu.LSM9DS1_MAGGAIN_4GAUSS);
             imu.setupGyro(imu.LSM9DS1_GYROSCALE_245DPS);
-            // get the start time for the collection of data
-            sfr::imu::sample_gyro = true;
         }
     }
 }

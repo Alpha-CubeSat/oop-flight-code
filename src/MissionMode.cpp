@@ -208,6 +208,7 @@ void BootIMU::transition_to()
     sfr::acs::off = true;
     sfr::imu::turn_on = true;
     sfr::imu::turn_off = false;
+    sfr::imu::sample_gyro = true;
 }
 void BootIMU::dispatch()
 {
@@ -276,7 +277,7 @@ void Photo::transition_to()
 void Photo::dispatch()
 {
     // Only go onto the next state until the IMU finished collecting all of the data
-    if (millis() > sfr::imu::door_open_collection_start_time + constants::imu::after_door_opens_min_run_time) {
+    if (millis() > sfr::imu::door_open_start_time + constants::imu::door_open_end_time) {
         sfr::mission::current_mode = sfr::mission::detumbleSpin;
         sfr::imu::turn_off = true;
     }
