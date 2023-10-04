@@ -14,9 +14,8 @@ public:
     void execute();
 
 private:
-    void create_camera_report(int fragment_number, uint8_t serial_number);
+    void create_camera_report(uint32_t fragment_number, uint8_t serial_number);
     uint32_t fragment_number = 0;
-    uint32_t current_serial = 0;
-    File imgFile;
+    uint8_t current_serial = 0;
 };
 #endif

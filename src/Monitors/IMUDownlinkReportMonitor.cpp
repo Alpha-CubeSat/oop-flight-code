@@ -4,7 +4,7 @@ IMUDownlinkReportMonitor::IMUDownlinkReportMonitor(unsigned int offset) : TimedC
 
 void IMUDownlinkReportMonitor::execute()
 {
-    // Fragment value has reaches a max and can no longer create a report
+    // We have reached the maximum capacity we could have for the fragments
     if (fragment_number >= sfr::imu::max_fragments) {
         sfr::imu::report_ready = false;
     }
@@ -15,6 +15,7 @@ void IMUDownlinkReportMonitor::execute()
         fragment_number++;
     }
 
+    // A fragment request has been made, and there is no report currently queued
     if (sfr::imu::fragment_requested && !sfr::imu::report_ready) {
         create_imu_downlink_report_from_SD(sfr::imu::fragment_number_requested);
     }
@@ -74,13 +75,11 @@ void IMUDownlinkReportMonitor::create_imu_downlink_report_from_SD(uint8_t fragme
     File txtFile = SD.open(filename.c_str(), FILE_READ);
 
     // parse hex stored as chars into actual hex
-    uint8_t tempbuffer[constants::imu::max_gyro_imu_report_size * 2];
+    uint8_t tempbuffer[constants::imu::max_gyro_imu_report_size];
     uint8_t parsedbuffer[constants::imu::max_gyro_imu_report_size];
-    for (size_t i = 0; i < sizeof(tempbuffer); i++) {
-        tempbuffer[i] = txtFile.read();
-    }
 
     txtFile.read(tempbuffer, constants::imu::max_gyro_imu_report_size);
+
     int x = 0;
     for (size_t i = 0; i < sizeof(tempbuffer); i++) {
         int byte_0;
@@ -116,5 +115,7 @@ void IMUDownlinkReportMonitor::create_imu_downlink_report_from_SD(uint8_t fragme
 #ifdef E2E_TESTNG
     Serial.println("IMU report ready");
 #endif
+
     sfr::imu::report_ready = true;
+    sfr::imu::fragment_requested = false;
 }

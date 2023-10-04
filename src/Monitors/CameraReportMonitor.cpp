@@ -20,7 +20,7 @@ void CameraReportMonitor::execute()
 #endif
         create_camera_report(fragment_number, current_serial);
         if (fragment_number == sfr::rockblock::camera_max_fragments[current_serial]) {
-            current_serial += 1;
+            current_serial++;
             fragment_number = 0;
             sfr::camera::report_ready = false;
         } else {
@@ -31,7 +31,7 @@ void CameraReportMonitor::execute()
     }
 }
 
-void CameraReportMonitor::create_camera_report(int fragment_number, uint8_t serial_number)
+void CameraReportMonitor::create_camera_report(uint32_t fragment_number, uint8_t serial_number)
 {
     Serial.println("DEBUG: fragment #: " + String(fragment_number));
     Serial.println("DEBUG: serial_number: " + String(serial_number));
@@ -45,14 +45,12 @@ void CameraReportMonitor::create_camera_report(int fragment_number, uint8_t seri
         filename += "0";
     }
     filename += String(fragment_number) + ".jpg";
-    imgFile = SD.open(filename.c_str(), FILE_READ);
+    File imgFile = SD.open(filename.c_str(), FILE_READ);
 
     // parse hex stored as chars into actual hex
-    uint8_t tempbuffer[constants::camera::content_length * 2];
+    uint8_t tempbuffer[constants::camera::content_length];
     uint8_t parsedbuffer[constants::camera::content_length];
-    for (size_t i = 0; i < sizeof(tempbuffer); i++) {
-        tempbuffer[i] = imgFile.read();
-    }
+
     imgFile.read(tempbuffer, constants::camera::content_length);
     int x = 0;
     for (size_t i = 0; i < sizeof(tempbuffer); i++) {
