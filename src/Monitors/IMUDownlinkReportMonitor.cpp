@@ -29,7 +29,7 @@ void IMUDownlinkReportMonitor::create_imu_downlink_report(uint8_t fragment_numbe
         return;
     }
 
-    // pushed imu report id
+    // Push imu report id
     sfr::rockblock::imu_report.push_back(24);
 
     // Push fragment number to the report
@@ -45,7 +45,7 @@ void IMUDownlinkReportMonitor::create_imu_downlink_report(uint8_t fragment_numbe
     String filename = "imu_frag_" + String(fragment_number) + ".txt";
     File txtFile = SD.open(filename.c_str(), FILE_WRITE);
 
-    // add actual gyro content to imu report
+    // Add actual gyro content to imu report
     for (int i = 0; i < pop_size; i++) {
         uint8_t data = sfr::imu::imu_dlink.back();
         sfr::rockblock::imu_report.push_back(data);
@@ -58,23 +58,23 @@ void IMUDownlinkReportMonitor::create_imu_downlink_report(uint8_t fragment_numbe
 
     txtFile.close();
 
-    // place the endflag at the end of the message
+    // Place the endflag at the end of the message
     if (fragment_number >= (int)(constants::imu_downlink::downlink_FIFO_byte_length / pop_size - 1)) {
         sfr::rockblock::imu_report.push_back(constants::imu_downlink::imu_report_endflag1);
         sfr::rockblock::imu_report.push_back(constants::imu_downlink::imu_report_endflag2);
     }
 
-    // for the next downlink cycle
+    // For the next downlink cycle
     sfr::imu::report_ready = true;
 }
 
 void IMUDownlinkReportMonitor::create_imu_downlink_report_from_SD(uint8_t fragment_number)
 {
-    // open image file and read it for specified image/fragment
+    // Open image file and read it for specified image/fragment
     String filename = "imu_frag_" + String(fragment_number) + ".txt";
     File txtFile = SD.open(filename.c_str(), FILE_READ);
 
-    // parse hex stored as chars into actual hex
+    // Parse hex stored as chars into actual hex
     uint8_t tempbuffer[constants::imu::max_gyro_imu_report_size];
     uint8_t parsedbuffer[constants::imu::max_gyro_imu_report_size];
 
@@ -104,7 +104,7 @@ void IMUDownlinkReportMonitor::create_imu_downlink_report_from_SD(uint8_t fragme
     sfr::rockblock::imu_report.push_back(24);
     sfr::rockblock::imu_report.push_back(fragment_number);
 
-    // add fragment data to imu report
+    // Add fragment data to imu report
     for (int i = 0; i < constants::camera::content_length; i++) {
         sfr::rockblock::imu_report.push_back(parsedbuffer[i]);
     }
