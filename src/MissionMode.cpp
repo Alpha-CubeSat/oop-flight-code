@@ -22,6 +22,7 @@ void Boot::dispatch()
 void AliveSignal::transition_to()
 {
     transmit_mode_settings(false);
+    sfr::rockblock::ready_status = true;
 }
 void AliveSignal::dispatch()
 {
