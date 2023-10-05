@@ -10,6 +10,7 @@ void MissionManager::execute()
     if (first) {
         boot_initialization();
         first = false;
+        sfr::mission::current_mode = sfr::mission::normalInSun;
     }
     sfr::mission::current_phase = modeToPhase(sfr::mission::current_mode);
 
