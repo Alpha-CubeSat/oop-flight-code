@@ -233,7 +233,6 @@ void RockblockControlTask::dispatch_send_message()
     sfr::rockblock::serial.write(checksum >> 8);
     sfr::rockblock::serial.write(checksum & 0xFF);
     sfr::rockblock::serial.write('\r');
-    sfr::rockblock::commands_received.clear();
     transition_to(rockblock_mode_type::await_message);
 }
 
