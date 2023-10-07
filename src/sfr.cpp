@@ -8,7 +8,8 @@ namespace sfr {
     } // namespace stabilization
     namespace boot {
         // OP Codes 1200
-        SFRField<uint32_t> max_time = SFRField<uint32_t>(2 * constants::time::one_hour, 0x1200);
+        // SFRField<uint32_t> max_time = SFRField<uint32_t>(2 * constants::time::one_hour, 0x1200);
+        SFRField<uint32_t> max_time = SFRField<uint32_t>(1 * constants::time::one_minute, 0x1200);
     } // namespace boot
     namespace detumble {
         // OP Codes 1500

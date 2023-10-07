@@ -53,7 +53,7 @@ public:
     void execute() override;
 
 private:
-    float val;
+    uint32_t last_millis;
 };
 
 #endif
