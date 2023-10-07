@@ -547,6 +547,16 @@ RockblockCommand *RockblockControlTask::commandFactory(RawRockblockCommand raw)
         Serial.println("EEPROM Reset Command");
 #endif
         return new EEPROMResetCommand(raw);
+    } else if (op_code == constants::rockblock::opcodes::sfr_field_opcode_camera_fragment_request) {
+#ifdef VERBOSE_RB
+        Serial.println("SFR Camera Fragment Request");
+#endif
+        return new CameraFragmentCommand(raw);
+    } else if (op_code == constants::rockblock::opcodes::sfr_field_opcode_imu_fragment_request) {
+#ifdef VERBOSE_RB
+        Serial.println("IMU Fragment Request");
+#endif
+        return new IMUFragmentCommand(raw);
     } else {
 #ifdef VERBOSE_RB
         Serial.print("Unknown Command with opcode: ");
