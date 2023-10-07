@@ -73,6 +73,10 @@ namespace constants {
             // EEPROM Reset Command
             constexpr uint16_t eeprom_reset_opcode = 0x7777;
 
+            // Fragment Request Commands
+            constexpr uint16_t sfr_field_opcode_camera_fragment_request = 0x8888;
+            constexpr uint16_t sfr_field_opcode_imu_fragment_request = 0x9999;
+
         } // namespace opcodes
     }     // namespace rockblock
     namespace temperature {

@@ -44,8 +44,10 @@ void CameraReportMonitor::create_camera_report(int fragment_number, uint8_t seri
         filename += "0";
     }
     filename += String(fragment_number) + ".jpg";
-    imgFile = SD.open(filename.c_str(), FILE_READ);
-
+#ifdef SIMULATOR
+    SD.begin(254);
+#endif
+    File imgFile = SD.open(filename.c_str(), FILE_READ);
     // parse hex stored as chars into actual hex
     uint8_t tempbuffer[constants::camera::content_length * 2];
     uint8_t parsedbuffer[constants::camera::content_length];

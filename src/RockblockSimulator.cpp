@@ -24,6 +24,7 @@ RockblockSimulator::RockblockSimulator()
     // insert("3333111111111111111100FA");
     // insert("4444111111111111111100FA");
     // insert("5555111111111111111100FA");
+    insert("8888000000000000000000FA");
 }
 
 void RockblockSimulator::begin(uint32_t baud)
