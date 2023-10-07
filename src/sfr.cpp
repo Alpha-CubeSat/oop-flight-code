@@ -162,7 +162,7 @@ namespace sfr {
         SFRField<uint32_t> downlink_period = SFRField<uint32_t>(20 * constants::time::one_minute, constants::time::one_second, 2 * constants::time::one_day, 0x2108);
         SFRField<uint32_t> lp_downlink_period = SFRField<uint32_t>(constants::time::one_hour, constants::time::one_second, 2 * constants::time::one_day, 0x2109);
         // SFRField<uint32_t> transmit_downlink_period = SFRField<uint32_t>(20 * constants::time::one_minute, constants::time::one_second, 2 * constants::time::one_day, 0x2110);
-        SFRField<uint32_t> transmit_downlink_period = SFRField<uint32_t>(0, 2 * constants::time::one_day, 0x2110);
+        SFRField<uint32_t> transmit_downlink_period = SFRField<uint32_t>(0, constants::time::one_second, 2 * constants::time::one_day, 0x2110);
         // END TODO
         SFRField<uint32_t> on_time = SFRField<uint32_t>(30 * constants::time::one_minute, 0, constants::time::one_revolution, 0x2111);
         SFRField<uint32_t> start_time_check_signal = SFRField<uint32_t>(0, 0x2112);

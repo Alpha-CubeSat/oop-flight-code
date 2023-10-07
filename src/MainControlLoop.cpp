@@ -30,11 +30,6 @@ void MainControlLoop::execute()
 {
 #ifdef VERBOSE
     Serial.println("--------------------START LOOP--------------------");
-    // Serial cycle time elapsed
-    uint32_t curr_millis = millis();
-    Serial.print("Cycle time (ms): ");
-    Serial.println(curr_millis - last_millis);
-    last_millis = curr_millis;
 
     // mission mode
     Serial.print("Current Mission Mode: ");
@@ -46,6 +41,15 @@ void MainControlLoop::execute()
 #endif
 
     clock_manager.execute();
+
+#ifdef VERBOSE
+    // Serial cycle time elapsed, place after clock manager for consistency
+    uint32_t curr_millis = millis();
+    Serial.print("Cycle time (ms): ");
+    Serial.println(curr_millis - last_millis);
+    last_millis = curr_millis;
+#endif
+
     mission_manager.execute_on_time();
     burnwire_control_task.execute_on_time();
     rockblock_control_task.execute_on_time();
