@@ -51,6 +51,10 @@ private:
      */
     sys_time_t initial_start_cycling_time;
 
+#ifdef VERBOSE
+    sys_time_t last_cycle_start_time;
+#endif
+
 public:
     /**
      * @brief Convert a control cycle number to the system time

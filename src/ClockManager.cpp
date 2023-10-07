@@ -17,6 +17,13 @@ void ClockManager::execute()
     }
     has_executed = true;
     TimedControlTaskBase::control_cycle_start_time = get_system_time();
+
+#ifdef VERBOSE
+    Serial.print("System Time Diff: ");
+    Serial.println(TimedControlTaskBase::control_cycle_start_time - last_cycle_start_time);
+    last_cycle_start_time = TimedControlTaskBase::control_cycle_start_time;
+#endif
+
     control_cycle_count++;
     sfr::mission::cycle_no++;
     sfr::mission::boot_time_mins = sfr::mission::cycle_no % (constants::time::one_minute / constants::timecontrol::control_cycle_time_ms);

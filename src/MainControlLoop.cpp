@@ -32,7 +32,7 @@ void MainControlLoop::execute()
     Serial.println("--------------------START LOOP--------------------");
     // Serial cycle time elapsed
     uint32_t curr_millis = millis();
-    Serial.print("Cycle time: ");
+    Serial.print("Cycle time (ms): ");
     Serial.println(curr_millis - last_millis);
     last_millis = curr_millis;
 
@@ -40,10 +40,9 @@ void MainControlLoop::execute()
     Serial.print("Current Mission Mode: ");
     Serial.println(sfr::mission::current_mode->get_name().c_str());
 
-    // sfr::temperature::in_sun = true;
+    sfr::temperature::in_sun = true;
 
     Serial.println(sfr::rockblock::mode.get());
-
 #endif
 
     clock_manager.execute();
