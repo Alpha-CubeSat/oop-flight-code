@@ -27,10 +27,14 @@ MainControlLoop::MainControlLoop()
 
 void MainControlLoop::execute()
 {
-    delay(200);
 #ifdef VERBOSE
     Serial.println("--------------------START LOOP--------------------");
-    // TODO print time on here
+    // Serial cycle time elapsed
+    uint32_t last_millis = 0;
+    uint32_t curr_millis = millis();
+    Serial.print("Cycle time");
+    Serial.println(curr_millis - last_millis);
+    last_millis = curr_millis;
 
     // mission mode
     Serial.print("Current Mission Mode: ");
@@ -39,10 +43,6 @@ void MainControlLoop::execute()
     sfr::temperature::in_sun = true;
 
     Serial.println(sfr::rockblock::mode.get());
-
-
-
-    
 
 #endif
 
