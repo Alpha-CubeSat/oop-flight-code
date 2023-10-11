@@ -11,18 +11,20 @@ void boot_initialization()
 
 void clear_sd_card()
 {
-    File root = SD.open("/");
+    if (SD.begin(254)) {
+        File root = SD.open("/");
 
-    if (root) {
-        while (true) {
-            File entry = root.openNextFile();
-            if (!entry) {
-                break;
+        if (root) {
+            while (true) {
+                File entry = root.openNextFile();
+                if (!entry) {
+                    break;
+                }
+                entry.close();
+                SD.remove(entry.name());
             }
-            entry.close();
-            SD.remove(entry.name());
+            root.close();
         }
-        root.close();
     }
 }
 
