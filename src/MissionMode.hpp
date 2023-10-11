@@ -464,6 +464,7 @@ void enter_lp(MissionMode *lp_mode);
 void exit_lp(MissionMode *reg_mode);
 void timed_out(MissionMode *next_mode, float max_time);
 void boot_initialization();
+void clear_sd_card();
 void check_previous(MissionMode *normal_mode, MissionMode *transmit_mode);
 void enter_lp_insun();
 void transmit_mode_settings(bool lp);
