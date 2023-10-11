@@ -5,7 +5,7 @@
 #include "sfr.hpp"
 #include <deque>
 
-class PhotoresistorMonitor 
+class PhotoresistorMonitor
 {
 public:
     PhotoresistorMonitor();

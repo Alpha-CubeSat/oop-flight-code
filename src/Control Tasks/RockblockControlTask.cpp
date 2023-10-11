@@ -114,7 +114,7 @@ void RockblockControlTask::dispatch_send_at()
 
 void RockblockControlTask::dispatch_await_at()
 {
-    if(serial_checks > constants::rockblock::max_serial_checks){
+    if (serial_checks > constants::rockblock::max_serial_checks) {
         transition_to(rockblock_mode_type::send_at);
     }
     if (sfr::rockblock::serial.read() == 'K') {

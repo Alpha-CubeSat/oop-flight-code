@@ -5,7 +5,7 @@
 #include "sfr.hpp"
 #include <EEPROM.h>
 
-class EEPROMControlTask 
+class EEPROMControlTask
 {
 public:
     EEPROMControlTask();

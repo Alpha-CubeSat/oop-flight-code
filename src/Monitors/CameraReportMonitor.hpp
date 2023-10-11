@@ -6,7 +6,7 @@
 #include "sfr.hpp"
 #include <vector>
 
-class CameraReportMonitor 
+class CameraReportMonitor
 {
 public:
     CameraReportMonitor();

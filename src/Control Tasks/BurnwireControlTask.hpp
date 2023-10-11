@@ -5,7 +5,7 @@
 #include "Pins.hpp"
 #include "sfr.hpp"
 
-class BurnwireControlTask 
+class BurnwireControlTask
 {
 public:
     BurnwireControlTask();

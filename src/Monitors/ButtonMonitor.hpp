@@ -4,7 +4,7 @@
 #include "constants.hpp"
 #include "sfr.hpp"
 
-class ButtonMonitor 
+class ButtonMonitor
 {
 public:
     ButtonMonitor();

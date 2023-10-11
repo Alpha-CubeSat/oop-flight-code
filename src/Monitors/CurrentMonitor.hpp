@@ -3,7 +3,7 @@
 
 #include "sfr.hpp"
 
-class CurrentMonitor 
+class CurrentMonitor
 {
 public:
     CurrentMonitor();

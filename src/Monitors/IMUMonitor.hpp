@@ -7,7 +7,7 @@
 #include "Pins.hpp"
 #include "SensorReading.hpp"
 #include "sfr.hpp"
-class IMUMonitor 
+class IMUMonitor
 {
 public:
     IMUMonitor();

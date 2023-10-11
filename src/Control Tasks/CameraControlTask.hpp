@@ -6,7 +6,7 @@
 #include "sfr.hpp"
 #include <SD.h>
 
-class CameraControlTask 
+class CameraControlTask
 {
 
 public:

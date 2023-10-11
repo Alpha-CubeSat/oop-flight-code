@@ -28,8 +28,7 @@ void MainControlLoop::execute()
 {
     // Serial cycle time elapsed, place after clock manager for consistency
     last_millis = millis();
-    // Serial cycle time elapsed, place after clock manager for consistency
-    last_millis = millis();
+
 #ifdef VERBOSE
     Serial.println("--------------------START LOOP--------------------");
 
@@ -181,7 +180,7 @@ void MainControlLoop::execute()
 
     cycle_time = millis() - last_millis;
 
-    if(cycle_time < 100){
+    if (cycle_time < 100) {
         delay(100 - cycle_time);
     }
 

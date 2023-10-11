@@ -21,7 +21,7 @@
 #include "Monitors/RockblockReportMonitor.hpp"
 #include "Monitors/TemperatureMonitor.hpp"
 
-class MainControlLoop 
+class MainControlLoop
 {
 protected:
     BatteryMonitor battery_monitor;

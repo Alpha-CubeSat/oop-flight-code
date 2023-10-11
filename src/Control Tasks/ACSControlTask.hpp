@@ -8,7 +8,7 @@
 #include "constants.hpp"
 #include "sfr.hpp"
 
-class ACSControlTask 
+class ACSControlTask
 {
 public:
     ACSControlTask();

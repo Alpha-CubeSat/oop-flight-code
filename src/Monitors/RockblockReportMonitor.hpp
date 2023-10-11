@@ -3,7 +3,7 @@
 
 #include "sfr.hpp"
 
-class RockblockReportMonitor 
+class RockblockReportMonitor
 {
 public:
     RockblockReportMonitor();

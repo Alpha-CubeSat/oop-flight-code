@@ -5,7 +5,7 @@
 #include <cassert>
 #include <vector>
 
-class IMUDownlinkReportMonitor 
+class IMUDownlinkReportMonitor
 {
 public:
     IMUDownlinkReportMonitor();

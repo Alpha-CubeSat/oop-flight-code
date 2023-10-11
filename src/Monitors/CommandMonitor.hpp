@@ -3,7 +3,7 @@
 
 #include "sfr.hpp"
 
-class CommandMonitor 
+class CommandMonitor
 {
 public:
     CommandMonitor();

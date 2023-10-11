@@ -7,7 +7,7 @@
 #include "sfr.hpp"
 #include <deque>
 
-class MissionManager 
+class MissionManager
 {
 public:
     MissionManager();
