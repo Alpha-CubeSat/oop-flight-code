@@ -61,20 +61,18 @@ void CameraControlTask::execute()
     }
 
     if (jpglen > 0) {
-        filetocreate = "";
+        String filename = "";
         if (sfr::camera::images_written < 10) {
-            filetocreate += "0";
+            filename += "0";
         }
-        filetocreate += String(sfr::camera::images_written);
-        image_lengths[sfr::camera::images_written] = jpglen;
+        filename += String(sfr::camera::images_written);
 
         if (sfr::camera::fragments_written < 10) {
-            filetocreate += "0";
+            filename += "0";
         }
-        filetocreate += String(sfr::camera::fragments_written) + ".jpg";
-        strcpy(filename, filetocreate.c_str());
+        filename += String(sfr::camera::fragments_written) + ".jpg";
 
-        imgFile = SD.open(filename, FILE_WRITE);
+        File imgFile = SD.open(filename.c_str(), FILE_WRITE);
 
         uint8_t *buffer;
         uint8_t bytesToRead = min(constants::camera::content_length, jpglen);

@@ -10,12 +10,7 @@ void CameraFragmentCommand::execute()
 
 bool CameraFragmentCommand::isValid()
 {
-    for (int mission_mode : sfr::mission::mode_history) {
-        //if (mission_mode == 22) {
-            return true;
-        //}
-    }
-    return false;
+    return sfr::mission::deployed;
 }
 
 void IMUFragmentCommand::execute()
@@ -26,10 +21,5 @@ void IMUFragmentCommand::execute()
 
 bool IMUFragmentCommand::isValid()
 {
-    for (int mission_mode : sfr::mission::mode_history) {
-        if (mission_mode == 22) {
-            return true;
-        }
-    }
-    return false;
+    return sfr::mission::deployed;
 }
