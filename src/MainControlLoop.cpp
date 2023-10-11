@@ -145,7 +145,7 @@ void MainControlLoop::execute()
         Serial.println("RockBLOCK NOT sleeping");
     }
 
-    Serial.print(" RockBLOCK Mode: ");
+    Serial.print("RockBLOCK Mode: ");
     Serial.println(sfr::rockblock::mode.get());
 
     // EEPROM
