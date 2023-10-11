@@ -1,26 +1,24 @@
 #include "MainControlLoop.hpp"
 
 MainControlLoop::MainControlLoop()
-    : ControlTask<void>(),
-      clock_manager(constants::timecontrol::control_cycle_time),
-      battery_monitor(constants::timecontrol::battery_monitor_offset),
-      button_monitor(constants::timecontrol::button_monitor_offset),
-      camera_report_monitor(constants::timecontrol::camera_report_monitor_offset),
-      command_monitor(constants::timecontrol::command_monitor_offset),
-      current_monitor(constants::timecontrol::current_monitor_offset),
-      normal_report_monitor(constants::timecontrol::normal_report_monitor_offset),
-      imu_monitor(constants::timecontrol::imu_monitor_offset),
-      imudownlink_report_monitor(constants::timecontrol::imudownlink_report_monitor_offset),
-      imu_downlink(constants::timecontrol::imudownlink_report_monitor_offset),
-      photoresistor_monitor(constants::timecontrol::photoresistor_monitor_offset),
-      rockblock_report_monitor(constants::timecontrol::rockblock_report_monitor_offset),
-      temperature_monitor(constants::timecontrol::temperature_monitor_offset),
-      burnwire_control_task(constants::timecontrol::burnwire_control_task_offset),
-      camera_control_task(constants::timecontrol::camera_control_task_offset),
-      rockblock_control_task(constants::timecontrol::rockblock_control_task_offset),
-      eeprom_control_task(constants::timecontrol::eeprom_control_task_offset),
-      mission_manager(constants::timecontrol::mission_manager_offset),
-      acs_control_task(constants::timecontrol::acs_monitor_offset)
+    : battery_monitor(),
+      button_monitor(),
+      camera_report_monitor(),
+      command_monitor(),
+      current_monitor(),
+      normal_report_monitor(),
+      imu_monitor(),
+      imudownlink_report_monitor(),
+      imu_downlink(),
+      photoresistor_monitor(),
+      rockblock_report_monitor(),
+      temperature_monitor(),
+      burnwire_control_task(),
+      camera_control_task(),
+      rockblock_control_task(),
+      eeprom_control_task(),
+      mission_manager(),
+      acs_control_task()
 {
     delay(1000);
     last_millis = 0;
@@ -28,8 +26,12 @@ MainControlLoop::MainControlLoop()
 
 void MainControlLoop::execute()
 {
+
 #ifdef VERBOSE
     Serial.println("--------------------START LOOP--------------------");
+
+    // Serial cycle time elapsed, place after clock manager for consistency
+    last_millis = millis();
 
     // mission mode
     Serial.print("Current Mission Mode: ");
@@ -40,41 +42,39 @@ void MainControlLoop::execute()
     Serial.println(sfr::rockblock::mode.get());
 #endif
 
-    clock_manager.execute();
+    mission_manager.execute();
+    burnwire_control_task.execute();
+    rockblock_control_task.execute();
+    command_monitor.execute();
+
+    camera_control_task.execute();
+    acs_control_task.execute();
+
+    imu_monitor.execute();
+    battery_monitor.execute();
+    button_monitor.execute();
+    current_monitor.execute();
+    photoresistor_monitor.execute();
+    rockblock_report_monitor.execute();
+    temperature_monitor.execute();
+
+    imu_downlink.execute();
+
+    normal_report_monitor.execute();
+    camera_report_monitor.execute();
+    imudownlink_report_monitor.execute();
+
+    eeprom_control_task.execute();
+
+    cycle_time = millis() - last_millis;
+
+    if(cycle_time < 100){
+        delay(100 - cycle_time);
+    }
 
 #ifdef VERBOSE
-    // Serial cycle time elapsed, place after clock manager for consistency
-    uint32_t curr_millis = millis();
     Serial.print("Cycle time (ms): ");
-    Serial.println(curr_millis - last_millis);
-    last_millis = curr_millis;
-#endif
-
-    mission_manager.execute_on_time();
-    burnwire_control_task.execute_on_time();
-    rockblock_control_task.execute_on_time();
-    command_monitor.execute_on_time();
-
-    camera_control_task.execute_on_time();
-    acs_control_task.execute_on_time();
-
-    imu_monitor.execute_on_time();
-    battery_monitor.execute_on_time();
-    button_monitor.execute_on_time();
-    current_monitor.execute_on_time();
-    photoresistor_monitor.execute_on_time();
-    rockblock_report_monitor.execute_on_time();
-    temperature_monitor.execute_on_time();
-
-    imu_downlink.execute_on_time();
-
-    normal_report_monitor.execute_on_time();
-    camera_report_monitor.execute_on_time();
-    imudownlink_report_monitor.execute_on_time();
-
-    eeprom_control_task.execute_on_time();
-
-#ifdef VERBOSE
+    Serial.println((millis() - last_millis));
     Serial.println("--------------------END LOOP--------------------");
     Serial.println(" ");
 #endif

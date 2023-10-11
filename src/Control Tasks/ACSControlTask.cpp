@@ -1,7 +1,6 @@
 #include "ACSControlTask.hpp"
 
-ACSControlTask::ACSControlTask(unsigned int offset)
-    : TimedControlTask<void>(offset)
+ACSControlTask::ACSControlTask()
 {
 }
 

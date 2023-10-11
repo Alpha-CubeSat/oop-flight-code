@@ -1,8 +1,7 @@
 #include "RockblockReportMonitor.hpp"
 #include "sfr.hpp"
 
-RockblockReportMonitor::RockblockReportMonitor(unsigned int offset)
-    : TimedControlTask<void>(offset)
+RockblockReportMonitor::RockblockReportMonitor()
 {
 }
 

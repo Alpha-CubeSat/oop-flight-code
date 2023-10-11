@@ -1,17 +1,16 @@
 #ifndef ROCKBLOCK_CONTROL_TASK_HPP_
 #define ROCKBLOCK_CONTROL_TASK_HPP_
 
-#include "Control Tasks/TimedControlTask.hpp"
 #include "Modes/rockblock_mode_type.enum"
 #include "Pins.hpp"
 #include "RockblockCommand.hpp"
 #include "RockblockSimulator.hpp"
 #include "sfr.hpp"
 
-class RockblockControlTask : public TimedControlTask<void>
+class RockblockControlTask
 {
 public:
-    RockblockControlTask(unsigned int offset);
+    RockblockControlTask();
     void execute();
 
 private:
@@ -42,6 +41,7 @@ private:
     RockblockCommand *commandFactory(RawRockblockCommand raw);
     uint32_t conseq_reads = 0;
     uint32_t start_time_check_signal = 0;
+    uint32_t serial_checks = 0;
 };
 
 #endif

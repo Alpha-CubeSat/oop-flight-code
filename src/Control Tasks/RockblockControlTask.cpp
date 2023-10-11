@@ -2,8 +2,7 @@
 #include "BurnwireCommands.hpp"
 #include "EEPROMResetCommand.hpp"
 
-RockblockControlTask::RockblockControlTask(unsigned int offset)
-    : TimedControlTask<void>(offset)
+RockblockControlTask::RockblockControlTask()
 {
     sfr::rockblock::serial.begin(constants::rockblock::baud);
 }
@@ -105,6 +104,7 @@ void RockblockControlTask::dispatch_standby()
 void RockblockControlTask::dispatch_send_at()
 {
     conseq_reads = 0;
+    serial_checks = 0;
 #ifdef VERBOSE_RB
     Serial.println("SENT: ATr");
 #endif
@@ -114,6 +114,9 @@ void RockblockControlTask::dispatch_send_at()
 
 void RockblockControlTask::dispatch_await_at()
 {
+    if(serial_checks > constants::rockblock::max_serial_checks){
+        transition_to(rockblock_mode_type::send_at);
+    }
     if (sfr::rockblock::serial.read() == 'K') {
 #ifdef VERBOSE_RB
         Serial.println("SAT INFO: ok");
@@ -121,6 +124,7 @@ void RockblockControlTask::dispatch_await_at()
         transition_to(rockblock_mode_type::send_signal_strength);
         sfr::rockblock::start_time_check_signal = millis();
     }
+    serial_checks++;
 }
 
 void RockblockControlTask::dispatch_send_signal_strength()

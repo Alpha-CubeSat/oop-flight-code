@@ -1,7 +1,6 @@
 #include "MissionManager.hpp"
 
-MissionManager::MissionManager(unsigned int offset)
-    : TimedControlTask<void>(offset)
+MissionManager::MissionManager()
 {
 }
 

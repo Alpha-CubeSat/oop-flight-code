@@ -1,7 +1,6 @@
 #ifndef MAIN_CONTROL_LOOP_HPP_
 #define MAIN_CONTROL_LOOP_HPP_
 
-#include "ClockManager.hpp"
 #include "Control Tasks/ACSControlTask.hpp"
 #include "Control Tasks/BurnwireControlTask.hpp"
 #include "Control Tasks/CameraControlTask.hpp"
@@ -22,11 +21,9 @@
 #include "Monitors/RockblockReportMonitor.hpp"
 #include "Monitors/TemperatureMonitor.hpp"
 
-class MainControlLoop : ControlTask<void>
+class MainControlLoop 
 {
 protected:
-    ClockManager clock_manager;
-
     BatteryMonitor battery_monitor;
     ButtonMonitor button_monitor;
     CameraReportMonitor camera_report_monitor;
@@ -50,10 +47,11 @@ protected:
 
 public:
     MainControlLoop();
-    void execute() override;
+    void execute();
 
 private:
     uint32_t last_millis;
+    uint32_t cycle_time;
 };
 
 #endif

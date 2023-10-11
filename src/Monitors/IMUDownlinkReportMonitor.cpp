@@ -1,6 +1,6 @@
 #include "IMUDownlinkReportMonitor.hpp"
 
-IMUDownlinkReportMonitor::IMUDownlinkReportMonitor(unsigned int offset) : TimedControlTask<void>(offset) {}
+IMUDownlinkReportMonitor::IMUDownlinkReportMonitor() {}
 
 void IMUDownlinkReportMonitor::execute()
 {

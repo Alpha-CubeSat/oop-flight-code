@@ -1,17 +1,16 @@
 #ifndef MISSION_MANAGER_HPP_
 #define MISSION_MANAGER_HPP_
 
-#include "Control Tasks/TimedControlTask.hpp"
 #include "MissionMode.hpp"
 #include "Phase.hpp"
 #include "constants.hpp"
 #include "sfr.hpp"
 #include <deque>
 
-class MissionManager : public TimedControlTask<void>
+class MissionManager 
 {
 public:
-    MissionManager(unsigned int offset);
+    MissionManager();
     Phase *modeToPhase(MissionMode *mission);
     void execute();
 

@@ -2,16 +2,15 @@
 #define CAMERA_CONTROL_TASK_HPP_
 
 #include "Arduino.h"
-#include "Control Tasks/TimedControlTask.hpp"
 #include "Pins.hpp"
 #include "sfr.hpp"
 #include <SD.h>
 
-class CameraControlTask : public TimedControlTask<void>
+class CameraControlTask 
 {
 
 public:
-    CameraControlTask(unsigned int offset);
+    CameraControlTask();
     void execute();
     Adafruit_VC0706 adaCam;
     File imgFile;

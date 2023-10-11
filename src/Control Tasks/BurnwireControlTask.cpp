@@ -1,7 +1,6 @@
 #include "BurnwireControlTask.hpp"
 
-BurnwireControlTask::BurnwireControlTask(unsigned int offset)
-    : TimedControlTask<void>(offset)
+BurnwireControlTask::BurnwireControlTask()
 {
 }
 

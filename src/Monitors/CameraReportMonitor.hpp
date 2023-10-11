@@ -2,15 +2,14 @@
 #define CAMERA_REPORT_MONITOR_HPP_
 
 #include "Control Tasks/RockblockControlTask.hpp"
-#include "Control Tasks/TimedControlTask.hpp"
 #include "SD.h"
 #include "sfr.hpp"
 #include <vector>
 
-class CameraReportMonitor : public TimedControlTask<void>
+class CameraReportMonitor 
 {
 public:
-    CameraReportMonitor(unsigned int offset);
+    CameraReportMonitor();
     void execute();
 
 private:

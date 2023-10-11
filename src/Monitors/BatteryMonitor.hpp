@@ -1,13 +1,12 @@
 #ifndef BATTERY_MONITOR_HPP_
 #define BATTERY_MONITOR_HPP_
 
-#include "Control Tasks/TimedControlTask.hpp"
 #include "sfr.hpp"
 
-class BatteryMonitor : public TimedControlTask<void>
+class BatteryMonitor
 {
 public:
-    BatteryMonitor(unsigned int offset);
+    BatteryMonitor();
     void execute();
 
 private:

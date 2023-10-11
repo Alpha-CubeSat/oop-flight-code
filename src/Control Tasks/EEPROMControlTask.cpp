@@ -1,7 +1,6 @@
 #include "EEPROMControlTask.hpp"
 
-EEPROMControlTask::EEPROMControlTask(unsigned int offset)
-    : TimedControlTask<void>(offset)
+EEPROMControlTask::EEPROMControlTask()
 {
     fast_cycle_counter = 0;
     slow_cycle_counter = 0;

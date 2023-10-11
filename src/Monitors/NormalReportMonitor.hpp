@@ -1,16 +1,15 @@
 #ifndef NORMAL_REPORT_MONITOR_HPP_
 #define NORMAL_REPORT_MONITOR_HPP_
 
-#include "Control Tasks/TimedControlTask.hpp"
 #include "Faults.hpp"
 #include "SFRField.hpp"
 #include "SensorReading.hpp"
 #include <queue>
 
-class NormalReportMonitor : public TimedControlTask<void>
+class NormalReportMonitor
 {
 public:
-    NormalReportMonitor(unsigned int offset);
+    NormalReportMonitor();
     void execute();
 
 private:
