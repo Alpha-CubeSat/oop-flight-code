@@ -180,8 +180,8 @@ void MainControlLoop::execute()
 
     cycle_time = millis() - last_millis;
 
-    if (cycle_time < 100) {
-        delay(100 - cycle_time);
+    if (cycle_time < constants::timecontrol::control_cycle_time_ms) {
+        delay(constants::timecontrol::control_cycle_time_ms - cycle_time);
     }
 
 #ifdef VERBOSE
