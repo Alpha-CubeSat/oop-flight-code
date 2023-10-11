@@ -52,6 +52,7 @@ public:
 private:
     uint32_t last_millis;
     uint32_t cycle_time;
+    float val;
 };
 
 #endif

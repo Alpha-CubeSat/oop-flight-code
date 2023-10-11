@@ -161,8 +161,7 @@ namespace sfr {
         // TODO actual default values
         SFRField<uint32_t> downlink_period = SFRField<uint32_t>(20 * constants::time::one_minute, constants::time::one_second, 2 * constants::time::one_day, 0x2108);
         SFRField<uint32_t> lp_downlink_period = SFRField<uint32_t>(constants::time::one_hour, constants::time::one_second, 2 * constants::time::one_day, 0x2109);
-        // SFRField<uint32_t> transmit_downlink_period = SFRField<uint32_t>(20 * constants::time::one_minute, constants::time::one_second, 2 * constants::time::one_day, 0x2110);
-        SFRField<uint32_t> transmit_downlink_period = SFRField<uint32_t>(0, constants::time::one_second, 2 * constants::time::one_day, 0x2110);
+        SFRField<uint32_t> transmit_downlink_period = SFRField<uint32_t>(20 * constants::time::one_minute, constants::time::one_second, 2 * constants::time::one_day, 0x2110);
         // END TODO
         SFRField<uint32_t> on_time = SFRField<uint32_t>(30 * constants::time::one_minute, 0, constants::time::one_revolution, 0x2111);
         SFRField<uint32_t> start_time_check_signal = SFRField<uint32_t>(0, 0x2112);
@@ -235,8 +234,7 @@ namespace sfr {
         SFRField<uint8_t> simple_mag = SFRField<uint8_t>((uint8_t)mag_type::z, 0x2502);
         SFRField<uint32_t> simple_current = SFRField<uint32_t>(0, 0x2503);
         // TODO actual default value
-        // SFRField<uint32_t> on_time = SFRField<uint32_t>(10 * constants::time::one_minute, 0, constants::time::one_revolution, 0x2504);
-        SFRField<uint32_t> on_time = SFRField<uint32_t>(0, 0, constants::time::one_revolution, 0x2504);
+        SFRField<uint32_t> on_time = SFRField<uint32_t>(10 * constants::time::one_minute, 0, constants::time::one_revolution, 0x2504);
         SFRField<uint32_t> Id_index = SFRField<uint32_t>(0, 0, (sizeof(constants::acs::Id_values) / sizeof(constants::acs::Id_values[0])) - 1, 0x2505);
         SFRField<uint32_t> Kd_index = SFRField<uint32_t>(0, 0, (sizeof(constants::acs::Kd_values) / sizeof(constants::acs::Kd_values[0])) - 1, 0x2506);
         SFRField<uint32_t> Kp_index = SFRField<uint32_t>(0, 0, (sizeof(constants::acs::Kp_values) / sizeof(constants::acs::Kp_values[0])) - 1, 0x2507);
