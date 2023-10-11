@@ -13,13 +13,10 @@ void clear_sd_card()
 {
     File root = SD.open("/");
 
-    if (root)
-    {
-        while (true)
-        {
+    if (root) {
+        while (true) {
             File entry = root.openNextFile();
-            if (!entry)
-            {
+            if (!entry) {
                 break;
             }
             entry.close();
