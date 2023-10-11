@@ -23,37 +23,42 @@ void setup()
 
     // Create files if specified
     if (create_files) {
-        Serial.println("Creating files");
 
         for (int i = 0; i < NUM_FILES; i++) {
             std::string filename = "file" + std::to_string(i) + ".txt";
             File file = SD.open(filename.c_str(), FILE_WRITE);
+            Serial.print("Creating ");
+            Serial.println(filename.c_str());
             file.close();
         }
     }
 
     // Delete files
-    Serial.println("Deleting all files");
 
     File root = SD.open("/");
 
     if (root) {
         while (true) {
             File entry = root.openNextFile();
+            Serial.print("Deleting ");
+            Serial.println(entry.name());
+
             if (!entry) {
                 break;
             }
-            entry.close();
+            // entry.close();
 
-            Serial.print("Clearing ");
-            Serial.println(entry.name());
-            SD.remove(entry.name());
+            if (!SD.remove(entry.name())) {
+                Serial.print("Deleting ");
+                Serial.print(entry.name());
+                Serial.println(" unsuccessful");
+            }
         }
         root.close();
     } else {
         Serial.println("Error: Opening root failed");
     }
-    Serial.println("All files cleared");
+    Serial.println("All files deleted");
 }
 
 void loop()
