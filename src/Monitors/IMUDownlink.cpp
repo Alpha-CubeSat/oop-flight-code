@@ -1,7 +1,6 @@
 #include "IMUDownlink.hpp"
 
-IMUDownlink::IMUDownlink(unsigned int offset)
-    : TimedControlTask<void>(offset)
+IMUDownlink::IMUDownlink()
 {
 }
 

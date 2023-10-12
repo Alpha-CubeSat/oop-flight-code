@@ -1,7 +1,6 @@
 #include "BatteryMonitor.hpp"
 
-BatteryMonitor::BatteryMonitor(unsigned int offset)
-    : TimedControlTask<void>(offset)
+BatteryMonitor::BatteryMonitor()
 {
     pinMode(constants::battery::voltage_value_pin, OUTPUT);
 }

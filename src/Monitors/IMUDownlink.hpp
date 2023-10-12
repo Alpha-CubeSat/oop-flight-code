@@ -2,13 +2,12 @@
 #define IMU_DOWNLINK_HPP_
 
 #include "Adafruit_LSM9DS1.h"
-#include "Control Tasks/TimedControlTask.hpp"
 #include "sfr.hpp"
 
-class IMUDownlink : public TimedControlTask<void>
+class IMUDownlink
 {
 public:
-    IMUDownlink(unsigned int offset);
+    IMUDownlink();
     void execute();
 
 private:

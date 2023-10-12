@@ -34,6 +34,7 @@ namespace constants {
         constexpr int sleep_pin = 19;
         constexpr int min_sleep_period = 2 * time::one_minute;
         constexpr int max_check_signal_time = time::one_minute;
+        constexpr int max_serial_checks = 50;
 
         constexpr int baud = 19200;
         constexpr size_t buffer_size = 63;
@@ -262,33 +263,6 @@ namespace constants {
         // control_cycle_time is the value actually used for timing. The
         // other constants are just informational.
         constexpr unsigned int control_cycle_time_ms = 100;
-        constexpr unsigned int control_cycle_time_us = control_cycle_time_ms * 1000;
-        constexpr unsigned int control_cycle_time = control_cycle_time_us;
-
-        // number being added is the time length of the previous function
-        // battery monitor takes max 60 us, so button monitor will start 60us after
-        static constexpr unsigned int acs_monitor_offset = 0;     // time starts at 0
-        static constexpr unsigned int battery_monitor_offset = 0; // to be determined
-        static constexpr unsigned int button_monitor_offset = 0;
-        static constexpr unsigned int camera_report_monitor_offset = 0;
-        static constexpr unsigned int command_monitor_offset = 0;
-        static constexpr unsigned int current_monitor_offset = 0;
-        static constexpr unsigned int fault_monitor_offset = 0;
-        static constexpr unsigned int imu_monitor_offset = 0;
-        static constexpr unsigned int imu_downlink_offset = 0;
-        static constexpr unsigned int normal_report_monitor_offset = 0;
-        static constexpr unsigned int imudownlink_report_monitor_offset = 0;
-        static constexpr unsigned int photoresistor_monitor_offset = 0;
-        static constexpr unsigned int temperature_monitor_offset = 0;
-
-        static constexpr unsigned int acs_control_task_offset = 0;
-        static constexpr unsigned int burnwire_control_task_offset = 0;
-        static constexpr unsigned int camera_control_task_offset = 0;
-        static constexpr unsigned int rockblock_control_task_offset = 0;
-        static constexpr unsigned int rockblock_report_monitor_offset = 0;
-        static constexpr unsigned int temperature_control_task_offset = 0;
-        static constexpr unsigned int eeprom_control_task_offset = 0;
-        static constexpr unsigned int mission_manager_offset = 0;
     } // namespace timecontrol
     namespace eeprom {
         // Byte locations of the EEPROM blue moon data

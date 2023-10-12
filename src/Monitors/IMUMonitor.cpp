@@ -4,8 +4,7 @@
 // adapt to new initialization process
 // if in case 2 for two minutes, it has failed initialization
 
-IMUMonitor::IMUMonitor(unsigned int offset)
-    : TimedControlTask<void>(offset)
+IMUMonitor::IMUMonitor()
 {
     imu = Adafruit_LSM9DS1(constants::imu::CSAG, constants::imu::CSM);
 }

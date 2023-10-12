@@ -1,7 +1,6 @@
 #ifndef ACS_CONTROL_TASK_HPP_
 #define ACS_CONTROL_TASK_HPP_
 
-#include "Control Tasks/TimedControlTask.hpp"
 #include "Modes/acs_mode_type.enum"
 #include "Modes/mag_type.enum"
 #include "Plant.h"
@@ -9,10 +8,10 @@
 #include "constants.hpp"
 #include "sfr.hpp"
 
-class ACSControlTask : public TimedControlTask<void>
+class ACSControlTask
 {
 public:
-    ACSControlTask(unsigned int offset);
+    ACSControlTask();
     StarshotACS starshotObj;
     Plant plantObj;
     void execute();

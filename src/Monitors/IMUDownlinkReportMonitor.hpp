@@ -1,15 +1,14 @@
 #ifndef IMU_DOWNLINK_REPORT_MONITOR_HPP_
 #define IMU_DOWNLINK_REPORT_MONITOR_HPP_
 
-#include "Control Tasks/TimedControlTask.hpp"
 #include "sfr.hpp"
 #include <cassert>
 #include <vector>
 
-class IMUDownlinkReportMonitor : public TimedControlTask<void>
+class IMUDownlinkReportMonitor
 {
 public:
-    IMUDownlinkReportMonitor(unsigned int offset);
+    IMUDownlinkReportMonitor();
     void execute();
 
 private:

@@ -1,7 +1,6 @@
 #include "TemperatureMonitor.hpp"
 
-TemperatureMonitor::TemperatureMonitor(unsigned int offset)
-    : TimedControlTask<void>(offset)
+TemperatureMonitor::TemperatureMonitor()
 {
     pinMode(constants::temperature::pin, INPUT);
 }

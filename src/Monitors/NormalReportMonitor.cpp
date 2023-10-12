@@ -2,8 +2,7 @@
 #include "Faults.hpp"
 #include "sfr.hpp"
 
-NormalReportMonitor::NormalReportMonitor(unsigned int offset)
-    : TimedControlTask<void>(offset)
+NormalReportMonitor::NormalReportMonitor()
 {
 }
 

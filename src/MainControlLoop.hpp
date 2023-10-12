@@ -22,11 +22,9 @@
 #include "Monitors/RockblockReportMonitor.hpp"
 #include "Monitors/TemperatureMonitor.hpp"
 
-class MainControlLoop : ControlTask<void>
+class MainControlLoop
 {
 protected:
-    ClockManager clock_manager;
-
     BatteryMonitor battery_monitor;
     ButtonMonitor button_monitor;
     CameraReportMonitor camera_report_monitor;
@@ -47,10 +45,11 @@ protected:
     EEPROMControlTask eeprom_control_task;
 
     MissionManager mission_manager;
+    ClockManager clock_manager;
 
 public:
     MainControlLoop();
-    void execute() override;
+    void execute();
 
 private:
     float val;

@@ -1,7 +1,6 @@
 #include "ButtonMonitor.hpp"
 
-ButtonMonitor::ButtonMonitor(unsigned int offset)
-    : TimedControlTask<void>(offset)
+ButtonMonitor::ButtonMonitor()
 {
 }
 

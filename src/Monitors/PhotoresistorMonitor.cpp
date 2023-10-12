@@ -1,7 +1,6 @@
 #include "PhotoresistorMonitor.hpp"
 
-PhotoresistorMonitor::PhotoresistorMonitor(unsigned int offset)
-    : TimedControlTask<void>(offset)
+PhotoresistorMonitor::PhotoresistorMonitor()
 {
 }
 
