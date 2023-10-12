@@ -1,6 +1,7 @@
 #ifndef MAIN_CONTROL_LOOP_HPP_
 #define MAIN_CONTROL_LOOP_HPP_
 
+#include "ClockManager.hpp"
 #include "Control Tasks/ACSControlTask.hpp"
 #include "Control Tasks/BurnwireControlTask.hpp"
 #include "Control Tasks/CameraControlTask.hpp"
@@ -8,7 +9,6 @@
 #include "Control Tasks/RockblockControlTask.hpp"
 #include "Faults.hpp"
 #include "MissionManager.hpp"
-#include "ClockManager.hpp"
 #include "Monitors/BatteryMonitor.hpp"
 #include "Monitors/ButtonMonitor.hpp"
 #include "Monitors/CameraReportMonitor.hpp"

@@ -15,4 +15,3 @@ void ClockManager::execute()
         delay(constants::timecontrol::control_cycle_time_ms - cycle_time);
     }
 }
-
