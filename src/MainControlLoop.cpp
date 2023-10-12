@@ -18,17 +18,14 @@ MainControlLoop::MainControlLoop()
       rockblock_control_task(),
       eeprom_control_task(),
       mission_manager(),
-      acs_control_task()
+      acs_control_task(),
+      clock_manager()
 {
     delay(1000);
-    last_millis = 0;
 }
 
 void MainControlLoop::execute()
 {
-    // Serial cycle time elapsed, place after clock manager for consistency
-    last_millis = millis();
-
 #ifdef VERBOSE
     Serial.println("--------------------START LOOP--------------------");
 
@@ -153,6 +150,7 @@ void MainControlLoop::execute()
     Serial.println(sfr::eeprom::time_alive);
 
 #endif
+    sfr::mission::cycle_start = millis();
 
     mission_manager.execute();
     burnwire_control_task.execute();
@@ -178,15 +176,12 @@ void MainControlLoop::execute()
 
     eeprom_control_task.execute();
 
-    cycle_time = millis() - last_millis;
-
-    if (cycle_time < constants::timecontrol::control_cycle_time_ms) {
-        delay(constants::timecontrol::control_cycle_time_ms - cycle_time);
-    }
+    // Clock Manager MUST run last
+    clock_manager.execute();
 
 #ifdef VERBOSE
     Serial.print("Cycle time (ms): ");
-    Serial.println((millis() - last_millis));
+    Serial.println(millis() - sfr::mission::cycle_start);
     Serial.println("--------------------END LOOP--------------------");
     Serial.println(" ");
 #endif

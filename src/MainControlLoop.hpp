@@ -8,6 +8,7 @@
 #include "Control Tasks/RockblockControlTask.hpp"
 #include "Faults.hpp"
 #include "MissionManager.hpp"
+#include "ClockManager.hpp"
 #include "Monitors/BatteryMonitor.hpp"
 #include "Monitors/ButtonMonitor.hpp"
 #include "Monitors/CameraReportMonitor.hpp"
@@ -44,14 +45,13 @@ protected:
     EEPROMControlTask eeprom_control_task;
 
     MissionManager mission_manager;
+    ClockManager clock_manager;
 
 public:
     MainControlLoop();
     void execute();
 
 private:
-    uint32_t last_millis;
-    uint32_t cycle_time;
     float val;
 };
 
