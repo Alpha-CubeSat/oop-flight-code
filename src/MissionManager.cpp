@@ -9,7 +9,6 @@ void MissionManager::execute()
 {
     if (first) {
         boot_initialization();
-        clear_sd_card();
         first = false;
     }
     sfr::mission::current_phase = modeToPhase(sfr::mission::current_mode);

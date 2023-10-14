@@ -1,31 +1,11 @@
 #include "MissionMode.hpp"
 #include "sfr.hpp"
-#include <SD.h>
 
 void boot_initialization()
 {
     sfr::rockblock::sleep_mode = true;
     sfr::acs::off = true;
     sfr::imu::turn_off = true;
-}
-
-void clear_sd_card()
-{
-    if (SD.begin(254)) {
-        File root = SD.open("/");
-
-        if (root) {
-            while (true) {
-                File entry = root.openNextFile();
-                if (!entry) {
-                    break;
-                }
-                entry.close();
-                SD.remove(entry.name());
-            }
-            root.close();
-        }
-    }
 }
 
 void Boot::transition_to()
