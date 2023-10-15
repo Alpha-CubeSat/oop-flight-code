@@ -26,6 +26,26 @@ MainControlLoop::MainControlLoop()
 
 void MainControlLoop::execute()
 {
+#ifdef FRAGMENT
+    Serial.println("--------------------START LOOP--------------------");
+    // TODO print time on here
+
+    // mission mode
+    Serial.print("Current Mission Mode: ");
+    Serial.println(sfr::mission::current_mode->get_name().c_str());
+
+    // RockBLOCK
+    if (sfr::rockblock::sleep_mode) {
+        Serial.println("RockBLOCK sleeping");
+    } else {
+        Serial.println("RockBLOCK NOT sleeping");
+    }
+
+    // EEPROM
+    Serial.print("Total time alive (across all boots): ");
+    Serial.println(sfr::eeprom::time_alive);
+#endif
+
 #ifdef VERBOSE
     Serial.println("--------------------START LOOP--------------------");
 
