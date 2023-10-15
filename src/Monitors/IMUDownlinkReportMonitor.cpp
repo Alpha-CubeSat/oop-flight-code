@@ -11,12 +11,20 @@ void IMUDownlinkReportMonitor::execute()
 
     // Create an IMU report when ever the report is ready
     if (fragment_number < sfr::imu::max_fragments && sfr::rockblock::imu_report.empty() && sfr::imu::report_written) {
+    #ifdef FRAGMENT
+        Serial.print("Writing fragment ");
+        Serial.println(fragment_number);
+    #endif
         create_imu_downlink_report(fragment_number);
         fragment_number++;
     }
 
     // A fragment request has been made, and there is no report currently queued
     if (sfr::imu::fragment_requested && !sfr::imu::report_ready) {
+    #ifdef FRAGMENT
+        Serial.print("Requested IMU fragmet ");
+        Serial.println(sfr::imu::fragment_number_requested);
+    #endif
         create_imu_downlink_report_from_SD(sfr::imu::fragment_number_requested);
     }
 }

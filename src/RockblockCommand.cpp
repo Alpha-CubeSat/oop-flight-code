@@ -15,8 +15,8 @@ bool CameraFragmentCommand::isValid()
 
 void IMUFragmentCommand::execute()
 {
-    // sfr::imu::fragment_requested = true;
-    // sfr::imu::fragment_number_requested = f_arg_1;
+    sfr::imu::fragment_requested = true;
+    sfr::imu::fragment_number_requested = f_arg_1;
 }
 
 bool IMUFragmentCommand::isValid()

@@ -26,10 +26,10 @@ RockblockSimulator::RockblockSimulator()
     // insert("5555111111111111111100FA");
 
     // Request camera fragment
-    insert("8888000000000000000000FA");
+    // insert("8888000000000000000000FA");
 
     // Request IMU fragment
-    insert("9999000000000000000000FA");
+    // insert("9999000000000000000000FA");
 }
 
 void RockblockSimulator::begin(uint32_t baud)
