@@ -17,12 +17,16 @@ void CameraControlTask::execute()
 
     if (sfr::camera::take_photo == true && sfr::camera::powered == true) {
         if (!adaCam.takePicture()) {
+#ifdef VERBOSE
             Serial.println("Failed to snap!");
+#endif
         } else {
-            Serial.println("\n\n\nPicture taken!\n\n\n");
             jpglen = adaCam.frameLength();
+#ifdef VERBOSE
+            Serial.println("\n\n\nPicture taken!\n\n\n");
             Serial.println("Camera frame length: " + String(jpglen));
             Serial.println("##### Start writing the picture to SD card #####");
+#endif
             if (jpglen > 0) {
                 sfr::camera::take_photo = false;
             }
@@ -39,8 +43,10 @@ void CameraControlTask::execute()
                 transition_to_abnormal_init();
             } else {
                 sfr::camera::failed_times = sfr::camera::failed_times + 1;
+#ifdef VERBOSE
                 Serial.print("Camera initialization failed times: ");
                 Serial.println(sfr::camera::failed_times);
+#endif
                 sfr::camera::init_mode = (uint16_t)sensor_init_mode_type::awaiting;
             }
         }
@@ -101,7 +107,9 @@ void CameraControlTask::execute()
         if (jpglen == 0) {
             sfr::rockblock::camera_max_fragments[sfr::camera::images_written] = sfr::camera::fragments_written;
             sfr::camera::images_written++;
+#ifdef VERBOSE
             Serial.println("Done writing file");
+#endif
             sfr::camera::turn_off = true;
         }
     }
@@ -117,8 +125,10 @@ void CameraControlTask::camera_init()
     if (sfr::camera::init_mode == (uint16_t)sensor_init_mode_type::in_progress && ((millis() - sfr::camera::init_start_time) > sfr::camera::init_timeout)) {
         // Camera initalization process is in progress but has exceeded timeout duration
         sfr::camera::init_mode = (uint16_t)sensor_init_mode_type::failed;
+#ifdef VERBOSE
         Serial.print("Camera intialization failed at step: ");
         Serial.println(sfr::camera::start_progress);
+#endif
     }
 
     if (sfr::camera::init_mode == (uint16_t)sensor_init_mode_type::in_progress) {
@@ -126,7 +136,9 @@ void CameraControlTask::camera_init()
         case 0: // step 0 - initialize SD card
         {
             if (!SD.begin(254)) {
+#ifdef VERBOSE
                 Serial.println("\n\n\nSD CARD FAILED\n\n\n");
+#endif
                 sfr::camera::init_mode = (uint16_t)sensor_init_mode_type::failed;
             } else {
                 sfr::camera::start_progress++;
@@ -142,22 +154,29 @@ void CameraControlTask::camera_init()
         case 2: // step 2 - call begin method
         {
             if (adaCam.begin()) {
+#ifdef VERBOSE
                 Serial.println("powered on camera");
+#endif
                 sfr::camera::start_progress++;
             } else {
+#ifdef VERBOSE
                 Serial.println("not receiving serial response");
+#endif
             }
             break;
         }
         case 3: // step 3  - set resolution
         {
-            Serial.println("###### Go into setting resolution #####");
             if (adaCam.setImageSize(sfr::camera::set_res)) {
                 if (adaCam.getImageSize() != sfr::camera::set_res) {
+#ifdef VERBOSE
                     Serial.println("Setting resolution failed");
+#endif
                     sfr::camera::init_mode = (uint16_t)sensor_init_mode_type::failed;
                 } else {
+#ifdef VERBOSE
                     Serial.println("Setting resolution succeeded");
+#endif
                     sfr::camera::start_progress++;
                 }
             }
@@ -167,11 +186,15 @@ void CameraControlTask::camera_init()
         {
             uint8_t get_res = adaCam.getImageSize();
             if (get_res == sfr::camera::set_res) {
+#ifdef VERBOSE
                 Serial.print("resolution fetched successfully: ");
                 Serial.println(get_res);
+#endif
                 sfr::camera::start_progress++;
             } else {
+#ifdef VERBOSE
                 Serial.println("Resolution fetch error");
+#endif
                 sfr::camera::init_mode = (uint16_t)sensor_init_mode_type::failed;
             }
             break;
@@ -192,8 +215,8 @@ void CameraControlTask::transition_to_normal()
     // updates camera mode to normal
     sfr::camera::mode = (uint16_t)sensor_mode_type::normal;
 #ifdef VERBOSE
-#endif
     Serial.println("camera initialization successful");
+#endif
 }
 
 void CameraControlTask::transition_to_abnormal_init()
@@ -201,7 +224,9 @@ void CameraControlTask::transition_to_abnormal_init()
     // updates camera mode to abnormal_init
     // trips fault
     // turns camera off
-    Serial.println("camera turned off");
+#ifdef VERBOSE
+    Serial.println("camera initialization failed, turning off");
+#endif
     sfr::camera::mode = (uint16_t)sensor_mode_type::abnormal_init;
     Pins::setPinState(constants::camera::power_on_pin, LOW);
     pinMode(constants::camera::rx, OUTPUT);

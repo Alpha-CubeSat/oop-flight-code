@@ -32,8 +32,10 @@ void CameraReportMonitor::execute()
 
 void CameraReportMonitor::create_camera_report(uint32_t fragment_number, uint8_t serial_number)
 {
+#ifdef VERBOSE
     Serial.println("DEBUG: fragment #: " + String(fragment_number));
     Serial.println("DEBUG: serial_number: " + String(serial_number));
+#endif
     // open image file and read it for specified image/fragment
     String filename = "";
     if (serial_number < 10) {
