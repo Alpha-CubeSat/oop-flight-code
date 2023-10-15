@@ -9,6 +9,15 @@ void IMUDownlinkReportMonitor::execute()
         sfr::imu::report_ready = false;
     }
 
+#ifdef FRAGMENT
+        Serial.print("IMU report empty: ");
+        Serial.println(sfr::rockblock::imu_report.empty());
+        Serial.print("IMU report written: ");
+        Serial.println(sfr::imu::report_written);
+        Serial.print("RockBLOCK mode: ");
+        Serial.println(sfr::rockblock::mode);
+#endif
+
     // Create an IMU report when ever the report is ready
     if (fragment_number < sfr::imu::max_fragments && sfr::rockblock::imu_report.empty() && sfr::imu::report_written) {
     #ifdef FRAGMENT
