@@ -15,7 +15,7 @@ Describe your testing. The testing should be at a level appropriate to demonstra
 If your update does not require significant testing, argue why, or if you're deferring testing to another PR, create an issue ticket for the deferral and link it.
 
 ### SFR Changes
-Describe any important diffs to the SFR. Ensure that any fields you added to the code successfully made it into the SFR file. Also if the changes are an SFRField, make sure to update the EEPROM offset constants to account for the new fields.
+Describe any important diffs to the SFR. Ensure that any fields you added to the code successfully made it into the SFR file. Also if you add or remove any SFR fields, update constants::epprom::sfr_num_fields appropriately.
 
 Finally, Make sure to determine if these changes open any follow up tasks, (whether it be with the normal report, EEPROM, etc.) and link an issue ticket if necessary here.
 
