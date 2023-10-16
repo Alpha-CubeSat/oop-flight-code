@@ -26,7 +26,7 @@ void IMUDownlinkReportMonitor::create_imu_downlink_report(int fragment_number)
     }
 
     // Push report ID
-    sfr::rockblock::imu_report.push_back(24);
+    sfr::rockblock::imu_report.push_back(constants::rockblock::imu_report_flag);
 
     // Push fragment number to the report
     sfr::rockblock::imu_report.push_back(fragment_number);

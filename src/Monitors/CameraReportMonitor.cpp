@@ -73,7 +73,8 @@ void CameraReportMonitor::create_camera_report(int fragment_number, uint8_t seri
     }
     imgFile.close();
 
-    sfr::rockblock::camera_report.push_back(42);
+    sfr::rockblock::camera_report.push_back(constants::rockblock::camera_report_flag);
+
     // get each byte of serial number and add to camera report
     sfr::rockblock::camera_report.push_back(serial_number);
 

@@ -17,12 +17,15 @@ void NormalReportMonitor::execute()
     bool eeprom_bools[] = {0, 0, 0, 0, sfr::eeprom::boot_restarted, sfr::eeprom::error_mode, sfr::eeprom::light_switch, sfr::eeprom::sfr_save_completed};
 
     std::vector<uint8_t> report_contents{
+        constants::rockblock::normal_report_flag,
+
         // SFR fields
         serialize(0x1802), // sfr::mission::boot_time_mins
         serialize(0x1905), // sfr::burnwire::burn_time
         serialize(0x1906), // sfr::burnwire::armed_time
         serialize(0x2109), // sfr::rockblock::lp_downlink_period
         serialize(0x2110), // sfr::rockblock::transmit_downlink_period
+        serialize(0x2501), // sfr::acs::mode
         serialize(0x2505), // sfr::acs::Id_index
         serialize(0x2506), // sfr::acs::Kd_index
         serialize(0x2507), // sfr::acs::Kp_index
@@ -70,10 +73,11 @@ void NormalReportMonitor::execute()
     }
 
     // push the most recent 16 mission modes switches, packed into 5 bits
+    // if less mission modes have been entered, fill with empty mission modes
     uint32_t k = 0;
     bool packed_commands[80] = {false};
     auto hist_mode = sfr::mission::mode_history.cbegin();
-    while (hist_mode != sfr::mission::mode_history.cend() && k <= sfr::mission::mission_mode_hist_length) {
+    while (hist_mode != sfr::mission::mode_history.cend() && k <= constants::rockblock::mission_mode_hist_length) {
         for (int i = 4; i >= 0; i--) {
             packed_commands[k * 5 + (4 - i)] = (*hist_mode >> i) & 1;
         }
@@ -90,8 +94,8 @@ void NormalReportMonitor::execute()
         sfr::rockblock::normal_report.push_back(packed_mode);
     }
 
-    // push the most recent 10 command opcodes, starting with most recent
-    // if less than 10 commands have been recieved, fill with empty opcodes
+    // push the most recent 9 command opcodes, starting with most recent
+    // if less commands have been recieved, fill with empty opcodes
     size_t commands = 0;
     auto current_command = sfr::rockblock::commands_received.cbegin();
     for (size_t j = 0; j < constants::rockblock::normal_report_command_max; j++) {
