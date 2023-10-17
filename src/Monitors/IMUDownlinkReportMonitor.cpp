@@ -22,8 +22,12 @@ void IMUDownlinkReportMonitor::create_imu_downlink_report(int fragment_number)
     // Set report is not ready if imu_dlink is empty and all fragments have been downlinked
     if (sfr::imu::imu_dlink.size() == 0 && sfr::rockblock::imu_report.size() == 0) {
         sfr::imu::report_ready = false;
+        sfr::rockblock::imu_report.clear();
         return;
     }
+
+    // Sets the amount of values that go into the report.
+    int pop_size = min(constants::imu::max_gyro_imu_report_size, sfr::imu::imu_dlink.size());
 
     // Push report ID
     sfr::rockblock::imu_report.push_back(24);
