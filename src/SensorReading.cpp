@@ -50,6 +50,7 @@ void SensorReading::set_invalid()
     valid = false;
     if (!fault->get_suppressed()) {
         buffer.clear();
+        Serial.print("Clearing buffer");
     }
     fault->signal();
 }

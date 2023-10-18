@@ -16,6 +16,16 @@ void IMUDownlinkReportMonitor::execute()
         Serial.println(sfr::imu::report_written);
         Serial.print("RockBLOCK mode: ");
         Serial.println(sfr::rockblock::mode);
+        Serial.print("Button pressed: ");
+        Serial.println(sfr::button::pressed);
+        Serial.print("Button fault: ");
+        Serial.println(fault_groups::hardware_faults::button->get_signaled());
+        Serial.print("Photoresistor covered: ");
+        Serial.println(sfr::photoresistor::covered);
+        Serial.print("Photoresistor fault: ");
+        Serial.println(fault_groups::hardware_faults::light_val->get_signaled());
+        Serial.print("Deployed: ");
+        Serial.println(sfr::mission::deployed);
 #endif
 
     // Create an IMU report when ever the report is ready
