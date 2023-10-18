@@ -11,8 +11,8 @@ void IMUDownlink::execute()
     float gyro_z;
     static bool prev_deployed = false;
     if (sfr::imu::sample_gyro) {
-        Serial.print("Door opened for: ");
-        Serial.println(millis() - sfr::imu::door_open_start_time);
+        // Serial.print("Door opened for: ");
+        // Serial.println(millis() - sfr::imu::door_open_start_time);
 
         // Store the time the door has opened
         if (prev_deployed != sfr::mission::deployed) {
