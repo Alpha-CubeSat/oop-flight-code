@@ -10,30 +10,34 @@ void IMUDownlinkReportMonitor::execute()
     }
 
 #ifdef FRAGMENT
+        Serial.print("IMU fragment: ");
+        Serial.println(fragment_number);
         Serial.print("IMU report empty: ");
         Serial.println(sfr::rockblock::imu_report.empty());
-        Serial.print("IMU report written: ");
-        Serial.println(sfr::imu::report_written);
+        // Serial.print("IMU report written: ");
+        // Serial.println(sfr::imu::report_written);
+        Serial.print("IMU DLINK SIZE: ");
+        Serial.println(sfr::imu::imu_dlink.size());
         Serial.print("RockBLOCK mode: ");
         Serial.println(sfr::rockblock::mode);
         Serial.print("Button pressed: ");
         Serial.println(sfr::button::pressed);
         Serial.print("Button fault: ");
-        Serial.println(fault_groups::hardware_faults::button->get_signaled());
-        Serial.print("Photoresistor covered: ");
-        Serial.println(sfr::photoresistor::covered);
-        Serial.print("Photoresistor fault: ");
-        Serial.println(fault_groups::hardware_faults::light_val->get_signaled());
+        Serial.println(fault_groups::hardware_faults::button->get_base());
+        // Serial.print("Photoresistor covered: ");
+        // Serial.println(sfr::photoresistor::covered);
+        // Serial.print("Photoresistor fault: ");
+        // Serial.println(fault_groups::hardware_faults::light_val->get_signaled());
         Serial.print("Deployed: ");
         Serial.println(sfr::mission::deployed);
 #endif
 
     // Create an IMU report when ever the report is ready
     if (fragment_number < sfr::imu::max_fragments && sfr::rockblock::imu_report.empty() && sfr::imu::report_written) {
-    #ifdef FRAGMENT
-        Serial.print("Writing fragment ");
-        Serial.println(fragment_number);
-    #endif
+    // #ifdef FRAGMENT
+    //     Serial.print("Writing fragment ");
+    //     Serial.println(fragment_number);
+    // #endif
         create_imu_downlink_report(fragment_number);
         fragment_number++;
     }
@@ -65,12 +69,6 @@ void IMUDownlinkReportMonitor::create_imu_downlink_report(uint8_t fragment_numbe
 
     // Push fragment number to the report
     sfr::rockblock::imu_report.push_back(fragment_number);
-
-    // set pop_size to the minimum of the content_length limit,
-    // the number of readings ready in the queue, and the max report size
-    int pop_size = min(min(constants::imu::max_gyro_imu_report_size,
-                           constants::rockblock::content_length),
-                       sfr::imu::imu_dlink.size());
 
     // Set up fragment save to SD card
     String filename = "imu_frag_" + String(fragment_number) + ".txt";
@@ -131,7 +129,7 @@ void IMUDownlinkReportMonitor::create_imu_downlink_report_from_SD(uint8_t fragme
 
     txtFile.close();
 
-    sfr::rockblock::imu_report.push_back(24);
+    sfr::rockblock::imu_report.push_back(constants::rockblock::imu_report_flag);
     sfr::rockblock::imu_report.push_back(fragment_number);
 
     // Add fragment data to imu report
