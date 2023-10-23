@@ -13,7 +13,7 @@ void RockblockControlTask::execute()
 
     if (mode != rockblock_mode_type::standby) {
         if (same_mode > constants::rockblock::max_same_mode) {
-            transition_to(rockblock_mode_type::send_at);
+            transition_to(rockblock_mode_type::standby);
         }
         same_mode++;
     }
