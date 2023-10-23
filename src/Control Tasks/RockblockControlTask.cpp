@@ -11,10 +11,10 @@ void RockblockControlTask::execute()
 {
     rockblock_mode_type mode = static_cast<rockblock_mode_type>(sfr::rockblock::mode.get());
 
-    #ifdef VERBOSE_RB
-        Serial.print("RockBLOCK Same Mode: ");
-        Serial.println(same_mode);
-    #endif
+#ifdef VERBOSE_RB
+    Serial.print("RockBLOCK Same Mode: ");
+    Serial.println(same_mode);
+#endif
 
     if (mode != rockblock_mode_type::standby) {
         if (same_mode > constants::rockblock::max_same_mode) {
