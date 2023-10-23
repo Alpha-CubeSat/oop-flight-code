@@ -11,6 +11,11 @@ void RockblockControlTask::execute()
 {
     rockblock_mode_type mode = static_cast<rockblock_mode_type>(sfr::rockblock::mode.get());
 
+    #ifdef VERBOSE_RB
+        Serial.print("RockBLOCK Same Mode: ");
+        Serial.println(same_mode);
+    #endif
+
     if (mode != rockblock_mode_type::standby) {
         if (same_mode > constants::rockblock::max_same_mode) {
             transition_to(rockblock_mode_type::standby);
@@ -112,7 +117,6 @@ void RockblockControlTask::dispatch_standby()
 void RockblockControlTask::dispatch_send_at()
 {
     conseq_reads = 0;
-    same_mode = 0;
 #ifdef VERBOSE_RB
     Serial.println("SENT: ATr");
 #endif
@@ -502,6 +506,7 @@ void RockblockControlTask::dispatch_end_transmission()
 void RockblockControlTask::transition_to(rockblock_mode_type new_mode)
 {
     sfr::rockblock::mode = (uint16_t)new_mode;
+    same_mode = 0;
 }
 
 RockblockCommand *RockblockControlTask::commandFactory(RawRockblockCommand raw)
