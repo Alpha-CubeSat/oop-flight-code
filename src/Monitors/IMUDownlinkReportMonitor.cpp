@@ -70,19 +70,12 @@ void IMUDownlinkReportMonitor::create_imu_downlink_report(uint8_t fragment_numbe
     // Push fragment number to the report
     sfr::rockblock::imu_report.push_back(fragment_number);
 
-    // Set up fragment save to SD card
-    String filename = "imu_frag_" + String(fragment_number) + ".txt";
-    File txtFile = SD.open(filename.c_str(), FILE_WRITE);
-
     // Add actual gyro content to imu report
     for (int i = 0; i < pop_size; i++) {
         uint8_t data = sfr::imu::imu_dlink.back();
         sfr::rockblock::imu_report.push_back(data);
-        txtFile.print(data, HEX);
         sfr::imu::imu_dlink.pop_back();
     }
-
-    txtFile.close();
 
     // Push end flags at the end of the report
     sfr::rockblock::imu_report.push_back(constants::imu_downlink::imu_report_endflag1);
