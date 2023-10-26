@@ -152,29 +152,98 @@ void MainControlLoop::execute()
 #endif
     sfr::mission::cycle_start = millis();
 
+    uint32_t start1 = millis();
     mission_manager.execute();
+    uint32_t diff1 = millis() - start1;
+
+    uint32_t start2 = millis();
     burnwire_control_task.execute();
+    uint32_t diff2 = millis() - start2;
+
+    uint32_t start3 = millis();
     rockblock_control_task.execute();
+    uint32_t diff3 = millis() - start3;
+
+    uint32_t start4 = millis();
     command_monitor.execute();
+    uint32_t diff4 = millis() - start4;
 
+    uint32_t start5 = millis();
     camera_control_task.execute();
+    uint32_t diff5 = millis() - start5;
+
+    uint32_t start6 = millis();
     acs_control_task.execute();
+    uint32_t diff6 = millis() - start6;
 
+    uint32_t start7 = millis();
     imu_monitor.execute();
+    uint32_t diff7 = millis() - start7;
+
+    uint32_t start8 = millis();
     battery_monitor.execute();
+    uint32_t diff8 = millis() - start8;
+
+    uint32_t start9 = millis();
     button_monitor.execute();
+    uint32_t diff9 = millis() - start9;
+
+    uint32_t start10 = millis();
     current_monitor.execute();
+    uint32_t diff10 = millis() - start10;
+
+    uint32_t start11 = millis();
     photoresistor_monitor.execute();
+    uint32_t diff11 = millis() - start11;
+
+    uint32_t start12 = millis();
     rockblock_report_monitor.execute();
+    uint32_t diff12 = millis() - start12;
+
+    uint32_t start13 = millis();
     temperature_monitor.execute();
+    uint32_t diff13 = millis() - start13;
 
+    uint32_t start14 = millis();
     imu_downlink.execute();
+    uint32_t diff14 = millis() - start14;
 
+    uint32_t start15 = millis();
     normal_report_monitor.execute();
-    camera_report_monitor.execute();
-    imudownlink_report_monitor.execute();
+    uint32_t diff15 = millis() - start15;
 
+    uint32_t start16 = millis();
+    camera_report_monitor.execute();
+    uint32_t diff16 = millis() - start16;
+
+    uint32_t start17 = millis();
+    imudownlink_report_monitor.execute();
+    uint32_t diff17 = millis() - start17;
+
+    uint32_t start18 = millis();
     eeprom_control_task.execute();
+    uint32_t diff18 = millis() - start18;
+
+#ifdef VERBOSE_TIMINGS
+    Serial.println(diff1);
+    Serial.println(diff2);
+    Serial.println(diff3);
+    Serial.println(diff4);
+    Serial.println(diff5);
+    Serial.println(diff6);
+    Serial.println(diff7);
+    Serial.println(diff8);
+    Serial.println(diff9);
+    Serial.println(diff10);
+    Serial.println(diff11);
+    Serial.println(diff12);
+    Serial.println(diff13);
+    Serial.println(diff14);
+    Serial.println(diff15);
+    Serial.println(diff16);
+    Serial.println(diff17);
+    Serial.println(diff18);
+#endif
 
     // Clock Manager MUST run last
     clock_manager.execute();
