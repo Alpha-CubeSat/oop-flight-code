@@ -10,34 +10,30 @@ void IMUDownlinkReportMonitor::execute()
     }
 
 #ifdef FRAGMENT
-        Serial.print("IMU fragment: ");
-        Serial.println(fragment_number);
-        Serial.print("IMU report empty: ");
-        Serial.println(sfr::rockblock::imu_report.empty());
-        // Serial.print("IMU report written: ");
-        // Serial.println(sfr::imu::report_written);
-        Serial.print("IMU DLINK SIZE: ");
-        Serial.println(sfr::imu::imu_dlink.size());
-        Serial.print("RockBLOCK mode: ");
-        Serial.println(sfr::rockblock::mode);
-        Serial.print("Button pressed: ");
-        Serial.println(sfr::button::pressed);
-        Serial.print("Button fault: ");
-        Serial.println(fault_groups::hardware_faults::button->get_base());
-        // Serial.print("Photoresistor covered: ");
-        // Serial.println(sfr::photoresistor::covered);
-        // Serial.print("Photoresistor fault: ");
-        // Serial.println(fault_groups::hardware_faults::light_val->get_signaled());
-        Serial.print("Deployed: ");
-        Serial.println(sfr::mission::deployed);
+        // Serial.print("IMU fragment: ");
+        // Serial.println(fragment_number);
+        // Serial.print("IMU report empty: ");
+        // Serial.println(sfr::rockblock::imu_report.empty());
+        // // Serial.print("IMU report written: ");
+        // // Serial.println(sfr::imu::report_written);
+        // Serial.print("IMU DLINK SIZE: ");
+        // Serial.println(sfr::imu::imu_dlink.size());
+        // Serial.print("RockBLOCK mode: ");
+        // Serial.println(sfr::rockblock::mode);
+        // Serial.print("Button pressed: ");
+        // Serial.println(sfr::button::pressed);
+        // Serial.print("Button fault: ");
+        // Serial.println(fault_groups::hardware_faults::button->get_base());
+        // // Serial.print("Photoresistor covered: ");
+        // // Serial.println(sfr::photoresistor::covered);
+        // // Serial.print("Photoresistor fault: ");
+        // // Serial.println(fault_groups::hardware_faults::light_val->get_signaled());
+        // Serial.print("Deployed: ");
+        // Serial.println(sfr::mission::deployed);
 #endif
 
     // Create an IMU report when ever the report is ready
     if (fragment_number < sfr::imu::max_fragments && sfr::rockblock::imu_report.empty() && sfr::imu::report_written) {
-    // #ifdef FRAGMENT
-    //     Serial.print("Writing fragment ");
-    //     Serial.println(fragment_number);
-    // #endif
         create_imu_downlink_report(fragment_number);
         fragment_number++;
     }
@@ -45,7 +41,7 @@ void IMUDownlinkReportMonitor::execute()
     // A fragment request has been made, and there is no report currently queued
     if (sfr::imu::fragment_requested && !sfr::imu::report_ready) {
     #ifdef FRAGMENT
-        Serial.print("Requested IMU fragmet ");
+        Serial.print("Requested IMU fragment ");
         Serial.println(sfr::imu::fragment_number_requested);
     #endif
         create_imu_downlink_report_from_SD(sfr::imu::fragment_number_requested);

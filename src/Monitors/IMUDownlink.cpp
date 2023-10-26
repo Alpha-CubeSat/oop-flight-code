@@ -50,15 +50,17 @@ void IMUDownlink::execute()
     }
 
     if (sfr::imu::report_written && values_unwritten > 0) {
-         // Set up fragment save to SD card
+        Serial.print("Writing IMU fragment ");
+        Serial.println(fragment_number);
+        // Set up fragment save to SD card
         String filename = "imu_frag_" + String(fragment_number) + ".txt";
         File txtFile = SD.open(filename.c_str(), FILE_WRITE);
 
         // Sets the amount of values that go into the report.
         int pop_size = min(constants::imu::max_gyro_imu_report_size, values_unwritten);
 
-        for (int i = start_index; i < pop_size; i++) {
-            uint8_t data = sfr::imu::imu_dlink[i];
+        for (int i = 0; i < pop_size; i++) {
+            uint8_t data = sfr::imu::imu_dlink[start_index];
             txtFile.print(data, HEX);
             values_unwritten--;
             start_index++;

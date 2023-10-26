@@ -26,25 +26,24 @@ MainControlLoop::MainControlLoop()
 
 void MainControlLoop::execute()
 {
-// #ifdef FRAGMENT
-//     Serial.println("--------------------START LOOP--------------------");
-//     // TODO print time on here
+#ifdef FRAGMENT
+    Serial.println("--------------------START LOOP--------------------");
+    // TODO print time on here
 
-//     // mission mode
-//     Serial.print("Current Mission Mode: ");
-//     Serial.println(sfr::mission::current_mode->get_name().c_str());
+    // mission mode
+    Serial.print("Current Mission Mode: ");
+    Serial.println(sfr::mission::current_mode->get_name().c_str());
 
-//     // RockBLOCK
-//     if (sfr::rockblock::sleep_mode) {
-//         Serial.println("RockBLOCK sleeping");
-//     } else {
-//         Serial.println("RockBLOCK NOT sleeping");
-//     }
+    // RockBLOCK
+    if (sfr::rockblock::sleep_mode) {
+        Serial.println("RockBLOCK sleeping");
+    } else {
+        Serial.println("RockBLOCK NOT sleeping");
+    }
 
-//     // EEPROM
-//     Serial.print("Total time alive (across all boots): ");
-//     Serial.println(sfr::eeprom::time_alive);
-// #endif
+    Serial.print("RockBLOCK mode: ");
+    Serial.println(sfr::rockblock::mode);
+#endif
 
 #ifdef VERBOSE
     Serial.println("--------------------START LOOP--------------------");
@@ -204,5 +203,12 @@ void MainControlLoop::execute()
     Serial.println(millis() - sfr::mission::cycle_start);
     Serial.println("--------------------END LOOP--------------------");
     Serial.println(" ");
+#endif
+
+#ifdef FRAGMENT
+    Serial.print("Cycle time (ms): ");
+    Serial.println(millis() - sfr::mission::cycle_start);
+    Serial.println("--------------------END LOOP--------------------");
+    Serial.println("");
 #endif
 }
