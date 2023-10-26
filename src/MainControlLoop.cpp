@@ -152,79 +152,86 @@ void MainControlLoop::execute()
 #endif
     sfr::mission::cycle_start = millis();
 
-    uint32_t start1 = millis();
+    uint32_t start1 = micros();
     mission_manager.execute();
-    uint32_t diff1 = millis() - start1;
+    uint32_t diff1 = micros() - start1;
 
-    uint32_t start2 = millis();
+    uint32_t start2 = micros();
     burnwire_control_task.execute();
-    uint32_t diff2 = millis() - start2;
+    uint32_t diff2 = micros() - start2;
 
-    uint32_t start3 = millis();
+    uint32_t start3 = micros();
     rockblock_control_task.execute();
-    uint32_t diff3 = millis() - start3;
+    uint32_t diff3 = micros() - start3;
 
-    uint32_t start4 = millis();
+    uint32_t start4 = micros();
     command_monitor.execute();
-    uint32_t diff4 = millis() - start4;
+    uint32_t diff4 = micros() - start4;
 
-    uint32_t start5 = millis();
+    uint32_t start5 = micros();
     camera_control_task.execute();
-    uint32_t diff5 = millis() - start5;
+    uint32_t diff5 = micros() - start5;
 
-    uint32_t start6 = millis();
+    uint32_t start6 = micros();
     acs_control_task.execute();
-    uint32_t diff6 = millis() - start6;
+    uint32_t diff6 = micros() - start6;
 
-    uint32_t start7 = millis();
+    uint32_t start7 = micros();
     imu_monitor.execute();
-    uint32_t diff7 = millis() - start7;
+    uint32_t diff7 = micros() - start7;
 
-    uint32_t start8 = millis();
+    uint32_t start8 = micros();
     battery_monitor.execute();
-    uint32_t diff8 = millis() - start8;
+    uint32_t diff8 = micros() - start8;
 
-    uint32_t start9 = millis();
+    uint32_t start9 = micros();
     button_monitor.execute();
-    uint32_t diff9 = millis() - start9;
+    uint32_t diff9 = micros() - start9;
 
-    uint32_t start10 = millis();
+    uint32_t start10 = micros();
     current_monitor.execute();
-    uint32_t diff10 = millis() - start10;
+    uint32_t diff10 = micros() - start10;
 
-    uint32_t start11 = millis();
+    uint32_t start11 = micros();
     photoresistor_monitor.execute();
-    uint32_t diff11 = millis() - start11;
+    uint32_t diff11 = micros() - start11;
 
-    uint32_t start12 = millis();
+    uint32_t start12 = micros();
     rockblock_report_monitor.execute();
-    uint32_t diff12 = millis() - start12;
+    uint32_t diff12 = micros() - start12;
 
-    uint32_t start13 = millis();
+    uint32_t start13 = micros();
     temperature_monitor.execute();
-    uint32_t diff13 = millis() - start13;
+    uint32_t diff13 = micros() - start13;
 
-    uint32_t start14 = millis();
+    uint32_t start14 = micros();
     imu_downlink.execute();
-    uint32_t diff14 = millis() - start14;
+    uint32_t diff14 = micros() - start14;
 
-    uint32_t start15 = millis();
+    uint32_t start15 = micros();
     normal_report_monitor.execute();
-    uint32_t diff15 = millis() - start15;
+    uint32_t diff15 = micros() - start15;
 
-    uint32_t start16 = millis();
+    uint32_t start16 = micros();
     camera_report_monitor.execute();
-    uint32_t diff16 = millis() - start16;
+    uint32_t diff16 = micros() - start16;
 
-    uint32_t start17 = millis();
+    uint32_t start17 = micros();
     imudownlink_report_monitor.execute();
-    uint32_t diff17 = millis() - start17;
+    uint32_t diff17 = micros() - start17;
 
-    uint32_t start18 = millis();
+    uint32_t start18 = micros();
     eeprom_control_task.execute();
-    uint32_t diff18 = millis() - start18;
+    uint32_t diff18 = micros() - start18;
 
-#ifdef VERBOSE_TIMINGS
+    // Clock Manager MUST run last
+    clock_manager.execute();
+
+    #ifdef VERBOSE_TIMINGS
+    Serial.println("START");
+    Serial.print("Current Mission Mode: ");
+    Serial.println(sfr::mission::current_mode->get_name().c_str());
+    Serial.println("Timings for each execution (us):");
     Serial.println(diff1);
     Serial.println(diff2);
     Serial.println(diff3);
@@ -243,10 +250,10 @@ void MainControlLoop::execute()
     Serial.println(diff16);
     Serial.println(diff17);
     Serial.println(diff18);
+    Serial.print("Cycle time (ms): ");
+    Serial.println(millis() - sfr::mission::cycle_start);
+    Serial.println("END");
 #endif
-
-    // Clock Manager MUST run last
-    clock_manager.execute();
 
 #ifdef VERBOSE
     Serial.print("Cycle time (ms): ");
