@@ -11,7 +11,7 @@ void RockblockControlTask::execute()
 {
     rockblock_mode_type mode = static_cast<rockblock_mode_type>(sfr::rockblock::mode.get());
 
-    if(sfr::rockblock::sleep_mode){
+    if (sfr::rockblock::sleep_mode) {
         sfr::rockblock::mode = (uint16_t)rockblock_mode_type::standby;
     }
 
