@@ -38,7 +38,7 @@ namespace constants {
         constexpr int sleep_pin = 19;
         constexpr int min_sleep_period = 2 * time::one_minute;
         constexpr int max_check_signal_time = time::one_minute;
-        constexpr int max_same_mode = (30 * time::one_minute) / time::control_cycle_time_ms;
+        constexpr int max_same_mode = (10 * time::one_minute) / time::control_cycle_time_ms;
 
         constexpr int baud = 19200;
         constexpr size_t buffer_size = 63;
@@ -53,7 +53,7 @@ namespace constants {
         constexpr uint8_t imu_report_flag = 24;
         constexpr uint8_t camera_report_flag = 42;
 
-        constexpr uint8_t end_of_command_upload_flag1 = 0;
+        constexpr uint8_t end_of_command_upload_flag1 = 250;
         constexpr uint8_t end_of_command_upload_flag2 = 250;
         namespace opcodes {
             // SFRField Commands
