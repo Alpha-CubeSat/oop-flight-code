@@ -476,9 +476,6 @@ void RockblockControlTask::dispatch_process_command()
             // Command is Valid - Will be added to list to be Executed During CommandMonitor Execute
             sfr::rockblock::processed_commands.push_back(processed);
             sfr::rockblock::waiting_command = true;
-        } else if (new_raw_command.opcode[0] == 'F' && new_raw_command.opcode[1] == 'L') {
-            Serial.println("SAT INFO: flush confirmed");
-            sfr::rockblock::flush_status = false;
         } else {
             Serial.println("SAT INFO: invalid command");
         }
