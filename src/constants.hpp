@@ -53,6 +53,8 @@ namespace constants {
         constexpr uint8_t imu_report_flag = 24;
         constexpr uint8_t camera_report_flag = 42;
 
+        constexpr uint8_t start_of_command_upload_flag1 = 254;
+        constexpr uint8_t start_of_command_upload_flag2 = 254;
         constexpr uint8_t end_of_command_upload_flag1 = 250;
         constexpr uint8_t end_of_command_upload_flag2 = 250;
         namespace opcodes {
