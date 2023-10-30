@@ -9,7 +9,7 @@ void ACSControlTask::execute()
 
 #ifdef ACS_SIM
     if (first) {
-        plantObj.initialize(0.001, altitude_input, I_input, inclination_input, m_input, q0_input, wx_input, wy_input, wz_input);
+        plantObj.initialize(0.1, altitude_input, I_input, inclination_input, m_input, q0_input, wx_input, wy_input, wz_input);
     }
 #endif
 
