@@ -69,6 +69,8 @@ real_T wz =1;                       // Variable: wz
                                           //  Referenced by: '<S1>/Discrete-Time Integrator2'
                                           //  init angular vel -z
 
+double f_step_size=0.001;
+
 extern real_T rt_atan2d_snf(real_T u0, real_T u1);
 extern void rt_invd3x3_snf(const real_T u[9], real_T y[9]);
 
@@ -582,19 +584,19 @@ void Plant::step()
   rtDW.DiscreteTimeIntegrator1_DSTAT_m[0] = ((rtb_Product[3] *
     rtDW.DiscreteTimeIntegrator_DSTATE - rtb_Product[2] *
     rtDW.DiscreteTimeIntegrator1_DSTATE) + rtb_Product[1] *
-    rtDW.DiscreteTimeIntegrator2_DSTATE) / 2.0 * 0.001 + rtb_Product_n;
+    rtDW.DiscreteTimeIntegrator2_DSTATE) / 2.0 * f_step_size + rtb_Product_n;
   rtDW.DiscreteTimeIntegrator1_DSTAT_m[1] = ((rtb_Product[2] *
     rtDW.DiscreteTimeIntegrator_DSTATE + rtb_Product[3] *
     rtDW.DiscreteTimeIntegrator1_DSTATE) - rtb_Product[0] *
-    rtDW.DiscreteTimeIntegrator2_DSTATE) / 2.0 * 0.001 + rtb_qd2;
+    rtDW.DiscreteTimeIntegrator2_DSTATE) / 2.0 * f_step_size + rtb_qd2;
   rtDW.DiscreteTimeIntegrator1_DSTAT_m[2] = ((-rtb_Product[1] *
     rtDW.DiscreteTimeIntegrator_DSTATE + rtb_Product[0] *
     rtDW.DiscreteTimeIntegrator1_DSTATE) + rtb_Product[3] *
-    rtDW.DiscreteTimeIntegrator2_DSTATE) / 2.0 * 0.001 + rtb_qd3;
+    rtDW.DiscreteTimeIntegrator2_DSTATE) / 2.0 * f_step_size + rtb_qd3;
   rtDW.DiscreteTimeIntegrator1_DSTAT_m[3] = ((-rtb_Product[0] *
     rtDW.DiscreteTimeIntegrator_DSTATE - rtb_Product[1] *
     rtDW.DiscreteTimeIntegrator1_DSTATE) - rtb_Product[2] *
-    rtDW.DiscreteTimeIntegrator2_DSTATE) / 2.0 * 0.001 + acc;
+    rtDW.DiscreteTimeIntegrator2_DSTATE) / 2.0 * f_step_size + acc;
 
   // End of Outputs for SubSystem: '<S1>/Quaternion Integration'
 
@@ -652,7 +654,7 @@ void Plant::step()
   //   Product: '<S7>/Divide1'
 
   rtDW.DiscreteTimeIntegrator1_DSTAT_l += 1.0 / rtb_qd4 *
-    rtDW.DiscreteTimeIntegrator5_DSTATE * acc * 0.001;
+    rtDW.DiscreteTimeIntegrator5_DSTATE * acc * f_step_size;
 
   // Update for DiscreteIntegrator: '<S7>/Discrete-Time Integrator2' incorporates:
   //   DiscreteIntegrator: '<S7>/Discrete-Time Integrator4'
@@ -660,7 +662,7 @@ void Plant::step()
   //   Product: '<S7>/Divide1'
 
   rtDW.DiscreteTimeIntegrator2_DSTAT_e += 1.0 / rtb_qd4 *
-    rtDW.DiscreteTimeIntegrator4_DSTATE * acc * 0.001;
+    rtDW.DiscreteTimeIntegrator4_DSTATE * acc * f_step_size;
 
   // Update for DiscreteIntegrator: '<S7>/Discrete-Time Integrator3' incorporates:
   //   DiscreteIntegrator: '<S7>/Discrete-Time Integrator6'
@@ -668,16 +670,16 @@ void Plant::step()
   //   Product: '<S7>/Divide1'
 
   rtDW.DiscreteTimeIntegrator3_DSTATE += 1.0 / rtb_qd4 *
-    rtDW.DiscreteTimeIntegrator6_DSTATE * acc * 0.001;
+    rtDW.DiscreteTimeIntegrator6_DSTATE * acc * f_step_size;
 
   // Update for DiscreteIntegrator: '<S7>/Discrete-Time Integrator4'
-  rtDW.DiscreteTimeIntegrator4_DSTATE += 0.001 * rtb_DiscreteTimeIntegrator2;
+  rtDW.DiscreteTimeIntegrator4_DSTATE += f_step_size * rtb_DiscreteTimeIntegrator2;
 
   // Update for DiscreteIntegrator: '<S7>/Discrete-Time Integrator5'
-  rtDW.DiscreteTimeIntegrator5_DSTATE += 0.001 * rtb_DiscreteTimeIntegrator1;
+  rtDW.DiscreteTimeIntegrator5_DSTATE += f_step_size * rtb_DiscreteTimeIntegrator1;
 
   // Update for DiscreteIntegrator: '<S7>/Discrete-Time Integrator6'
-  rtDW.DiscreteTimeIntegrator6_DSTATE += 0.001 * rtb_DiscreteTimeIntegrator3;
+  rtDW.DiscreteTimeIntegrator6_DSTATE += f_step_size * rtb_DiscreteTimeIntegrator3;
 
   // End of Outputs for SubSystem: '<S1>/Tranlational Dynamics'
 
@@ -879,13 +881,13 @@ void Plant::step()
   rtb_Normalization[2] *= acc;
 
   // Update for DiscreteIntegrator: '<S1>/Discrete-Time Integrator'
-  rtDW.DiscreteTimeIntegrator_DSTATE += 0.001 * rtb_Product_j[0];
+  rtDW.DiscreteTimeIntegrator_DSTATE += f_step_size * rtb_Product_j[0];
 
   // Update for DiscreteIntegrator: '<S1>/Discrete-Time Integrator1'
-  rtDW.DiscreteTimeIntegrator1_DSTATE += 0.001 * rtb_Product_j[1];
+  rtDW.DiscreteTimeIntegrator1_DSTATE += f_step_size * rtb_Product_j[1];
 
   // Update for DiscreteIntegrator: '<S1>/Discrete-Time Integrator2'
-  rtDW.DiscreteTimeIntegrator2_DSTATE += 0.001 * rtb_Product_j[2];
+  rtDW.DiscreteTimeIntegrator2_DSTATE += f_step_size * rtb_Product_j[2];
 
   // End of Outputs for SubSystem: '<Root>/Plant'
 
@@ -977,7 +979,7 @@ void Plant::initialize()
   }
 }
 // Model initialize function
-void Plant::initialize(double Altitude_input, double I_input[9], double inclination_input, double m_input, double q0_input[4], double wx_input, double wy_input, double wz_input)
+void Plant::initialize(double f_step_size_input, double Altitude_input, double I_input[9], double inclination_input, double m_input, double q0_input[4], double wx_input, double wy_input, double wz_input)
 {
   // Registration code
 
@@ -1006,6 +1008,8 @@ void Plant::initialize(double Altitude_input, double I_input[9], double inclinat
     wx = wx_input;
     wy = wy_input;
     wz = wz_input;
+
+    f_step_size=f_step_size_input;
 
     // SystemInitialize for Atomic SubSystem: '<Root>/Plant'
     // InitializeConditions for DiscreteIntegrator: '<S1>/Discrete-Time Integrator'

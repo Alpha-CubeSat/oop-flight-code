@@ -206,7 +206,7 @@ public:
 
   // model initialize function
   void initialize();
-  void initialize(double Altitude_input, double I_input[9], double inclination_input, double m_input, double q0_input[4], double wx_input, double wy_input, double wz_input);
+  void initialize(double f_step_size_input, double Altitude_input, double I_input[9], double inclination_input, double m_input, double q0_input[4], double wx_input, double wy_input, double wz_input);
   // model step function
   void step();
 
