@@ -443,13 +443,6 @@ void RockblockControlTask::dispatch_process_command()
                 Serial.print(0, HEX);
             Serial.print(look_ahead2, HEX);
 
-            // Already read first and second opcode indices; start at third index
-            for (size_t o = 2; o < constants::rockblock::opcode_len; ++o) {
-                new_raw_command.opcode[o] = sfr::rockblock::serial.read();
-                if (new_raw_command.opcode[o] < 0x10)
-                    Serial.print(0, HEX);
-                Serial.print(new_raw_command.opcode[o], HEX);
-            }
             for (size_t a1 = 0; a1 < constants::rockblock::arg1_len; ++a1) {
                 new_raw_command.arg_1[a1] = sfr::rockblock::serial.read();
                 if (new_raw_command.arg_1[a1] < 0x10)
