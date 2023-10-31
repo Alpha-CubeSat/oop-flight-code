@@ -427,7 +427,8 @@ void RockblockControlTask::dispatch_process_command()
             look_ahead2 = sfr::rockblock::serial.read();
             if (sfr::rockblock::serial.read() == constants::rockblock::end_of_command_upload_flag1 && 
                 sfr::rockblock::serial.read() == constants::rockblock::end_of_command_upload_flag2) {
-                break; // Exit command read loop
+                transition_to(rockblock_mode_type::queue_check);
+                return; // Exit command read loop
             }
             Serial.println("SAT CMD");
             // Instantiate a new unprocessed raw command
