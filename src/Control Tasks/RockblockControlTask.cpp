@@ -425,8 +425,8 @@ void RockblockControlTask::dispatch_process_command()
         for (int i = 0; i < sfr::rockblock::max_commands_count; i++) {
             look_ahead1 = sfr::rockblock::serial.read(); 
             look_ahead2 = sfr::rockblock::serial.read();
-            if (sfr::rockblock::serial.read() == constants::rockblock::end_of_command_upload_flag1 && 
-                sfr::rockblock::serial.read() == constants::rockblock::end_of_command_upload_flag2) {
+            if (look_ahead1 == constants::rockblock::end_of_command_upload_flag1 && 
+                look_ahead2 == constants::rockblock::end_of_command_upload_flag2) {
                 transition_to(rockblock_mode_type::queue_check);
                 return; // Exit command read loop
             }
