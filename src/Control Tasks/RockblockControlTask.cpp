@@ -15,7 +15,7 @@ void RockblockControlTask::execute()
         transition_to(rockblock_mode_type::standby);
     }
 
-#ifdef VERBOSE_RB
+#ifdef VERBOSE
     Serial.print("RockBLOCK Same Mode: ");
     Serial.println(same_mode);
 #endif
@@ -415,74 +415,64 @@ void RockblockControlTask::dispatch_read_message()
 
 void RockblockControlTask::dispatch_process_command()
 {
-
     // read until start of command flags read
-    uint8_t look_ahead1 = -1;
-    uint8_t look_ahead2 = -1;
-    while (look_ahead1 != constants::rockblock::start_of_command_upload_flag1 && look_ahead2 != constants::rockblock::start_of_command_upload_flag2) {
-        look_ahead1 = sfr::rockblock::serial.read(); // Peek
-        look_ahead2 = sfr::rockblock::serial.read(); // Peek
+    if (sfr::rockblock::serial.read() == constants::rockblock::start_of_command_upload_flag1 &&
+        sfr::rockblock::serial.read() == constants::rockblock::start_of_command_upload_flag2) {
+        /*
+            Parses up to `max_commands_count` number of commands
+            Exits early if end-of-command-upload flags read
+        */
+        for (int i = 0; i < sfr::rockblock::max_commands_count; i++) {
+            look_ahead1 = sfr::rockblock::serial.read();
+            look_ahead2 = sfr::rockblock::serial.read();
+            if (look_ahead1 == constants::rockblock::end_of_command_upload_flag1 &&
+                look_ahead2 == constants::rockblock::end_of_command_upload_flag2) {
+                transition_to(rockblock_mode_type::queue_check);
+                return; // Exit command read loop
+            }
+            Serial.println("SAT CMD");
+            // Instantiate a new unprocessed raw command
+            RawRockblockCommand new_raw_command;
+            new_raw_command.opcode[0] = look_ahead1;
+            new_raw_command.opcode[1] = look_ahead2;
+
+            if (look_ahead1 < 0x10)
+                Serial.print(0, HEX);
+            Serial.print(look_ahead1, HEX);
+
+            if (look_ahead2 < 0x10)
+                Serial.print(0, HEX);
+            Serial.print(look_ahead2, HEX);
+
+            for (size_t a1 = 0; a1 < constants::rockblock::arg1_len; ++a1) {
+                new_raw_command.arg_1[a1] = sfr::rockblock::serial.read();
+                if (new_raw_command.arg_1[a1] < 0x10)
+                    Serial.print(0, HEX);
+                Serial.print(new_raw_command.arg_1[a1], HEX);
+            }
+            for (size_t a2 = 0; a2 < constants::rockblock::arg2_len; ++a2) {
+                new_raw_command.arg_2[a2] = sfr::rockblock::serial.read();
+                if (new_raw_command.arg_2[a2] < 0x10)
+                    Serial.print(0, HEX);
+                Serial.print(new_raw_command.arg_2[a2], HEX);
+            }
+
+            Serial.println();
+
+            // Parse New Command From Input OP Codes
+            RockblockCommand *processed = commandFactory(new_raw_command);
+            if (processed->isValid()) {
+                // Command is Valid - Will be added to list to be Executed During CommandMonitor Execute
+                sfr::rockblock::processed_commands.push_back(processed);
+                sfr::rockblock::waiting_command = true;
+            } else {
+                Serial.println("SAT INFO: invalid command");
+            }
+        }
+
+        conseq_reads++;
+        transition_to(rockblock_mode_type::queue_check);
     }
-
-    /*
-        Parses up to `max_commands_count` number of commands
-        Exits early if end-of-command-upload flags read
-    */
-    for (int i = 0; i < sfr::rockblock::max_commands_count; i++) {
-        look_ahead1 = sfr::rockblock::serial.read(); // Peek
-        look_ahead2 = sfr::rockblock::serial.read(); // Peek
-        if (look_ahead1 == constants::rockblock::end_of_command_upload_flag1 && look_ahead2 == constants::rockblock::end_of_command_upload_flag2) {
-            break; // Exit command read loop
-        }
-        Serial.println("SAT CMD");
-        // Instantiate a new unprocessed raw command
-        RawRockblockCommand new_raw_command;
-        new_raw_command.opcode[0] = look_ahead1;
-        new_raw_command.opcode[1] = look_ahead2;
-
-        if (look_ahead1 < 0x10)
-            Serial.print(0, HEX);
-        Serial.print(look_ahead1, HEX);
-
-        if (look_ahead2 < 0x10)
-            Serial.print(0, HEX);
-        Serial.print(look_ahead2, HEX);
-
-        // Already read first and second opcode indices; start at third index
-        for (size_t o = 2; o < constants::rockblock::opcode_len; ++o) {
-            new_raw_command.opcode[o] = sfr::rockblock::serial.read();
-            if (new_raw_command.opcode[o] < 0x10)
-                Serial.print(0, HEX);
-            Serial.print(new_raw_command.opcode[o], HEX);
-        }
-        for (size_t a1 = 0; a1 < constants::rockblock::arg1_len; ++a1) {
-            new_raw_command.arg_1[a1] = sfr::rockblock::serial.read();
-            if (new_raw_command.arg_1[a1] < 0x10)
-                Serial.print(0, HEX);
-            Serial.print(new_raw_command.arg_1[a1], HEX);
-        }
-        for (size_t a2 = 0; a2 < constants::rockblock::arg2_len; ++a2) {
-            new_raw_command.arg_2[a2] = sfr::rockblock::serial.read();
-            if (new_raw_command.arg_2[a2] < 0x10)
-                Serial.print(0, HEX);
-            Serial.print(new_raw_command.arg_2[a2], HEX);
-        }
-
-        Serial.println();
-
-        // Parse New Command From Input OP Codes
-        RockblockCommand *processed = commandFactory(new_raw_command);
-        if (processed->isValid()) {
-            // Command is Valid - Will be added to list to be Executed During CommandMonitor Execute
-            sfr::rockblock::processed_commands.push_back(processed);
-            sfr::rockblock::waiting_command = true;
-        } else {
-            Serial.println("SAT INFO: invalid command");
-        }
-    }
-
-    conseq_reads++;
-    transition_to(rockblock_mode_type::queue_check);
 }
 
 void RockblockControlTask::dispatch_queue_check()

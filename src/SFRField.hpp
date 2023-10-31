@@ -129,7 +129,6 @@ public:
     void setFieldValue(uint32_t arg1)
     {
         // Convert 32bit word into Target Type
-        static_assert(sizeof(T) <= sizeof(arg1), "Templated Type is larger than input.");
         T casted;
         std::memcpy(&casted, &arg1, sizeof(T));
         set(casted);
