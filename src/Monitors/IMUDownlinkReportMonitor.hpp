@@ -2,7 +2,6 @@
 #define IMU_DOWNLINK_REPORT_MONITOR_HPP_
 
 #include "sfr.hpp"
-#include <cassert>
 #include <vector>
 
 class IMUDownlinkReportMonitor
