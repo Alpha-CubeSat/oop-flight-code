@@ -423,7 +423,7 @@ void RockblockControlTask::dispatch_process_command()
             Exits early if end-of-command-upload flags read
         */
         for (int i = 0; i < sfr::rockblock::max_commands_count; i++) {
-            look_ahead1 = sfr::rockblock::serial.read(); // Peek
+            look_ahead1 = sfr::rockblock::serial.read(); 
             look_ahead2 = sfr::rockblock::serial.read();
             if (sfr::rockblock::serial.read() == constants::rockblock::end_of_command_upload_flag1 && 
                 sfr::rockblock::serial.read() == constants::rockblock::end_of_command_upload_flag2) {
