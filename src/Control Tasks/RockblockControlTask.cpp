@@ -417,7 +417,7 @@ void RockblockControlTask::dispatch_process_command()
 {
     // read until start of command flags read
     if (sfr::rockblock::serial.read() == constants::rockblock::start_of_command_upload_flag1 && 
-        sfr::rockblock::serial.read() != constants::rockblock::start_of_command_upload_flag2) {
+        sfr::rockblock::serial.read() == constants::rockblock::start_of_command_upload_flag2) {
         /*
             Parses up to `max_commands_count` number of commands
             Exits early if end-of-command-upload flags read
