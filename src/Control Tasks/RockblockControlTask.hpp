@@ -46,6 +46,8 @@ private:
     uint32_t conseq_reads = 0;
     uint32_t start_time_check_signal = 0;
     uint32_t same_mode = 0;
+    uint8_t look_ahead1 = -1;
+    uint8_t look_ahead2 = -1;
 };
 
 #endif
