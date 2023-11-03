@@ -22,6 +22,7 @@ MainControlLoop::MainControlLoop()
       clock_manager()
 {
     delay(1000);
+    int actual_period = Watchdog.enable(constants::watchdog::max_period_ms);
 }
 
 void MainControlLoop::execute()
@@ -178,6 +179,10 @@ void MainControlLoop::execute()
 
     // Clock Manager MUST run last
     clock_manager.execute();
+
+    // Pet watchdog
+
+    Watchdog.reset();
 
 #ifdef VERBOSE
     Serial.print("Cycle time (ms): ");
