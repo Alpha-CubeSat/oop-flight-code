@@ -22,7 +22,7 @@ MainControlLoop::MainControlLoop()
       clock_manager()
 {
     delay(1000);
-    int actual_period = Watchdog.enable(constants::watchdog::max_period_ms);
+    (void)Watchdog.enable(constants::watchdog::max_period_ms);
 }
 
 void MainControlLoop::execute()
