@@ -296,7 +296,7 @@ namespace constants {
         static constexpr unsigned int slow_write_interval = 600;
     } // namespace eeprom
     namespace watchdog {
-        constexpr unsigned int max_period_ms = 4000;
+        constexpr unsigned int max_period_ms = 10000;
     } // namespace watchdog
 };    // namespace constants
 
