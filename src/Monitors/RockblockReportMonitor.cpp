@@ -50,75 +50,37 @@ void RockblockReportMonitor::schedule_report()
 {
 
     // Check if in a low-power mode; if so, only enable normal report downlink
-    if (sfr::mission::current_mode->get_type() == mode_type::LP) {
-        if (millis() - sfr::rockblock::last_downlink >= sfr::rockblock::downlink_period) {
+    if (millis() - sfr::rockblock::last_downlink >= sfr::rockblock::downlink_period) {
+        if (sfr::mission::current_mode->get_type() == mode_type::LP) {
             sfr::rockblock::downlink_report_type = (uint16_t)report_type::normal_report;
             sfr::rockblock::ready_status = true;
             return;
+        } else {
+            // Not in low-power mode; report type cycle order: normal report, IMU report, camera report
+            switch (static_cast<report_type>(sfr::rockblock::downlink_report_type.get())) {
+            case report_type::normal_report:
+                if (sfr::camera::report_ready) {
+                    switch_report_type_to(report_type::camera_report);
+                    return;
+                } else if (sfr::imu::report_ready) {
+                    switch_report_type_to(report_type::imu_report);
+                    return;
+                }
+                switch_report_type_to(report_type::normal_report);
+                return;
+            case report_type::camera_report:
+                if (sfr::imu::report_ready) {
+                    switch_report_type_to(report_type::imu_report);
+                    return;
+                }
+                switch_report_type_to(report_type::normal_report);
+                return;
+            case report_type::imu_report:
+                switch_report_type_to(report_type::normal_report);
+                return;
+            }
         }
-
+    } else {
         sfr::rockblock::ready_status = false;
-        return;
-    }
-
-    // Not in low-power mode; report type cycle order: normal report, IMU report, camera report
-    switch (static_cast<report_type>(sfr::rockblock::downlink_report_type.get())) {
-    case report_type::normal_report:
-        if (sfr::imu::report_ready) {
-            switch_report_type_to(report_type::imu_report);
-            return;
-        }
-
-        if (sfr::camera::report_ready) {
-            switch_report_type_to(report_type::camera_report);
-            return;
-        }
-
-        if (millis() - sfr::rockblock::last_downlink >= sfr::rockblock::downlink_period) {
-            switch_report_type_to(report_type::normal_report);
-            return;
-        }
-
-        // None of the reports are ready
-        sfr::rockblock::ready_status = false;
-        return;
-    case report_type::imu_report:
-        if (sfr::camera::report_ready) {
-            switch_report_type_to(report_type::camera_report);
-            return;
-        }
-
-        if (millis() - sfr::rockblock::last_downlink >= sfr::rockblock::downlink_period) {
-            switch_report_type_to(report_type::normal_report);
-            return;
-        }
-
-        if (sfr::imu::report_ready) {
-            switch_report_type_to(report_type::imu_report);
-            return;
-        }
-
-        // None of the reports are ready
-        sfr::rockblock::ready_status = false;
-        return;
-    case report_type::camera_report:
-        if (millis() - sfr::rockblock::last_downlink >= sfr::rockblock::downlink_period) {
-            switch_report_type_to(report_type::normal_report);
-            return;
-        }
-
-        if (sfr::imu::report_ready) {
-            switch_report_type_to(report_type::imu_report);
-            return;
-        }
-
-        if (sfr::camera::report_ready) {
-            switch_report_type_to(report_type::camera_report);
-            return;
-        }
-
-        // None of the reports are ready
-        sfr::rockblock::ready_status = false;
-        return;
     }
 }
