@@ -18,10 +18,13 @@ void RockblockReportMonitor::execute()
 
     switch (static_cast<report_type>(sfr::rockblock::downlink_report_type.get())) {
     case report_type::camera_report:
-        sfr::rockblock::downlink_report.clear();
-        for (auto &data : sfr::rockblock::camera_report) {
-            sfr::rockblock::downlink_report.push_back(data);
+        if (last_report_type != report_type::camera_report) {
+            sfr::rockblock::downlink_report.clear();
+            for (auto &data : sfr::rockblock::camera_report) {
+                sfr::rockblock::downlink_report.push_back(data);
+            }
         }
+        last_report_type = report_type::camera_report;
         return;
 
     case report_type::normal_report:
@@ -29,13 +32,17 @@ void RockblockReportMonitor::execute()
         for (auto &data : sfr::rockblock::normal_report) {
             sfr::rockblock::downlink_report.push_back(data);
         }
+        last_report_type = report_type::normal_report;
         return;
 
     case report_type::imu_report:
-        sfr::rockblock::downlink_report.clear();
-        for (auto &data : sfr::rockblock::imu_report) {
-            sfr::rockblock::downlink_report.push_back(data);
+        if (last_report_type != report_type::imu_report) {
+            sfr::rockblock::downlink_report.clear();
+            for (auto &data : sfr::rockblock::imu_report) {
+                sfr::rockblock::downlink_report.push_back(data);
+            }
         }
+        last_report_type = report_type::imu_report;
         return;
     }
 }
@@ -48,10 +55,10 @@ void RockblockReportMonitor::switch_report_type_to(report_type downlink_report_t
 
 void RockblockReportMonitor::schedule_report()
 {
-
-    // Check if in a low-power mode; if so, only enable normal report downlink
-    if (millis() - sfr::rockblock::last_downlink >= sfr::rockblock::downlink_period) {
+    if (!sfr::rockblock::sleep_mode && millis() - sfr::rockblock::last_downlink >= sfr::rockblock::downlink_period) {
+        // Check if in a low-power mode
         if (sfr::mission::current_mode->get_type() == mode_type::LP) {
+            // In low-power mode; only enable normal report downlinks
             sfr::rockblock::downlink_report_type = (uint16_t)report_type::normal_report;
             sfr::rockblock::ready_status = true;
             return;
