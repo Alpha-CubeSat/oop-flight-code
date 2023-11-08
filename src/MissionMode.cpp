@@ -23,7 +23,7 @@ void AliveSignal::transition_to()
 {
     transmit_mode_settings(false);
     sfr::imu::turn_off = false; // Calling after transmit_mode_settings to overwrite sfr::imu::turn_off
-    sfr::imu::turn_on = true; 
+    sfr::imu::turn_on = true;
     sfr::rockblock::ready_status = true;
 }
 void AliveSignal::dispatch()
