@@ -171,7 +171,7 @@ void TransmitInSun::transition_to()
 }
 void TransmitInSun::dispatch()
 {
-    (sfr::mission::normalInSun, sfr::rockblock::on_time);
+    timed_out(sfr::mission::normalInSun, sfr::rockblock::on_time);
     enter_lp_insun();
     exit_insun_phase(sfr::mission::bootImu);
 }
