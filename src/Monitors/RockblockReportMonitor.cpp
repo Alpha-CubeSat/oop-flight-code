@@ -18,13 +18,10 @@ void RockblockReportMonitor::execute()
 
     switch (static_cast<report_type>(sfr::rockblock::downlink_report_type.get())) {
     case report_type::camera_report:
-        if (last_report_type != report_type::camera_report) {
-            sfr::rockblock::downlink_report.clear();
-            for (auto &data : sfr::rockblock::camera_report) {
-                sfr::rockblock::downlink_report.push_back(data);
-            }
+        sfr::rockblock::downlink_report.clear();
+        for (auto &data : sfr::rockblock::camera_report) {
+            sfr::rockblock::downlink_report.push_back(data);
         }
-        last_report_type = report_type::camera_report;
         return;
 
     case report_type::normal_report:
@@ -32,17 +29,13 @@ void RockblockReportMonitor::execute()
         for (auto &data : sfr::rockblock::normal_report) {
             sfr::rockblock::downlink_report.push_back(data);
         }
-        last_report_type = report_type::normal_report;
         return;
 
     case report_type::imu_report:
-        if (last_report_type != report_type::imu_report) {
-            sfr::rockblock::downlink_report.clear();
-            for (auto &data : sfr::rockblock::imu_report) {
-                sfr::rockblock::downlink_report.push_back(data);
-            }
+        sfr::rockblock::downlink_report.clear();
+        for (auto &data : sfr::rockblock::imu_report) {
+            sfr::rockblock::downlink_report.push_back(data);
         }
-        last_report_type = report_type::imu_report;
         return;
     }
 }
