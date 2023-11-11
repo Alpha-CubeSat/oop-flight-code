@@ -35,7 +35,6 @@ void CameraControlTask::execute()
             transition_to_normal();
         } else if (sfr::camera::init_mode == (uint16_t)sensor_init_mode_type::failed) {
             if (sfr::camera::failed_times == sfr::camera::failed_limit) {
-                sfr::camera::failed_times = 0; // reset
                 transition_to_abnormal_init();
             } else {
                 sfr::camera::failed_times = sfr::camera::failed_times + 1;
