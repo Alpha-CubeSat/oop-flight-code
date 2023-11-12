@@ -9,6 +9,7 @@ void CameraControlTask::execute()
 {
     // handle latent turn on / turn off variables
     if (sfr::camera::turn_off == true && sfr::camera::powered == false) {
+        sfr::camera::failed_times = 0;
         sfr::camera::turn_off = false;
     }
     if (sfr::camera::turn_on == true && sfr::camera::powered == true) {
@@ -35,7 +36,6 @@ void CameraControlTask::execute()
             transition_to_normal();
         } else if (sfr::camera::init_mode == (uint16_t)sensor_init_mode_type::failed) {
             if (sfr::camera::failed_times == sfr::camera::failed_limit) {
-                sfr::camera::failed_times = 0; // reset
                 transition_to_abnormal_init();
             } else {
                 sfr::camera::failed_times = sfr::camera::failed_times + 1;
@@ -55,6 +55,7 @@ void CameraControlTask::execute()
         pinMode(constants::camera::tx, OUTPUT);
         Pins::setPinState(constants::camera::rx, LOW);
         Pins::setPinState(constants::camera::tx, LOW);
+        sfr::camera::failed_times = 0;
         sfr::camera::powered = false;
         sfr::camera::turn_off = false;
         sfr::camera::init_mode = (uint16_t)sensor_init_mode_type::in_progress;

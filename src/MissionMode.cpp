@@ -234,7 +234,7 @@ void BootCamera::transition_to()
 
 void BootCamera::dispatch()
 {
-    if (sfr::camera::init_mode == (uint16_t)sensor_init_mode_type::complete || sfr::camera::failed_times > sfr::camera::failed_limit) {
+    if (sfr::camera::init_mode == (uint16_t)sensor_init_mode_type::complete || sfr::camera::failed_times >= sfr::camera::failed_limit) {
         sfr::mission::current_mode = sfr::mission::mandatoryBurns;
     }
 }
