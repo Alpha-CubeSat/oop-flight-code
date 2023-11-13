@@ -49,7 +49,7 @@ void DetumbleSpin::transition_to()
 }
 void DetumbleSpin::dispatch()
 {
-    if (sfr::imu::failed_times > sfr::imu::failed_limit) {
+    if (sfr::imu::failed_times >= sfr::imu::failed_limit) {
         sfr::mission::current_mode = sfr::mission::normal;
         sfr::acs::mode = (uint8_t)acs_mode_type::point;
     }
