@@ -33,6 +33,7 @@ void IMUMonitor::execute()
     // handle latent turn on / turn off variables
     if (sfr::imu::turn_off == true && sfr::imu::powered == false) {
         sfr::imu::turn_off = false;
+        sfr::imu::failed_times = 0;
     }
     if (sfr::imu::turn_on == true && sfr::imu::powered == true) {
         sfr::imu::turn_on = false;
@@ -49,7 +50,6 @@ void IMUMonitor::execute()
             sfr::imu::powered = true;
         } else {
             if (sfr::imu::failed_times == sfr::imu::failed_limit) {
-                sfr::imu::failed_times = 0; // reset
                 transition_to_abnormal_init();
             } else {
                 sfr::imu::failed_times = sfr::imu::failed_times + 1;
