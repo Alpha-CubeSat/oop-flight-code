@@ -52,7 +52,6 @@ void DetumbleSpin::dispatch()
     if (sfr::imu::failed_times >= sfr::imu::failed_limit) {
         sfr::mission::current_mode = sfr::mission::normal;
         sfr::acs::mode = (uint8_t)acs_mode_type::point;
-        sfr::imu::failed_times = 0;
     }
     exit_detumble_phase(sfr::mission::normal);
 }
