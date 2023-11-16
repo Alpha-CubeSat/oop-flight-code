@@ -72,7 +72,7 @@ void IMUMonitor::execute()
         invalidate_data();
 
         // reset number of failed imu initialization attempts every time IMU is turned off
-        sfr::imu::failed_times = 0
+        sfr::imu::failed_times = 0;
     }
 
     if (sfr::imu::powered == true) {
