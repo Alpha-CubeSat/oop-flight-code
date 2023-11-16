@@ -102,6 +102,12 @@ public:
         LSM9DS1_REGISTER_OUT_Z_H_XL = 0x2D,
     } lsm9ds1AccGyroRegisters_t;
 
+    /**! Register mapping for magnetometer component */
+    typedef enum
+    {
+        LSM9DS1_REGISTER_CTRL_REG1_M = 0x20,
+    } lsm9ds1MagRegisters_t;
+
     /**! Enumeration for accelerometer range (2/4/8/16 g) */
     typedef enum
     {

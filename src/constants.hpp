@@ -260,6 +260,8 @@ namespace constants {
         constexpr int door_open_end_time = 19 * time::one_second;    // 19 seconds after the door opens IMU Turn off
 
         constexpr int sfr_resolution = 10;
+
+        constexpr int spi_clock_freq = 80000000
     } // namespace imu
 
     namespace imu_downlink {

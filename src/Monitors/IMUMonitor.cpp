@@ -66,18 +66,13 @@ void IMUMonitor::execute()
 #ifdef VERBOSE
         Serial.println("Turned off IMU");
 #endif
-        pinMode(constants::imu::CSAG, OUTPUT);
-        pinMode(constants::imu::CSM, OUTPUT);
-        Pins::setPinState(constants::imu::CSAG, LOW);
-        Pins::setPinState(constants::imu::CSM, LOW);
-
+        shutdown();
         sfr::imu::powered = false;
         sfr::imu::turn_off = false;
-
         invalidate_data();
 
         // reset number of failed imu initialization attempts every time IMU is turned off
-        sfr::imu::failed_times = 0;
+        sfr::imu::failed_times = 0
     }
 
     if (sfr::imu::powered == true) {
@@ -192,4 +187,33 @@ void IMUMonitor::invalidate_data()
     fault_groups::imu_faults::gyro_x_value->force();
     fault_groups::imu_faults::gyro_y_value->force();
     fault_groups::imu_faults::gyro_z_value->force();
+}
+
+void IMUMonitor::shutdown()
+{
+    pinMode(constants::imu::CSAG, OUTPUT);
+    pinMode(constants::imu::CSM, OUTPUT);
+
+    SPI.begin();
+    SPI.beginTransaction(SPISettings(constants::imu::spi_clock_freq, MSBFIRST, SPI_MODE0));
+
+    // Turn off gyroscope
+    Pins::setPinState(constants::imu::CSAG, LOW);
+    SPI.transfer(imu.LSM9DS1_REGISTER_CTRL_REG6_XL);
+    SPI.transfer(imu.LSM9DS1_ACCELDATARATE_POWERDOWN);
+    Pins::setPinState(constants::imu::CSAG, HIGH);
+
+    // Turn off accelerometer
+    Pins::setPinState(constants::imu::CSAG, LOW);
+    SPI.transfer(imu.LSM9DS1_REGISTER_CTRL_REG1_G);
+    SPI.transfer(imu.LSM9DS1_ACCELDATARATE_POWERDOWN);
+    Pins::setPinState(constants::imu::CSAG, HIGH);
+
+    // Switch magnetometer to low power mode
+    Pins::setPinState(constants::imu::CSM, LOW);
+    SPI.transfer(imu.LSM9DS1_REGISTER_CTRL_REG1_M);
+    SPI.transfer(imu.LSM9DS1_ACCELDATARATE_POWERDOWN);
+    Pins::setPinState(constants::imu::CSM, HIGH);
+
+    SPI.endTransaction();
 }
