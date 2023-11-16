@@ -261,7 +261,7 @@ namespace constants {
 
         constexpr int sfr_resolution = 10;
 
-        constexpr int spi_clock_freq = 80000000
+        constexpr int spi_clock_freq = 80000000;
     } // namespace imu
 
     namespace imu_downlink {
