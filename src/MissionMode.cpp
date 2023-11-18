@@ -215,9 +215,9 @@ void BootIMU::transition_to()
 }
 void BootIMU::dispatch()
 {
-    // sfr::mission::current_mode = sfr::mission::bootImu;
-    // this is where we need to do the 20 seconds
-    if (((sfr::imu::init_mode == (uint16_t)sensor_init_mode_type::complete) && ((millis() - sfr::imu::imu_boot_collection_start_time) >= constants::imu::boot_IMU_min_run_time)) || sfr::imu::failed_times >= sfr::camera::failed_limit) {
+    // Once the IMU is initialized and 20 seconds have passed transition.
+    // OR If the failed tiems exceeds the limit transition
+    if (((sfr::imu::init_mode == (uint16_t)sensor_init_mode_type::complete) && ((millis() - sfr::imu::imu_boot_collection_start_time) >= constants::imu::boot_IMU_min_run_time)) || sfr::imu::failed_times >= sfr::imu::failed_limit) {
         sfr::mission::current_mode = sfr::mission::bootCamera;
         // reset failed times once we transition
         sfr::imu::failed_times = 0;
