@@ -6,10 +6,9 @@ ButtonMonitor::ButtonMonitor()
 
 void ButtonMonitor::execute()
 {
-    val = digitalRead(constants::button::button_pin);
+    uint8_t val = digitalRead(constants::button::button_pin);
     sfr::button::button_pressed->set_value(val);
-    // Serial.print("Button read: ");
-    // Serial.println(val);
+
     // button is recognized as not pressed
     if (val == 0) {
         sfr::button::pressed = false;

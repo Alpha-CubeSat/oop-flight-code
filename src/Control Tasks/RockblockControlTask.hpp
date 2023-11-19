@@ -41,7 +41,7 @@ private:
     RockblockCommand *commandFactory(RawRockblockCommand raw);
     uint32_t conseq_reads = 0;
     uint32_t start_time_check_signal = 0;
-    uint32_t serial_checks = 0;
+    uint32_t same_mode = 0;
 };
 
 #endif

@@ -259,7 +259,7 @@ void RegularBurns::transition_to()
 
 void RegularBurns::dispatch()
 {
-    if ((!sfr::button::pressed && !fault_groups::hardware_faults::button->get_signaled()) || (!sfr::photoresistor::covered && !fault_groups::hardware_faults::light_val->get_signaled())) {
+    if ((!sfr::button::pressed && !fault_groups::hardware_faults::button->get_base()) || (!sfr::photoresistor::covered && !fault_groups::hardware_faults::light_val->get_base())) {
         sfr::mission::current_mode = sfr::mission::photo;
         sfr::mission::deployed = true;
 

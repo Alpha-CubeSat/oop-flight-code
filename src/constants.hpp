@@ -13,6 +13,9 @@ namespace constants {
         constexpr unsigned long one_day = 24 * one_hour;
         constexpr unsigned long half_second = one_second / 2;
         constexpr float one_revolution = 90 * one_minute;
+
+        // control_cycle_time is the value actually used for timing. The
+        constexpr unsigned int control_cycle_time_ms = 100;
     } // namespace time
     namespace sensor {
         constexpr int collect = 3;
@@ -35,7 +38,7 @@ namespace constants {
         constexpr int sleep_pin = 19;
         constexpr int min_sleep_period = 2 * time::one_minute;
         constexpr int max_check_signal_time = time::one_minute;
-        constexpr int max_serial_checks = 50;
+        constexpr int max_same_mode = (30 * time::one_minute) / time::control_cycle_time_ms;
 
         constexpr int baud = 19200;
         constexpr size_t buffer_size = 63;
@@ -267,12 +270,6 @@ namespace constants {
         constexpr uint8_t imu_report_endflag1 = 0xFE;
         constexpr uint8_t imu_report_endflag2 = 0x92;
     } // namespace imu_downlink
-    namespace timecontrol {
-        // Environment-based initializations of the control loop time.
-        // control_cycle_time is the value actually used for timing. The
-        // other constants are just informational.
-        constexpr unsigned int control_cycle_time_ms = 100;
-    } // namespace timecontrol
     namespace eeprom {
         // Byte locations of the EEPROM blue moon data
         static constexpr unsigned int boot_time_loc1 = 0;

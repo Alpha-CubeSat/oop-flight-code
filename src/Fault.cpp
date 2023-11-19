@@ -78,3 +78,8 @@ uint8_t Fault::serialize()
     serialized += (int8_t)signaled;
     return serialized;
 }
+
+uint16_t Fault::get_opcode()
+{
+    return opcode;
+}

@@ -10,6 +10,19 @@ RockblockControlTask::RockblockControlTask()
 void RockblockControlTask::execute()
 {
     rockblock_mode_type mode = static_cast<rockblock_mode_type>(sfr::rockblock::mode.get());
+
+#ifdef VERBOSE_RB
+    Serial.print("RockBLOCK Same Mode: ");
+    Serial.println(same_mode);
+#endif
+
+    if (mode != rockblock_mode_type::standby) {
+        if (same_mode > constants::rockblock::max_same_mode) {
+            transition_to(rockblock_mode_type::standby);
+        }
+        same_mode++;
+    }
+
     switch (mode) {
     case rockblock_mode_type::standby:
         dispatch_standby();
@@ -104,7 +117,6 @@ void RockblockControlTask::dispatch_standby()
 void RockblockControlTask::dispatch_send_at()
 {
     conseq_reads = 0;
-    serial_checks = 0;
 #ifdef VERBOSE_RB
     Serial.println("SENT: ATr");
 #endif
@@ -114,9 +126,6 @@ void RockblockControlTask::dispatch_send_at()
 
 void RockblockControlTask::dispatch_await_at()
 {
-    if (serial_checks > constants::rockblock::max_serial_checks) {
-        transition_to(rockblock_mode_type::send_at);
-    }
     if (sfr::rockblock::serial.read() == 'K') {
 #ifdef VERBOSE_RB
         Serial.println("SAT INFO: ok");
@@ -124,7 +133,6 @@ void RockblockControlTask::dispatch_await_at()
         transition_to(rockblock_mode_type::send_signal_strength);
         sfr::rockblock::start_time_check_signal = millis();
     }
-    serial_checks++;
 }
 
 void RockblockControlTask::dispatch_send_signal_strength()
@@ -434,8 +442,6 @@ void RockblockControlTask::dispatch_process_command()
                 Serial.println("SAT INFO: flush confirmed");
                 sfr::rockblock::flush_status = false;
             } else {
-                // Invalid Command Recieved
-                // TODO: What Goes Here @Lauren
                 Serial.println("SAT INFO: invalid command");
             }
         }
@@ -500,6 +506,7 @@ void RockblockControlTask::dispatch_end_transmission()
 void RockblockControlTask::transition_to(rockblock_mode_type new_mode)
 {
     sfr::rockblock::mode = (uint16_t)new_mode;
+    same_mode = 0;
 }
 
 RockblockCommand *RockblockControlTask::commandFactory(RawRockblockCommand raw)
