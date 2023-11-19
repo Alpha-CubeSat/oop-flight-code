@@ -9,10 +9,6 @@ void MissionManager::execute()
     if (first) {
         boot_initialization();
         first = false;
-
-        // Force the mode into be ready to deploy
-        sfr::mission::current_mode = sfr::mission::normalInSun;
-        sfr::temperature::in_sun = true;
     }
     sfr::mission::current_phase = modeToPhase(sfr::mission::current_mode);
 
