@@ -82,3 +82,59 @@ void IMUDownlinkReportMonitor::create_imu_downlink_report(uint8_t fragment_numbe
     // For the next downlink cycle
     sfr::imu::report_ready = true;
 }
+
+void IMUDownlinkReportMonitor::create_imu_downlink_report_from_SD(uint8_t fragment_number)
+{
+    // Open image file and read it for specified image/fragment
+    String filename = "imu_frag_" + String(fragment_number) + ".txt";
+    File txtFile = SD.open(filename.c_str(), FILE_READ);
+
+    // Parse hex stored as chars into actual hex
+    uint8_t tempbuffer[constants::imu::max_gyro_imu_report_size * 2];
+    uint8_t parsedbuffer[constants::imu::max_gyro_imu_report_size];
+
+    for (size_t i = 0; i < sizeof(tempbuffer); i++) {
+        tempbuffer[i] = txtFile.read();
+    }
+
+    // txtFile.read(tempbuffer, constants::imu::max_gyro_imu_report_size);
+
+    int x = 0;
+    for (size_t i = 0; i < sizeof(tempbuffer); i++) {
+        int byte_0;
+        int byte_1;
+        if (tempbuffer[i] <= 90 && tempbuffer[i] >= 65) {
+            byte_0 = tempbuffer[i] - 55;
+        } else {
+            byte_0 = tempbuffer[i] - 48;
+        }
+        if (tempbuffer[i + 1] <= 90 && tempbuffer[i + 1] >= 65) {
+            byte_1 = tempbuffer[i + 1] - 55;
+        } else {
+            byte_1 = tempbuffer[i + 1] - 48;
+        }
+        parsedbuffer[x] = byte_1 + (byte_0 * 16);
+        x++;
+        i++;
+    }
+
+    txtFile.close();
+
+    sfr::rockblock::imu_report.push_back(constants::rockblock::imu_report_flag);
+    sfr::rockblock::imu_report.push_back(fragment_number);
+
+    // Add fragment data to imu report
+    for (int i = 0; i < constants::camera::content_length; i++) {
+        sfr::rockblock::imu_report.push_back(parsedbuffer[i]);
+    }
+
+    sfr::rockblock::imu_report.push_back(constants::imu_downlink::imu_report_endflag1);
+    sfr::rockblock::imu_report.push_back(constants::imu_downlink::imu_report_endflag2);
+
+#ifdef E2E_TESTNG
+    Serial.println("IMU report ready");
+#endif
+
+    sfr::imu::report_ready = true;
+    sfr::imu::fragment_requested = false;
+}
