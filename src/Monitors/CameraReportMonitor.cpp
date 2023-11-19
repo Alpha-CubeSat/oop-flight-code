@@ -7,15 +7,16 @@ void CameraReportMonitor::execute()
 {
     // Get a requested fragment
     if (sfr::rockblock::camera_report.empty() && sfr::camera::fragment_requested) {
+#ifdef VERBOSE
+        Serial.println("Requested Camera fragment " + String(sfr::camera::fragment_number_requested));
+#endif
         create_camera_report(sfr::camera::fragment_number_requested, sfr::camera::serial_requested);
         sfr::camera::fragment_requested = false;
     }
     // Prepare data from an image taken for downlink
     else if (sfr::rockblock::camera_report.empty() && sfr::camera::images_written > current_serial) {
 #ifdef VERBOSE
-        Serial.println("Report monitor started");
-        Serial.println("Current serial: " + String(current_serial));
-        Serial.println("Current fragment: " + String(fragment_number));
+        Serial.println("Writing Camera serial " + String(current_serial) + " fragment " + String(fragment_number));
 #endif
         create_camera_report(fragment_number, current_serial);
         if (fragment_number == sfr::rockblock::camera_max_fragments[current_serial]) {
@@ -32,10 +33,6 @@ void CameraReportMonitor::execute()
 
 void CameraReportMonitor::create_camera_report(uint32_t fragment_number, uint8_t serial_number)
 {
-#ifdef VERBOSE
-    Serial.println("DEBUG: fragment #: " + String(fragment_number));
-    Serial.println("DEBUG: serial_number: " + String(serial_number));
-#endif
     // open image file and read it for specified image/fragment
     String filename = "";
     if (serial_number < 10) {
@@ -56,7 +53,7 @@ void CameraReportMonitor::create_camera_report(uint32_t fragment_number, uint8_t
     for (size_t i = 0; i < sizeof(tempbuffer); i++) {
         tempbuffer[i] = imgFile.read();
     }
-    // imgFile.read(tempbuffer, constants::camera::content_length);
+
     int x = 0;
     for (size_t i = 0; i < sizeof(tempbuffer); i++) {
         int byte_0;
@@ -93,8 +90,6 @@ void CameraReportMonitor::create_camera_report(uint32_t fragment_number, uint8_t
     for (int i = 0; i < constants::camera::content_length; i++) {
         sfr::rockblock::camera_report.push_back(parsedbuffer[i]);
     }
-#ifdef E2E_TESTNG
-    Serial.println("Camera report ready");
-#endif
+
     sfr::camera::report_ready = true;
 }

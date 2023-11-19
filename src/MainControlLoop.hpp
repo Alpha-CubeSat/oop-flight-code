@@ -54,7 +54,6 @@ public:
     void execute();
 
 private:
-    bool initialized = false;
     float val;
 };
 
