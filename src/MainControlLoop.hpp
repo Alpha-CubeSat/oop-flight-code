@@ -22,6 +22,8 @@
 #include "Monitors/RockblockReportMonitor.hpp"
 #include "Monitors/TemperatureMonitor.hpp"
 
+#include "Adafruit_SleepyDog.h"
+
 class MainControlLoop
 {
 protected:

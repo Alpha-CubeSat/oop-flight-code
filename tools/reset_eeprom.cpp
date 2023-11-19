@@ -1,7 +1,6 @@
 #include <Arduino.h>
 #include <EEPROM.h>
 #include <SD.h>
-#include <string>
 
 #define NUM_FILES 10
 
@@ -23,7 +22,7 @@ void setup()
     if (create_files) {
 
         for (int i = 0; i < NUM_FILES; i++) {
-            std::string filename = "file" + std::to_string(i) + ".txt";
+            String filename = "file" + String(i) + ".txt";
             File file = SD.open(filename.c_str(), FILE_WRITE);
             Serial.print("Creating ");
             Serial.println(filename.c_str());

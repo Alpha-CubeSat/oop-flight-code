@@ -9,7 +9,7 @@ void ACSControlTask::execute()
 
 #ifdef ACS_SIM
     if (first) {
-        plantObj.initialize(altitude_input, I_input, inclination_input, m_input, q0_input, wx_input, wy_input, wz_input);
+        plantObj.initialize(0.1, altitude_input, I_input, inclination_input, m_input, q0_input, wx_input, wy_input, wz_input);
     }
 #endif
 
@@ -51,15 +51,7 @@ void ACSControlTask::execute()
     Serial.println(gyro_z);
 #endif
 
-    if (last_time == 0) {
-        plantObj.step();
-    } else {
-        num_steps = millis() - last_time;
-        for (int i = 0; i < num_steps; i++) {
-            plantObj.step();
-        }
-    }
-    last_time = millis();
+    plantObj.step();
 #endif
 
     if (!sfr::acs::off) {
