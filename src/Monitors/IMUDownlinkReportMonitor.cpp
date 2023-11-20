@@ -10,7 +10,7 @@ void IMUDownlinkReportMonitor::execute()
     }
 
     // A fragment request has been made, and there is no report currently queued
-    if (sfr::imu::fragment_requested && !sfr::imu::report_ready) {
+    if (sfr::imu::fragment_requested && sfr::rockblock::imu_report.empty()) {
 #ifdef VERBOSE
         Serial.println("Requested IMU fragment " + String(sfr::imu::fragment_number_requested));
 #endif
