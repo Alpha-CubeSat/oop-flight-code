@@ -48,8 +48,10 @@ void IMUDownlink::execute()
     }
 
     if (sfr::imu::report_written && values_unwritten > 0) {
+#ifdef VERBOSE
         Serial.print("Writing IMU fragment ");
         Serial.println(fragment_number);
+#endif
         // Set up fragment save to SD card
         String filename = "imu_frag_" + String(fragment_number) + ".txt";
         File txtFile = SD.open(filename.c_str(), FILE_WRITE);
