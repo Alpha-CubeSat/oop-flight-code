@@ -9,6 +9,15 @@ void IMUDownlinkReportMonitor::execute()
         sfr::imu::report_ready = false;
     }
 
+    // A fragment request has been made, and there is no report currently queued
+    if (sfr::imu::fragment_requested && !sfr::imu::report_ready) {
+#ifdef VERBOSE
+        Serial.println("Requested IMU fragment " + String(sfr::imu::fragment_number_requested));
+#endif
+        // Will not do anything if the requested fragment's text file does not exist
+        create_imu_downlink_report_from_SD(sfr::imu::fragment_number_requested);
+    }
+
     // Create an IMU report when ever the report is ready
     if (fragment_number < sfr::imu::max_fragments && sfr::rockblock::imu_report.empty() && sfr::imu::report_written) {
 #ifdef VERBOSE
@@ -16,14 +25,6 @@ void IMUDownlinkReportMonitor::execute()
 #endif
         create_imu_downlink_report(fragment_number);
         fragment_number++;
-    }
-
-    // A fragment request has been made, and there is no report currently queued
-    if (sfr::imu::fragment_requested && !sfr::imu::report_ready) {
-#ifdef VERBOSE
-        Serial.println("Requested IMU fragment " + String(sfr::imu::fragment_number_requested));
-#endif
-        create_imu_downlink_report_from_SD(sfr::imu::fragment_number_requested);
     }
 }
 
@@ -64,46 +65,50 @@ void IMUDownlinkReportMonitor::create_imu_downlink_report_from_SD(uint8_t fragme
     String filename = "imu_frag_" + String(fragment_number) + ".txt";
     File txtFile = SD.open(filename.c_str(), FILE_READ);
 
-    // Parse hex stored as chars into actual hex
-    uint8_t tempbuffer[constants::imu::max_gyro_imu_report_size * 2];
-    uint8_t parsedbuffer[constants::imu::max_gyro_imu_report_size];
+    if (txtFile) {
+        // Text file exists on SD card
 
-    for (size_t i = 0; i < sizeof(tempbuffer); i++) {
-        tempbuffer[i] = txtFile.read();
-    }
+        // Parse hex stored as chars into actual hex
+        uint8_t tempbuffer[constants::imu::max_gyro_imu_report_size * 2];
+        uint8_t parsedbuffer[constants::imu::max_gyro_imu_report_size];
 
-    int x = 0;
-    for (size_t i = 0; i < sizeof(tempbuffer); i++) {
-        int byte_0;
-        int byte_1;
-        if (tempbuffer[i] <= 90 && tempbuffer[i] >= 65) {
-            byte_0 = tempbuffer[i] - 55;
-        } else {
-            byte_0 = tempbuffer[i] - 48;
+        for (size_t i = 0; i < sizeof(tempbuffer); i++) {
+            tempbuffer[i] = txtFile.read();
         }
-        if (tempbuffer[i + 1] <= 90 && tempbuffer[i + 1] >= 65) {
-            byte_1 = tempbuffer[i + 1] - 55;
-        } else {
-            byte_1 = tempbuffer[i + 1] - 48;
+
+        int x = 0;
+        for (size_t i = 0; i < sizeof(tempbuffer); i++) {
+            int byte_0;
+            int byte_1;
+            if (tempbuffer[i] <= 90 && tempbuffer[i] >= 65) {
+                byte_0 = tempbuffer[i] - 55;
+            } else {
+                byte_0 = tempbuffer[i] - 48;
+            }
+            if (tempbuffer[i + 1] <= 90 && tempbuffer[i + 1] >= 65) {
+                byte_1 = tempbuffer[i + 1] - 55;
+            } else {
+                byte_1 = tempbuffer[i + 1] - 48;
+            }
+            parsedbuffer[x] = byte_1 + (byte_0 * 16);
+            x++;
+            i++;
         }
-        parsedbuffer[x] = byte_1 + (byte_0 * 16);
-        x++;
-        i++;
+
+        txtFile.close();
+
+        sfr::rockblock::imu_report.push_back(constants::rockblock::imu_report_flag);
+        sfr::rockblock::imu_report.push_back(fragment_number);
+
+        // Add fragment data to imu report
+        for (int i = 0; i < constants::camera::content_length; i++) {
+            sfr::rockblock::imu_report.push_back(parsedbuffer[i]);
+        }
+
+        sfr::rockblock::imu_report.push_back(constants::imu_downlink::imu_report_endflag1);
+        sfr::rockblock::imu_report.push_back(constants::imu_downlink::imu_report_endflag2);
+
+        sfr::imu::report_ready = true;
+        sfr::imu::fragment_requested = false;
     }
-
-    txtFile.close();
-
-    sfr::rockblock::imu_report.push_back(constants::rockblock::imu_report_flag);
-    sfr::rockblock::imu_report.push_back(fragment_number);
-
-    // Add fragment data to imu report
-    for (int i = 0; i < constants::camera::content_length; i++) {
-        sfr::rockblock::imu_report.push_back(parsedbuffer[i]);
-    }
-
-    sfr::rockblock::imu_report.push_back(constants::imu_downlink::imu_report_endflag1);
-    sfr::rockblock::imu_report.push_back(constants::imu_downlink::imu_report_endflag2);
-
-    sfr::imu::report_ready = true;
-    sfr::imu::fragment_requested = false;
 }
