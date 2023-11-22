@@ -169,6 +169,7 @@ public:
     int16_t temperature; ///< Last read temperzture data will be available here
 
     bool begin(void);
+    void shutdown(void);
     void read(void);
     void readAccel(void);
     void readGyro(void);

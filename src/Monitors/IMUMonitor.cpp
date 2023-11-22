@@ -11,7 +11,7 @@ IMUMonitor::IMUMonitor()
 
 void IMUMonitor::IMU_init()
 {
-    if (sfr::imu::init_mode == (uint16_t)sensor_init_mode_type::awaiting) {
+        if (sfr::imu::init_mode == (uint16_t)sensor_init_mode_type::awaiting) {
         // Called imu_init function and initialization process has not yet started
         sfr::imu::init_mode = (uint16_t)sensor_init_mode_type::in_progress;
     }
@@ -43,6 +43,7 @@ void IMUMonitor::execute()
 #ifdef VERBOSE
         Serial.println("Turned on IMU");
 #endif
+        sfr::imu::init_mode = (uint16_t)sensor_init_mode_type::awaiting;
         IMUMonitor::IMU_init();
         if (sfr::imu::init_mode == (uint16_t)sensor_init_mode_type::complete) {
             sfr::imu::turn_on = false;
@@ -66,7 +67,7 @@ void IMUMonitor::execute()
 #ifdef VERBOSE
         Serial.println("Turned off IMU");
 #endif
-        shutdown();
+        imu.shutdown();
         sfr::imu::powered = false;
         sfr::imu::turn_off = false;
         invalidate_data();
@@ -187,33 +188,4 @@ void IMUMonitor::invalidate_data()
     fault_groups::imu_faults::gyro_x_value->force();
     fault_groups::imu_faults::gyro_y_value->force();
     fault_groups::imu_faults::gyro_z_value->force();
-}
-
-void IMUMonitor::shutdown()
-{
-    pinMode(constants::imu::CSAG, OUTPUT);
-    pinMode(constants::imu::CSM, OUTPUT);
-
-    SPI.begin();
-    SPI.beginTransaction(SPISettings(constants::imu::spi_clock_freq, MSBFIRST, SPI_MODE0));
-
-    // Turn off gyroscope
-    Pins::setPinState(constants::imu::CSAG, LOW);
-    SPI.transfer(imu.LSM9DS1_REGISTER_CTRL_REG6_XL);
-    SPI.transfer(imu.LSM9DS1_ACCELDATARATE_POWERDOWN);
-    Pins::setPinState(constants::imu::CSAG, HIGH);
-
-    // Turn off accelerometer
-    Pins::setPinState(constants::imu::CSAG, LOW);
-    SPI.transfer(imu.LSM9DS1_REGISTER_CTRL_REG1_G);
-    SPI.transfer(imu.LSM9DS1_ACCELDATARATE_POWERDOWN);
-    Pins::setPinState(constants::imu::CSAG, HIGH);
-
-    // Switch magnetometer to low power mode
-    Pins::setPinState(constants::imu::CSM, LOW);
-    SPI.transfer(imu.LSM9DS1_REGISTER_CTRL_REG1_M);
-    SPI.transfer(imu.LSM9DS1_ACCELDATARATE_POWERDOWN);
-    Pins::setPinState(constants::imu::CSM, HIGH);
-
-    SPI.endTransaction();
 }
