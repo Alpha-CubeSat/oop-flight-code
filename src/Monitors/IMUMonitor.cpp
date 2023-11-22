@@ -11,7 +11,7 @@ IMUMonitor::IMUMonitor()
 
 void IMUMonitor::IMU_init()
 {
-        if (sfr::imu::init_mode == (uint16_t)sensor_init_mode_type::awaiting) {
+    if (sfr::imu::init_mode == (uint16_t)sensor_init_mode_type::awaiting) {
         // Called imu_init function and initialization process has not yet started
         sfr::imu::init_mode = (uint16_t)sensor_init_mode_type::in_progress;
     }
