@@ -142,6 +142,12 @@ bool Adafruit_LSM9DS1::begin() {
   return true;
 }
 
+void Adafruit_LSM9DS1::shutdown() {
+  write8(XGTYPE, LSM9DS1_REGISTER_CTRL_REG6_XL, 0x00);
+  write8(XGTYPE, LSM9DS1_REGISTER_CTRL_REG1_G, 0x00);
+  _magSensor.setOperationMode(LIS3MDL_POWERDOWNMODE);
+}
+
 /***************************************************************************
  PUBLIC FUNCTIONS
  ***************************************************************************/

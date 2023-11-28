@@ -43,6 +43,7 @@ void IMUMonitor::execute()
 #ifdef VERBOSE
         Serial.println("Turned on IMU");
 #endif
+        sfr::imu::init_mode = (uint16_t)sensor_init_mode_type::awaiting;
         IMUMonitor::IMU_init();
         if (sfr::imu::init_mode == (uint16_t)sensor_init_mode_type::complete) {
             sfr::imu::turn_on = false;
@@ -66,14 +67,9 @@ void IMUMonitor::execute()
 #ifdef VERBOSE
         Serial.println("Turned off IMU");
 #endif
-        pinMode(constants::imu::CSAG, OUTPUT);
-        pinMode(constants::imu::CSM, OUTPUT);
-        Pins::setPinState(constants::imu::CSAG, LOW);
-        Pins::setPinState(constants::imu::CSM, LOW);
-
+        imu.shutdown();
         sfr::imu::powered = false;
         sfr::imu::turn_off = false;
-
         invalidate_data();
 
         // reset number of failed imu initialization attempts every time IMU is turned off
