@@ -54,10 +54,7 @@ void setup()
         Serial.println("Error: Opening root failed");
     }
     Serial.println("All files deleted");
-}
 
-void loop()
-{
     Serial.println("Beginning EEPROM reset!");
     uint16_t eeprom_length = EEPROM.length();
     for (unsigned int i = 0; i < eeprom_length; i++) {
@@ -74,6 +71,11 @@ void loop()
     EEPROM.put(4092, (uint16_t)10);
     EEPROM.put(8, (uint16_t)460);
     EEPROM.put(4094, (uint16_t)460);
-    Serial.println("Reset finished, will run again in 5 seconds. You can unplug to save write endurance!");
-    delay(5000);
+    Serial.println("EEPROM reset finished!")
+}
+
+void loop()
+{
+    Serial.println("SD and EEPROM reset finished!");
+    delay(10000);
 }
