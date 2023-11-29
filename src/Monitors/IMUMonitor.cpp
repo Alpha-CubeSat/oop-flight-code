@@ -33,6 +33,7 @@ void IMUMonitor::execute()
     // handle latent turn on / turn off variables
     if (sfr::imu::turn_off == true && sfr::imu::powered == false) {
         sfr::imu::turn_off = false;
+        sfr::imu::failed_times = 0;
     }
     if (sfr::imu::turn_on == true && sfr::imu::powered == true) {
         sfr::imu::turn_on = false;
@@ -42,6 +43,7 @@ void IMUMonitor::execute()
 #ifdef VERBOSE
         Serial.println("Turned on IMU");
 #endif
+        sfr::imu::init_mode = (uint16_t)sensor_init_mode_type::awaiting;
         IMUMonitor::IMU_init();
         if (sfr::imu::init_mode == (uint16_t)sensor_init_mode_type::complete) {
             sfr::imu::turn_on = false;
@@ -49,7 +51,6 @@ void IMUMonitor::execute()
             sfr::imu::powered = true;
         } else {
             if (sfr::imu::failed_times == sfr::imu::failed_limit) {
-                sfr::imu::failed_times = 0; // reset
                 transition_to_abnormal_init();
             } else {
                 sfr::imu::failed_times = sfr::imu::failed_times + 1;
@@ -66,14 +67,9 @@ void IMUMonitor::execute()
 #ifdef VERBOSE
         Serial.println("Turned off IMU");
 #endif
-        pinMode(constants::imu::CSAG, OUTPUT);
-        pinMode(constants::imu::CSM, OUTPUT);
-        Pins::setPinState(constants::imu::CSAG, LOW);
-        Pins::setPinState(constants::imu::CSM, LOW);
-
+        imu.shutdown();
         sfr::imu::powered = false;
         sfr::imu::turn_off = false;
-
         invalidate_data();
 
         // reset number of failed imu initialization attempts every time IMU is turned off
