@@ -7,6 +7,7 @@
 #include "StarshotACS.h"
 #include "constants.hpp"
 #include "sfr.hpp"
+#include "ekf.h"
 
 class ACSControlTask
 {
@@ -14,6 +15,7 @@ public:
     ACSControlTask();
     StarshotACS starshotObj;
     Plant plantObj;
+    EKF ekfObj;
     void execute();
 
 private:
