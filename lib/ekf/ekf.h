@@ -1,8 +1,7 @@
-// this disables some run-time checks which slightly speeds up your program.
+// This disables some run-time checks which slightly speeds up your program.
 // However, this should not be done prematurely, as it also hides otherwise hard-to-find programming mistakes (such as combining expressions of incompatible dimensions)!
 // Disable EIGEN DEBUGGING!!!
 #define NDEBUG
-
 #include <ArduinoEigenDense.h>
 
 class EKF {

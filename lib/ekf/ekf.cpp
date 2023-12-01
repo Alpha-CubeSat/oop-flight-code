@@ -45,8 +45,7 @@ Eigen::VectorXd rk4(const Eigen::VectorXd &x_initial, double f_step_size, double
     Eigen::VectorXd x = x_initial;
     int num_steps = static_cast<int>((t_end - t_start) / f_step_size);
 
-    for (int i = 0; i < num_steps; ++i)
-    {
+    for (int i = 0; i < num_steps; ++i) {
         x = rk4_step(x, f_step_size);
     }
 
@@ -71,7 +70,6 @@ void EKF::step()
     predict(J);
 
     correct();
-
 }
 
 Eigen::MatrixXd matrix_exp(const Eigen::MatrixXd &A, int order = 5)
@@ -81,12 +79,10 @@ Eigen::MatrixXd matrix_exp(const Eigen::MatrixXd &A, int order = 5)
     Eigen::MatrixXd A_power = A;
     Eigen::MatrixXd identity = Eigen::MatrixXd::Identity(n, n);
 
-    for (int i = 1; i <= order; ++i)
-    {
+    for (int i = 1; i <= order; ++i) {
         result += A_power;
 
-        if (i % 2 == 0)
-        {
+        if (i % 2 == 0) {
             result -= A_power;
         }
 
@@ -108,7 +104,6 @@ void EKF::predict(const Eigen::MatrixXd &J_k_k)
 
     state = rk4(state, 0.1, 0.0, dt);
     covariance = J_k_k * covariance * J_k_k.transpose() + Q;
-
 }
 
 void EKF::correct()
