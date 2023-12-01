@@ -17,6 +17,24 @@ void ACSControlTask::execute()
 #ifdef VERBOSE
         Serial.println("Initialize starshot library");
         starshotObj.initialize(constants::acs::step_size_input, constants::acs::A_input, constants::acs::Id_values[sfr::acs::Id_index], constants::acs::Kd_values[sfr::acs::Kd_index], constants::acs::Kp_values[sfr::acs::Kp_index], constants::acs::c_values[sfr::acs::c_index], constants::acs::i_max_input, constants::acs::k_input, constants::acs::n_input);
+        /// EKF Initalizing PARAMETERS///
+        Eigen::VectorXd initial_state = Eigen::VectorXd::Zero(6);
+        Eigen::MatrixXd initial_cov = Eigen::MatrixXd::Zero(6, 6);
+        // Q (process noise covariance) Matrix
+        Eigen::MatrixXd Q = 0.02 * Eigen::MatrixXd::Identity(6, 6);
+        Q.diagonal() << 0.008, 0.07, 0.005, 0.1, 0.1, 0.1;
+        // Rd (measurement noise variance) Matrices
+        Eigen::MatrixXd Rd(6, 6);
+        Rd << 2.02559220e-01, 5.17515015e-03, -3.16669361e-02, -1.76503506e-04, -3.74891174e-05, -7.75657503e-05,
+            5.17515015e-03, 1.55389381e-01, 1.07780468e-02, -2.90511952e-05, -8.02931174e-06, -1.26277622e-05,
+            -3.16669361e-02, 1.07780468e-02, 3.93162684e-01, 9.29630074e-05, 1.22496815e-05, 5.67092127e-05,
+            -1.76503506e-04, -2.90511952e-05, 9.29630074e-05, 1.80161545e-05, -2.27002599e-09, -6.07376965e-07,
+            -3.74891174e-05, -8.02931174e-06, 1.22496815e-05, -2.27002599e-09, 6.70144060e-06, 2.97298687e-08,
+            -7.75657503e-05, -1.26277622e-05, 5.67092127e-05, -6.07376965e-07, 2.97298687e-08, 8.52192033e-06;
+        // Hd
+        Eigen::MatrixXd Hd = Eigen::MatrixXd::Identity(6, 6);
+        Serial.println("Initialize EKF library");
+        ekfObj.initialize(constants::acs::step_size_input, initial_state, initial_cov, Q, Rd, Hd);
 #endif
         first = false;
     }
@@ -29,6 +47,7 @@ void ACSControlTask::execute()
     imu_valid = sfr::imu::gyro_x_value->get_value(&gyro_x) && sfr::imu::gyro_y_value->get_value(&gyro_y) && sfr::imu::gyro_z_value->get_value(&gyro_z) && sfr::imu::mag_x_value->get_value(&mag_x) && sfr::imu::mag_y_value->get_value(&mag_y) && sfr::imu::mag_z_value->get_value(&mag_z);
 
 #ifdef ACS_SIM
+    // maybe want to add ekf here?
     gyro_x = plantObj.rtY.angularvelocity[0];
     gyro_y = plantObj.rtY.angularvelocity[1];
     gyro_z = plantObj.rtY.angularvelocity[2];
@@ -77,12 +96,23 @@ void ACSControlTask::execute()
             mag_y = mag_y / 1000000.0;
             mag_z = mag_z / 1000000.0;
 
-            starshotObj.rtU.w[0] = gyro_x;
-            starshotObj.rtU.w[1] = gyro_y;
-            starshotObj.rtU.w[2] = gyro_z;
-            starshotObj.rtU.Bfield_body[0] = mag_x;
-            starshotObj.rtU.Bfield_body[1] = mag_y;
-            starshotObj.rtU.Bfield_body[2] = mag_z;
+            // load sensor reading to EKF
+            ekfObj.Z(0) = mag_x;
+            ekfObj.Z(1) = mag_y;
+            ekfObj.Z(2) = mag_z;
+            ekfObj.Z(3) = gyro_x;
+            ekfObj.Z(4) = gyro_y;
+            ekfObj.Z(5) = gyro_z;
+
+            ekfObj.step();
+
+            // load filtered imu data from EKF to the controller
+            starshotObj.rtU.Bfield_body[0] = ekfObj.state(0);
+            starshotObj.rtU.Bfield_body[1] = ekfObj.state(1);
+            starshotObj.rtU.Bfield_body[2] = ekfObj.state(2);
+            starshotObj.rtU.w[0] = ekfObj.state(3);
+            starshotObj.rtU.w[1] = ekfObj.state(4);
+            starshotObj.rtU.w[2] = ekfObj.state(5);
 
             starshotObj.step();
 
