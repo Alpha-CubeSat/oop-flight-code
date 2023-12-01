@@ -538,37 +538,47 @@ RockblockCommand *RockblockControlTask::commandFactory(RawRockblockCommand raw)
     // Create Specific Child Class of Rockblock command depending on the OP Code
     uint16_t op_code = raw.get_f_opcode();
     if (op_code == constants::rockblock::opcodes::sfr_field_opcode_deploy) {
-#ifdef VERBOSE_RB
+#ifdef VERBOSE
         Serial.println("SFR Deploy Command");
 #endif
         return new DeployCommand(raw);
     } else if (op_code == constants::rockblock::opcodes::sfr_field_opcode_arm) {
-#ifdef VERBOSE_RB
+#ifdef VERBOSE
         Serial.println("SFR Arm Command");
 #endif
         return new ArmCommand(raw);
     } else if (op_code == constants::rockblock::opcodes::sfr_field_opcode_fire) {
-#ifdef VERBOSE_RB
+#ifdef VERBOSE
         Serial.println("SFR Fire Command");
 #endif
         return new FireCommand(raw);
+    } else if (op_code >= constants::rockblock::opcodes::sfr_field_opcode_min && op_code <= constants::rockblock::opcodes::sfr_field_opcode_max) {
+#ifdef VERBOSE
+        Serial.println("SFR Override Command");
+#endif
+        return new SFROverrideCommand(raw);
+    } else if (op_code >= constants::rockblock::opcodes::fault_opcode_min && op_code <= constants::rockblock::opcodes::fault_opcode_max) {
+#ifdef VERBOSE
+        Serial.println("Fault Override Command");
+#endif
+        return new FaultOverrideCommand(raw);
     } else if (op_code == constants::rockblock::opcodes::eeprom_reset_opcode) {
-#ifdef VERBOSE_RB
+#ifdef VERBOSE
         Serial.println("EEPROM Reset Command");
 #endif
         return new EEPROMResetCommand(raw);
     } else if (op_code == constants::rockblock::opcodes::sfr_field_opcode_camera_fragment_request) {
-#ifdef VERBOSE_RB
+#ifdef VERBOSE
         Serial.println("SFR Camera Fragment Request");
 #endif
         return new CameraFragmentCommand(raw);
     } else if (op_code == constants::rockblock::opcodes::sfr_field_opcode_imu_fragment_request) {
-#ifdef VERBOSE_RB
+#ifdef VERBOSE
         Serial.println("IMU Fragment Request");
 #endif
         return new IMUFragmentCommand(raw);
     } else {
-#ifdef VERBOSE_RB
+#ifdef VERBOSE
         Serial.print("Unknown Command with opcode: ");
         Serial.println(op_code, HEX);
 #endif
