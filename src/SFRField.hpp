@@ -76,25 +76,25 @@ public:
 
     SFRField(float default_val, float min, float max, int opcode_val, float resolution)
     {
-        value = default_val * resolution;
+        value = default_val;
         this->min = min;
         this->max = max;
         opcode = opcode_val;
         this->resolution = resolution;
         restore = false;
-        T initial = default_val * resolution;
+        T initial = default_val;
         SFRInterface::opcode_lookup[opcode_val] = this;
     }
 
     SFRField(float default_val, int opcode_val, float resolution)
     {
-        value = default_val * resolution;
+        value = default_val;
         min = std::numeric_limits<T>::min();
         max = std::numeric_limits<T>::max();
         opcode = opcode_val;
         this->resolution = resolution;
         restore = false;
-        T initial = default_val * resolution;
+        T initial = default_val;
         SFRInterface::opcode_lookup[opcode_val] = this;
     }
 

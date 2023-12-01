@@ -342,7 +342,7 @@ void enter_lp(MissionMode *lp_mode)
 {
     float voltage;
 
-    if (!sfr::battery::voltage_average->is_valid() || (sfr::battery::voltage_average->get_value(&voltage) && voltage <= sfr::battery::min_battery)) {
+    if (!sfr::battery::voltage_average->is_valid() || (sfr::battery::voltage_average->get_value(&voltage) && voltage <= sfr::battery::min_battery.get_float())) {
         sfr::mission::current_mode = lp_mode;
     }
 }
@@ -362,7 +362,7 @@ void exit_lp(MissionMode *reg_mode)
 
     Serial.println(sfr::battery::voltage_average->get_value(&voltage));
 
-    if (sfr::battery::voltage_average->get_value(&voltage) && voltage > sfr::battery::acceptable_battery) {
+    if (sfr::battery::voltage_average->get_value(&voltage) && voltage > sfr::battery::acceptable_battery.get_float()) {
         Serial.println(voltage);
         sfr::mission::current_mode = reg_mode;
     }
@@ -383,7 +383,7 @@ void enter_lp_insun()
 
     if (!sfr::battery::voltage_average->is_valid()) {
         sfr::mission::current_mode = sfr::mission::voltageFailureInSun;
-    } else if (sfr::battery::voltage_average->get_value(&voltage) && voltage <= sfr::battery::min_battery) {
+    } else if (sfr::battery::voltage_average->get_value(&voltage) && voltage <= sfr::battery::min_battery.get_float()) {
         sfr::mission::current_mode = sfr::mission::lowPowerInSun;
     }
 }

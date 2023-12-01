@@ -13,11 +13,11 @@ namespace sfr {
     namespace detumble {
         // OP Codes 1500
         // TODO actual default values
-        SFRField<uint8_t> min_stable_gyro_z = SFRField<uint8_t>((1 / constants::imu::sfr_resolution), 0x1500, constants::imu::sfr_resolution);
-        SFRField<uint8_t> max_stable_gyro_x = SFRField<uint8_t>((.2 / constants::imu::sfr_resolution), 0x1501, constants::imu::sfr_resolution);
-        SFRField<uint8_t> max_stable_gyro_y = SFRField<uint8_t>((.2 / constants::imu::sfr_resolution), 0x1502, constants::imu::sfr_resolution);
-        SFRField<uint8_t> min_unstable_gyro_x = SFRField<uint8_t>((.7 / constants::imu::sfr_resolution), 0x1503, constants::imu::sfr_resolution);
-        SFRField<uint8_t> min_unstable_gyro_y = SFRField<uint8_t>((.7 / constants::imu::sfr_resolution), 0x1504, constants::imu::sfr_resolution);
+        SFRField<uint8_t> min_stable_gyro_z = SFRField<uint8_t>((1 * constants::imu::sfr_resolution), 0x1500, constants::imu::sfr_resolution);
+        SFRField<uint8_t> max_stable_gyro_x = SFRField<uint8_t>((0.2 * constants::imu::sfr_resolution), 0x1501, constants::imu::sfr_resolution);
+        SFRField<uint8_t> max_stable_gyro_y = SFRField<uint8_t>((0.2 * constants::imu::sfr_resolution), 0x1502, constants::imu::sfr_resolution);
+        SFRField<uint8_t> min_unstable_gyro_x = SFRField<uint8_t>((0.7 * constants::imu::sfr_resolution), 0x1503, constants::imu::sfr_resolution);
+        SFRField<uint8_t> min_unstable_gyro_y = SFRField<uint8_t>((0.7 * constants::imu::sfr_resolution), 0x1504, constants::imu::sfr_resolution);
         // END TODO
     } // namespace detumble
     namespace aliveSignal {
@@ -243,8 +243,8 @@ namespace sfr {
     } // namespace acs
     namespace battery {
         // OP Codes 2600
-        SFRField<uint32_t> acceptable_battery = SFRField<uint32_t>((3.9 / constants::battery::sfr_resolution), 0x2600, constants::battery::sfr_resolution);
-        SFRField<uint32_t> min_battery = SFRField<uint32_t>((3.75 / constants::battery::sfr_resolution), 0x2601, constants::battery::sfr_resolution);
+        SFRField<uint32_t> acceptable_battery = SFRField<uint32_t>((3.9 * constants::battery::sfr_resolution), 0x2600, constants::battery::sfr_resolution);
+        SFRField<uint32_t> min_battery = SFRField<uint32_t>((3.75 * constants::battery::sfr_resolution), 0x2601, constants::battery::sfr_resolution);
 
         SensorReading *voltage_value = new SensorReading(fault_groups::power_faults::voltage_value, 1, constants::battery::min_voltage, constants::battery::max_voltage);
         SensorReading *voltage_average = new SensorReading(fault_groups::power_faults::voltage_average, 300, constants::battery::min_voltage, constants::battery::max_voltage);
