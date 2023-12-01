@@ -4,7 +4,8 @@
 #define NDEBUG
 #include <ArduinoEigenDense.h>
 
-class EKF {
+class EKF
+{
 public:
     EKF();
 
@@ -17,7 +18,7 @@ public:
 
 private:
     double dt;
-    Eigen::MatrixXd Q;  // Process noise covariance
+    Eigen::MatrixXd Q;   // Process noise covariance
     Eigen::MatrixXd R_d; // (measurement noise variance) Matrices
     Eigen::MatrixXd H_d;
 
