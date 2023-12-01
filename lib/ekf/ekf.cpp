@@ -52,15 +52,24 @@ Eigen::VectorXd rk4(const Eigen::VectorXd &x_initial, double f_step_size, double
     return x;
 }
 
-void EKF::initialize(double delta_t, const Eigen::VectorXd &initial_state, const Eigen::MatrixXd &initial_covariance, const Eigen::MatrixXd &process_noise_covariance, const Eigen::MatrixXd &Rd, const Eigen::MatrixXd &Hd)
+void EKF::initialize(double delta_t)
 {
-    state = initial_state;
-    Z = initial_state;
-    covariance = initial_covariance;
-    Q = process_noise_covariance;
-    R_d = Rd;
-    H_d = Hd;
+    state = Eigen::VectorXd::Zero(6);
+    Z = Eigen::VectorXd::Zero(6);
+    covariance = Eigen::MatrixXd::Zero(6, 6);
+    Q = 0.02 * Eigen::MatrixXd::Identity(6, 6);
+    H_d = Eigen::MatrixXd::Identity(6, 6);
     dt = delta_t;
+
+    Eigen::MatrixXd R_d(6, 6);
+    R_d << 2.02559220e-01, 5.17515015e-03, -3.16669361e-02, -1.76503506e-04, -3.74891174e-05, -7.75657503e-05,
+        5.17515015e-03, 1.55389381e-01, 1.07780468e-02, -2.90511952e-05, -8.02931174e-06, -1.26277622e-05,
+        -3.16669361e-02, 1.07780468e-02, 3.93162684e-01, 9.29630074e-05, 1.22496815e-05, 5.67092127e-05,
+        -1.76503506e-04, -2.90511952e-05, 9.29630074e-05, 1.80161545e-05, -2.27002599e-09, -6.07376965e-07,
+        -3.74891174e-05, -8.02931174e-06, 1.22496815e-05, -2.27002599e-09, 6.70144060e-06, 2.97298687e-08,
+        -7.75657503e-05, -1.26277622e-05, 5.67092127e-05, -6.07376965e-07, 2.97298687e-08, 8.52192033e-06;
+
+    Q.diagonal() << 0.008, 0.07, 0.005, 0.1, 0.1, 0.1;
 }
 
 void EKF::step()
