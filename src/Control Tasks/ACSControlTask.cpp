@@ -74,12 +74,7 @@ void ACSControlTask::execute()
 
             IMUOffset(&mag_x, &mag_y, &mag_z, temp_c, voltage, pwm_x, pwm_y, pwm_z);
 
-            // Convert from uT to T
-            mag_x = mag_x / 1000000.0;
-            mag_y = mag_y / 1000000.0;
-            mag_z = mag_z / 1000000.0;
-
-            // load sensor reading to EKF
+            // load sensor reading to EKF (expecting uT)
             ekfObj.Z(0) = mag_x;
             ekfObj.Z(1) = mag_y;
             ekfObj.Z(2) = mag_z;
@@ -89,10 +84,10 @@ void ACSControlTask::execute()
 
             ekfObj.step();
 
-            // load filtered imu data from EKF to the controller
-            starshotObj.rtU.Bfield_body[0] = ekfObj.state(0);
-            starshotObj.rtU.Bfield_body[1] = ekfObj.state(1);
-            starshotObj.rtU.Bfield_body[2] = ekfObj.state(2);
+            // load filtered imu data from EKF to the controller (expecting T)
+            starshotObj.rtU.Bfield_body[0] = ekfObj.state(0) / 1000000.0;
+            starshotObj.rtU.Bfield_body[1] = ekfObj.state(1) / 1000000.0;
+            starshotObj.rtU.Bfield_body[2] = ekfObj.state(2) / 1000000.0;
             starshotObj.rtU.w[0] = ekfObj.state(3);
             starshotObj.rtU.w[1] = ekfObj.state(4);
             starshotObj.rtU.w[2] = ekfObj.state(5);
