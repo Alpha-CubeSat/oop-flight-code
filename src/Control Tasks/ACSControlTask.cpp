@@ -47,7 +47,7 @@ void ACSControlTask::execute()
     imu_valid = sfr::imu::gyro_x_value->get_value(&gyro_x) && sfr::imu::gyro_y_value->get_value(&gyro_y) && sfr::imu::gyro_z_value->get_value(&gyro_z) && sfr::imu::mag_x_value->get_value(&mag_x) && sfr::imu::mag_y_value->get_value(&mag_y) && sfr::imu::mag_z_value->get_value(&mag_z);
 
 #ifdef ACS_SIM
-    //maybe want to add ekf here?
+    // maybe want to add ekf here?
     gyro_x = plantObj.rtY.angularvelocity[0];
     gyro_y = plantObj.rtY.angularvelocity[1];
     gyro_z = plantObj.rtY.angularvelocity[2];
@@ -96,7 +96,7 @@ void ACSControlTask::execute()
             mag_y = mag_y / 1000000.0;
             mag_z = mag_z / 1000000.0;
 
-            //load sensor reading to EKF
+            // load sensor reading to EKF
             ekfObj.Z(0) = mag_x;
             ekfObj.Z(1) = mag_y;
             ekfObj.Z(2) = mag_z;
@@ -106,7 +106,7 @@ void ACSControlTask::execute()
 
             ekfObj.step();
 
-            //load filtered imu data from EKF to the controller
+            // load filtered imu data from EKF to the controller
             starshotObj.rtU.Bfield_body[0] = ekfObj.state(0);
             starshotObj.rtU.Bfield_body[1] = ekfObj.state(1);
             starshotObj.rtU.Bfield_body[2] = ekfObj.state(2);
