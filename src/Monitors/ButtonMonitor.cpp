@@ -6,7 +6,7 @@ ButtonMonitor::ButtonMonitor()
 
 void ButtonMonitor::execute()
 {
-    val = digitalRead(constants::button::button_pin);
+    uint8_t val = digitalRead(constants::button::button_pin);
     sfr::button::button_pressed->set_value(val);
 
     // button is recognized as not pressed

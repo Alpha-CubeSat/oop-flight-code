@@ -131,5 +131,7 @@ public:
      * @return uint8_t - The four major indicators of fault status. 0000BFSuSi
      */
     uint8_t serialize();
+
+    uint16_t get_opcode();
 };
 #endif

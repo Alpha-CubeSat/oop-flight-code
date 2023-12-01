@@ -28,9 +28,9 @@ void IMUDownlink::execute()
                 sfr::imu::imu_dlink.push_front((gyro_z + 5) * 25);
             }
 
-            // Delete older values if the dlink is larger then the maximum bytes dowlinked
+            // Delete older values if the dlink is larger then the maximum bytes downlinked
             if (sfr::imu::imu_dlink.size() > constants::imu_downlink::max_imu_report_length) {
-                // if greater than the max size shrink the buffer.
+                // If greater than the max size shrink the buffer
                 for (int i = 0; i < 3; i++) {
                     sfr::imu::imu_dlink.pop_back();
                 }
@@ -43,6 +43,30 @@ void IMUDownlink::execute()
             sfr::imu::sample_gyro = false;
             sfr::imu::turn_off = true;
             sfr::imu::report_written = true;
+            values_unwritten = sfr::imu::imu_dlink.size();
         }
+    }
+
+    if (sfr::imu::report_written && values_unwritten > 0) {
+#ifdef VERBOSE
+        Serial.print("Writing IMU fragment ");
+        Serial.println(fragment_number);
+#endif
+        // Set up fragment save to SD card
+        String filename = "imu_frag_" + String(fragment_number) + ".txt";
+        File txtFile = SD.open(filename.c_str(), FILE_WRITE);
+
+        // Sets the amount of values that go into the report.
+        int pop_size = min(constants::imu::max_gyro_imu_report_size, values_unwritten);
+
+        for (int i = 0; i < pop_size; i++) {
+            uint8_t data = sfr::imu::imu_dlink[start_index];
+            txtFile.print(data, HEX);
+            values_unwritten--;
+            start_index++;
+        }
+
+        fragment_number++;
+        txtFile.close();
     }
 }
