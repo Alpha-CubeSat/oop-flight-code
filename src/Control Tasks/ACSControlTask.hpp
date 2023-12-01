@@ -6,8 +6,8 @@
 #include "Plant.h"
 #include "StarshotACS.h"
 #include "constants.hpp"
-#include "sfr.hpp"
 #include "ekf.h"
+#include "sfr.hpp"
 
 class ACSControlTask
 {
