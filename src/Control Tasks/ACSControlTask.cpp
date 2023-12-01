@@ -86,7 +86,7 @@ void ACSControlTask::execute()
             ekfObj.Z(3) = gyro_x;
             ekfObj.Z(4) = gyro_y;
             ekfObj.Z(5) = gyro_z;
-            
+
             ekfObj.step();
 
             // load filtered imu data from EKF to the controller
