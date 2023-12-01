@@ -9,7 +9,7 @@ class EKF
 public:
     EKF();
 
-    void initialize(double delta_t, const Eigen::VectorXd &initial_state, const Eigen::MatrixXd &initial_covariance, const Eigen::MatrixXd &process_noise_covariance, const Eigen::MatrixXd &noise_covariance, const Eigen::MatrixXd &Hd);
+    void initialize(double delta_t);
     void step();
 
     Eigen::VectorXd state;
