@@ -29,7 +29,7 @@ void AliveSignal::transition_to()
 void AliveSignal::dispatch()
 {
     exit_signal_phase(sfr::mission::detumbleSpin);
-    enter_lp(sfr::mission::lowPowerAliveSignal); // entering lp takes precedence 
+    enter_lp(sfr::mission::lowPowerAliveSignal); // entering lp takes precedence
 }
 
 void LowPowerAliveSignal::transition_to()
@@ -75,7 +75,7 @@ void Normal::transition_to()
 void Normal::dispatch()
 {
     timed_out(sfr::mission::transmit, sfr::acs::on_time);
-    enter_lp(sfr::mission::lowPower); // entering lp takes precedence 
+    enter_lp(sfr::mission::lowPower); // entering lp takes precedence
 }
 
 void LowPower::transition_to()
@@ -94,7 +94,7 @@ void Transmit::transition_to()
 void Transmit::dispatch()
 {
     timed_out(sfr::mission::normal, sfr::rockblock::on_time);
-    enter_lp(sfr::mission::lowPower); // entering lp takes precedence 
+    enter_lp(sfr::mission::lowPower); // entering lp takes precedence
 }
 
 void NormalDeployment::transition_to()
@@ -104,7 +104,7 @@ void NormalDeployment::transition_to()
 void NormalDeployment::dispatch()
 {
     timed_out(sfr::mission::transmitDeployment, sfr::acs::on_time);
-    enter_lp(sfr::mission::lowPowerDeployment); // entering lp takes precedence 
+    enter_lp(sfr::mission::lowPowerDeployment); // entering lp takes precedence
 }
 
 void TransmitDeployment::transition_to()
@@ -114,7 +114,7 @@ void TransmitDeployment::transition_to()
 void TransmitDeployment::dispatch()
 {
     timed_out(sfr::mission::normalDeployment, sfr::rockblock::on_time);
-    enter_lp(sfr::mission::lowPowerDeployment); // entering lp takes precedence 
+    enter_lp(sfr::mission::lowPowerDeployment); // entering lp takes precedence
 }
 
 void LowPowerDeployment::transition_to()
@@ -133,7 +133,7 @@ void NormalArmed::transition_to()
 void NormalArmed::dispatch()
 {
     timed_out(sfr::mission::transmitArmed, sfr::acs::on_time);
-    enter_lp(sfr::mission::lowPowerArmed); // entering lp takes precedence 
+    enter_lp(sfr::mission::lowPowerArmed); // entering lp takes precedence
 }
 
 void TransmitArmed::transition_to()
@@ -144,7 +144,7 @@ void TransmitArmed::transition_to()
 void TransmitArmed::dispatch()
 {
     timed_out(sfr::mission::normalArmed, sfr::rockblock::on_time);
-    enter_lp(sfr::mission::lowPowerArmed); // entering lp takes precedence 
+    enter_lp(sfr::mission::lowPowerArmed); // entering lp takes precedence
 }
 
 void LowPowerArmed::transition_to()
@@ -164,7 +164,7 @@ void NormalInSun::dispatch()
 {
     timed_out(sfr::mission::transmitInSun, sfr::acs::on_time);
     exit_insun_phase(sfr::mission::bootImu);
-    enter_lp_insun(); // entering lp takes precedence 
+    enter_lp_insun(); // entering lp takes precedence
 }
 
 void TransmitInSun::transition_to()
@@ -175,7 +175,7 @@ void TransmitInSun::dispatch()
 {
     timed_out(sfr::mission::normalInSun, sfr::rockblock::on_time);
     exit_insun_phase(sfr::mission::bootImu);
-    enter_lp_insun(); // entering lp takes precedence 
+    enter_lp_insun(); // entering lp takes precedence
 }
 
 void LowPowerInSun::transition_to()
