@@ -5,7 +5,7 @@ void boot_initialization()
 {
     sfr::rockblock::sleep_mode = true;
     sfr::acs::off = true;
-    sfr::imu::turn_on = true;
+    //sfr::imu::turn_on = true;
 }
 
 void Boot::transition_to()
@@ -22,8 +22,8 @@ void Boot::dispatch()
 void AliveSignal::transition_to()
 {
     transmit_mode_settings(false);
-    sfr::imu::turn_off = false; // Calling after transmit_mode_settings to overwrite sfr::imu::turn_off
-    sfr::imu::turn_on = true;
+    //sfr::imu::turn_off = false; // Calling after transmit_mode_settings to overwrite sfr::imu::turn_off
+    //sfr::imu::turn_on = true;
     sfr::rockblock::ready_status = true;
 }
 void AliveSignal::dispatch()
@@ -60,7 +60,7 @@ void LowPowerDetumbleSpin::transition_to()
 {
     sfr::rockblock::sleep_mode = true;
     sfr::acs::off = true;
-    sfr::imu::turn_off = true;
+    //sfr::imu::turn_off = true;
 }
 void LowPowerDetumbleSpin::dispatch()
 {
@@ -209,8 +209,8 @@ void BootIMU::transition_to()
 {
     sfr::rockblock::sleep_mode = true;
     sfr::acs::off = true;
-    sfr::imu::turn_on = true;
-    sfr::imu::turn_off = false;
+    //sfr::imu::turn_on = true;
+    //sfr::imu::turn_off = false;
     sfr::imu::sample_gyro = true;
 }
 void BootIMU::dispatch()
@@ -228,8 +228,8 @@ void BootCamera::transition_to()
 {
     sfr::rockblock::sleep_mode = true;
     sfr::acs::off = true;
-    sfr::imu::turn_on = true;
-    sfr::camera::turn_on = true;
+    //sfr::imu::turn_on = true;
+    //sfr::camera::turn_on = true;
 }
 
 void BootCamera::dispatch()
@@ -282,7 +282,7 @@ void Photo::dispatch()
     // Only go onto the next state until the IMU finished collecting all of the data
     if (millis() > sfr::imu::door_open_start_time + constants::imu::door_open_end_time) {
         sfr::mission::current_mode = sfr::mission::detumbleSpin;
-        sfr::imu::turn_off = true;
+        //sfr::imu::turn_off = true;
     }
 }
 
@@ -388,7 +388,7 @@ void transmit_mode_settings(bool lp)
 {
     sfr::rockblock::sleep_mode = false;
     sfr::acs::off = true;
-    sfr::imu::turn_off = true;
+    //sfr::imu::turn_off = true;
     if (lp) {
         sfr::rockblock::downlink_period = sfr::rockblock::lp_downlink_period;
     } else {
@@ -400,5 +400,5 @@ void acs_mode_settings()
 {
     sfr::rockblock::sleep_mode = true;
     sfr::acs::off = false;
-    sfr::imu::turn_on = true;
+    //sfr::imu::turn_on = true;
 }

@@ -31,22 +31,22 @@ void IMUMonitor::IMU_init()
 void IMUMonitor::execute()
 {
     // handle latent turn on / turn off variables
-    if (sfr::imu::turn_off == true && sfr::imu::powered == false) {
-        sfr::imu::turn_off = false;
+    if (sfr::imu::power_setting == (uint8_t)sensor_power_mode_type::off && sfr::imu::powered == false) {
+        sfr::imu::power_setting = (uint8_t)sensor_power_mode_type::do_nothing;
         sfr::imu::failed_times = 0;
     }
-    if (sfr::imu::turn_on == true && sfr::imu::powered == true) {
-        sfr::imu::turn_on = false;
+    if (sfr::imu::power_setting == (uint8_t)sensor_power_mode_type::on && sfr::imu::powered == true) {
+        sfr::imu::power_setting = (uint8_t)sensor_power_mode_type::do_nothing;
     }
 
-    if (sfr::imu::turn_on == true && sfr::imu::powered == false) {
+    if (sfr::imu::power_setting == (uint8_t)sensor_power_mode_type::on && sfr::imu::powered == false) {
 #ifdef VERBOSE
         Serial.println("Turned on IMU");
 #endif
         sfr::imu::init_mode = (uint16_t)sensor_init_mode_type::awaiting;
         IMUMonitor::IMU_init();
         if (sfr::imu::init_mode == (uint16_t)sensor_init_mode_type::complete) {
-            sfr::imu::turn_on = false;
+            sfr::imu::power_setting = (uint8_t)sensor_power_mode_type::do_nothing;
             transition_to_normal();
             sfr::imu::powered = true;
         } else {
@@ -63,13 +63,13 @@ void IMUMonitor::execute()
         }
     }
 
-    if (sfr::imu::turn_off == true && sfr::imu::powered == true) {
+    if (sfr::imu::power_setting == (uint8_t)sensor_power_mode_type::off && sfr::imu::powered == true) {
 #ifdef VERBOSE
         Serial.println("Turned off IMU");
 #endif
         imu.shutdown();
         sfr::imu::powered = false;
-        sfr::imu::turn_off = false;
+        sfr::imu::power_setting = (uint8_t)sensor_power_mode_type::do_nothing;
         invalidate_data();
 
         // reset number of failed imu initialization attempts every time IMU is turned off
@@ -167,9 +167,8 @@ void IMUMonitor::transition_to_abnormal_init()
     sfr::imu::mode = (uint16_t)sensor_mode_type::abnormal_init;
     invalidate_data();
 
-    sfr::imu::turn_on = false;
+    sfr::imu::power_setting = (uint8_t)sensor_power_mode_type::do_nothing;
     sfr::imu::powered = false;
-    sfr::imu::turn_off = false;
     sfr::imu::init_mode = (uint16_t)sensor_init_mode_type::awaiting;
 }
 

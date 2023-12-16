@@ -41,7 +41,7 @@ void IMUDownlink::execute()
         // Turn IMU off if it has deployed and the time alloted time has finished.
         if (sfr::mission::deployed && (millis() - sfr::imu::door_open_start_time) > constants::imu::door_open_end_time) {
             sfr::imu::sample_gyro = false;
-            sfr::imu::turn_off = true;
+            sfr::imu::power_setting = (uint8_t)sensor_power_mode_type::off;
             sfr::imu::report_written = true;
             values_unwritten = sfr::imu::imu_dlink.size();
         }
