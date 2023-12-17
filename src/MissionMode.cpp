@@ -137,7 +137,7 @@ void NormalDeployment::transition_to()
         sensor_power_mode_type::on,  // imu
         sensor_power_mode_type::off, // camera
         false,                       // acs off
-        sfr::rockblock::transmit__downlink_period);
+        sfr::rockblock::transmit_downlink_period);
 }
 void NormalDeployment::dispatch()
 {
