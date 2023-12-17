@@ -8,7 +8,7 @@ CameraControlTask::CameraControlTask()
 void CameraControlTask::execute()
 {
     // handle latent turn on / turn off variables
-    if (sfr::camera::power_setting ==(uint8_t)sensor_power_mode_type::off && sfr::camera::powered == false) {
+    if (sfr::camera::power_setting == (uint8_t)sensor_power_mode_type::off && sfr::camera::powered == false) {
         sfr::camera::failed_times = 0;
         sfr::camera::power_setting = (uint8_t)sensor_power_mode_type::do_nothing;
     }
