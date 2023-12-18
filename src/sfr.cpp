@@ -129,23 +129,22 @@ namespace sfr {
         // OP Codes 2000
         SFRField<bool> photo_taken_sd_failed = SFRField<bool>(false, 0x2000);
         SFRField<bool> take_photo = SFRField<bool>(false, 0x2001);
-        SFRField<bool> turn_on = SFRField<bool>(false, 0x2002);
-        SFRField<bool> turn_off = SFRField<bool>(false, 0x2003);
-        SFRField<bool> powered = SFRField<bool>(false, 0x2004);
-        SFRField<bool> report_ready = SFRField<bool>(false, 0x2005);
-        SFRField<bool> fragment_requested = SFRField<bool>(false, 0x2006);
-        SFRField<uint8_t> start_progress = SFRField<uint8_t>(0, 0x2007);
-        SFRField<uint8_t> serial_requested = SFRField<uint8_t>(0, 0x2008);
-        SFRField<uint16_t> mode = SFRField<uint16_t>((uint16_t)sensor_mode_type::normal, 0x2009);
-        SFRField<uint16_t> failed_times = SFRField<uint16_t>(0, 0x2010);
-        SFRField<uint16_t> failed_limit = SFRField<uint16_t>(5, 0x2011);
-        SFRField<uint16_t> init_mode = SFRField<uint16_t>((uint16_t)sensor_init_mode_type::awaiting, 0x2012);
-        SFRField<uint32_t> init_start_time = SFRField<uint32_t>(0, 0x2013);
-        SFRField<uint32_t> init_timeout = SFRField<uint32_t>(12 * constants::time::one_second, 0x2014);
-        SFRField<uint32_t> images_written = SFRField<uint32_t>(0, 0x2015);
-        SFRField<uint32_t> fragments_written = SFRField<uint32_t>(0, 0x2016);
-        SFRField<uint32_t> set_res = SFRField<uint32_t>(VC0706_160x120, 0x2017);
-        SFRField<uint32_t> fragment_number_requested = SFRField<uint32_t>(0, 0x2018);
+        SFRField<bool> powered = SFRField<bool>(false, 0x2002);
+        SFRField<bool> report_ready = SFRField<bool>(false, 0x2003);
+        SFRField<bool> fragment_requested = SFRField<bool>(false, 0x2004);
+        SFRField<uint8_t> start_progress = SFRField<uint8_t>(0, 0x2005);
+        SFRField<uint8_t> serial_requested = SFRField<uint8_t>(0, 0x2006);
+        SFRField<uint8_t> power_setting = SFRField<uint8_t>((uint8_t)sensor_power_mode_type::do_nothing, 0x2007);
+        SFRField<uint16_t> mode = SFRField<uint16_t>((uint16_t)sensor_mode_type::normal, 0x2008);
+        SFRField<uint16_t> failed_times = SFRField<uint16_t>(0, 0x2009);
+        SFRField<uint16_t> failed_limit = SFRField<uint16_t>(5, 0x2010);
+        SFRField<uint16_t> init_mode = SFRField<uint16_t>((uint16_t)sensor_init_mode_type::awaiting, 0x2011);
+        SFRField<uint32_t> init_start_time = SFRField<uint32_t>(0, 0x2012);
+        SFRField<uint32_t> init_timeout = SFRField<uint32_t>(12 * constants::time::one_second, 0x2013);
+        SFRField<uint32_t> images_written = SFRField<uint32_t>(0, 0x2014);
+        SFRField<uint32_t> fragments_written = SFRField<uint32_t>(0, 0x2015);
+        SFRField<uint32_t> set_res = SFRField<uint32_t>(VC0706_160x120, 0x2016);
+        SFRField<uint32_t> fragment_number_requested = SFRField<uint32_t>(0, 0x2017);
     } // namespace camera
     namespace rockblock {
         // OP Codes 2100
@@ -185,20 +184,19 @@ namespace sfr {
     namespace imu {
         // OP Codes 2200
         SFRField<bool> sample_gyro = SFRField<bool>(false, 0x2200);
-        SFRField<bool> turn_on = SFRField<bool>(false, 0x2201);
-        SFRField<bool> turn_off = SFRField<bool>(false, 0x2202);
-        SFRField<bool> powered = SFRField<bool>(false, 0x2203);
-        SFRField<bool> report_written = SFRField<bool>(false, 0x2204);
-        SFRField<bool> report_ready = SFRField<bool>(false, 0x2205);
-        SFRField<bool> fragment_requested = SFRField<bool>(false, 0x2206);
-        SFRField<uint8_t> fragment_number_requested = SFRField<uint8_t>(0, 0x2207);
-        SFRField<uint16_t> mode = SFRField<uint16_t>((uint16_t)sensor_mode_type::init, 0x2208);
-        SFRField<uint16_t> init_mode = SFRField<uint16_t>((uint16_t)sensor_init_mode_type::awaiting, 0x2209);
-        SFRField<uint16_t> failed_times = SFRField<uint16_t>(0, 0x2210);
-        SFRField<uint16_t> failed_limit = SFRField<uint16_t>(5, 0x2211);
-        SFRField<uint16_t> imu_boot_collection_start_time = SFRField<uint16_t>(0, 0x2212);
-        SFRField<uint16_t> door_open_start_time = SFRField<uint16_t>(0, 0x2213);
-        SFRField<uint32_t> max_fragments = SFRField<uint32_t>(256, 0x2214);
+        SFRField<bool> powered = SFRField<bool>(false, 0x2201);
+        SFRField<bool> report_written = SFRField<bool>(false, 0x2202);
+        SFRField<bool> report_ready = SFRField<bool>(false, 0x2203);
+        SFRField<bool> fragment_requested = SFRField<bool>(false, 0x2204);
+        SFRField<uint8_t> fragment_number_requested = SFRField<uint8_t>(0, 0x2205);
+        SFRField<uint8_t> power_setting = SFRField<uint8_t>((uint8_t)sensor_power_mode_type::do_nothing, 0x2206);
+        SFRField<uint16_t> mode = SFRField<uint16_t>((uint16_t)sensor_mode_type::init, 0x2207);
+        SFRField<uint16_t> init_mode = SFRField<uint16_t>((uint16_t)sensor_init_mode_type::awaiting, 0x2208);
+        SFRField<uint16_t> failed_times = SFRField<uint16_t>(0, 0x2209);
+        SFRField<uint16_t> failed_limit = SFRField<uint16_t>(5, 0x2210);
+        SFRField<uint16_t> imu_boot_collection_start_time = SFRField<uint16_t>(0, 0x2211);
+        SFRField<uint16_t> door_open_start_time = SFRField<uint16_t>(0, 0x2212);
+        SFRField<uint32_t> max_fragments = SFRField<uint32_t>(256, 0x2213);
 
         SensorReading *mag_x_value = new SensorReading(fault_groups::imu_faults::mag_x_value, 1, constants::imu::min_mag, constants::imu::max_mag);
         SensorReading *mag_y_value = new SensorReading(fault_groups::imu_faults::mag_y_value, 1, constants::imu::min_mag, constants::imu::max_mag);

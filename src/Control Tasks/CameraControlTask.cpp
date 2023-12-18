@@ -8,12 +8,12 @@ CameraControlTask::CameraControlTask()
 void CameraControlTask::execute()
 {
     // handle latent turn on / turn off variables
-    if (sfr::camera::turn_off == true && sfr::camera::powered == false) {
+    if (sfr::camera::power_setting == (uint8_t)sensor_power_mode_type::off && sfr::camera::powered == false) {
         sfr::camera::failed_times = 0;
-        sfr::camera::turn_off = false;
+        sfr::camera::power_setting = (uint8_t)sensor_power_mode_type::do_nothing;
     }
-    if (sfr::camera::turn_on == true && sfr::camera::powered == true) {
-        sfr::camera::turn_on = false;
+    if (sfr::camera::power_setting == (uint8_t)sensor_power_mode_type::on && sfr::camera::powered == true) {
+        sfr::camera::power_setting = (uint8_t)sensor_power_mode_type::do_nothing;
     }
 
     if (sfr::camera::take_photo == true && sfr::camera::powered == true) {
@@ -34,7 +34,7 @@ void CameraControlTask::execute()
         }
     }
 
-    if (sfr::camera::turn_on == true && sfr::camera::powered == false) {
+    if (sfr::camera::power_setting == (uint8_t)sensor_power_mode_type::on && sfr::camera::powered == false) {
         camera_init();
         if (sfr::camera::init_mode == (uint16_t)sensor_init_mode_type::complete) {
             transition_to_normal();
@@ -52,7 +52,7 @@ void CameraControlTask::execute()
         }
     }
 
-    if (sfr::camera::turn_off == true && sfr::camera::powered == true) {
+    if (sfr::camera::power_setting == (uint8_t)sensor_power_mode_type::off && sfr::camera::powered == true) {
 #ifdef VERBOSE
         Serial.println("turned off camera");
 #endif
@@ -63,7 +63,7 @@ void CameraControlTask::execute()
         Pins::setPinState(constants::camera::tx, LOW);
         sfr::camera::failed_times = 0;
         sfr::camera::powered = false;
-        sfr::camera::turn_off = false;
+        sfr::camera::power_setting = (uint8_t)sensor_power_mode_type::do_nothing;
         sfr::camera::init_mode = (uint16_t)sensor_init_mode_type::in_progress;
     }
 
@@ -111,7 +111,7 @@ void CameraControlTask::execute()
 #ifdef VERBOSE
             Serial.println("Done writing file");
 #endif
-            sfr::camera::turn_off = true;
+            sfr::camera::power_setting = (uint8_t)sensor_power_mode_type::off;
         }
     }
 }
@@ -203,7 +203,7 @@ void CameraControlTask::camera_init()
         case 5: // completed initialization
         {
             sfr::camera::init_mode = (uint16_t)sensor_init_mode_type::complete;
-            sfr::camera::turn_on = false;
+            sfr::camera::power_setting = (uint8_t)sensor_power_mode_type::do_nothing;
             sfr::camera::powered = true;
             break;
         }
@@ -235,8 +235,7 @@ void CameraControlTask::transition_to_abnormal_init()
     Pins::setPinState(constants::camera::rx, LOW);
     Pins::setPinState(constants::camera::tx, LOW);
     sfr::camera::powered = false;
-    sfr::camera::turn_off = false;
-    sfr::camera::turn_on = false;
+    sfr::camera::power_setting = (uint8_t)sensor_power_mode_type::do_nothing;
     sfr::camera::init_mode = (uint16_t)sensor_init_mode_type::awaiting;
     sfr::camera::start_progress = 0;
 }

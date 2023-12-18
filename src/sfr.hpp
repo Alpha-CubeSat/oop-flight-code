@@ -11,6 +11,7 @@
 #include "Modes/rockblock_mode_type.enum"
 #include "Modes/sensor_init_mode_type.enum"
 #include "Modes/sensor_mode_type.enum"
+#include "Modes/sensor_power_mode_type.enum"
 #include "Phase.hpp"
 #include "RockblockCommand.hpp"
 #include "RockblockSimulator.hpp"
@@ -146,13 +147,12 @@ namespace sfr {
         // OP Codes 2000
         extern SFRField<bool> photo_taken_sd_failed;
         extern SFRField<bool> take_photo;
-        extern SFRField<bool> turn_on;
-        extern SFRField<bool> turn_off;
         extern SFRField<bool> powered;
         extern SFRField<bool> report_ready;
         extern SFRField<bool> fragment_requested;
         extern SFRField<uint8_t> serial_requested;
         extern SFRField<uint8_t> start_progress;
+        extern SFRField<uint8_t> power_setting;
         extern SFRField<uint16_t> failed_times;
         extern SFRField<uint16_t> failed_limit;
         extern SFRField<uint16_t> init_mode;
@@ -200,13 +200,12 @@ namespace sfr {
     namespace imu {
         // OP Codes 2200
         extern SFRField<bool> sample_gyro;
-        extern SFRField<bool> turn_on;
-        extern SFRField<bool> turn_off;
         extern SFRField<bool> powered;
         extern SFRField<bool> report_written;
         extern SFRField<bool> report_ready;
         extern SFRField<bool> fragment_requested;
         extern SFRField<uint8_t> fragment_number_requested;
+        extern SFRField<uint8_t> power_setting;
         extern SFRField<uint16_t> mode;
         extern SFRField<uint16_t> init_mode;
         extern SFRField<uint16_t> failed_times;

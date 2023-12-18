@@ -1,0 +1,11 @@
+#ifndef sensor_power_mode_type_enum_
+#define sensor_power_mode_type_enum_
+
+enum class sensor_power_mode_type : unsigned char
+{
+    do_nothing = 0,
+    on = 1,
+    off = 2
+};
+
+#endif
