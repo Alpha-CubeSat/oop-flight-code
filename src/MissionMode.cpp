@@ -41,7 +41,7 @@ void LowPowerAliveSignal::transition_to()
 {
     settings(
         false,                       // rockblock sleeping
-        sensor_power_mode_type::off, // imu
+        sensor_power_mode_type::on,  // imu
         sensor_power_mode_type::off, // camera
         true,                        // acs off
         sfr::rockblock::lp_downlink_period);
