@@ -51,12 +51,10 @@ void ACSControlTask::execute()
 #endif
 
     if ((old_Id != constants::acs::Id_values[sfr::acs::Id_index] || old_Kd != constants::acs::Kd_values[sfr::acs::Kd_index] || old_Kp != constants::acs::Kp_values[sfr::acs::Kp_index] || old_c != constants::acs::c_values[sfr::acs::c_index]) || first) {
-#ifdef VERBOSE
         Serial.println("Initialize starshot library");
         starshotObj.initialize(constants::acs::step_size_input, constants::acs::A_input, constants::acs::Id_values[sfr::acs::Id_index], constants::acs::Kd_values[sfr::acs::Kd_index], constants::acs::Kp_values[sfr::acs::Kp_index], constants::acs::c_values[sfr::acs::c_index], constants::acs::i_max_input, constants::acs::k_input, constants::acs::n_input);
         Serial.println("Initialize EKF library");
         ekfObj.initialize(constants::acs::step_size_input);
-#endif
         first = false;
     }
 
