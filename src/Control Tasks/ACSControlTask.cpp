@@ -6,6 +6,43 @@ ACSControlTask::ACSControlTask()
 
 void ACSControlTask::execute()
 {
+    Serial.print(millis());
+    Serial.print(", ");
+    Serial.print(sfr::mission::current_mode->get_name().c_str());
+    Serial.print(", ");
+    if (sfr::acs::off == false) {
+        Serial.print("ON");
+    } else {
+        Serial.print("OFF");
+    }
+    Serial.print(", ");
+    if (sfr::acs::mode == 0) {
+        Serial.print("SIMPLE");
+    } else if (sfr::acs::mode == 1) {
+        Serial.print("POINT");
+    } else if (sfr::acs::mode == 2) {
+        Serial.print("DETUMBLE");
+    }
+
+    Serial.print(", ");
+    Serial.print(mag_x);
+    Serial.print(", ");
+    Serial.print(mag_y);
+    Serial.print(", ");
+    Serial.print(mag_z);
+    Serial.print(", ");
+    Serial.print(gyro_x);
+    Serial.print(", ");
+    Serial.print(gyro_y);
+    Serial.print(", ");
+    Serial.print(gyro_z);
+    Serial.print(", ");
+    Serial.print(current_x);
+    Serial.print(", ");
+    Serial.print(current_y);
+    Serial.print(", ");
+    Serial.print(current_z);
+    Serial.println("");
 
 #ifdef ACS_SIM
     if (first) {
@@ -37,21 +74,6 @@ void ACSControlTask::execute()
     mag_x = plantObj.rtY.magneticfield[0];
     mag_y = plantObj.rtY.magneticfield[1];
     mag_z = plantObj.rtY.magneticfield[2];
-
-#ifdef VERBOSE
-    Serial.print("Simulated MAG_X: ");
-    Serial.println(mag_x);
-    Serial.print("Simulated MAG_Y: ");
-    Serial.println(mag_y);
-    Serial.print("Simulated MAG_Z: ");
-    Serial.println(mag_z);
-    Serial.print("Simulated GYRO_X: ");
-    Serial.println(gyro_x);
-    Serial.print("Simulated GYRO_Y: ");
-    Serial.println(gyro_y);
-    Serial.print("Simulated GYRO_Z: ");
-    Serial.println(gyro_z);
-#endif
 
     plantObj.step();
 #endif
