@@ -105,9 +105,9 @@ void ACSControlTask::execute()
             ekfObj.step();
 
             // load filtered imu data from EKF to the controller (expecting T)
-            starshotObj.rtU.Bfield_body[0] = ekfObj.state(0) / 1000000.0;
-            starshotObj.rtU.Bfield_body[1] = ekfObj.state(1) / 1000000.0;
-            starshotObj.rtU.Bfield_body[2] = ekfObj.state(2) / 1000000.0;
+            starshotObj.rtU.Bfield_body[0] = ekfObj.state(0);
+            starshotObj.rtU.Bfield_body[1] = ekfObj.state(1);
+            starshotObj.rtU.Bfield_body[2] = ekfObj.state(2);
             starshotObj.rtU.w[0] = ekfObj.state(3);
             starshotObj.rtU.w[1] = ekfObj.state(4);
             starshotObj.rtU.w[2] = ekfObj.state(5);
