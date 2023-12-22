@@ -37,12 +37,6 @@ void ACSControlTask::execute()
     Serial.print(", ");
     Serial.print(gyro_z);
     Serial.print(", ");
-    Serial.print(current_x);
-    Serial.print(", ");
-    Serial.print(current_y);
-    Serial.print(", ");
-    Serial.print(current_z);
-    Serial.println("");
 
 #ifdef ACS_SIM
     if (first) {
@@ -51,13 +45,13 @@ void ACSControlTask::execute()
 #endif
 
     if ((old_Id != constants::acs::Id_values[sfr::acs::Id_index] || old_Kd != constants::acs::Kd_values[sfr::acs::Kd_index] || old_Kp != constants::acs::Kp_values[sfr::acs::Kp_index] || old_c != constants::acs::c_values[sfr::acs::c_index]) || first) {
-        #ifdef VERBOSE
+#ifdef VERBOSE
         Serial.println("Initialize starshot library");
-        #endif
+#endif
         starshotObj.initialize(constants::acs::step_size_input, constants::acs::A_input, constants::acs::Id_values[sfr::acs::Id_index], constants::acs::Kd_values[sfr::acs::Kd_index], constants::acs::Kp_values[sfr::acs::Kp_index], constants::acs::c_values[sfr::acs::c_index], constants::acs::i_max_input, constants::acs::k_input, constants::acs::n_input);
-        #ifdef VERBOSE
+#ifdef VERBOSE
         Serial.println("Initialize EKF library");
-        #endif
+#endif
         ekfObj.initialize(constants::acs::step_size_input);
         first = false;
     }
@@ -67,7 +61,8 @@ void ACSControlTask::execute()
     old_Kp = constants::acs::Kp_values[sfr::acs::Kp_index];
     old_c = constants::acs::c_values[sfr::acs::c_index];
 
-    imu_valid = sfr::imu::gyro_x_value->get_value(&gyro_x) && sfr::imu::gyro_y_value->get_value(&gyro_y) && sfr::imu::gyro_z_value->get_value(&gyro_z) && sfr::imu::mag_x_value->get_value(&mag_x) && sfr::imu::mag_y_value->get_value(&mag_y) && sfr::imu::mag_z_value->get_value(&mag_z);
+    //imu_valid = sfr::imu::gyro_x_value->get_value(&gyro_x) && sfr::imu::gyro_y_value->get_value(&gyro_y) && sfr::imu::gyro_z_value->get_value(&gyro_z) && sfr::imu::mag_x_value->get_value(&mag_x) && sfr::imu::mag_y_value->get_value(&mag_y) && sfr::imu::mag_z_value->get_value(&mag_z);
+    imu_valid = true;
 
 #ifdef ACS_SIM
     gyro_x = plantObj.rtY.angularvelocity[0];
@@ -122,10 +117,22 @@ void ACSControlTask::execute()
                 current_x = starshotObj.rtY.detumble[0];
                 current_y = starshotObj.rtY.detumble[1];
                 current_z = starshotObj.rtY.detumble[2];
+                Serial.print(current_x);
+                Serial.print(", ");
+                Serial.print(current_y);
+                Serial.print(", ");
+                Serial.print(current_z);
+                Serial.println("");
             } else if (sfr::acs::mode == (uint8_t)acs_mode_type::point) {
                 current_x = starshotObj.rtY.point[0];
                 current_y = starshotObj.rtY.point[1];
                 current_z = starshotObj.rtY.point[2];
+                Serial.print(current_x);
+                Serial.print(", ");
+                Serial.print(current_y);
+                Serial.print(", ");
+                Serial.print(current_z);
+                Serial.println("");
             } else if (sfr::acs::mode == (uint8_t)acs_mode_type::simple) {
                 current_x = 0;
                 current_y = 0;
@@ -137,8 +144,21 @@ void ACSControlTask::execute()
                 } else if (sfr::acs::simple_mag == (uint8_t)mag_type::z) {
                     current_z = sfr::acs::simple_current;
                 }
+                Serial.print(current_x);
+                Serial.print(", ");
+                Serial.print(current_y);
+                Serial.print(", ");
+                Serial.print(current_z);
+                Serial.println("");
             }
         }
+    } else {
+        Serial.print(current_x);
+        Serial.print(", ");
+        Serial.print(current_y);
+        Serial.print(", ");
+        Serial.print(current_z);
+        Serial.println("");
     }
 
     if (sfr::acs::off || !imu_valid) {
