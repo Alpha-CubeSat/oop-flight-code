@@ -78,21 +78,6 @@ void ACSControlTask::execute()
     mag_z = plantObj.rtY.magneticfield[2];
 
     plantObj.step();
-
-    Serial.print(", ");
-    Serial.print(mag_x);
-    Serial.print(", ");
-    Serial.print(mag_y);
-    Serial.print(", ");
-    Serial.print(mag_z);
-    Serial.print(", ");
-    Serial.print(gyro_x);
-    Serial.print(", ");
-    Serial.print(gyro_y);
-    Serial.print(", ");
-    Serial.print(gyro_z);
-    Serial.print(", ");
-
 #endif
 
     if (!sfr::acs::off) {
@@ -112,6 +97,19 @@ void ACSControlTask::execute()
             }
 
             // IMUOffset(&mag_x, &mag_y, &mag_z, temp_c, voltage, pwm_x, pwm_y, pwm_z);
+            Serial.print(", ");
+            Serial.print(mag_x);
+            Serial.print(", ");
+            Serial.print(mag_y);
+            Serial.print(", ");
+            Serial.print(mag_z);
+            Serial.print(", ");
+            Serial.print(gyro_x);
+            Serial.print(", ");
+            Serial.print(gyro_y);
+            Serial.print(", ");
+            Serial.print(gyro_z);
+            Serial.print(", ");
 
             // load sensor reading to EKF (expecting uT)
             ekfObj.Z(0) = mag_x * 1E6; // convert T to uT
