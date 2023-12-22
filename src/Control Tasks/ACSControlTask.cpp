@@ -40,7 +40,17 @@ void ACSControlTask::execute()
 
 #ifdef ACS_SIM
     if (first) {
-        plantObj.initialize(0.1, altitude_input, I_input, inclination_input, m_input, q0_input, wx_input, wy_input, wz_input);
+        double altitude_input = 400;
+        double I_input[9] = {0.00195761450869, -5.836632382E-5, 2.27638093E-6,
+                             -5.836632382E-5, 0.00196346658902, 8.8920475E-7, 2.27638093E-6, 8.8920475E-7,
+                             0.00204697265884};
+        double inclination_input = 0.90058989402907408; // 51.6 deg in rad
+        double m_input = 1.3;                           // kg
+        double q0_input[4] = {0.5, 0.5, -0.18301270189221924, 0.6830127018922193};
+        double wx_input = 0.008;
+        double wy_input = -0.005;
+        double wz_input = -0.0001;
+        plantObj.initialize(0.20, altitude_input, I_input, inclination_input, m_input, q0_input, wx_input, wy_input, wz_input);
     }
 #endif
 
@@ -48,11 +58,20 @@ void ACSControlTask::execute()
 #ifdef VERBOSE
         Serial.println("Initialize starshot library");
 #endif
-        starshotObj.initialize(constants::acs::step_size_input, constants::acs::A_input, constants::acs::Id_values[sfr::acs::Id_index], constants::acs::Kd_values[sfr::acs::Kd_index], constants::acs::Kp_values[sfr::acs::Kp_index], constants::acs::c_values[sfr::acs::c_index], constants::acs::i_max_input, constants::acs::k_input, constants::acs::n_input);
+        // starshotObj.initialize(constants::acs::step_size_input, constants::acs::A_input, constants::acs::Id_values[sfr::acs::Id_index], constants::acs::Kd_values[sfr::acs::Kd_index], constants::acs::Kp_values[sfr::acs::Kp_index], constants::acs::c_values[sfr::acs::c_index], constants::acs::i_max_input, constants::acs::k_input, constants::acs::n_input);
+        double A_input = 4.0E-5;
+        double Id_input = 0.196;
+        double Kd_input = 0.0007935279615795299;
+        double Kp_input = 5.2506307629097953E-10;
+        double c_input = 1.0E-5;
+        double i_max_input = 0.25;
+        double k_input = 13.5;
+        double n_input = 500.0;
+        starshotObj.initialize(0.20, A_input, Id_input, Kd_input, Kp_input, c_input, i_max_input, k_input, n_input);
 #ifdef VERBOSE
         Serial.println("Initialize EKF library");
 #endif
-        ekfObj.initialize(constants::acs::step_size_input);
+        ekfObj.initialize(0.20);
         first = false;
     }
 
@@ -61,7 +80,7 @@ void ACSControlTask::execute()
     old_Kp = constants::acs::Kp_values[sfr::acs::Kp_index];
     old_c = constants::acs::c_values[sfr::acs::c_index];
 
-    //imu_valid = sfr::imu::gyro_x_value->get_value(&gyro_x) && sfr::imu::gyro_y_value->get_value(&gyro_y) && sfr::imu::gyro_z_value->get_value(&gyro_z) && sfr::imu::mag_x_value->get_value(&mag_x) && sfr::imu::mag_y_value->get_value(&mag_y) && sfr::imu::mag_z_value->get_value(&mag_z);
+    // imu_valid = sfr::imu::gyro_x_value->get_value(&gyro_x) && sfr::imu::gyro_y_value->get_value(&gyro_y) && sfr::imu::gyro_z_value->get_value(&gyro_z) && sfr::imu::mag_x_value->get_value(&mag_x) && sfr::imu::mag_y_value->get_value(&mag_y) && sfr::imu::mag_z_value->get_value(&mag_z);
     imu_valid = true;
 
 #ifdef ACS_SIM
