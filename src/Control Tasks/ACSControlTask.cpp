@@ -24,20 +24,6 @@ void ACSControlTask::execute()
         Serial.print("DETUMBLE");
     }
 
-    Serial.print(", ");
-    Serial.print(mag_x);
-    Serial.print(", ");
-    Serial.print(mag_y);
-    Serial.print(", ");
-    Serial.print(mag_z);
-    Serial.print(", ");
-    Serial.print(gyro_x);
-    Serial.print(", ");
-    Serial.print(gyro_y);
-    Serial.print(", ");
-    Serial.print(gyro_z);
-    Serial.print(", ");
-
 #ifdef ACS_SIM
     if (first) {
         double altitude_input = 400;
@@ -92,6 +78,21 @@ void ACSControlTask::execute()
     mag_z = plantObj.rtY.magneticfield[2];
 
     plantObj.step();
+
+    Serial.print(", ");
+    Serial.print(mag_x);
+    Serial.print(", ");
+    Serial.print(mag_y);
+    Serial.print(", ");
+    Serial.print(mag_z);
+    Serial.print(", ");
+    Serial.print(gyro_x);
+    Serial.print(", ");
+    Serial.print(gyro_y);
+    Serial.print(", ");
+    Serial.print(gyro_z);
+    Serial.print(", ");
+
 #endif
 
     if (!sfr::acs::off) {
@@ -110,7 +111,7 @@ void ACSControlTask::execute()
                 voltage = 0;
             }
 
-            IMUOffset(&mag_x, &mag_y, &mag_z, temp_c, voltage, pwm_x, pwm_y, pwm_z);
+            // IMUOffset(&mag_x, &mag_y, &mag_z, temp_c, voltage, pwm_x, pwm_y, pwm_z);
 
             // load sensor reading to EKF (expecting uT)
             ekfObj.Z(0) = mag_x * 1E6; // convert T to uT
