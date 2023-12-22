@@ -126,9 +126,9 @@ void ACSControlTask::execute()
             starshotObj.rtU.Bfield_body[0] = ekfObj.state(0) / 1E6;
             starshotObj.rtU.Bfield_body[1] = ekfObj.state(1) / 1E6;
             starshotObj.rtU.Bfield_body[2] = ekfObj.state(2) / 1E6;
-            starshotObj.rtU.w[0] = ekfObj.state(3) / 1E6;
-            starshotObj.rtU.w[1] = ekfObj.state(4) / 1E6;
-            starshotObj.rtU.w[2] = ekfObj.state(5) / 1E6;
+            starshotObj.rtU.w[0] = ekfObj.state(3);
+            starshotObj.rtU.w[1] = ekfObj.state(4);
+            starshotObj.rtU.w[2] = ekfObj.state(5);
 
             starshotObj.step();
 
