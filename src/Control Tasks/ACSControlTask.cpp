@@ -97,19 +97,6 @@ void ACSControlTask::execute()
             }
 
             // IMUOffset(&mag_x, &mag_y, &mag_z, temp_c, voltage, pwm_x, pwm_y, pwm_z);
-            Serial.print(", ");
-            Serial.print(mag_x);
-            Serial.print(", ");
-            Serial.print(mag_y);
-            Serial.print(", ");
-            Serial.print(mag_z);
-            Serial.print(", ");
-            Serial.print(gyro_x);
-            Serial.print(", ");
-            Serial.print(gyro_y);
-            Serial.print(", ");
-            Serial.print(gyro_z);
-            Serial.print(", ");
 
             // load sensor reading to EKF (expecting uT)
             ekfObj.Z(0) = mag_x * 1E6; // convert T to uT
@@ -118,6 +105,20 @@ void ACSControlTask::execute()
             ekfObj.Z(3) = gyro_x;
             ekfObj.Z(4) = gyro_y;
             ekfObj.Z(5) = gyro_z;
+
+            Serial.print(", ");
+            Serial.print(mag_x * 1E6);
+            Serial.print(", ");
+            Serial.print(mag_y * 1E6);
+            Serial.print(", ");
+            Serial.print(mag_z * 1E6);
+            Serial.print(", ");
+            Serial.print(gyro_x);
+            Serial.print(", ");
+            Serial.print(gyro_y);
+            Serial.print(", ");
+            Serial.print(gyro_z);
+            Serial.print(", ");
 
             ekfObj.step();
 
