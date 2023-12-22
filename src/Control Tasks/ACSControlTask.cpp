@@ -107,17 +107,17 @@ void ACSControlTask::execute()
             ekfObj.Z(5) = gyro_z;
 
             Serial.print(", ");
-            Serial.print(mag_x * 1E6);
+            Serial.print(ekfObj.Z(0));
             Serial.print(", ");
-            Serial.print(mag_y * 1E6);
+            Serial.print(ekfObj.Z(1));
             Serial.print(", ");
-            Serial.print(mag_z * 1E6);
+            Serial.print(ekfObj.Z(2));
             Serial.print(", ");
-            Serial.print(gyro_x);
+            Serial.print(ekfObj.Z(3));
             Serial.print(", ");
-            Serial.print(gyro_y);
+            Serial.print(ekfObj.Z(4));
             Serial.print(", ");
-            Serial.print(gyro_z);
+            Serial.print(ekfObj.Z(5));
             Serial.print(", ");
 
             ekfObj.step();
@@ -129,6 +129,19 @@ void ACSControlTask::execute()
             starshotObj.rtU.w[0] = ekfObj.state(3);
             starshotObj.rtU.w[1] = ekfObj.state(4);
             starshotObj.rtU.w[2] = ekfObj.state(5);
+
+            Serial.print(starshotObj.rtU.Bfield_body[0]);
+            Serial.print(", ");
+            Serial.print(starshotObj.rtU.Bfield_body[1]);
+            Serial.print(", ");
+            Serial.print(starshotObj.rtU.Bfield_body[2]);
+            Serial.print(", ");
+            Serial.print(starshotObj.rtU.w[0]);
+            Serial.print(", ");
+            Serial.print(starshotObj.rtU.w[1]);
+            Serial.print(", ");
+            Serial.print(starshotObj.rtU.w[2]);
+            Serial.print(", ");
 
             starshotObj.step();
 
