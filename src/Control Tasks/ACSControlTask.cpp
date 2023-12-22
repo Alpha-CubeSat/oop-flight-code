@@ -202,6 +202,13 @@ void ACSControlTask::execute()
     ACSWrite(constants::acs::xtorqorder, current_x, constants::acs::xout1, constants::acs::xout2, constants::acs::xPWMpin);
     ACSWrite(constants::acs::ytorqorder, current_y, constants::acs::yout1, constants::acs::yout2, constants::acs::yPWMpin);
     ACSWrite(constants::acs::ztorqorder, current_z, constants::acs::zout1, constants::acs::zout2, constants::acs::zPWMpin);
+
+
+    // pass current values into plantsim
+    plantObj.rtU.current[0] = current_x;
+    plantObj.rtU.current[1] = current_y;
+    plantObj.rtU.current[2] = current_z;
+
 }
 
 int ACSControlTask::current2PWM(float current)
