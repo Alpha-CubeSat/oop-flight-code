@@ -149,22 +149,10 @@ void ACSControlTask::execute()
                 current_x = starshotObj.rtY.detumble[0];
                 current_y = starshotObj.rtY.detumble[1];
                 current_z = starshotObj.rtY.detumble[2];
-                Serial.print(current_x);
-                Serial.print(", ");
-                Serial.print(current_y);
-                Serial.print(", ");
-                Serial.print(current_z);
-                Serial.println("");
             } else if (sfr::acs::mode == (uint8_t)acs_mode_type::point) {
                 current_x = starshotObj.rtY.point[0];
                 current_y = starshotObj.rtY.point[1];
                 current_z = starshotObj.rtY.point[2];
-                Serial.print(current_x);
-                Serial.print(", ");
-                Serial.print(current_y);
-                Serial.print(", ");
-                Serial.print(current_z);
-                Serial.println("");
             } else if (sfr::acs::mode == (uint8_t)acs_mode_type::simple) {
                 current_x = 0;
                 current_y = 0;
@@ -176,22 +164,9 @@ void ACSControlTask::execute()
                 } else if (sfr::acs::simple_mag == (uint8_t)mag_type::z) {
                     current_z = sfr::acs::simple_current;
                 }
-                Serial.print(current_x);
-                Serial.print(", ");
-                Serial.print(current_y);
-                Serial.print(", ");
-                Serial.print(current_z);
-                Serial.println("");
             }
         }
-    } else {
-        Serial.print(current_x);
-        Serial.print(", ");
-        Serial.print(current_y);
-        Serial.print(", ");
-        Serial.print(current_z);
-        Serial.println("");
-    }
+    } 
 
     if (sfr::acs::off || !imu_valid) {
         current_x = 0;
@@ -203,12 +178,17 @@ void ACSControlTask::execute()
     ACSWrite(constants::acs::ytorqorder, current_y, constants::acs::yout1, constants::acs::yout2, constants::acs::yPWMpin);
     ACSWrite(constants::acs::ztorqorder, current_z, constants::acs::zout1, constants::acs::zout2, constants::acs::zPWMpin);
 
+    Serial.print(current_x);
+    Serial.print(", ");
+    Serial.print(current_y);
+    Serial.print(", ");
+    Serial.print(current_z);
+    Serial.println("");
 
     // pass current values into plantsim
     plantObj.rtU.current[0] = current_x;
     plantObj.rtU.current[1] = current_y;
     plantObj.rtU.current[2] = current_z;
-
 }
 
 int ACSControlTask::current2PWM(float current)
