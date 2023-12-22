@@ -130,17 +130,17 @@ void ACSControlTask::execute()
             starshotObj.rtU.w[1] = ekfObj.state(4);
             starshotObj.rtU.w[2] = ekfObj.state(5);
 
-            Serial.print(starshotObj.rtU.Bfield_body[0]);
+            Serial.print(starshotObj.rtU.Bfield_body[0] * 1E6);
             Serial.print(", ");
-            Serial.print(starshotObj.rtU.Bfield_body[1]);
+            Serial.print(starshotObj.rtU.Bfield_body[1] * 1E6);
             Serial.print(", ");
-            Serial.print(starshotObj.rtU.Bfield_body[2]);
+            Serial.print(starshotObj.rtU.Bfield_body[2]* 1E6);
             Serial.print(", ");
-            Serial.print(starshotObj.rtU.w[0]);
+            Serial.print(starshotObj.rtU.w[0]* 1E6);
             Serial.print(", ");
-            Serial.print(starshotObj.rtU.w[1]);
+            Serial.print(starshotObj.rtU.w[1]* 1E6);
             Serial.print(", ");
-            Serial.print(starshotObj.rtU.w[2]);
+            Serial.print(starshotObj.rtU.w[2]* 1E6);
             Serial.print(", ");
 
             starshotObj.step();
