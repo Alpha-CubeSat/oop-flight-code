@@ -36,7 +36,7 @@ void ACSControlTask::execute()
         double wx_input = 0.008;
         double wy_input = -0.005;
         double wz_input = -0.0001;
-        plantObj.initialize(0.20, altitude_input, I_input, inclination_input, m_input, q0_input, wx_input, wy_input, wz_input);
+        plantObj.initialize(0.10, altitude_input, I_input, inclination_input, m_input, q0_input, wx_input, wy_input, wz_input);
     }
 #endif
 
@@ -53,11 +53,11 @@ void ACSControlTask::execute()
         double i_max_input = 0.25;
         double k_input = 13.5;
         double n_input = 500.0;
-        starshotObj.initialize(0.20, A_input, Id_input, Kd_input, Kp_input, c_input, i_max_input, k_input, n_input);
+        starshotObj.initialize(0.10, A_input, Id_input, Kd_input, Kp_input, c_input, i_max_input, k_input, n_input);
 #ifdef VERBOSE
         Serial.println("Initialize EKF library");
 #endif
-        ekfObj.initialize(0.20);
+        ekfObj.initialize(0.10);
         first = false;
     }
 
