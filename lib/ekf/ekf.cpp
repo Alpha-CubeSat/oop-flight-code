@@ -45,31 +45,23 @@ Eigen::VectorXd rk4(const Eigen::VectorXd &x_initial, double f_step_size, double
     Eigen::VectorXd x = x_initial;
     int num_steps = static_cast<int>((t_end - t_start) / f_step_size);
 
-    for (int i = 0; i < num_steps; ++i) {
+    for (int i = 0; i < num_steps; ++i)
+    {
         x = rk4_step(x, f_step_size);
     }
 
     return x;
 }
 
-void EKF::initialize(double delta_t)
+void EKF::initialize(double delta_t, const Eigen::VectorXd &initial_state, const Eigen::MatrixXd &initial_covariance, const Eigen::MatrixXd &process_noise_covariance, const Eigen::MatrixXd &Rd, const Eigen::MatrixXd &Hd)
 {
-    state = Eigen::VectorXd::Zero(6);
-    Z = Eigen::VectorXd::Zero(6);
-    covariance = Eigen::MatrixXd::Zero(6, 6);
-    Q = 0.02 * Eigen::MatrixXd::Identity(6, 6);
-    H_d = Eigen::MatrixXd::Identity(6, 6);
+    state = initial_state;
+    Z = initial_state;
+    covariance = initial_covariance;
+    Q = process_noise_covariance;
+    R_d = Rd;
+    H_d = Hd;
     dt = delta_t;
-
-    Eigen::MatrixXd R_d(6, 6);
-    R_d << 2.02559220e-01, 5.17515015e-03, -3.16669361e-02, -1.76503506e-04, -3.74891174e-05, -7.75657503e-05,
-        5.17515015e-03, 1.55389381e-01, 1.07780468e-02, -2.90511952e-05, -8.02931174e-06, -1.26277622e-05,
-        -3.16669361e-02, 1.07780468e-02, 3.93162684e-01, 9.29630074e-05, 1.22496815e-05, 5.67092127e-05,
-        -1.76503506e-04, -2.90511952e-05, 9.29630074e-05, 1.80161545e-05, -2.27002599e-09, -6.07376965e-07,
-        -3.74891174e-05, -8.02931174e-06, 1.22496815e-05, -2.27002599e-09, 6.70144060e-06, 2.97298687e-08,
-        -7.75657503e-05, -1.26277622e-05, 5.67092127e-05, -6.07376965e-07, 2.97298687e-08, 8.52192033e-06;
-
-    Q.diagonal() << 0.008, 0.07, 0.005, 0.1, 0.1, 0.1;
 }
 
 void EKF::step()
@@ -79,6 +71,7 @@ void EKF::step()
     predict(J);
 
     correct();
+
 }
 
 Eigen::MatrixXd matrix_exp(const Eigen::MatrixXd &A, int order = 5)
@@ -88,10 +81,12 @@ Eigen::MatrixXd matrix_exp(const Eigen::MatrixXd &A, int order = 5)
     Eigen::MatrixXd A_power = A;
     Eigen::MatrixXd identity = Eigen::MatrixXd::Identity(n, n);
 
-    for (int i = 1; i <= order; ++i) {
+    for (int i = 1; i <= order; ++i)
+    {
         result += A_power;
 
-        if (i % 2 == 0) {
+        if (i % 2 == 0)
+        {
             result -= A_power;
         }
 
@@ -110,9 +105,16 @@ Eigen::MatrixXd matrix_exp(const Eigen::MatrixXd &A, int order = 5)
 
 void EKF::predict(const Eigen::MatrixXd &J_k_k)
 {
-
+    // double t1 = millis();
+    //Eigen::MatrixXd Ad = matrix_exp(J_k_k * dt);
+    // double t2 = millis();
     state = rk4(state, 0.1, 0.0, dt);
+    // double t3 = millis();
     covariance = J_k_k * covariance * J_k_k.transpose() + Q;
+    //covariance = Ad * covariance * Ad.transpose() + Q;
+    // double t4 = millis();
+
+    //Serial.printf("matrix_exp: %f, rk4: %f, cov_multiply: %f \n", t2-t1, t3-t2, t4-t3);
 }
 
 void EKF::correct()
