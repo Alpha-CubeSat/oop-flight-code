@@ -53,9 +53,11 @@ private:
     double inclination_input = 0.90058989402907408; // 51.6 deg in rad
     double m_input = 1.3;                           // kg
     double q0_input[4] = {0.5, 0.5, -0.18301270189221924, 0.6830127018922193};
-    double wx_input = 0.0;
-    double wy_input = 0.0;
-    double wz_input = 1.0;
+
+    // detumble starting conditions
+    double wx_input = 0.008;
+    double wy_input = -0.005;
+    double wz_input = -0.0001;
 #endif
 };
 

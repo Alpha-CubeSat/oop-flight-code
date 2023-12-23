@@ -6,7 +6,7 @@ ACSControlTask::ACSControlTask()
 
 void ACSControlTask::execute()
 {
-
+    
 #ifdef ACS_SIM
     if (first) {
         plantObj.initialize(constants::acs::step_size_input, altitude_input, I_input, inclination_input, m_input, q0_input, wx_input, wy_input, wz_input);
@@ -52,29 +52,13 @@ void ACSControlTask::execute()
     imu_valid = true;
 
 #ifdef ACS_SIM
-    gyro_x = plantObj.rtY.angularvelocity[0];
-    gyro_y = plantObj.rtY.angularvelocity[1];
-    gyro_z = plantObj.rtY.angularvelocity[2];
-    mag_x = plantObj.rtY.magneticfield[0];
-    mag_y = plantObj.rtY.magneticfield[1];
-    mag_z = plantObj.rtY.magneticfield[2];
-
-#ifdef VERBOSE
-    Serial.print("Simulated MAG_X: ");
-    Serial.println(mag_x);
-    Serial.print("Simulated MAG_Y: ");
-    Serial.println(mag_y);
-    Serial.print("Simulated MAG_Z: ");
-    Serial.println(mag_z);
-    Serial.print("Simulated GYRO_X: ");
-    Serial.println(gyro_x);
-    Serial.print("Simulated GYRO_Y: ");
-    Serial.println(gyro_y);
-    Serial.print("Simulated GYRO_Z: ");
-    Serial.println(gyro_z);
-#endif
+    // 1. Pass output of starshot into plant
+    plantObj.rtU.current[0] = current_x;
+    plantObj.rtU.current[1] = current_y;
+    plantObj.rtU.current[2] = current_z;
 
     plantObj.step();
+
 #endif
 
     if (!sfr::acs::off) {
@@ -93,19 +77,26 @@ void ACSControlTask::execute()
                 voltage = 0;
             }
 
+            gyro_x = plantObj.rtY.angularvelocity[0];
+            gyro_y = plantObj.rtY.angularvelocity[1];
+            gyro_z = plantObj.rtY.angularvelocity[2];
+            mag_x = plantObj.rtY.magneticfield[0];
+            mag_y = plantObj.rtY.magneticfield[1];
+            mag_z = plantObj.rtY.magneticfield[2];
+
             // IMUOffset(&mag_x, &mag_y, &mag_z, temp_c, voltage, pwm_x, pwm_y, pwm_z);
 
-            // load sensor reading to EKF (expecting uT)
-            ekfObj.Z(0) = mag_x;
-            ekfObj.Z(1) = mag_y;
-            ekfObj.Z(2) = mag_z;
+            // 2. Pass sensor data / output of plant into ekf
+            ekfObj.Z(0) = mag_x * 1000000.0;
+            ekfObj.Z(1) = mag_y * 1000000.0;
+            ekfObj.Z(2) = mag_z * 1000000.0;
             ekfObj.Z(3) = gyro_x;
             ekfObj.Z(4) = gyro_y;
             ekfObj.Z(5) = gyro_z;
 
             ekfObj.step();
 
-            // load filtered imu data from EKF to the controller (expecting T)
+            // 3. Pass output of ekf into starshot
             starshotObj.rtU.Bfield_body[0] = ekfObj.state(0) / 1000000.0;
             starshotObj.rtU.Bfield_body[1] = ekfObj.state(1) / 1000000.0;
             starshotObj.rtU.Bfield_body[2] = ekfObj.state(2) / 1000000.0;
@@ -115,6 +106,7 @@ void ACSControlTask::execute()
 
             starshotObj.step();
 
+            // 4. Complete the loop (set current values to output of starshot)
             if (sfr::acs::mode == (uint8_t)acs_mode_type::detumble) {
                 current_x = starshotObj.rtY.detumble[0];
                 current_y = starshotObj.rtY.detumble[1];
@@ -148,11 +140,7 @@ void ACSControlTask::execute()
     ACSWrite(constants::acs::ytorqorder, current_y, constants::acs::yout1, constants::acs::yout2, constants::acs::yPWMpin);
     ACSWrite(constants::acs::ztorqorder, current_z, constants::acs::zout1, constants::acs::zout2, constants::acs::zPWMpin);
 
-    // pass current values into plantsim
-    plantObj.rtU.current[0] = current_x;
-    plantObj.rtU.current[1] = current_y;
-    plantObj.rtU.current[2] = current_z;
-
+#ifdef ACS_SIM
     Serial.print(starshotObj.rtY.pt_error); // deg
     Serial.print(", ");
     Serial.print(plantObj.rtU.current[0]);
@@ -173,6 +161,7 @@ void ACSControlTask::execute()
     Serial.print(", ");
     Serial.print(plantObj.rtY.angularvelocity[2]);
     Serial.println();
+#endif
 }
 
 int ACSControlTask::current2PWM(float current)
