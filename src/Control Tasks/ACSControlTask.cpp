@@ -6,7 +6,7 @@ ACSControlTask::ACSControlTask()
 
 void ACSControlTask::execute()
 {
-    
+
 #ifdef ACS_SIM
     if (first) {
         plantObj.initialize(constants::acs::step_size_input, altitude_input, I_input, inclination_input, m_input, q0_input, wx_input, wy_input, wz_input);
@@ -143,11 +143,11 @@ void ACSControlTask::execute()
 #ifdef ACS_SIM
     Serial.print(starshotObj.rtY.pt_error); // deg
     Serial.print(", ");
-    Serial.print(current_x); 
+    Serial.print(current_x);
     Serial.print(", ");
-    Serial.print(current_y); 
+    Serial.print(current_y);
     Serial.print(", ");
-    Serial.print(current_z); 
+    Serial.print(current_z);
     Serial.print(", ");
     Serial.print(plantObj.rtU.current[0]);
     Serial.print(", ");
