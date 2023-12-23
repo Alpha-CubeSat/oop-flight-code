@@ -84,7 +84,7 @@ void ACSControlTask::execute()
             mag_y = plantObj.rtY.magneticfield[1];
             mag_z = plantObj.rtY.magneticfield[2];
 
-            IMUOffset(&mag_x, &mag_y, &mag_z, temp_c, voltage, pwm_x, pwm_y, pwm_z);
+            // IMUOffset(&mag_x, &mag_y, &mag_z, temp_c, voltage, pwm_x, pwm_y, pwm_z);
 
             // 2. Pass sensor data / output of plant into ekf
             ekfObj.Z(0) = mag_x * 1000000.0;
@@ -141,6 +141,23 @@ void ACSControlTask::execute()
     ACSWrite(constants::acs::ztorqorder, current_z, constants::acs::zout1, constants::acs::zout2, constants::acs::zPWMpin);
 
 #ifdef ACS_SIM
+    Serial.print(millis());
+    Serial.print(", ");
+    Serial.print(sfr::mission::current_mode->get_name().c_str());
+    Serial.print(", ");
+    if (sfr::acs::off == false) {
+        Serial.print("ON");
+    } else {
+        Serial.print("OFF");
+    }
+    Serial.print(", ");
+    if (sfr::acs::mode == 0) {
+        Serial.print("SIMPLE, ");
+    } else if (sfr::acs::mode == 1) {
+        Serial.print("POINT, ");
+    } else if (sfr::acs::mode == 2) {
+        Serial.print("DETUMBLE, ");
+    }
     Serial.print(starshotObj.rtY.pt_error); // deg
     Serial.print(", ");
     Serial.print(current_x);
