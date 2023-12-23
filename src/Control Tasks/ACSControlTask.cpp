@@ -14,14 +14,31 @@ void ACSControlTask::execute()
 #endif
 
     if ((old_Id != constants::acs::Id_values[sfr::acs::Id_index] || old_Kd != constants::acs::Kd_values[sfr::acs::Kd_index] || old_Kp != constants::acs::Kp_values[sfr::acs::Kp_index] || old_c != constants::acs::c_values[sfr::acs::c_index]) || first) {
+
 #ifdef VERBOSE
         Serial.println("Initialize starshot library");
 #endif
         starshotObj.initialize(constants::acs::step_size_input, constants::acs::A_input, constants::acs::Id_values[sfr::acs::Id_index], constants::acs::Kd_values[sfr::acs::Kd_index], constants::acs::Kp_values[sfr::acs::Kp_index], constants::acs::c_values[sfr::acs::c_index], constants::acs::i_max_input, constants::acs::k_input, constants::acs::n_input);
+
 #ifdef VERBOSE
         Serial.println("Initialize EKF library");
 #endif
-        ekfObj.initialize(constants::acs::step_size_input);
+        Eigen::VectorXd initial_state = Eigen::VectorXd::Zero(6);
+        Eigen::MatrixXd initial_cov = Eigen::MatrixXd::Zero(6, 6);
+        // Q (process noise covariance) Matrix
+        Eigen::MatrixXd Q = 0.02 * Eigen::MatrixXd::Identity(6, 6);
+        Q.diagonal() << 0.008, 0.07, 0.005, 0.1, 0.1, 0.1;
+        // Rd (measurement noise variance) Matrices
+        Eigen::MatrixXd Rd(6, 6);
+        Rd << 2.02559220e-01, 5.17515015e-03, -3.16669361e-02, -1.76503506e-04, -3.74891174e-05, -7.75657503e-05,
+            5.17515015e-03, 1.55389381e-01, 1.07780468e-02, -2.90511952e-05, -8.02931174e-06, -1.26277622e-05,
+            -3.16669361e-02, 1.07780468e-02, 3.93162684e-01, 9.29630074e-05, 1.22496815e-05, 5.67092127e-05,
+            -1.76503506e-04, -2.90511952e-05, 9.29630074e-05, 1.80161545e-05, -2.27002599e-09, -6.07376965e-07,
+            -3.74891174e-05, -8.02931174e-06, 1.22496815e-05, -2.27002599e-09, 6.70144060e-06, 2.97298687e-08,
+            -7.75657503e-05, -1.26277622e-05, 5.67092127e-05, -6.07376965e-07, 2.97298687e-08, 8.52192033e-06;
+        // Hd
+        Eigen::MatrixXd Hd = Eigen::MatrixXd::Identity(6, 6);
+        ekfObj.initialize(constants::acs::step_size_input, initial_state, initial_cov, Q, Rd, Hd);
 
         first = false;
     }
