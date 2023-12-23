@@ -9,7 +9,7 @@ void ACSControlTask::execute()
 
 #ifdef ACS_SIM
     if (first) {
-        plantObj.initialize(0.1, altitude_input, I_input, inclination_input, m_input, q0_input, wx_input, wy_input, wz_input);
+        plantObj.initialize(constants::acs::step_size_input, altitude_input, I_input, inclination_input, m_input, q0_input, wx_input, wy_input, wz_input);
     }
 #endif
 
@@ -76,7 +76,7 @@ void ACSControlTask::execute()
                 voltage = 0;
             }
 
-            //IMUOffset(&mag_x, &mag_y, &mag_z, temp_c, voltage, pwm_x, pwm_y, pwm_z);
+            // IMUOffset(&mag_x, &mag_y, &mag_z, temp_c, voltage, pwm_x, pwm_y, pwm_z);
 
             // load sensor reading to EKF (expecting uT)
             ekfObj.Z(0) = mag_x;
@@ -135,6 +135,27 @@ void ACSControlTask::execute()
     plantObj.rtU.current[0] = current_x;
     plantObj.rtU.current[1] = current_y;
     plantObj.rtU.current[2] = current_z;
+
+    Serial.print(starshotObj.rtY.pt_error); // deg
+    Serial.print(", ");
+    Serial.print(plantObj.rtU.current[0]);
+    Serial.print(", ");
+    Serial.print(plantObj.rtU.current[1]);
+    Serial.print(", ");
+    Serial.print(plantObj.rtU.current[2]);
+    Serial.print(", ");
+    Serial.print(plantObj.rtY.magneticfield[0] * 1000000.0); // uT
+    Serial.print(", ");
+    Serial.print(plantObj.rtY.magneticfield[1] * 1000000.0); // uT
+    Serial.print(", ");
+    Serial.print(plantObj.rtY.magneticfield[2] * 1000000.0); // uT
+    Serial.print(", ");
+    Serial.print(plantObj.rtY.angularvelocity[0]);
+    Serial.print(", ");
+    Serial.print(plantObj.rtY.angularvelocity[1]);
+    Serial.print(", ");
+    Serial.print(plantObj.rtY.angularvelocity[2]);
+    Serial.println();
 }
 
 int ACSControlTask::current2PWM(float current)

@@ -217,7 +217,7 @@ namespace constants {
         constexpr float hardiron_z = 6.928;
 
         // Starshot
-        constexpr float step_size_input = 0.20;
+        constexpr float step_size_input = 0.10;
         constexpr float A_input = 4.0E-5;
         constexpr float i_max_input = 0.25;
         constexpr float k_input = 13.5;
