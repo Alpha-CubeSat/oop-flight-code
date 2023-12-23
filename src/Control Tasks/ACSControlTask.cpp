@@ -143,6 +143,12 @@ void ACSControlTask::execute()
 #ifdef ACS_SIM
     Serial.print(starshotObj.rtY.pt_error); // deg
     Serial.print(", ");
+    Serial.print(current_x); 
+    Serial.print(", ");
+    Serial.print(current_y); 
+    Serial.print(", ");
+    Serial.print(current_z); 
+    Serial.print(", ");
     Serial.print(plantObj.rtU.current[0]);
     Serial.print(", ");
     Serial.print(plantObj.rtU.current[1]);
