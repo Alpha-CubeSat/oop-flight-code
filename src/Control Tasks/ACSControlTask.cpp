@@ -84,7 +84,7 @@ void ACSControlTask::execute()
             mag_y = plantObj.rtY.magneticfield[1];
             mag_z = plantObj.rtY.magneticfield[2];
 
-            // IMUOffset(&mag_x, &mag_y, &mag_z, temp_c, voltage, pwm_x, pwm_y, pwm_z);
+            IMUOffset(&mag_x, &mag_y, &mag_z, temp_c, voltage, pwm_x, pwm_y, pwm_z);
 
             // 2. Pass sensor data / output of plant into ekf
             ekfObj.Z(0) = mag_x * 1000000.0;
