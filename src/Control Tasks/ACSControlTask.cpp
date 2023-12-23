@@ -6,37 +6,10 @@ ACSControlTask::ACSControlTask()
 
 void ACSControlTask::execute()
 {
-    Serial.print(millis());
-    Serial.print(", ");
-    Serial.print(sfr::mission::current_mode->get_name().c_str());
-    Serial.print(", ");
-    if (sfr::acs::off == false) {
-        Serial.print("ON");
-    } else {
-        Serial.print("OFF");
-    }
-    Serial.print(", ");
-    if (sfr::acs::mode == 0) {
-        Serial.print("SIMPLE");
-    } else if (sfr::acs::mode == 1) {
-        Serial.print("POINT");
-    } else if (sfr::acs::mode == 2) {
-        Serial.print("DETUMBLE");
-    }
 
 #ifdef ACS_SIM
     if (first) {
-        double altitude_input = 400;
-        double I_input[9] = {0.00195761450869, -5.836632382E-5, 2.27638093E-6,
-                             -5.836632382E-5, 0.00196346658902, 8.8920475E-7, 2.27638093E-6, 8.8920475E-7,
-                             0.00204697265884};
-        double inclination_input = 0.90058989402907408; // 51.6 deg in rad
-        double m_input = 1.3;                           // kg
-        double q0_input[4] = {0.5, 0.5, -0.18301270189221924, 0.6830127018922193};
-        double wx_input = 0.008;
-        double wy_input = -0.005;
-        double wz_input = -0.0001;
-        plantObj.initialize(0.10, altitude_input, I_input, inclination_input, m_input, q0_input, wx_input, wy_input, wz_input);
+        plantObj.initialize(0.1, altitude_input, I_input, inclination_input, m_input, q0_input, wx_input, wy_input, wz_input);
     }
 #endif
 
@@ -44,20 +17,12 @@ void ACSControlTask::execute()
 #ifdef VERBOSE
         Serial.println("Initialize starshot library");
 #endif
-        // starshotObj.initialize(constants::acs::step_size_input, constants::acs::A_input, constants::acs::Id_values[sfr::acs::Id_index], constants::acs::Kd_values[sfr::acs::Kd_index], constants::acs::Kp_values[sfr::acs::Kp_index], constants::acs::c_values[sfr::acs::c_index], constants::acs::i_max_input, constants::acs::k_input, constants::acs::n_input);
-        double A_input = 4.0E-5;
-        double Id_input = 0.196;
-        double Kd_input = 0.0007935279615795299;
-        double Kp_input = 5.2506307629097953E-10;
-        double c_input = 1.0E-5;
-        double i_max_input = 0.25;
-        double k_input = 13.5;
-        double n_input = 500.0;
-        starshotObj.initialize(0.10, A_input, Id_input, Kd_input, Kp_input, c_input, i_max_input, k_input, n_input);
+        starshotObj.initialize(constants::acs::step_size_input, constants::acs::A_input, constants::acs::Id_values[sfr::acs::Id_index], constants::acs::Kd_values[sfr::acs::Kd_index], constants::acs::Kp_values[sfr::acs::Kp_index], constants::acs::c_values[sfr::acs::c_index], constants::acs::i_max_input, constants::acs::k_input, constants::acs::n_input);
 #ifdef VERBOSE
         Serial.println("Initialize EKF library");
 #endif
-        ekfObj.initialize(0.10);
+        ekfObj.initialize(constants::acs::step_size_input);
+
         first = false;
     }
 
@@ -66,7 +31,7 @@ void ACSControlTask::execute()
     old_Kp = constants::acs::Kp_values[sfr::acs::Kp_index];
     old_c = constants::acs::c_values[sfr::acs::c_index];
 
-    // imu_valid = sfr::imu::gyro_x_value->get_value(&gyro_x) && sfr::imu::gyro_y_value->get_value(&gyro_y) && sfr::imu::gyro_z_value->get_value(&gyro_z) && sfr::imu::mag_x_value->get_value(&mag_x) && sfr::imu::mag_y_value->get_value(&mag_y) && sfr::imu::mag_z_value->get_value(&mag_z);
+    imu_valid = sfr::imu::gyro_x_value->get_value(&gyro_x) && sfr::imu::gyro_y_value->get_value(&gyro_y) && sfr::imu::gyro_z_value->get_value(&gyro_z) && sfr::imu::mag_x_value->get_value(&mag_x) && sfr::imu::mag_y_value->get_value(&mag_y) && sfr::imu::mag_z_value->get_value(&mag_z);
     imu_valid = true;
 
 #ifdef ACS_SIM
@@ -76,6 +41,21 @@ void ACSControlTask::execute()
     mag_x = plantObj.rtY.magneticfield[0];
     mag_y = plantObj.rtY.magneticfield[1];
     mag_z = plantObj.rtY.magneticfield[2];
+
+#ifdef VERBOSE
+    Serial.print("Simulated MAG_X: ");
+    Serial.println(mag_x);
+    Serial.print("Simulated MAG_Y: ");
+    Serial.println(mag_y);
+    Serial.print("Simulated MAG_Z: ");
+    Serial.println(mag_z);
+    Serial.print("Simulated GYRO_X: ");
+    Serial.println(gyro_x);
+    Serial.print("Simulated GYRO_Y: ");
+    Serial.println(gyro_y);
+    Serial.print("Simulated GYRO_Z: ");
+    Serial.println(gyro_z);
+#endif
 
     plantObj.step();
 #endif
@@ -96,52 +76,25 @@ void ACSControlTask::execute()
                 voltage = 0;
             }
 
-            // IMUOffset(&mag_x, &mag_y, &mag_z, temp_c, voltage, pwm_x, pwm_y, pwm_z);
+            //IMUOffset(&mag_x, &mag_y, &mag_z, temp_c, voltage, pwm_x, pwm_y, pwm_z);
 
             // load sensor reading to EKF (expecting uT)
-            ekfObj.Z(0) = mag_x * 1E6; // convert T to uT
-            ekfObj.Z(1) = mag_y * 1E6;
-            ekfObj.Z(2) = mag_z * 1E6;
+            ekfObj.Z(0) = mag_x;
+            ekfObj.Z(1) = mag_y;
+            ekfObj.Z(2) = mag_z;
             ekfObj.Z(3) = gyro_x;
             ekfObj.Z(4) = gyro_y;
             ekfObj.Z(5) = gyro_z;
 
-            Serial.print(", ");
-            Serial.print(ekfObj.Z(0));
-            Serial.print(", ");
-            Serial.print(ekfObj.Z(1));
-            Serial.print(", ");
-            Serial.print(ekfObj.Z(2));
-            Serial.print(", ");
-            Serial.print(ekfObj.Z(3));
-            Serial.print(", ");
-            Serial.print(ekfObj.Z(4));
-            Serial.print(", ");
-            Serial.print(ekfObj.Z(5));
-            Serial.print(", ");
-
             ekfObj.step();
 
             // load filtered imu data from EKF to the controller (expecting T)
-            starshotObj.rtU.Bfield_body[0] = ekfObj.state(0) / 1E6;
-            starshotObj.rtU.Bfield_body[1] = ekfObj.state(1) / 1E6;
-            starshotObj.rtU.Bfield_body[2] = ekfObj.state(2) / 1E6;
+            starshotObj.rtU.Bfield_body[0] = ekfObj.state(0) / 1000000.0;
+            starshotObj.rtU.Bfield_body[1] = ekfObj.state(1) / 1000000.0;
+            starshotObj.rtU.Bfield_body[2] = ekfObj.state(2) / 1000000.0;
             starshotObj.rtU.w[0] = ekfObj.state(3);
             starshotObj.rtU.w[1] = ekfObj.state(4);
             starshotObj.rtU.w[2] = ekfObj.state(5);
-
-            Serial.print(starshotObj.rtU.Bfield_body[0] * 1E6);
-            Serial.print(", ");
-            Serial.print(starshotObj.rtU.Bfield_body[1] * 1E6);
-            Serial.print(", ");
-            Serial.print(starshotObj.rtU.Bfield_body[2]* 1E6);
-            Serial.print(", ");
-            Serial.print(starshotObj.rtU.w[0]* 1E6);
-            Serial.print(", ");
-            Serial.print(starshotObj.rtU.w[1]* 1E6);
-            Serial.print(", ");
-            Serial.print(starshotObj.rtU.w[2]* 1E6);
-            Serial.print(", ");
 
             starshotObj.step();
 
@@ -166,7 +119,7 @@ void ACSControlTask::execute()
                 }
             }
         }
-    } 
+    }
 
     if (sfr::acs::off || !imu_valid) {
         current_x = 0;
@@ -177,13 +130,6 @@ void ACSControlTask::execute()
     ACSWrite(constants::acs::xtorqorder, current_x, constants::acs::xout1, constants::acs::xout2, constants::acs::xPWMpin);
     ACSWrite(constants::acs::ytorqorder, current_y, constants::acs::yout1, constants::acs::yout2, constants::acs::yPWMpin);
     ACSWrite(constants::acs::ztorqorder, current_z, constants::acs::zout1, constants::acs::zout2, constants::acs::zPWMpin);
-
-    Serial.print(current_x);
-    Serial.print(", ");
-    Serial.print(current_y);
-    Serial.print(", ");
-    Serial.print(current_z);
-    Serial.println("");
 
     // pass current values into plantsim
     plantObj.rtU.current[0] = current_x;
