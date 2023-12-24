@@ -52,10 +52,10 @@ private:
     double m_input = 1.3;                           // kg
     double q0_input[4] = {0.5, 0.5, -0.18301270189221924, 0.6830127018922193};
 
-    // detumble starting conditions TODO
-    double wx_input = 0.008;
-    double wy_input = -0.005;
-    double wz_input = -0.0001;
+    // detumble starting conditions (1 - 5 deg per second magnitude)
+    double wx_input = 0.05;
+    double wy_input = -0.04;
+    double wz_input = -0.01;
 #endif
 };
 
