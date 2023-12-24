@@ -21,15 +21,13 @@ public:
 private:
     void ACSWrite(int torqorder, float current, int out1, int out2, int PWMpin);
     int current2PWM(float current);
-    void IMUOffset(float *mag_x, float *mag_y, float *mag_z, float temp, float voltage, float pwmX, float pwmY, float pwmZ);
+    void IMUOffset();
     float gyro_x;
     float gyro_y;
     float gyro_z;
     float mag_x;
     float mag_y;
     float mag_z;
-    float temp_c;
-    float voltage;
     float pwm_x;
     float pwm_y;
     float pwm_z;
@@ -54,7 +52,7 @@ private:
     double m_input = 1.3;                           // kg
     double q0_input[4] = {0.5, 0.5, -0.18301270189221924, 0.6830127018922193};
 
-    // detumble starting conditions
+    // detumble starting conditions TODO
     double wx_input = 0.008;
     double wy_input = -0.005;
     double wz_input = -0.0001;

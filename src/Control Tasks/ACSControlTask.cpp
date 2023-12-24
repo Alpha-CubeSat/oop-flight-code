@@ -69,14 +69,6 @@ void ACSControlTask::execute()
         }
 
         if (imu_valid) {
-            if (!sfr::temperature::temp_c_value->get_value(&temp_c)) {
-                temp_c = 0;
-            }
-
-            if (!sfr::battery::voltage_value->get_value(&voltage)) {
-                voltage = 0;
-            }
-
             gyro_x = plantObj.rtY.angularvelocity[0];
             gyro_y = plantObj.rtY.angularvelocity[1];
             gyro_z = plantObj.rtY.angularvelocity[2];
@@ -84,7 +76,7 @@ void ACSControlTask::execute()
             mag_y = plantObj.rtY.magneticfield[1];
             mag_z = plantObj.rtY.magneticfield[2];
 
-            // IMUOffset(&mag_x, &mag_y, &mag_z, temp_c, voltage, pwm_x, pwm_y, pwm_z);
+            IMUOffset();
 
             // 2. Pass sensor data / output of plant into ekf
             ekfObj.Z(0) = mag_x * 1000000.0;
@@ -240,22 +232,33 @@ void ACSControlTask::ACSWrite(int torqorder, float current, int out1, int out2, 
     }
 }
 
-void ACSControlTask::IMUOffset(float *mag_x, float *mag_y, float *mag_z, float temp, float voltage, float pwmX, float pwmY, float pwmZ)
+void ACSControlTask::IMUOffset()
 {
+    float temp;
+    float voltage;
+
+    if (!sfr::temperature::temp_c_value->get_value(&temp)) {
+        temp = 0;
+    }
+
+    if (!sfr::battery::voltage_value->get_value(&voltage)) {
+        voltage = 0;
+    }
+
     using namespace constants::acs;
 
     /*Offset Contributions from PWM (ex: pwmX_oX is contribution of X mag to offset x)*/
-    float pwmX_ox = pwmX_ox_1 * pwmX + pwmX_ox_2 * pow(pwmX, 2) + pwmX_ox_3 * pow(pwmX, 3);
-    float pwmX_oy = pwmX_oy_1 * pwmX + pwmX_oy_2 * pow(pwmX, 2) + pwmX_oy_3 * pow(pwmX, 3);
-    float pwmX_oz = pwmX_oz_1 * pwmX + pwmX_oz_2 * pow(pwmX, 2) + pwmX_oz_3 * pow(pwmX, 3);
+    float pwmX_ox = pwmX_ox_1 * pwm_x + pwmX_ox_2 * pow(pwm_x, 2) + pwmX_ox_3 * pow(pwm_x, 3);
+    float pwmX_oy = pwmX_oy_1 * pwm_x + pwmX_oy_2 * pow(pwm_x, 2) + pwmX_oy_3 * pow(pwm_x, 3);
+    float pwmX_oz = pwmX_oz_1 * pwm_x + pwmX_oz_2 * pow(pwm_x, 2) + pwmX_oz_3 * pow(pwm_x, 3);
 
-    float pwmY_ox = pwmY_ox_1 * pwmY + pwmY_ox_2 * pow(pwmY, 2) + pwmY_ox_3 * pow(pwmY, 3);
-    float pwmY_oy = pwmY_oy_1 * pwmY + pwmY_oy_2 * pow(pwmY, 2) + pwmY_oy_3 * pow(pwmY, 3);
-    float pwmY_oz = pwmY_oz_1 * pwmY + pwmY_oz_2 * pow(pwmY, 2) + pwmY_oz_3 * pow(pwmY, 3);
+    float pwmY_ox = pwmY_ox_1 * pwm_y + pwmY_ox_2 * pow(pwm_y, 2) + pwmY_ox_3 * pow(pwm_y, 3);
+    float pwmY_oy = pwmY_oy_1 * pwm_y + pwmY_oy_2 * pow(pwm_y, 2) + pwmY_oy_3 * pow(pwm_y, 3);
+    float pwmY_oz = pwmY_oz_1 * pwm_y + pwmY_oz_2 * pow(pwm_y, 2) + pwmY_oz_3 * pow(pwm_y, 3);
 
-    float pwmZ_ox = pwmZ_ox_1 * pwmZ + pwmZ_ox_2 * pow(pwmZ, 2) + pwmZ_ox_3 * pow(pwmZ, 3);
-    float pwmZ_oy = pwmZ_oy_1 * pwmZ + pwmZ_oy_2 * pow(pwmZ, 2) + pwmZ_oy_3 * pow(pwmZ, 3);
-    float pwmZ_oz = pwmZ_oz_1 * pwmZ + pwmZ_oz_2 * pow(pwmZ, 2) + pwmZ_oz_3 * pow(pwmZ, 3);
+    float pwmZ_ox = pwmZ_ox_1 * pwm_z + pwmZ_ox_2 * pow(pwm_z, 2) + pwmZ_ox_3 * pow(pwm_z, 3);
+    float pwmZ_oy = pwmZ_oy_1 * pwm_z + pwmZ_oy_2 * pow(pwm_z, 2) + pwmZ_oy_3 * pow(pwm_z, 3);
+    float pwmZ_oz = pwmZ_oz_1 * pwm_z + pwmZ_oz_2 * pow(pwm_z, 2) + pwmZ_oz_3 * pow(pwm_z, 3);
     /*******************************************/
     /*Voltage Adjustment Coefficients (ex: volX_ox = coef for pwmX_oX)*/
     float volX_ox = volX_ox_1 * voltage + volX_ox_c;
@@ -282,7 +285,7 @@ void ACSControlTask::IMUOffset(float *mag_x, float *mag_y, float *mag_z, float t
     /*******************************************/
     /* Finally, adjust magnetometer readings*/
 
-    *mag_x = *mag_x - xoffset;
-    *mag_y = *mag_y - yoffset;
-    *mag_z = *mag_z - zoffset;
+    mag_x = mag_x - xoffset;
+    mag_y = mag_y - yoffset;
+    mag_z = mag_z - zoffset;
 }
