@@ -58,7 +58,7 @@ void ACSControlTask::execute()
     plantObj.rtU.current[2] = current_z;
 
     plantObj.step();
-
+    
 #endif
 
     if (!sfr::acs::off) {
@@ -69,19 +69,23 @@ void ACSControlTask::execute()
         }
 
         if (imu_valid) {
+#ifdef ACS_SIM
             gyro_x = plantObj.rtY.angularvelocity[0];
             gyro_y = plantObj.rtY.angularvelocity[1];
             gyro_z = plantObj.rtY.angularvelocity[2];
-            mag_x = plantObj.rtY.magneticfield[0];
-            mag_y = plantObj.rtY.magneticfield[1];
-            mag_z = plantObj.rtY.magneticfield[2];
+
+            // Convert to uT
+            mag_x = plantObj.rtY.magneticfield[0] * 1000000.0;
+            mag_y = plantObj.rtY.magneticfield[1] * 1000000.0;
+            mag_z = plantObj.rtY.magneticfield[2] * 1000000.0;
+#endif
 
             IMUOffset();
 
             // 2. Pass sensor data / output of plant into ekf
-            ekfObj.Z(0) = mag_x * 1000000.0;
-            ekfObj.Z(1) = mag_y * 1000000.0;
-            ekfObj.Z(2) = mag_z * 1000000.0;
+            ekfObj.Z(0) = mag_x;
+            ekfObj.Z(1) = mag_y;
+            ekfObj.Z(2) = mag_z;
             ekfObj.Z(3) = gyro_x;
             ekfObj.Z(4) = gyro_y;
             ekfObj.Z(5) = gyro_z;
@@ -285,7 +289,7 @@ void ACSControlTask::IMUOffset()
     /*******************************************/
     /* Finally, adjust magnetometer readings*/
 
-    mag_x = mag_x - ( xoffset / 1000000.0 );
-    mag_y = mag_y - ( yoffset / 1000000.0 );
-    mag_z = mag_z - ( zoffset / 1000000.0 );
+    mag_x = mag_x - xoffset;
+    mag_y = mag_y - yoffset;
+    mag_z = mag_z - zoffset;
 }
