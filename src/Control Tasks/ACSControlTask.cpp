@@ -285,7 +285,7 @@ void ACSControlTask::IMUOffset()
     /*******************************************/
     /* Finally, adjust magnetometer readings*/
 
-    mag_x = mag_x - xoffset;
-    mag_y = mag_y - yoffset;
-    mag_z = mag_z - zoffset;
+    mag_x = mag_x - ( xoffset / 1000000.0 );
+    mag_y = mag_y - ( yoffset / 1000000.0 );
+    mag_z = mag_z - ( zoffset / 1000000.0 );
 }
