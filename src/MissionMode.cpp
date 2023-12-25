@@ -78,7 +78,7 @@ void LowPowerDetumbleSpin::transition_to()
         true,                        // rockblock sleeping
         sensor_power_mode_type::on,  // imu
         sensor_power_mode_type::off, // camera
-        true,                       // acs off
+        true,                        // acs off
         sfr::rockblock::lp_downlink_period);
 }
 void LowPowerDetumbleSpin::dispatch()
