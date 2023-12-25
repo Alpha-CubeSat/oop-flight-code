@@ -69,6 +69,7 @@ void DetumbleSpin::dispatch()
         sfr::acs::mode = (uint8_t)acs_mode_type::point;
     }
     exit_detumble_phase(sfr::mission::normal);
+    enter_lp(sfr::mission::lowPowerDetumbleSpin);
 }
 
 void LowPowerDetumbleSpin::transition_to()
@@ -77,7 +78,7 @@ void LowPowerDetumbleSpin::transition_to()
         true,                        // rockblock sleeping
         sensor_power_mode_type::on,  // imu
         sensor_power_mode_type::off, // camera
-        false,                       // acs off
+        true,                       // acs off
         sfr::rockblock::lp_downlink_period);
 }
 void LowPowerDetumbleSpin::dispatch()
