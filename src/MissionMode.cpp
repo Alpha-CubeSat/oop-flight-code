@@ -64,10 +64,6 @@ void DetumbleSpin::transition_to()
 }
 void DetumbleSpin::dispatch()
 {
-    if (sfr::imu::failed_times >= sfr::imu::failed_limit) {
-        sfr::mission::current_mode = sfr::mission::normal;
-        sfr::acs::mode = (uint8_t)acs_mode_type::point;
-    }
     exit_detumble_phase(sfr::mission::normal);
     enter_lp(sfr::mission::lowPowerDetumbleSpin);
 }
@@ -406,6 +402,12 @@ void exit_detumble_phase(MissionMode *mode)
     float gyro_x;
     float gyro_y;
     float gyro_z;
+
+    // invalid readings from IMU
+    if (sfr::imu::failed_times >= sfr::imu::failed_limit) {
+        sfr::mission::current_mode = mode;
+        sfr::acs::mode = (uint8_t)acs_mode_type::simple;
+    }
 
     // cubesat has stabilized: gyro z > 1 rad/s && gyro x and gyro y are below 0.2 rad/s
     if (sfr::imu::gyro_z_average->get_value(&gyro_z) && gyro_z >= sfr::detumble::min_stable_gyro_z.get_float() &&
