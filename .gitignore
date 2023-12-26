@@ -2,3 +2,4 @@
 .vscode/
 tools/putty.log
 .DS_Store
+logs/

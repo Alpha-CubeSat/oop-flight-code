@@ -21,15 +21,13 @@ public:
 private:
     void ACSWrite(int torqorder, float current, int out1, int out2, int PWMpin);
     int current2PWM(float current);
-    void IMUOffset(float *mag_x, float *mag_y, float *mag_z, float temp, float voltage, float pwmX, float pwmY, float pwmZ);
+    void IMUOffset();
     float gyro_x;
     float gyro_y;
     float gyro_z;
     float mag_x;
     float mag_y;
     float mag_z;
-    float temp_c;
-    float voltage;
     float pwm_x;
     float pwm_y;
     float pwm_z;
@@ -53,9 +51,11 @@ private:
     double inclination_input = 0.90058989402907408; // 51.6 deg in rad
     double m_input = 1.3;                           // kg
     double q0_input[4] = {0.5, 0.5, -0.18301270189221924, 0.6830127018922193};
-    double wx_input = 0.0;
-    double wy_input = 0.0;
-    double wz_input = 1.0;
+
+    // detumble starting conditions (1 - 5 deg per second magnitude)
+    double wx_input = 0.05;
+    double wy_input = -0.04;
+    double wz_input = -0.01;
 #endif
 };
 

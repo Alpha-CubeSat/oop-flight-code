@@ -9,17 +9,37 @@ void ACSControlTask::execute()
 
 #ifdef ACS_SIM
     if (first) {
-        plantObj.initialize(0.1, altitude_input, I_input, inclination_input, m_input, q0_input, wx_input, wy_input, wz_input);
+        plantObj.initialize(constants::acs::step_size_input, altitude_input, I_input, inclination_input, m_input, q0_input, wx_input, wy_input, wz_input);
     }
 #endif
 
     if ((old_Id != constants::acs::Id_values[sfr::acs::Id_index] || old_Kd != constants::acs::Kd_values[sfr::acs::Kd_index] || old_Kp != constants::acs::Kp_values[sfr::acs::Kp_index] || old_c != constants::acs::c_values[sfr::acs::c_index]) || first) {
+
 #ifdef VERBOSE
         Serial.println("Initialize starshot library");
-        starshotObj.initialize(constants::acs::step_size_input, constants::acs::A_input, constants::acs::Id_values[sfr::acs::Id_index], constants::acs::Kd_values[sfr::acs::Kd_index], constants::acs::Kp_values[sfr::acs::Kp_index], constants::acs::c_values[sfr::acs::c_index], constants::acs::i_max_input, constants::acs::k_input, constants::acs::n_input);
-        Serial.println("Initialize EKF library");
-        ekfObj.initialize(constants::acs::step_size_input);
 #endif
+        starshotObj.initialize(constants::acs::step_size_input, constants::acs::A_input, constants::acs::Id_values[sfr::acs::Id_index], constants::acs::Kd_values[sfr::acs::Kd_index], constants::acs::Kp_values[sfr::acs::Kp_index], constants::acs::c_values[sfr::acs::c_index], constants::acs::i_max_input, constants::acs::k_input, constants::acs::n_input);
+
+#ifdef VERBOSE
+        Serial.println("Initialize EKF library");
+#endif
+        Eigen::VectorXd initial_state = Eigen::VectorXd::Zero(6);
+        Eigen::MatrixXd initial_cov = Eigen::MatrixXd::Zero(6, 6);
+        // Q (process noise covariance) Matrix
+        Eigen::MatrixXd Q = 0.02 * Eigen::MatrixXd::Identity(6, 6);
+        Q.diagonal() << 0.008, 0.07, 0.005, 0.1, 0.1, 0.1;
+        // Rd (measurement noise variance) Matrices
+        Eigen::MatrixXd Rd(6, 6);
+        Rd << 2.02559220e-01, 5.17515015e-03, -3.16669361e-02, -1.76503506e-04, -3.74891174e-05, -7.75657503e-05,
+            5.17515015e-03, 1.55389381e-01, 1.07780468e-02, -2.90511952e-05, -8.02931174e-06, -1.26277622e-05,
+            -3.16669361e-02, 1.07780468e-02, 3.93162684e-01, 9.29630074e-05, 1.22496815e-05, 5.67092127e-05,
+            -1.76503506e-04, -2.90511952e-05, 9.29630074e-05, 1.80161545e-05, -2.27002599e-09, -6.07376965e-07,
+            -3.74891174e-05, -8.02931174e-06, 1.22496815e-05, -2.27002599e-09, 6.70144060e-06, 2.97298687e-08,
+            -7.75657503e-05, -1.26277622e-05, 5.67092127e-05, -6.07376965e-07, 2.97298687e-08, 8.52192033e-06;
+        // Hd
+        Eigen::MatrixXd Hd = Eigen::MatrixXd::Identity(6, 6);
+        ekfObj.initialize(constants::acs::step_size_input, initial_state, initial_cov, Q, Rd, Hd);
+
         first = false;
     }
 
@@ -31,29 +51,13 @@ void ACSControlTask::execute()
     imu_valid = sfr::imu::gyro_x_value->get_value(&gyro_x) && sfr::imu::gyro_y_value->get_value(&gyro_y) && sfr::imu::gyro_z_value->get_value(&gyro_z) && sfr::imu::mag_x_value->get_value(&mag_x) && sfr::imu::mag_y_value->get_value(&mag_y) && sfr::imu::mag_z_value->get_value(&mag_z);
 
 #ifdef ACS_SIM
-    gyro_x = plantObj.rtY.angularvelocity[0];
-    gyro_y = plantObj.rtY.angularvelocity[1];
-    gyro_z = plantObj.rtY.angularvelocity[2];
-    mag_x = plantObj.rtY.magneticfield[0];
-    mag_y = plantObj.rtY.magneticfield[1];
-    mag_z = plantObj.rtY.magneticfield[2];
-
-#ifdef VERBOSE
-    Serial.print("Simulated MAG_X: ");
-    Serial.println(mag_x);
-    Serial.print("Simulated MAG_Y: ");
-    Serial.println(mag_y);
-    Serial.print("Simulated MAG_Z: ");
-    Serial.println(mag_z);
-    Serial.print("Simulated GYRO_X: ");
-    Serial.println(gyro_x);
-    Serial.print("Simulated GYRO_Y: ");
-    Serial.println(gyro_y);
-    Serial.print("Simulated GYRO_Z: ");
-    Serial.println(gyro_z);
-#endif
+    // 1. Pass output of starshot into plant
+    plantObj.rtU.current[0] = current_x;
+    plantObj.rtU.current[1] = current_y;
+    plantObj.rtU.current[2] = current_z;
 
     plantObj.step();
+
 #endif
 
     if (!sfr::acs::off) {
@@ -64,17 +68,20 @@ void ACSControlTask::execute()
         }
 
         if (imu_valid) {
-            if (!sfr::temperature::temp_c_value->get_value(&temp_c)) {
-                temp_c = 0;
-            }
+#ifdef ACS_SIM
+            gyro_x = plantObj.rtY.angularvelocity[0];
+            gyro_y = plantObj.rtY.angularvelocity[1];
+            gyro_z = plantObj.rtY.angularvelocity[2];
 
-            if (!sfr::battery::voltage_value->get_value(&voltage)) {
-                voltage = 0;
-            }
+            // Convert to uT
+            mag_x = plantObj.rtY.magneticfield[0] * 1000000.0;
+            mag_y = plantObj.rtY.magneticfield[1] * 1000000.0;
+            mag_z = plantObj.rtY.magneticfield[2] * 1000000.0;
+#endif
 
-            IMUOffset(&mag_x, &mag_y, &mag_z, temp_c, voltage, pwm_x, pwm_y, pwm_z);
+            IMUOffset();
 
-            // load sensor reading to EKF (expecting uT)
+            // 2. Pass sensor data / output of plant into ekf
             ekfObj.Z(0) = mag_x;
             ekfObj.Z(1) = mag_y;
             ekfObj.Z(2) = mag_z;
@@ -84,7 +91,7 @@ void ACSControlTask::execute()
 
             ekfObj.step();
 
-            // load filtered imu data from EKF to the controller (expecting T)
+            // 3. Pass output of ekf into starshot
             starshotObj.rtU.Bfield_body[0] = ekfObj.state(0) / 1000000.0;
             starshotObj.rtU.Bfield_body[1] = ekfObj.state(1) / 1000000.0;
             starshotObj.rtU.Bfield_body[2] = ekfObj.state(2) / 1000000.0;
@@ -94,6 +101,7 @@ void ACSControlTask::execute()
 
             starshotObj.step();
 
+            // 4. Complete the loop (set current values to output of starshot)
             if (sfr::acs::mode == (uint8_t)acs_mode_type::detumble) {
                 current_x = starshotObj.rtY.detumble[0];
                 current_y = starshotObj.rtY.detumble[1];
@@ -126,6 +134,52 @@ void ACSControlTask::execute()
     ACSWrite(constants::acs::xtorqorder, current_x, constants::acs::xout1, constants::acs::xout2, constants::acs::xPWMpin);
     ACSWrite(constants::acs::ytorqorder, current_y, constants::acs::yout1, constants::acs::yout2, constants::acs::yPWMpin);
     ACSWrite(constants::acs::ztorqorder, current_z, constants::acs::zout1, constants::acs::zout2, constants::acs::zPWMpin);
+
+#ifdef ACS_SIM
+    Serial.print(millis());
+    Serial.print(", ");
+    Serial.print(sfr::mission::current_mode->get_name().c_str());
+    Serial.print(", ");
+    if (sfr::acs::off == false) {
+        Serial.print("ON");
+    } else {
+        Serial.print("OFF");
+    }
+    Serial.print(", ");
+    if (sfr::acs::mode == 0) {
+        Serial.print("SIMPLE, ");
+    } else if (sfr::acs::mode == 1) {
+        Serial.print("POINT, ");
+    } else if (sfr::acs::mode == 2) {
+        Serial.print("DETUMBLE, ");
+    }
+    Serial.print(starshotObj.rtY.pt_error); // deg
+    Serial.print(", ");
+    Serial.print(current_x);
+    Serial.print(", ");
+    Serial.print(current_y);
+    Serial.print(", ");
+    Serial.print(current_z);
+    Serial.print(", ");
+    Serial.print(plantObj.rtU.current[0]);
+    Serial.print(", ");
+    Serial.print(plantObj.rtU.current[1]);
+    Serial.print(", ");
+    Serial.print(plantObj.rtU.current[2]);
+    Serial.print(", ");
+    Serial.print(plantObj.rtY.magneticfield[0] * 1000000.0); // uT
+    Serial.print(", ");
+    Serial.print(plantObj.rtY.magneticfield[1] * 1000000.0); // uT
+    Serial.print(", ");
+    Serial.print(plantObj.rtY.magneticfield[2] * 1000000.0); // uT
+    Serial.print(", ");
+    Serial.print(plantObj.rtY.angularvelocity[0]);
+    Serial.print(", ");
+    Serial.print(plantObj.rtY.angularvelocity[1]);
+    Serial.print(", ");
+    Serial.print(plantObj.rtY.angularvelocity[2]);
+    Serial.println();
+#endif
 }
 
 int ACSControlTask::current2PWM(float current)
@@ -181,22 +235,33 @@ void ACSControlTask::ACSWrite(int torqorder, float current, int out1, int out2, 
     }
 }
 
-void ACSControlTask::IMUOffset(float *mag_x, float *mag_y, float *mag_z, float temp, float voltage, float pwmX, float pwmY, float pwmZ)
+void ACSControlTask::IMUOffset()
 {
+    float temp;
+    float voltage;
+
+    if (!sfr::temperature::temp_c_value->get_value(&temp)) {
+        temp = 0;
+    }
+
+    if (!sfr::battery::voltage_value->get_value(&voltage)) {
+        voltage = 0;
+    }
+
     using namespace constants::acs;
 
     /*Offset Contributions from PWM (ex: pwmX_oX is contribution of X mag to offset x)*/
-    float pwmX_ox = pwmX_ox_1 * pwmX + pwmX_ox_2 * pow(pwmX, 2) + pwmX_ox_3 * pow(pwmX, 3);
-    float pwmX_oy = pwmX_oy_1 * pwmX + pwmX_oy_2 * pow(pwmX, 2) + pwmX_oy_3 * pow(pwmX, 3);
-    float pwmX_oz = pwmX_oz_1 * pwmX + pwmX_oz_2 * pow(pwmX, 2) + pwmX_oz_3 * pow(pwmX, 3);
+    float pwmX_ox = pwmX_ox_1 * pwm_x + pwmX_ox_2 * pow(pwm_x, 2) + pwmX_ox_3 * pow(pwm_x, 3);
+    float pwmX_oy = pwmX_oy_1 * pwm_x + pwmX_oy_2 * pow(pwm_x, 2) + pwmX_oy_3 * pow(pwm_x, 3);
+    float pwmX_oz = pwmX_oz_1 * pwm_x + pwmX_oz_2 * pow(pwm_x, 2) + pwmX_oz_3 * pow(pwm_x, 3);
 
-    float pwmY_ox = pwmY_ox_1 * pwmY + pwmY_ox_2 * pow(pwmY, 2) + pwmY_ox_3 * pow(pwmY, 3);
-    float pwmY_oy = pwmY_oy_1 * pwmY + pwmY_oy_2 * pow(pwmY, 2) + pwmY_oy_3 * pow(pwmY, 3);
-    float pwmY_oz = pwmY_oz_1 * pwmY + pwmY_oz_2 * pow(pwmY, 2) + pwmY_oz_3 * pow(pwmY, 3);
+    float pwmY_ox = pwmY_ox_1 * pwm_y + pwmY_ox_2 * pow(pwm_y, 2) + pwmY_ox_3 * pow(pwm_y, 3);
+    float pwmY_oy = pwmY_oy_1 * pwm_y + pwmY_oy_2 * pow(pwm_y, 2) + pwmY_oy_3 * pow(pwm_y, 3);
+    float pwmY_oz = pwmY_oz_1 * pwm_y + pwmY_oz_2 * pow(pwm_y, 2) + pwmY_oz_3 * pow(pwm_y, 3);
 
-    float pwmZ_ox = pwmZ_ox_1 * pwmZ + pwmZ_ox_2 * pow(pwmZ, 2) + pwmZ_ox_3 * pow(pwmZ, 3);
-    float pwmZ_oy = pwmZ_oy_1 * pwmZ + pwmZ_oy_2 * pow(pwmZ, 2) + pwmZ_oy_3 * pow(pwmZ, 3);
-    float pwmZ_oz = pwmZ_oz_1 * pwmZ + pwmZ_oz_2 * pow(pwmZ, 2) + pwmZ_oz_3 * pow(pwmZ, 3);
+    float pwmZ_ox = pwmZ_ox_1 * pwm_z + pwmZ_ox_2 * pow(pwm_z, 2) + pwmZ_ox_3 * pow(pwm_z, 3);
+    float pwmZ_oy = pwmZ_oy_1 * pwm_z + pwmZ_oy_2 * pow(pwm_z, 2) + pwmZ_oy_3 * pow(pwm_z, 3);
+    float pwmZ_oz = pwmZ_oz_1 * pwm_z + pwmZ_oz_2 * pow(pwm_z, 2) + pwmZ_oz_3 * pow(pwm_z, 3);
     /*******************************************/
     /*Voltage Adjustment Coefficients (ex: volX_ox = coef for pwmX_oX)*/
     float volX_ox = volX_ox_1 * voltage + volX_ox_c;
@@ -223,7 +288,7 @@ void ACSControlTask::IMUOffset(float *mag_x, float *mag_y, float *mag_z, float t
     /*******************************************/
     /* Finally, adjust magnetometer readings*/
 
-    *mag_x = *mag_x - xoffset;
-    *mag_y = *mag_y - yoffset;
-    *mag_z = *mag_z - zoffset;
+    mag_x = mag_x - xoffset;
+    mag_y = mag_y - yoffset;
+    mag_z = mag_z - zoffset;
 }
