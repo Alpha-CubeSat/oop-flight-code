@@ -406,7 +406,7 @@ void exit_detumble_phase(MissionMode *mode)
     // invalid readings from IMU
     if (sfr::imu::failed_times >= sfr::imu::failed_limit) {
         sfr::mission::current_mode = mode;
-        sfr::acs::mode = (uint8_t)acs_mode_type::simple;
+        sfr::acs::mode = (uint8_t)acs_mode_type::point;
     }
 
     // cubesat has stabilized: gyro z > 1 rad/s && gyro x and gyro y are below 0.2 rad/s
