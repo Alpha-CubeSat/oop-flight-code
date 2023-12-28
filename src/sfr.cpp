@@ -4,7 +4,7 @@ namespace sfr {
     namespace stabilization {
         // OP Codes 1100
         // TODO actual default value
-        SFRField<uint32_t> max_time = SFRField<uint32_t>(30 * constants::time::one_minute, 0x1100);
+        SFRField<uint32_t> max_time = SFRField<uint32_t>(2 * constants::time::one_hour, 0x1100);
     } // namespace stabilization
     namespace boot {
         // OP Codes 1200
