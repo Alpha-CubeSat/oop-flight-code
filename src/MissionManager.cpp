@@ -39,6 +39,8 @@ Phase *MissionManager::modeToPhase(MissionMode *mission)
 {
     if (mission->get_id() == sfr::mission::detumbleSpin->get_id() || mission->get_id() == sfr::mission::lowPowerDetumbleSpin->get_id()) {
         return sfr::mission::stabilization;
+    } else if (mission->get_id() == sfr::mission::aliveSignal->get_id() || mission->get_id() == sfr::mission::lowPowerAliveSignal->get_id()) {
+        return sfr::mission::signal;
     } else if (mission->get_id() == sfr::mission::normal->get_id() || mission->get_id() == sfr::mission::transmit->get_id() || mission->get_id() == sfr::mission::lowPower->get_id()) {
         return sfr::mission::standby;
     } else if (mission->get_id() == sfr::mission::normalDeployment->get_id() || mission->get_id() == sfr::mission::transmitDeployment->get_id() || mission->get_id() == sfr::mission::lowPowerDeployment->get_id()) {
@@ -47,7 +49,7 @@ Phase *MissionManager::modeToPhase(MissionMode *mission)
         return sfr::mission::armed;
     } else if (mission->get_id() == sfr::mission::normalInSun->get_id() || mission->get_id() == sfr::mission::transmitInSun->get_id() || mission->get_id() == sfr::mission::lowPowerInSun->get_id() || mission->get_id() == sfr::mission::voltageFailureInSun->get_id()) {
         return sfr::mission::inSun;
-    } else if (mission->get_id() == sfr::mission::bootCamera->get_id() || mission->get_id() == sfr::mission::mandatoryBurns->get_id() || mission->get_id() == sfr::mission::regularBurns->get_id() || mission->get_id() == sfr::mission::photo->get_id()) {
+    } else if (mission->get_id() == sfr::mission::bootImu->get_id() || mission->get_id() == sfr::mission::bootCamera->get_id() || mission->get_id() == sfr::mission::mandatoryBurns->get_id() || mission->get_id() == sfr::mission::regularBurns->get_id() || mission->get_id() == sfr::mission::photo->get_id()) {
         return sfr::mission::firing;
     } else {
         return sfr::mission::initialization;

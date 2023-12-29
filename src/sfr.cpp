@@ -67,6 +67,7 @@ namespace sfr {
         Photo photo_class;
 
         Initialization initialization_class;
+        Signal signal_class;
         Stabilization stabilization_class;
         Standby standby_class;
         Deployment deployment_class;
@@ -99,6 +100,7 @@ namespace sfr {
         MissionMode *photo = &photo_class;
 
         Phase *initialization = &initialization_class;
+        Phase *signal = &signal_class;
         Phase *stabilization = &stabilization_class;
         Phase *standby = &standby_class;
         Phase *deployment = &deployment_class;
@@ -162,7 +164,6 @@ namespace sfr {
         SFRField<uint32_t> transmit_downlink_period = SFRField<uint32_t>(20 * constants::time::one_minute, constants::time::one_second, 2 * constants::time::one_day, 0x2110);
         // END TODO
         SFRField<uint32_t> on_time = SFRField<uint32_t>(30 * constants::time::one_minute, 0, constants::time::one_revolution, 0x2111);
-        SFRField<uint32_t> start_time_check_signal = SFRField<uint32_t>(0, 0x2112);
 
         char buffer[constants::rockblock::buffer_size] = {0};
         int camera_commands[99][constants::rockblock::command_len] = {0};

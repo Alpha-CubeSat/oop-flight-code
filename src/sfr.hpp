@@ -85,6 +85,7 @@ namespace sfr {
         extern Photo photo_class;
 
         extern Initialization initialization_class;
+        extern Signal signal_class;
         extern Stabilization stabilization_class;
         extern Standby standby_class;
         extern Deployment deployment_class;
@@ -117,6 +118,7 @@ namespace sfr {
         extern MissionMode *photo;
 
         extern Phase *initialization;
+        extern Phase *signal;
         extern Phase *stabilization;
         extern Phase *standby;
         extern Phase *deployment;
@@ -177,7 +179,6 @@ namespace sfr {
         extern SFRField<uint32_t> downlink_period;
         extern SFRField<uint32_t> lp_downlink_period;
         extern SFRField<uint32_t> transmit_downlink_period;
-        extern SFRField<uint32_t> start_time_check_signal;
         extern SFRField<uint32_t> on_time;
 
         extern char buffer[constants::rockblock::buffer_size];

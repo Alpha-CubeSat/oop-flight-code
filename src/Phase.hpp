@@ -20,7 +20,7 @@ class Initialization : public Phase
     }
 };
 
-class Stabilization : public Phase
+class Signal : public Phase
 {
     int get_id()
     {
@@ -28,7 +28,7 @@ class Stabilization : public Phase
     }
 };
 
-class Standby : public Phase
+class Stabilization : public Phase
 {
     int get_id()
     {
@@ -36,7 +36,7 @@ class Standby : public Phase
     }
 };
 
-class Deployment : public Phase
+class Standby : public Phase
 {
     int get_id()
     {
@@ -44,7 +44,7 @@ class Deployment : public Phase
     }
 };
 
-class Armed : public Phase
+class Deployment : public Phase
 {
     int get_id()
     {
@@ -52,7 +52,7 @@ class Armed : public Phase
     }
 };
 
-class InSun : public Phase
+class Armed : public Phase
 {
     int get_id()
     {
@@ -60,11 +60,19 @@ class InSun : public Phase
     }
 };
 
-class Firing : public Phase
+class InSun : public Phase
 {
     int get_id()
     {
         return 6;
+    }
+};
+
+class Firing : public Phase
+{
+    int get_id()
+    {
+        return 7;
     }
 };
 

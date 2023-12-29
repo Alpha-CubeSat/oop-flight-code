@@ -160,7 +160,6 @@ void RockblockControlTask::dispatch_await_at()
         Serial.println("SAT INFO: ok");
 #endif
         transition_to(rockblock_mode_type::send_signal_strength);
-        sfr::rockblock::start_time_check_signal = millis();
     }
 }
 
