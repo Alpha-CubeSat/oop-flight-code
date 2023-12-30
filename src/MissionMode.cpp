@@ -29,12 +29,12 @@ void AliveSignal::transition_to()
         sensor_power_mode_type::on,  // imu
         sensor_power_mode_type::off, // camera
         true,                        // acs off
-        sfr::rockblock::lp_downlink_period);
+        0);
 }
 void AliveSignal::dispatch()
 {
+    enter_lp(sfr::mission::lowPowerAliveSignal);
     exit_signal_phase(sfr::mission::detumbleSpin);
-    enter_lp(sfr::mission::lowPowerAliveSignal); // entering lp takes precedence
 }
 
 void LowPowerAliveSignal::transition_to()
@@ -386,13 +386,12 @@ void exit_signal_phase(MissionMode *mode)
     // if rockblock hard faults 3 times exit alive signal
     if (sfr::aliveSignal::num_hard_faults >= sfr::aliveSignal::max_downlink_hard_faults || sfr::aliveSignal::downlinked) {
         sfr::mission::current_mode = mode;
+        sfr::aliveSignal::downlinked = false;
+        sfr::aliveSignal::num_hard_faults = 0;
     }
-    // if rockblock cannot get signal in one minute exit alive signal
-    if (millis() - sfr::rockblock::start_time_check_signal >= constants::rockblock::max_check_signal_time) {
+    if (millis() - sfr::mission::signal->start_time >= sfr::aliveSignal::max_time) {
         sfr::mission::current_mode = mode;
     }
-    // if signal phase has timed out
-    timed_out(mode, sfr::aliveSignal::max_time);
 }
 
 void exit_detumble_phase(MissionMode *mode)
@@ -409,7 +408,7 @@ void exit_detumble_phase(MissionMode *mode)
         sfr::acs::mode = (uint8_t)acs_mode_type::point;
     }
 
-    // cubesat has stabilized: gyro z > 1 rad/s && gyro x and gyro y are below 0.2 rad/s
+    // cubesat has stabilized: gyro z > 0.9 rad/s && gyro x and gyro y are below 0.1 rad/s
     if (sfr::imu::gyro_z_average->get_value(&gyro_z) && gyro_z >= sfr::detumble::min_stable_gyro_z.get_float() &&
         sfr::imu::gyro_x_average->get_value(&gyro_x) && gyro_x <= sfr::detumble::max_stable_gyro_x.get_float() &&
         sfr::imu::gyro_y_average->get_value(&gyro_y) && gyro_y <= sfr::detumble::max_stable_gyro_y.get_float()) {

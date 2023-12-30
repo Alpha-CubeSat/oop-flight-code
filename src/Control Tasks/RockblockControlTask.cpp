@@ -160,7 +160,6 @@ void RockblockControlTask::dispatch_await_at()
         Serial.println("SAT INFO: ok");
 #endif
         transition_to(rockblock_mode_type::send_signal_strength);
-        sfr::rockblock::start_time_check_signal = millis();
     }
 }
 
@@ -515,6 +514,7 @@ void RockblockControlTask::dispatch_await_flush()
 void RockblockControlTask::dispatch_end_transmission()
 {
     sfr::rockblock::last_downlink = millis();
+    sfr::aliveSignal::downlinked = true;
     if (sfr::rockblock::downlink_period > constants::rockblock::min_sleep_period) {
         Pins::setPinState(constants::rockblock::sleep_pin, LOW);
     }
