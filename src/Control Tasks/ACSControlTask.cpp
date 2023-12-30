@@ -2,17 +2,13 @@
 
 ACSControlTask::ACSControlTask()
 {
+#ifdef ACS_SIM
+    plantObj.initialize(constants::acs::step_size_input, altitude_input, I_input, inclination_input, m_input, q0_input, wx_input, wy_input, wz_input);
+#endif
 }
 
 void ACSControlTask::execute()
 {
-
-#ifdef ACS_SIM
-    if (first) {
-        plantObj.initialize(constants::acs::step_size_input, altitude_input, I_input, inclination_input, m_input, q0_input, wx_input, wy_input, wz_input);
-    }
-#endif
-
     if ((old_Id != constants::acs::Id_values[sfr::acs::Id_index] || old_Kd != constants::acs::Kd_values[sfr::acs::Kd_index] || old_Kp != constants::acs::Kp_values[sfr::acs::Kp_index] || old_c != constants::acs::c_values[sfr::acs::c_index]) || first) {
 
 #ifdef VERBOSE
@@ -77,6 +73,11 @@ void ACSControlTask::execute()
             mag_x = plantObj.rtY.magneticfield[0] * 1000000.0;
             mag_y = plantObj.rtY.magneticfield[1] * 1000000.0;
             mag_z = plantObj.rtY.magneticfield[2] * 1000000.0;
+
+            // needed for detumble spin exit conditions
+            sfr::imu::gyro_x_average->set_value(gyro_x);
+            sfr::imu::gyro_y_average->set_value(gyro_y);
+            sfr::imu::gyro_z_average->set_value(gyro_z);
 #endif
 
             IMUOffset();

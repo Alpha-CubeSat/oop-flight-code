@@ -13,9 +13,9 @@ namespace sfr {
     namespace detumble {
         // OP Codes 1500
         // TODO actual default values
-        SFRField<uint8_t> min_stable_gyro_z = SFRField<uint8_t>((1 * constants::imu::sfr_resolution), 0x1500, constants::imu::sfr_resolution);
-        SFRField<uint8_t> max_stable_gyro_x = SFRField<uint8_t>((0.2 * constants::imu::sfr_resolution), 0x1501, constants::imu::sfr_resolution);
-        SFRField<uint8_t> max_stable_gyro_y = SFRField<uint8_t>((0.2 * constants::imu::sfr_resolution), 0x1502, constants::imu::sfr_resolution);
+        SFRField<uint8_t> min_stable_gyro_z = SFRField<uint8_t>((0.9 * constants::imu::sfr_resolution), 0x1500, constants::imu::sfr_resolution);
+        SFRField<uint8_t> max_stable_gyro_x = SFRField<uint8_t>((0.1 * constants::imu::sfr_resolution), 0x1501, constants::imu::sfr_resolution);
+        SFRField<uint8_t> max_stable_gyro_y = SFRField<uint8_t>((0.1 * constants::imu::sfr_resolution), 0x1502, constants::imu::sfr_resolution);
         SFRField<uint8_t> min_unstable_gyro_x = SFRField<uint8_t>((0.7 * constants::imu::sfr_resolution), 0x1503, constants::imu::sfr_resolution);
         SFRField<uint8_t> min_unstable_gyro_y = SFRField<uint8_t>((0.7 * constants::imu::sfr_resolution), 0x1504, constants::imu::sfr_resolution);
         // END TODO
@@ -159,7 +159,7 @@ namespace sfr {
         SFRField<uint16_t> mode = SFRField<uint16_t>((uint16_t)rockblock_mode_type::standby, 0x2106);
         SFRField<uint32_t> last_downlink = SFRField<uint32_t>(0, 0x2107);
         // TODO actual default values
-        SFRField<uint32_t> downlink_period = SFRField<uint32_t>(20 * constants::time::one_minute, constants::time::one_second, 2 * constants::time::one_day, 0x2108);
+        SFRField<uint32_t> downlink_period = SFRField<uint32_t>(20 * constants::time::one_minute, 0, 2 * constants::time::one_day, 0x2108);
         SFRField<uint32_t> lp_downlink_period = SFRField<uint32_t>(constants::time::one_hour, constants::time::one_second, 2 * constants::time::one_day, 0x2109);
         SFRField<uint32_t> transmit_downlink_period = SFRField<uint32_t>(20 * constants::time::one_minute, constants::time::one_second, 2 * constants::time::one_day, 0x2110);
         // END TODO

@@ -37,7 +37,6 @@ namespace constants {
         constexpr int content_length = 68;
         constexpr int sleep_pin = 19;
         constexpr int min_sleep_period = 2 * time::one_minute;
-        constexpr int max_check_signal_time = 5 * time::one_minute;
         constexpr int max_same_mode = (10 * time::one_minute) / time::control_cycle_time_ms;
 
         constexpr int baud = 19200;

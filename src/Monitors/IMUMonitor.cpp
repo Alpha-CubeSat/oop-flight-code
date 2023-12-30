@@ -118,9 +118,11 @@ void IMUMonitor::capture_imu_values()
     sfr::imu::mag_y_average->set_value(mag.magnetic.y);
     sfr::imu::mag_z_average->set_value(mag.magnetic.z);
 
+#ifndef ACS_SIM
     sfr::imu::gyro_x_average->set_value(gyro.gyro.x);
     sfr::imu::gyro_y_average->set_value(gyro.gyro.y);
     sfr::imu::gyro_z_average->set_value(gyro.gyro.z);
+#endif
 }
 
 void IMUMonitor::transition_to_normal()
@@ -177,9 +179,12 @@ void IMUMonitor::invalidate_data()
     fault_groups::imu_faults::mag_x_average->force();
     fault_groups::imu_faults::mag_y_average->force();
     fault_groups::imu_faults::mag_z_average->force();
+
+#ifndef ACS_SIM
     fault_groups::imu_faults::gyro_x_average->force();
     fault_groups::imu_faults::gyro_y_average->force();
     fault_groups::imu_faults::gyro_z_average->force();
+#endif
 
     fault_groups::imu_faults::mag_x_value->force();
     fault_groups::imu_faults::mag_y_value->force();
