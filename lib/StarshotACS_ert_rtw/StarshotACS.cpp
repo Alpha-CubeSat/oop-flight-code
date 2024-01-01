@@ -571,13 +571,13 @@ void StarshotACS::step()
 //   // End of SystemInitialize for SubSystem: '<Root>/StarshotACS'
 // }
 
-void StarshotACS::initialize(double step_size_input, double A_input, double Id_input, double Kd_input, double Kp_input, double c_input, double i_max_input, double k_input, double n_input)
+void StarshotACS::initialize(double step_size_input, double A_input, double Id_input, double Kd_input, double Kp_input, double c_input, double i_max_input, double k_input, double n_input, double target_spin_rate)
 {
   // SystemInitialize for Atomic SubSystem: '<Root>/StarshotACS'
   // InitializeConditions for DiscreteIntegrator: '<S2>/Discrete-Time Integrator'
   rtDW.DiscreteTimeIntegrator_DSTATE[0] = 0.0;
   rtDW.DiscreteTimeIntegrator_DSTATE[1] = 0.0;
-  rtDW.DiscreteTimeIntegrator_DSTATE[2] = 1.0;
+  rtDW.DiscreteTimeIntegrator_DSTATE[2] = target_spin_rate;
   
   step_size = step_size_input;
   A = A_input;

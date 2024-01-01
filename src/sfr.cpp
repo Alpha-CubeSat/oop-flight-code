@@ -13,7 +13,7 @@ namespace sfr {
     namespace detumble {
         // OP Codes 1500
         // TODO actual default values
-        SFRField<uint8_t> min_stable_gyro_z = SFRField<uint8_t>((0.9 * constants::imu::sfr_resolution), 0x1500, constants::imu::sfr_resolution);
+        SFRField<uint8_t> min_stable_gyro_z = SFRField<uint8_t>((0.8 * constants::acs::target_spin_rate * constants::imu::sfr_resolution), 0x1500, constants::imu::sfr_resolution);
         SFRField<uint8_t> max_stable_gyro_x = SFRField<uint8_t>((0.1 * constants::imu::sfr_resolution), 0x1501, constants::imu::sfr_resolution);
         SFRField<uint8_t> max_stable_gyro_y = SFRField<uint8_t>((0.1 * constants::imu::sfr_resolution), 0x1502, constants::imu::sfr_resolution);
         SFRField<uint8_t> min_unstable_gyro_x = SFRField<uint8_t>((0.7 * constants::imu::sfr_resolution), 0x1503, constants::imu::sfr_resolution);
