@@ -52,8 +52,8 @@ void IMUDownlinkReportMonitor::create_imu_downlink_report(uint8_t fragment_numbe
         sfr::imu::imu_dlink.pop_back();
     }
     // Push end flag at the end of the report
-    sfr::rockblock::imu_report.push_back(constants::imu_downlink::imu_report_endflag1);
-    sfr::rockblock::imu_report.push_back(constants::imu_downlink::imu_report_endflag2);
+    sfr::rockblock::imu_report.push_back(constants::rockblock::imu_report_endflag1);
+    sfr::rockblock::imu_report.push_back(constants::rockblock::imu_report_endflag2);
 
     // For the next downlink cycle
     sfr::imu::report_ready = true;
@@ -105,8 +105,8 @@ void IMUDownlinkReportMonitor::create_imu_downlink_report_from_SD(uint8_t fragme
             sfr::rockblock::imu_report.push_back(parsedbuffer[i]);
         }
 
-        sfr::rockblock::imu_report.push_back(constants::imu_downlink::imu_report_endflag1);
-        sfr::rockblock::imu_report.push_back(constants::imu_downlink::imu_report_endflag2);
+        sfr::rockblock::imu_report.push_back(constants::rockblock::imu_report_endflag1);
+        sfr::rockblock::imu_report.push_back(constants::rockblock::imu_report_endflag2);
 
         sfr::imu::report_ready = true;
         sfr::imu::fragment_requested = false;
