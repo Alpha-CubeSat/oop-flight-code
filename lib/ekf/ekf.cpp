@@ -1,5 +1,5 @@
 #include "ekf.h"
-
+#include <iostream>
 typedef Eigen::VectorXd state_type;
 
 EKF::EKF() {}
@@ -69,7 +69,6 @@ void EKF::step()
     Eigen::MatrixXd J = CalculateJacobian();
 
     predict(J);
-
     correct();
 
 }
@@ -108,20 +107,41 @@ void EKF::predict(const Eigen::MatrixXd &J_k_k)
     // double t1 = millis();
     //Eigen::MatrixXd Ad = matrix_exp(J_k_k * dt);
     // double t2 = millis();
-    state = rk4(state, 0.1, 0.0, dt);
+    // state = rk4(state, 0.1, 0.0, dt);
+    state = rk4(state, dt, 0.0, dt);
     // double t3 = millis();
     covariance = J_k_k * covariance * J_k_k.transpose() + Q;
     //covariance = Ad * covariance * Ad.transpose() + Q;
     // double t4 = millis();
 
+    //std::cout << "prediction:  " << state(0) / 1000000.0 << ", " << state(1) / 1000000.0 << ", " << state(2) / 1000000.0 << ", " << state(3) << ", " << state(4) << ", " << state(5)<< "\n";
+
     //Serial.printf("matrix_exp: %f, rk4: %f, cov_multiply: %f \n", t2-t1, t3-t2, t4-t3);
 }
 
+// void EKF::correct()
+// {
+//     Eigen::MatrixXd K_k1 = covariance * H_d.transpose() * (H_d * covariance * H_d.transpose() + R_d).inverse();
+
+//     covariance = covariance -  K_k1 * (H_d * covariance * H_d.transpose() + R_d) * K_k1.transpose();
+
+
+//     state = state +  K_k1 * (Z - H_d * state);
+
+//     std::cout << "correction:  " << state(0) / 1000000.0 << ", " << state(1) / 1000000.0 << ", " << state(2) / 1000000.0 << ", " << state(3) << ", " << state(4) << ", " << state(5) << "\n";
+// }
+
 void EKF::correct()
 {
-    Eigen::MatrixXd K_k1 = covariance * H_d.transpose() * (H_d * covariance * H_d.transpose() + R_d).inverse();
-    covariance -= K_k1 * (H_d * covariance * H_d.transpose() + R_d) * K_k1.transpose();
-    state += K_k1 * (Z - H_d * state);
+    Eigen::MatrixXd S = H_d * covariance * H_d.transpose() + R_d;      // Innovation covariance
+    Eigen::MatrixXd K_k1 = covariance * H_d.transpose() * S.inverse(); // Kalman gain
+
+    // Update state estimate.
+    state = state + K_k1 * (Z - H_d * state);
+
+    // Update covariance matrix.
+    Eigen::MatrixXd I = Eigen::MatrixXd::Identity(state.size(), state.size()); // Identity matrix
+    covariance = (I - K_k1 * H_d) * covariance;
 }
 
 Eigen::MatrixXd EKF::CalculateJacobian()
