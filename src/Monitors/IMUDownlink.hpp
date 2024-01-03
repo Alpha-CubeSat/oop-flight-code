@@ -2,6 +2,7 @@
 #define IMU_DOWNLINK_HPP_
 
 #include "Adafruit_LSM9DS1.h"
+#include "NormalReportMonitor.hpp"
 #include "sfr.hpp"
 #include <SD.h>
 
