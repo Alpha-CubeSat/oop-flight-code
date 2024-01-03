@@ -249,10 +249,38 @@ void RockblockControlTask::dispatch_send_message()
         break;
     }
     case report_type::imu_report:
-        Serial.print("IMU Report Downlinking\n");
+        Serial.println("IMU Report Downlinking");
+        Serial.print("Start Flag: ");
+        print_hex(&sfr::rockblock::downlink_report[0], false);
+
+        Serial.print("Fragment Number: ");
+        print_hex(&sfr::rockblock::downlink_report[1], false);
+
+        for (int i = 2; i < sfr::rockblock::downlink_report.size() - 2; i = i + 2) {
+            Serial.print("Gyro X: ");
+            print_hex(serialize(sfr::rockblock::downlink_report[i], sfr::imu::gyro_x_value->get_min(), sfr::imu::gyro_x_value->get_max()), false);
+            Serial.print("Gyro Y: ");
+            print_hex(serialize(sfr::rockblock::downlink_report[i + 1], sfr::imu::gyro_y_value->get_min(), sfr::imu::gyro_y_value->get_max()), false);
+            Serial.print("Gyro Z: ");
+            print_hex(serialize(sfr::rockblock::downlink_report[i + 2], sfr::imu::gyro_z_value->get_min(), sfr::imu::gyro_z_value->get_max()), false);
+        }
+
+        Serial.print("End Flag 1: ");
+        print_hex(&sfr::rockblock::downlink_report[sfr::rockblock::downlink_report.size() - 2], false);
+
+        Serial.print("End Flag 2: ");
+        print_hex(&sfr::rockblock::downlink_report[sfr::rockblock::downlink_report.size() - 1], false);
         break;
     case report_type::normal_report:
-        Serial.print("Normal Report Downlinking\n");
+        Serial.println("Normal Report Downlinking");
+        Serial.print("Start Flag: ");
+        print_hex(&sfr::rockblock::downlink_report[0], false);
+
+        Serial.print("sfr::mission::boot_time_mins: ");
+        print_hex(&sfr::rockblock::downlink_report[1], false);
+
+        Serial.print("sfr::mission::boot_time_mins: ");
+        print_hex(&sfr::rockblock::downlink_report[1], false);
 
         break;
     }
@@ -637,4 +665,12 @@ void RockblockControlTask::print_hex(uint8_t *hex_num, bool raw)
         Serial.print(" -> ");
         Serial.print(*(int *)hex_num);
     }
+}
+
+uint8_t *RockblockControlTask::serialize(float value, float min, float max)
+{
+    if ((max - min) == 0) {
+        return 0;
+    }
+    return (uint8_t *)(uint8_t)(map(value, 0, 255, min, max));
 }
