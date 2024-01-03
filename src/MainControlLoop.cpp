@@ -27,6 +27,7 @@ MainControlLoop::MainControlLoop()
 
 void MainControlLoop::execute()
 {
+    sfr::mission::cycle_start = millis();
 #ifdef VERBOSE
     Serial.println("--------------------START LOOP--------------------");
 
@@ -151,8 +152,7 @@ void MainControlLoop::execute()
     Serial.println(sfr::eeprom::time_alive);
 
 #endif
-    sfr::mission::cycle_start = millis();
-
+    
     mission_manager.execute();
     burnwire_control_task.execute();
     rockblock_control_task.execute();
