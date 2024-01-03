@@ -11,12 +11,12 @@ class NormalReportMonitor
 public:
     NormalReportMonitor();
     void execute();
+    static uint8_t serialize(SensorReading *valueObj);
+    static uint8_t serialize(float value, float min, float max);
 
 private:
-    uint8_t serialize(SensorReading *valueObj);
-    uint8_t serialize(int opcode);
-    uint8_t serialize(float value, float min, float max);
     uint8_t serialize(bool values[]);
+    uint8_t serialize(int opcode);
 };
 
 #endif

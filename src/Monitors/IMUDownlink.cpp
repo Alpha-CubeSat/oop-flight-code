@@ -23,9 +23,9 @@ void IMUDownlink::execute()
             // Checks if IMU Values are valid
             if (sfr::imu::gyro_x_value->get_value(&gyro_x) && sfr::imu::gyro_y_value->get_value(&gyro_y) && sfr::imu::gyro_z_value->get_value(&gyro_z)) {
                 // Add gyro values to the buffer as rad/s
-                sfr::imu::imu_dlink.push_front((gyro_x + 5) * 25);
-                sfr::imu::imu_dlink.push_front((gyro_y + 5) * 25);
-                sfr::imu::imu_dlink.push_front((gyro_z + 5) * 25);
+                sfr::imu::imu_dlink.push_front(NormalReportMonitor::serialize(sfr::imu::gyro_x_value));
+                sfr::imu::imu_dlink.push_front(NormalReportMonitor::serialize(sfr::imu::gyro_y_value));
+                sfr::imu::imu_dlink.push_front(NormalReportMonitor::serialize(sfr::imu::gyro_z_value));
             }
 
             // Delete older values if the dlink is larger then the maximum bytes downlinked
