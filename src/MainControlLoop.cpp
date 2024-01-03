@@ -152,7 +152,7 @@ void MainControlLoop::execute()
     Serial.println(sfr::eeprom::time_alive);
 
 #endif
-    
+
     mission_manager.execute();
     burnwire_control_task.execute();
     rockblock_control_task.execute();
