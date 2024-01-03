@@ -3,7 +3,7 @@
 ACSControlTask::ACSControlTask()
 {
 #ifdef ACS_SIM
-    plantObj.initialize(constants::acs::step_size_input, altitude_input, I_input, inclination_input, m_input, q0_input, wx_input, wy_input, wz_input);
+    plantObj.initialize(0.01, altitude_input, I_input, inclination_input, m_input, q0_input, wx_input, wy_input, wz_input);
 #endif
 }
 
@@ -48,12 +48,13 @@ void ACSControlTask::execute()
 
 #ifdef ACS_SIM
     // 1. Pass output of starshot into plant
-    plantObj.rtU.current[0] = current_x;
-    plantObj.rtU.current[1] = current_y;
-    plantObj.rtU.current[2] = current_z;
+    for (int i = 0; i < (int)(constants::acs::step_size_input / 0.01); i++) {
+        plantObj.rtU.current[0] = current_x;
+        plantObj.rtU.current[1] = current_y;
+        plantObj.rtU.current[2] = current_z;
 
-    plantObj.step();
-
+        plantObj.step();
+    }
 #endif
 
     if (!sfr::acs::off) {
