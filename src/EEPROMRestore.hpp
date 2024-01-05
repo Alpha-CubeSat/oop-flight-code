@@ -1,5 +1,6 @@
 #ifndef EEPROM_RESTORE_HPP_
 #define EEPROM_RESTORE_HPP_
+#include "Control Tasks/EEPROMControlTask.hpp"
 #include "sfr.hpp"
 #include <EEPROM.h>
 

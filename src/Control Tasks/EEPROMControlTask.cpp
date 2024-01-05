@@ -94,7 +94,6 @@ void EEPROMControlTask::save_sfr_data()
 
         // Update and write SFR data age
         sfr::eeprom::sfr_data_age++;
-        EEPROM.put(sfr::eeprom::sfr_data_addr, sfr::eeprom::sfr_data_age.get());
 
         // Save each SFR field's restore boolean and value as a uint32_t
         uint16_t sfr_write_address = sfr::eeprom::sfr_data_addr + 4;
@@ -104,9 +103,27 @@ void EEPROMControlTask::save_sfr_data()
             sfr_write_address += constants::eeprom::sfr_store_size;
         }
 
+        uint32_t checksum = generate_sfr_checksum();
+
         // Write SFR data age again. EEPROM restore will check that these ages match to determine if the last SFR save was completed.
-        EEPROM.put(sfr_write_address, sfr::eeprom::sfr_data_age.get());
+        EEPROM.put(sfr::eeprom::sfr_data_addr, checksum);
     }
+}
+
+uint32_t EEPROMControlTask::generate_sfr_checksum()
+{
+    // SFR checksum accumulator
+    uint32_t checksum_total = 0;
+    uint16_t sfr_start_addr = sfr::eeprom::sfr_data_addr;
+    uint16_t sfr_end_addr = sfr::eeprom::sfr_data_addr + constants::eeprom::sfr_data_full_offset;
+
+    for (unsigned int i = sfr_start_addr; i < sfr_end_addr; i++) {
+        uint8_t value = EEPROM.read(i);
+        checksum_total += value;
+    }
+
+    uint32_t checksum = checksum_total % constants::eeprom::sfr_num_fields;
+    return checksum;
 }
 
 /* NOTES:
