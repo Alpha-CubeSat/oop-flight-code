@@ -101,7 +101,7 @@ void IMUDownlinkReportMonitor::create_imu_downlink_report_from_SD(uint8_t fragme
         sfr::rockblock::imu_report.push_back(fragment_number);
 
         // Add fragment data to imu report
-        for (int i = 0; i < constants::camera::content_length; i++) {
+        for (int i = 0; i < constants::imu::max_gyro_imu_report_size; i++) {
             sfr::rockblock::imu_report.push_back(parsedbuffer[i]);
         }
 
