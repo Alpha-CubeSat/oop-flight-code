@@ -42,9 +42,11 @@ private:
     bool get_OK();
     void get_valid_signal(rockblock_mode_type good_signal, rockblock_mode_type bad_signal);
     void transition_to(rockblock_mode_type new_mode);
-    void print_hex(uint8_t *hex_num, bool raw);
+    void print_hex(uint8_t hex_num);
     RockblockCommand *commandFactory(RawRockblockCommand raw);
-    uint8_t *serialize(float value, float min, float max);
+    float deserialize(float value, float min, float max);
+    float deserialize(float value, int opcode);
+    void print_SFRField(int i, int opcode);
     uint32_t conseq_reads = 0;
     uint32_t same_mode = 0;
     uint8_t look_ahead1 = -1;

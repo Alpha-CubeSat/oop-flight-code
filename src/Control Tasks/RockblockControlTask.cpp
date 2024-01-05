@@ -232,18 +232,18 @@ void RockblockControlTask::dispatch_send_message()
     case report_type::camera_report: {
         Serial.println("Camera Report Downlinking");
         Serial.print("Start Flag: ");
-        print_hex(&sfr::rockblock::downlink_report[0], false);
+        // print_hex(&sfr::rockblock::downlink_report[0], false);
 
         Serial.print("Serial Number: ");
-        print_hex(&sfr::rockblock::downlink_report[1], false);
+        // print_hex(&sfr::rockblock::downlink_report[1], false);
 
         Serial.print("Fragment Number: ");
         uint8_t temp_array[] = {sfr::rockblock::downlink_report[2], sfr::rockblock::downlink_report[3], sfr::rockblock::downlink_report[4], sfr::rockblock::downlink_report[5]};
-        print_hex(temp_array, false);
+        // print_hex(temp_array, false);
 
         Serial.print("Image: ");
         for (int i = 6; i < sfr::rockblock::downlink_report.size(); i++) {
-            print_hex(&sfr::rockblock::downlink_report[i], true);
+            // print_hex(&sfr::rockblock::downlink_report[i], true);
         }
         Serial.println();
         break;
@@ -251,37 +251,163 @@ void RockblockControlTask::dispatch_send_message()
     case report_type::imu_report:
         Serial.println("IMU Report Downlinking");
         Serial.print("Start Flag: ");
-        print_hex(&sfr::rockblock::downlink_report[0], false);
+        // print_hex(&sfr::rockblock::downlink_report[0], false);
 
         Serial.print("Fragment Number: ");
-        print_hex(&sfr::rockblock::downlink_report[1], false);
+        // print_hex(&sfr::rockblock::downlink_report[1], false);
 
         for (int i = 2; i < sfr::rockblock::downlink_report.size() - 2; i = i + 2) {
             Serial.print("Gyro X: ");
-            print_hex(serialize(sfr::rockblock::downlink_report[i], sfr::imu::gyro_x_value->get_min(), sfr::imu::gyro_x_value->get_max()), false);
+            // print_hex(&sfr::rockblock::downlink_report[i], true);
+            // print_hex(deserialize(sfr::rockblock::downlink_report[i], sfr::imu::gyro_x_value->get_min(), sfr::imu::gyro_x_value->get_max()), true);
             Serial.print("Gyro Y: ");
-            print_hex(serialize(sfr::rockblock::downlink_report[i + 1], sfr::imu::gyro_y_value->get_min(), sfr::imu::gyro_y_value->get_max()), false);
+            // print_hex(&sfr::rockblock::downlink_report[i + 1], true);
+            // print_hex(deserialize(sfr::rockblock::downlink_report[i + 1], sfr::imu::gyro_y_value->get_min(), sfr::imu::gyro_y_value->get_max()), true);
             Serial.print("Gyro Z: ");
-            print_hex(serialize(sfr::rockblock::downlink_report[i + 2], sfr::imu::gyro_z_value->get_min(), sfr::imu::gyro_z_value->get_max()), false);
+            // print_hex(&sfr::rockblock::downlink_report[i + 2], true);
+            // print_hex(deserialize(sfr::rockblock::downlink_report[i + 2], sfr::imu::gyro_z_value->get_min(), sfr::imu::gyro_z_value->get_max()), true);
         }
 
         Serial.print("End Flag 1: ");
-        print_hex(&sfr::rockblock::downlink_report[sfr::rockblock::downlink_report.size() - 2], false);
+        // print_hex(&sfr::rockblock::downlink_report[sfr::rockblock::downlink_report.size() - 2], false);
 
         Serial.print("End Flag 2: ");
-        print_hex(&sfr::rockblock::downlink_report[sfr::rockblock::downlink_report.size() - 1], false);
+        // print_hex(&sfr::rockblock::downlink_report[sfr::rockblock::downlink_report.size() - 1], false);
         break;
     case report_type::normal_report:
+        Serial.println("==========================================================================");
         Serial.println("Normal Report Downlinking");
-        Serial.print("Start Flag: ");
-        print_hex(&sfr::rockblock::downlink_report[0], false);
+        Serial.println("==========================================================================");
+        Serial.println("Item Name            || Raw Hex         || Deserialized & Decimal         ");
+        Serial.println("--------------------------------------------------------------------------");
 
-        Serial.print("sfr::mission::boot_time_mins: ");
-        print_hex(&sfr::rockblock::downlink_report[1], false);
+        Serial.print("Start Flag->");
+        print_hex(sfr::rockblock::downlink_report[0]);
+        Serial.print("->");
+        Serial.println(sfr::rockblock::downlink_report[0]);
+        Serial.println("--------------------------------------------------------------------------");
 
-        Serial.print("sfr::mission::boot_time_mins: ");
-        print_hex(&sfr::rockblock::downlink_report[1], false);
+        Serial.print("sfr::mission::boot_time_mins->");
+        print_SFRField(1, 0x1802);
 
+        Serial.print("sfr::burnwire::burn_time->");
+        print_SFRField(2, 0x1905);
+
+        Serial.print("sfr::burnwire::armed_time->");
+        print_SFRField(3, 0x1906);
+
+        Serial.print("sfr::rockblock::lp_downlink_period->");
+        print_SFRField(4, 0x2109);
+
+        Serial.print("sfr::rockblock::transmit_downlink_period->");
+        print_SFRField(5, 0x2110);
+
+        Serial.print("sfr::acs::mode->");
+        print_SFRField(6, 0x2501);
+
+        Serial.print("sfr::acs::Id_index->");
+        print_SFRField(7, 0x2505);
+
+        Serial.print("sfr::acs::Kd_index->");
+        print_SFRField(8, 0x2506);
+
+        Serial.print("sfr::acs::Kp_index->");
+        print_SFRField(9, 0x2507);
+
+        Serial.print("sfr::acs::c_index->");
+        print_SFRField(10, 0x2508);
+
+        Serial.print("sfr::eeprom::boot_counter->");
+        print_SFRField(11, 0x2805);
+
+        Serial.print("sfr::eeprom::dynamic_data_addr->");
+        print_SFRField(12, 0x2806);
+
+        Serial.print("sfr::eeprom::sfr_data_addr->");
+        print_SFRField(13, 0x2807);
+
+        Serial.print("sfr::eeprom::time_alive->");
+        print_SFRField(14, 0x2808);
+
+        Serial.print("sfr::eeprom::dynamic_data_age->");
+        print_SFRField(15, 0x2809);
+
+        Serial.print("sfr::eeprom::sfr_data_age->");
+        print_SFRField(16, 0x2810);
+
+        Serial.print("sfr::acs::on_time->");
+        print_SFRField(17, 0x2504);
+
+        Serial.print("sfr::rockblock::on_time->");
+        print_SFRField(18, 0x2111);
+
+        Serial.print("sfr_packed_bools: ");
+        Serial.print("sfr::photoresistor::covered: ");
+        Serial.println(sfr::rockblock::downlink_report[19] & (1 << 0));
+        Serial.print("sfr::mission::possible_uncovered: ");
+        Serial.println(sfr::rockblock::downlink_report[19] & (1 << 1));
+        Serial.print("sfr::camera::powered: ");
+        Serial.println(sfr::rockblock::downlink_report[19] & (1 << 2));
+        Serial.print("sfr::mission::deployed: ");
+        Serial.println(sfr::rockblock::downlink_report[19] & (1 << 3));
+        Serial.print("sfr::rockblock::waiting_command: ");
+        Serial.println(sfr::rockblock::downlink_report[19] & (1 << 4));
+        Serial.print("sfr::temperature::in_sun: ");
+        Serial.println(sfr::rockblock::downlink_report[19] & (1 << 5));
+        Serial.print("sfr::current::in_sun: ");
+        Serial.println(sfr::rockblock::downlink_report[19] & (1 << 6));
+        Serial.print("sfr::button::pressed: ");
+        Serial.println(sfr::rockblock::downlink_report[19] & (1 << 7));
+
+        Serial.print("sfr::photoresistor::light_val_average_standby: ");
+        // print_hex(&sfr::rockblock::downlink_report[20], true);
+        // print_hex(deserialize(sfr::rockblock::downlink_report[20], sfr::photoresistor::light_val_average_standby->get_min(), sfr::photoresistor::light_val_average_standby->get_max()), true);
+
+        Serial.print("sfr::imu::mag_x_average: ");
+        // print_hex(&sfr::rockblock::downlink_report[21], true);
+        // print_hex(deserialize(sfr::rockblock::downlink_report[21], sfr::imu::mag_x_average->get_min(), sfr::imu::mag_x_average->get_max()), true);
+
+        Serial.print("sfr::imu::mag_y_average: ");
+        // print_hex(&sfr::rockblock::downlink_report[22], true);
+        // print_hex(deserialize(sfr::rockblock::downlink_report[22], sfr::imu::mag_y_average->get_min(), sfr::imu::mag_y_average->get_max()), true);
+
+        Serial.print("sfr::imu::mag_z_average: ");
+        // print_hex(&sfr::rockblock::downlink_report[23], true);
+        // print_hex(deserialize(sfr::rockblock::downlink_report[23], sfr::imu::mag_z_average->get_min(), sfr::imu::mag_z_average->get_max()), true);
+
+        Serial.print("sfr::imu::gyro_x_average: ");
+        // print_hex(&sfr::rockblock::downlink_report[24], true);
+        // print_hex(deserialize(sfr::rockblock::downlink_report[24], sfr::imu::gyro_x_average->get_min(), sfr::imu::gyro_x_average->get_max()), true);
+
+        Serial.print("sfr::imu::gyro_y_average: ");
+        // print_hex(&sfr::rockblock::downlink_report[25], true);
+        // print_hex(deserialize(sfr::rockblock::downlink_report[25], sfr::imu::gyro_y_average->get_min(), sfr::imu::gyro_y_average->get_max()), true);
+
+        Serial.print("sfr::imu::gyro_z_average: ");
+        // print_hex(&sfr::rockblock::downlink_report[26], true);
+        // print_hex(deserialize(sfr::rockblock::downlink_report[26], sfr::imu::gyro_z_average->get_min(), sfr::imu::gyro_z_average->get_max()), true);
+
+        Serial.print("sfr::temperature::temp_c_value: ");
+        // print_hex(&sfr::rockblock::downlink_report[27], true);
+        // print_hex(deserialize(sfr::rockblock::downlink_report[27], sfr::temperature::temp_c_value->get_min(), sfr::temperature::temp_c_value->get_max()), true);
+
+        Serial.print("sfr::temperature::temp_c_average: ");
+        // print_hex(&sfr::rockblock::downlink_report[28], true);
+        // print_hex(deserialize(sfr::rockblock::downlink_report[28], sfr::temperature::temp_c_average->get_min(), sfr::temperature::temp_c_average->get_max()), true);
+
+        Serial.print("sfr::current::solar_current_average: ");
+        // print_hex(&sfr::rockblock::downlink_report[29], true);
+        // print_hex(deserialize(sfr::rockblock::downlink_report[29], sfr::current::solar_current_average->get_min(), sfr::current::solar_current_average->get_max()), true);
+
+        Serial.print("sfr::battery::voltage_value: ");
+        // print_hex(&sfr::rockblock::downlink_report[30], true);
+        // print_hex(deserialize(sfr::rockblock::downlink_report[30], sfr::battery::voltage_value->get_min(), sfr::battery::voltage_value->get_max()), true);
+
+        Serial.print("sfr::battery::voltage_average: ");
+        // print_hex(&sfr::rockblock::downlink_report[31], true);
+        // print_hex(deserialize(sfr::rockblock::downlink_report[31], sfr::battery::voltage_average->get_min(), sfr::battery::voltage_average->get_max()), true);
+
+        delay(1000);
         break;
     }
 
@@ -652,25 +778,34 @@ void RockblockControlTask::get_valid_signal(rockblock_mode_type good_signal, roc
     }
 }
 
-void RockblockControlTask::print_hex(uint8_t *hex_num, bool raw)
+void RockblockControlTask::print_hex(uint8_t hex_num)
 {
-    for (size_t i = 0; i < sizeof(hex_num) / sizeof(uint8_t); i++) {
-        if (hex_num[i] < 16) {
-            Serial.print(0);
-        }
-        Serial.print(hex_num[i], HEX);
+    if (hex_num < 16) {
+        Serial.print(0);
     }
-
-    if (!raw) {
-        Serial.print(" -> ");
-        Serial.print(*(int *)hex_num);
-    }
+    Serial.print(hex_num, HEX);
 }
 
-uint8_t *RockblockControlTask::serialize(float value, float min, float max)
+float RockblockControlTask::deserialize(float value, float min, float max)
 {
     if ((max - min) == 0) {
         return 0;
     }
-    return (uint8_t *)(uint8_t)(map(value, 0, 255, min, max));
+    return map(value, 0, 255, min, max);
 }
+
+float RockblockControlTask::deserialize(float value, int opcode)
+{
+    SFRInterface *valueObj = SFRInterface::opcode_lookup[opcode];
+    return deserialize(value, valueObj->getMin(), valueObj->getMax());
+}
+
+void RockblockControlTask::print_SFRField(int i, int opcode)
+{
+    print_hex(sfr::rockblock::downlink_report[i]);
+    Serial.print("->");
+    Serial.println(deserialize(sfr::rockblock::downlink_report[i], opcode));
+    Serial.println("--------------------------------------------------------------------------");
+}
+
+
