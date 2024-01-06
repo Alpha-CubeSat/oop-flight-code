@@ -16,9 +16,9 @@ bool SensorReading::get_value(float *value_location)
         // get average value
         float average = (std::accumulate(buffer.begin(), buffer.end(), 0.0)) / buffer_size;
         *value_location = average;
-        return 1;
+        return true;
     } else {
-        return 0;
+        return false;
     }
 }
 
