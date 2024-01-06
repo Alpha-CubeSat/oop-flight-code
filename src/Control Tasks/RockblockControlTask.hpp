@@ -45,8 +45,9 @@ private:
     void print_hex(uint8_t hex_num);
     RockblockCommand *commandFactory(RawRockblockCommand raw);
     float deserialize(float value, float min, float max);
-    float deserialize(float value, int opcode);
     void print_SFRField(int i, int opcode);
+    void print_SensorReading(int i, SensorReading *valueObj);
+    void print_Fault(int i, bool shift);
     uint32_t conseq_reads = 0;
     uint32_t same_mode = 0;
     uint8_t look_ahead1 = -1;

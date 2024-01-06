@@ -230,55 +230,90 @@ void RockblockControlTask::dispatch_send_message()
 #ifdef VERBOSE
     switch (static_cast<report_type>(sfr::rockblock::downlink_report_type.get())) {
     case report_type::camera_report: {
+        Serial.println("==========================================================================");
         Serial.println("Camera Report Downlinking");
-        Serial.print("Start Flag: ");
-        // print_hex(&sfr::rockblock::downlink_report[0], false);
+        Serial.println("==========================================================================");
+        Serial.println("Item Name            -> Raw Hex         -> Deserialized & Decimal         ");
+        Serial.println("--------------------------------------------------------------------------");
 
-        Serial.print("Serial Number: ");
-        // print_hex(&sfr::rockblock::downlink_report[1], false);
+        Serial.print("Start Flag->");
+        print_hex(sfr::rockblock::downlink_report[0]);
+        Serial.print("->");
+        Serial.println(sfr::rockblock::downlink_report[0]);
+        Serial.println("--------------------------------------------------------------------------");
 
-        Serial.print("Fragment Number: ");
-        uint8_t temp_array[] = {sfr::rockblock::downlink_report[2], sfr::rockblock::downlink_report[3], sfr::rockblock::downlink_report[4], sfr::rockblock::downlink_report[5]};
-        // print_hex(temp_array, false);
+        Serial.print("Serial Number->");
+        print_hex(sfr::rockblock::downlink_report[1]);
+        Serial.print("->");
+        Serial.println(sfr::rockblock::downlink_report[1]);
+        Serial.println("--------------------------------------------------------------------------");
+
+        Serial.print("Fragment Number->");
+        print_hex(sfr::rockblock::downlink_report[2]);
+        print_hex(sfr::rockblock::downlink_report[3]);
+        print_hex(sfr::rockblock::downlink_report[4]);
+        print_hex(sfr::rockblock::downlink_report[5]);
+        Serial.print("->");
+        uint32_t fragment_number = 0;
+        fragment_number = (sfr::rockblock::downlink_report[5] << 24) + (sfr::rockblock::downlink_report[4] << 16) + (sfr::rockblock::downlink_report[3] << 8) + sfr::rockblock::downlink_report[2];
+        Serial.println(fragment_number);
+        Serial.println("--------------------------------------------------------------------------");
 
         Serial.print("Image: ");
         for (int i = 6; i < sfr::rockblock::downlink_report.size(); i++) {
-            // print_hex(&sfr::rockblock::downlink_report[i], true);
+            print_hex(sfr::rockblock::downlink_report[i]);
         }
-        Serial.println();
+        Serial.println("==========================================================================");
         break;
     }
     case report_type::imu_report:
+        Serial.println("==========================================================================");
         Serial.println("IMU Report Downlinking");
-        Serial.print("Start Flag: ");
-        // print_hex(&sfr::rockblock::downlink_report[0], false);
+        Serial.println("==========================================================================");
+        Serial.println("Item Name            -> Raw Hex         -> Deserialized & Decimal         ");
+        Serial.println("--------------------------------------------------------------------------");
+
+        Serial.print("Start Flag->");
+        print_hex(sfr::rockblock::downlink_report[0]);
+        Serial.print("->");
+        Serial.println(sfr::rockblock::downlink_report[0]);
+        Serial.println("--------------------------------------------------------------------------");
 
         Serial.print("Fragment Number: ");
-        // print_hex(&sfr::rockblock::downlink_report[1], false);
+        print_hex(sfr::rockblock::downlink_report[1]);
+        Serial.print("->");
+        Serial.println(sfr::rockblock::downlink_report[1]);
+        Serial.println("--------------------------------------------------------------------------");
 
         for (int i = 2; i < sfr::rockblock::downlink_report.size() - 2; i = i + 2) {
             Serial.print("Gyro X: ");
-            // print_hex(&sfr::rockblock::downlink_report[i], true);
-            // print_hex(deserialize(sfr::rockblock::downlink_report[i], sfr::imu::gyro_x_value->get_min(), sfr::imu::gyro_x_value->get_max()), true);
+            print_SensorReading(i, sfr::imu::gyro_x_value);
+
             Serial.print("Gyro Y: ");
-            // print_hex(&sfr::rockblock::downlink_report[i + 1], true);
-            // print_hex(deserialize(sfr::rockblock::downlink_report[i + 1], sfr::imu::gyro_y_value->get_min(), sfr::imu::gyro_y_value->get_max()), true);
+            print_SensorReading(i + 1, sfr::imu::gyro_y_value);
+
             Serial.print("Gyro Z: ");
-            // print_hex(&sfr::rockblock::downlink_report[i + 2], true);
-            // print_hex(deserialize(sfr::rockblock::downlink_report[i + 2], sfr::imu::gyro_z_value->get_min(), sfr::imu::gyro_z_value->get_max()), true);
+            print_SensorReading(i + 2, sfr::imu::gyro_z_value);
+            Serial.println("--------------------------------------------------------------------------");
         }
 
         Serial.print("End Flag 1: ");
-        // print_hex(&sfr::rockblock::downlink_report[sfr::rockblock::downlink_report.size() - 2], false);
+        print_hex(sfr::rockblock::downlink_report[sfr::rockblock::downlink_report.size() - 2]);
+        Serial.print("->");
+        Serial.println(sfr::rockblock::downlink_report[sfr::rockblock::downlink_report.size() - 2]);
+        Serial.println("--------------------------------------------------------------------------");
 
         Serial.print("End Flag 2: ");
-        // print_hex(&sfr::rockblock::downlink_report[sfr::rockblock::downlink_report.size() - 1], false);
+        print_hex(sfr::rockblock::downlink_report[sfr::rockblock::downlink_report.size() - 1]);
+        Serial.print("->");
+        Serial.println(sfr::rockblock::downlink_report[sfr::rockblock::downlink_report.size() - 1]);
+        Serial.println("==========================================================================");
         break;
     case report_type::normal_report:
         Serial.println("==========================================================================");
         Serial.println("Normal Report Downlinking");
         Serial.println("==========================================================================");
-        Serial.println("Item Name            || Raw Hex         || Deserialized & Decimal         ");
+        Serial.println("Item Name            -> Raw Hex         -> Deserialized & Decimal         ");
         Serial.println("--------------------------------------------------------------------------");
 
         Serial.print("Start Flag->");
@@ -341,79 +376,162 @@ void RockblockControlTask::dispatch_send_message()
         Serial.print("sfr::rockblock::on_time->");
         print_SFRField(18, 0x2111);
 
-        Serial.print("sfr_packed_bools: ");
-        Serial.print("sfr::photoresistor::covered: ");
-        Serial.println(sfr::rockblock::downlink_report[19] & (1 << 0));
-        Serial.print("sfr::mission::possible_uncovered: ");
-        Serial.println(sfr::rockblock::downlink_report[19] & (1 << 1));
-        Serial.print("sfr::camera::powered: ");
-        Serial.println(sfr::rockblock::downlink_report[19] & (1 << 2));
-        Serial.print("sfr::mission::deployed: ");
-        Serial.println(sfr::rockblock::downlink_report[19] & (1 << 3));
-        Serial.print("sfr::rockblock::waiting_command: ");
-        Serial.println(sfr::rockblock::downlink_report[19] & (1 << 4));
-        Serial.print("sfr::temperature::in_sun: ");
-        Serial.println(sfr::rockblock::downlink_report[19] & (1 << 5));
-        Serial.print("sfr::current::in_sun: ");
-        Serial.println(sfr::rockblock::downlink_report[19] & (1 << 6));
-        Serial.print("sfr::button::pressed: ");
-        Serial.println(sfr::rockblock::downlink_report[19] & (1 << 7));
+        Serial.print("sfr::photoresistor::covered->");
+        Serial.println((bool)(sfr::rockblock::downlink_report[19] & (1 << 0)));
+        Serial.print("sfr::mission::possible_uncovered->");
+        Serial.println((bool)(sfr::rockblock::downlink_report[19] & (1 << 1)));
+        Serial.print("sfr::camera::powered->");
+        Serial.println((bool)(sfr::rockblock::downlink_report[19] & (1 << 2)));
+        Serial.print("sfr::mission::deployed->");
+        Serial.println((bool)(sfr::rockblock::downlink_report[19] & (1 << 3)));
+        Serial.print("sfr::rockblock::waiting_command->");
+        Serial.println((bool)(sfr::rockblock::downlink_report[19] & (1 << 4)));
+        Serial.print("sfr::temperature::in_sun->");
+        Serial.println((bool)(sfr::rockblock::downlink_report[19] & (1 << 5)));
+        Serial.print("sfr::current::in_sun->");
+        Serial.println((bool)(sfr::rockblock::downlink_report[19] & (1 << 6)));
+        Serial.print("sfr::button::pressed->");
+        Serial.println((bool)(sfr::rockblock::downlink_report[19] & (1 << 7)));
+        Serial.println("--------------------------------------------------------------------------");
 
-        Serial.print("sfr::photoresistor::light_val_average_standby: ");
-        // print_hex(&sfr::rockblock::downlink_report[20], true);
-        // print_hex(deserialize(sfr::rockblock::downlink_report[20], sfr::photoresistor::light_val_average_standby->get_min(), sfr::photoresistor::light_val_average_standby->get_max()), true);
+        Serial.print("sfr::photoresistor::light_val_average_standby->");
+        print_SensorReading(20, sfr::photoresistor::light_val_average_standby);
 
-        Serial.print("sfr::imu::mag_x_average: ");
-        // print_hex(&sfr::rockblock::downlink_report[21], true);
-        // print_hex(deserialize(sfr::rockblock::downlink_report[21], sfr::imu::mag_x_average->get_min(), sfr::imu::mag_x_average->get_max()), true);
+        Serial.print("sfr::imu::mag_x_average->");
+        print_SensorReading(21, sfr::imu::mag_x_average);
 
-        Serial.print("sfr::imu::mag_y_average: ");
-        // print_hex(&sfr::rockblock::downlink_report[22], true);
-        // print_hex(deserialize(sfr::rockblock::downlink_report[22], sfr::imu::mag_y_average->get_min(), sfr::imu::mag_y_average->get_max()), true);
+        Serial.print("sfr::imu::mag_y_average->");
+        print_SensorReading(22, sfr::imu::mag_y_average);
 
-        Serial.print("sfr::imu::mag_z_average: ");
-        // print_hex(&sfr::rockblock::downlink_report[23], true);
-        // print_hex(deserialize(sfr::rockblock::downlink_report[23], sfr::imu::mag_z_average->get_min(), sfr::imu::mag_z_average->get_max()), true);
+        Serial.print("sfr::imu::mag_z_average->");
+        print_SensorReading(23, sfr::imu::mag_z_average);
 
-        Serial.print("sfr::imu::gyro_x_average: ");
-        // print_hex(&sfr::rockblock::downlink_report[24], true);
-        // print_hex(deserialize(sfr::rockblock::downlink_report[24], sfr::imu::gyro_x_average->get_min(), sfr::imu::gyro_x_average->get_max()), true);
+        Serial.print("sfr::imu::gyro_x_average->");
+        print_SensorReading(24, sfr::imu::gyro_x_average);
 
-        Serial.print("sfr::imu::gyro_y_average: ");
-        // print_hex(&sfr::rockblock::downlink_report[25], true);
-        // print_hex(deserialize(sfr::rockblock::downlink_report[25], sfr::imu::gyro_y_average->get_min(), sfr::imu::gyro_y_average->get_max()), true);
+        Serial.print("sfr::imu::gyro_y_average->");
+        print_SensorReading(25, sfr::imu::gyro_y_average);
 
-        Serial.print("sfr::imu::gyro_z_average: ");
-        // print_hex(&sfr::rockblock::downlink_report[26], true);
-        // print_hex(deserialize(sfr::rockblock::downlink_report[26], sfr::imu::gyro_z_average->get_min(), sfr::imu::gyro_z_average->get_max()), true);
+        Serial.print("sfr::imu::gyro_z_average->");
+        print_SensorReading(26, sfr::imu::gyro_z_average);
 
-        Serial.print("sfr::temperature::temp_c_value: ");
-        // print_hex(&sfr::rockblock::downlink_report[27], true);
-        // print_hex(deserialize(sfr::rockblock::downlink_report[27], sfr::temperature::temp_c_value->get_min(), sfr::temperature::temp_c_value->get_max()), true);
+        Serial.print("sfr::temperature::temp_c_value->");
+        print_SensorReading(27, sfr::temperature::temp_c_value);
 
-        Serial.print("sfr::temperature::temp_c_average: ");
-        // print_hex(&sfr::rockblock::downlink_report[28], true);
-        // print_hex(deserialize(sfr::rockblock::downlink_report[28], sfr::temperature::temp_c_average->get_min(), sfr::temperature::temp_c_average->get_max()), true);
+        Serial.print("sfr::temperature::temp_c_average->");
+        print_SensorReading(28, sfr::temperature::temp_c_average);
 
-        Serial.print("sfr::current::solar_current_average: ");
-        // print_hex(&sfr::rockblock::downlink_report[29], true);
-        // print_hex(deserialize(sfr::rockblock::downlink_report[29], sfr::current::solar_current_average->get_min(), sfr::current::solar_current_average->get_max()), true);
+        Serial.print("sfr::current::solar_current_average->");
+        print_SensorReading(29, sfr::current::solar_current_average);
 
-        Serial.print("sfr::battery::voltage_value: ");
-        // print_hex(&sfr::rockblock::downlink_report[30], true);
-        // print_hex(deserialize(sfr::rockblock::downlink_report[30], sfr::battery::voltage_value->get_min(), sfr::battery::voltage_value->get_max()), true);
+        Serial.print("sfr::battery::voltage_value->");
+        print_SensorReading(30, sfr::battery::voltage_value);
 
-        Serial.print("sfr::battery::voltage_average: ");
-        // print_hex(&sfr::rockblock::downlink_report[31], true);
-        // print_hex(deserialize(sfr::rockblock::downlink_report[31], sfr::battery::voltage_average->get_min(), sfr::battery::voltage_average->get_max()), true);
+        Serial.print("sfr::battery::voltage_average->");
+        print_SensorReading(31, sfr::battery::voltage_average);
 
-        delay(1000);
+        Serial.println("fault_groups::imu_faults::mag_x_average->");
+        print_Fault(32, false);
+        Serial.println("fault_groups::imu_faults::mag_x_value->");
+        print_Fault(32, true);
+
+        Serial.println("fault_groups::imu_faults::mag_y_average->");
+        print_Fault(33, false);
+        Serial.println("fault_groups::imu_faults::mag_y_value->");
+        print_Fault(33, true);
+
+        Serial.println("fault_groups::imu_faults::mag_z_average->");
+        print_Fault(34, false);
+        Serial.println("fault_groups::imu_faults::mag_z_value->");
+        print_Fault(34, true);
+
+        Serial.println("fault_groups::imu_faults::gyro_x_average->");
+        print_Fault(35, false);
+        Serial.println("fault_groups::imu_faults::gyro_x_value->");
+        print_Fault(35, true);
+
+        Serial.println("fault_groups::imu_faults::gyro_y_average->");
+        print_Fault(36, false);
+        Serial.println("fault_groups::imu_faults::gyro_y_value->");
+        print_Fault(36, true);
+
+        Serial.println("fault_groups::imu_faults::gyro_z_average->");
+        print_Fault(37, false);
+        Serial.println("fault_groups::imu_faults::gyro_z_value->");
+        print_Fault(37, true);
+
+        Serial.println("fault_groups::power_faults::temp_c_average->");
+        print_Fault(38, false);
+        Serial.println("fault_groups::power_faults::temp_c_value->");
+        print_Fault(38, true);
+
+        Serial.println("fault_groups::power_faults::voltage_average->");
+        print_Fault(39, false);
+        Serial.println("fault_groups::power_faults::voltage_value->");
+        print_Fault(39, true);
+
+        Serial.println("fault_groups::hardware_faults::button->");
+        print_Fault(40, false);
+        Serial.println("fault_groups::hardware_faults::light_val->");
+        print_Fault(40, true);
+
+        Serial.println("fault_groups::power_faults::solar_current_average->");
+        print_Fault(41, true);
+
+        Serial.print("sfr::eeprom::boot_restarted->");
+        Serial.println((bool)(sfr::rockblock::downlink_report[41] & (1 << 0)));
+        Serial.print("sfr::eeprom::error_mode->");
+        Serial.println((bool)(sfr::rockblock::downlink_report[41] & (1 << 1)));
+        Serial.print("sfr::eeprom::light_switch->");
+        Serial.println((bool)(sfr::rockblock::downlink_report[41] & (1 << 2)));
+        Serial.print("sfr::eeprom::sfr_save_completed->");
+        Serial.println((bool)(sfr::rockblock::downlink_report[41] & (1 << 3)));
+        Serial.println("--------------------------------------------------------------------------");
+
+        Serial.print("Mission Mode History->");
+        print_hex(sfr::rockblock::downlink_report[42]);
+        print_hex(sfr::rockblock::downlink_report[43]);
+        print_hex(sfr::rockblock::downlink_report[44]);
+        print_hex(sfr::rockblock::downlink_report[45]);
+        print_hex(sfr::rockblock::downlink_report[46]);
+        print_hex(sfr::rockblock::downlink_report[47]);
+        print_hex(sfr::rockblock::downlink_report[48]);
+        print_hex(sfr::rockblock::downlink_report[49]);
+        print_hex(sfr::rockblock::downlink_report[50]);
+        print_hex(sfr::rockblock::downlink_report[51]);
+        Serial.println();
+        Serial.println("--------------------------------------------------------------------------");
+
+        Serial.print("Processed Opcodes->");
+        print_hex(sfr::rockblock::downlink_report[52]);
+        print_hex(sfr::rockblock::downlink_report[53]);
+        print_hex(sfr::rockblock::downlink_report[54]);
+        print_hex(sfr::rockblock::downlink_report[55]);
+        print_hex(sfr::rockblock::downlink_report[56]);
+        print_hex(sfr::rockblock::downlink_report[57]);
+        print_hex(sfr::rockblock::downlink_report[58]);
+        print_hex(sfr::rockblock::downlink_report[59]);
+        print_hex(sfr::rockblock::downlink_report[60]);
+        print_hex(sfr::rockblock::downlink_report[61]);
+        print_hex(sfr::rockblock::downlink_report[62]);
+        print_hex(sfr::rockblock::downlink_report[63]);
+        print_hex(sfr::rockblock::downlink_report[64]);
+        print_hex(sfr::rockblock::downlink_report[65]);
+        print_hex(sfr::rockblock::downlink_report[66]);
+        print_hex(sfr::rockblock::downlink_report[67]);
+        print_hex(sfr::rockblock::downlink_report[68]);
+        print_hex(sfr::rockblock::downlink_report[69]);
+        Serial.println();
+        Serial.println("==========================================================================");
         break;
     }
-
+    Serial.print("SENT: ");
 #endif
     for (auto &data : sfr::rockblock::downlink_report) {
         sfr::rockblock::serial.write(data);
+#ifdef VERBOSE
+        print_hex(data);
+#endif
         checksum += (uint16_t)data;
     }
 
@@ -794,18 +912,35 @@ float RockblockControlTask::deserialize(float value, float min, float max)
     return map(value, 0, 255, min, max);
 }
 
-float RockblockControlTask::deserialize(float value, int opcode)
-{
-    SFRInterface *valueObj = SFRInterface::opcode_lookup[opcode];
-    return deserialize(value, valueObj->getMin(), valueObj->getMax());
-}
-
 void RockblockControlTask::print_SFRField(int i, int opcode)
 {
+    SFRInterface *valueObj = SFRInterface::opcode_lookup[opcode];
     print_hex(sfr::rockblock::downlink_report[i]);
     Serial.print("->");
-    Serial.println(deserialize(sfr::rockblock::downlink_report[i], opcode));
+    Serial.println(deserialize(sfr::rockblock::downlink_report[i], valueObj->getMin(), valueObj->getMax()));
     Serial.println("--------------------------------------------------------------------------");
 }
 
+void RockblockControlTask::print_SensorReading(int i, SensorReading *valueObj)
+{
+    print_hex(sfr::rockblock::downlink_report[i]);
+    Serial.print("->");
+    Serial.println(deserialize(sfr::rockblock::downlink_report[i], valueObj->get_min(), valueObj->get_max()));
+    Serial.println("--------------------------------------------------------------------------");
+}
 
+void RockblockControlTask::print_Fault(int i, bool shift)
+{
+    Serial.print("Signaled: ");
+    Serial.println((bool)(sfr::rockblock::downlink_report[i] & (1 << (0 + shift * 4))));
+
+    Serial.print("Suppressed: ");
+    Serial.println((bool)(sfr::rockblock::downlink_report[i] & (1 << (1 + shift * 4))));
+
+    Serial.print("Forced: ");
+    Serial.println((bool)(sfr::rockblock::downlink_report[i] & (1 << (2 + shift * 4))));
+
+    Serial.print("Base: ");
+    Serial.println((bool)(sfr::rockblock::downlink_report[i] & (1 << (3 + shift * 4))));
+    Serial.println("--------------------------------------------------------------------------");
+}
