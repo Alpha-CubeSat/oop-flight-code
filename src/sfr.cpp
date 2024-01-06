@@ -269,12 +269,8 @@ namespace sfr {
             {constants::camera::rx, LOW},
             {constants::camera::tx, LOW},
             {constants::button::button_pin, HIGH},
-            {constants::battery::voltage_value_pin, LOW},
             {constants::acs::STBXYpin, LOW},
             {constants::acs::STBZpin, LOW},
-            {constants::photoresistor::pin, LOW},
-            {constants::temperature::pin, LOW},
-            {constants::current::pin, LOW},
             {constants::burnwire::first_pin, LOW},
             {constants::burnwire::second_pin, LOW},
             {constants::rockblock::sleep_pin, LOW}};
