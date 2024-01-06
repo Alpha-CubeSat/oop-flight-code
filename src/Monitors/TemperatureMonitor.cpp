@@ -2,7 +2,6 @@
 
 TemperatureMonitor::TemperatureMonitor()
 {
-    pinMode(constants::temperature::pin, INPUT);
 }
 
 void TemperatureMonitor::execute()
