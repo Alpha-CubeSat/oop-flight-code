@@ -2,7 +2,6 @@
 
 BatteryMonitor::BatteryMonitor()
 {
-    pinMode(constants::battery::voltage_value_pin, OUTPUT);
 }
 
 void BatteryMonitor::execute()

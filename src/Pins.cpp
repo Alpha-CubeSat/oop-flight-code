@@ -26,12 +26,8 @@ void Pins::setInitialPinStates()
     pinMode(constants::camera::rx, OUTPUT);
     pinMode(constants::camera::tx, OUTPUT);
     pinMode(constants::button::button_pin, INPUT);
-    pinMode(constants::battery::voltage_value_pin, INPUT);
     pinMode(constants::acs::STBXYpin, OUTPUT);
     pinMode(constants::acs::STBZpin, OUTPUT);
-    pinMode(constants::photoresistor::pin, INPUT);
-    pinMode(constants::temperature::pin, INPUT);
-    pinMode(constants::current::pin, INPUT);
     pinMode(constants::burnwire::first_pin, OUTPUT);
     pinMode(constants::burnwire::second_pin, OUTPUT);
     pinMode(constants::rockblock::sleep_pin, OUTPUT);
