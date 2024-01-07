@@ -88,19 +88,9 @@ void CameraControlTask::execute()
         for (int i = 0; i < bytesToRead; i++) {
             if (buffer[i] < 16) {
                 imgFile.print(0, HEX);
-#ifdef VERBOSE_CAM
-                Serial.print(0, HEX);
-#endif
             }
             imgFile.print(buffer[i], HEX);
-#ifdef VERBOSE_CAM
-            Serial.print(buffer[i], HEX);
-#endif
         }
-
-#ifdef VERBOSE_CAM
-        Serial.println("");
-#endif
 
         jpglen -= bytesToRead;
         imgFile.close();

@@ -48,6 +48,10 @@ namespace constants {
         constexpr size_t command_len = opcode_len + arg1_len + arg2_len;
         constexpr size_t max_conseq_read = 3;
 
+        constexpr int max_imu_report_length = 1188;
+        constexpr uint8_t imu_report_endflag1 = 0xFE;
+        constexpr uint8_t imu_report_endflag2 = 0x92;
+
         constexpr uint8_t normal_report_flag = 99;
         constexpr uint8_t imu_report_flag = 24;
         constexpr uint8_t camera_report_flag = 42;
@@ -265,12 +269,6 @@ namespace constants {
         constexpr int sfr_resolution = 10;
     } // namespace imu
 
-    namespace imu_downlink {
-        // Note this is how much data correlates to 30 seconds
-        constexpr int max_imu_report_length = 1188;
-        constexpr uint8_t imu_report_endflag1 = 0xFE;
-        constexpr uint8_t imu_report_endflag2 = 0x92;
-    } // namespace imu_downlink
     namespace eeprom {
         // Byte locations of the EEPROM blue moon data
         static constexpr unsigned int boot_time_loc1 = 0;

@@ -14,7 +14,7 @@ void NormalReportMonitor::execute()
         sfr::mission::deployed, sfr::rockblock::waiting_command,
         sfr::temperature::in_sun, sfr::current::in_sun, sfr::button::pressed};
 
-    bool eeprom_bools[] = {0, 0, 0, 0, sfr::eeprom::boot_restarted, sfr::eeprom::error_mode, sfr::eeprom::light_switch, sfr::eeprom::sfr_save_completed};
+    bool eeprom_bools[] = {sfr::eeprom::boot_restarted, sfr::eeprom::error_mode, sfr::eeprom::light_switch, sfr::eeprom::sfr_save_completed, 0, 0, 0, 0};
 
     std::vector<uint8_t> report_contents{
         constants::rockblock::normal_report_flag,

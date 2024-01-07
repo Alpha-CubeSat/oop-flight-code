@@ -29,7 +29,7 @@ void AliveSignal::transition_to()
         sensor_power_mode_type::on,  // imu
         sensor_power_mode_type::off, // camera
         true,                        // acs off
-        0);
+        sfr::rockblock::transmit_downlink_period);
 }
 void AliveSignal::dispatch()
 {
@@ -433,7 +433,8 @@ void exit_detumble_phase(MissionMode *mode)
 void exit_insun_phase(MissionMode *mode)
 {
     if ((sfr::temperature::temp_c_average->is_valid() && sfr::temperature::in_sun) ||
-        (!sfr::temperature::temp_c_average->is_valid() && sfr::current::solar_current_average->is_valid() && sfr::current::in_sun)) {
+        (!sfr::temperature::temp_c_average->is_valid() && sfr::current::solar_current_average->is_valid() && sfr::current::in_sun) ||
+        (!sfr::temperature::temp_c_average->is_valid() && !sfr::current::solar_current_average->is_valid())) {
         sfr::mission::current_mode = mode;
     }
 }

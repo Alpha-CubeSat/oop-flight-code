@@ -12,24 +12,17 @@ RockblockSimulator::RockblockSimulator()
     flush_stage = 0;
     bin_transmit = 0;
     signal = 5;
-    // Command with end of command flag
-    // opcode 1901
-    // arg_1  11111111
-    // arg_2  00000000
-    // end of command upload flag 1 00
-    // end of command upload flag 2 FA
-    // insert("1901111111110000000000FA");
 
     // COMMANDS TO DEPLOY BURNWIRE
-    // insert("3333111111111111111100FA");
-    // insert("4444111111111111111100FA");
-    // insert("5555111111111111111100FA");
+    // insert("FEFE33331111111111111111FAFA");
+    // insert("FEFE44441111111111111111FAFA");
+    // insert("FEFE55551111111111111111FAFA");
 
     // Request camera fragment
-    // insert("8888000000000000000000FA");
+    // insert("FEFE8888000000000000000000FA");
 
     // Request IMU fragment
-    // insert("9999000000000000000000FA");
+    // insert("FEFE9999000000000000000000FA");
 }
 
 void RockblockSimulator::begin(uint32_t baud)
