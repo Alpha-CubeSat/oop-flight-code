@@ -433,7 +433,8 @@ void exit_detumble_phase(MissionMode *mode)
 void exit_insun_phase(MissionMode *mode)
 {
     if ((sfr::temperature::temp_c_average->is_valid() && sfr::temperature::in_sun) ||
-        (!sfr::temperature::temp_c_average->is_valid() && sfr::current::solar_current_average->is_valid() && sfr::current::in_sun)) {
+        (!sfr::temperature::temp_c_average->is_valid() && sfr::current::solar_current_average->is_valid() && sfr::current::in_sun) ||
+        (!sfr::temperature::temp_c_average->is_valid() && !sfr::current::solar_current_average->is_valid())) {
         sfr::mission::current_mode = mode;
     }
 }
