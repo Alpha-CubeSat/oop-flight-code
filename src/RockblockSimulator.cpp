@@ -14,9 +14,9 @@ RockblockSimulator::RockblockSimulator()
     signal = 5;
 
     // COMMANDS TO DEPLOY BURNWIRE
-    insert("FEFE33331111111111111111FAFA");
-    insert("FEFE44441111111111111111FAFA");
-    insert("FEFE55551111111111111111FAFA");
+    // insert("FEFE33331111111111111111FAFA");
+    // insert("FEFE44441111111111111111FAFA");
+    // insert("FEFE55551111111111111111FAFA");
 
     // Request camera fragment
     // insert("FEFE8888000000000000000000FA");
