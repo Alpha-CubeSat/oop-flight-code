@@ -29,7 +29,7 @@ void AliveSignal::transition_to()
         sensor_power_mode_type::on,  // imu
         sensor_power_mode_type::off, // camera
         true,                        // acs off
-        0);
+        sfr::rockblock::transmit_downlink_period);
 }
 void AliveSignal::dispatch()
 {
