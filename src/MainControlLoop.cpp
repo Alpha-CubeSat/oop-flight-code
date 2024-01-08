@@ -128,6 +128,16 @@ void MainControlLoop::execute()
     Serial.print("IMU initialization failed attempts: ");
     Serial.println(sfr::imu::failed_times);
 
+    // Camera
+    if (sfr::camera::powered) {
+        Serial.println("Optical sensor powered");
+    } else {
+        Serial.println("Optical sensor UNpowered");
+    }
+
+    Serial.print("Optical sensor initialization failed attempts: ");
+    Serial.println(sfr::camera::failed_times);
+
     // Temp
     if (sfr::temperature::temp_c_average->get_value(&val)) {
         Serial.print("Temp: ");
