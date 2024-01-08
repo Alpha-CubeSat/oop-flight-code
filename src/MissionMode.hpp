@@ -467,6 +467,6 @@ void timed_out(MissionMode *next_mode, float max_time);
 void boot_initialization();
 void check_previous(MissionMode *normal_mode, MissionMode *transmit_mode);
 void enter_lp_insun();
-void settings(bool rockblock_sleep_mode, sensor_power_mode_type imu_power_setting, sensor_power_mode_type camera_power_setting, bool acs_off, uint32_t downlink_period);
+void settings(bool rockblock_sleep_mode, sensor_power_mode_type camera_power_setting, bool acs_off, uint32_t downlink_period);
 
 #endif

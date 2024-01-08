@@ -5,7 +5,6 @@ void boot_initialization()
 {
     settings(
         true,                        // rockblock sleeping
-        sensor_power_mode_type::on,  // imu
         sensor_power_mode_type::off, // camera
         true,                        // acs off
         sfr::rockblock::lp_downlink_period);
@@ -26,7 +25,6 @@ void AliveSignal::transition_to()
 {
     settings(
         false,                       // rockblock sleeping
-        sensor_power_mode_type::on,  // imu
         sensor_power_mode_type::off, // camera
         true,                        // acs off
         sfr::rockblock::transmit_downlink_period);
@@ -41,7 +39,6 @@ void LowPowerAliveSignal::transition_to()
 {
     settings(
         false,                       // rockblock sleeping
-        sensor_power_mode_type::on,  // imu
         sensor_power_mode_type::off, // camera
         true,                        // acs off
         sfr::rockblock::lp_downlink_period);
@@ -56,7 +53,6 @@ void DetumbleSpin::transition_to()
 {
     settings(
         true,                        // rockblock sleeping
-        sensor_power_mode_type::on,  // imu
         sensor_power_mode_type::off, // camera
         false,                       // acs off
         sfr::rockblock::transmit_downlink_period);
@@ -72,7 +68,6 @@ void LowPowerDetumbleSpin::transition_to()
 {
     settings(
         true,                        // rockblock sleeping
-        sensor_power_mode_type::on,  // imu
         sensor_power_mode_type::off, // camera
         true,                        // acs off
         sfr::rockblock::lp_downlink_period);
@@ -87,7 +82,6 @@ void Normal::transition_to()
 {
     settings(
         true,                        // rockblock sleeping
-        sensor_power_mode_type::on,  // imu
         sensor_power_mode_type::off, // camera
         false,                       // acs off
         sfr::rockblock::transmit_downlink_period);
@@ -102,7 +96,6 @@ void LowPower::transition_to()
 {
     settings(
         false,                       // rockblock sleeping
-        sensor_power_mode_type::off, // imu
         sensor_power_mode_type::off, // camera
         true,                        // acs off
         sfr::rockblock::lp_downlink_period);
@@ -116,7 +109,6 @@ void Transmit::transition_to()
 {
     settings(
         false,                       // rockblock sleeping
-        sensor_power_mode_type::off, // imu
         sensor_power_mode_type::off, // camera
         true,                        // acs off
         sfr::rockblock::transmit_downlink_period);
@@ -131,7 +123,6 @@ void NormalDeployment::transition_to()
 {
     settings(
         true,                        // rockblock sleeping
-        sensor_power_mode_type::on,  // imu
         sensor_power_mode_type::off, // camera
         false,                       // acs off
         sfr::rockblock::transmit_downlink_period);
@@ -146,7 +137,6 @@ void TransmitDeployment::transition_to()
 {
     settings(
         false,                       // rockblock sleeping
-        sensor_power_mode_type::off, // imu
         sensor_power_mode_type::off, // camera
         true,                        // acs off
         sfr::rockblock::transmit_downlink_period);
@@ -161,7 +151,6 @@ void LowPowerDeployment::transition_to()
 {
     settings(
         false,                       // rockblock sleeping
-        sensor_power_mode_type::off, // imu
         sensor_power_mode_type::off, // camera
         true,                        // acs off
         sfr::rockblock::lp_downlink_period);
@@ -175,7 +164,6 @@ void NormalArmed::transition_to()
 {
     settings(
         true,                        // rockblock sleeping
-        sensor_power_mode_type::on,  // imu
         sensor_power_mode_type::off, // camera
         false,                       // acs off
         sfr::rockblock::transmit_downlink_period);
@@ -190,7 +178,6 @@ void TransmitArmed::transition_to()
 {
     settings(
         false,                       // rockblock sleeping
-        sensor_power_mode_type::off, // imu
         sensor_power_mode_type::off, // camera
         true,                        // acs off
         sfr::rockblock::transmit_downlink_period);
@@ -205,7 +192,6 @@ void LowPowerArmed::transition_to()
 {
     settings(
         false,                       // rockblock sleeping
-        sensor_power_mode_type::off, // imu
         sensor_power_mode_type::off, // camera
         true,                        // acs off
         sfr::rockblock::lp_downlink_period);
@@ -219,7 +205,6 @@ void NormalInSun::transition_to()
 {
     settings(
         true,                        // rockblock sleeping
-        sensor_power_mode_type::on,  // imu
         sensor_power_mode_type::off, // camera
         false,                       // acs off
         sfr::rockblock::transmit_downlink_period);
@@ -235,7 +220,6 @@ void TransmitInSun::transition_to()
 {
     settings(
         false,                       // rockblock sleeping
-        sensor_power_mode_type::off, // imu
         sensor_power_mode_type::off, // camera
         true,                        // acs off
         sfr::rockblock::transmit_downlink_period);
@@ -251,7 +235,6 @@ void LowPowerInSun::transition_to()
 {
     settings(
         false,                       // rockblock sleeping
-        sensor_power_mode_type::off, // imu
         sensor_power_mode_type::off, // camera
         true,                        // acs off
         sfr::rockblock::lp_downlink_period);
@@ -269,7 +252,6 @@ void VoltageFailureInSun::transition_to()
 {
     settings(
         false,                       // rockblock sleeping
-        sensor_power_mode_type::off, // imu
         sensor_power_mode_type::off, // camera
         true,                        // acs off
         sfr::rockblock::lp_downlink_period);
@@ -288,7 +270,6 @@ void BootIMU::transition_to()
 {
     settings(
         true,                        // rockblock sleeping
-        sensor_power_mode_type::on,  // imu
         sensor_power_mode_type::off, // camera
         true,                        // acs off
         sfr::rockblock::lp_downlink_period);
@@ -309,7 +290,6 @@ void BootCamera::transition_to()
 {
     settings(
         true,                       // rockblock sleeping
-        sensor_power_mode_type::on, // imu
         sensor_power_mode_type::on, // camera
         true,                       // acs off
         sfr::rockblock::lp_downlink_period);
@@ -328,7 +308,6 @@ void MandatoryBurns::transition_to()
 {
     settings(
         true,                        // rockblock sleeping
-        sensor_power_mode_type::on,  // imu
         sensor_power_mode_type::off, // camera
         true,                        // acs off
         sfr::rockblock::lp_downlink_period);
@@ -346,7 +325,6 @@ void RegularBurns::transition_to()
 {
     settings(
         true,                       // rockblock sleeping
-        sensor_power_mode_type::on, // imu
         sensor_power_mode_type::on, // camera
         true,                       // acs off
         sfr::rockblock::lp_downlink_period);
@@ -367,7 +345,6 @@ void Photo::transition_to()
 {
     settings(
         true,                       // rockblock sleeping
-        sensor_power_mode_type::on, // imu
         sensor_power_mode_type::on, // camera
         true,                       // acs off
         sfr::rockblock::lp_downlink_period);
@@ -490,10 +467,9 @@ void enter_lp_insun()
     }
 }
 
-void settings(bool rockblock_sleep_mode, sensor_power_mode_type imu_power_setting, sensor_power_mode_type camera_power_setting, bool acs_off, uint32_t downlink_period)
+void settings(bool rockblock_sleep_mode, sensor_power_mode_type camera_power_setting, bool acs_off, uint32_t downlink_period)
 {
     sfr::rockblock::sleep_mode = rockblock_sleep_mode;
-    sfr::imu::power_setting = (uint8_t)imu_power_setting;
     sfr::camera::power_setting = (uint8_t)camera_power_setting;
     sfr::acs::off = acs_off;
     sfr::rockblock::downlink_period = downlink_period;
