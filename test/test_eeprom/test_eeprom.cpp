@@ -450,6 +450,121 @@ void test_dynamic_age_limit()
     TEST_ASSERT_EQUAL(1, sfr::eeprom::dynamic_data_age);
 }
 
+void test_dynamic_age_limit()
+{
+    // Setup
+    reset_eeprom();
+    SFRInterface::resetSFR();
+    EEPROMControlTask eeprom_control_task();
+
+    // First boot cycle, fastfoward to past boot wait time
+    EEPROMRestore::execute();
+    sfr::eeprom::time_alive = 2 * constants::time::one_hour;
+
+    // Check the current dynamic data address
+    TEST_ASSERT_EQUAL(10, sfr::eeprom::dynamic_data_addr);
+
+    // Set the dynamic data age to be near the limit
+    sfr::eeprom::dynamic_data_age = 94999;
+
+    // Trigger EEPROM Control Task executes like in MCL, end on MCL cycle with a write (2 writes total)
+    for (unsigned int i = 0; i < constants::eeprom::fast_write_interval + 1; i++) {
+        delay(constants::time::control_cycle_time_ms); // Simulate MCL cycle time to increase time alive counter
+        eeprom_control_task.execute();
+    }
+
+    // Save most recent time alive value
+    uint32_t time_alive = sfr::eeprom::time_alive;
+
+    // Check that dynamic data address and age updated
+    TEST_ASSERT_EQUAL(18, sfr::eeprom::dynamic_data_addr);
+    TEST_ASSERT_EQUAL(1, sfr::eeprom::dynamic_data_age);
+
+    // Simulate power cycle
+    SFRInterface::resetSFR();
+    EEPROMRestore::execute();
+
+    // Check restore execution for dynamic data
+    TEST_ASSERT_EQUAL(time_alive, sfr::eeprom::time_alive.get());
+    TEST_ASSERT_EQUAL(18, sfr::eeprom::dynamic_data_addr);
+    TEST_ASSERT_EQUAL(1, sfr::eeprom::dynamic_data_age);
+}
+
+void test_sfr_age_limit()
+{
+    // Setup
+    reset_eeprom();
+    SFRInterface::resetSFR();
+    EEPROMControlTask eeprom_control_task();
+
+    // First boot cycle, fastfoward to past boot wait time
+    EEPROMRestore::execute();
+    sfr::eeprom::time_alive = 2 * constants::time::one_hour;
+
+    // Check the current sfr data address
+    TEST_ASSERT_EQUAL(460, sfr::eeprom::sfr_data_addr);
+
+    // Set the dynamic data age to be near the limit
+    sfr::eeprom::sfr_data_age = 94999;
+
+    // Trigger EEPROM Control Task executes like in MCL, end on MCL cycle with a write (2 writes total)
+    for (unsigned int i = 0; i < constants::eeprom::fast_write_interval + 1; i++) {
+        delay(constants::time::control_cycle_time_ms); // Simulate MCL cycle time to increase time alive counter
+        eeprom_control_task.execute();
+    }
+
+    // Save most recent time alive value
+    uint32_t time_alive = sfr::eeprom::time_alive;
+
+    // Check that dynamic data address and age updated
+    TEST_ASSERT_EQUAL(949, sfr::eeprom::sfr_data_addr);
+    TEST_ASSERT_EQUAL(1, sfr::eeprom::sfr_data_age);
+
+    // Simulate power cycle
+    SFRInterface::resetSFR();
+    EEPROMRestore::execute();
+
+    // Check restore execution for dynamic data
+    TEST_ASSERT_EQUAL(time_alive, sfr::eeprom::time_alive.get());
+    TEST_ASSERT_EQUAL(949, sfr::eeprom::sfr_data_addr);
+    TEST_ASSERT_EQUAL(1, sfr::eeprom::sfr_data_age);
+}
+
+void test_save_restore_with_full_eeprom()
+{
+    // Setup
+    reset_eeprom();
+    SFRInterface::resetSFR();
+    EEPROMControlTask eeprom_control_task();
+
+    // First boot cycle, fastfoward to past boot wait time
+    EEPROMRestore::execute();
+    sfr::eeprom::time_alive = 2 * constants::time::one_hour;
+
+    // Set the current sfr data address after finishing 7 sections (the max)
+    sfr::eeprom::sfr_data_addr = 3883;
+
+    // Set the current dynamic data address after finishing 56 sections (the max)
+    sfr::eeprom::sfr_data_addr = 458;
+
+    // Trigger EEPROM Control Task
+    eeprom_control_task.execute();
+    delay(1000);
+
+    // Check that dynamic and sfr section ages do not change
+    TEST_ASSERT_EQUAL(0, sfr::eeprom::sfr_data_addr);
+    TEST_ASSERT_EQUAL(0, sfr::eeprom::sfr_data_age);
+
+    // Simulate power cycle
+    SFRInterface::resetSFR();
+    EEPROMRestore::execute();
+
+    // Check restore execution
+    TEST_ASSERT_EQUAL(0, sfr::eeprom::time_alive.get());
+    TEST_ASSERT_EQUAL(0, sfr::eeprom::sfr_data_addr);
+    TEST_ASSERT_EQUAL(0, sfr::eeprom::sfr_data_age);
+}
+
 int test_eeprom()
 {
     UNITY_BEGIN();
@@ -463,8 +578,7 @@ int test_eeprom()
     RUN_TEST(test_light_switch_off);
     RUN_TEST(test_dynamic_age_limit);
     RUN_TEST(test_sfr_age_limit);
-    // RUN_TEST(test_save_with_full_eeprom);
-    // RUN_TEST(test_restore_after_full_eeprom);
+    RUN_TEST(test_save_restore_with_full_eeprom);
 
     return UNITY_END();
 }
