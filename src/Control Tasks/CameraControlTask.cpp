@@ -143,7 +143,7 @@ void CameraControlTask::execute()
         camera_shutdown();
         sfr::camera::powered = false;
         sfr::camera::power_setting = (uint8_t)sensor_power_mode_type::do_nothing;
-        
+
         // reset number of failed camera initialization attempts every time camera is turned off
         sfr::camera::failed_times = 0;
     }
