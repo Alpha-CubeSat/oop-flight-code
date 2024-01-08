@@ -38,7 +38,8 @@ void SensorReading::set_value(float x)
     }
 
     if (buffer.size() != buffer_size) {
-        set_invalid();
+        valid = false;
+        fault->signal();
     }
 
 } // mutator for buffer
