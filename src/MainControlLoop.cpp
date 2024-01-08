@@ -147,6 +147,15 @@ void MainControlLoop::execute()
         Serial.println("Temp INvalid");
     }
 
+    // Solar Current
+    if (sfr::current::solar_current_average->get_value(&val)) {
+        Serial.print("Solar Current: ");
+        Serial.print(val);
+        Serial.println(" mA");
+    } else {
+        Serial.println("Solar Current INvalid");
+    }
+
     // RockBLOCK
     if (sfr::rockblock::sleep_mode) {
         Serial.println("RockBLOCK sleeping");

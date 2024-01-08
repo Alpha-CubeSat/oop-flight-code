@@ -55,6 +55,20 @@ void ACSControlTask::execute()
 
         plantObj.step();
     }
+
+    gyro_x = plantObj.rtY.angularvelocity[0];
+    gyro_y = plantObj.rtY.angularvelocity[1];
+    gyro_z = plantObj.rtY.angularvelocity[2];
+
+    // Convert to uT
+    mag_x = plantObj.rtY.magneticfield[0] * 1000000.0;
+    mag_y = plantObj.rtY.magneticfield[1] * 1000000.0;
+    mag_z = plantObj.rtY.magneticfield[2] * 1000000.0;
+
+    // needed for detumble spin exit conditions
+    sfr::imu::gyro_x_average->set_value(gyro_x);
+    sfr::imu::gyro_y_average->set_value(gyro_y);
+    sfr::imu::gyro_z_average->set_value(gyro_z);
 #endif
 
     if (!sfr::acs::off) {
@@ -65,21 +79,6 @@ void ACSControlTask::execute()
         }
 
         if (imu_valid) {
-#ifdef ACS_SIM
-            gyro_x = plantObj.rtY.angularvelocity[0];
-            gyro_y = plantObj.rtY.angularvelocity[1];
-            gyro_z = plantObj.rtY.angularvelocity[2];
-
-            // Convert to uT
-            mag_x = plantObj.rtY.magneticfield[0] * 1000000.0;
-            mag_y = plantObj.rtY.magneticfield[1] * 1000000.0;
-            mag_z = plantObj.rtY.magneticfield[2] * 1000000.0;
-
-            // needed for detumble spin exit conditions
-            sfr::imu::gyro_x_average->set_value(gyro_x);
-            sfr::imu::gyro_y_average->set_value(gyro_y);
-            sfr::imu::gyro_z_average->set_value(gyro_z);
-#endif
 
             IMUOffset();
 

@@ -18,13 +18,6 @@ void CurrentMonitor::execute()
     sfr::current::solar_current_average->set_value(milliamps);
 
     if (sfr::current::solar_current_average->get_value(&milliamps)) {
-
-#ifdef VERBOSE
-        Serial.print("Current: ");
-        Serial.print(milliamps);
-        Serial.println(" mA");
-
-#endif
         sfr::current::in_sun = milliamps >= constants::current::in_sun_val;
     } else {
         sfr::current::in_sun = false;

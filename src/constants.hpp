@@ -18,8 +18,7 @@ namespace constants {
         constexpr unsigned int control_cycle_time_ms = 100;
     } // namespace time
     namespace sensor {
-        constexpr int collect = 3;
-        constexpr int repeats = 10;
+        constexpr int repeats = 100;
     } // namespace sensor
     namespace photoresistor {
         constexpr int pin = 38;
@@ -95,7 +94,7 @@ namespace constants {
     } // namespace temperature
     namespace current {
         constexpr int pin = 22;
-        constexpr int in_sun_val = 70;
+        constexpr float in_sun_val = 70; // mA
         constexpr float voltage_ref = 3.3;
         constexpr int resolution = 1024;
         constexpr int load = 30;     // load resister value (kOhm)
