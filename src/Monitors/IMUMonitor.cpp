@@ -1,9 +1,5 @@
 #include "IMUMonitor.hpp"
 
-// eliminate virtual classes and camera monitor.cpp
-// adapt to new initialization process
-// if in case 2 for two minutes, it has failed initialization
-
 IMUMonitor::IMUMonitor()
 {
     imu = Adafruit_LSM9DS1(constants::imu::CSAG, constants::imu::CSM);
@@ -44,7 +40,7 @@ void IMUMonitor::execute()
         Serial.println("Turned on IMU");
 #endif
         sfr::imu::init_mode = (uint16_t)sensor_init_mode_type::awaiting;
-        IMUMonitor::IMU_init();
+        IMU_init();
         if (sfr::imu::init_mode == (uint16_t)sensor_init_mode_type::complete) {
             sfr::imu::power_setting = (uint8_t)sensor_power_mode_type::do_nothing;
             transition_to_normal();
@@ -82,47 +78,6 @@ void IMUMonitor::execute()
 #endif
         capture_imu_values();
     }
-}
-
-void IMUMonitor::capture_imu_values()
-{
-    sensors_event_t accel, mag, gyro, temp;
-    imu.getEvent(&accel, &mag, &gyro, &temp);
-
-    imu.setupMag(imu.LSM9DS1_MAGGAIN_8GAUSS);
-    imu.setupGyro(imu.LSM9DS1_GYROSCALE_245DPS);
-
-    // Save most recent readings
-    sfr::imu::mag_x_value->set_value(mag.magnetic.x);
-    sfr::imu::mag_y_value->set_value(mag.magnetic.y);
-    sfr::imu::mag_z_value->set_value(mag.magnetic.z);
-
-    sfr::imu::gyro_x_value->set_value(gyro.gyro.x);
-    sfr::imu::gyro_y_value->set_value(gyro.gyro.y);
-    sfr::imu::gyro_z_value->set_value(gyro.gyro.z);
-
-// IMU PRINT STATEMENTS FOR LOGGING AND GRAPHING IMU DATA
-#ifdef IMU_TESTING
-    Serial.print("Gyro_X: ");
-    Serial.print(gyro.gyro.x);
-    Serial.print(" Gyro_Y: ");
-    Serial.print(gyro.gyro.y);
-    Serial.print(" Gyro_Z: ");
-    Serial.print(gyro.gyro.z);
-    Serial.print(" Time: ");
-    Serial.println(millis());
-#endif
-
-    // Add reading to buffer
-    sfr::imu::mag_x_average->set_value(mag.magnetic.x);
-    sfr::imu::mag_y_average->set_value(mag.magnetic.y);
-    sfr::imu::mag_z_average->set_value(mag.magnetic.z);
-
-#ifndef ACS_SIM
-    sfr::imu::gyro_x_average->set_value(gyro.gyro.x);
-    sfr::imu::gyro_y_average->set_value(gyro.gyro.y);
-    sfr::imu::gyro_z_average->set_value(gyro.gyro.z);
-#endif
 }
 
 void IMUMonitor::transition_to_normal()
@@ -192,4 +147,45 @@ void IMUMonitor::invalidate_data()
     fault_groups::imu_faults::gyro_x_value->force();
     fault_groups::imu_faults::gyro_y_value->force();
     fault_groups::imu_faults::gyro_z_value->force();
+}
+
+void IMUMonitor::capture_imu_values()
+{
+    sensors_event_t accel, mag, gyro, temp;
+    imu.getEvent(&accel, &mag, &gyro, &temp);
+
+    imu.setupMag(imu.LSM9DS1_MAGGAIN_8GAUSS);
+    imu.setupGyro(imu.LSM9DS1_GYROSCALE_245DPS);
+
+    // Save most recent readings
+    sfr::imu::mag_x_value->set_value(mag.magnetic.x);
+    sfr::imu::mag_y_value->set_value(mag.magnetic.y);
+    sfr::imu::mag_z_value->set_value(mag.magnetic.z);
+
+    sfr::imu::gyro_x_value->set_value(gyro.gyro.x);
+    sfr::imu::gyro_y_value->set_value(gyro.gyro.y);
+    sfr::imu::gyro_z_value->set_value(gyro.gyro.z);
+
+// IMU PRINT STATEMENTS FOR LOGGING AND GRAPHING IMU DATA
+#ifdef IMU_TESTING
+    Serial.print("Gyro_X: ");
+    Serial.print(gyro.gyro.x);
+    Serial.print(" Gyro_Y: ");
+    Serial.print(gyro.gyro.y);
+    Serial.print(" Gyro_Z: ");
+    Serial.print(gyro.gyro.z);
+    Serial.print(" Time: ");
+    Serial.println(millis());
+#endif
+
+    // Add reading to buffer
+    sfr::imu::mag_x_average->set_value(mag.magnetic.x);
+    sfr::imu::mag_y_average->set_value(mag.magnetic.y);
+    sfr::imu::mag_z_average->set_value(mag.magnetic.z);
+
+#ifndef ACS_SIM
+    sfr::imu::gyro_x_average->set_value(gyro.gyro.x);
+    sfr::imu::gyro_y_average->set_value(gyro.gyro.y);
+    sfr::imu::gyro_z_average->set_value(gyro.gyro.z);
+#endif
 }

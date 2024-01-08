@@ -5,17 +5,150 @@ CameraControlTask::CameraControlTask()
 {
 }
 
+void CameraControlTask::camera_init()
+{
+    if (sfr::camera::init_mode == (uint16_t)sensor_init_mode_type::awaiting) {
+        // Called camera_init function and initialization process has not yet started
+        sfr::camera::init_start_time = millis();
+        sfr::camera::init_mode = (uint16_t)sensor_init_mode_type::in_progress;
+    }
+
+    if (sfr::camera::init_mode == (uint16_t)sensor_init_mode_type::in_progress && ((millis() - sfr::camera::init_start_time) > sfr::camera::init_timeout)) {
+        // Camera initalization process is in progress but has exceeded timeout duration
+        sfr::camera::init_mode = (uint16_t)sensor_init_mode_type::failed;
+#ifdef VERBOSE
+        Serial.print("Optical sensor intialization failed at step: ");
+        Serial.println(sfr::camera::start_progress);
+#endif
+    }
+
+    if (sfr::camera::init_mode == (uint16_t)sensor_init_mode_type::in_progress) {
+        switch (sfr::camera::start_progress) {
+        case 0: // step 0 - initialize SD card
+        {
+            if (!SD.begin(254)) {
+#ifdef VERBOSE
+                Serial.println("\n\n\nSD CARD FAILED\n\n\n");
+#endif
+                sfr::camera::init_mode = (uint16_t)sensor_init_mode_type::failed;
+            } else {
+                sfr::camera::start_progress++;
+            }
+            break;
+        }
+        case 1: // step 1 - setting power
+        {
+            Pins::setPinState(constants::camera::power_on_pin, HIGH);
+            sfr::camera::start_progress++;
+            break;
+        }
+        case 2: // step 2 - call begin method
+        {
+            if (adaCam.begin()) {
+#ifdef VERBOSE
+                Serial.println("Powered on optical sensor");
+#endif
+                sfr::camera::start_progress++;
+            } else {
+#ifdef VERBOSE
+                Serial.println("Not receiving optical sensor serial response");
+#endif
+            }
+            break;
+        }
+        case 3: // step 3  - set resolution
+        {
+            if (adaCam.setImageSize(sfr::camera::set_res)) {
+                if (adaCam.getImageSize() != sfr::camera::set_res) {
+#ifdef VERBOSE
+                    Serial.println("Setting resolution failed");
+#endif
+                    sfr::camera::init_mode = (uint16_t)sensor_init_mode_type::failed;
+                } else {
+#ifdef VERBOSE
+                    Serial.println("Setting resolution succeeded");
+#endif
+                    sfr::camera::start_progress++;
+                }
+            }
+            break;
+        }
+        case 4: // step 4 - get resolution
+        {
+            uint8_t get_res = adaCam.getImageSize();
+            if (get_res == sfr::camera::set_res) {
+#ifdef VERBOSE
+                Serial.print("Resolution fetched successfully: ");
+                Serial.println(get_res);
+#endif
+                sfr::camera::start_progress++;
+            } else {
+#ifdef VERBOSE
+                Serial.println("Resolution fetch error");
+#endif
+                sfr::camera::init_mode = (uint16_t)sensor_init_mode_type::failed;
+            }
+            break;
+        }
+        case 5: // completed initialization
+        {
+            sfr::camera::init_mode = (uint16_t)sensor_init_mode_type::complete;
+            sfr::camera::power_setting = (uint8_t)sensor_power_mode_type::do_nothing;
+            sfr::camera::powered = true;
+            break;
+        }
+        }
+    }
+}
+
 void CameraControlTask::execute()
 {
     // handle latent turn on / turn off variables
     if (sfr::camera::power_setting == (uint8_t)sensor_power_mode_type::off && sfr::camera::powered == false) {
-        sfr::camera::failed_times = 0;
         sfr::camera::power_setting = (uint8_t)sensor_power_mode_type::do_nothing;
+        sfr::camera::failed_times = 0;
     }
     if (sfr::camera::power_setting == (uint8_t)sensor_power_mode_type::on && sfr::camera::powered == true) {
         sfr::camera::power_setting = (uint8_t)sensor_power_mode_type::do_nothing;
     }
 
+    if (sfr::camera::power_setting == (uint8_t)sensor_power_mode_type::on && sfr::camera::powered == false) {
+#ifdef VERBOSE
+        Serial.println("Turned on optical sensor");
+#endif
+        sfr::camera::init_mode = (uint16_t)sensor_init_mode_type::awaiting;
+        camera_init();
+        if (sfr::camera::init_mode == (uint16_t)sensor_init_mode_type::complete) {
+            sfr::camera::power_setting = (uint8_t)sensor_power_mode_type::do_nothing;
+            transition_to_normal();
+            sfr::camera::powered = true;
+        } else {
+            if (sfr::camera::failed_times == sfr::camera::failed_limit) {
+                transition_to_abnormal_init();
+            } else {
+                sfr::camera::failed_times = sfr::camera::failed_times + 1;
+#ifdef VERBOSE
+                Serial.print("Optical sensor initialization failed times: ");
+                Serial.println(sfr::camera::failed_times);
+#endif
+                sfr::camera::init_mode = (uint16_t)sensor_init_mode_type::awaiting;
+            }
+        }
+    }
+
+    if (sfr::camera::power_setting == (uint8_t)sensor_power_mode_type::off && sfr::camera::powered == true) {
+#ifdef VERBOSE
+        Serial.println("Turned off optical sensor");
+#endif
+        camera_shutdown();
+        sfr::camera::powered = false;
+        sfr::camera::power_setting = (uint8_t)sensor_power_mode_type::do_nothing;
+        
+        // reset number of failed camera initialization attempts every time camera is turned off
+        sfr::camera::failed_times = 0;
+    }
+
+    // handle taking and storing photos
     if (sfr::camera::take_photo == true && sfr::camera::powered == true) {
         if (!adaCam.takePicture()) {
 #ifdef VERBOSE
@@ -32,39 +165,6 @@ void CameraControlTask::execute()
                 sfr::camera::take_photo = false;
             }
         }
-    }
-
-    if (sfr::camera::power_setting == (uint8_t)sensor_power_mode_type::on && sfr::camera::powered == false) {
-        camera_init();
-        if (sfr::camera::init_mode == (uint16_t)sensor_init_mode_type::complete) {
-            transition_to_normal();
-        } else if (sfr::camera::init_mode == (uint16_t)sensor_init_mode_type::failed) {
-            if (sfr::camera::failed_times == sfr::camera::failed_limit) {
-                transition_to_abnormal_init();
-            } else {
-                sfr::camera::failed_times = sfr::camera::failed_times + 1;
-#ifdef VERBOSE
-                Serial.print("Camera initialization failed times: ");
-                Serial.println(sfr::camera::failed_times);
-#endif
-                sfr::camera::init_mode = (uint16_t)sensor_init_mode_type::awaiting;
-            }
-        }
-    }
-
-    if (sfr::camera::power_setting == (uint8_t)sensor_power_mode_type::off && sfr::camera::powered == true) {
-#ifdef VERBOSE
-        Serial.println("turned off camera");
-#endif
-        Pins::setPinState(constants::camera::power_on_pin, LOW);
-        pinMode(constants::camera::rx, OUTPUT);
-        pinMode(constants::camera::tx, OUTPUT);
-        Pins::setPinState(constants::camera::rx, LOW);
-        Pins::setPinState(constants::camera::tx, LOW);
-        sfr::camera::failed_times = 0;
-        sfr::camera::powered = false;
-        sfr::camera::power_setting = (uint8_t)sensor_power_mode_type::do_nothing;
-        sfr::camera::init_mode = (uint16_t)sensor_init_mode_type::in_progress;
     }
 
     if (jpglen > 0) {
@@ -106,107 +206,12 @@ void CameraControlTask::execute()
     }
 }
 
-void CameraControlTask::camera_init()
-{
-    if (sfr::camera::init_mode == (uint16_t)sensor_init_mode_type::awaiting) {
-        // Called camera_init function and initialization process has not yet started
-        sfr::camera::init_start_time = millis();
-        sfr::camera::init_mode = (uint16_t)sensor_init_mode_type::in_progress;
-    }
-    if (sfr::camera::init_mode == (uint16_t)sensor_init_mode_type::in_progress && ((millis() - sfr::camera::init_start_time) > sfr::camera::init_timeout)) {
-        // Camera initalization process is in progress but has exceeded timeout duration
-        sfr::camera::init_mode = (uint16_t)sensor_init_mode_type::failed;
-#ifdef VERBOSE
-        Serial.print("Camera intialization failed at step: ");
-        Serial.println(sfr::camera::start_progress);
-#endif
-    }
-
-    if (sfr::camera::init_mode == (uint16_t)sensor_init_mode_type::in_progress) {
-        switch (sfr::camera::start_progress) {
-        case 0: // step 0 - initialize SD card
-        {
-            if (!SD.begin(254)) {
-#ifdef VERBOSE
-                Serial.println("\n\n\nSD CARD FAILED\n\n\n");
-#endif
-                sfr::camera::init_mode = (uint16_t)sensor_init_mode_type::failed;
-            } else {
-                sfr::camera::start_progress++;
-            }
-            break;
-        }
-        case 1: // step 1 - setting power
-        {
-            Pins::setPinState(constants::camera::power_on_pin, HIGH);
-            sfr::camera::start_progress++;
-            break;
-        }
-        case 2: // step 2 - call begin method
-        {
-            if (adaCam.begin()) {
-#ifdef VERBOSE
-                Serial.println("powered on camera");
-#endif
-                sfr::camera::start_progress++;
-            } else {
-#ifdef VERBOSE
-                Serial.println("not receiving serial response");
-#endif
-            }
-            break;
-        }
-        case 3: // step 3  - set resolution
-        {
-            if (adaCam.setImageSize(sfr::camera::set_res)) {
-                if (adaCam.getImageSize() != sfr::camera::set_res) {
-#ifdef VERBOSE
-                    Serial.println("Setting resolution failed");
-#endif
-                    sfr::camera::init_mode = (uint16_t)sensor_init_mode_type::failed;
-                } else {
-#ifdef VERBOSE
-                    Serial.println("Setting resolution succeeded");
-#endif
-                    sfr::camera::start_progress++;
-                }
-            }
-            break;
-        }
-        case 4: // step 4 - get resolution
-        {
-            uint8_t get_res = adaCam.getImageSize();
-            if (get_res == sfr::camera::set_res) {
-#ifdef VERBOSE
-                Serial.print("resolution fetched successfully: ");
-                Serial.println(get_res);
-#endif
-                sfr::camera::start_progress++;
-            } else {
-#ifdef VERBOSE
-                Serial.println("Resolution fetch error");
-#endif
-                sfr::camera::init_mode = (uint16_t)sensor_init_mode_type::failed;
-            }
-            break;
-        }
-        case 5: // completed initialization
-        {
-            sfr::camera::init_mode = (uint16_t)sensor_init_mode_type::complete;
-            sfr::camera::power_setting = (uint8_t)sensor_power_mode_type::do_nothing;
-            sfr::camera::powered = true;
-            break;
-        }
-        }
-    }
-}
-
 void CameraControlTask::transition_to_normal()
 {
     // updates camera mode to normal
     sfr::camera::mode = (uint16_t)sensor_mode_type::normal;
 #ifdef VERBOSE
-    Serial.println("camera initialization successful");
+    Serial.println("Optical sensor initialization successful");
 #endif
 }
 
@@ -216,16 +221,21 @@ void CameraControlTask::transition_to_abnormal_init()
     // trips fault
     // turns camera off
 #ifdef VERBOSE
-    Serial.println("camera initialization failed, turning off");
+    Serial.println("Optical sensor initialization failed, turning off");
 #endif
     sfr::camera::mode = (uint16_t)sensor_mode_type::abnormal_init;
+    camera_shutdown();
+
+    sfr::camera::power_setting = (uint8_t)sensor_power_mode_type::do_nothing;
+    sfr::camera::powered = false;
+    sfr::camera::init_mode = (uint16_t)sensor_init_mode_type::awaiting;
+}
+
+void CameraControlTask::camera_shutdown()
+{
     Pins::setPinState(constants::camera::power_on_pin, LOW);
     pinMode(constants::camera::rx, OUTPUT);
     pinMode(constants::camera::tx, OUTPUT);
     Pins::setPinState(constants::camera::rx, LOW);
     Pins::setPinState(constants::camera::tx, LOW);
-    sfr::camera::powered = false;
-    sfr::camera::power_setting = (uint8_t)sensor_power_mode_type::do_nothing;
-    sfr::camera::init_mode = (uint16_t)sensor_init_mode_type::awaiting;
-    sfr::camera::start_progress = 0;
 }
