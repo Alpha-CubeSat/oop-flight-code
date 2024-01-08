@@ -29,6 +29,7 @@ void IMUMonitor::execute()
     // handle latent turn on / turn off variables
     if (sfr::imu::power_setting == (uint8_t)sensor_power_mode_type::off && sfr::imu::powered == false) {
         sfr::imu::power_setting = (uint8_t)sensor_power_mode_type::do_nothing;
+        invalidate_data();
         sfr::imu::failed_times = 0;
     }
     if (sfr::imu::power_setting == (uint8_t)sensor_power_mode_type::on && sfr::imu::powered == true) {
@@ -134,12 +135,9 @@ void IMUMonitor::invalidate_data()
     fault_groups::imu_faults::mag_x_average->force();
     fault_groups::imu_faults::mag_y_average->force();
     fault_groups::imu_faults::mag_z_average->force();
-
-#ifndef ACS_SIM
     fault_groups::imu_faults::gyro_x_average->force();
     fault_groups::imu_faults::gyro_y_average->force();
     fault_groups::imu_faults::gyro_z_average->force();
-#endif
 
     fault_groups::imu_faults::mag_x_value->force();
     fault_groups::imu_faults::mag_y_value->force();
@@ -184,6 +182,7 @@ void IMUMonitor::capture_imu_values()
     sfr::imu::mag_z_average->set_value(mag.magnetic.z);
 
 #ifndef ACS_SIM
+    // used outside of ACS Control Task to determine exit conditions for Detumble Spin
     sfr::imu::gyro_x_average->set_value(gyro.gyro.x);
     sfr::imu::gyro_y_average->set_value(gyro.gyro.y);
     sfr::imu::gyro_z_average->set_value(gyro.gyro.z);
