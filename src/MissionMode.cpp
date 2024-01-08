@@ -319,6 +319,8 @@ void BootCamera::dispatch()
 {
     if (sfr::camera::init_mode == (uint16_t)sensor_init_mode_type::complete || sfr::camera::failed_times >= sfr::camera::failed_limit) {
         sfr::mission::current_mode = sfr::mission::mandatoryBurns;
+        // reset failed times once we transition
+        sfr::camera::failed_times = 0;
     }
 }
 
@@ -406,6 +408,9 @@ void exit_detumble_phase(MissionMode *mode)
     if (sfr::imu::failed_times >= sfr::imu::failed_limit) {
         sfr::mission::current_mode = mode;
         sfr::acs::mode = (uint8_t)acs_mode_type::point;
+
+        // reset failed times once we transition
+        sfr::imu::failed_times = 0;
     }
 
     // cubesat has stabilized: gyro z > 0.9 rad/s && gyro x and gyro y are below 0.1 rad/s

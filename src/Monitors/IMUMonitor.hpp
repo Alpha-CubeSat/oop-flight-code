@@ -15,13 +15,11 @@ public:
 
 private:
     void IMU_init();
+    void invalidate_data();
     void transition_to_normal();
     void transition_to_abnormal_init();
     void capture_imu_values();
-    void invalidate_data();
-
     sensor_mode_type mode;
-
     Adafruit_LSM9DS1 imu;
 };
 

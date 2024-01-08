@@ -15,10 +15,11 @@ public:
 
 private:
     void camera_init();
+    void camera_shutdown();
     void transition_to_normal();
     void transition_to_abnormal_init();
-    Adafruit_VC0706 adaCam;
     uint16_t jpglen = 0;
+    Adafruit_VC0706 adaCam;
 };
 
 #endif
