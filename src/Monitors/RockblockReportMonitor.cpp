@@ -7,7 +7,7 @@ RockblockReportMonitor::RockblockReportMonitor()
 
 void RockblockReportMonitor::execute()
 {
-    if(sfr::rockblock::mode == (uint16_t)rockblock_mode_type::standby){
+    if (sfr::rockblock::mode == (uint16_t)rockblock_mode_type::standby) {
         schedule_report();
     }
 
