@@ -51,10 +51,6 @@ void IMUMonitor::execute()
                 transition_to_abnormal_init();
             } else {
                 sfr::imu::failed_times = sfr::imu::failed_times + 1;
-#ifdef VERBOSE
-                Serial.print("IMU initialization failed times: ");
-                Serial.println(sfr::imu::failed_times);
-#endif
                 sfr::imu::init_mode = (uint16_t)sensor_init_mode_type::awaiting;
             }
         }

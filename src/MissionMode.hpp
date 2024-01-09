@@ -393,7 +393,7 @@ public:
     }
     std::string get_name()
     {
-        return "Boot Camera";
+        return "Boot Optical Sensor";
     }
     mode_type get_type()
     {

@@ -127,10 +127,6 @@ void CameraControlTask::execute()
                 transition_to_abnormal_init();
             } else {
                 sfr::camera::failed_times = sfr::camera::failed_times + 1;
-#ifdef VERBOSE
-                Serial.print("Optical sensor initialization failed times: ");
-                Serial.println(sfr::camera::failed_times);
-#endif
                 sfr::camera::init_mode = (uint16_t)sensor_init_mode_type::awaiting;
             }
         }
