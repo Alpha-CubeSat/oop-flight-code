@@ -116,13 +116,13 @@ void CameraControlTask::execute()
 #ifdef VERBOSE
         Serial.println("Turned on optical sensor");
 #endif
-        sfr::camera::init_mode = (uint16_t)sensor_init_mode_type::awaiting;
         camera_init();
         if (sfr::camera::init_mode == (uint16_t)sensor_init_mode_type::complete) {
             sfr::camera::power_setting = (uint8_t)sensor_power_mode_type::do_nothing;
             transition_to_normal();
             sfr::camera::powered = true;
-        } else {
+        } else if (sfr::camera::init_mode == (uint16_t)sensor_init_mode_type::failed) {
+            sfr::camera::init_mode = (uint16_t)sensor_init_mode_type::awaiting;
             if (sfr::camera::failed_times == sfr::camera::failed_limit) {
                 transition_to_abnormal_init();
             } else {
