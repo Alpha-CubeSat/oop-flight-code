@@ -62,7 +62,6 @@ namespace sfr {
 
         extern Boot boot_class;
         extern AliveSignal aliveSignal_class;
-        extern LowPowerAliveSignal lowPowerAliveSignal_class;
         extern DetumbleSpin detumbleSpin_class;
         extern LowPowerDetumbleSpin lowPowerDetumbleSpin_class;
         extern Normal normal_class;
@@ -85,7 +84,6 @@ namespace sfr {
         extern Photo photo_class;
 
         extern Initialization initialization_class;
-        extern Signal signal_class;
         extern Stabilization stabilization_class;
         extern Standby standby_class;
         extern Deployment deployment_class;
@@ -95,7 +93,6 @@ namespace sfr {
 
         extern MissionMode *boot;
         extern MissionMode *aliveSignal;
-        extern MissionMode *lowPowerAliveSignal;
         extern MissionMode *detumbleSpin;
         extern MissionMode *lowPowerDetumbleSpin;
         extern MissionMode *normal;
@@ -118,7 +115,6 @@ namespace sfr {
         extern MissionMode *photo;
 
         extern Phase *initialization;
-        extern Phase *signal;
         extern Phase *stabilization;
         extern Phase *standby;
         extern Phase *deployment;

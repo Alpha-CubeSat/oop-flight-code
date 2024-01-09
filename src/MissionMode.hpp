@@ -59,25 +59,6 @@ public:
     }
 };
 
-class LowPowerAliveSignal : public MissionMode
-{
-public:
-    void transition_to();
-    void dispatch();
-    int get_id()
-    {
-        return 2;
-    }
-    std::string get_name()
-    {
-        return "Low Power Alive Signal";
-    }
-    mode_type get_type()
-    {
-        return mode_type::LP;
-    }
-};
-
 class DetumbleSpin : public MissionMode
 {
 public:
@@ -85,7 +66,7 @@ public:
     void dispatch();
     int get_id()
     {
-        return 3;
+        return 2;
     }
     std::string get_name()
     {
@@ -104,7 +85,7 @@ public:
     void dispatch();
     int get_id()
     {
-        return 4;
+        return 3;
     }
     std::string get_name()
     {
@@ -123,7 +104,7 @@ public:
     void dispatch();
     int get_id()
     {
-        return 5;
+        return 4;
     }
     std::string get_name()
     {
@@ -142,7 +123,7 @@ public:
     void dispatch();
     int get_id()
     {
-        return 6;
+        return 5;
     }
     std::string get_name()
     {
@@ -161,7 +142,7 @@ public:
     void dispatch();
     int get_id()
     {
-        return 7;
+        return 6;
     }
     std::string get_name()
     {
@@ -180,7 +161,7 @@ public:
     void dispatch();
     int get_id()
     {
-        return 8;
+        return 7;
     }
     std::string get_name()
     {
@@ -199,7 +180,7 @@ public:
     void dispatch();
     int get_id()
     {
-        return 9;
+        return 8;
     }
     std::string get_name()
     {
@@ -218,7 +199,7 @@ public:
     void dispatch();
     int get_id()
     {
-        return 10;
+        return 9;
     }
     std::string get_name()
     {
@@ -237,7 +218,7 @@ public:
     void dispatch();
     int get_id()
     {
-        return 11;
+        return 10;
     }
     std::string get_name()
     {
@@ -256,7 +237,7 @@ public:
     void dispatch();
     int get_id()
     {
-        return 12;
+        return 11;
     }
     std::string get_name()
     {
@@ -275,7 +256,7 @@ public:
     void dispatch();
     int get_id()
     {
-        return 13;
+        return 12;
     }
     std::string get_name()
     {
@@ -294,7 +275,7 @@ public:
     void dispatch();
     int get_id()
     {
-        return 14;
+        return 13;
     }
     std::string get_name()
     {
@@ -313,7 +294,7 @@ public:
     void dispatch();
     int get_id()
     {
-        return 15;
+        return 14;
     }
     std::string get_name()
     {
@@ -332,7 +313,7 @@ public:
     void dispatch();
     int get_id()
     {
-        return 16;
+        return 15;
     }
     std::string get_name()
     {
@@ -351,7 +332,7 @@ public:
     void dispatch();
     int get_id()
     {
-        return 17;
+        return 16;
     }
     std::string get_name()
     {
@@ -370,7 +351,7 @@ public:
     void dispatch();
     int get_id()
     {
-        return 18;
+        return 17;
     }
     std::string get_name()
     {
@@ -389,7 +370,7 @@ public:
     void dispatch();
     int get_id()
     {
-        return 19;
+        return 18;
     }
     std::string get_name()
     {
@@ -408,7 +389,7 @@ public:
     void dispatch();
     int get_id()
     {
-        return 20;
+        return 19;
     }
     std::string get_name()
     {
@@ -427,7 +408,7 @@ public:
     void dispatch();
     int get_id()
     {
-        return 21;
+        return 20;
     }
     std::string get_name()
     {
@@ -446,7 +427,7 @@ public:
     void dispatch();
     int get_id()
     {
-        return 22;
+        return 21;
     }
     std::string get_name()
     {

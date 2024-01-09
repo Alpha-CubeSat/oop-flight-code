@@ -31,22 +31,15 @@ void AliveSignal::transition_to()
 }
 void AliveSignal::dispatch()
 {
-    enter_lp(sfr::mission::lowPowerAliveSignal);
-    exit_signal_phase(sfr::mission::detumbleSpin);
-}
-
-void LowPowerAliveSignal::transition_to()
-{
-    settings(
-        false,                       // rockblock sleeping
-        sensor_power_mode_type::off, // camera
-        true,                        // acs off
-        sfr::rockblock::lp_downlink_period);
-}
-void LowPowerAliveSignal::dispatch()
-{
-    exit_lp(sfr::mission::aliveSignal);
-    exit_signal_phase(sfr::mission::lowPowerDetumbleSpin);
+    // if rockblock hard faults 3 times exit alive signal
+    if (sfr::aliveSignal::num_hard_faults >= sfr::aliveSignal::max_downlink_hard_faults || sfr::aliveSignal::downlinked) {
+        sfr::mission::current_mode = sfr::mission::detumbleSpin;
+        sfr::aliveSignal::downlinked = false;
+        sfr::aliveSignal::num_hard_faults = 0;
+    }
+    if (millis() - sfr::mission::aliveSignal->start_time >= sfr::aliveSignal::max_time) {
+        sfr::mission::current_mode = sfr::mission::detumbleSpin;
+    }
 }
 
 void DetumbleSpin::transition_to()
@@ -57,6 +50,7 @@ void DetumbleSpin::transition_to()
         false,                       // acs off
         sfr::rockblock::transmit_downlink_period);
     sfr::acs::mode = (uint8_t)acs_mode_type::detumble;
+    sfr::imu::power_setting = (uint8_t)sensor_power_mode_type::on;
 }
 void DetumbleSpin::dispatch()
 {
@@ -274,6 +268,7 @@ void BootIMU::transition_to()
         true,                        // acs off
         sfr::rockblock::lp_downlink_period);
     sfr::imu::sample_gyro = true;
+    sfr::imu::power_setting = (uint8_t)sensor_power_mode_type::on;
 }
 void BootIMU::dispatch()
 {
@@ -368,7 +363,7 @@ void exit_signal_phase(MissionMode *mode)
         sfr::aliveSignal::downlinked = false;
         sfr::aliveSignal::num_hard_faults = 0;
     }
-    if (millis() - sfr::mission::signal->start_time >= sfr::aliveSignal::max_time) {
+    if (millis() - sfr::mission::aliveSignal->start_time >= sfr::aliveSignal::max_time) {
         sfr::mission::current_mode = mode;
     }
 }

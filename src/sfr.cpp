@@ -44,7 +44,6 @@ namespace sfr {
 
         Boot boot_class;
         AliveSignal aliveSignal_class;
-        LowPowerAliveSignal lowPowerAliveSignal_class;
         DetumbleSpin detumbleSpin_class;
         LowPowerDetumbleSpin lowPowerDetumbleSpin_class;
         Normal normal_class;
@@ -67,7 +66,6 @@ namespace sfr {
         Photo photo_class;
 
         Initialization initialization_class;
-        Signal signal_class;
         Stabilization stabilization_class;
         Standby standby_class;
         Deployment deployment_class;
@@ -77,7 +75,6 @@ namespace sfr {
 
         MissionMode *boot = &boot_class;
         MissionMode *aliveSignal = &aliveSignal_class;
-        MissionMode *lowPowerAliveSignal = &lowPowerAliveSignal_class;
         MissionMode *detumbleSpin = &detumbleSpin_class;
         MissionMode *lowPowerDetumbleSpin = &lowPowerDetumbleSpin_class;
         MissionMode *normal = &normal_class;
@@ -100,7 +97,6 @@ namespace sfr {
         MissionMode *photo = &photo_class;
 
         Phase *initialization = &initialization_class;
-        Phase *signal = &signal_class;
         Phase *stabilization = &stabilization_class;
         Phase *standby = &standby_class;
         Phase *deployment = &deployment_class;
@@ -190,7 +186,7 @@ namespace sfr {
         SFRField<bool> report_ready = SFRField<bool>(false, 0x2203);
         SFRField<bool> fragment_requested = SFRField<bool>(false, 0x2204);
         SFRField<uint8_t> fragment_number_requested = SFRField<uint8_t>(0, 0x2205);
-        SFRField<uint8_t> power_setting = SFRField<uint8_t>((uint8_t)sensor_power_mode_type::do_nothing, 0x2206);
+        SFRField<uint8_t> power_setting = SFRField<uint8_t>((uint8_t)sensor_power_mode_type::on, 0x2206);
         SFRField<uint16_t> mode = SFRField<uint16_t>((uint16_t)sensor_mode_type::init, 0x2207);
         SFRField<uint16_t> init_mode = SFRField<uint16_t>((uint16_t)sensor_init_mode_type::awaiting, 0x2208);
         SFRField<uint16_t> failed_times = SFRField<uint16_t>(0, 0x2209);

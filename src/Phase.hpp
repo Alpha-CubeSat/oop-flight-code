@@ -20,14 +20,6 @@ class Initialization : public Phase
     }
 };
 
-class Signal : public Phase
-{
-    int get_id()
-    {
-        return 1;
-    }
-};
-
 class Stabilization : public Phase
 {
     int get_id()
