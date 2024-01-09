@@ -114,17 +114,15 @@ void EEPROMRestore::restore_sfr_data()
     if (sfr::eeprom::light_switch && has_sfr_data_space) {
         // Light switch is on, EEPROM for SFR is not full
         // Try to restore SFR fields according to their restore booleans
-        uint32_t sfr_data_age1;
-        EEPROM.get(sfr::eeprom::sfr_data_addr, sfr_data_age1);
+        uint32_t stored_checksum;
+        EEPROM.get(sfr::eeprom::sfr_data_addr, stored_checksum);
 
-        uint32_t sfr_data_age2;
-        EEPROM.get(sfr::eeprom::sfr_data_addr + constants::eeprom::sfr_data_full_offset - 4, sfr_data_age2);
+        uint32_t generated_checksum = EEPROMControlTask::generate_sfr_checksum();
 
-        sfr::eeprom::sfr_save_completed = sfr_data_age1 == sfr_data_age2; // False means SFR didn't finish saving
-        sfr::eeprom::sfr_data_age = sfr_data_age1;                        // First SFR age is more accurate
+        sfr::eeprom::sfr_save_completed = stored_checksum == generated_checksum; // False means SFR didn't finish saving
 
         if (sfr::eeprom::sfr_save_completed) {
-            uint16_t sfr_read_address = sfr::eeprom::sfr_data_addr + 4;
+            uint16_t sfr_read_address = sfr::eeprom::sfr_data_addr + 4; // Move the read address back to the EEPROM location of the first SFR field
 
             for (const auto &pair : SFRInterface::opcode_lookup) {
                 bool restore;

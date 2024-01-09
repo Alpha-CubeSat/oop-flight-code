@@ -288,12 +288,12 @@ namespace constants {
         static constexpr unsigned int sfr_data_start = 460;
         static constexpr unsigned int sfr_store_size = 5;
         static constexpr unsigned int sfr_num_fields = 97;
-        static constexpr unsigned int sfr_data_full_offset = sfr_num_fields * sfr_store_size + 8;
+        static constexpr unsigned int sfr_data_full_offset = sfr_num_fields * sfr_store_size + 4;
         static constexpr unsigned int write_age_limit = 95000; // Must be less than 100000
 
-        // Measured in MCL cycles. Fast is ~ every 10 sec, slow is ~ every 60 sec
+        // Measured in MCL cycles
         static constexpr unsigned int fast_write_interval = 100;
-        static constexpr unsigned int slow_write_interval = 600;
+        static constexpr unsigned int slow_write_interval = 500;
     } // namespace eeprom
     namespace watchdog {
         constexpr unsigned int max_period_ms = 10000;

@@ -10,6 +10,7 @@ class EEPROMControlTask
 public:
     EEPROMControlTask();
     void execute();
+    static uint32_t generate_sfr_checksum();
 
 private:
     void save_boot_time();
