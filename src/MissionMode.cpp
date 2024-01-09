@@ -8,6 +8,7 @@ void boot_initialization()
         sensor_power_mode_type::off, // camera
         true,                        // acs off
         sfr::rockblock::lp_downlink_period);
+    sfr::imu::failed_times = 0;
 }
 
 void Boot::transition_to()
@@ -50,7 +51,6 @@ void DetumbleSpin::transition_to()
         false,                       // acs off
         sfr::rockblock::transmit_downlink_period);
     sfr::acs::mode = (uint8_t)acs_mode_type::detumble;
-    sfr::imu::power_setting = (uint8_t)sensor_power_mode_type::on;
 }
 void DetumbleSpin::dispatch()
 {
@@ -268,7 +268,7 @@ void BootIMU::transition_to()
         true,                        // acs off
         sfr::rockblock::lp_downlink_period);
     sfr::imu::sample_gyro = true;
-    sfr::imu::power_setting = (uint8_t)sensor_power_mode_type::on;
+    sfr::imu::failed_times = 0;
 }
 void BootIMU::dispatch()
 {
@@ -276,8 +276,6 @@ void BootIMU::dispatch()
     // OR If the failed tiems exceeds the limit transition
     if (((sfr::imu::init_mode == (uint16_t)sensor_init_mode_type::complete) && ((millis() - sfr::imu::imu_boot_collection_start_time) >= constants::imu::boot_IMU_min_run_time)) || sfr::imu::failed_times >= sfr::imu::failed_limit) {
         sfr::mission::current_mode = sfr::mission::bootCamera;
-        // reset failed times once we transition
-        sfr::imu::failed_times = 0;
     }
 }
 
@@ -294,8 +292,6 @@ void BootCamera::dispatch()
 {
     if (sfr::camera::init_mode == (uint16_t)sensor_init_mode_type::complete || sfr::camera::failed_times >= sfr::camera::failed_limit) {
         sfr::mission::current_mode = sfr::mission::mandatoryBurns;
-        // reset failed times once we transition
-        sfr::camera::failed_times = 0;
     }
 }
 
@@ -380,9 +376,6 @@ void exit_detumble_phase(MissionMode *mode)
     if (sfr::imu::failed_times >= sfr::imu::failed_limit) {
         sfr::mission::current_mode = mode;
         sfr::acs::mode = (uint8_t)acs_mode_type::point;
-
-        // reset failed times once we transition
-        sfr::imu::failed_times = 0;
     }
 
     // cubesat has stabilized: gyro z > 0.9 rad/s && gyro x and gyro y are below 0.1 rad/s
@@ -468,4 +461,5 @@ void settings(bool rockblock_sleep_mode, sensor_power_mode_type camera_power_set
     sfr::camera::power_setting = (uint8_t)camera_power_setting;
     sfr::acs::off = acs_off;
     sfr::rockblock::downlink_period = downlink_period;
+    sfr::imu::power_setting = (uint8_t)sensor_power_mode_type::on;
 }
