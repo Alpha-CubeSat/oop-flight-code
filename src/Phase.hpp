@@ -24,7 +24,7 @@ class Stabilization : public Phase
 {
     int get_id()
     {
-        return 2;
+        return 1;
     }
 };
 
@@ -32,7 +32,7 @@ class Standby : public Phase
 {
     int get_id()
     {
-        return 3;
+        return 2;
     }
 };
 
@@ -40,7 +40,7 @@ class Deployment : public Phase
 {
     int get_id()
     {
-        return 4;
+        return 3;
     }
 };
 
@@ -48,7 +48,7 @@ class Armed : public Phase
 {
     int get_id()
     {
-        return 5;
+        return 4;
     }
 };
 
@@ -56,7 +56,7 @@ class InSun : public Phase
 {
     int get_id()
     {
-        return 6;
+        return 5;
     }
 };
 
@@ -64,7 +64,7 @@ class Firing : public Phase
 {
     int get_id()
     {
-        return 7;
+        return 6;
     }
 };
 

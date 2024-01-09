@@ -37,7 +37,7 @@ void MissionManager::execute()
 
 Phase *MissionManager::modeToPhase(MissionMode *mission)
 {
-    if (mission->get_id() == sfr::mission::detumbleSpin->get_id() || mission->get_id() == sfr::mission::lowPowerDetumbleSpin->get_id() || sfr::mission::aliveSignal->get_id()) {
+    if (mission->get_id() == sfr::mission::detumbleSpin->get_id() || mission->get_id() == sfr::mission::lowPowerDetumbleSpin->get_id()) {
         return sfr::mission::stabilization;
     } else if (mission->get_id() == sfr::mission::normal->get_id() || mission->get_id() == sfr::mission::transmit->get_id() || mission->get_id() == sfr::mission::lowPower->get_id()) {
         return sfr::mission::standby;
