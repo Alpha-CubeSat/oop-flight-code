@@ -92,7 +92,7 @@ void EEPROMControlTask::save_sfr_data()
     if (sfr::eeprom::sfr_data_addr + constants::eeprom::sfr_data_full_offset - 1 <= sfr::eeprom::sfr_data_addr.getMax()) {
         // There is enough memory for another cycle of SFR data
 
-        // Update and write SFR data age
+        // Update SFR data age
         sfr::eeprom::sfr_data_age++;
 
         // Save each SFR field's restore boolean and value as a uint32_t
@@ -105,7 +105,7 @@ void EEPROMControlTask::save_sfr_data()
 
         uint32_t checksum = generate_sfr_checksum();
 
-        // Write SFR data age again. EEPROM restore will check that these ages match to determine if the last SFR save was completed.
+        // Write SFR checksum. EEPROM restore will check that its own generated checksum matches to determine if the last SFR save was completed.
         EEPROM.put(sfr::eeprom::sfr_data_addr, checksum);
     }
 }
