@@ -255,7 +255,7 @@ void RockblockControlTask::dispatch_send_message()
         print_hex(sfr::rockblock::downlink_report[5]);
         Serial.print("->");
         uint32_t fragment_number = 0;
-        fragment_number = (sfr::rockblock::downlink_report[5] << 24) + (sfr::rockblock::downlink_report[4] << 16) + (sfr::rockblock::downlink_report[3] << 8) + sfr::rockblock::downlink_report[2];
+        fragment_number = (sfr::rockblock::downlink_report[2] << 24) + (sfr::rockblock::downlink_report[3] << 16) + (sfr::rockblock::downlink_report[4] << 8) + sfr::rockblock::downlink_report[5];
         Serial.println(fragment_number);
         Serial.println("--------------------------------------------------------------------------");
 
@@ -263,6 +263,7 @@ void RockblockControlTask::dispatch_send_message()
         for (int i = 6; i < sfr::rockblock::downlink_report.size(); i++) {
             print_hex(sfr::rockblock::downlink_report[i]);
         }
+        Serial.println();
         Serial.println("==========================================================================");
         break;
     }
@@ -285,7 +286,7 @@ void RockblockControlTask::dispatch_send_message()
         Serial.println(sfr::rockblock::downlink_report[1]);
         Serial.println("--------------------------------------------------------------------------");
 
-        for (int i = 2; i < sfr::rockblock::downlink_report.size() - 2; i = i + 2) {
+        for (int i = 2; i < sfr::rockblock::downlink_report.size() - 2; i = i + 3) {
             Serial.print("Gyro X: ");
             print_SensorReading(i, sfr::imu::gyro_x_value);
 

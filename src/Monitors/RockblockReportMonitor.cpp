@@ -7,13 +7,8 @@ RockblockReportMonitor::RockblockReportMonitor()
 
 void RockblockReportMonitor::execute()
 {
-    switch (static_cast<rockblock_mode_type>(sfr::rockblock::mode.get())) {
-    // Report scheduling is only performed in `rockblock_mode_type::standby` mode
-    case rockblock_mode_type::standby:
+    if(sfr::rockblock::mode == (uint16_t)rockblock_mode_type::standby){
         schedule_report();
-        break;
-    default:
-        break;
     }
 
     switch (static_cast<report_type>(sfr::rockblock::downlink_report_type.get())) {
