@@ -153,9 +153,9 @@ void CameraControlTask::execute()
         } else {
             jpglen = adaCam.frameLength();
 #ifdef VERBOSE
-            Serial.println("\n\n\nPicture taken!\n\n\n");
-            Serial.println("Camera frame length: " + String(jpglen));
-            Serial.println("##### Start writing the picture to SD card #####");
+            Serial.println("\n\n\nOptical sensor data captured!\n\n\n");
+            Serial.println("Optical sensor data frame length: " + String(jpglen));
+            Serial.println("##### Start writing the optical sensor data to SD card #####");
 #endif
             if (jpglen > 0) {
                 sfr::camera::take_photo = false;

@@ -231,7 +231,7 @@ void RockblockControlTask::dispatch_send_message()
     switch (static_cast<report_type>(sfr::rockblock::downlink_report_type.get())) {
     case report_type::camera_report: {
         Serial.println("==========================================================================");
-        Serial.println("Camera Report Downlinking");
+        Serial.println("Optical Sensor Data Report Downlinking");
         Serial.println("==========================================================================");
         Serial.println("Item Name            -> Raw Hex         -> Deserialized & Decimal         ");
         Serial.println("--------------------------------------------------------------------------");
@@ -381,7 +381,7 @@ void RockblockControlTask::dispatch_send_message()
         Serial.println((bool)(sfr::rockblock::downlink_report[19] & (1 << 0)));
         Serial.print("sfr::mission::possible_uncovered->");
         Serial.println((bool)(sfr::rockblock::downlink_report[19] & (1 << 1)));
-        Serial.print("sfr::camera::powered->");
+        Serial.print("sfr::optical_sensor::powered->");
         Serial.println((bool)(sfr::rockblock::downlink_report[19] & (1 << 2)));
         Serial.print("sfr::mission::deployed->");
         Serial.println((bool)(sfr::rockblock::downlink_report[19] & (1 << 3)));

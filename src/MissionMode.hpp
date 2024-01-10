@@ -431,7 +431,7 @@ public:
     }
     std::string get_name()
     {
-        return "Photo";
+        return "Deployment Verification";
     }
     mode_type get_type()
     {

@@ -16,7 +16,7 @@ void CameraReportMonitor::execute()
     // Prepare data from an image taken for downlink
     else if (sfr::rockblock::camera_report.empty() && sfr::camera::images_written > current_serial) {
 #ifdef VERBOSE
-        Serial.println("Writing Camera serial " + String(current_serial) + " fragment " + String(fragment_number));
+        Serial.println("Writing optical sensor data serial " + String(current_serial) + " fragment " + String(fragment_number));
 #endif
         create_camera_report(fragment_number, current_serial);
         if (fragment_number == sfr::rockblock::camera_max_fragments[current_serial]) {

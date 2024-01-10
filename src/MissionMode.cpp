@@ -298,9 +298,9 @@ void BootCamera::dispatch()
 void MandatoryBurns::transition_to()
 {
     settings(
-        true,                        // rockblock sleeping
-        sensor_power_mode_type::off, // camera
-        true,                        // acs off
+        true,                               // rockblock sleeping
+        sensor_power_mode_type::do_nothing, // camera
+        true,                               // acs off
         sfr::rockblock::lp_downlink_period);
     sfr::mission::possible_uncovered = true;
 }
@@ -315,9 +315,9 @@ void MandatoryBurns::dispatch()
 void RegularBurns::transition_to()
 {
     settings(
-        true,                       // rockblock sleeping
-        sensor_power_mode_type::on, // camera
-        true,                       // acs off
+        true,                               // rockblock sleeping
+        sensor_power_mode_type::do_nothing, // camera
+        true,                               // acs off
         sfr::rockblock::lp_downlink_period);
 }
 
@@ -335,9 +335,9 @@ void RegularBurns::dispatch()
 void Photo::transition_to()
 {
     settings(
-        true,                       // rockblock sleeping
-        sensor_power_mode_type::on, // camera
-        true,                       // acs off
+        true,                               // rockblock sleeping
+        sensor_power_mode_type::do_nothing, // camera
+        true,                               // acs off
         sfr::rockblock::lp_downlink_period);
     sfr::camera::take_photo = true;
 }
