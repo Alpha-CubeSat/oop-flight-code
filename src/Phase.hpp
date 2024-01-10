@@ -4,8 +4,8 @@
 class Phase
 {
 public:
-    float start_time;
-    void set_start_time(float new_start_time)
+    uint32_t start_time;
+    void set_start_time(uint32_t new_start_time)
     {
         start_time = new_start_time;
     }

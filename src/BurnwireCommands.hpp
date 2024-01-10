@@ -12,7 +12,7 @@ public:
 
     bool isValid()
     {
-        return sfr::mission::current_phase == sfr::mission::standby;
+        return sfr::mission::current_phase->get_id() == sfr::mission::standby->get_id();
     }
 };
 
@@ -28,7 +28,7 @@ public:
 
     bool isValid()
     {
-        return sfr::mission::current_phase == sfr::mission::deployment;
+        return sfr::mission::current_phase->get_id() == sfr::mission::deployment->get_id();
     }
 };
 
@@ -44,6 +44,6 @@ public:
 
     bool isValid()
     {
-        return sfr::mission::current_phase == sfr::mission::armed;
+        return sfr::mission::current_phase->get_id() == sfr::mission::armed->get_id();
     }
 };

@@ -205,8 +205,8 @@ namespace sfr {
         extern SFRField<uint16_t> init_mode;
         extern SFRField<uint16_t> failed_times;
         extern SFRField<uint16_t> failed_limit;
-        extern SFRField<uint16_t> imu_boot_collection_start_time;
-        extern SFRField<uint16_t> door_open_start_time;
+        extern SFRField<uint32_t> imu_boot_collection_start_time;
+        extern SFRField<uint32_t> door_open_start_time;
         extern SFRField<uint32_t> max_fragments;
 
         extern SensorReading *mag_x_value;

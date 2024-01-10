@@ -11,8 +11,8 @@ class MissionMode
 public:
     virtual void transition_to();
     virtual void dispatch();
-    float start_time;
-    void set_start_time(float new_start_time)
+    uint32_t start_time;
+    void set_start_time(uint32_t new_start_time)
     {
         start_time = new_start_time;
     }
@@ -443,11 +443,11 @@ void exit_signal_phase(MissionMode *mode);
 void exit_detumble_phase(MissionMode *mode);
 void exit_insun_phase(MissionMode *mode);
 void enter_lp(MissionMode *lp_mode);
-void exit_lp(MissionMode *reg_mode);
-void timed_out(MissionMode *next_mode, float max_time);
-void boot_initialization();
 void check_previous(MissionMode *normal_mode, MissionMode *transmit_mode);
+void exit_lp(MissionMode *reg_mode);
+void timed_out(MissionMode *next_mode, uint32_t max_time);
 void enter_lp_insun();
 void settings(bool rockblock_sleep_mode, sensor_power_mode_type camera_power_setting, bool acs_off, uint32_t downlink_period);
+void boot_initialization();
 
 #endif

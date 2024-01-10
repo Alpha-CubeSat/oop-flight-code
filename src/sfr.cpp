@@ -189,8 +189,8 @@ namespace sfr {
         SFRField<uint16_t> init_mode = SFRField<uint16_t>((uint16_t)sensor_init_mode_type::awaiting, 0x2208);
         SFRField<uint16_t> failed_times = SFRField<uint16_t>(0, 0x2209);
         SFRField<uint16_t> failed_limit = SFRField<uint16_t>(5, 0x2210);
-        SFRField<uint16_t> imu_boot_collection_start_time = SFRField<uint16_t>(0, 0x2211);
-        SFRField<uint16_t> door_open_start_time = SFRField<uint16_t>(0, 0x2212);
+        SFRField<uint32_t> imu_boot_collection_start_time = SFRField<uint32_t>(0, 0x2211);
+        SFRField<uint32_t> door_open_start_time = SFRField<uint32_t>(0, 0x2212);
         SFRField<uint32_t> max_fragments = SFRField<uint32_t>(256, 0x2213);
 
         SensorReading *mag_x_value = new SensorReading(fault_groups::imu_faults::mag_x_value, 1, constants::imu::min_mag, constants::imu::max_mag);

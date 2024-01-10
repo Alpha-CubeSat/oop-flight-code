@@ -7,15 +7,15 @@
 
 namespace constants {
     namespace time {
-        constexpr unsigned long one_second = 1000;
-        constexpr unsigned long one_minute = 60 * one_second;
-        constexpr unsigned long one_hour = 60 * one_minute;
-        constexpr unsigned long one_day = 24 * one_hour;
-        constexpr unsigned long half_second = one_second / 2;
-        constexpr float one_revolution = 90 * one_minute;
+        constexpr uint32_t one_second = 1000;
+        constexpr uint32_t one_minute = 60 * one_second;
+        constexpr uint32_t one_hour = 60 * one_minute;
+        constexpr uint32_t one_day = 24 * one_hour;
+        constexpr uint32_t half_second = one_second / 2;
+        constexpr uint32_t one_revolution = 90 * one_minute;
 
         // control_cycle_time is the value actually used for timing. The
-        constexpr unsigned int control_cycle_time_ms = 100;
+        constexpr uint32_t control_cycle_time_ms = 100;
     } // namespace time
     namespace sensor {
         constexpr int repeats = 100;
@@ -260,8 +260,8 @@ namespace constants {
         constexpr int CSM = 20;
 
         constexpr uint8_t max_gyro_imu_report_size = 66;
-        constexpr int boot_IMU_min_run_time = 20 * time::one_second;   // 20 seconds before transition to bootCamera.
-        constexpr uint32_t door_open_end_time = 19 * time::one_second; // 19 seconds after the door opens IMU Turn off
+        constexpr uint32_t boot_IMU_min_run_time = 20 * time::one_second; // 20 seconds before transition to bootCamera.
+        constexpr uint32_t door_open_end_time = 19 * time::one_second;    // 19 seconds after the door opens IMU Turn off
 
         constexpr int sfr_resolution = 10;
     } // namespace imu
@@ -294,7 +294,7 @@ namespace constants {
         static constexpr unsigned int slow_write_interval = 600;
     } // namespace eeprom
     namespace watchdog {
-        constexpr unsigned int max_period_ms = 10000;
+        constexpr uint32_t max_period_ms = 10000;
     } // namespace watchdog
 };    // namespace constants
 

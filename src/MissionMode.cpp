@@ -347,7 +347,6 @@ void Photo::dispatch()
     // Only go onto the next state until the IMU finished collecting all of the data
     if (millis() > (sfr::imu::door_open_start_time + constants::imu::door_open_end_time)) {
         sfr::mission::current_mode = sfr::mission::detumbleSpin;
-        sfr::imu::power_setting = (uint8_t)sensor_power_mode_type::off;
     }
 }
 
@@ -435,7 +434,7 @@ void exit_lp(MissionMode *reg_mode)
     }
 }
 
-void timed_out(MissionMode *next_mode, float max_time)
+void timed_out(MissionMode *next_mode, uint32_t max_time)
 {
     if (millis() - sfr::mission::current_mode->start_time >= max_time) {
         sfr::mission::current_mode = next_mode;
