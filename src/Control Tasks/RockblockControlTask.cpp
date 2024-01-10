@@ -853,11 +853,6 @@ RockblockCommand *RockblockControlTask::commandFactory(RawRockblockCommand raw)
         Serial.println("SFR Camera Fragment Request");
 #endif
         return new CameraFragmentCommand(raw);
-    } else if (op_code == constants::rockblock::opcodes::sfr_field_opcode_imu_fragment_request) {
-#ifdef VERBOSE
-        Serial.println("IMU Fragment Request");
-#endif
-        return new IMUFragmentCommand(raw);
     } else {
 #ifdef VERBOSE
         Serial.print("Unknown Command with opcode: ");

@@ -82,8 +82,6 @@ namespace constants {
 
             // Fragment Request Commands
             constexpr uint16_t sfr_field_opcode_camera_fragment_request = 0x8888;
-            constexpr uint16_t sfr_field_opcode_imu_fragment_request = 0x9999;
-
         } // namespace opcodes
     }     // namespace rockblock
     namespace temperature {
@@ -287,7 +285,7 @@ namespace constants {
         static constexpr unsigned int dynamic_data_start = 10;
         static constexpr unsigned int sfr_data_start = 460;
         static constexpr unsigned int sfr_store_size = 5;
-        static constexpr unsigned int sfr_num_fields = 97;
+        static constexpr unsigned int sfr_num_fields = 92;
         static constexpr unsigned int sfr_data_full_offset = sfr_num_fields * sfr_store_size + 4;
         static constexpr unsigned int write_age_limit = 95000; // Must be less than 100000
 

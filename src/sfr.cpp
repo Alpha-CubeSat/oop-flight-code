@@ -184,8 +184,6 @@ namespace sfr {
         SFRField<bool> powered = SFRField<bool>(false, 0x2201);
         SFRField<bool> report_written = SFRField<bool>(false, 0x2202);
         SFRField<bool> report_ready = SFRField<bool>(false, 0x2203);
-        SFRField<bool> fragment_requested = SFRField<bool>(false, 0x2204);
-        SFRField<uint8_t> fragment_number_requested = SFRField<uint8_t>(0, 0x2205);
         SFRField<uint8_t> power_setting = SFRField<uint8_t>((uint8_t)sensor_power_mode_type::on, 0x2206);
         SFRField<uint16_t> mode = SFRField<uint16_t>((uint16_t)sensor_mode_type::init, 0x2207);
         SFRField<uint16_t> init_mode = SFRField<uint16_t>((uint16_t)sensor_init_mode_type::awaiting, 0x2208);

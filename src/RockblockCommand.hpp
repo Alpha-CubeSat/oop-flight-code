@@ -148,18 +148,6 @@ public:
     bool isValid();
 };
 
-class IMUFragmentCommand : public RockblockCommand
-{
-public:
-    IMUFragmentCommand(RawRockblockCommand raw) : RockblockCommand{raw} {};
-
-    void execute();
-    bool isValid();
-
-private:
-    SFRInterface *field;
-};
-
 class UnknownCommand : public RockblockCommand
 {
 public:

@@ -12,14 +12,3 @@ bool CameraFragmentCommand::isValid()
 {
     return sfr::mission::deployed;
 }
-
-void IMUFragmentCommand::execute()
-{
-    sfr::imu::fragment_requested = true;
-    sfr::imu::fragment_number_requested = f_arg_1;
-}
-
-bool IMUFragmentCommand::isValid()
-{
-    return sfr::mission::deployed;
-}
