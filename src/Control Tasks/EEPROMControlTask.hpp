@@ -20,6 +20,7 @@ private:
     bool last_light_switch = false;
     uint8_t fast_cycle_counter; // Counts to constants::eeprom::fast_write_interval before going to 0 and repeating
     uint8_t slow_cycle_counter; // Counts to constants::eeprom::slow_write_interval before going to 0 and repeating
+    uint32_t prev_time;
 };
 
 #endif
