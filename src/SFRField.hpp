@@ -58,7 +58,7 @@ public:
         opcode = opcode_val;
         resolution = 1;
         restore = false;
-        T initial = default_val;
+        initial = default_val;
         SFRInterface::opcode_lookup[opcode_val] = this;
     }
 
@@ -70,7 +70,7 @@ public:
         opcode = opcode_val;
         resolution = 1;
         restore = false;
-        T initial = default_val;
+        initial = default_val;
         SFRInterface::opcode_lookup[opcode_val] = this;
     }
 
@@ -82,7 +82,7 @@ public:
         opcode = opcode_val;
         this->resolution = resolution;
         restore = false;
-        T initial = default_val;
+        initial = default_val;
         SFRInterface::opcode_lookup[opcode_val] = this;
     }
 
@@ -94,7 +94,7 @@ public:
         opcode = opcode_val;
         this->resolution = resolution;
         restore = false;
-        T initial = default_val;
+        initial = default_val;
         SFRInterface::opcode_lookup[opcode_val] = this;
     }
 

@@ -1,6 +1,6 @@
 #include "SensorReading.hpp"
 
-SensorReading::SensorReading(Fault *fault, uint8_t buffer_size, float min, float max)
+SensorReading::SensorReading(Fault *fault, uint16_t buffer_size, float min, float max)
 {
     this->fault = fault;
     this->buffer_size = buffer_size;

@@ -25,7 +25,7 @@ private:
      * @brief Size of the buffer, the amount of values that should be averaged
      *
      */
-    uint8_t buffer_size;
+    uint16_t buffer_size;
 
     /**
      * @brief Max valid value
@@ -62,7 +62,7 @@ public:
      * @param min Minimum valid value
      * @param max Maximum valid value
      */
-    SensorReading(Fault *fault, uint8_t buffer_size, float min, float max);
+    SensorReading(Fault *fault, uint16_t buffer_size, float min, float max);
 
     /**
      * @brief Get sensor reading average value

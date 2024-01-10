@@ -179,7 +179,7 @@ namespace sfr {
 
         extern char buffer[constants::rockblock::buffer_size];
         extern int camera_commands[99][constants::rockblock::command_len];
-        extern int commas[constants::rockblock::num_commas];
+        extern uint8_t commas[constants::rockblock::num_commas];
         extern uint32_t camera_max_fragments[99];
         extern std::deque<uint16_t> commands_received;
         extern std::deque<RockblockCommand *> processed_commands;

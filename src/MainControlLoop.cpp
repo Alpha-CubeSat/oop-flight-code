@@ -6,19 +6,19 @@ MainControlLoop::MainControlLoop()
       camera_report_monitor(),
       command_monitor(),
       current_monitor(),
-      normal_report_monitor(),
       imu_monitor(),
-      imudownlink_report_monitor(),
       imu_downlink(),
+      normal_report_monitor(),
+      imudownlink_report_monitor(),
       photoresistor_monitor(),
       rockblock_report_monitor(),
       temperature_monitor(),
+      acs_control_task(),
       burnwire_control_task(),
       camera_control_task(),
       rockblock_control_task(),
       eeprom_control_task(),
       mission_manager(),
-      acs_control_task(),
       clock_manager()
 {
     delay(1000);

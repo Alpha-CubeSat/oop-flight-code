@@ -260,7 +260,7 @@ void RockblockControlTask::dispatch_send_message()
         Serial.println("--------------------------------------------------------------------------");
 
         Serial.print("Image: ");
-        for (int i = 6; i < sfr::rockblock::downlink_report.size(); i++) {
+        for (uint8_t i = 6; i < sfr::rockblock::downlink_report.size(); i++) {
             print_hex(sfr::rockblock::downlink_report[i]);
         }
         Serial.println();
@@ -286,7 +286,7 @@ void RockblockControlTask::dispatch_send_message()
         Serial.println(sfr::rockblock::downlink_report[1]);
         Serial.println("--------------------------------------------------------------------------");
 
-        for (int i = 2; i < sfr::rockblock::downlink_report.size() - 2; i = i + 3) {
+        for (uint8_t i = 2; i < sfr::rockblock::downlink_report.size() - 2; i = i + 3) {
             Serial.print("Gyro X: ");
             print_SensorReading(i, sfr::imu::gyro_x_value);
 
@@ -596,7 +596,7 @@ void RockblockControlTask::dispatch_create_buffer()
         memset(sfr::rockblock::buffer, '\0', constants::rockblock::buffer_size);
         // clear commas to -1
         memset(sfr::rockblock::commas, -1, constants::rockblock::num_commas);
-        int buffer_iter = 0;
+        uint8_t buffer_iter = 0;
         int comma_iter = 0;
         for (size_t i = 0; i < constants::rockblock::buffer_size; i++) {
             char c = sfr::rockblock::serial.read();
