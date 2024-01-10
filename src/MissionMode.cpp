@@ -345,7 +345,7 @@ void Photo::transition_to()
 void Photo::dispatch()
 {
     // Only go onto the next state until the IMU finished collecting all of the data
-    if (millis() > (sfr::imu::door_open_start_time + constants::imu::door_open_end_time)) {
+    if (millis() - sfr::imu::door_open_start_time > constants::imu::door_open_end_time) {
         sfr::mission::current_mode = sfr::mission::detumbleSpin;
     }
 }
