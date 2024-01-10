@@ -4,15 +4,11 @@ EEPROMControlTask::EEPROMControlTask()
 {
     fast_cycle_counter = 0;
     slow_cycle_counter = 0;
-    prev_time = 0;
 }
 
 void EEPROMControlTask::execute()
 {
-    uint32_t curr_time = millis();
-    uint32_t new_time_increment = curr_time - prev_time;
-    sfr::eeprom::time_alive += new_time_increment;
-    prev_time = curr_time;
+    sfr::eeprom::time_alive += millis() - sfr::eeprom::time_alive;
 
     if (sfr::eeprom::light_switch != last_light_switch) {
         EEPROM.put(constants::eeprom::light_switch_loc1, sfr::eeprom::light_switch.get());
