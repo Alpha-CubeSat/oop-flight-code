@@ -17,7 +17,7 @@ void Boot::transition_to()
 }
 void Boot::dispatch()
 {
-    if (sfr::eeprom::time_alive - sfr::mission::current_mode->start_time >= sfr::boot::max_time) {
+    if (sfr::eeprom::time_alive >= sfr::boot::max_time) {
         sfr::mission::current_mode = sfr::mission::aliveSignal;
     }
 }
@@ -34,12 +34,12 @@ void AliveSignal::dispatch()
 {
     // if rockblock hard faults 3 times exit alive signal
     if (sfr::aliveSignal::num_hard_faults >= sfr::aliveSignal::max_downlink_hard_faults || sfr::aliveSignal::downlinked) {
-        sfr::mission::current_mode = sfr::mission::detumbleSpin;
         sfr::aliveSignal::downlinked = false;
         sfr::aliveSignal::num_hard_faults = 0;
+        exit_alive_signal();
     }
     if (millis() - sfr::mission::aliveSignal->start_time >= sfr::aliveSignal::max_time) {
-        sfr::mission::current_mode = sfr::mission::detumbleSpin;
+        exit_alive_signal();
     }
 }
 
@@ -461,4 +461,16 @@ void settings(bool rockblock_sleep_mode, sensor_power_mode_type camera_power_set
     sfr::acs::off = acs_off;
     sfr::rockblock::downlink_period = downlink_period;
     sfr::imu::power_setting = (uint8_t)sensor_power_mode_type::on;
+}
+
+void exit_alive_signal()
+{
+    if (sfr::eeprom::time_alive >= (sfr::boot::max_time + sfr::stabilization::max_time)) {
+        sfr::mission::current_mode = sfr::mission::normal;
+        if (sfr::acs::mode == (uint8_t)acs_mode_type::detumble) {
+            sfr::acs::mode = (uint8_t)acs_mode_type::point;
+        }
+    } else {
+        sfr::mission::current_mode = sfr::mission::detumbleSpin;
+    }
 }
