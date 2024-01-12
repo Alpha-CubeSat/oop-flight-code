@@ -9,12 +9,12 @@ public:
     {
         start_time = new_start_time;
     }
-    virtual int get_id();
+    virtual uint8_t get_id();
 };
 
 class Initialization : public Phase
 {
-    int get_id()
+    uint8_t get_id()
     {
         return 0;
     }
@@ -22,7 +22,7 @@ class Initialization : public Phase
 
 class Stabilization : public Phase
 {
-    int get_id()
+    uint8_t get_id()
     {
         return 1;
     }
@@ -30,7 +30,7 @@ class Stabilization : public Phase
 
 class Standby : public Phase
 {
-    int get_id()
+    uint8_t get_id()
     {
         return 2;
     }
@@ -38,7 +38,7 @@ class Standby : public Phase
 
 class Deployment : public Phase
 {
-    int get_id()
+    uint8_t get_id()
     {
         return 3;
     }
@@ -46,7 +46,7 @@ class Deployment : public Phase
 
 class Armed : public Phase
 {
-    int get_id()
+    uint8_t get_id()
     {
         return 4;
     }
@@ -54,7 +54,7 @@ class Armed : public Phase
 
 class InSun : public Phase
 {
-    int get_id()
+    uint8_t get_id()
     {
         return 5;
     }
@@ -62,7 +62,7 @@ class InSun : public Phase
 
 class Firing : public Phase
 {
-    int get_id()
+    uint8_t get_id()
     {
         return 6;
     }

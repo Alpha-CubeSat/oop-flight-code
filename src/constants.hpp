@@ -65,23 +65,27 @@ namespace constants {
             constexpr uint16_t sfr_field_opcode_max = 0x2899;
 
             // Deploy Command
-            constexpr uint16_t sfr_field_opcode_deploy = 0x3333;
+            constexpr uint16_t deploy_opcode = 0x3333;
 
             // Arm Command
-            constexpr uint16_t sfr_field_opcode_arm = 0x4444;
+            constexpr uint16_t arm_opcode = 0x4444;
 
             // Fire Command
-            constexpr uint16_t sfr_field_opcode_fire = 0x5555;
+            constexpr uint16_t fire_opcode = 0x5555;
+
+            // EEPROM Reset Command
+            constexpr uint16_t eeprom_reset_opcode = 0x7777;
+
+            // Camera Fragment Request Command
+            constexpr uint16_t camera_fragment_request_opcode = 0x8888;
+
+            // Mission Mode Override Command
+            constexpr uint16_t mission_mode_override_opcode = 0x9999;
 
             // Fault Suppress Commands
             constexpr uint16_t fault_opcode_min = 0x6000;
             constexpr uint16_t fault_opcode_max = 0x6100;
 
-            // EEPROM Reset Command
-            constexpr uint16_t eeprom_reset_opcode = 0x7777;
-
-            // Fragment Request Commands
-            constexpr uint16_t sfr_field_opcode_camera_fragment_request = 0x8888;
         } // namespace opcodes
     }     // namespace rockblock
     namespace temperature {

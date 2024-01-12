@@ -77,7 +77,7 @@ namespace sfr {
         extern TransmitInSun transmitInSun_class;
         extern LowPowerInSun lowPowerInSun_class;
         extern VoltageFailureInSun voltageFailureInSun_class;
-        extern BootIMU bootImu_class;
+        extern BootIMU bootIMU_class;
         extern BootCamera bootCamera_class;
         extern MandatoryBurns mandatoryBurns_class;
         extern RegularBurns regularBurns_class;
@@ -108,7 +108,7 @@ namespace sfr {
         extern MissionMode *transmitInSun;
         extern MissionMode *lowPowerInSun;
         extern MissionMode *voltageFailureInSun;
-        extern MissionMode *bootImu;
+        extern MissionMode *bootIMU;
         extern MissionMode *bootCamera;
         extern MissionMode *mandatoryBurns;
         extern MissionMode *regularBurns;
