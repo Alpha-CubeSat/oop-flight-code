@@ -856,6 +856,7 @@ RockblockCommand *RockblockControlTask::commandFactory(RawRockblockCommand raw)
 #ifdef VERBOSE
         Serial.println("Mission Mode Override Command");
 #endif
+        return new MissionModeOverrideCommand(raw);
     }
 
     else if (op_code >= constants::rockblock::opcodes::sfr_field_opcode_min && op_code <= constants::rockblock::opcodes::sfr_field_opcode_max) {
