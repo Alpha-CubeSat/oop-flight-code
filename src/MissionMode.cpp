@@ -206,7 +206,7 @@ void NormalInSun::transition_to()
 void NormalInSun::dispatch()
 {
     timed_out(sfr::mission::transmitInSun, sfr::acs::on_time);
-    exit_insun_phase(sfr::mission::bootImu);
+    exit_insun_phase(sfr::mission::bootIMU);
     enter_lp_insun(); // entering lp takes precedence
 }
 
@@ -221,7 +221,7 @@ void TransmitInSun::transition_to()
 void TransmitInSun::dispatch()
 {
     timed_out(sfr::mission::normalInSun, sfr::rockblock::on_time);
-    exit_insun_phase(sfr::mission::bootImu);
+    exit_insun_phase(sfr::mission::bootIMU);
     enter_lp_insun(); // entering lp takes precedence
 }
 
@@ -256,7 +256,7 @@ void VoltageFailureInSun::dispatch()
     if (sfr::battery::voltage_average->is_valid()) {
         sfr::mission::current_mode = sfr::mission::normalInSun;
     } else {
-        exit_insun_phase(sfr::mission::bootImu);
+        exit_insun_phase(sfr::mission::bootIMU);
     }
 }
 

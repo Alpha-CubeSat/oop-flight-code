@@ -47,7 +47,7 @@ Phase *MissionManager::modeToPhase(MissionMode *mission)
         return sfr::mission::armed;
     } else if (mission->get_id() == sfr::mission::normalInSun->get_id() || mission->get_id() == sfr::mission::transmitInSun->get_id() || mission->get_id() == sfr::mission::lowPowerInSun->get_id() || mission->get_id() == sfr::mission::voltageFailureInSun->get_id()) {
         return sfr::mission::inSun;
-    } else if (mission->get_id() == sfr::mission::bootImu->get_id() || mission->get_id() == sfr::mission::bootCamera->get_id() || mission->get_id() == sfr::mission::mandatoryBurns->get_id() || mission->get_id() == sfr::mission::regularBurns->get_id() || mission->get_id() == sfr::mission::photo->get_id()) {
+    } else if (mission->get_id() == sfr::mission::bootIMU->get_id() || mission->get_id() == sfr::mission::bootCamera->get_id() || mission->get_id() == sfr::mission::mandatoryBurns->get_id() || mission->get_id() == sfr::mission::regularBurns->get_id() || mission->get_id() == sfr::mission::photo->get_id()) {
         return sfr::mission::firing;
     } else {
         return sfr::mission::initialization;

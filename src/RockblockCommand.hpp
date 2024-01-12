@@ -154,4 +154,40 @@ public:
     UnknownCommand(RawRockblockCommand raw) : RockblockCommand{raw} {};
 };
 
+class DeployCommand : public RockblockCommand
+{
+public:
+    DeployCommand(RawRockblockCommand raw) : RockblockCommand{raw} {};
+
+    void execute();
+    bool isValid();
+};
+
+class ArmCommand : public RockblockCommand
+{
+public:
+    ArmCommand(RawRockblockCommand raw) : RockblockCommand{raw} {};
+
+    void execute();
+    bool isValid();
+};
+
+class FireCommand : public RockblockCommand
+{
+public:
+    FireCommand(RawRockblockCommand raw) : RockblockCommand{raw} {};
+
+    void execute();
+    bool isValid();
+};
+
+class MissionModeOverrideCommand : public RockblockCommand
+{
+public:
+    MissionModeOverrideCommand(RawRockblockCommand raw) : RockblockCommand{raw} {};
+
+    void execute();
+    bool isValid();
+};
+
 #endif

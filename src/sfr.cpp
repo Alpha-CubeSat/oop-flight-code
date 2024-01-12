@@ -59,7 +59,7 @@ namespace sfr {
         TransmitInSun transmitInSun_class;
         LowPowerInSun lowPowerInSun_class;
         VoltageFailureInSun voltageFailureInSun_class;
-        BootIMU bootImu_class;
+        BootIMU bootIMU_class;
         BootCamera bootCamera_class;
         MandatoryBurns mandatoryBurns_class;
         RegularBurns regularBurns_class;
@@ -90,7 +90,7 @@ namespace sfr {
         MissionMode *transmitInSun = &transmitInSun_class;
         MissionMode *lowPowerInSun = &lowPowerInSun_class;
         MissionMode *voltageFailureInSun = &voltageFailureInSun_class;
-        MissionMode *bootImu = &bootImu_class;
+        MissionMode *bootIMU = &bootIMU_class;
         MissionMode *bootCamera = &bootCamera_class;
         MissionMode *mandatoryBurns = &mandatoryBurns_class;
         MissionMode *regularBurns = &regularBurns_class;

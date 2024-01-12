@@ -1,5 +1,4 @@
 #include "RockblockControlTask.hpp"
-#include "BurnwireCommands.hpp"
 #include "EEPROMResetCommand.hpp"
 
 RockblockControlTask::RockblockControlTask()
@@ -818,42 +817,62 @@ RockblockCommand *RockblockControlTask::commandFactory(RawRockblockCommand raw)
 {
     // Create Specific Child Class of Rockblock command depending on the OP Code
     uint16_t op_code = raw.get_f_opcode();
-    if (op_code == constants::rockblock::opcodes::sfr_field_opcode_deploy) {
+    if (op_code == constants::rockblock::opcodes::deploy_opcode) {
 #ifdef VERBOSE
-        Serial.println("SFR Deploy Command");
+        Serial.println("Deploy Command");
 #endif
         return new DeployCommand(raw);
-    } else if (op_code == constants::rockblock::opcodes::sfr_field_opcode_arm) {
+    }
+
+    else if (op_code == constants::rockblock::opcodes::arm_opcode) {
 #ifdef VERBOSE
-        Serial.println("SFR Arm Command");
+        Serial.println("Arm Command");
 #endif
         return new ArmCommand(raw);
-    } else if (op_code == constants::rockblock::opcodes::sfr_field_opcode_fire) {
+    }
+
+    else if (op_code == constants::rockblock::opcodes::fire_opcode) {
 #ifdef VERBOSE
-        Serial.println("SFR Fire Command");
+        Serial.println("Fire Command");
 #endif
         return new FireCommand(raw);
-    } else if (op_code >= constants::rockblock::opcodes::sfr_field_opcode_min && op_code <= constants::rockblock::opcodes::sfr_field_opcode_max) {
-#ifdef VERBOSE
-        Serial.println("SFR Override Command");
-#endif
-        return new SFROverrideCommand(raw);
-    } else if (op_code >= constants::rockblock::opcodes::fault_opcode_min && op_code <= constants::rockblock::opcodes::fault_opcode_max) {
-#ifdef VERBOSE
-        Serial.println("Fault Override Command");
-#endif
-        return new FaultOverrideCommand(raw);
-    } else if (op_code == constants::rockblock::opcodes::eeprom_reset_opcode) {
+    }
+
+    else if (op_code == constants::rockblock::opcodes::eeprom_reset_opcode) {
 #ifdef VERBOSE
         Serial.println("EEPROM Reset Command");
 #endif
         return new EEPROMResetCommand(raw);
-    } else if (op_code == constants::rockblock::opcodes::sfr_field_opcode_camera_fragment_request) {
+    }
+
+    else if (op_code == constants::rockblock::opcodes::camera_fragment_request_opcode) {
 #ifdef VERBOSE
-        Serial.println("SFR Camera Fragment Request");
+        Serial.println("Optical Sensor Fragment Request");
 #endif
         return new CameraFragmentCommand(raw);
-    } else {
+    }
+
+    else if (op_code == constants::rockblock::opcodes::mission_mode_override_opcode) {
+#ifdef VERBOSE
+        Serial.println("Mission Mode Override Command");
+#endif
+    }
+
+    else if (op_code >= constants::rockblock::opcodes::sfr_field_opcode_min && op_code <= constants::rockblock::opcodes::sfr_field_opcode_max) {
+#ifdef VERBOSE
+        Serial.println("SFR Override Command");
+#endif
+        return new SFROverrideCommand(raw);
+    }
+
+    else if (op_code >= constants::rockblock::opcodes::fault_opcode_min && op_code <= constants::rockblock::opcodes::fault_opcode_max) {
+#ifdef VERBOSE
+        Serial.println("Fault Override Command");
+#endif
+        return new FaultOverrideCommand(raw);
+    }
+
+    else {
 #ifdef VERBOSE
         Serial.print("Unknown Command with opcode: ");
         Serial.println(op_code, HEX);
