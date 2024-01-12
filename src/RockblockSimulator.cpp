@@ -149,10 +149,6 @@ void RockblockSimulator::flush_check()
 void RockblockSimulator::serial_process()
 {
     if (input.back() == '\r') { // process on line end
-        // edge case that binary data contains 0x0A '\r'
-        if (bin_transmit && (int)input.size() != send_len + 3) {
-            return;
-        }
         // print received data
         std::string tmp = input;
         std::replace(tmp.begin(), tmp.end(), '\r', 'r');
@@ -187,24 +183,6 @@ void RockblockSimulator::serial_process()
             bin_transmit = 1;                    // prepare for binary transmission
             output = input;
             output += "\r\nREADY\r\n"; // reply READY
-            // } else if( send_len != 0 && (int) input.size() == send_len + 2 + 1 ) {
-        } else if (bin_transmit) { // transmit binary (data)
-            // checksum calculation
-            uint16_t checksum = 0;
-            for (size_t i = 0; i < send_len; i++) {
-                checksum += (uint16_t)input[i];
-            }
-            char b1 = checksum >> 8;
-            char b2 = checksum & 0xFF;
-            // revert stage flag
-            bin_transmit = 0;
-            // confirm checksum
-            if (b1 == input[send_len] && b2 == input[send_len + 1]) {
-                output = "\r\n0\r\n\r\nOK\r\n"; // reply CORRECT
-                downlink_data = input.substr(0, send_len);
-            } else {
-                output = "\r\n2\r\n\r\nOK\r\n"; // reply ERROR
-            }
         } else if (input == "AT+SBDIX\r") {
             if (downlink_data == "FLUSH_MT") {
                 flush_stage = 1;
@@ -265,6 +243,27 @@ void RockblockSimulator::serial_process()
             output += (char)(checksum & 0xFF);
             output += "\r\nOK\r\n"; // reply OK
             uplink_data.clear();
+        } else if (bin_transmit) { // transmit binary (data)
+            // edge case that binary data contains 0x0A '\r'
+            if ((int)input.size() != send_len + 3) {
+                return;
+            }
+            // checksum calculation
+            uint16_t checksum = 0;
+            for (size_t i = 0; i < send_len; i++) {
+                checksum += (uint16_t)input[i];
+            }
+            char b1 = checksum >> 8;
+            char b2 = checksum & 0xFF;
+            // revert stage flag
+            bin_transmit = 0;
+            // confirm checksum
+            if (b1 == input[send_len] && b2 == input[send_len + 1]) {
+                output = "\r\n0\r\n\r\nOK\r\n"; // reply CORRECT
+                downlink_data = input.substr(0, send_len);
+            } else {
+                output = "\r\n2\r\n\r\nOK\r\n"; // reply ERROR
+            }
         }
 
         tmp = output;
