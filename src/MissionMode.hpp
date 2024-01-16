@@ -443,7 +443,6 @@ void exit_signal_phase(MissionMode *mode);
 void exit_detumble_phase(MissionMode *mode);
 void exit_insun_phase(MissionMode *mode);
 void enter_lp(MissionMode *lp_mode);
-void check_previous(MissionMode *normal_mode, MissionMode *transmit_mode);
 void exit_lp(MissionMode *reg_mode);
 void timed_out(MissionMode *next_mode, uint32_t max_time);
 void enter_lp_insun();

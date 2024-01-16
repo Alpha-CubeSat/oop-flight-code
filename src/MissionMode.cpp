@@ -54,7 +54,7 @@ void DetumbleSpin::transition_to()
 }
 void DetumbleSpin::dispatch()
 {
-    exit_detumble_phase(sfr::mission::normal);
+    exit_detumble_phase(sfr::mission::transmit);
     enter_lp(sfr::mission::lowPowerDetumbleSpin);
 }
 
@@ -96,7 +96,7 @@ void LowPower::transition_to()
 }
 void LowPower::dispatch()
 {
-    check_previous(sfr::mission::normal, sfr::mission::transmit);
+    exit_lp(sfr::mission::transmit);
 }
 
 void Transmit::transition_to()
@@ -151,7 +151,7 @@ void LowPowerDeployment::transition_to()
 }
 void LowPowerDeployment::dispatch()
 {
-    check_previous(sfr::mission::normalDeployment, sfr::mission::transmitDeployment);
+    exit_lp(sfr::mission::transmitDeployment);
 }
 
 void NormalArmed::transition_to()
@@ -192,7 +192,7 @@ void LowPowerArmed::transition_to()
 }
 void LowPowerArmed::dispatch()
 {
-    check_previous(sfr::mission::normalArmed, sfr::mission::transmitArmed);
+    exit_lp(sfr::mission::transmitArmed);
 }
 
 void NormalInSun::transition_to()
@@ -238,7 +238,7 @@ void LowPowerInSun::dispatch()
     if (!sfr::battery::voltage_average->is_valid()) {
         sfr::mission::current_mode = sfr::mission::voltageFailureInSun;
     } else {
-        check_previous(sfr::mission::normalInSun, sfr::mission::transmitInSun);
+        exit_lp(sfr::mission::transmitInSun);
     }
 }
 
@@ -254,7 +254,7 @@ void VoltageFailureInSun::transition_to()
 void VoltageFailureInSun::dispatch()
 {
     if (sfr::battery::voltage_average->is_valid()) {
-        sfr::mission::current_mode = sfr::mission::normalInSun;
+        sfr::mission::current_mode = sfr::mission::transmitInSun;
     } else {
         exit_insun_phase(sfr::mission::bootIMU);
     }
@@ -416,15 +416,6 @@ void enter_lp(MissionMode *lp_mode)
     }
 }
 
-void check_previous(MissionMode *normal_mode, MissionMode *transmit_mode)
-{
-    if (sfr::mission::mode_history[1] == transmit_mode->get_id()) {
-        exit_lp(transmit_mode);
-    } else {
-        exit_lp(normal_mode);
-    }
-}
-
 void exit_lp(MissionMode *reg_mode)
 {
     float voltage;
@@ -466,7 +457,7 @@ void settings(bool rockblock_sleep_mode, sensor_power_mode_type camera_power_set
 void exit_alive_signal()
 {
     if (sfr::eeprom::time_alive >= (sfr::boot::max_time + sfr::stabilization::max_time)) {
-        sfr::mission::current_mode = sfr::mission::normal;
+        sfr::mission::current_mode = sfr::mission::transmit;
         if (sfr::acs::mode == (uint8_t)acs_mode_type::detumble) {
             sfr::acs::mode = (uint8_t)acs_mode_type::point;
         }
