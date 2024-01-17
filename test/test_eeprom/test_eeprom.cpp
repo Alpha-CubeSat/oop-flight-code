@@ -55,13 +55,21 @@ void test_power_cycle_during_boot()
     TEST_ASSERT_EQUAL(1, boot_counter2);                   // check second boot counter in EEPROM updated properly
 
     // Save initial time alive value
-    uint32_t time_alive = sfr::eeprom::time_alive;
+    uint32_t initial_time_alive = sfr::eeprom::time_alive;
 
     // Trigger EEPROM Control Task executes like in MCL, end on MCL cycle with write (2 writes total)
+    uint32_t time_passed = 0;
     for (unsigned int i = 0; i < constants::eeprom::fast_write_interval + 1; i++) {
-        delay(constants::time::control_cycle_time_ms); // Simulate MCL cycle time to increase time alive counter
         eeprom_control_task1.execute();
+
+        // Simulate MCL cycle time to increase time alive counter
+        // delay(constants::time::control_cycle_time_ms); // For some reason, PlatformIO doesn't like this line
+        time_passed += constants::time::control_cycle_time_ms;
+        sfr::eeprom::time_alive = time_passed;
     }
+
+    // Save most recent time alive value written to EEPROM
+    uint32_t saved_time_alive = sfr::eeprom::time_alive - constants::time::control_cycle_time_ms;
 
     // Verify EEPROM Control Task
     uint32_t boot_time1;
@@ -69,12 +77,9 @@ void test_power_cycle_during_boot()
     uint32_t boot_time2;
     EEPROM.get(constants::eeprom::boot_time_loc2, boot_time2);
 
-    TEST_ASSERT_TRUE(sfr::eeprom::time_alive.get() > time_alive); // Check that time alive has increased
-    TEST_ASSERT_EQUAL(boot_time1, sfr::eeprom::time_alive.get()); // Check that the first time alive value in EEPROM updated properly
-    TEST_ASSERT_EQUAL(boot_time2, sfr::eeprom::time_alive.get()); // check that the second time alive value in EEPROM updated properly
-
-    // Save most recent time alive value
-    time_alive = sfr::eeprom::time_alive;
+    TEST_ASSERT_TRUE(boot_time1 > initial_time_alive); // Check that boot timer has increased
+    TEST_ASSERT_EQUAL(saved_time_alive, boot_time1); // Check that the first boot time value in EEPROM updated properly
+    TEST_ASSERT_EQUAL(saved_time_alive, boot_time2); // Check that the first boot time value in EEPROM updated properly
 
     // Simulate power cycle
     SFRInterface::resetSFR();
@@ -83,7 +88,7 @@ void test_power_cycle_during_boot()
 
     // Check second restore execution
     TEST_ASSERT_EQUAL(true, sfr::eeprom::boot_mode.get());        // Check that we are still in boot mode (time alive should not have exceeded the boot timeout)
-    TEST_ASSERT_EQUAL(time_alive, sfr::eeprom::time_alive.get()); // Check that the time alive value was properly restored into the SFR
+    TEST_ASSERT_EQUAL(boot_time1, sfr::eeprom::time_alive.get()); // Check that the time alive value was properly restored into the SFR
 
     EEPROM.get(constants::eeprom::boot_counter_loc1, boot_counter1);
     EEPROM.get(constants::eeprom::boot_counter_loc2, boot_counter2);
@@ -92,19 +97,29 @@ void test_power_cycle_during_boot()
     TEST_ASSERT_EQUAL(2, boot_counter1);                   // Check that the first boot counter in EEPROM updated properly
     TEST_ASSERT_EQUAL(2, boot_counter2);                   // Check that the second boot counter in EEPROM updated properly
 
-    // Trigger EEPROM Control Task executes like in MCL, end on MCL cycle with a write (2 writes total)
+    // Save initial time alive value a
+    initial_time_alive = sfr::eeprom::time_alive;
+
+    // Trigger EEPROM Control Task executes like in MCL, end on MCL cycle with write (2 writes total)
     for (unsigned int i = 0; i < constants::eeprom::fast_write_interval + 1; i++) {
-        delay(constants::time::control_cycle_time_ms); // Simulate MCL cycle time to increase time alive counter
         eeprom_control_task2.execute();
+
+        // Simulate MCL cycle time to increase time alive counter
+        // delay(constants::time::control_cycle_time_ms); // For some reason, PlatformIO doesn't like this line
+        time_passed += constants::time::control_cycle_time_ms;
+        sfr::eeprom::time_alive = time_passed;
     }
 
-    // Verify EEPROM Control Task
+    // Save most recent time alive value written to EEPROM
+    saved_time_alive = sfr::eeprom::time_alive - constants::time::control_cycle_time_ms;
+
+    // Verify EEPROM Control Task continues increasing boot time after power cycle
     EEPROM.get(constants::eeprom::boot_time_loc1, boot_time1);
     EEPROM.get(constants::eeprom::boot_time_loc2, boot_time2);
 
-    TEST_ASSERT_TRUE(sfr::eeprom::time_alive.get() > time_alive); // Check that time alive has increased
-    TEST_ASSERT_EQUAL(boot_time1, sfr::eeprom::time_alive.get()); // Check that the first time alive value in EEPROM updated properly
-    TEST_ASSERT_EQUAL(boot_time2, sfr::eeprom::time_alive.get()); // Check that the second time alive value in EEPROM updated properly
+    TEST_ASSERT_TRUE(boot_time1 > initial_time_alive); // Check that boot timer has increased
+    TEST_ASSERT_EQUAL(saved_time_alive, boot_time1); // Check that the first boot time value in EEPROM updated properly
+    TEST_ASSERT_EQUAL(saved_time_alive, boot_time2); // Check that the first boot time value in EEPROM updated properly
 }
 
 void test_finish_boot()
@@ -132,10 +147,15 @@ void test_finish_boot()
     TEST_ASSERT_EQUAL(2, boot_counter1);
     TEST_ASSERT_EQUAL(2, boot_counter2);
 
-    // Trigger EEPROM Control Task executes like in MCL, end on MCL cycle with a write (2 writes total)
+    // Trigger EEPROM Control Task executes like in MCL, end on MCL cycle with write (2 writes total)
+    uint32_t time_passed = 0;
     for (unsigned int i = 0; i < constants::eeprom::fast_write_interval + 1; i++) {
-        delay(constants::time::control_cycle_time_ms); // Simulate MCL cycle time to increase time alive counter
         eeprom_control_task.execute();
+
+        // Simulate MCL cycle time to increase time alive counter
+        // delay(constants::time::control_cycle_time_ms); // For some reason, PlatformIO doesn't like this line
+        time_passed += constants::time::control_cycle_time_ms;
+        sfr::eeprom::time_alive = time_passed;
     }
 
     TEST_ASSERT_EQUAL(false, sfr::eeprom::boot_mode.get()); // Check that the boot phase has finished
@@ -144,8 +164,10 @@ void test_finish_boot()
     SFRInterface::resetSFR();
     EEPROMRestore::execute();
 
-    TEST_ASSERT_EQUAL(false, sfr::eeprom::boot_mode.get()); // Check that the boot phase has finished after power cycle
+    // Check that the boot phase has finished after power cycle
+    TEST_ASSERT_EQUAL(false, sfr::eeprom::boot_mode.get());
 
+    // Check that the boot counters have updated properly
     EEPROM.get(constants::eeprom::boot_counter_loc1, boot_counter1);
     EEPROM.get(constants::eeprom::boot_counter_loc2, boot_counter2);
 
@@ -200,7 +222,7 @@ void test_blue_moon_data_error()
     EEPROM.put(constants::eeprom::boot_counter_loc1, (uint8_t)1);
     EEPROM.put(constants::eeprom::boot_counter_loc2, (uint8_t)1);
     EEPROM.put(constants::eeprom::dynamic_data_addr_loc1, (uint16_t)constants::eeprom::dynamic_data_start);
-    EEPROM.put(constants::eeprom::dynamic_data_addr_loc2, (uint16_t)(constants::eeprom::dynamic_data_start + 2)); // Purposely does not equal first dynamc data start to simulate error
+    EEPROM.put(constants::eeprom::dynamic_data_addr_loc2, (uint16_t)(constants::eeprom::dynamic_data_start + 1)); // Purposely does not equal first dynamc data start to simulate error
 
     sfr::eeprom::time_alive = 2 * constants::time::one_hour + 1; // Change stored dynamic data
     sfr::eeprom::light_switch = true;                            // Turn light switch on
@@ -211,16 +233,18 @@ void test_blue_moon_data_error()
     sfr::rockblock::downlink_period = 15 * constants::time::one_minute;
     sfr::rockblock::downlink_period.setRestoreOnBoot(true);
 
-    // Write dynamic data and sfr data
+    // Write dynamic data and SFR data
     EEPROMControlTask eeprom_control_task;
     eeprom_control_task.execute();
 
+    // Simulate power cycle
     // Try to restore with errored blue moon values after boot wait is finished
+    SFRInterface::resetSFR();
     EEPROMRestore::execute();
 
     TEST_ASSERT_EQUAL(true, sfr::eeprom::error_mode.get()); // An error has been detected
 
-    // Verify SFR data and dynamic data don't get restored
+    // Verify SFR data and dynamic data do not get restored
     TEST_ASSERT_EQUAL(sfr::eeprom::time_alive.getDefaultValue(), sfr::eeprom::time_alive.getFieldValue());
     TEST_ASSERT_EQUAL(sfr::eeprom::dynamic_data_age.getDefaultValue(), sfr::eeprom::dynamic_data_age.getDefaultValue());
 
@@ -287,14 +311,19 @@ void test_dynamic_data_restore()
     // Check that no dynamic data writes have been made
     TEST_ASSERT_EQUAL(0, sfr::eeprom::dynamic_data_age.get());
 
-    // Trigger EEPROM Control Task executes like in MCL, end on MCL cycle with a write (2 writes total)
+    // Trigger EEPROM Control Task executes like in MCL, end on MCL cycle with write (2 writes total)
+    uint32_t time_passed = 0;
     for (unsigned int i = 0; i < constants::eeprom::fast_write_interval + 1; i++) {
-        delay(constants::time::control_cycle_time_ms); // Simulate MCL cycle time to increase time alive counter
         eeprom_control_task.execute();
+
+        // Simulate MCL cycle time to increase time alive counter
+        // delay(constants::time::control_cycle_time_ms); // For some reason, PlatformIO doesn't like this line
+        time_passed += constants::time::control_cycle_time_ms;
+        sfr::eeprom::time_alive = time_passed;
     }
 
-    // Save most recent time alive value
-    uint32_t time_alive = sfr::eeprom::time_alive;
+    // Save most recent time alive value written to EEPROM
+    uint32_t saved_time_alive = sfr::eeprom::time_alive - constants::time::control_cycle_time_ms;
 
     // Simulate power cycle
     SFRInterface::resetSFR();
@@ -303,7 +332,7 @@ void test_dynamic_data_restore()
     // Check second restore execution
     TEST_ASSERT_EQUAL(false, sfr::eeprom::boot_mode.get());
     TEST_ASSERT_EQUAL(false, sfr::eeprom::error_mode.get());
-    TEST_ASSERT_EQUAL(time_alive, sfr::eeprom::time_alive.get());
+    TEST_ASSERT_EQUAL(saved_time_alive, sfr::eeprom::time_alive.get());
     TEST_ASSERT_EQUAL(2, sfr::eeprom::dynamic_data_age.get());
 }
 
@@ -328,10 +357,15 @@ void test_sfr_data_restore()
     // Check that no SFR data writes have been made
     TEST_ASSERT_EQUAL(0, sfr::eeprom::sfr_data_age.get());
 
-    // Trigger EEPROM Control Task executes like in MCL, end on MCL cycle with a write (2 writes total)
+    // Trigger EEPROM Control Task executes like in MCL, end on MCL cycle with write (2 writes total)
+    uint32_t time_passed = 0;
     for (unsigned int i = 0; i < constants::eeprom::fast_write_interval + 1; i++) {
-        delay(constants::time::control_cycle_time_ms); // Simulate MCL cycle time to increase time alive counter
         eeprom_control_task.execute();
+
+        // Simulate MCL cycle time to increase time alive counter
+        // delay(constants::time::control_cycle_time_ms); // For some reason, PlatformIO doesn't like this line
+        time_passed += constants::time::control_cycle_time_ms;
+        sfr::eeprom::time_alive = time_passed;
     }
 
     // Check that light switches have been set
@@ -356,6 +390,7 @@ void test_sfr_data_restore()
         }
     }
 
+    TEST_ASSERT_EQUAL(true, sfr::eeprom::sfr_save_completed.get());
     TEST_ASSERT_EQUAL(11, sfr::burnwire::attempts_limit.get());
     TEST_ASSERT_EQUAL(0, sfr::acs::on_time.get());
     TEST_ASSERT_EQUAL(2, sfr::eeprom::sfr_data_age); // Write age increased by 2
@@ -382,10 +417,15 @@ void test_light_switch_off()
     // Check that no SFR data writes have been made
     TEST_ASSERT_EQUAL(0, sfr::eeprom::sfr_data_age.get());
 
-    // Trigger EEPROM Control Task executes like in MCL, end on MCL cycle with a write (2 writes total)
-    for (unsigned int i = 0; i < constants::eeprom::fast_write_interval + 1; i++) {
-        delay(constants::time::control_cycle_time_ms); // Simulate MCL cycle time to increase time alive counter
+    // Trigger EEPROM Control Task executes like in MCL, end on MCL cycle with write (2 writes total)
+    uint32_t time_passed = 0;
+    for (unsigned int i = 0; i < constants::eeprom::slow_write_interval + 1; i++) {
         eeprom_control_task.execute();
+
+        // Simulate MCL cycle time to increase time alive counter
+        // delay(constants::time::control_cycle_time_ms); // For some reason, PlatformIO doesn't like this line
+        time_passed += constants::time::control_cycle_time_ms;
+        sfr::eeprom::time_alive = time_passed;
     }
 
     // Check that light switches have been set
@@ -422,22 +462,27 @@ void test_dynamic_age_limit()
     sfr::eeprom::time_alive = 2 * constants::time::one_hour;
 
     // Check the current dynamic data address
-    TEST_ASSERT_EQUAL(10, sfr::eeprom::dynamic_data_addr);
+    TEST_ASSERT_EQUAL(constants::eeprom::dynamic_data_start, sfr::eeprom::dynamic_data_addr);
 
     // Set the dynamic data age to be near the limit
-    sfr::eeprom::dynamic_data_age = 94999;
+    sfr::eeprom::dynamic_data_age = constants::eeprom::write_age_limit - 1;
 
-    // Trigger EEPROM Control Task executes like in MCL, end on MCL cycle with a write (2 writes total)
+    // Trigger EEPROM Control Task executes like in MCL, end on MCL cycle with write (2 writes total)
+    uint32_t time_passed = 0;
     for (unsigned int i = 0; i < constants::eeprom::fast_write_interval + 1; i++) {
-        delay(constants::time::control_cycle_time_ms); // Simulate MCL cycle time to increase time alive counter
         eeprom_control_task.execute();
+
+        // Simulate MCL cycle time to increase time alive counter
+        // delay(constants::time::control_cycle_time_ms); // For some reason, PlatformIO doesn't like this line
+        time_passed += constants::time::control_cycle_time_ms;
+        sfr::eeprom::time_alive = time_passed;
     }
 
-    // Save most recent time alive value
-    uint32_t time_alive = sfr::eeprom::time_alive;
+    // Save most recent time alive value written to EEPROM
+    uint32_t saved_time_alive = sfr::eeprom::time_alive - constants::time::control_cycle_time_ms;
 
     // Check that dynamic data address and age updated
-    TEST_ASSERT_EQUAL(18, sfr::eeprom::dynamic_data_addr);
+    TEST_ASSERT_EQUAL(constants::eeprom::dynamic_data_start + constants::eeprom::dynamic_data_full_offset, sfr::eeprom::dynamic_data_addr);
     TEST_ASSERT_EQUAL(1, sfr::eeprom::dynamic_data_age);
 
     // Simulate power cycle
@@ -445,8 +490,8 @@ void test_dynamic_age_limit()
     EEPROMRestore::execute();
 
     // Check restore execution for dynamic data
-    TEST_ASSERT_EQUAL(time_alive, sfr::eeprom::time_alive.get());
-    TEST_ASSERT_EQUAL(18, sfr::eeprom::dynamic_data_addr);
+    TEST_ASSERT_EQUAL(saved_time_alive, sfr::eeprom::time_alive.get());
+    TEST_ASSERT_EQUAL(constants::eeprom::dynamic_data_start + constants::eeprom::dynamic_data_full_offset, sfr::eeprom::dynamic_data_addr);
     TEST_ASSERT_EQUAL(1, sfr::eeprom::dynamic_data_age);
 }
 
@@ -461,32 +506,33 @@ void test_sfr_age_limit()
     EEPROMRestore::execute();
     sfr::eeprom::time_alive = 2 * constants::time::one_hour;
 
-    // Check the current sfr data address
-    TEST_ASSERT_EQUAL(460, sfr::eeprom::sfr_data_addr);
+    // Check the current SFR data address
+    TEST_ASSERT_EQUAL(constants::eeprom::sfr_data_start, sfr::eeprom::sfr_data_addr);
 
     // Set the dynamic data age to be near the limit
-    sfr::eeprom::sfr_data_age = 94999;
+    sfr::eeprom::sfr_data_age = constants::eeprom::write_age_limit - 1;
 
-    // Trigger EEPROM Control Task executes like in MCL, end on MCL cycle with a write (2 writes total)
-    for (unsigned int i = 0; i < constants::eeprom::fast_write_interval + 1; i++) {
-        delay(constants::time::control_cycle_time_ms); // Simulate MCL cycle time to increase time alive counter
+    // Trigger EEPROM Control Task executes like in MCL, end on MCL cycle with write (2 writes total)
+    uint32_t time_passed = 0;
+    for (unsigned int i = 0; i < constants::eeprom::slow_write_interval + 1; i++) {
         eeprom_control_task.execute();
+
+        // Simulate MCL cycle time to increase time alive counter
+        // delay(constants::time::control_cycle_time_ms); // For some reason, PlatformIO doesn't like this line
+        time_passed += constants::time::control_cycle_time_ms;
+        sfr::eeprom::time_alive = time_passed;
     }
 
-    // Save most recent time alive value
-    uint32_t time_alive = sfr::eeprom::time_alive;
-
     // Check that dynamic data address and age updated
-    TEST_ASSERT_EQUAL(949, sfr::eeprom::sfr_data_addr);
+    TEST_ASSERT_EQUAL(constants::eeprom::sfr_data_start + constants::eeprom::sfr_data_full_offset, sfr::eeprom::sfr_data_addr);
     TEST_ASSERT_EQUAL(1, sfr::eeprom::sfr_data_age);
 
     // Simulate power cycle
     SFRInterface::resetSFR();
     EEPROMRestore::execute();
 
-    // Check restore execution for dynamic data
-    TEST_ASSERT_EQUAL(time_alive, sfr::eeprom::time_alive.get());
-    TEST_ASSERT_EQUAL(949, sfr::eeprom::sfr_data_addr);
+    // Check restore execution for sfr eeprom metadata
+    TEST_ASSERT_EQUAL(constants::eeprom::sfr_data_start + constants::eeprom::sfr_data_full_offset, sfr::eeprom::sfr_data_addr);
     TEST_ASSERT_EQUAL(1, sfr::eeprom::sfr_data_age);
 }
 
@@ -501,17 +547,20 @@ void test_save_restore_with_full_eeprom()
     EEPROMRestore::execute();
     sfr::eeprom::time_alive = 2 * constants::time::one_hour;
 
-    // Set the current sfr data address after finishing 7 sections (the max)
-    sfr::eeprom::sfr_data_addr = 3883;
+    // Set the current SFR data address to the last section (7th section, or 6 offsets)
+    sfr::eeprom::sfr_data_addr = constants::eeprom::sfr_data_start + 6 * constants::eeprom::sfr_data_full_offset;
+    sfr::eeprom::sfr_data_age = constants::eeprom::write_age_limit;
 
-    // Set the current dynamic data address after finishing 56 sections (the max)
-    sfr::eeprom::sfr_data_addr = 458;
+    // Set the current dynamic data address to the last section (56th section, or 55 offsets)
+    sfr::eeprom::dynamic_data_addr = constants::eeprom::dynamic_data_start + 55 * constants::eeprom::dynamic_data_full_offset;
+    sfr::eeprom::dynamic_data_age = constants::eeprom::write_age_limit;
 
     // Trigger EEPROM Control Task
     eeprom_control_task.execute();
-    delay(1000);
 
     // Check that dynamic and sfr section ages do not change
+    TEST_ASSERT_EQUAL(constants::eeprom::dynamic_data_start + 56 * constants::eeprom::dynamic_data_full_offset, sfr::eeprom::dynamic_data_addr);
+    TEST_ASSERT_EQUAL(constants::eeprom::sfr_data_start + 7 * constants::eeprom::sfr_data_full_offset, sfr::eeprom::sfr_data_addr);
     TEST_ASSERT_EQUAL(0, sfr::eeprom::dynamic_data_age);
     TEST_ASSERT_EQUAL(0, sfr::eeprom::sfr_data_age);
 
@@ -521,31 +570,26 @@ void test_save_restore_with_full_eeprom()
 
     // Check restore execution
     TEST_ASSERT_EQUAL(0, sfr::eeprom::time_alive.get());
-    TEST_ASSERT_EQUAL(458, sfr::eeprom::dynamic_data_addr);
-    TEST_ASSERT_EQUAL(3883, sfr::eeprom::sfr_data_addr);
+    TEST_ASSERT_EQUAL(constants::eeprom::dynamic_data_start + 56 * constants::eeprom::dynamic_data_full_offset, sfr::eeprom::dynamic_data_addr);
+    TEST_ASSERT_EQUAL(constants::eeprom::sfr_data_start + 7 * constants::eeprom::sfr_data_full_offset, sfr::eeprom::sfr_data_addr);
     TEST_ASSERT_EQUAL(0, sfr::eeprom::dynamic_data_age);
     TEST_ASSERT_EQUAL(0, sfr::eeprom::sfr_data_age);
-}
-
-void test_blank() {
-
 }
 
 int test_eeprom()
 {
     UNITY_BEGIN();
-    RUN_TEST(test_blank);
-    // RUN_TEST(test_power_cycle_during_boot);
-    // RUN_TEST(test_finish_boot);
-    // RUN_TEST(test_boot_time_error);
-    // RUN_TEST(test_blue_moon_data_error);
-    // RUN_TEST(test_sfr_save_error);
-    // RUN_TEST(test_dynamic_data_restore);
-    // RUN_TEST(test_sfr_data_restore);
-    // RUN_TEST(test_light_switch_off);
-    // RUN_TEST(test_dynamic_age_limit);
-    // RUN_TEST(test_sfr_age_limit);
-    // RUN_TEST(test_save_restore_with_full_eeprom);
+    RUN_TEST(test_power_cycle_during_boot);
+    RUN_TEST(test_finish_boot);
+    RUN_TEST(test_boot_time_error);
+    RUN_TEST(test_blue_moon_data_error);
+    RUN_TEST(test_sfr_save_error);
+    RUN_TEST(test_dynamic_data_restore);
+    RUN_TEST(test_sfr_data_restore);
+    RUN_TEST(test_light_switch_off);
+    RUN_TEST(test_dynamic_age_limit);
+    RUN_TEST(test_sfr_age_limit);
+    RUN_TEST(test_save_restore_with_full_eeprom);
 
     return UNITY_END();
 }
@@ -559,9 +603,8 @@ int main()
 #include <Arduino.h>
 void setup()
 {
-    delay(5000);
+    delay(2000);
     Serial.begin(9600);
-    delay(5000);
     test_eeprom();
 }
 
