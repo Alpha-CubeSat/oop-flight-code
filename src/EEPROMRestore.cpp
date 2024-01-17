@@ -33,7 +33,7 @@ void EEPROMRestore::check_boot_vals()
 
     if (boot_time1 == boot_time2 && boot_counter1 == boot_counter2) {
         // Boot time counters and boot counters are valid
-        
+
         sfr::eeprom::error_mode = false;
 
         sfr::eeprom::boot_counter = boot_counter1 + 1;
@@ -41,7 +41,7 @@ void EEPROMRestore::check_boot_vals()
         EEPROM.put(constants::eeprom::boot_counter_loc2, sfr::eeprom::boot_counter.get());
         if (boot_time1 < 2 * constants::time::one_hour) {
             // The initial two hour wait has not passed, still in boot mode
-            
+
             sfr::eeprom::boot_mode = true;
             sfr::eeprom::time_alive = boot_time1;
         } else {
@@ -51,7 +51,7 @@ void EEPROMRestore::check_boot_vals()
         }
     } else {
         // Boot time counters or boot counters are invalid, restart initial two hour wait
-        
+
         sfr::eeprom::error_mode = true;
         sfr::eeprom::boot_mode = true;
         sfr::eeprom::boot_restarted = true;
@@ -103,7 +103,7 @@ void EEPROMRestore::restore_dynamic_data()
 
     if (has_dynamic_data_space) {
         // EEPROM for dynamic data is not full, so restore dynamic data
-        
+
         uint32_t time_alive;
         EEPROM.get(sfr::eeprom::dynamic_data_addr, time_alive);
         sfr::eeprom::time_alive = time_alive;
@@ -127,13 +127,13 @@ void EEPROMRestore::restore_sfr_data()
         sfr::eeprom::sfr_save_completed = stored_checksum == generated_checksum; // False means SFR didn't finish saving
 
         if (sfr::eeprom::sfr_save_completed) {
-            
+
             // Pull the SFR data write age from the back of the current EEPROM section
             uint32_t sfr_data_age;
             uint16_t sfr_data_age_addr = sfr::eeprom::sfr_data_addr + constants::eeprom::sfr_data_full_offset - 4;
             EEPROM.get(sfr_data_age_addr, sfr_data_age);
             sfr::eeprom::sfr_data_age = sfr_data_age;
-            
+
             if (sfr::eeprom::light_switch) {
 
                 // Move the read address back to the EEPROM location of the first SFR field

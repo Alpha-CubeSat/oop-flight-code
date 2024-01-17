@@ -78,8 +78,8 @@ void test_power_cycle_during_boot()
     EEPROM.get(constants::eeprom::boot_time_loc2, boot_time2);
 
     TEST_ASSERT_TRUE(boot_time1 > initial_time_alive); // Check that boot timer has increased
-    TEST_ASSERT_EQUAL(saved_time_alive, boot_time1); // Check that the first boot time value in EEPROM updated properly
-    TEST_ASSERT_EQUAL(saved_time_alive, boot_time2); // Check that the first boot time value in EEPROM updated properly
+    TEST_ASSERT_EQUAL(saved_time_alive, boot_time1);   // Check that the first boot time value in EEPROM updated properly
+    TEST_ASSERT_EQUAL(saved_time_alive, boot_time2);   // Check that the first boot time value in EEPROM updated properly
 
     // Simulate power cycle
     SFRInterface::resetSFR();
@@ -118,8 +118,8 @@ void test_power_cycle_during_boot()
     EEPROM.get(constants::eeprom::boot_time_loc2, boot_time2);
 
     TEST_ASSERT_TRUE(boot_time1 > initial_time_alive); // Check that boot timer has increased
-    TEST_ASSERT_EQUAL(saved_time_alive, boot_time1); // Check that the first boot time value in EEPROM updated properly
-    TEST_ASSERT_EQUAL(saved_time_alive, boot_time2); // Check that the first boot time value in EEPROM updated properly
+    TEST_ASSERT_EQUAL(saved_time_alive, boot_time1);   // Check that the first boot time value in EEPROM updated properly
+    TEST_ASSERT_EQUAL(saved_time_alive, boot_time2);   // Check that the first boot time value in EEPROM updated properly
 }
 
 void test_finish_boot()
