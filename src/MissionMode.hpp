@@ -439,7 +439,6 @@ public:
     }
 };
 
-void exit_signal_phase(MissionMode *mode);
 void exit_detumble_phase(MissionMode *mode);
 void exit_insun_phase(MissionMode *mode);
 void enter_lp(MissionMode *lp_mode);

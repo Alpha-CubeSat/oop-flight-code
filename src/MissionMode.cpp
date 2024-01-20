@@ -350,19 +350,6 @@ void Photo::dispatch()
     }
 }
 
-void exit_signal_phase(MissionMode *mode)
-{
-    // if rockblock hard faults 3 times exit alive signal
-    if (sfr::aliveSignal::num_hard_faults >= sfr::aliveSignal::max_downlink_hard_faults || sfr::aliveSignal::downlinked) {
-        sfr::mission::current_mode = mode;
-        sfr::aliveSignal::downlinked = false;
-        sfr::aliveSignal::num_hard_faults = 0;
-    }
-    if (millis() - sfr::mission::aliveSignal->start_time >= sfr::aliveSignal::max_time) {
-        sfr::mission::current_mode = mode;
-    }
-}
-
 void exit_detumble_phase(MissionMode *mode)
 {
 
