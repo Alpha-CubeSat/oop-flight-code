@@ -33,6 +33,7 @@ void EEPROMRestore::check_boot_vals()
 
     if (boot_time1 == boot_time2 && boot_counter1 == boot_counter2) {
         // Boot time counters and boot counters are valid
+
         sfr::eeprom::error_mode = false;
 
         sfr::eeprom::boot_counter = boot_counter1 + 1;
@@ -40,6 +41,7 @@ void EEPROMRestore::check_boot_vals()
         EEPROM.put(constants::eeprom::boot_counter_loc2, sfr::eeprom::boot_counter.get());
         if (boot_time1 < 2 * constants::time::one_hour) {
             // The initial two hour wait has not passed, still in boot mode
+
             sfr::eeprom::boot_mode = true;
             sfr::eeprom::time_alive = boot_time1;
         } else {
@@ -49,6 +51,7 @@ void EEPROMRestore::check_boot_vals()
         }
     } else {
         // Boot time counters or boot counters are invalid, restart initial two hour wait
+
         sfr::eeprom::error_mode = true;
         sfr::eeprom::boot_mode = true;
         sfr::eeprom::boot_restarted = true;
@@ -83,11 +86,13 @@ void EEPROMRestore::restore_blue_moon_data()
 
     if (light_switch1 == light_switch2 && dynamic_data_addr1 == dynamic_data_addr2 && sfr_data_addr1 == sfr_data_addr2) {
         // EEPROM data is still valid
+
         sfr::eeprom::dynamic_data_addr = dynamic_data_addr1;
         sfr::eeprom::sfr_data_addr = sfr_data_addr1;
         sfr::eeprom::light_switch = light_switch1;
     } else {
         // EEPROM data is invalid
+
         sfr::eeprom::error_mode = true;
     }
 }
@@ -97,7 +102,8 @@ void EEPROMRestore::restore_dynamic_data()
     bool has_dynamic_data_space = sfr::eeprom::dynamic_data_addr + constants::eeprom::dynamic_data_full_offset - 1 <= sfr::eeprom::dynamic_data_addr.getMax();
 
     if (has_dynamic_data_space) {
-        // EEPROM for dynamic data is not full, so fetch dynamic metadata
+        // EEPROM for dynamic data is not full, so restore dynamic data
+
         uint32_t time_alive;
         EEPROM.get(sfr::eeprom::dynamic_data_addr, time_alive);
         sfr::eeprom::time_alive = time_alive;
@@ -111,31 +117,42 @@ void EEPROMRestore::restore_dynamic_data()
 void EEPROMRestore::restore_sfr_data()
 {
     bool has_sfr_data_space = sfr::eeprom::sfr_data_addr + constants::eeprom::sfr_data_full_offset - 1 <= sfr::eeprom::sfr_data_addr.getMax();
-    if (sfr::eeprom::light_switch && has_sfr_data_space) {
-        // Light switch is on, EEPROM for SFR is not full
-        // Try to restore SFR fields according to their restore booleans
+    if (has_sfr_data_space) {
+        // EEPROM for SFR data is not full, so proceed with further checks to restore SFR data
+
+        // Check SFR data integrity with checksum
         uint32_t stored_checksum;
         EEPROM.get(sfr::eeprom::sfr_data_addr, stored_checksum);
-
         uint32_t generated_checksum = EEPROMControlTask::generate_sfr_checksum();
-
         sfr::eeprom::sfr_save_completed = stored_checksum == generated_checksum; // False means SFR didn't finish saving
 
         if (sfr::eeprom::sfr_save_completed) {
-            uint16_t sfr_read_address = sfr::eeprom::sfr_data_addr + 4; // Move the read address back to the EEPROM location of the first SFR field
 
-            for (const auto &pair : SFRInterface::opcode_lookup) {
-                bool restore;
-                EEPROM.get(sfr_read_address, restore);
-                pair.second->setRestoreOnBoot(restore);
+            // Pull the SFR data write age from the back of the current EEPROM section
+            uint32_t sfr_data_age;
+            uint16_t sfr_data_age_addr = sfr::eeprom::sfr_data_addr + constants::eeprom::sfr_data_full_offset - 4;
+            EEPROM.get(sfr_data_age_addr, sfr_data_age);
+            sfr::eeprom::sfr_data_age = sfr_data_age;
 
-                if (restore) {
-                    uint32_t value;
-                    EEPROM.get(sfr_read_address + 1, value);
-                    pair.second->setFieldValue(value);
+            if (sfr::eeprom::light_switch) {
+
+                // Move the read address back to the EEPROM location of the first SFR field
+                uint16_t sfr_read_address = sfr::eeprom::sfr_data_addr + 4;
+
+                // Restore SFR fields according to their restore booleans
+                for (const auto &pair : SFRInterface::opcode_lookup) {
+                    bool restore;
+                    EEPROM.get(sfr_read_address, restore);
+                    pair.second->setRestoreOnBoot(restore);
+
+                    if (restore) {
+                        uint32_t value;
+                        EEPROM.get(sfr_read_address + 1, value);
+                        pair.second->setFieldValue(value);
+                    }
+
+                    sfr_read_address += constants::eeprom::sfr_store_size;
                 }
-
-                sfr_read_address += constants::eeprom::sfr_store_size;
             }
         }
     }
