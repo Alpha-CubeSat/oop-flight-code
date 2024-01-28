@@ -14,8 +14,9 @@ void setup()
     Serial.begin(9600);
 
     if (!SD.begin(254)) {
-        Serial.println("Error: Failed to init SD card");
-        return;
+        while(true){
+            Serial.println("Error: Failed to init SD card");
+        }
     }
 
     // Create files if specified
@@ -71,7 +72,7 @@ void setup()
     EEPROM.put(4092, (uint16_t)10);
     EEPROM.put(8, (uint16_t)460);
     EEPROM.put(4094, (uint16_t)460);
-    Serial.println("EEPROM reset finished!");
+    Serial.println("EEPROM reset finished!");  
 }
 
 void loop()
