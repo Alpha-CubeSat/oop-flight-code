@@ -13,6 +13,8 @@ int Pins::getPinState(int pinName)
 
 void Pins::setInitialPinStates()
 {
+    pinMode(constants::button::button_pin, INPUT);
+    
     pinMode(constants::acs::xPWMpin, OUTPUT);
     pinMode(constants::acs::yPWMpin, OUTPUT);
     pinMode(constants::acs::zPWMpin, OUTPUT);
@@ -25,7 +27,6 @@ void Pins::setInitialPinStates()
     pinMode(constants::camera::power_on_pin, OUTPUT);
     pinMode(constants::camera::rx, OUTPUT);
     pinMode(constants::camera::tx, OUTPUT);
-    pinMode(constants::button::button_pin, INPUT);
     pinMode(constants::acs::STBXYpin, OUTPUT);
     pinMode(constants::acs::STBZpin, OUTPUT);
     pinMode(constants::burnwire::first_pin, OUTPUT);
@@ -44,9 +45,9 @@ void Pins::setInitialPinStates()
     Pins::setPinState(constants::camera::power_on_pin, LOW);
     Pins::setPinState(constants::camera::rx, LOW);
     Pins::setPinState(constants::camera::tx, LOW);
-    Pins::setPinState(constants::acs::STBXYpin, LOW);
-    Pins::setPinState(constants::acs::STBZpin, LOW);
+    Pins::setPinState(constants::acs::STBXYpin, HIGH);
+    Pins::setPinState(constants::acs::STBZpin, HIGH);
     Pins::setPinState(constants::burnwire::first_pin, LOW);
     Pins::setPinState(constants::burnwire::second_pin, LOW);
-    Pins::setPinState(constants::rockblock::sleep_pin, HIGH);
+    Pins::setPinState(constants::rockblock::sleep_pin, LOW);
 }
