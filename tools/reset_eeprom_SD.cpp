@@ -13,6 +13,23 @@ void setup()
 {
     Serial.begin(9600);
 
+    Serial.println("Beginning EEPROM reset!");
+    for (unsigned int i = 0; i < EEPROM.length(); i++) {
+        EEPROM.write(i, 0);
+    }
+
+    // EEPROM.put(0, (uint32_t)0);
+    // EEPROM.put(4086, (uint32_t)0);
+    // EEPROM.put(4, (uint8_t)0);
+    // EEPROM.put(4090, (uint8_t)0);
+    EEPROM.put(5, (bool)false);
+    EEPROM.put(4091, (bool)false);
+    EEPROM.put(6, (uint16_t)10);
+    EEPROM.put(4092, (uint16_t)10);
+    EEPROM.put(8, (uint16_t)460);
+    EEPROM.put(4094, (uint16_t)460);
+    Serial.println("EEPROM reset finished!");  
+
     if (!SD.begin(254)) {
         while(true){
             Serial.println("Error: Failed to init SD card");
@@ -55,24 +72,6 @@ void setup()
         Serial.println("Error: Opening root failed");
     }
     Serial.println("All files deleted");
-
-    Serial.println("Beginning EEPROM reset!");
-    uint16_t eeprom_length = EEPROM.length();
-    for (unsigned int i = 0; i < eeprom_length; i++) {
-        EEPROM.write(i, 0);
-    }
-
-    // EEPROM.put(0, (uint32_t)0);
-    // EEPROM.put(4086, (uint32_t)0);
-    // EEPROM.put(4, (uint8_t)0);
-    // EEPROM.put(4090, (uint8_t)0);
-    EEPROM.put(5, (bool)false);
-    EEPROM.put(4091, (bool)false);
-    EEPROM.put(6, (uint16_t)10);
-    EEPROM.put(4092, (uint16_t)10);
-    EEPROM.put(8, (uint16_t)460);
-    EEPROM.put(4094, (uint16_t)460);
-    Serial.println("EEPROM reset finished!");  
 }
 
 void loop()
