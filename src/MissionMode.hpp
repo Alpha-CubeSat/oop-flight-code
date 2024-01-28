@@ -362,7 +362,7 @@ public:
     }
 };
 
-class BootIMU : public MissionMode
+class BootSensors : public MissionMode
 {
 public:
     void transition_to();
@@ -374,7 +374,7 @@ public:
     }
     std::string get_name()
     {
-        return "Boot IMU";
+        return "Boot Optical Sensor";
     }
     mode_type get_type()
     {
@@ -382,7 +382,7 @@ public:
     }
 };
 
-class BootCamera : public MissionMode
+class CaptureIMU : public MissionMode
 {
 public:
     void transition_to();
@@ -394,7 +394,7 @@ public:
     }
     std::string get_name()
     {
-        return "Boot Optical Sensor";
+        return "Boot IMU";
     }
     mode_type get_type()
     {
@@ -442,7 +442,7 @@ public:
     }
 };
 
-class Photo : public MissionMode
+class DeploymentVerification : public MissionMode
 {
 public:
     void transition_to();
@@ -464,7 +464,7 @@ public:
 
 void exit_detumble_phase(MissionMode *mode);
 void exit_armed_phase(MissionMode *mode);
-void exit_insun_phase(MissionMode *mode);
+void exit_insun_phase();
 void enter_lp(MissionMode *lp_mode);
 void exit_lp(MissionMode *reg_mode);
 void timed_out(MissionMode *next_mode, uint32_t max_time);

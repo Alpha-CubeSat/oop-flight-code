@@ -57,11 +57,11 @@ namespace sfr {
         TransmitInSun transmitInSun_class;
         LowPowerInSun lowPowerInSun_class;
         VoltageFailureInSun voltageFailureInSun_class;
-        BootIMU bootIMU_class;
-        BootCamera bootCamera_class;
+        CaptureIMU captureIMU_class;
+        BootSensors bootSensors_class;
         MandatoryBurns mandatoryBurns_class;
         RegularBurns regularBurns_class;
-        Photo photo_class;
+        DeploymentVerification deploymentVerification_class;
 
         Initialization initialization_class;
         Stabilization stabilization_class;
@@ -88,11 +88,11 @@ namespace sfr {
         MissionMode *transmitInSun = &transmitInSun_class;
         MissionMode *lowPowerInSun = &lowPowerInSun_class;
         MissionMode *voltageFailureInSun = &voltageFailureInSun_class;
-        MissionMode *bootIMU = &bootIMU_class;
-        MissionMode *bootCamera = &bootCamera_class;
+        MissionMode *captureIMU = &captureIMU_class;
+        MissionMode *bootSensors = &bootSensors_class;
         MissionMode *mandatoryBurns = &mandatoryBurns_class;
         MissionMode *regularBurns = &regularBurns_class;
-        MissionMode *photo = &photo_class;
+        MissionMode *deploymentVerification = &deploymentVerification_class;
 
         Phase *initialization = &initialization_class;
         Phase *stabilization = &stabilization_class;
@@ -114,7 +114,7 @@ namespace sfr {
         SFRField<uint16_t> attempts = SFRField<uint16_t>(0, 0x1900);
         SFRField<uint16_t> mode = SFRField<uint16_t>((uint16_t)burnwire_mode_type::standby, 0x1901);
         SFRField<uint16_t> attempts_limit = SFRField<uint16_t>(10, 0x1902);
-        SFRField<uint16_t> mandatory_attempts_limit = SFRField<uint16_t>(4, 0x1903);
+        SFRField<uint16_t> mandatory_attempts_limit = SFRField<uint16_t>(2, 0x1903);
         SFRField<uint32_t> start_time = SFRField<uint32_t>(0, 0x1904);
         SFRField<uint32_t> burn_time = SFRField<uint32_t>(600, 0, 5 * constants::time::one_second, 0x1905);
         SFRField<uint32_t> armed_time = SFRField<uint32_t>(48 * constants::time::one_hour, 0, 12 * constants::time::one_hour, 0x1906);
@@ -177,18 +177,15 @@ namespace sfr {
     } // namespace rockblock
     namespace imu {
         // OP Codes 2200
-        SFRField<bool> sample_gyro = SFRField<bool>(false, 0x2200);
-        SFRField<bool> powered = SFRField<bool>(false, 0x2201);
-        SFRField<bool> report_written = SFRField<bool>(false, 0x2202);
-        SFRField<bool> report_ready = SFRField<bool>(false, 0x2203);
-        SFRField<uint8_t> power_setting = SFRField<uint8_t>((uint8_t)sensor_power_mode_type::on, 0x2206);
-        SFRField<uint16_t> mode = SFRField<uint16_t>((uint16_t)sensor_mode_type::init, 0x2207);
-        SFRField<uint16_t> init_mode = SFRField<uint16_t>((uint16_t)sensor_init_mode_type::awaiting, 0x2208);
-        SFRField<uint16_t> failed_times = SFRField<uint16_t>(0, 0x2209);
-        SFRField<uint16_t> failed_limit = SFRField<uint16_t>(5, 0x2210);
-        SFRField<uint32_t> imu_boot_collection_start_time = SFRField<uint32_t>(0, 0x2211);
-        SFRField<uint32_t> door_open_start_time = SFRField<uint32_t>(0, 0x2212);
-        SFRField<uint32_t> max_fragments = SFRField<uint32_t>(256, 0x2213);
+        SFRField<bool> powered = SFRField<bool>(false, 0x2200);
+        SFRField<bool> report_written = SFRField<bool>(false, 0x2201);
+        SFRField<bool> report_ready = SFRField<bool>(false, 0x2202);
+        SFRField<uint8_t> power_setting = SFRField<uint8_t>((uint8_t)sensor_power_mode_type::on, 0x2203);
+        SFRField<uint16_t> mode = SFRField<uint16_t>((uint16_t)sensor_mode_type::init, 0x2204);
+        SFRField<uint16_t> init_mode = SFRField<uint16_t>((uint16_t)sensor_init_mode_type::awaiting, 0x2205);
+        SFRField<uint16_t> failed_times = SFRField<uint16_t>(0, 0x2206);
+        SFRField<uint16_t> failed_limit = SFRField<uint16_t>(5, 0x2207);
+        SFRField<uint32_t> max_fragments = SFRField<uint32_t>(256, 0x2208);
 
         SensorReading *mag_x_value = new SensorReading(fault_groups::imu_faults::mag_x_value, 1, constants::imu::min_mag, constants::imu::max_mag);
         SensorReading *mag_y_value = new SensorReading(fault_groups::imu_faults::mag_y_value, 1, constants::imu::min_mag, constants::imu::max_mag);

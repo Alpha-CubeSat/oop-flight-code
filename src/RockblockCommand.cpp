@@ -115,11 +115,11 @@ void MissionModeOverrideCommand::execute()
         break;
     }
     case 17: {
-        sfr::mission::current_mode = sfr::mission::bootIMU;
+        sfr::mission::current_mode = sfr::mission::captureIMU;
         break;
     }
     case 18: {
-        sfr::mission::current_mode = sfr::mission::bootCamera;
+        sfr::mission::current_mode = sfr::mission::bootSensors;
         break;
     }
     case 19: {
@@ -131,7 +131,7 @@ void MissionModeOverrideCommand::execute()
         break;
     }
     case 21: {
-        sfr::mission::current_mode = sfr::mission::photo;
+        sfr::mission::current_mode = sfr::mission::deploymentVerification;
         break;
     }
     }
@@ -139,5 +139,5 @@ void MissionModeOverrideCommand::execute()
 
 bool MissionModeOverrideCommand::isValid()
 {
-    return (f_arg_1 >= sfr::mission::boot->get_id() && f_arg_1 <= sfr::mission::photo->get_id());
+    return (f_arg_1 >= sfr::mission::boot->get_id() && f_arg_1 <= sfr::mission::deploymentVerification->get_id());
 }

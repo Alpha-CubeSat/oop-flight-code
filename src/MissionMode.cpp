@@ -16,6 +16,7 @@ void Boot::transition_to()
 {
     boot_initialization();
 }
+
 void Boot::dispatch()
 {
     if (sfr::eeprom::time_alive >= sfr::boot::max_time) {
@@ -36,6 +37,7 @@ void AliveSignal::transition_to()
         true,                        // acs off
         sfr::rockblock::transmit_downlink_period);
 }
+
 void AliveSignal::dispatch()
 {
     // if rockblock hard faults 3 times exit alive signal
@@ -60,6 +62,7 @@ void DetumbleSpin::transition_to()
         sfr::rockblock::transmit_downlink_period);
     sfr::acs::mode = (uint8_t)acs_mode_type::detumble;
 }
+
 void DetumbleSpin::dispatch()
 {
     exit_detumble_phase(sfr::mission::transmit);
@@ -79,6 +82,7 @@ void LowPowerDetumbleSpin::transition_to()
         true,                        // acs off
         sfr::rockblock::lp_downlink_period);
 }
+
 void LowPowerDetumbleSpin::dispatch()
 {
     exit_lp(sfr::mission::detumbleSpin);
@@ -98,6 +102,7 @@ void Normal::transition_to()
         false,                       // acs off
         sfr::rockblock::transmit_downlink_period);
 }
+
 void Normal::dispatch()
 {
     timed_out(sfr::mission::transmit, sfr::acs::on_time);
@@ -117,6 +122,7 @@ void LowPower::transition_to()
         true,                        // acs off
         sfr::rockblock::lp_downlink_period);
 }
+
 void LowPower::dispatch()
 {
     exit_lp(sfr::mission::transmit);
@@ -135,6 +141,7 @@ void Transmit::transition_to()
         true,                        // acs off
         sfr::rockblock::transmit_downlink_period);
 }
+
 void Transmit::dispatch()
 {
     timed_out(sfr::mission::normal, sfr::rockblock::on_time);
@@ -154,6 +161,7 @@ void NormalDeployment::transition_to()
         false,                       // acs off
         sfr::rockblock::transmit_downlink_period);
 }
+
 void NormalDeployment::dispatch()
 {
     timed_out(sfr::mission::transmitDeployment, sfr::acs::on_time);
@@ -173,6 +181,7 @@ void TransmitDeployment::transition_to()
         true,                        // acs off
         sfr::rockblock::transmit_downlink_period);
 }
+
 void TransmitDeployment::dispatch()
 {
     timed_out(sfr::mission::normalDeployment, sfr::rockblock::on_time);
@@ -192,6 +201,7 @@ void LowPowerDeployment::transition_to()
         true,                        // acs off
         sfr::rockblock::lp_downlink_period);
 }
+
 void LowPowerDeployment::dispatch()
 {
     exit_lp(sfr::mission::transmitDeployment);
@@ -210,6 +220,7 @@ void NormalArmed::transition_to()
         false,                       // acs off
         sfr::rockblock::transmit_downlink_period);
 }
+
 void NormalArmed::dispatch()
 {
     timed_out(sfr::mission::transmitArmed, sfr::acs::on_time);
@@ -230,6 +241,7 @@ void TransmitArmed::transition_to()
         true,                        // acs off
         sfr::rockblock::transmit_downlink_period);
 }
+
 void TransmitArmed::dispatch()
 {
     timed_out(sfr::mission::normalArmed, sfr::rockblock::on_time);
@@ -250,6 +262,7 @@ void LowPowerArmed::transition_to()
         true,                        // acs off
         sfr::rockblock::lp_downlink_period);
 }
+
 void LowPowerArmed::dispatch()
 {
     exit_lp(sfr::mission::transmitArmed);
@@ -269,10 +282,11 @@ void NormalInSun::transition_to()
         false,                       // acs off
         sfr::rockblock::transmit_downlink_period);
 }
+
 void NormalInSun::dispatch()
 {
     timed_out(sfr::mission::transmitInSun, sfr::acs::on_time);
-    exit_insun_phase(sfr::mission::bootIMU);
+    exit_insun_phase();
     enter_lp_insun(); // entering lp takes precedence
 }
 
@@ -289,10 +303,11 @@ void TransmitInSun::transition_to()
         true,                        // acs off
         sfr::rockblock::transmit_downlink_period);
 }
+
 void TransmitInSun::dispatch()
 {
     timed_out(sfr::mission::normalInSun, sfr::rockblock::on_time);
-    exit_insun_phase(sfr::mission::bootIMU);
+    exit_insun_phase();
     enter_lp_insun(); // entering lp takes precedence
 }
 
@@ -309,6 +324,7 @@ void LowPowerInSun::transition_to()
         true,                        // acs off
         sfr::rockblock::lp_downlink_period);
 }
+
 void LowPowerInSun::dispatch()
 {
     if (!sfr::battery::voltage_average->is_valid()) {
@@ -337,7 +353,7 @@ void VoltageFailureInSun::dispatch()
     if (sfr::battery::voltage_average->is_valid()) {
         sfr::mission::current_mode = sfr::mission::transmitInSun;
     } else {
-        exit_insun_phase(sfr::mission::bootIMU);
+        exit_insun_phase();
     }
 }
 
@@ -346,47 +362,48 @@ Phase *VoltageFailureInSun::get_phase()
     return sfr::mission::inSun;
 }
 
-void BootIMU::transition_to()
-{
-    settings(
-        true,                        // rockblock sleeping
-        sensor_power_mode_type::off, // camera
-        true,                        // acs off
-        sfr::rockblock::lp_downlink_period);
-    sfr::imu::sample_gyro = true;
-    sfr::imu::failed_times = 0;
-}
-void BootIMU::dispatch()
-{
-    // Once the IMU is initialized and 20 seconds have passed transition.
-    // OR If the failed tiems exceeds the limit transition
-    if (((sfr::imu::init_mode == (uint16_t)sensor_init_mode_type::complete) && ((millis() - sfr::imu::imu_boot_collection_start_time) >= constants::imu::boot_IMU_min_run_time)) || sfr::imu::failed_times >= sfr::imu::failed_limit) {
-        sfr::mission::current_mode = sfr::mission::bootCamera;
-    }
-}
-
-Phase *BootIMU::get_phase()
-{
-    return sfr::mission::firing;
-}
-
-void BootCamera::transition_to()
+void BootSensors::transition_to()
 {
     settings(
         true,                       // rockblock sleeping
         sensor_power_mode_type::on, // camera
         true,                       // acs off
         sfr::rockblock::lp_downlink_period);
+    sfr::camera::failed_times = 0;
+    sfr::imu::failed_times = 0;
 }
 
-void BootCamera::dispatch()
+void BootSensors::dispatch()
 {
     if (sfr::camera::init_mode == (uint16_t)sensor_init_mode_type::complete || sfr::camera::failed_times >= sfr::camera::failed_limit) {
-        sfr::mission::current_mode = sfr::mission::mandatoryBurns;
+        if (sfr::imu::init_mode == (uint16_t)sensor_init_mode_type::complete) {
+            sfr::mission::current_mode = sfr::mission::captureIMU;
+        } else if (sfr::imu::failed_times >= sfr::imu::failed_limit) {
+            sfr::mission::current_mode = sfr::mission::mandatoryBurns;
+        }
     }
 }
 
-Phase *BootCamera::get_phase()
+Phase *BootSensors::get_phase()
+{
+    return sfr::mission::firing;
+}
+
+void CaptureIMU::transition_to()
+{
+    settings(
+        true,                               // rockblock sleeping
+        sensor_power_mode_type::do_nothing, // camera
+        true,                               // acs off
+        sfr::rockblock::lp_downlink_period);
+}
+
+void CaptureIMU::dispatch()
+{
+    timed_out(sfr::mission::mandatoryBurns, constants::imu::boot_IMU_min_run_time);
+}
+
+Phase *CaptureIMU::get_phase()
 {
     return sfr::mission::firing;
 }
@@ -403,7 +420,7 @@ void MandatoryBurns::transition_to()
 
 void MandatoryBurns::dispatch()
 {
-    if (sfr::burnwire::attempts > sfr::burnwire::mandatory_attempts_limit) {
+    if (sfr::burnwire::attempts >= sfr::burnwire::mandatory_attempts_limit) {
         sfr::mission::current_mode = sfr::mission::regularBurns;
     }
 }
@@ -425,10 +442,10 @@ void RegularBurns::transition_to()
 void RegularBurns::dispatch()
 {
     if ((!sfr::button::pressed && !fault_groups::hardware_faults::button->get_base()) || (!sfr::photoresistor::covered && !fault_groups::hardware_faults::light_val->get_base())) {
-        sfr::mission::current_mode = sfr::mission::photo;
+        sfr::mission::current_mode = sfr::mission::deploymentVerification;
         sfr::mission::deployed = true;
 
-    } else if (sfr::burnwire::attempts > sfr::burnwire::attempts_limit) {
+    } else if (sfr::burnwire::attempts >= sfr::burnwire::attempts_limit) {
         sfr::mission::current_mode = sfr::mission::transmitArmed;
     }
 }
@@ -438,7 +455,7 @@ Phase *RegularBurns::get_phase()
     return sfr::mission::firing;
 }
 
-void Photo::transition_to()
+void DeploymentVerification::transition_to()
 {
     settings(
         true,                               // rockblock sleeping
@@ -448,15 +465,15 @@ void Photo::transition_to()
     sfr::camera::take_photo = true;
 }
 
-void Photo::dispatch()
+void DeploymentVerification::dispatch()
 {
-    // Only go onto the next state until the IMU finished collecting all of the data
-    if (millis() - sfr::imu::door_open_start_time > constants::imu::door_open_end_time) {
+    if ((millis() - sfr::mission::deploymentVerification->start_time) >= constants::imu::door_open_end_time) {
         sfr::mission::current_mode = sfr::mission::detumbleSpin;
+        sfr::imu::report_written = true;
     }
 }
 
-Phase *Photo::get_phase()
+Phase *DeploymentVerification::get_phase()
 {
     return sfr::mission::firing;
 }
@@ -503,12 +520,12 @@ void exit_armed_phase(MissionMode *mode)
     }
 }
 
-void exit_insun_phase(MissionMode *mode)
+void exit_insun_phase()
 {
     if ((sfr::temperature::temp_c_average->is_valid() && sfr::temperature::in_sun) ||
         (!sfr::temperature::temp_c_average->is_valid() && sfr::current::solar_current_average->is_valid() && sfr::current::in_sun) ||
         (!sfr::temperature::temp_c_average->is_valid() && !sfr::current::solar_current_average->is_valid())) {
-        sfr::mission::current_mode = mode;
+        sfr::mission::current_mode = sfr::mission::bootSensors;
     }
 }
 
@@ -538,14 +555,11 @@ void timed_out(MissionMode *next_mode, uint32_t max_time)
 
 void enter_lp_insun()
 {
-    float voltage;
-
     // using is valid rather than the return of get value because we should not enter voltageFailureInSun just because the buffer is not full
-
     if (!sfr::battery::voltage_average->is_valid()) {
         sfr::mission::current_mode = sfr::mission::voltageFailureInSun;
-    } else if (sfr::battery::voltage_average->get_value(&voltage) && voltage <= sfr::battery::min_battery.get_float()) {
-        sfr::mission::current_mode = sfr::mission::lowPowerInSun;
+    } else {
+        enter_lp(sfr::mission::lowPowerInSun);
     }
 }
 

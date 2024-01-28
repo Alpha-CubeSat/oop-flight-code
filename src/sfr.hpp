@@ -77,11 +77,11 @@ namespace sfr {
         extern TransmitInSun transmitInSun_class;
         extern LowPowerInSun lowPowerInSun_class;
         extern VoltageFailureInSun voltageFailureInSun_class;
-        extern BootIMU bootIMU_class;
-        extern BootCamera bootCamera_class;
+        extern CaptureIMU captureIMU_class;
+        extern BootSensors bootSensors_class;
         extern MandatoryBurns mandatoryBurns_class;
         extern RegularBurns regularBurns_class;
-        extern Photo photo_class;
+        extern DeploymentVerification deploymentVerification_class;
 
         extern Initialization initialization_class;
         extern Stabilization stabilization_class;
@@ -108,11 +108,11 @@ namespace sfr {
         extern MissionMode *transmitInSun;
         extern MissionMode *lowPowerInSun;
         extern MissionMode *voltageFailureInSun;
-        extern MissionMode *bootIMU;
-        extern MissionMode *bootCamera;
+        extern MissionMode *captureIMU;
+        extern MissionMode *bootSensors;
         extern MissionMode *mandatoryBurns;
         extern MissionMode *regularBurns;
-        extern MissionMode *photo;
+        extern MissionMode *deploymentVerification;
 
         extern Phase *initialization;
         extern Phase *stabilization;
@@ -195,7 +195,6 @@ namespace sfr {
     } // namespace rockblock
     namespace imu {
         // OP Codes 2200
-        extern SFRField<bool> sample_gyro;
         extern SFRField<bool> powered;
         extern SFRField<bool> report_written;
         extern SFRField<bool> report_ready;
@@ -204,8 +203,6 @@ namespace sfr {
         extern SFRField<uint16_t> init_mode;
         extern SFRField<uint16_t> failed_times;
         extern SFRField<uint16_t> failed_limit;
-        extern SFRField<uint32_t> imu_boot_collection_start_time;
-        extern SFRField<uint32_t> door_open_start_time;
         extern SFRField<uint32_t> max_fragments;
 
         extern SensorReading *mag_x_value;

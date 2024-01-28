@@ -265,7 +265,7 @@ namespace constants {
 
         constexpr uint8_t max_gyro_imu_report_size = 66;
         constexpr uint32_t boot_IMU_min_run_time = 20 * time::one_second; // 20 seconds before transition to bootCamera.
-        constexpr uint32_t door_open_end_time = 19 * time::one_second;    // 19 seconds after the door opens IMU Turn off
+        constexpr uint32_t door_open_end_time = 10 * time::one_second;    // 10 seconds after the door opens IMU Turn off
 
         constexpr int sfr_resolution = 10;
     } // namespace imu
