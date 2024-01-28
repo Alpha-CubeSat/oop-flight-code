@@ -4,7 +4,6 @@
 #include "Modes/acs_mode_type.enum"
 #include "Modes/mode_type.enum"
 #include "Modes/sensor_power_mode_type.enum"
-#include <string>
 #include "Phase.hpp"
 
 class MissionMode

@@ -1,6 +1,8 @@
 #ifndef PHASE_HPP_
 #define PHASE_HPP_
 
+#include <string>
+
 class Phase
 {
 public:
