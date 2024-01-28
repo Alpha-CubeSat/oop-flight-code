@@ -16,11 +16,6 @@ void MissionManager::execute()
         sfr::mission::current_phase->set_start_time(millis());
     }
 
-    if (sfr::mission::current_phase->get_id() == sfr::mission::armed->get_id() && (millis() - sfr::mission::current_phase->start_time) > sfr::burnwire::armed_time) {
-        sfr::mission::current_mode = sfr::mission::normalDeployment;
-        sfr::mission::current_phase = modeToPhase(sfr::mission::current_mode);
-    }
-
     if (sfr::mission::previous_mode->get_id() != sfr::mission::current_mode->get_id()) {
         sfr::mission::current_mode->set_start_time(millis());
         sfr::mission::current_mode->transition_to();

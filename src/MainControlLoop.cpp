@@ -17,7 +17,7 @@ MainControlLoop::MainControlLoop()
       burnwire_control_task(),
       camera_control_task(),
       rockblock_control_task(),
-      eeprom_control_task(),
+      eeprom_control_task(), // TODO review
       mission_manager(),
       clock_manager()
 {
@@ -172,7 +172,7 @@ void MainControlLoop::execute()
 
 #endif
 
-    mission_manager.execute();
+    mission_manager.execute(); // TODO Review stopped here
     burnwire_control_task.execute();
     rockblock_control_task.execute();
     command_monitor.execute();

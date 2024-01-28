@@ -12,14 +12,12 @@ namespace sfr {
     } // namespace boot
     namespace detumble {
         // OP Codes 1500
-        // TODO actual default values
-        SFRField<uint8_t> min_stable_gyro_z = SFRField<uint8_t>((0.8 * constants::acs::target_spin_rate * constants::imu::sfr_resolution), 0x1500, constants::imu::sfr_resolution);
-        SFRField<uint8_t> max_stable_gyro_x = SFRField<uint8_t>((0.1 * constants::imu::sfr_resolution), 0x1501, constants::imu::sfr_resolution);
-        SFRField<uint8_t> max_stable_gyro_y = SFRField<uint8_t>((0.1 * constants::imu::sfr_resolution), 0x1502, constants::imu::sfr_resolution);
-        SFRField<uint8_t> min_unstable_gyro_x = SFRField<uint8_t>((0.7 * constants::imu::sfr_resolution), 0x1503, constants::imu::sfr_resolution);
-        SFRField<uint8_t> min_unstable_gyro_y = SFRField<uint8_t>((0.7 * constants::imu::sfr_resolution), 0x1504, constants::imu::sfr_resolution);
-        // END TODO
-    } // namespace detumble
+        SFRField<uint8_t> min_stable_gyro_z = SFRField<uint8_t>((4 * constants::acs::target_spin_rate * constants::imu::sfr_resolution), 0x1500, constants::imu::sfr_resolution); // rad/s
+        SFRField<uint8_t> max_stable_gyro_x = SFRField<uint8_t>((0.1 * constants::imu::sfr_resolution), 0x1501, constants::imu::sfr_resolution);                                  // rad/s
+        SFRField<uint8_t> max_stable_gyro_y = SFRField<uint8_t>((0.1 * constants::imu::sfr_resolution), 0x1502, constants::imu::sfr_resolution);                                  // rad/s
+        SFRField<uint8_t> min_unstable_gyro_x = SFRField<uint8_t>((0.7 * constants::imu::sfr_resolution), 0x1503, constants::imu::sfr_resolution);                                // rad/s
+        SFRField<uint8_t> min_unstable_gyro_y = SFRField<uint8_t>((0.7 * constants::imu::sfr_resolution), 0x1504, constants::imu::sfr_resolution);                                // rad/s
+    }                                                                                                                                                                             // namespace detumble
     namespace aliveSignal {
         // OP Codes 1600
         SFRField<bool> downlinked = SFRField<bool>(false, 0x1600);
@@ -263,8 +261,8 @@ namespace sfr {
             {constants::camera::rx, LOW},
             {constants::camera::tx, LOW},
             {constants::button::button_pin, HIGH},
-            {constants::acs::STBXYpin, LOW},
-            {constants::acs::STBZpin, LOW},
+            {constants::acs::STBXYpin, HIGH},
+            {constants::acs::STBZpin, HIGH},
             {constants::burnwire::first_pin, LOW},
             {constants::burnwire::second_pin, LOW},
             {constants::rockblock::sleep_pin, LOW}};

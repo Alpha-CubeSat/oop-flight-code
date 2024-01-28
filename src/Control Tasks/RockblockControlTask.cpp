@@ -794,7 +794,9 @@ void RockblockControlTask::dispatch_await_flush()
 void RockblockControlTask::dispatch_end_transmission()
 {
     sfr::rockblock::last_downlink = millis();
-    sfr::aliveSignal::downlinked = true;
+    if (sfr::mission::current_mode->get_id() == sfr::mission::aliveSignal->get_id()) {
+        sfr::aliveSignal::downlinked = true;
+    }
     if (sfr::rockblock::downlink_period > constants::rockblock::min_sleep_period) {
         Pins::setPinState(constants::rockblock::sleep_pin, LOW);
     }

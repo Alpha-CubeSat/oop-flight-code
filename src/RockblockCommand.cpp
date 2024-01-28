@@ -15,7 +15,7 @@ bool CameraFragmentCommand::isValid()
 
 void DeployCommand::execute()
 {
-    sfr::mission::current_mode = sfr::mission::normalDeployment;
+    sfr::mission::current_mode = sfr::mission::transmitDeployment;
 }
 
 bool DeployCommand::isValid()
@@ -25,7 +25,7 @@ bool DeployCommand::isValid()
 
 void ArmCommand::execute()
 {
-    sfr::mission::current_mode = sfr::mission::normalArmed;
+    sfr::mission::current_mode = sfr::mission::transmitArmed;
 }
 
 bool ArmCommand::isValid()
@@ -35,7 +35,7 @@ bool ArmCommand::isValid()
 
 void FireCommand::execute()
 {
-    sfr::mission::current_mode = sfr::mission::normalInSun;
+    sfr::mission::current_mode = sfr::mission::transmitInSun;
 }
 
 bool FireCommand::isValid()

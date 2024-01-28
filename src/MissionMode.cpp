@@ -9,6 +9,7 @@ void boot_initialization()
         true,                        // acs off
         sfr::rockblock::lp_downlink_period);
     sfr::imu::failed_times = 0;
+    sfr::camera::failed_times = 0;
 }
 
 void Boot::transition_to()
@@ -33,12 +34,9 @@ void AliveSignal::transition_to()
 void AliveSignal::dispatch()
 {
     // if rockblock hard faults 3 times exit alive signal
-    if (sfr::aliveSignal::num_hard_faults >= sfr::aliveSignal::max_downlink_hard_faults || sfr::aliveSignal::downlinked) {
-        sfr::aliveSignal::downlinked = false;
-        sfr::aliveSignal::num_hard_faults = 0;
-        exit_alive_signal();
-    }
-    if (millis() - sfr::mission::aliveSignal->start_time >= sfr::aliveSignal::max_time) {
+    if (sfr::aliveSignal::num_hard_faults >= sfr::aliveSignal::max_downlink_hard_faults ||
+        sfr::aliveSignal::downlinked ||
+        (millis() - sfr::mission::aliveSignal->start_time >= sfr::aliveSignal::max_time)) {
         exit_alive_signal();
     }
 }
@@ -165,6 +163,7 @@ void NormalArmed::transition_to()
 void NormalArmed::dispatch()
 {
     timed_out(sfr::mission::transmitArmed, sfr::acs::on_time);
+    exit_armed_phase(sfr::mission::transmitInSun);
     enter_lp(sfr::mission::lowPowerArmed); // entering lp takes precedence
 }
 
@@ -179,6 +178,7 @@ void TransmitArmed::transition_to()
 void TransmitArmed::dispatch()
 {
     timed_out(sfr::mission::normalArmed, sfr::rockblock::on_time);
+    exit_armed_phase(sfr::mission::transmitInSun);
     enter_lp(sfr::mission::lowPowerArmed); // entering lp takes precedence
 }
 
@@ -193,6 +193,7 @@ void LowPowerArmed::transition_to()
 void LowPowerArmed::dispatch()
 {
     exit_lp(sfr::mission::transmitArmed);
+    exit_armed_phase(sfr::mission::lowPowerInSun);
 }
 
 void NormalInSun::transition_to()
@@ -353,7 +354,6 @@ void Photo::dispatch()
 void exit_detumble_phase(MissionMode *mode)
 {
 
-    // TODO min stable/unstable gyro and max stable gyro are SFR fields with resolution. FS-160
     float gyro_x;
     float gyro_y;
     float gyro_z;
@@ -364,7 +364,7 @@ void exit_detumble_phase(MissionMode *mode)
         sfr::acs::mode = (uint8_t)acs_mode_type::point;
     }
 
-    // cubesat has stabilized: gyro z > 0.9 rad/s && gyro x and gyro y are below 0.1 rad/s
+    // cubesat stabilized
     if (sfr::imu::gyro_z_average->get_value(&gyro_z) && gyro_z >= sfr::detumble::min_stable_gyro_z.get_float() &&
         sfr::imu::gyro_x_average->get_value(&gyro_x) && gyro_x <= sfr::detumble::max_stable_gyro_x.get_float() &&
         sfr::imu::gyro_y_average->get_value(&gyro_y) && gyro_y <= sfr::detumble::max_stable_gyro_y.get_float()) {
@@ -372,7 +372,7 @@ void exit_detumble_phase(MissionMode *mode)
         sfr::acs::mode = (uint8_t)acs_mode_type::point;
     }
 
-    // cubesat will never stabilize: x gyro or y gyro are greater than 0.7 rad/s
+    // cubesat will never stabilize
     if ((sfr::imu::gyro_x_average->get_value(&gyro_x) && gyro_x >= sfr::detumble::min_unstable_gyro_x.get_float()) ||
         (sfr::imu::gyro_y_average->get_value(&gyro_y) && gyro_y >= sfr::detumble::min_unstable_gyro_y.get_float())) {
         sfr::mission::current_mode = mode;
@@ -383,6 +383,13 @@ void exit_detumble_phase(MissionMode *mode)
     if (millis() - sfr::mission::stabilization->start_time >= sfr::stabilization::max_time) {
         sfr::mission::current_mode = mode;
         sfr::acs::mode = (uint8_t)acs_mode_type::point;
+    }
+}
+
+void exit_armed_phase(MissionMode *mode)
+{
+    if (millis() - sfr::mission::armed->start_time >= sfr::burnwire::armed_time) {
+        sfr::mission::current_mode = mode;
     }
 }
 
@@ -451,4 +458,6 @@ void exit_alive_signal()
     } else {
         sfr::mission::current_mode = sfr::mission::detumbleSpin;
     }
+    sfr::aliveSignal::downlinked = false;
+    sfr::aliveSignal::num_hard_faults = 0;
 }
