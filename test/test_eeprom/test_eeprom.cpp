@@ -128,15 +128,15 @@ void test_finish_boot()
     reset_eeprom();
     SFRInterface::resetSFR();
     EEPROMControlTask eeprom_control_task;
-    EEPROM.put(constants::eeprom::boot_time_loc1, (uint32_t)(sfr::boot::max_time - 1));
-    EEPROM.put(constants::eeprom::boot_time_loc2, (uint32_t)(sfr::boot::max_time - 1));
+    EEPROM.put(constants::eeprom::boot_time_loc1, (uint32_t)(sfr::boot::max_time.get() - 1));
+    EEPROM.put(constants::eeprom::boot_time_loc2, (uint32_t)(sfr::boot::max_time.get() - 1));
     EEPROM.put(constants::eeprom::boot_counter_loc1, (uint8_t)1);
     EEPROM.put(constants::eeprom::boot_counter_loc2, (uint8_t)1);
 
     // Simulate power cycle and check EEPROM Restore execute
     EEPROMRestore::execute();
     TEST_ASSERT_EQUAL(true, sfr::eeprom::boot_mode.get());
-    TEST_ASSERT_EQUAL(sfr::boot::max_time - 1, sfr::eeprom::time_alive.get());
+    TEST_ASSERT_EQUAL(sfr::boot::max_time.get() - 1, sfr::eeprom::time_alive.get());
 
     uint8_t boot_counter1;
     EEPROM.get(constants::eeprom::boot_counter_loc1, boot_counter1);
@@ -217,14 +217,14 @@ void test_blue_moon_data_error()
     // Setup
     reset_eeprom();
     SFRInterface::resetSFR();
-    EEPROM.put(constants::eeprom::boot_time_loc1, (uint32_t)(2 * constants::time::one_hour));
-    EEPROM.put(constants::eeprom::boot_time_loc2, (uint32_t)(2 * constants::time::one_hour));
+    EEPROM.put(constants::eeprom::boot_time_loc1, (uint32_t)sfr::boot::max_time.get());
+    EEPROM.put(constants::eeprom::boot_time_loc2, (uint32_t)sfr::boot::max_time.get());
     EEPROM.put(constants::eeprom::boot_counter_loc1, (uint8_t)1);
     EEPROM.put(constants::eeprom::boot_counter_loc2, (uint8_t)1);
     EEPROM.put(constants::eeprom::dynamic_data_addr_loc1, (uint16_t)constants::eeprom::dynamic_data_start);
     EEPROM.put(constants::eeprom::dynamic_data_addr_loc2, (uint16_t)(constants::eeprom::dynamic_data_start + 1)); // Purposely does not equal first dynamc data start to simulate error
 
-    sfr::eeprom::time_alive = 2 * constants::time::one_hour + 1; // Change stored dynamic data
+    sfr::eeprom::time_alive = sfr::boot::max_time.get() + 1; // Change stored dynamic data
     sfr::eeprom::light_switch = true;                            // Turn light switch on
 
     // Change some SFR fields
@@ -246,7 +246,7 @@ void test_blue_moon_data_error()
 
     // Verify SFR data and dynamic data do not get restored
     TEST_ASSERT_EQUAL(sfr::eeprom::time_alive.getDefaultValue(), sfr::eeprom::time_alive.getFieldValue());
-    TEST_ASSERT_EQUAL(sfr::eeprom::dynamic_data_age.getDefaultValue(), sfr::eeprom::dynamic_data_age.getDefaultValue());
+    TEST_ASSERT_EQUAL(sfr::eeprom::dynamic_data_age.getDefaultValue(), sfr::eeprom::dynamic_data_age.getFieldValue());
 
     for (auto const &pair : SFRInterface::opcode_lookup) {
         if (!is_eeprom_opcode(pair.first)) {
@@ -263,8 +263,8 @@ void test_sfr_save_error()
     SFRInterface::resetSFR();
     EEPROMControlTask eeprom_control_task;
 
-    EEPROM.put(constants::eeprom::boot_time_loc1, (uint32_t)(2 * constants::time::one_hour));
-    EEPROM.put(constants::eeprom::boot_time_loc2, (uint32_t)(2 * constants::time::one_hour));
+    EEPROM.put(constants::eeprom::boot_time_loc1, (uint32_t)sfr::boot::max_time.get());
+    EEPROM.put(constants::eeprom::boot_time_loc2, (uint32_t)sfr::boot::max_time.get());
     EEPROM.put(constants::eeprom::boot_counter_loc1, (uint8_t)1);
     EEPROM.put(constants::eeprom::boot_counter_loc2, (uint8_t)1);
     EEPROM.put(constants::eeprom::light_switch_loc1, (bool)true);
@@ -306,7 +306,7 @@ void test_dynamic_data_restore()
 
     // First boot cycle, fastfoward to past boot wait time
     EEPROMRestore::execute();
-    sfr::eeprom::time_alive = 2 * constants::time::one_hour;
+    sfr::eeprom::time_alive = sfr::boot::max_time.get();
 
     // Check that no dynamic data writes have been made
     TEST_ASSERT_EQUAL(0, sfr::eeprom::dynamic_data_age.get());
@@ -345,7 +345,7 @@ void test_sfr_data_restore()
 
     // First boot cycle, fastfoward to past boot wait time, turn on light switch
     EEPROMRestore::execute();
-    sfr::eeprom::time_alive = 2 * constants::time::one_hour;
+    sfr::eeprom::time_alive = sfr::boot::max_time.get();
     sfr::eeprom::light_switch = true;
 
     // Change some SFR fields
@@ -405,7 +405,7 @@ void test_light_switch_off()
 
     // First boot cycle, fastfoward to past boot wait time, turn off light switch
     EEPROMRestore::execute();
-    sfr::eeprom::time_alive = 2 * constants::time::one_hour;
+    sfr::eeprom::time_alive = sfr::boot::max_time.get();
     sfr::eeprom::light_switch = false;
 
     // Change some SFR fields
@@ -459,10 +459,10 @@ void test_dynamic_age_limit()
 
     // First boot cycle, fastfoward to past boot wait time
     EEPROMRestore::execute();
-    sfr::eeprom::time_alive = 2 * constants::time::one_hour;
+    sfr::eeprom::time_alive = sfr::boot::max_time.get();
 
     // Check the current dynamic data address
-    TEST_ASSERT_EQUAL(constants::eeprom::dynamic_data_start, sfr::eeprom::dynamic_data_addr);
+    TEST_ASSERT_EQUAL(constants::eeprom::dynamic_data_start, sfr::eeprom::dynamic_data_addr.get());
 
     // Set the dynamic data age to be near the limit
     sfr::eeprom::dynamic_data_age = constants::eeprom::write_age_limit - 1;
@@ -482,8 +482,8 @@ void test_dynamic_age_limit()
     uint32_t saved_time_alive = sfr::eeprom::time_alive - constants::time::control_cycle_time_ms;
 
     // Check that dynamic data address and age updated
-    TEST_ASSERT_EQUAL(constants::eeprom::dynamic_data_start + constants::eeprom::dynamic_data_full_offset, sfr::eeprom::dynamic_data_addr);
-    TEST_ASSERT_EQUAL(1, sfr::eeprom::dynamic_data_age);
+    TEST_ASSERT_EQUAL(constants::eeprom::dynamic_data_start + constants::eeprom::dynamic_data_full_offset, sfr::eeprom::dynamic_data_addr.get());
+    TEST_ASSERT_EQUAL(1, sfr::eeprom::dynamic_data_age.get());
 
     // Simulate power cycle
     SFRInterface::resetSFR();
@@ -491,8 +491,8 @@ void test_dynamic_age_limit()
 
     // Check restore execution for dynamic data
     TEST_ASSERT_EQUAL(saved_time_alive, sfr::eeprom::time_alive.get());
-    TEST_ASSERT_EQUAL(constants::eeprom::dynamic_data_start + constants::eeprom::dynamic_data_full_offset, sfr::eeprom::dynamic_data_addr);
-    TEST_ASSERT_EQUAL(1, sfr::eeprom::dynamic_data_age);
+    TEST_ASSERT_EQUAL(constants::eeprom::dynamic_data_start + constants::eeprom::dynamic_data_full_offset, sfr::eeprom::dynamic_data_addr.get());
+    TEST_ASSERT_EQUAL(1, sfr::eeprom::dynamic_data_age.get());
 }
 
 void test_sfr_age_limit()
@@ -504,10 +504,10 @@ void test_sfr_age_limit()
 
     // First boot cycle, fastfoward to past boot wait time
     EEPROMRestore::execute();
-    sfr::eeprom::time_alive = 2 * constants::time::one_hour;
+    sfr::eeprom::time_alive = sfr::boot::max_time.get();
 
     // Check the current SFR data address
-    TEST_ASSERT_EQUAL(constants::eeprom::sfr_data_start, sfr::eeprom::sfr_data_addr);
+    TEST_ASSERT_EQUAL(constants::eeprom::sfr_data_start, sfr::eeprom::sfr_data_addr.get());
 
     // Set the dynamic data age to be near the limit
     sfr::eeprom::sfr_data_age = constants::eeprom::write_age_limit - 1;
@@ -524,16 +524,16 @@ void test_sfr_age_limit()
     }
 
     // Check that dynamic data address and age updated
-    TEST_ASSERT_EQUAL(constants::eeprom::sfr_data_start + constants::eeprom::sfr_data_full_offset, sfr::eeprom::sfr_data_addr);
-    TEST_ASSERT_EQUAL(1, sfr::eeprom::sfr_data_age);
+    TEST_ASSERT_EQUAL(constants::eeprom::sfr_data_start + constants::eeprom::sfr_data_full_offset, sfr::eeprom::sfr_data_addr.get());
+    TEST_ASSERT_EQUAL(1, sfr::eeprom::sfr_data_age.get());
 
     // Simulate power cycle
     SFRInterface::resetSFR();
     EEPROMRestore::execute();
 
     // Check restore execution for sfr eeprom metadata
-    TEST_ASSERT_EQUAL(constants::eeprom::sfr_data_start + constants::eeprom::sfr_data_full_offset, sfr::eeprom::sfr_data_addr);
-    TEST_ASSERT_EQUAL(1, sfr::eeprom::sfr_data_age);
+    TEST_ASSERT_EQUAL(constants::eeprom::sfr_data_start + constants::eeprom::sfr_data_full_offset, sfr::eeprom::sfr_data_addr.get());
+    TEST_ASSERT_EQUAL(1, sfr::eeprom::sfr_data_age.get());
 }
 
 void test_save_restore_with_full_eeprom()
@@ -545,7 +545,7 @@ void test_save_restore_with_full_eeprom()
 
     // First boot cycle, fastfoward to past boot wait time
     EEPROMRestore::execute();
-    sfr::eeprom::time_alive = 2 * constants::time::one_hour;
+    sfr::eeprom::time_alive = sfr::boot::max_time.get();
 
     // Set the current SFR data address to the last section (7th section, or 6 offsets)
     sfr::eeprom::sfr_data_addr = constants::eeprom::sfr_data_start + 6 * constants::eeprom::sfr_data_full_offset;
@@ -559,10 +559,10 @@ void test_save_restore_with_full_eeprom()
     eeprom_control_task.execute();
 
     // Check that dynamic and sfr section ages do not change
-    TEST_ASSERT_EQUAL(constants::eeprom::dynamic_data_start + 56 * constants::eeprom::dynamic_data_full_offset, sfr::eeprom::dynamic_data_addr);
-    TEST_ASSERT_EQUAL(constants::eeprom::sfr_data_start + 7 * constants::eeprom::sfr_data_full_offset, sfr::eeprom::sfr_data_addr);
-    TEST_ASSERT_EQUAL(0, sfr::eeprom::dynamic_data_age);
-    TEST_ASSERT_EQUAL(0, sfr::eeprom::sfr_data_age);
+    TEST_ASSERT_EQUAL(constants::eeprom::dynamic_data_start + 56 * constants::eeprom::dynamic_data_full_offset, sfr::eeprom::dynamic_data_addr.get());
+    TEST_ASSERT_EQUAL(constants::eeprom::sfr_data_start + 7 * constants::eeprom::sfr_data_full_offset, sfr::eeprom::sfr_data_addr.get());
+    TEST_ASSERT_EQUAL(0, sfr::eeprom::dynamic_data_age.get());
+    TEST_ASSERT_EQUAL(0, sfr::eeprom::sfr_data_age.get());
 
     // Simulate power cycle
     SFRInterface::resetSFR();
@@ -570,10 +570,10 @@ void test_save_restore_with_full_eeprom()
 
     // Check restore execution
     TEST_ASSERT_EQUAL(0, sfr::eeprom::time_alive.get());
-    TEST_ASSERT_EQUAL(constants::eeprom::dynamic_data_start + 56 * constants::eeprom::dynamic_data_full_offset, sfr::eeprom::dynamic_data_addr);
-    TEST_ASSERT_EQUAL(constants::eeprom::sfr_data_start + 7 * constants::eeprom::sfr_data_full_offset, sfr::eeprom::sfr_data_addr);
-    TEST_ASSERT_EQUAL(0, sfr::eeprom::dynamic_data_age);
-    TEST_ASSERT_EQUAL(0, sfr::eeprom::sfr_data_age);
+    TEST_ASSERT_EQUAL(constants::eeprom::dynamic_data_start + 56 * constants::eeprom::dynamic_data_full_offset, sfr::eeprom::dynamic_data_addr.get());
+    TEST_ASSERT_EQUAL(constants::eeprom::sfr_data_start + 7 * constants::eeprom::sfr_data_full_offset, sfr::eeprom::sfr_data_addr.get());
+    TEST_ASSERT_EQUAL(0, sfr::eeprom::dynamic_data_age.get());
+    TEST_ASSERT_EQUAL(0, sfr::eeprom::sfr_data_age.get());
 }
 
 int test_eeprom()
