@@ -20,7 +20,7 @@ void DeployCommand::execute()
 
 bool DeployCommand::isValid()
 {
-    return sfr::mission::current_phase->get_id() == sfr::mission::standby->get_id();
+    return sfr::mission::current_mode->get_phase()->get_id() == sfr::mission::standby->get_id();
 }
 
 void ArmCommand::execute()
@@ -30,7 +30,7 @@ void ArmCommand::execute()
 
 bool ArmCommand::isValid()
 {
-    return sfr::mission::current_phase->get_id() == sfr::mission::deployment->get_id();
+    return sfr::mission::current_mode->get_phase()->get_id() == sfr::mission::deployment->get_id();
 }
 
 void FireCommand::execute()
@@ -40,7 +40,7 @@ void FireCommand::execute()
 
 bool FireCommand::isValid()
 {
-    return sfr::mission::current_phase->get_id() == sfr::mission::armed->get_id();
+    return sfr::mission::current_mode->get_phase()->get_id() == sfr::mission::armed->get_id();
 }
 
 void MissionModeOverrideCommand::execute()

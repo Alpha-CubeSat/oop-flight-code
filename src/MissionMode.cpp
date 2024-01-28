@@ -23,6 +23,11 @@ void Boot::dispatch()
     }
 }
 
+Phase *Boot::get_phase()
+{
+    return sfr::mission::initialization;
+}
+
 void AliveSignal::transition_to()
 {
     settings(
@@ -41,6 +46,11 @@ void AliveSignal::dispatch()
     }
 }
 
+Phase *AliveSignal::get_phase()
+{
+    return sfr::mission::initialization;
+}
+
 void DetumbleSpin::transition_to()
 {
     settings(
@@ -54,6 +64,11 @@ void DetumbleSpin::dispatch()
 {
     exit_detumble_phase(sfr::mission::transmit);
     enter_lp(sfr::mission::lowPowerDetumbleSpin);
+}
+
+Phase *DetumbleSpin::get_phase()
+{
+    return sfr::mission::stabilization;
 }
 
 void LowPowerDetumbleSpin::transition_to()
@@ -70,6 +85,11 @@ void LowPowerDetumbleSpin::dispatch()
     exit_detumble_phase(sfr::mission::lowPower);
 }
 
+Phase *LowPowerDetumbleSpin::get_phase()
+{
+    return sfr::mission::stabilization;
+}
+
 void Normal::transition_to()
 {
     settings(
@@ -84,6 +104,11 @@ void Normal::dispatch()
     enter_lp(sfr::mission::lowPower); // entering lp takes precedence
 }
 
+Phase *Normal::get_phase()
+{
+    return sfr::mission::standby;
+}
+
 void LowPower::transition_to()
 {
     settings(
@@ -95,6 +120,11 @@ void LowPower::transition_to()
 void LowPower::dispatch()
 {
     exit_lp(sfr::mission::transmit);
+}
+
+Phase *LowPower::get_phase()
+{
+    return sfr::mission::standby;
 }
 
 void Transmit::transition_to()
@@ -111,6 +141,11 @@ void Transmit::dispatch()
     enter_lp(sfr::mission::lowPower); // entering lp takes precedence
 }
 
+Phase *Transmit::get_phase()
+{
+    return sfr::mission::standby;
+}
+
 void NormalDeployment::transition_to()
 {
     settings(
@@ -123,6 +158,11 @@ void NormalDeployment::dispatch()
 {
     timed_out(sfr::mission::transmitDeployment, sfr::acs::on_time);
     enter_lp(sfr::mission::lowPowerDeployment); // entering lp takes precedence
+}
+
+Phase *NormalDeployment::get_phase()
+{
+    return sfr::mission::deployment;
 }
 
 void TransmitDeployment::transition_to()
@@ -139,6 +179,11 @@ void TransmitDeployment::dispatch()
     enter_lp(sfr::mission::lowPowerDeployment); // entering lp takes precedence
 }
 
+Phase *TransmitDeployment::get_phase()
+{
+    return sfr::mission::deployment;
+}
+
 void LowPowerDeployment::transition_to()
 {
     settings(
@@ -150,6 +195,11 @@ void LowPowerDeployment::transition_to()
 void LowPowerDeployment::dispatch()
 {
     exit_lp(sfr::mission::transmitDeployment);
+}
+
+Phase *LowPowerDeployment::get_phase()
+{
+    return sfr::mission::deployment;
 }
 
 void NormalArmed::transition_to()
@@ -167,6 +217,11 @@ void NormalArmed::dispatch()
     enter_lp(sfr::mission::lowPowerArmed); // entering lp takes precedence
 }
 
+Phase *NormalArmed::get_phase()
+{
+    return sfr::mission::armed;
+}
+
 void TransmitArmed::transition_to()
 {
     settings(
@@ -182,6 +237,11 @@ void TransmitArmed::dispatch()
     enter_lp(sfr::mission::lowPowerArmed); // entering lp takes precedence
 }
 
+Phase *TransmitArmed::get_phase()
+{
+    return sfr::mission::armed;
+}
+
 void LowPowerArmed::transition_to()
 {
     settings(
@@ -194,6 +254,11 @@ void LowPowerArmed::dispatch()
 {
     exit_lp(sfr::mission::transmitArmed);
     exit_armed_phase(sfr::mission::lowPowerInSun);
+}
+
+Phase *LowPowerArmed::get_phase()
+{
+    return sfr::mission::armed;
 }
 
 void NormalInSun::transition_to()
@@ -211,6 +276,11 @@ void NormalInSun::dispatch()
     enter_lp_insun(); // entering lp takes precedence
 }
 
+Phase *NormalInSun::get_phase()
+{
+    return sfr::mission::inSun;
+}
+
 void TransmitInSun::transition_to()
 {
     settings(
@@ -224,6 +294,11 @@ void TransmitInSun::dispatch()
     timed_out(sfr::mission::normalInSun, sfr::rockblock::on_time);
     exit_insun_phase(sfr::mission::bootIMU);
     enter_lp_insun(); // entering lp takes precedence
+}
+
+Phase *TransmitInSun::get_phase()
+{
+    return sfr::mission::inSun;
 }
 
 void LowPowerInSun::transition_to()
@@ -243,6 +318,11 @@ void LowPowerInSun::dispatch()
     }
 }
 
+Phase *LowPowerInSun::get_phase()
+{
+    return sfr::mission::inSun;
+}
+
 void VoltageFailureInSun::transition_to()
 {
     settings(
@@ -259,6 +339,11 @@ void VoltageFailureInSun::dispatch()
     } else {
         exit_insun_phase(sfr::mission::bootIMU);
     }
+}
+
+Phase *VoltageFailureInSun::get_phase()
+{
+    return sfr::mission::inSun;
 }
 
 void BootIMU::transition_to()
@@ -280,6 +365,11 @@ void BootIMU::dispatch()
     }
 }
 
+Phase *BootIMU::get_phase()
+{
+    return sfr::mission::firing;
+}
+
 void BootCamera::transition_to()
 {
     settings(
@@ -294,6 +384,11 @@ void BootCamera::dispatch()
     if (sfr::camera::init_mode == (uint16_t)sensor_init_mode_type::complete || sfr::camera::failed_times >= sfr::camera::failed_limit) {
         sfr::mission::current_mode = sfr::mission::mandatoryBurns;
     }
+}
+
+Phase *BootCamera::get_phase()
+{
+    return sfr::mission::firing;
 }
 
 void MandatoryBurns::transition_to()
@@ -311,6 +406,11 @@ void MandatoryBurns::dispatch()
     if (sfr::burnwire::attempts > sfr::burnwire::mandatory_attempts_limit) {
         sfr::mission::current_mode = sfr::mission::regularBurns;
     }
+}
+
+Phase *MandatoryBurns::get_phase()
+{
+    return sfr::mission::firing;
 }
 
 void RegularBurns::transition_to()
@@ -333,6 +433,11 @@ void RegularBurns::dispatch()
     }
 }
 
+Phase *RegularBurns::get_phase()
+{
+    return sfr::mission::firing;
+}
+
 void Photo::transition_to()
 {
     settings(
@@ -349,6 +454,11 @@ void Photo::dispatch()
     if (millis() - sfr::imu::door_open_start_time > constants::imu::door_open_end_time) {
         sfr::mission::current_mode = sfr::mission::detumbleSpin;
     }
+}
+
+Phase *Photo::get_phase()
+{
+    return sfr::mission::firing;
 }
 
 void exit_detumble_phase(MissionMode *mode)

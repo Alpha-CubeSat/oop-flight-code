@@ -4,6 +4,7 @@
 #include "Adafruit_VC0706.h"
 #include "Arduino.h"
 #include "Faults.hpp"
+#include "Phase.hpp"
 #include "MissionMode.hpp"
 #include "Modes/burnwire_mode_type.enum"
 #include "Modes/mag_type.enum"
@@ -12,7 +13,6 @@
 #include "Modes/sensor_init_mode_type.enum"
 #include "Modes/sensor_mode_type.enum"
 #include "Modes/sensor_power_mode_type.enum"
-#include "Phase.hpp"
 #include "RockblockCommand.hpp"
 #include "RockblockSimulator.hpp"
 #include "SFRField.hpp"
@@ -125,7 +125,6 @@ namespace sfr {
         extern MissionMode *current_mode;
         extern MissionMode *previous_mode;
 
-        extern Phase *current_phase;
         extern Phase *previous_phase;
 
         extern std::deque<int> mode_history;
