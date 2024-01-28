@@ -56,7 +56,7 @@ void EEPROMControlTask::save_boot_time()
     EEPROM.put(constants::eeprom::boot_time_loc1, sfr::eeprom::time_alive.get());
     EEPROM.put(constants::eeprom::boot_time_loc2, sfr::eeprom::time_alive.get());
 
-    if (sfr::eeprom::time_alive >= 2 * constants::time::one_hour) {
+    if (sfr::eeprom::time_alive >= sfr::boot::max_time) {
         sfr::eeprom::boot_mode = false;
     }
 }

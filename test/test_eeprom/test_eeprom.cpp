@@ -128,15 +128,15 @@ void test_finish_boot()
     reset_eeprom();
     SFRInterface::resetSFR();
     EEPROMControlTask eeprom_control_task;
-    EEPROM.put(constants::eeprom::boot_time_loc1, (uint32_t)(2 * constants::time::one_hour - 1));
-    EEPROM.put(constants::eeprom::boot_time_loc2, (uint32_t)(2 * constants::time::one_hour - 1));
+    EEPROM.put(constants::eeprom::boot_time_loc1, (uint32_t)(sfr::boot::max_time - 1));
+    EEPROM.put(constants::eeprom::boot_time_loc2, (uint32_t)(sfr::boot::max_time - 1));
     EEPROM.put(constants::eeprom::boot_counter_loc1, (uint8_t)1);
     EEPROM.put(constants::eeprom::boot_counter_loc2, (uint8_t)1);
 
     // Simulate power cycle and check EEPROM Restore execute
     EEPROMRestore::execute();
     TEST_ASSERT_EQUAL(true, sfr::eeprom::boot_mode.get());
-    TEST_ASSERT_EQUAL(2 * constants::time::one_hour - 1, sfr::eeprom::time_alive.get());
+    TEST_ASSERT_EQUAL(sfr::boot::max_time - 1, sfr::eeprom::time_alive.get());
 
     uint8_t boot_counter1;
     EEPROM.get(constants::eeprom::boot_counter_loc1, boot_counter1);

@@ -39,7 +39,7 @@ void EEPROMRestore::check_boot_vals()
         sfr::eeprom::boot_counter = boot_counter1 + 1;
         EEPROM.put(constants::eeprom::boot_counter_loc1, sfr::eeprom::boot_counter.get());
         EEPROM.put(constants::eeprom::boot_counter_loc2, sfr::eeprom::boot_counter.get());
-        if (boot_time1 < 2 * constants::time::one_hour) {
+        if (boot_time1 < sfr::boot::max_time) {
             // The initial two hour wait has not passed, still in boot mode
 
             sfr::eeprom::boot_mode = true;

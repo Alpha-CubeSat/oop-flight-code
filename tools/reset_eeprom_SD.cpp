@@ -76,6 +76,6 @@ void setup()
 
 void loop()
 {
-    Serial.println("SD and EEPROM reset finished!");
+    Serial.println("EEPROM and SD reset finished!");
     delay(10000);
 }
