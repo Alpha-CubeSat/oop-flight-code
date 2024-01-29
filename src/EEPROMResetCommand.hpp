@@ -34,17 +34,17 @@ public:
         sfr::eeprom::boot_restarted = false;
 
         // Write to EEPROM
-        EEPROM.put(constants::eeprom::boot_time_loc1, sfr::eeprom::boot_counter);
-        EEPROM.put(constants::eeprom::boot_time_loc2, sfr::eeprom::boot_counter);
+        EEPROM.put(constants::eeprom::boot_time_loc1, sfr::eeprom::boot_counter.get());
+        EEPROM.put(constants::eeprom::boot_time_loc2, sfr::eeprom::boot_counter.get());
 
-        EEPROM.put(constants::eeprom::light_switch_loc1, sfr::eeprom::light_switch);
-        EEPROM.put(constants::eeprom::light_switch_loc2, sfr::eeprom::light_switch);
+        EEPROM.put(constants::eeprom::light_switch_loc1, sfr::eeprom::light_switch.get());
+        EEPROM.put(constants::eeprom::light_switch_loc2, sfr::eeprom::light_switch.get());
 
-        EEPROM.put(constants::eeprom::dynamic_data_addr_loc1, sfr::eeprom::dynamic_data_addr);
-        EEPROM.put(constants::eeprom::dynamic_data_addr_loc2, sfr::eeprom::dynamic_data_addr);
+        EEPROM.put(constants::eeprom::dynamic_data_addr_loc1, sfr::eeprom::dynamic_data_addr.get());
+        EEPROM.put(constants::eeprom::dynamic_data_addr_loc2, sfr::eeprom::dynamic_data_addr.get());
 
-        EEPROM.put(constants::eeprom::sfr_data_addr_loc1, sfr::eeprom::sfr_data_addr);
-        EEPROM.put(constants::eeprom::sfr_data_addr_loc2, sfr::eeprom::sfr_data_addr);
+        EEPROM.put(constants::eeprom::sfr_data_addr_loc1, sfr::eeprom::sfr_data_addr.get());
+        EEPROM.put(constants::eeprom::sfr_data_addr_loc2, sfr::eeprom::sfr_data_addr.get());
 
         // Write to the relevant SFRFields
     }
