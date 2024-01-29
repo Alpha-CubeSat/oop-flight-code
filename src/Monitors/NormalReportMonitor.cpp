@@ -75,11 +75,11 @@ void NormalReportMonitor::execute()
     // push the most recent 16 mission modes switches, packed into 5 bits
     // if less mission modes have been entered, fill with empty mission modes
     uint32_t k = 0;
-    bool packed_commands[80] = {false};
+    bool packed_modes[80] = {false};
     auto hist_mode = sfr::mission::mode_history.cbegin();
     while (hist_mode != sfr::mission::mode_history.cend() && k <= constants::rockblock::mission_mode_hist_length) {
         for (int i = 4; i >= 0; i--) {
-            packed_commands[k * 5 + (4 - i)] = (*hist_mode >> i) & 1;
+            packed_modes[k * 5 + (4 - i)] = (*hist_mode >> i) & 1;
         }
         std::advance(hist_mode, 1);
         k++;
@@ -89,7 +89,7 @@ void NormalReportMonitor::execute()
     for (int m = 0; m < 10; m++) {
         uint8_t packed_mode = 0;
         for (int n = 0; n < 8; n++) {
-            packed_mode += packed_commands[m * 8 + n] << (7 - n);
+            packed_mode += packed_modes[m * 8 + n] << (7 - n);
         }
         sfr::rockblock::normal_report.push_back(packed_mode);
     }
