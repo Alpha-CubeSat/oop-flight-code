@@ -35,7 +35,6 @@ namespace constants {
     namespace rockblock {
         constexpr int normal_report_command_max = 9;
         constexpr int mission_mode_hist_length = 16;
-        constexpr int content_length = 68;
         constexpr int sleep_pin = 19;
         constexpr int min_sleep_period = 2 * time::one_minute;
         constexpr int max_same_mode = (10 * time::one_minute) / time::control_cycle_time_ms;
@@ -286,7 +285,7 @@ namespace constants {
         static constexpr unsigned int dynamic_data_start = 10;
         static constexpr unsigned int sfr_data_start = 460;
         static constexpr unsigned int sfr_store_size = 5;
-        static constexpr unsigned int sfr_num_fields = 89;
+        static constexpr unsigned int sfr_num_fields = 88;
         static constexpr unsigned int sfr_data_full_offset = sfr_num_fields * sfr_store_size + 4;
         static constexpr unsigned int write_age_limit = 95000; // Must be less than 100000
 

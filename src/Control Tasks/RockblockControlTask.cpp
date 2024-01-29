@@ -682,7 +682,9 @@ void RockblockControlTask::dispatch_read_message_ok()
 
 void RockblockControlTask::dispatch_read_message()
 {
+#ifdef VERBOSE
     Serial.println("SENT: AT+SBDRBr");
+#endif
     sfr::rockblock::serial.print("AT+SBDRB\r");
     transition_to(rockblock_mode_type::process_command);
 }
@@ -704,12 +706,15 @@ void RockblockControlTask::dispatch_process_command()
                 transition_to(rockblock_mode_type::queue_check);
                 return; // Exit command read loop
             }
+#ifdef VERBOSE
             Serial.println("SAT CMD");
+#endif
             // Instantiate a new unprocessed raw command
             RawRockblockCommand new_raw_command;
             new_raw_command.opcode[0] = look_ahead1;
             new_raw_command.opcode[1] = look_ahead2;
 
+#ifdef VERBOSE
             if (look_ahead1 < 0x10)
                 Serial.print(0, HEX);
             Serial.print(look_ahead1, HEX);
@@ -717,21 +722,28 @@ void RockblockControlTask::dispatch_process_command()
             if (look_ahead2 < 0x10)
                 Serial.print(0, HEX);
             Serial.print(look_ahead2, HEX);
+#endif
 
             for (size_t a1 = 0; a1 < constants::rockblock::arg1_len; ++a1) {
                 new_raw_command.arg_1[a1] = sfr::rockblock::serial.read();
+#ifdef VERBOSE
                 if (new_raw_command.arg_1[a1] < 0x10)
                     Serial.print(0, HEX);
                 Serial.print(new_raw_command.arg_1[a1], HEX);
+#endif
             }
             for (size_t a2 = 0; a2 < constants::rockblock::arg2_len; ++a2) {
                 new_raw_command.arg_2[a2] = sfr::rockblock::serial.read();
+#ifdef VERBOSE
                 if (new_raw_command.arg_2[a2] < 0x10)
                     Serial.print(0, HEX);
                 Serial.print(new_raw_command.arg_2[a2], HEX);
+#endif
             }
 
+#ifdef VERBOSE
             Serial.println();
+#endif
 
             // Parse New Command From Input OP Codes
             RockblockCommand *processed = commandFactory(new_raw_command);
@@ -740,7 +752,9 @@ void RockblockControlTask::dispatch_process_command()
                 sfr::rockblock::processed_commands.push_back(processed);
                 sfr::rockblock::waiting_command = true;
             } else {
+#ifdef VERBOSE
                 Serial.println("SAT INFO: invalid command");
+#endif
             }
         }
         transition_to(rockblock_mode_type::queue_check);
@@ -752,9 +766,11 @@ void RockblockControlTask::dispatch_queue_check()
     size_t idx = sfr::rockblock::commas[4] + 1;
     char *ptr = sfr::rockblock::buffer + idx;
     int queued = strtol(ptr, nullptr, 10);
+#ifdef VERBOSE
     Serial.print("SAT INFO: ");
     Serial.print(queued);
     Serial.println(" waiting");
+#endif
     // check if enough messages are waiting
     if (queued >= sfr::rockblock::queue_limit) {
         transition_to(rockblock_mode_type::send_flush);
@@ -767,7 +783,9 @@ void RockblockControlTask::dispatch_queue_check()
 
 void RockblockControlTask::dispatch_send_flush()
 {
+#ifdef VERBOSE
     Serial.println("SENT: AT+SBDWT=FLUSH_MTr");
+#endif
     sfr::rockblock::serial.print("AT+SBDWT=FLUSH_MT\r");
     transition_to(rockblock_mode_type::await_flush);
 }
@@ -775,7 +793,9 @@ void RockblockControlTask::dispatch_send_flush()
 void RockblockControlTask::dispatch_await_flush()
 {
     if (get_OK()) {
+#ifdef VERBOSE
         Serial.println("SAT INFO: OK");
+#endif
         transition_to(rockblock_mode_type::send_response);
     }
 }

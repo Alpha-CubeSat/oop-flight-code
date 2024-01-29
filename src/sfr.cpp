@@ -122,43 +122,40 @@ namespace sfr {
     } // namespace burnwire
     namespace camera {
         // OP Codes 2000
-        SFRField<bool> photo_taken_sd_failed = SFRField<bool>(false, 0x2000);
-        SFRField<bool> take_photo = SFRField<bool>(false, 0x2001);
-        SFRField<bool> powered = SFRField<bool>(false, 0x2002);
-        SFRField<bool> report_ready = SFRField<bool>(false, 0x2003);
-        SFRField<bool> fragment_requested = SFRField<bool>(false, 0x2004);
-        SFRField<uint8_t> start_progress = SFRField<uint8_t>(0, 0x2005);
-        SFRField<uint8_t> serial_requested = SFRField<uint8_t>(0, 0x2006);
-        SFRField<uint8_t> power_setting = SFRField<uint8_t>((uint8_t)sensor_power_mode_type::do_nothing, 0x2007);
-        SFRField<uint16_t> mode = SFRField<uint16_t>((uint16_t)sensor_mode_type::normal, 0x2008);
-        SFRField<uint16_t> failed_times = SFRField<uint16_t>(0, 0x2009);
-        SFRField<uint16_t> failed_limit = SFRField<uint16_t>(5, 0x2010);
-        SFRField<uint16_t> init_mode = SFRField<uint16_t>((uint16_t)sensor_init_mode_type::awaiting, 0x2011);
-        SFRField<uint32_t> init_start_time = SFRField<uint32_t>(0, 0x2012);
-        SFRField<uint32_t> init_timeout = SFRField<uint32_t>(12 * constants::time::one_second, 0x2013);
-        SFRField<uint32_t> images_written = SFRField<uint32_t>(0, 0x2014);
-        SFRField<uint32_t> fragments_written = SFRField<uint32_t>(0, 0x2015);
-        SFRField<uint32_t> set_res = SFRField<uint32_t>(VC0706_160x120, 0x2016);
-        SFRField<uint32_t> fragment_number_requested = SFRField<uint32_t>(0, 0x2017);
+        SFRField<bool> take_photo = SFRField<bool>(false, 0x2000);
+        SFRField<bool> powered = SFRField<bool>(false, 0x2001);
+        SFRField<bool> report_ready = SFRField<bool>(false, 0x2002);
+        SFRField<bool> fragment_requested = SFRField<bool>(false, 0x2003);
+        SFRField<uint8_t> start_progress = SFRField<uint8_t>(0, 0x2004);
+        SFRField<uint8_t> serial_requested = SFRField<uint8_t>(0, 0x2005);
+        SFRField<uint8_t> power_setting = SFRField<uint8_t>((uint8_t)sensor_power_mode_type::do_nothing, 0x2006);
+        SFRField<uint16_t> mode = SFRField<uint16_t>((uint16_t)sensor_mode_type::normal, 0x2007);
+        SFRField<uint16_t> failed_times = SFRField<uint16_t>(0, 0x2008);
+        SFRField<uint16_t> failed_limit = SFRField<uint16_t>(5, 0x2009);
+        SFRField<uint16_t> init_mode = SFRField<uint16_t>((uint16_t)sensor_init_mode_type::awaiting, 0x2010);
+        SFRField<uint32_t> init_start_time = SFRField<uint32_t>(0, 0x2011);
+        SFRField<uint32_t> init_timeout = SFRField<uint32_t>(12 * constants::time::one_second, 0x2012);
+        SFRField<uint32_t> images_written = SFRField<uint32_t>(0, 0x2013);
+        SFRField<uint32_t> fragments_written = SFRField<uint32_t>(0, 0x2014);
+        SFRField<uint32_t> set_res = SFRField<uint32_t>(VC0706_160x120, 0x2015);
+        SFRField<uint32_t> fragment_number_requested = SFRField<uint32_t>(0, 0x2016);
     } // namespace camera
     namespace rockblock {
         // OP Codes 2100
         SFRField<bool> ready_status = SFRField<bool>(false, 0x2100);
         SFRField<bool> waiting_command = SFRField<bool>(false, 0x2101);
-        SFRField<bool> flush_status = SFRField<bool>(false, 0x2102);
-        SFRField<bool> sleep_mode = SFRField<bool>(false, 0x2103);
-        SFRField<uint8_t> max_commands_count = SFRField<uint8_t>(6, 0x2104);
-        SFRField<uint8_t> queue_limit = SFRField<uint8_t>(5, 0x2105);
-        SFRField<uint16_t> downlink_report_type = SFRField<uint16_t>((uint16_t)report_type::normal_report, 0x2106);
-        SFRField<uint16_t> mode = SFRField<uint16_t>((uint16_t)rockblock_mode_type::standby, 0x2107);
-        SFRField<uint32_t> last_downlink = SFRField<uint32_t>(0, 0x2108);
-        SFRField<uint32_t> downlink_period = SFRField<uint32_t>(20 * constants::time::one_minute, 0, 2 * constants::time::one_day, 0x2109);
-        SFRField<uint32_t> lp_downlink_period = SFRField<uint32_t>(constants::time::one_hour, constants::time::one_second, 2 * constants::time::one_day, 0x2110);
-        SFRField<uint32_t> transmit_downlink_period = SFRField<uint32_t>(20 * constants::time::one_minute, constants::time::one_second, 2 * constants::time::one_day, 0x2111);
-        SFRField<uint32_t> on_time = SFRField<uint32_t>(30 * constants::time::one_minute, 0, constants::time::one_revolution, 0x2112);
+        SFRField<bool> sleep_mode = SFRField<bool>(false, 0x2102);
+        SFRField<uint8_t> max_commands_count = SFRField<uint8_t>(6, 0x2103);
+        SFRField<uint8_t> queue_limit = SFRField<uint8_t>(5, 0x2104);
+        SFRField<uint16_t> downlink_report_type = SFRField<uint16_t>((uint16_t)report_type::normal_report, 0x2105);
+        SFRField<uint16_t> mode = SFRField<uint16_t>((uint16_t)rockblock_mode_type::standby, 0x2106);
+        SFRField<uint32_t> last_downlink = SFRField<uint32_t>(0, 0x2107);
+        SFRField<uint32_t> downlink_period = SFRField<uint32_t>(20 * constants::time::one_minute, 0, 2 * constants::time::one_day, 0x2108);
+        SFRField<uint32_t> lp_downlink_period = SFRField<uint32_t>(constants::time::one_hour, constants::time::one_second, 2 * constants::time::one_day, 0x2109);
+        SFRField<uint32_t> transmit_downlink_period = SFRField<uint32_t>(20 * constants::time::one_minute, constants::time::one_second, 2 * constants::time::one_day, 0x2110);
+        SFRField<uint32_t> on_time = SFRField<uint32_t>(30 * constants::time::one_minute, 0, constants::time::one_revolution, 0x2111);
 
         char buffer[constants::rockblock::buffer_size] = {0};
-        int camera_commands[99][constants::rockblock::command_len] = {0};
         uint8_t commas[constants::rockblock::num_commas] = {0};
         uint32_t camera_max_fragments[99] = {0};
         std::deque<uint16_t> commands_received;
@@ -220,7 +217,6 @@ namespace sfr {
         SFRField<uint8_t> mode = SFRField<uint8_t>((uint8_t)acs_mode_type::detumble, 0x2501);
         SFRField<uint8_t> simple_mag = SFRField<uint8_t>((uint8_t)mag_type::z, 0x2502);
         SFRField<uint32_t> simple_current = SFRField<uint32_t>(0, 0x2503);
-        // TODO actual default value
         SFRField<uint32_t> on_time = SFRField<uint32_t>(10 * constants::time::one_minute, 0, constants::time::one_revolution, 0x2504);
         SFRField<uint32_t> Id_index = SFRField<uint32_t>(0, 0, (sizeof(constants::acs::Id_values) / sizeof(constants::acs::Id_values[0])) - 1, 0x2505);
         SFRField<uint32_t> Kd_index = SFRField<uint32_t>(0, 0, (sizeof(constants::acs::Kd_values) / sizeof(constants::acs::Kd_values[0])) - 1, 0x2506);

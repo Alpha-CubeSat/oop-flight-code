@@ -172,7 +172,7 @@ void MainControlLoop::execute()
 
 #endif
 
-    mission_manager.execute(); // TODO Review stopped here
+    mission_manager.execute();
     burnwire_control_task.execute();
     rockblock_control_task.execute();
     command_monitor.execute();
@@ -200,7 +200,6 @@ void MainControlLoop::execute()
     clock_manager.execute();
 
     // Pet watchdog
-
     Watchdog.reset();
 
 #ifdef VERBOSE

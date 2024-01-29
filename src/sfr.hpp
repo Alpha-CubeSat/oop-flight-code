@@ -142,7 +142,6 @@ namespace sfr {
     } // namespace burnwire
     namespace camera {
         // OP Codes 2000
-        extern SFRField<bool> photo_taken_sd_failed;
         extern SFRField<bool> take_photo;
         extern SFRField<bool> powered;
         extern SFRField<bool> report_ready;
@@ -164,7 +163,6 @@ namespace sfr {
     namespace rockblock {
         // OP Codes 2100
         extern SFRField<bool> ready_status;
-        extern SFRField<bool> flush_status;
         extern SFRField<bool> waiting_command;
         extern SFRField<bool> sleep_mode;
         extern SFRField<uint8_t> max_commands_count;
@@ -178,7 +176,6 @@ namespace sfr {
         extern SFRField<uint32_t> on_time;
 
         extern char buffer[constants::rockblock::buffer_size];
-        extern int camera_commands[99][constants::rockblock::command_len];
         extern uint8_t commas[constants::rockblock::num_commas];
         extern uint32_t camera_max_fragments[99];
         extern std::deque<uint16_t> commands_received;
