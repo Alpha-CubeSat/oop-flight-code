@@ -10,7 +10,7 @@ void setup()
 {
     Pins::setInitialPinStates();
     Serial.begin(9600);
-    EEPROMRestore::execute(); // TODO REVIEW
+    EEPROMRestore::execute();
 }
 
 void loop()

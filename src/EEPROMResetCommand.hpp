@@ -17,45 +17,36 @@ public:
         uint8_t boot_count = (constants::masks::uint32_byte1_mask & f_arg_1) >> 24;
         bool light_switch = !!((constants::masks::uint32_byte2_mask & f_arg_1) >> 16);
 
-        uint8_t sfr_data_addr_1 = (constants::masks::uint32_byte3_mask & f_arg_1) >> 8;
-        uint8_t sfr_data_addr_2 = (constants::masks::uint32_byte4_mask & f_arg_1);
-        uint16_t sfr_data_addr = sfr_data_addr_1 | sfr_data_addr_2;
+        uint16_t sfr_data_addr = (constants::masks::uint32_byte3_mask | constants::masks::uint32_byte4_mask) & f_arg_1;
 
         uint8_t sfr_data_age = (constants::masks::uint32_byte1_mask & f_arg_2) >> 24;
         uint8_t dynamic_data_age = (constants::masks::uint32_byte2_mask & f_arg_2) >> 16;
 
-        uint8_t dynamic_data_addr_1 = (constants::masks::uint32_byte3_mask & f_arg_2) >> 8;
-        uint8_t dynamic_data_addr_2 = (constants::masks::uint32_byte4_mask & f_arg_2);
-        uint16_t dynamic_data_addr = dynamic_data_addr_1 | dynamic_data_addr_2;
+        uint16_t dynamic_data_addr = (constants::masks::uint32_byte3_mask | constants::masks::uint32_byte4_mask) & f_arg_2;
+
+        sfr::eeprom::boot_counter = boot_count;
+        sfr::eeprom::light_switch = light_switch;
+        sfr::eeprom::dynamic_data_addr = dynamic_data_addr;
+        sfr::eeprom::sfr_data_addr = sfr_data_addr;
+        sfr::eeprom::dynamic_data_age = round(map(dynamic_data_age, 0, 255, 0, constants::eeprom::write_age_limit));
+        sfr::eeprom::sfr_data_age = round(map(sfr_data_age, 0, 255, 0, constants::eeprom::write_age_limit));
+        sfr::eeprom::error_mode = false;
+        sfr::eeprom::boot_restarted = false;
 
         // Write to EEPROM
-        EEPROM.put(constants::eeprom::boot_time_loc1, boot_count);
-        EEPROM.put(constants::eeprom::boot_time_loc2, boot_count);
+        EEPROM.put(constants::eeprom::boot_time_loc1, sfr::eeprom::boot_counter);
+        EEPROM.put(constants::eeprom::boot_time_loc2, sfr::eeprom::boot_counter);
 
-        EEPROM.put(constants::eeprom::light_switch_loc1, light_switch);
-        EEPROM.put(constants::eeprom::light_switch_loc2, light_switch);
+        EEPROM.put(constants::eeprom::light_switch_loc1, sfr::eeprom::light_switch);
+        EEPROM.put(constants::eeprom::light_switch_loc2, sfr::eeprom::light_switch);
 
-        EEPROM.put(constants::eeprom::dynamic_data_addr_loc1, dynamic_data_addr);
-        EEPROM.put(constants::eeprom::dynamic_data_addr_loc2, dynamic_data_addr);
+        EEPROM.put(constants::eeprom::dynamic_data_addr_loc1, sfr::eeprom::dynamic_data_addr);
+        EEPROM.put(constants::eeprom::dynamic_data_addr_loc2, sfr::eeprom::dynamic_data_addr);
 
-        EEPROM.put(constants::eeprom::sfr_data_addr_loc1, sfr_data_addr);
-        EEPROM.put(constants::eeprom::sfr_data_addr_loc2, sfr_data_addr);
+        EEPROM.put(constants::eeprom::sfr_data_addr_loc1, sfr::eeprom::sfr_data_addr);
+        EEPROM.put(constants::eeprom::sfr_data_addr_loc2, sfr::eeprom::sfr_data_addr);
 
         // Write to the relevant SFRFields
-        SFRInterface::setFieldValByOpcode(0x2800, boot_count);
-        SFRInterface::setFieldValByOpcode(0x2803, light_switch);
-
-        SFRInterface::setFieldValByOpcode(0x2806, dynamic_data_addr);
-        SFRInterface::setFieldValByOpcode(0x2807, sfr_data_addr);
-
-        SFRInterface::setFieldValByOpcode(0x2809, round(map(dynamic_data_age, 0, 255, 0, constants::eeprom::write_age_limit)));
-        SFRInterface::setFieldValByOpcode(0x2810, round(map(sfr_data_age, 0, 255, 0, constants::eeprom::write_age_limit)));
-
-        // Set the error mode to false
-        SFRInterface::setFieldValByOpcode(0x2802, false);
-
-        // Reset the boot restarted flag (may be false already);
-        SFRInterface::setFieldValByOpcode(0x2801, false);
     }
 
     bool isValid()

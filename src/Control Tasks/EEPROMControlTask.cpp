@@ -15,6 +15,7 @@ void EEPROMControlTask::execute()
     if (sfr::eeprom::light_switch != last_light_switch) {
         EEPROM.put(constants::eeprom::light_switch_loc1, sfr::eeprom::light_switch.get());
         EEPROM.put(constants::eeprom::light_switch_loc2, sfr::eeprom::light_switch.get());
+        last_light_switch = sfr::eeprom::light_switch;
     }
 
     if (fast_cycle_counter == 0 && sfr::eeprom::boot_mode) {
@@ -38,13 +39,15 @@ void EEPROMControlTask::execute()
         EEPROMControlTask::save_sfr_data();
     }
 
-    if (fast_cycle_counter == constants::eeprom::fast_write_interval - 1) {
+    // Cycles since last save
+    if (fast_cycle_counter >= constants::eeprom::fast_write_interval - 1) {
         fast_cycle_counter = 0;
     } else {
         fast_cycle_counter++;
     }
 
-    if (slow_cycle_counter == constants::eeprom::slow_write_interval - 1) {
+    // Cycles since last save
+    if (slow_cycle_counter >= constants::eeprom::slow_write_interval - 1) {
         slow_cycle_counter = 0;
     } else {
         slow_cycle_counter++;
@@ -63,7 +66,7 @@ void EEPROMControlTask::save_boot_time()
 
 void EEPROMControlTask::save_dynamic_data()
 {
-    if (sfr::eeprom::dynamic_data_age == constants::eeprom::write_age_limit) {
+    if (sfr::eeprom::dynamic_data_age >= constants::eeprom::write_age_limit) {
         // If write age reached, shift and save the dynamic data address
 
         sfr::eeprom::dynamic_data_addr += constants::eeprom::dynamic_data_full_offset;
@@ -86,7 +89,7 @@ void EEPROMControlTask::save_dynamic_data()
 
 void EEPROMControlTask::save_sfr_data()
 {
-    if (sfr::eeprom::sfr_data_age == constants::eeprom::write_age_limit) {
+    if (sfr::eeprom::sfr_data_age >= constants::eeprom::write_age_limit) {
         // If write age reached, shift and save the SFR data address
 
         sfr::eeprom::sfr_data_addr += constants::eeprom::sfr_data_full_offset;
