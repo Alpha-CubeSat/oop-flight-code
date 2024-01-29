@@ -72,7 +72,7 @@ void ACSControlTask::execute()
 #endif
 
     if (!sfr::acs::off) {
-        if ((!imu_valid && (sfr::imu::mode == (uint16_t)sensor_mode_type::abnormal_init)) || (!imu_valid && (sfr::imu::mode == (uint16_t)sensor_mode_type::normal))) {
+        if ((!imu_valid && (sfr::imu::mode == (uint16_t)sensor_mode_type::abnormal_init || sfr::imu::mode == (uint16_t)sensor_mode_type::normal)) || sfr::acs::mode == (uint8_t)acs_mode_type::simple) {
             sfr::acs::mode = (uint8_t)acs_mode_type::simple;
             //  consider IMU valid since it is not needed for simple mode
             imu_valid = true;

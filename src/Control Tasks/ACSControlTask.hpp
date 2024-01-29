@@ -3,7 +3,9 @@
 
 #include "Modes/acs_mode_type.enum"
 #include "Modes/mag_type.enum"
+#ifdef ACS_SIM
 #include "Plant.h"
+#endif
 #include "StarshotACS.h"
 #include "constants.hpp"
 #include "ekf.h"
@@ -14,7 +16,9 @@ class ACSControlTask
 public:
     ACSControlTask();
     StarshotACS starshotObj;
+#ifdef ACS_SIM
     Plant plantObj;
+#endif
     EKF ekfObj;
     void execute();
 
