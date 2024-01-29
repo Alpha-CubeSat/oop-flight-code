@@ -1,5 +1,4 @@
 #include "RockblockControlTask.hpp"
-#include "EEPROMResetCommand.hpp"
 
 RockblockControlTask::RockblockControlTask()
 {

@@ -5,6 +5,7 @@
 #include "Fault.hpp"
 #include "SFRField.hpp"
 #include "constants.hpp"
+#include <EEPROM.h>
 #include <stdint.h>
 
 class RawRockblockCommand
@@ -185,6 +186,15 @@ class MissionModeOverrideCommand : public RockblockCommand
 {
 public:
     MissionModeOverrideCommand(RawRockblockCommand raw) : RockblockCommand{raw} {};
+
+    void execute();
+    bool isValid();
+};
+
+class EEPROMResetCommand : public RockblockCommand
+{
+public:
+    EEPROMResetCommand(RawRockblockCommand raw) : RockblockCommand{raw} {};
 
     void execute();
     bool isValid();
