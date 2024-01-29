@@ -11,7 +11,7 @@ void IMUDownlink::execute()
     float gyro_z;
 
     // Adds the values to the buffer if light sail hasn't deployed or the time hasn't been met
-    if (!sfr::mission::deployed && !sfr::imu::report_written) {
+    if (!sfr::imu::dlink_written) {
 
         // Checks if IMU Values are valid
         if (sfr::imu::gyro_x_value->get_value(&gyro_x) && sfr::imu::gyro_y_value->get_value(&gyro_y) && sfr::imu::gyro_z_value->get_value(&gyro_z)) {

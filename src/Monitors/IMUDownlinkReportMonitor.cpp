@@ -10,7 +10,7 @@ void IMUDownlinkReportMonitor::execute()
     }
 
     // Create an IMU report when ever the report is ready
-    if (fragment_number < sfr::imu::max_fragments && sfr::rockblock::imu_report.empty() && sfr::imu::report_written) {
+    if (fragment_number < sfr::imu::max_fragments && sfr::rockblock::imu_report.empty() && sfr::imu::dlink_written) {
         create_imu_downlink_report(fragment_number);
         fragment_number++;
     }

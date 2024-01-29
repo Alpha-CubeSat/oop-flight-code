@@ -8,9 +8,6 @@ class CurrentMonitor
 public:
     CurrentMonitor();
     void execute();
-
-private:
-    bool initialized = false;
 };
 
 #endif

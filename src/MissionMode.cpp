@@ -469,7 +469,7 @@ void DeploymentVerification::dispatch()
 {
     if ((millis() - sfr::mission::deploymentVerification->start_time) >= constants::imu::door_open_end_time) {
         sfr::mission::current_mode = sfr::mission::detumbleSpin;
-        sfr::imu::report_written = true;
+        sfr::imu::dlink_written = true;
     }
 }
 

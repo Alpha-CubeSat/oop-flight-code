@@ -6,11 +6,6 @@ PhotoresistorMonitor::PhotoresistorMonitor()
 
 void PhotoresistorMonitor::execute()
 {
-    if (!initialized) {
-        sfr::photoresistor::light_val_average_standby->set_valid();
-        sfr::photoresistor::light_val_average_deployment->set_valid();
-        initialized = true;
-    }
 
     val = analogRead(constants::photoresistor::pin);
     sfr::photoresistor::light_val_average_standby->set_value(val);
@@ -25,11 +20,8 @@ void PhotoresistorMonitor::execute()
         if (avg_buffer_valid || deploy_buffer_valid) {
             // set buffer to invalid if never reached burn
             if (!sfr::mission::possible_uncovered) {
-                if (sfr::photoresistor::light_val_average_standby->get_value(&val)) {
-                    sfr::photoresistor::light_val_average_standby->set_invalid();
-                } else {
-                    sfr::photoresistor::light_val_average_deployment->set_invalid();
-                }
+                sfr::photoresistor::light_val_average_standby->set_invalid();
+                sfr::photoresistor::light_val_average_deployment->set_invalid();
                 fault_groups::hardware_faults::light_val->force();
             }
         }

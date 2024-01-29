@@ -12,12 +12,12 @@ namespace sfr {
     } // namespace boot
     namespace detumble {
         // OP Codes 1500
-        SFRField<uint8_t> min_stable_gyro_z = SFRField<uint8_t>((4 * constants::acs::target_spin_rate * constants::imu::sfr_resolution), 0x1500, constants::imu::sfr_resolution); // rad/s
-        SFRField<uint8_t> max_stable_gyro_x = SFRField<uint8_t>((0.1 * constants::imu::sfr_resolution), 0x1501, constants::imu::sfr_resolution);                                  // rad/s
-        SFRField<uint8_t> max_stable_gyro_y = SFRField<uint8_t>((0.1 * constants::imu::sfr_resolution), 0x1502, constants::imu::sfr_resolution);                                  // rad/s
-        SFRField<uint8_t> min_unstable_gyro_x = SFRField<uint8_t>((0.7 * constants::imu::sfr_resolution), 0x1503, constants::imu::sfr_resolution);                                // rad/s
-        SFRField<uint8_t> min_unstable_gyro_y = SFRField<uint8_t>((0.7 * constants::imu::sfr_resolution), 0x1504, constants::imu::sfr_resolution);                                // rad/s
-    }                                                                                                                                                                             // namespace detumble
+        SFRField<uint8_t> min_stable_gyro_z = SFRField<uint8_t>((0.8 * constants::acs::target_spin_rate * constants::imu::sfr_resolution), 0x1500, constants::imu::sfr_resolution); // rad/s
+        SFRField<uint8_t> max_stable_gyro_x = SFRField<uint8_t>((0.1 * constants::imu::sfr_resolution), 0x1501, constants::imu::sfr_resolution);                                    // rad/s
+        SFRField<uint8_t> max_stable_gyro_y = SFRField<uint8_t>((0.1 * constants::imu::sfr_resolution), 0x1502, constants::imu::sfr_resolution);                                    // rad/s
+        SFRField<uint8_t> min_unstable_gyro_x = SFRField<uint8_t>((0.7 * constants::imu::sfr_resolution), 0x1503, constants::imu::sfr_resolution);                                  // rad/s
+        SFRField<uint8_t> min_unstable_gyro_y = SFRField<uint8_t>((0.7 * constants::imu::sfr_resolution), 0x1504, constants::imu::sfr_resolution);                                  // rad/s
+    }                                                                                                                                                                               // namespace detumble
     namespace aliveSignal {
         // OP Codes 1600
         SFRField<bool> downlinked = SFRField<bool>(false, 0x1600);
@@ -178,14 +178,14 @@ namespace sfr {
     namespace imu {
         // OP Codes 2200
         SFRField<bool> powered = SFRField<bool>(false, 0x2200);
-        SFRField<bool> report_written = SFRField<bool>(false, 0x2201);
+        SFRField<bool> dlink_written = SFRField<bool>(false, 0x2201);
         SFRField<bool> report_ready = SFRField<bool>(false, 0x2202);
         SFRField<uint8_t> power_setting = SFRField<uint8_t>((uint8_t)sensor_power_mode_type::on, 0x2203);
-        SFRField<uint16_t> mode = SFRField<uint16_t>((uint16_t)sensor_mode_type::init, 0x2204);
-        SFRField<uint16_t> init_mode = SFRField<uint16_t>((uint16_t)sensor_init_mode_type::awaiting, 0x2205);
-        SFRField<uint16_t> failed_times = SFRField<uint16_t>(0, 0x2206);
-        SFRField<uint16_t> failed_limit = SFRField<uint16_t>(5, 0x2207);
-        SFRField<uint32_t> max_fragments = SFRField<uint32_t>(256, 0x2208);
+        SFRField<uint8_t> max_fragments = SFRField<uint8_t>(20, 0x2204);
+        SFRField<uint16_t> mode = SFRField<uint16_t>((uint16_t)sensor_mode_type::init, 0x2205);
+        SFRField<uint16_t> init_mode = SFRField<uint16_t>((uint16_t)sensor_init_mode_type::awaiting, 0x2206);
+        SFRField<uint16_t> failed_times = SFRField<uint16_t>(0, 0x2207);
+        SFRField<uint16_t> failed_limit = SFRField<uint16_t>(5, 0x2208);
 
         SensorReading *mag_x_value = new SensorReading(fault_groups::imu_faults::mag_x_value, 1, constants::imu::min_mag, constants::imu::max_mag);
         SensorReading *mag_y_value = new SensorReading(fault_groups::imu_faults::mag_y_value, 1, constants::imu::min_mag, constants::imu::max_mag);

@@ -51,7 +51,7 @@ private:
      */
     bool valid = false;
 
-    bool repeated_values(std::deque<float> *buffer, float val);
+    bool repeated_values(float val);
 
 public:
     /**

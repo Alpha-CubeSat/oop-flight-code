@@ -6,13 +6,8 @@ CurrentMonitor::CurrentMonitor()
 
 void CurrentMonitor::execute()
 {
-    if (!initialized) {
-        sfr::current::solar_current_average->set_valid();
-        initialized = true;
-    }
-
     uint16_t val = analogRead(constants::current::pin);
-    float voltage = (val * constants::current::voltage_ref) / constants::current::resolution;
+    float voltage = (val * constants::sensor::voltage_ref) / constants::sensor::resolution;
     float milliamps = 1000 * voltage / (constants::current::load * constants::current::shunt);
 
     sfr::current::solar_current_average->set_value(milliamps);

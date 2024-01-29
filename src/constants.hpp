@@ -19,6 +19,8 @@ namespace constants {
     } // namespace time
     namespace sensor {
         constexpr int repeats = 100;
+        constexpr int resolution = 1023;
+        constexpr float voltage_ref = 3.3;
     } // namespace sensor
     namespace photoresistor {
         constexpr int pin = 38;
@@ -97,11 +99,9 @@ namespace constants {
     namespace current {
         constexpr int pin = 22;
         constexpr float in_sun_val = 70; // mA
-        constexpr float voltage_ref = 3.3;
-        constexpr int resolution = 1024;
-        constexpr int load = 30;     // load resister value (kOhm)
-        constexpr float shunt = 0.1; // shunt resistor value (Ohm)
-    }                                // namespace current
+        constexpr int load = 30;         // load resister value (kOhm)
+        constexpr float shunt = 0.1;     // shunt resistor value (Ohm)
+    }                                    // namespace current
     namespace masks {
         constexpr uint32_t uint32_byte1_mask = 0b11111111000000000000000000000000;
         constexpr uint32_t uint32_byte2_mask = 0b00000000111111110000000000000000;
@@ -234,8 +234,6 @@ namespace constants {
     } // namespace acs
     namespace battery {
         constexpr int voltage_value_pin = 32;
-        constexpr float voltage_ref = 3.3;
-        constexpr int resolution = 1023;
         constexpr int r1 = 4700;
         constexpr int r2 = 10000;
         constexpr int min_voltage = 0;
@@ -289,7 +287,7 @@ namespace constants {
         static constexpr unsigned int dynamic_data_start = 10;
         static constexpr unsigned int sfr_data_start = 460;
         static constexpr unsigned int sfr_store_size = 5;
-        static constexpr unsigned int sfr_num_fields = 92;
+        static constexpr unsigned int sfr_num_fields = 90;
         static constexpr unsigned int sfr_data_full_offset = sfr_num_fields * sfr_store_size + 4;
         static constexpr unsigned int write_age_limit = 95000; // Must be less than 100000
 

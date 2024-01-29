@@ -196,14 +196,14 @@ namespace sfr {
     namespace imu {
         // OP Codes 2200
         extern SFRField<bool> powered;
-        extern SFRField<bool> report_written;
+        extern SFRField<bool> dlink_written;
         extern SFRField<bool> report_ready;
         extern SFRField<uint8_t> power_setting;
+        extern SFRField<uint8_t> max_fragments;
         extern SFRField<uint16_t> mode;
         extern SFRField<uint16_t> init_mode;
         extern SFRField<uint16_t> failed_times;
         extern SFRField<uint16_t> failed_limit;
-        extern SFRField<uint32_t> max_fragments;
 
         extern SensorReading *mag_x_value;
         extern SensorReading *mag_y_value;

@@ -9,9 +9,6 @@ class TemperatureMonitor
 public:
     TemperatureMonitor();
     void execute();
-
-private:
-    bool initialized = false;
 };
 
 #endif

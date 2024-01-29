@@ -6,7 +6,6 @@ SensorReading::SensorReading(Fault *fault, uint16_t buffer_size, float min, floa
     this->buffer_size = buffer_size;
     this->max = max;
     this->min = min;
-    buffer.clear();
 } // constructor
 
 bool SensorReading::get_value(float *value_location)
@@ -25,7 +24,7 @@ bool SensorReading::get_value(float *value_location)
 void SensorReading::set_value(float x)
 {
     // check if value is within expected range
-    if (x <= max && x >= min && !repeated_values(&buffer, x)) {
+    if (x <= max && x >= min && !repeated_values(x)) {
         set_valid();
         buffer.push_front(x);
         // check if buffer is full
@@ -59,22 +58,22 @@ void SensorReading::set_invalid()
     fault->signal();
 }
 
-bool SensorReading::repeated_values(std::deque<float> *buffer, float val)
+bool SensorReading::repeated_values(float val)
 {
     int min_loop_max;
 
-    if (buffer->empty() || buffer->size() == 1) {
+    if (buffer.empty() || buffer.size() == 1) {
         return false;
     }
 
-    if (buffer->size() > constants::sensor::repeats) {
+    if (buffer.size() > constants::sensor::repeats) {
         min_loop_max = constants::sensor::repeats;
     } else {
-        min_loop_max = buffer->size();
+        min_loop_max = buffer.size();
     }
 
     for (int i = 0; i < min_loop_max; i++) {
-        if (buffer->at(i) != val) {
+        if (buffer.at(i) != val) {
             return false;
         }
     }

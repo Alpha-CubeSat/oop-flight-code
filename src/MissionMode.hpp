@@ -374,7 +374,7 @@ public:
     }
     std::string get_name()
     {
-        return "Boot Optical Sensor";
+        return "Boot Sensors";
     }
     mode_type get_type()
     {
@@ -394,7 +394,7 @@ public:
     }
     std::string get_name()
     {
-        return "Boot IMU";
+        return "Capture IMU";
     }
     mode_type get_type()
     {

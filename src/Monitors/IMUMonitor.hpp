@@ -19,7 +19,6 @@ private:
     void transition_to_normal();
     void transition_to_abnormal_init();
     void capture_imu_values();
-    sensor_mode_type mode;
     Adafruit_LSM9DS1 imu;
 };
 

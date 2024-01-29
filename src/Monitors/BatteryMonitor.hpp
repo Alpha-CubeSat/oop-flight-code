@@ -8,9 +8,6 @@ class BatteryMonitor
 public:
     BatteryMonitor();
     void execute();
-
-private:
-    bool initialized = false;
 };
 
 #endif

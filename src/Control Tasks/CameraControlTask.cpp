@@ -24,25 +24,13 @@ void CameraControlTask::camera_init()
 
     if (sfr::camera::init_mode == (uint16_t)sensor_init_mode_type::in_progress) {
         switch (sfr::camera::start_progress) {
-        case 0: // step 0 - initialize SD card
-        {
-            if (!SD.begin(254)) {
-#ifdef VERBOSE
-                Serial.println("\n\n\nSD CARD FAILED\n\n\n");
-#endif
-                sfr::camera::init_mode = (uint16_t)sensor_init_mode_type::failed;
-            } else {
-                sfr::camera::start_progress++;
-            }
-            break;
-        }
-        case 1: // step 1 - setting power
+        case 0: // step 0 - setting power
         {
             Pins::setPinState(constants::camera::power_on_pin, HIGH);
             sfr::camera::start_progress++;
             break;
         }
-        case 2: // step 2 - call begin method
+        case 1: // step 1 - call begin method
         {
             if (adaCam.begin()) {
 #ifdef VERBOSE
@@ -53,10 +41,11 @@ void CameraControlTask::camera_init()
 #ifdef VERBOSE
                 Serial.println("Not receiving optical sensor serial response");
 #endif
+                sfr::camera::init_mode = (uint16_t)sensor_init_mode_type::failed;
             }
             break;
         }
-        case 3: // step 3  - set resolution
+        case 2: // step 2  - set resolution
         {
             if (adaCam.setImageSize(sfr::camera::set_res)) {
                 if (adaCam.getImageSize() != sfr::camera::set_res) {
@@ -73,7 +62,7 @@ void CameraControlTask::camera_init()
             }
             break;
         }
-        case 4: // step 4 - get resolution
+        case 3: // step 3 - get resolution
         {
             uint8_t get_res = adaCam.getImageSize();
             if (get_res == sfr::camera::set_res) {
@@ -87,6 +76,18 @@ void CameraControlTask::camera_init()
                 Serial.println("Resolution fetch error");
 #endif
                 sfr::camera::init_mode = (uint16_t)sensor_init_mode_type::failed;
+            }
+            break;
+        }
+        case 4: // step 4 - initialize SD card
+        {
+            if (!SD.begin(254)) {
+#ifdef VERBOSE
+                Serial.println("\n\n\nSD CARD FAILED\n\n\n");
+#endif
+                sfr::camera::init_mode = (uint16_t)sensor_init_mode_type::failed;
+            } else {
+                sfr::camera::start_progress++;
             }
             break;
         }
@@ -176,28 +177,29 @@ void CameraControlTask::execute()
         filename += String(sfr::camera::fragments_written) + ".jpg";
 
         File imgFile = SD.open(filename.c_str(), FILE_WRITE);
+        if (imgFile) {
+            uint8_t *buffer;
+            uint8_t bytesToRead = min(constants::camera::content_length, jpglen);
+            buffer = adaCam.readPicture(bytesToRead);
 
-        uint8_t *buffer;
-        uint8_t bytesToRead = min(constants::camera::content_length, jpglen);
-        buffer = adaCam.readPicture(bytesToRead);
-
-        for (int i = 0; i < bytesToRead; i++) {
-            if (buffer[i] < 16) {
-                imgFile.print(0, HEX);
+            for (int i = 0; i < bytesToRead; i++) {
+                if (buffer[i] < 16) {
+                    imgFile.print(0, HEX);
+                }
+                imgFile.print(buffer[i], HEX);
             }
-            imgFile.print(buffer[i], HEX);
-        }
 
-        jpglen -= bytesToRead;
-        imgFile.close();
-        sfr::camera::fragments_written++;
-        if (jpglen == 0) {
-            sfr::rockblock::camera_max_fragments[sfr::camera::images_written] = sfr::camera::fragments_written;
-            sfr::camera::images_written++;
+            jpglen -= bytesToRead;
+            imgFile.close();
+            sfr::camera::fragments_written++;
+            if (jpglen == 0) {
+                sfr::rockblock::camera_max_fragments[sfr::camera::images_written] = sfr::camera::fragments_written;
+                sfr::camera::images_written++;
 #ifdef VERBOSE
-            Serial.println("Done writing file");
+                Serial.println("Done writing file");
 #endif
-            sfr::camera::power_setting = (uint8_t)sensor_power_mode_type::off;
+                sfr::camera::power_setting = (uint8_t)sensor_power_mode_type::off;
+            }
         }
     }
 }
@@ -234,4 +236,10 @@ void CameraControlTask::camera_shutdown()
     pinMode(constants::camera::tx, OUTPUT);
     Pins::setPinState(constants::camera::rx, LOW);
     Pins::setPinState(constants::camera::tx, LOW);
+
+    // if SD.begin succeeds but camera is never able to snap, reduce SD card power consumption
+    File file = SD.open("-", FILE_WRITE);
+    if (file) {
+        file.close();
+    }
 }

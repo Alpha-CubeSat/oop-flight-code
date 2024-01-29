@@ -97,20 +97,6 @@ void IMUMonitor::transition_to_normal()
     fault_groups::imu_faults::gyro_x_value->restore();
     fault_groups::imu_faults::gyro_y_value->restore();
     fault_groups::imu_faults::gyro_z_value->restore();
-
-    sfr::imu::mag_x_average->set_valid();
-    sfr::imu::mag_y_average->set_valid();
-    sfr::imu::mag_z_average->set_valid();
-    sfr::imu::gyro_x_average->set_valid();
-    sfr::imu::gyro_y_average->set_valid();
-    sfr::imu::gyro_z_average->set_valid();
-
-    sfr::imu::mag_x_value->set_valid();
-    sfr::imu::mag_y_value->set_valid();
-    sfr::imu::mag_z_value->set_valid();
-    sfr::imu::gyro_x_value->set_valid();
-    sfr::imu::gyro_y_value->set_valid();
-    sfr::imu::gyro_z_value->set_valid();
 }
 
 void IMUMonitor::transition_to_abnormal_init()
@@ -147,9 +133,6 @@ void IMUMonitor::capture_imu_values()
 {
     sensors_event_t accel, mag, gyro, temp;
     imu.getEvent(&accel, &mag, &gyro, &temp);
-
-    imu.setupMag(imu.LSM9DS1_MAGGAIN_8GAUSS);
-    imu.setupGyro(imu.LSM9DS1_GYROSCALE_245DPS);
 
     // Save most recent readings
     sfr::imu::mag_x_value->set_value(mag.magnetic.x);
