@@ -84,13 +84,13 @@ void RockblockControlTask::execute()
     case rockblock_mode_type::process_mo_status:
         dispatch_process_mo_status();
         break;
-    case rockblock_mode_type::send_signal_strength_mo:
+    case rockblock_mode_type::send_signal_strength_response:
         // AT+CSQ\r
-        dispatch_send_signal_strength_mo();
+        dispatch_send_signal_strength_response();
         break;
-    case rockblock_mode_type::await_signal_strength_mo:
+    case rockblock_mode_type::await_signal_strength_response:
         // +CSQ: <rssi>
-        dispatch_await_signal_strength_mo();
+        dispatch_await_signal_strength_response();
         break;
     case rockblock_mode_type::process_mt_status:
         dispatch_process_mt_status();
@@ -143,7 +143,6 @@ void RockblockControlTask::dispatch_standby()
 
 void RockblockControlTask::dispatch_send_at()
 {
-    conseq_reads = 0;
 #ifdef VERBOSE
     Serial.println("SENT: ATr");
 #endif
@@ -552,15 +551,14 @@ void RockblockControlTask::dispatch_send_message()
 void RockblockControlTask::dispatch_await_message()
 {
     char c = sfr::rockblock::serial.read();
-    if (c == '0' || c == '1' || c == '2' || c == '3') {
-        if (c == '0') {
+    if (c == '0') {
 #ifdef VERBOSE
-            Serial.println("SAT INFO: report accepted");
+        Serial.println("SAT INFO: report accepted");
 #endif
-            transition_to(rockblock_mode_type::await_message_ok);
-        } else {
-            transition_to(rockblock_mode_type::send_message);
-        }
+        transition_to(rockblock_mode_type::await_message_ok);
+
+    } else if (c == '1' || c == '2' || c == '3') {
+        transition_to(rockblock_mode_type::send_message);
     }
 }
 
@@ -590,9 +588,9 @@ void RockblockControlTask::dispatch_create_buffer()
         sfr::rockblock::serial.read() == 'I' &&
         sfr::rockblock::serial.read() == 'X' &&
         sfr::rockblock::serial.read() == ':') {
-        // clear buffer to nulls
+        // clear buffer to nulls (contents of message)
         memset(sfr::rockblock::buffer, '\0', constants::rockblock::buffer_size);
-        // clear commas to -1
+        // clear commas to -1 (index of comma in buffer)
         memset(sfr::rockblock::commas, -1, constants::rockblock::num_commas);
         uint8_t buffer_iter = 0;
         int comma_iter = 0;
@@ -622,63 +620,61 @@ void RockblockControlTask::dispatch_create_buffer()
 
 void RockblockControlTask::dispatch_process_mo_status()
 {
-    if (sfr::rockblock::commas[0] > 1) {
-        Serial.println("SAT INFO: there is another character");
+    if (sfr::rockblock::commas[0] == 1 && (sfr::rockblock::buffer[0] == '0' || sfr::rockblock::buffer[0] == '1' || sfr::rockblock::buffer[0] != '2')) {
+        // nominal
+        transition_to(rockblock_mode_type::process_mt_status);
+    } else {
         if (sfr::mission::current_mode->get_id() == sfr::mission::aliveSignal->get_id()) {
 #ifdef VERBOSE
             Serial.println("ROCKBLOCK HARD FAULT");
 #endif
             sfr::aliveSignal::num_hard_faults++;
         }
-        transition_to(rockblock_mode_type::send_signal_strength_mo);
-    } else if (sfr::rockblock::buffer[0] != '0' && sfr::rockblock::buffer[0] != '1' && sfr::rockblock::buffer[0] != '2') {
         Serial.println("SAT INFO: mo status is greater than 2");
-        transition_to(rockblock_mode_type::send_response);
-    } else {
-        transition_to(rockblock_mode_type::process_mt_status);
+        // off nominal response, but wait until signal is strong to downlink again to preserve power
+        transition_to(rockblock_mode_type::send_signal_strength_response);
     }
 }
 
-void RockblockControlTask::dispatch_send_signal_strength_mo()
+void RockblockControlTask::dispatch_send_signal_strength_response()
 {
     Serial.println("SENT: AT+CSQr");
     sfr::rockblock::serial.print("AT+CSQ\r");
-    transition_to(rockblock_mode_type::await_signal_strength_mo);
+    transition_to(rockblock_mode_type::await_signal_strength_response);
 }
 
-void RockblockControlTask::dispatch_await_signal_strength_mo()
+void RockblockControlTask::dispatch_await_signal_strength_response()
 {
-    get_valid_signal(rockblock_mode_type::send_response, rockblock_mode_type::send_signal_strength_mo);
+    get_valid_signal(rockblock_mode_type::send_response, rockblock_mode_type::send_signal_strength_response);
 }
 
 void RockblockControlTask::dispatch_process_mt_status()
 {
-    switch (sfr::rockblock::buffer[sfr::rockblock::commas[1] + 1]) {
-    case '2':
+    char c = sfr::rockblock::buffer[sfr::rockblock::commas[1] + 1];
+    // check if there is only one character
+    if ((sfr::rockblock::commas[2] - sfr::rockblock::commas[1]) == 1) {
+        if (c == '0') {
+            Serial.println("SAT INFO: there were no messages to retrieve");
+            transition_to(rockblock_mode_type::end_transmission);
+        } else if (c == '1') {
+            Serial.println("SAT INFO: message retrieved");
+            if (sfr::rockblock::downlink_report_type == (uint16_t)report_type::camera_report) {
+                sfr::rockblock::camera_report.clear();
+            }
+            if (sfr::rockblock::downlink_report_type == (uint16_t)report_type::imu_report) {
+                sfr::rockblock::imu_report.clear();
+            }
+            transition_to(rockblock_mode_type::read_message_ok);
+        }
+    } else {
         Serial.println("SAT INFO: error during check");
-        transition_to(rockblock_mode_type::send_response);
-        break;
-    case '1':
-        Serial.println("SAT INFO: message retrieved");
-        if (sfr::rockblock::downlink_report_type == (uint16_t)report_type::camera_report) {
-            sfr::rockblock::camera_report.clear();
-        }
-        if (sfr::rockblock::downlink_report_type == (uint16_t)report_type::imu_report) {
-            sfr::rockblock::imu_report.clear();
-        }
-        transition_to(rockblock_mode_type::read_message_ok);
-        break;
-    case '0':
-        Serial.println("SAT INFO: there were no messages to retrieve");
-        transition_to(rockblock_mode_type::end_transmission);
-        break;
+        transition_to(rockblock_mode_type::send_signal_strength_response);
     }
 }
 
 void RockblockControlTask::dispatch_read_message_ok()
 {
     if (get_OK()) {
-        sfr::rockblock::flush_status = true;
         Serial.println("SAT INFO: OK");
         transition_to(rockblock_mode_type::read_message);
     }
@@ -747,8 +743,6 @@ void RockblockControlTask::dispatch_process_command()
                 Serial.println("SAT INFO: invalid command");
             }
         }
-
-        conseq_reads++;
         transition_to(rockblock_mode_type::queue_check);
     }
 }
@@ -761,14 +755,11 @@ void RockblockControlTask::dispatch_queue_check()
     Serial.print("SAT INFO: ");
     Serial.print(queued);
     Serial.println(" waiting");
-    // check if in cycle before limit
-    bool cycle_boundary = conseq_reads >= (constants::rockblock::max_conseq_read - 1);
     // check if enough messages are waiting
-    bool queue_limit = queued > 1;
-    if (cycle_boundary && queue_limit && !sfr::rockblock::flush_status) {
+    if (queued >= sfr::rockblock::queue_limit) {
         transition_to(rockblock_mode_type::send_flush);
     } else if (queued > 0) {
-        transition_to(rockblock_mode_type::send_message_length);
+        transition_to(rockblock_mode_type::send_response);
     } else {
         transition_to(rockblock_mode_type::end_transmission);
     }
@@ -784,7 +775,6 @@ void RockblockControlTask::dispatch_send_flush()
 void RockblockControlTask::dispatch_await_flush()
 {
     if (get_OK()) {
-        sfr::rockblock::flush_status = true;
         Serial.println("SAT INFO: OK");
         transition_to(rockblock_mode_type::send_response);
     }

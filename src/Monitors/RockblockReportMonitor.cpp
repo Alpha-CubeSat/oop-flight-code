@@ -11,23 +11,22 @@ void RockblockReportMonitor::execute()
         schedule_report();
     }
 
+    sfr::rockblock::downlink_report.clear();
+
     switch (static_cast<report_type>(sfr::rockblock::downlink_report_type.get())) {
     case report_type::camera_report:
-        sfr::rockblock::downlink_report.clear();
         for (auto &data : sfr::rockblock::camera_report) {
             sfr::rockblock::downlink_report.push_back(data);
         }
         return;
 
     case report_type::normal_report:
-        sfr::rockblock::downlink_report.clear();
         for (auto &data : sfr::rockblock::normal_report) {
             sfr::rockblock::downlink_report.push_back(data);
         }
         return;
 
     case report_type::imu_report:
-        sfr::rockblock::downlink_report.clear();
         for (auto &data : sfr::rockblock::imu_report) {
             sfr::rockblock::downlink_report.push_back(data);
         }
@@ -60,16 +59,18 @@ void RockblockReportMonitor::schedule_report()
                 } else if (sfr::imu::report_ready) {
                     switch_report_type_to(report_type::imu_report);
                     return;
+                } else {
+                    switch_report_type_to(report_type::normal_report);
+                    return;
                 }
-                switch_report_type_to(report_type::normal_report);
-                return;
             case report_type::camera_report:
                 if (sfr::imu::report_ready) {
                     switch_report_type_to(report_type::imu_report);
                     return;
+                } else {
+                    switch_report_type_to(report_type::normal_report);
+                    return;
                 }
-                switch_report_type_to(report_type::normal_report);
-                return;
             case report_type::imu_report:
                 switch_report_type_to(report_type::normal_report);
                 return;

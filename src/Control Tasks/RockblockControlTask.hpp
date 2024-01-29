@@ -29,8 +29,8 @@ private:
     void dispatch_send_response();
     void dispatch_create_buffer();
     void dispatch_process_mo_status();
-    void dispatch_send_signal_strength_mo();
-    void dispatch_await_signal_strength_mo();
+    void dispatch_send_signal_strength_response();
+    void dispatch_await_signal_strength_response();
     void dispatch_process_mt_status();
     void dispatch_read_message_ok();
     void dispatch_read_message();
@@ -48,7 +48,6 @@ private:
     void print_SFRField(int i, int opcode);
     void print_SensorReading(int i, SensorReading *valueObj);
     void print_Fault(int i, bool shift);
-    uint32_t conseq_reads = 0;
     uint32_t same_mode = 0;
     uint8_t look_ahead1 = -1;
     uint8_t look_ahead2 = -1;

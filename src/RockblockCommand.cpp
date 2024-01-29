@@ -10,7 +10,7 @@ void CameraFragmentCommand::execute()
 
 bool CameraFragmentCommand::isValid()
 {
-    return sfr::mission::deployed;
+    return f_arg_1 < sfr::camera::images_written;
 }
 
 void DeployCommand::execute()
@@ -115,11 +115,11 @@ void MissionModeOverrideCommand::execute()
         break;
     }
     case 17: {
-        sfr::mission::current_mode = sfr::mission::captureIMU;
+        sfr::mission::current_mode = sfr::mission::bootSensors;
         break;
     }
     case 18: {
-        sfr::mission::current_mode = sfr::mission::bootSensors;
+        sfr::mission::current_mode = sfr::mission::captureIMU;
         break;
     }
     case 19: {

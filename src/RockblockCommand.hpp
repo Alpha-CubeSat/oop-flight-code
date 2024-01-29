@@ -51,16 +51,6 @@ public:
     } ///< \brief Return true if a command arguments are valid for that op code, false otherwise
 
     virtual void execute(){}; ///< \brief Executes Command Functionality or SFR Edit
-
-    static uint16_t get_decimal_opcode(const uint8_t *hex_opcode_bytes)
-    {
-        return (hex_opcode_bytes[1] << 8) | (hex_opcode_bytes[0]);
-    }
-
-    static uint32_t get_decimal_arg(const uint8_t *hex_arg_bytes)
-    {
-        return (hex_arg_bytes[3] << 24) | (hex_arg_bytes[2]) << 16 | (hex_arg_bytes[1] << 8) | (hex_arg_bytes[0]);
-    }
 };
 
 class SFROverrideCommand : public RockblockCommand
@@ -123,14 +113,12 @@ public:
 
     void execute()
     {
-        if (fault) {
-            if (f_arg_1 && !f_arg_2) {
-                fault->force();
-            } else if (!f_arg_1 && f_arg_2) {
-                fault->suppress();
-            } else if (!f_arg_1 && !f_arg_2) {
-                fault->restore();
-            }
+        if (f_arg_1 && !f_arg_2) {
+            fault->force();
+        } else if (!f_arg_1 && f_arg_2) {
+            fault->suppress();
+        } else if (!f_arg_1 && !f_arg_2) {
+            fault->restore();
         }
     }
 

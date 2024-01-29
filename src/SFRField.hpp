@@ -23,12 +23,9 @@ public:
     virtual void reset();
 
     virtual ~SFRInterface(){};
-    static void setFieldValByOpcode(int opcode, uint32_t arg1);
 
     virtual void setFieldValue(uint32_t arg1);
     virtual uint32_t getFieldValue();
-
-    virtual uint32_t getDefaultValue();
 
     virtual uint32_t getMin();
     virtual uint32_t getMax();

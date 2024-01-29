@@ -47,7 +47,6 @@ namespace constants {
         constexpr size_t arg1_len = 4;
         constexpr size_t arg2_len = 4;
         constexpr size_t command_len = opcode_len + arg1_len + arg2_len;
-        constexpr size_t max_conseq_read = 3;
 
         constexpr int max_imu_report_length = 1188;
         constexpr uint8_t imu_report_endflag1 = 0xFE;

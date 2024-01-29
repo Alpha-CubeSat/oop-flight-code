@@ -168,6 +168,7 @@ namespace sfr {
         extern SFRField<bool> waiting_command;
         extern SFRField<bool> sleep_mode;
         extern SFRField<uint8_t> max_commands_count;
+        extern SFRField<uint8_t> queue_limit;
         extern SFRField<uint16_t> downlink_report_type;
         extern SFRField<uint16_t> mode;
         extern SFRField<uint32_t> last_downlink;
