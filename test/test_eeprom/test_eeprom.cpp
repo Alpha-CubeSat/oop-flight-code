@@ -225,7 +225,7 @@ void test_blue_moon_data_error()
     EEPROM.put(constants::eeprom::dynamic_data_addr_loc2, (uint16_t)(constants::eeprom::dynamic_data_start + 1)); // Purposely does not equal first dynamc data start to simulate error
 
     sfr::eeprom::time_alive = sfr::boot::max_time.get() + 1; // Change stored dynamic data
-    sfr::eeprom::light_switch = true;                            // Turn light switch on
+    sfr::eeprom::light_switch = true;                        // Turn light switch on
 
     // Change some SFR fields
     sfr::camera::failed_limit = 10;
@@ -245,7 +245,9 @@ void test_blue_moon_data_error()
     TEST_ASSERT_EQUAL(true, sfr::eeprom::error_mode.get()); // An error has been detected
 
     // Verify SFR data and dynamic data do not get restored
-    TEST_ASSERT_EQUAL(sfr::eeprom::time_alive.getDefaultValue(), sfr::eeprom::time_alive.getFieldValue());
+    uint32_t boot_time;
+    EEPROM.get(constants::eeprom::boot_time_loc1, boot_time);
+    TEST_ASSERT_EQUAL(boot_time, sfr::eeprom::time_alive.getFieldValue()); // Time alive is the boot time count since boot timers should still be equal
     TEST_ASSERT_EQUAL(sfr::eeprom::dynamic_data_age.getDefaultValue(), sfr::eeprom::dynamic_data_age.getFieldValue());
 
     for (auto const &pair : SFRInterface::opcode_lookup) {
