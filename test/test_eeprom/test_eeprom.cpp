@@ -3,6 +3,8 @@
 #include <SFRField.hpp>
 #include <unity.h>
 
+// NOTE: There are some checks with a time_alive value restored from EEPROM that is updated by millis, so it's possible it is inconsistent
+
 /* Zeroes out all EEPROM bytes. */
 void reset_eeprom()
 {
@@ -445,11 +447,19 @@ void test_light_switch_off()
 
     // Check that all SFR values are still their defaults
     for (auto const &pair : SFRInterface::opcode_lookup) {
-        if (!is_eeprom_opcode(pair.first)) {
+        if (!is_eeprom_opcode(pair.first) && pair.first != 0x1902 && pair.first != 0x2504) {
+            // SFR field is not an EEPROM field or one of changed ones
             TEST_ASSERT_EQUAL(pair.second->getDefaultValue(), pair.second->getFieldValue());
             TEST_ASSERT_EQUAL(false, pair.second->getRestoreOnBoot());
         }
     }
+
+    // Test that SFR values do not get restored but their restore booleans do
+    TEST_ASSERT_EQUAL(sfr::burnwire::attempts_limit.getDefaultValue(), sfr::burnwire::attempts_limit.get());
+    TEST_ASSERT_EQUAL(true, sfr::burnwire::attempts_limit.getRestoreOnBoot());
+    TEST_ASSERT_EQUAL(sfr::acs::on_time.getDefaultValue(), sfr::acs::on_time.get());
+    TEST_ASSERT_EQUAL(true, sfr::acs::on_time.getRestoreOnBoot());
+    TEST_ASSERT_EQUAL(2, sfr::eeprom::sfr_data_age); // Write age increased by 2
 }
 
 void test_dynamic_age_limit()
@@ -549,8 +559,8 @@ void test_save_restore_with_full_eeprom()
     EEPROMRestore::execute();
     sfr::eeprom::time_alive = sfr::boot::max_time.get();
 
-    // Set the current SFR data address to the last section (7th section, or 6 offsets)
-    sfr::eeprom::sfr_data_addr = constants::eeprom::sfr_data_start + 6 * constants::eeprom::sfr_data_full_offset;
+    // Set the current SFR data address to the last section (8th section, or 7 offsets)
+    sfr::eeprom::sfr_data_addr = constants::eeprom::sfr_data_start + 7 * constants::eeprom::sfr_data_full_offset;
     sfr::eeprom::sfr_data_age = constants::eeprom::write_age_limit;
 
     // Set the current dynamic data address to the last section (56th section, or 55 offsets)
@@ -562,7 +572,7 @@ void test_save_restore_with_full_eeprom()
 
     // Check that dynamic and sfr section ages do not change
     TEST_ASSERT_EQUAL(constants::eeprom::dynamic_data_start + 56 * constants::eeprom::dynamic_data_full_offset, sfr::eeprom::dynamic_data_addr.get());
-    TEST_ASSERT_EQUAL(constants::eeprom::sfr_data_start + 7 * constants::eeprom::sfr_data_full_offset, sfr::eeprom::sfr_data_addr.get());
+    TEST_ASSERT_EQUAL(constants::eeprom::sfr_data_start + 8 * constants::eeprom::sfr_data_full_offset, sfr::eeprom::sfr_data_addr.get());
     TEST_ASSERT_EQUAL(0, sfr::eeprom::dynamic_data_age.get());
     TEST_ASSERT_EQUAL(0, sfr::eeprom::sfr_data_age.get());
 
@@ -571,9 +581,11 @@ void test_save_restore_with_full_eeprom()
     EEPROMRestore::execute();
 
     // Check restore execution
-    TEST_ASSERT_EQUAL(0, sfr::eeprom::time_alive.get());
+    uint32_t boot_time;
+    EEPROM.get(constants::eeprom::boot_time_loc1, boot_time);
+    TEST_ASSERT_EQUAL(boot_time, sfr::eeprom::time_alive.getFieldValue()); // Time alive is the boot time count since boot timers should still be equal, but dynamic data is not restored
     TEST_ASSERT_EQUAL(constants::eeprom::dynamic_data_start + 56 * constants::eeprom::dynamic_data_full_offset, sfr::eeprom::dynamic_data_addr.get());
-    TEST_ASSERT_EQUAL(constants::eeprom::sfr_data_start + 7 * constants::eeprom::sfr_data_full_offset, sfr::eeprom::sfr_data_addr.get());
+    TEST_ASSERT_EQUAL(constants::eeprom::sfr_data_start + 8 * constants::eeprom::sfr_data_full_offset, sfr::eeprom::sfr_data_addr.get());
     TEST_ASSERT_EQUAL(0, sfr::eeprom::dynamic_data_age.get());
     TEST_ASSERT_EQUAL(0, sfr::eeprom::sfr_data_age.get());
 }
