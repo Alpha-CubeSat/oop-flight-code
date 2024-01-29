@@ -125,7 +125,6 @@ void EEPROMRestore::restore_sfr_data()
         uint16_t sfr_data_age_addr = sfr::eeprom::sfr_data_addr + constants::eeprom::sfr_data_full_offset - 4;
         EEPROM.get(sfr_data_age_addr, sfr_data_age);
         sfr::eeprom::sfr_data_age = sfr_data_age;
-        Serial.println(sfr_data_age_addr);
 
         // Check SFR data integrity with checksum
         uint32_t stored_checksum;
