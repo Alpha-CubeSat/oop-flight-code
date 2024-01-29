@@ -652,7 +652,7 @@ void RockblockControlTask::dispatch_process_mt_status()
 {
     char c = sfr::rockblock::buffer[sfr::rockblock::commas[1] + 1];
     // check if there is only one character
-    if ((sfr::rockblock::commas[2] - sfr::rockblock::commas[1]) == 1) {
+    if ((sfr::rockblock::commas[2] - sfr::rockblock::commas[1]) == 2) {
         if (c == '0') {
             Serial.println("SAT INFO: there were no messages to retrieve");
             transition_to(rockblock_mode_type::end_transmission);
