@@ -125,8 +125,6 @@ namespace sfr {
         extern MissionMode *current_mode;
         extern MissionMode *previous_mode;
 
-        extern Phase *previous_phase;
-
         extern std::deque<int> mode_history;
     } // namespace mission
     namespace burnwire {

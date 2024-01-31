@@ -11,7 +11,7 @@ void MissionManager::execute()
         first = false;
     }
 
-    if (sfr::mission::previous_phase->get_id() != sfr::mission::current_mode->get_phase()->get_id()) {
+    if (sfr::mission::previous_mode->get_phase()->get_id() != sfr::mission::current_mode->get_phase()->get_id()) {
         sfr::mission::current_mode->get_phase()->set_start_time(millis());
     }
 
@@ -25,6 +25,5 @@ void MissionManager::execute()
     }
 
     sfr::mission::previous_mode = sfr::mission::current_mode;
-    sfr::mission::previous_phase = sfr::mission::current_mode->get_phase();
     sfr::mission::current_mode->dispatch();
 }
