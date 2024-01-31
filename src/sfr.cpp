@@ -105,8 +105,6 @@ namespace sfr {
         MissionMode *current_mode = boot;
         MissionMode *previous_mode = boot;
 
-        Phase *previous_phase = initialization;
-
         std::deque<int> mode_history;
     } // namespace mission
     namespace burnwire {
