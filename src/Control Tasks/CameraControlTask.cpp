@@ -43,7 +43,7 @@ void CameraControlTask::camera_init()
             if (adaCam.begin()) {
 #ifdef VERBOSE
                 Serial.println("Powered on optical sensor");
-#endif       
+#endif
                 sfr::camera::start_progress++;
             } else {
 #ifdef VERBOSE
