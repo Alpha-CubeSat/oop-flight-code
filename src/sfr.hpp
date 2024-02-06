@@ -157,6 +157,8 @@ namespace sfr {
         extern SFRField<uint32_t> fragments_written;
         extern SFRField<uint32_t> set_res;
         extern SFRField<uint32_t> fragment_number_requested;
+        extern SFRField<uint32_t> power_start_time;
+        extern SFRField<uint32_t> power_time;
     } // namespace camera
     namespace rockblock {
         // OP Codes 2100

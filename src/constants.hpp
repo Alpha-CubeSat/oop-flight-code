@@ -285,7 +285,7 @@ namespace constants {
         static constexpr unsigned int dynamic_data_start = 10;
         static constexpr unsigned int sfr_data_start = 460;
         static constexpr unsigned int sfr_store_size = 5;
-        static constexpr unsigned int sfr_num_fields = 88;
+        static constexpr unsigned int sfr_num_fields = 90;
         static constexpr unsigned int sfr_data_full_offset = sfr_num_fields * sfr_store_size + 4;
         static constexpr unsigned int write_age_limit = 95000; // Must be less than 100000
 
