@@ -28,14 +28,22 @@ void CameraControlTask::camera_init()
         {
             Pins::setPinState(constants::camera::power_on_pin, HIGH);
             sfr::camera::start_progress++;
+            sfr::camera::power_start_time = millis();
             break;
         }
-        case 1: // step 1 - call begin method
+        case 1: // step 1 - wait for camera to power on before attempting initialization
+        {
+            if (millis() - sfr::camera::power_start_time >= sfr::camera::power_time) {
+                sfr::camera::start_progress++;
+            }
+            break;
+        }
+        case 2: // step 2 - call begin method
         {
             if (adaCam.begin()) {
 #ifdef VERBOSE
                 Serial.println("Powered on optical sensor");
-#endif
+#endif       
                 sfr::camera::start_progress++;
             } else {
 #ifdef VERBOSE
@@ -45,7 +53,7 @@ void CameraControlTask::camera_init()
             }
             break;
         }
-        case 2: // step 2  - set resolution
+        case 3: // step 3  - set resolution
         {
             if (adaCam.setImageSize(sfr::camera::set_res)) {
                 if (adaCam.getImageSize() != sfr::camera::set_res) {
@@ -62,7 +70,7 @@ void CameraControlTask::camera_init()
             }
             break;
         }
-        case 3: // step 3 - get resolution
+        case 4: // step 4 - get resolution
         {
             uint8_t get_res = adaCam.getImageSize();
             if (get_res == sfr::camera::set_res) {
@@ -79,7 +87,7 @@ void CameraControlTask::camera_init()
             }
             break;
         }
-        case 4: // step 4 - initialize SD card
+        case 5: // step 5 - initialize SD card
         {
             if (!SD.begin(254)) {
 #ifdef VERBOSE
@@ -91,7 +99,7 @@ void CameraControlTask::camera_init()
             }
             break;
         }
-        case 5: // completed initialization
+        case 6: // completed initialization
         {
             sfr::camera::init_mode = (uint16_t)sensor_init_mode_type::complete;
             sfr::camera::power_setting = (uint8_t)sensor_power_mode_type::do_nothing;

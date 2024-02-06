@@ -137,6 +137,8 @@ namespace sfr {
         SFRField<uint32_t> fragments_written = SFRField<uint32_t>(0, 0x2014);
         SFRField<uint32_t> set_res = SFRField<uint32_t>(VC0706_160x120, 0x2015);
         SFRField<uint32_t> fragment_number_requested = SFRField<uint32_t>(0, 0x2016);
+        SFRField<uint32_t> power_start_time = SFRField<uint32_t>(0, 0x2017);
+        SFRField<uint32_t> power_time = SFRField<uint32_t>(400, 0x2018);
     } // namespace camera
     namespace rockblock {
         // OP Codes 2100
