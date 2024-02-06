@@ -139,9 +139,10 @@ void IMUMonitor::capture_imu_values()
     sfr::imu::mag_y_value->set_value(mag.magnetic.y);
     sfr::imu::mag_z_value->set_value(mag.magnetic.z);
 
-    sfr::imu::gyro_x_value->set_value(gyro.gyro.x);
-    sfr::imu::gyro_y_value->set_value(gyro.gyro.y);
-    sfr::imu::gyro_z_value->set_value(gyro.gyro.z);
+    // gyro bias offsets
+    sfr::imu::gyro_x_value->set_value(gyro.gyro.x - (-0.02297));
+    sfr::imu::gyro_y_value->set_value(gyro.gyro.y - (0.03015));
+    sfr::imu::gyro_z_value->set_value(gyro.gyro.z - (-0.01396));
 
 // IMU PRINT STATEMENTS FOR LOGGING AND GRAPHING IMU DATA
 #ifdef IMU_TESTING
