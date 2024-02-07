@@ -220,6 +220,9 @@ namespace sfr {
         SFRField<uint32_t> Kd_index = SFRField<uint32_t>(0, 0, (sizeof(constants::acs::Kd_values) / sizeof(constants::acs::Kd_values[0])) - 1, 0x2506);
         SFRField<uint32_t> Kp_index = SFRField<uint32_t>(0, 0, (sizeof(constants::acs::Kp_values) / sizeof(constants::acs::Kp_values[0])) - 1, 0x2507);
         SFRField<uint32_t> c_index = SFRField<uint32_t>(0, 0, (sizeof(constants::acs::c_values) / sizeof(constants::acs::c_values[0])) - 1, 0x2508);
+        SFRField<int32_t> pwm_x = SFRField<int32_t>(0, -256, 256, 0x2509);
+        SFRField<int32_t> pwm_y = SFRField<int32_t>(0, -256, 256, 0x2510);
+        SFRField<int32_t> pwm_z = SFRField<int32_t>(0, -256, 256, 0x2511);
     } // namespace acs
     namespace battery {
         // OP Codes 2600

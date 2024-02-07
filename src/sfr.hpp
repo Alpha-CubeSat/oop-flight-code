@@ -240,6 +240,11 @@ namespace sfr {
         extern SFRField<uint32_t> Kd_index;
         extern SFRField<uint32_t> Kp_index;
         extern SFRField<uint32_t> c_index;
+
+        extern SFRField<int32_t> pwm_x;
+        extern SFRField<int32_t> pwm_y;
+        extern SFRField<int32_t> pwm_z;
+
     } // namespace acs
     namespace battery {
         // OP Codes 2600

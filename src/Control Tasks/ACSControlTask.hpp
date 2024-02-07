@@ -8,7 +8,7 @@
 #endif
 #include "StarshotACS.h"
 #include "constants.hpp"
-#include "ekf.h"
+
 #include "sfr.hpp"
 
 class ACSControlTask
@@ -19,13 +19,12 @@ public:
 #ifdef ACS_SIM
     Plant plantObj;
 #endif
-    EKF ekfObj;
+
     void execute();
 
 private:
     void ACSWrite(int torqorder, float current, int out1, int out2, int PWMpin);
     int current2PWM(float current);
-    void IMUOffset();
     float gyro_x;
     float gyro_y;
     float gyro_z;

@@ -123,7 +123,8 @@ namespace constants {
 
         constexpr int STBXYpin = 9;
         constexpr int STBZpin = 27;
-
+        
+        // TODO:
         constexpr int xtorqorder = 0;
         constexpr int ytorqorder = 0;
         constexpr int ztorqorder = 0;
