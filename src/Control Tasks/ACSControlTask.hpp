@@ -14,7 +14,6 @@ public:
     ACSControlTask();
     StarshotACS starshotObj;
 
-
     void execute();
 
 private:
@@ -29,15 +28,12 @@ private:
     float gyro_y;
     float gyro_z;
 
-
     float num_steps;
     bool first = true;
     float old_Id;
     float old_Kd;
     float old_Kp;
     float old_c;
-
-
 };
 
 #endif

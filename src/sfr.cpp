@@ -223,7 +223,7 @@ namespace sfr {
         SFRField<uint32_t> Kp_index = SFRField<uint32_t>(0, 0, (sizeof(constants::acs::Kp_values) / sizeof(constants::acs::Kp_values[0])) - 1, 0x2507);
         SFRField<uint32_t> c_index = SFRField<uint32_t>(0, 0, (sizeof(constants::acs::c_values) / sizeof(constants::acs::c_values[0])) - 1, 0x2508);
 
-        SFRField<float> current_x = SFRField<float>(0, -0.3,  0.3, 0x2509, 1.0);
+        SFRField<float> current_x = SFRField<float>(0, -0.3, 0.3, 0x2509, 1.0);
         SFRField<float> current_y = SFRField<float>(0, -0.3, 0.3, 0x2510, 1.0);
         SFRField<float> current_z = SFRField<float>(0, -0.3, 0.3, 0x2511, 1.0);
 

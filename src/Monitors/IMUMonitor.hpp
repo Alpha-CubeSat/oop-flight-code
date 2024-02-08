@@ -23,7 +23,6 @@ public:
     IMUMonitor();
     void execute();
 
-
 private:
     void IMU_init();
     void invalidate_data();
@@ -31,7 +30,7 @@ private:
     void transition_to_abnormal_init();
     void capture_imu_values();
     void imu_offset();
-    
+
     float temp;
     float voltage;
 
@@ -45,7 +44,7 @@ private:
 
     Adafruit_LSM9DS1 imu;
 
-    bool first=true;
+    bool first = true;
 
 #ifdef ACS_SIM
     double altitude_input = 400;

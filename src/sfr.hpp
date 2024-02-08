@@ -195,7 +195,7 @@ namespace sfr {
         extern SFRField<bool> dlink_written;
         extern SFRField<bool> report_ready;
         extern SFRField<bool> imu_valid;
-        
+
         extern SFRField<uint8_t> power_setting;
         extern SFRField<uint8_t> max_fragments;
         extern SFRField<uint16_t> mode;

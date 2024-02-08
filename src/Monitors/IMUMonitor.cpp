@@ -135,7 +135,6 @@ void IMUMonitor::imu_offset()
     using namespace constants::acs;
     using namespace sfr::acs;
 
-
     if (!sfr::temperature::temp_c_value->get_value(&temp)) {
         temp = 0;
     }
@@ -232,19 +231,16 @@ void IMUMonitor::capture_imu_values()
     Serial.println(millis());
 #endif
 
-
     // Save most recent readings
     sfr::imu::mag_x_value->set_value(mag.magnetic.x);
     sfr::imu::mag_y_value->set_value(mag.magnetic.y);
     sfr::imu::mag_z_value->set_value(mag.magnetic.z);
 
-    sfr::imu::gyro_x_value->set_value(gyro.gyro.x );
-    sfr::imu::gyro_y_value->set_value(gyro.gyro.y );
-    sfr::imu::gyro_z_value->set_value(gyro.gyro.z );
+    sfr::imu::gyro_x_value->set_value(gyro.gyro.x);
+    sfr::imu::gyro_y_value->set_value(gyro.gyro.y);
+    sfr::imu::gyro_z_value->set_value(gyro.gyro.z);
 
-
-
-    if(first){
+    if (first) {
 #ifdef VERBOSE
         Serial.println("Initialize EKF library");
 #endif
@@ -267,15 +263,13 @@ void IMUMonitor::capture_imu_values()
 #ifdef ACS_SIM
         plantObj.initialize(0.01, altitude_input, I_input, inclination_input, m_input, q0_input, wx_input, wy_input, wz_input);
 #endif
-        first=false;
+        first = false;
     }
 
-
-    //offset the mag/gyro values in the sfr
+    // offset the mag/gyro values in the sfr
     imu_offset();
 
-
-//if ACS_SIM, plant will overwrite the sensor values to the sfr
+// if ACS_SIM, plant will overwrite the sensor values to the sfr
 #ifdef ACS_SIM
     // 1. Pass output of starshot into plant
     for (int i = 0; i < (int)(constants::acs::step_size_input / 0.01); i++) {
@@ -297,7 +291,6 @@ void IMUMonitor::capture_imu_values()
     sfr::imu::mag_z_value->set_value(plantObj.rtY.magneticfield[2] * 1000000.0);
 
 #endif
-
 
     // read imu data from sfr as local
 
@@ -334,8 +327,6 @@ void IMUMonitor::capture_imu_values()
     ekfObj.Z(5) = gyro_z;
 
     ekfObj.step();
-
-
 
     // Add offset readings to buffer
     sfr::imu::mag_x_average->set_value(ekfObj.state(0));
