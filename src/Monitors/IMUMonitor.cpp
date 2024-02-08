@@ -134,15 +134,7 @@ void IMUMonitor::imu_offset()
 
     using namespace constants::acs;
     using namespace sfr::acs;
-    float temp;
-    float voltage;
-    float mag_x;
-    float mag_y;
-    float mag_z;
 
-    float gyro_x;
-    float gyro_y;
-    float gyro_z;
 
     if (!sfr::temperature::temp_c_value->get_value(&temp)) {
         temp = 0;
@@ -272,7 +264,9 @@ void IMUMonitor::capture_imu_values()
         // Hd
         Eigen::MatrixXd Hd = Eigen::MatrixXd::Identity(6, 6);
         ekfObj.initialize(constants::acs::step_size_input, initial_state, initial_cov, Q, Rd, Hd);
-
+#ifdef ACS_SIM
+        plantObj.initialize(0.01, altitude_input, I_input, inclination_input, m_input, q0_input, wx_input, wy_input, wz_input);
+#endif
         first=false;
     }
 
@@ -280,13 +274,32 @@ void IMUMonitor::capture_imu_values()
     //offset the mag/gyro values in the sfr
     imu_offset();
 
-    float mag_x;
-    float mag_y;
-    float mag_z;
 
-    float gyro_x;
-    float gyro_y;
-    float gyro_z;
+//if ACS_SIM, plant will overwrite the sensor values to the sfr
+#ifdef ACS_SIM
+    // 1. Pass output of starshot into plant
+    for (int i = 0; i < (int)(constants::acs::step_size_input / 0.01); i++) {
+        plantObj.rtU.current[0] = sfr::acs::current_x.get_float();
+        plantObj.rtU.current[1] = sfr::acs::current_y.get_float();
+        plantObj.rtU.current[2] = sfr::acs::current_z.get_float();
+
+        plantObj.step();
+    }
+
+    sfr::imu::gyro_x_value->set_value(plantObj.rtY.angularvelocity[0]);
+    sfr::imu::gyro_y_value->set_value(plantObj.rtY.angularvelocity[1]);
+    sfr::imu::gyro_z_value->set_value(plantObj.rtY.angularvelocity[2]);
+
+    // Convert to uT
+
+    sfr::imu::mag_x_value->set_value(plantObj.rtY.magneticfield[0] * 1000000.0);
+    sfr::imu::mag_y_value->set_value(plantObj.rtY.magneticfield[1] * 1000000.0);
+    sfr::imu::mag_z_value->set_value(plantObj.rtY.magneticfield[2] * 1000000.0);
+
+#endif
+
+
+    // read imu data from sfr as local
 
     if (!sfr::imu::mag_x_value->get_value(&mag_x)) {
         mag_x = 0;
@@ -323,7 +336,7 @@ void IMUMonitor::capture_imu_values()
     ekfObj.step();
 
 
-#ifndef ACS_SIM
+
     // Add offset readings to buffer
     sfr::imu::mag_x_average->set_value(ekfObj.state(0));
     sfr::imu::mag_y_average->set_value(ekfObj.state(1));
@@ -333,5 +346,6 @@ void IMUMonitor::capture_imu_values()
     sfr::imu::gyro_x_average->set_value(ekfObj.state(3));
     sfr::imu::gyro_y_average->set_value(ekfObj.state(4));
     sfr::imu::gyro_z_average->set_value(ekfObj.state(5));
-#endif
+
+    sfr::imu::imu_valid = sfr::imu::gyro_x_value->get_value(&gyro_x) && sfr::imu::gyro_y_value->get_value(&gyro_y) && sfr::imu::gyro_z_value->get_value(&gyro_z) && sfr::imu::mag_x_value->get_value(&mag_x) && sfr::imu::mag_y_value->get_value(&mag_y) && sfr::imu::mag_z_value->get_value(&mag_z);
 }

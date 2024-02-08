@@ -181,6 +181,8 @@ namespace sfr {
         SFRField<uint16_t> failed_times = SFRField<uint16_t>(0, 0x2207);
         SFRField<uint16_t> failed_limit = SFRField<uint16_t>(5, 0x2208);
 
+        SFRField<bool> imu_valid = SFRField<bool>(true, 0x2209);
+
         SensorReading *mag_x_value = new SensorReading(fault_groups::imu_faults::mag_x_value, 1, constants::imu::min_mag, constants::imu::max_mag);
         SensorReading *mag_y_value = new SensorReading(fault_groups::imu_faults::mag_y_value, 1, constants::imu::min_mag, constants::imu::max_mag);
         SensorReading *mag_z_value = new SensorReading(fault_groups::imu_faults::mag_z_value, 1, constants::imu::min_mag, constants::imu::max_mag);
@@ -220,9 +222,15 @@ namespace sfr {
         SFRField<uint32_t> Kd_index = SFRField<uint32_t>(0, 0, (sizeof(constants::acs::Kd_values) / sizeof(constants::acs::Kd_values[0])) - 1, 0x2506);
         SFRField<uint32_t> Kp_index = SFRField<uint32_t>(0, 0, (sizeof(constants::acs::Kp_values) / sizeof(constants::acs::Kp_values[0])) - 1, 0x2507);
         SFRField<uint32_t> c_index = SFRField<uint32_t>(0, 0, (sizeof(constants::acs::c_values) / sizeof(constants::acs::c_values[0])) - 1, 0x2508);
-        SFRField<int32_t> pwm_x = SFRField<int32_t>(0, -256, 256, 0x2509);
-        SFRField<int32_t> pwm_y = SFRField<int32_t>(0, -256, 256, 0x2510);
-        SFRField<int32_t> pwm_z = SFRField<int32_t>(0, -256, 256, 0x2511);
+
+        SFRField<float> current_x = SFRField<float>(0, -0.3,  0.3, 0x2509, 1.0);
+        SFRField<float> current_y = SFRField<float>(0, -0.3, 0.3, 0x2510, 1.0);
+        SFRField<float> current_z = SFRField<float>(0, -0.3, 0.3, 0x2511, 1.0);
+
+        SFRField<int32_t> pwm_x = SFRField<int32_t>(0, -256, 256, 0x2512);
+        SFRField<int32_t> pwm_y = SFRField<int32_t>(0, -256, 256, 0x2513);
+        SFRField<int32_t> pwm_z = SFRField<int32_t>(0, -256, 256, 0x2514);
+
     } // namespace acs
     namespace battery {
         // OP Codes 2600

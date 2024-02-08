@@ -1,10 +1,8 @@
 #include "ACSControlTask.hpp"
+using namespace sfr::acs;
 
 ACSControlTask::ACSControlTask()
 {
-#ifdef ACS_SIM
-    plantObj.initialize(0.01, altitude_input, I_input, inclination_input, m_input, q0_input, wx_input, wy_input, wz_input);
-#endif
 }
 
 void ACSControlTask::execute()
@@ -16,7 +14,6 @@ void ACSControlTask::execute()
 #endif
         starshotObj.initialize(constants::acs::step_size_input, constants::acs::A_input, constants::acs::Id_values[sfr::acs::Id_index], constants::acs::Kd_values[sfr::acs::Kd_index], constants::acs::Kp_values[sfr::acs::Kp_index], constants::acs::c_values[sfr::acs::c_index], constants::acs::i_max_input, constants::acs::k_input, constants::acs::n_input, constants::acs::target_spin_rate);
 
-
         first = false;
     }
 
@@ -25,32 +22,7 @@ void ACSControlTask::execute()
     old_Kp = constants::acs::Kp_values[sfr::acs::Kp_index];
     old_c = constants::acs::c_values[sfr::acs::c_index];
 
-    imu_valid = sfr::imu::gyro_x_value->get_value(&gyro_x) && sfr::imu::gyro_y_value->get_value(&gyro_y) && sfr::imu::gyro_z_value->get_value(&gyro_z) && sfr::imu::mag_x_value->get_value(&mag_x) && sfr::imu::mag_y_value->get_value(&mag_y) && sfr::imu::mag_z_value->get_value(&mag_z);
-
-#ifdef ACS_SIM
-    // 1. Pass output of starshot into plant
-    for (int i = 0; i < (int)(constants::acs::step_size_input / 0.01); i++) {
-        plantObj.rtU.current[0] = current_x;
-        plantObj.rtU.current[1] = current_y;
-        plantObj.rtU.current[2] = current_z;
-
-        plantObj.step();
-    }
-
-    gyro_x = plantObj.rtY.angularvelocity[0];
-    gyro_y = plantObj.rtY.angularvelocity[1];
-    gyro_z = plantObj.rtY.angularvelocity[2];
-
-    // Convert to uT
-    mag_x = plantObj.rtY.magneticfield[0] * 1000000.0;
-    mag_y = plantObj.rtY.magneticfield[1] * 1000000.0;
-    mag_z = plantObj.rtY.magneticfield[2] * 1000000.0;
-
-    // needed for detumble spin exit conditions
-    sfr::imu::gyro_x_average->set_value(gyro_x);
-    sfr::imu::gyro_y_average->set_value(gyro_y);
-    sfr::imu::gyro_z_average->set_value(gyro_z);
-#endif
+    using namespace sfr::imu;
 
     if (!sfr::acs::off) {
         if ((!imu_valid && (sfr::imu::mode == (uint16_t)sensor_mode_type::abnormal_init || sfr::imu::mode == (uint16_t)sensor_mode_type::normal)) || sfr::acs::mode == (uint8_t)acs_mode_type::simple) {
@@ -61,45 +33,71 @@ void ACSControlTask::execute()
 
         if (imu_valid) {
 
+            // read sfr data into local variables
+            if (!sfr::imu::mag_x_value->get_value(&mag_x)) {
+                mag_x = 0;
+            }
 
-            // 3. Pass output of ekf into starshot
-            starshotObj.rtU.Bfield_body[0] = ekfObj.state(0) / 1000000.0;
-            starshotObj.rtU.Bfield_body[1] = ekfObj.state(1) / 1000000.0;
-            starshotObj.rtU.Bfield_body[2] = ekfObj.state(2) / 1000000.0;
-            starshotObj.rtU.w[0] = ekfObj.state(3);
-            starshotObj.rtU.w[1] = ekfObj.state(4);
-            starshotObj.rtU.w[2] = ekfObj.state(5);
+            if (!sfr::imu::mag_y_value->get_value(&mag_y)) {
+                mag_y = 0;
+            }
+
+            if (!sfr::imu::mag_z_value->get_value(&mag_z)) {
+                mag_z = 0;
+            }
+
+            if (!sfr::imu::gyro_x_value->get_value(&gyro_x)) {
+                gyro_x = 0;
+            }
+
+            if (!sfr::imu::gyro_y_value->get_value(&gyro_y)) {
+                gyro_y = 0;
+            }
+
+            if (!sfr::imu::gyro_z_value->get_value(&gyro_z)) {
+                gyro_z = 0;
+            }
+
+            //  Pass output of ekf into starshot
+            starshotObj.rtU.Bfield_body[0] = mag_x / 1000000.0;
+            starshotObj.rtU.Bfield_body[1] = mag_y / 1000000.0;
+            starshotObj.rtU.Bfield_body[2] = mag_z / 1000000.0;
+            starshotObj.rtU.w[0] = gyro_x;
+            starshotObj.rtU.w[1] = gyro_y;
+            starshotObj.rtU.w[2] = gyro_z;
 
             starshotObj.step();
 
-            // 4. Complete the loop (set current values to output of starshot)
+            // Complete the loop (set current values to output of starshot)
             if (sfr::acs::mode == (uint8_t)acs_mode_type::detumble) {
-                current_x = starshotObj.rtY.detumble[0];
-                current_y = starshotObj.rtY.detumble[1];
-                current_z = starshotObj.rtY.detumble[2];
+                current_x.set(starshotObj.rtY.detumble[0]);
+                current_y.set(starshotObj.rtY.detumble[1]);
+                current_z.set(starshotObj.rtY.detumble[2]);
+
             } else if (sfr::acs::mode == (uint8_t)acs_mode_type::point) {
-                current_x = starshotObj.rtY.point[0];
-                current_y = starshotObj.rtY.point[1];
-                current_z = starshotObj.rtY.point[2];
+                current_x.set(starshotObj.rtY.point[0]);
+                current_y.set(starshotObj.rtY.point[1]);
+
+                current_z.set(starshotObj.rtY.point[2]);
             } else if (sfr::acs::mode == (uint8_t)acs_mode_type::simple) {
-                current_x = 0;
-                current_y = 0;
-                current_z = 0;
+                current_x.set(0);
+                current_y.set(0);
+                current_z.set(0);
                 if (sfr::acs::simple_mag == (uint8_t)mag_type::x) {
-                    current_x = sfr::acs::simple_current;
+                    current_x.set(sfr::acs::simple_current);
                 } else if (sfr::acs::simple_mag == (uint8_t)mag_type::y) {
-                    current_y = sfr::acs::simple_current;
+                    current_y.set(sfr::acs::simple_current);
                 } else if (sfr::acs::simple_mag == (uint8_t)mag_type::z) {
-                    current_z = sfr::acs::simple_current;
+                    current_z.set(sfr::acs::simple_current);
                 }
             }
         }
     }
 
     if (sfr::acs::off || !imu_valid) {
-        current_x = 0;
-        current_y = 0;
-        current_z = 0;
+        current_x.set(0);
+        current_y.set(0);
+        current_z.set(0);
     }
 
     ACSWrite(constants::acs::xtorqorder, current_x, constants::acs::xout1, constants::acs::xout2, constants::acs::xPWMpin);
@@ -124,6 +122,7 @@ void ACSControlTask::execute()
     } else if (sfr::acs::mode == 2) {
         Serial.print("DETUMBLE, ");
     }
+
     Serial.print(starshotObj.rtY.pt_error); // deg
     Serial.print(", ");
     Serial.print(current_x);
@@ -132,24 +131,21 @@ void ACSControlTask::execute()
     Serial.print(", ");
     Serial.print(current_z);
     Serial.print(", ");
-    Serial.print(plantObj.rtU.current[0]);
+    Serial.print(current_x);
     Serial.print(", ");
-    Serial.print(plantObj.rtU.current[1]);
+    Serial.print(mag_x); // uT
     Serial.print(", ");
-    Serial.print(plantObj.rtU.current[2]);
+    Serial.print(mag_y); // uT
     Serial.print(", ");
-    Serial.print(plantObj.rtY.magneticfield[0] * 1000000.0); // uT
+    Serial.print(mag_z); // uT
     Serial.print(", ");
-    Serial.print(plantObj.rtY.magneticfield[1] * 1000000.0); // uT
+    Serial.print(gyro_x);
     Serial.print(", ");
-    Serial.print(plantObj.rtY.magneticfield[2] * 1000000.0); // uT
+    Serial.print(gyro_y);
     Serial.print(", ");
-    Serial.print(plantObj.rtY.angularvelocity[0]);
-    Serial.print(", ");
-    Serial.print(plantObj.rtY.angularvelocity[1]);
-    Serial.print(", ");
-    Serial.print(plantObj.rtY.angularvelocity[2]);
+    Serial.print(gyro_z);
     Serial.println();
+
 #endif
 }
 
@@ -205,4 +201,3 @@ void ACSControlTask::ACSWrite(int torqorder, float current, int out1, int out2, 
         }
     }
 }
-
