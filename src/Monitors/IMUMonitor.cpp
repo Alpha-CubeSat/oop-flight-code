@@ -133,7 +133,6 @@ void IMUMonitor::imu_offset()
 {
 
     using namespace constants::acs;
-    using namespace sfr::acs;
 
     if (!sfr::temperature::temp_c_value->get_value(&temp)) {
         temp = 0;
@@ -168,17 +167,17 @@ void IMUMonitor::imu_offset()
     }
 
     /*Offset Contributions from PWM (ex: pwmX_oX is contribution of X mag to offset x)*/
-    float pwmX_ox = pwmX_ox_1 * pwm_x.get() + pwmX_ox_2 * pow(pwm_x.get(), 2) + pwmX_ox_3 * pow(pwm_x.get(), 3);
-    float pwmX_oy = pwmX_oy_1 * pwm_x.get() + pwmX_oy_2 * pow(pwm_x.get(), 2) + pwmX_oy_3 * pow(pwm_x.get(), 3);
-    float pwmX_oz = pwmX_oz_1 * pwm_x.get() + pwmX_oz_2 * pow(pwm_x.get(), 2) + pwmX_oz_3 * pow(pwm_x.get(), 3);
+    float pwmX_ox = pwmX_ox_1 * sfr::acs::pwm_x.get_float() + pwmX_ox_2 * pow(sfr::acs::pwm_x.get_float(), 2) + pwmX_ox_3 * pow(sfr::acs::pwm_x.get_float(), 3);
+    float pwmX_oy = pwmX_oy_1 * sfr::acs::pwm_x.get_float() + pwmX_oy_2 * pow(sfr::acs::pwm_x.get_float(), 2) + pwmX_oy_3 * pow(sfr::acs::pwm_x.get_float(), 3);
+    float pwmX_oz = pwmX_oz_1 * sfr::acs::pwm_x.get_float() + pwmX_oz_2 * pow(sfr::acs::pwm_x.get_float(), 2) + pwmX_oz_3 * pow(sfr::acs::pwm_x.get_float(), 3);
 
-    float pwmY_ox = pwmY_ox_1 * pwm_y.get() + pwmY_ox_2 * pow(pwm_y.get(), 2) + pwmY_ox_3 * pow(pwm_y.get(), 3);
-    float pwmY_oy = pwmY_oy_1 * pwm_y.get() + pwmY_oy_2 * pow(pwm_y.get(), 2) + pwmY_oy_3 * pow(pwm_y.get(), 3);
-    float pwmY_oz = pwmY_oz_1 * pwm_y.get() + pwmY_oz_2 * pow(pwm_y.get(), 2) + pwmY_oz_3 * pow(pwm_y.get(), 3);
+    float pwmY_ox = pwmY_ox_1 * sfr::acs::pwm_y.get_float() + pwmY_ox_2 * pow(sfr::acs::pwm_y.get_float(), 2) + pwmY_ox_3 * pow(sfr::acs::pwm_y.get_float(), 3);
+    float pwmY_oy = pwmY_oy_1 * sfr::acs::pwm_y.get_float() + pwmY_oy_2 * pow(sfr::acs::pwm_y.get_float(), 2) + pwmY_oy_3 * pow(sfr::acs::pwm_y.get_float(), 3);
+    float pwmY_oz = pwmY_oz_1 * sfr::acs::pwm_y.get_float() + pwmY_oz_2 * pow(sfr::acs::pwm_y.get_float(), 2) + pwmY_oz_3 * pow(sfr::acs::pwm_y.get_float(), 3);
 
-    float pwmZ_ox = pwmZ_ox_1 * pwm_z.get() + pwmZ_ox_2 * pow(pwm_z.get(), 2) + pwmZ_ox_3 * pow(pwm_z.get(), 3);
-    float pwmZ_oy = pwmZ_oy_1 * pwm_z.get() + pwmZ_oy_2 * pow(pwm_z.get(), 2) + pwmZ_oy_3 * pow(pwm_z.get(), 3);
-    float pwmZ_oz = pwmZ_oz_1 * pwm_z.get() + pwmZ_oz_2 * pow(pwm_z.get(), 2) + pwmZ_oz_3 * pow(pwm_z.get(), 3);
+    float pwmZ_ox = pwmZ_ox_1 * sfr::acs::pwm_z.get_float() + pwmZ_ox_2 * pow(sfr::acs::pwm_z.get_float(), 2) + pwmZ_ox_3 * pow(sfr::acs::pwm_z.get_float(), 3);
+    float pwmZ_oy = pwmZ_oy_1 * sfr::acs::pwm_z.get_float() + pwmZ_oy_2 * pow(sfr::acs::pwm_z.get_float(), 2) + pwmZ_oy_3 * pow(sfr::acs::pwm_z.get_float(), 3);
+    float pwmZ_oz = pwmZ_oz_1 * sfr::acs::pwm_z.get_float() + pwmZ_oz_2 * pow(sfr::acs::pwm_z.get_float(), 2) + pwmZ_oz_3 * pow(sfr::acs::pwm_z.get_float(), 3);
     /*******************************************/
     /*Voltage Adjustment Coefficients (ex: volX_ox = coef for pwmX_oX)*/
     float volX_ox = volX_ox_1 * voltage + volX_ox_c;
@@ -360,6 +359,4 @@ void IMUMonitor::capture_imu_values()
     sfr::imu::gyro_x_average->set_value(ekfObj.state(3));
     sfr::imu::gyro_y_average->set_value(ekfObj.state(4));
     sfr::imu::gyro_z_average->set_value(ekfObj.state(5));
-
-    sfr::imu::imu_valid = sfr::imu::gyro_x_value->get_value(&gyro_x) && sfr::imu::gyro_y_value->get_value(&gyro_y) && sfr::imu::gyro_z_value->get_value(&gyro_z) && sfr::imu::mag_x_value->get_value(&mag_x) && sfr::imu::mag_y_value->get_value(&mag_y) && sfr::imu::mag_z_value->get_value(&mag_z);
 }

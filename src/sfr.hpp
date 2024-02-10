@@ -196,7 +196,6 @@ namespace sfr {
         extern SFRField<bool> powered;
         extern SFRField<bool> dlink_written;
         extern SFRField<bool> report_ready;
-        extern SFRField<bool> imu_valid;
 
         extern SFRField<uint8_t> power_setting;
         extern SFRField<uint8_t> max_fragments;
@@ -245,13 +244,13 @@ namespace sfr {
         extern SFRField<uint32_t> Kp_index;
         extern SFRField<uint32_t> c_index;
 
-        extern SFRField<float> current_x;
-        extern SFRField<float> current_y;
-        extern SFRField<float> current_z;
+        extern SFRField<uint32_t> current_x;
+        extern SFRField<uint32_t> current_y;
+        extern SFRField<uint32_t> current_z;
 
-        extern SFRField<int32_t> pwm_x;
-        extern SFRField<int32_t> pwm_y;
-        extern SFRField<int32_t> pwm_z;
+        extern SFRField<uint32_t> pwm_x;
+        extern SFRField<uint32_t> pwm_y;
+        extern SFRField<uint32_t> pwm_z;
 
     } // namespace acs
     namespace battery {

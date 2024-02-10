@@ -1,5 +1,4 @@
 #include "ACSControlTask.hpp"
-using namespace sfr::acs;
 
 ACSControlTask::ACSControlTask()
 {
@@ -22,9 +21,12 @@ void ACSControlTask::execute()
     old_Kp = constants::acs::Kp_values[sfr::acs::Kp_index];
     old_c = constants::acs::c_values[sfr::acs::c_index];
 
-    using namespace sfr::imu;
-    imu_valid = true;
-    sfr::acs::off = false;
+    imu_valid = sfr::imu::gyro_x_value->get_value(&gyro_x) &&
+                sfr::imu::gyro_y_value->get_value(&gyro_y) &&
+                sfr::imu::gyro_z_value->get_value(&gyro_z) &&
+                sfr::imu::mag_x_value->get_value(&mag_x) &&
+                sfr::imu::mag_y_value->get_value(&mag_y) &&
+                sfr::imu::mag_z_value->get_value(&mag_z);
 
     if (!sfr::acs::off) {
         if ((!imu_valid && (sfr::imu::mode == (uint16_t)sensor_mode_type::abnormal_init || sfr::imu::mode == (uint16_t)sensor_mode_type::normal)) || sfr::acs::mode == (uint8_t)acs_mode_type::simple) {
@@ -72,39 +74,39 @@ void ACSControlTask::execute()
 
             // Complete the loop (set current values to output of starshot)
             if (sfr::acs::mode == (uint8_t)acs_mode_type::detumble) {
-                current_x.set(starshotObj.rtY.detumble[0]);
-                current_y.set(starshotObj.rtY.detumble[1]);
-                current_z.set(starshotObj.rtY.detumble[2]);
+                sfr::acs::current_x.set(starshotObj.rtY.detumble[0]);
+                sfr::acs::current_y.set(starshotObj.rtY.detumble[1]);
+                sfr::acs::current_z.set(starshotObj.rtY.detumble[2]);
 
             } else if (sfr::acs::mode == (uint8_t)acs_mode_type::point) {
-                current_x.set(starshotObj.rtY.point[0]);
-                current_y.set(starshotObj.rtY.point[1]);
+                sfr::acs::current_x.set(starshotObj.rtY.point[0]);
+                sfr::acs::current_y.set(starshotObj.rtY.point[1]);
 
-                current_z.set(starshotObj.rtY.point[2]);
+                sfr::acs::current_z.set(starshotObj.rtY.point[2]);
             } else if (sfr::acs::mode == (uint8_t)acs_mode_type::simple) {
-                current_x.set(0);
-                current_y.set(0);
-                current_z.set(0);
+                sfr::acs::current_x.set(0);
+                sfr::acs::current_y.set(0);
+                sfr::acs::current_z.set(0);
                 if (sfr::acs::simple_mag == (uint8_t)mag_type::x) {
-                    current_x.set(sfr::acs::simple_current);
+                    sfr::acs::current_x.set(sfr::acs::simple_current);
                 } else if (sfr::acs::simple_mag == (uint8_t)mag_type::y) {
-                    current_y.set(sfr::acs::simple_current);
+                    sfr::acs::current_y.set(sfr::acs::simple_current);
                 } else if (sfr::acs::simple_mag == (uint8_t)mag_type::z) {
-                    current_z.set(sfr::acs::simple_current);
+                    sfr::acs::current_z.set(sfr::acs::simple_current);
                 }
             }
         }
     }
 
     if (sfr::acs::off || !imu_valid) {
-        current_x.set(0);
-        current_y.set(0);
-        current_z.set(0);
+        sfr::acs::current_x.set(0);
+        sfr::acs::current_y.set(0);
+        sfr::acs::current_z.set(0);
     }
 
-    ACSWrite(constants::acs::xtorqorder, current_x, constants::acs::xout1, constants::acs::xout2, constants::acs::xPWMpin);
-    ACSWrite(constants::acs::ytorqorder, current_y, constants::acs::yout1, constants::acs::yout2, constants::acs::yPWMpin);
-    ACSWrite(constants::acs::ztorqorder, current_z, constants::acs::zout1, constants::acs::zout2, constants::acs::zPWMpin);
+    ACSWrite(constants::acs::xtorqorder, sfr::acs::current_x, constants::acs::xout1, constants::acs::xout2, constants::acs::xPWMpin);
+    ACSWrite(constants::acs::ytorqorder, sfr::acs::current_y, constants::acs::yout1, constants::acs::yout2, constants::acs::yPWMpin);
+    ACSWrite(constants::acs::ztorqorder, sfr::acs::current_z, constants::acs::zout1, constants::acs::zout2, constants::acs::zPWMpin);
 
 #ifdef ACS_DATA
     Serial.print(millis());
@@ -127,13 +129,13 @@ void ACSControlTask::execute()
 
     Serial.print(starshotObj.rtY.pt_error); // deg
     Serial.print(", ");
-    Serial.print(current_x);
+    Serial.print(sfr::acs::current_x);
     Serial.print(", ");
-    Serial.print(current_y);
+    Serial.print(sfr::acs::current_y);
     Serial.print(", ");
-    Serial.print(current_z);
+    Serial.print(sfr::acs::current_z);
     Serial.print(", ");
-    Serial.print(current_x);
+    Serial.print(sfr::acs::current_x);
     Serial.print(", ");
     Serial.print(mag_x); // uT
     Serial.print(", ");
@@ -169,11 +171,11 @@ void ACSControlTask::ACSWrite(int torqorder, float current, int out1, int out2, 
     Serial.println(PWM);
 #endif
     if (PWMpin == constants::acs::xPWMpin) {
-        pwm_x = PWM;
+        sfr::acs::pwm_x = PWM;
     } else if (PWMpin == constants::acs::yPWMpin) {
-        pwm_y = PWM;
+        sfr::acs::pwm_y = PWM;
     } else if (PWMpin == constants::acs::zPWMpin) {
-        pwm_z = PWM;
+        sfr::acs::pwm_z = PWM;
     }
 
     if (PWM == 0) {

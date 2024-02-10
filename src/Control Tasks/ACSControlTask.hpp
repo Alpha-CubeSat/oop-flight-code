@@ -20,16 +20,17 @@ private:
     void ACSWrite(int torqorder, float current, int out1, int out2, int PWMpin);
     int current2PWM(float current);
 
+    bool first = true;
+    bool imu_valid = true;
+
     float mag_x;
     float mag_y;
     float mag_z;
-
+    
     float gyro_x;
     float gyro_y;
     float gyro_z;
 
-    float num_steps;
-    bool first = true;
     float old_Id;
     float old_Kd;
     float old_Kp;
