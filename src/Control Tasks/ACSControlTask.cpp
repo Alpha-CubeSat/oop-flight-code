@@ -88,11 +88,11 @@ void ACSControlTask::execute()
                 sfr::acs::current_y.set(0);
                 sfr::acs::current_z.set(0);
                 if (sfr::acs::simple_mag == (uint8_t)mag_type::x) {
-                    sfr::acs::current_x.set(sfr::acs::simple_current);
+                    sfr::acs::current_x.set(sfr::acs::simple_current.get_float());
                 } else if (sfr::acs::simple_mag == (uint8_t)mag_type::y) {
-                    sfr::acs::current_y.set(sfr::acs::simple_current);
+                    sfr::acs::current_y.set(sfr::acs::simple_current.get_float());
                 } else if (sfr::acs::simple_mag == (uint8_t)mag_type::z) {
-                    sfr::acs::current_z.set(sfr::acs::simple_current);
+                    sfr::acs::current_z.set(sfr::acs::simple_current.get_float());
                 }
             }
         }
