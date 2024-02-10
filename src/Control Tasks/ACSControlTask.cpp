@@ -23,6 +23,8 @@ void ACSControlTask::execute()
     old_c = constants::acs::c_values[sfr::acs::c_index];
 
     using namespace sfr::imu;
+    imu_valid = true;
+    sfr::acs::off = false;
 
     if (!sfr::acs::off) {
         if ((!imu_valid && (sfr::imu::mode == (uint16_t)sensor_mode_type::abnormal_init || sfr::imu::mode == (uint16_t)sensor_mode_type::normal)) || sfr::acs::mode == (uint8_t)acs_mode_type::simple) {
@@ -104,7 +106,7 @@ void ACSControlTask::execute()
     ACSWrite(constants::acs::ytorqorder, current_y, constants::acs::yout1, constants::acs::yout2, constants::acs::yPWMpin);
     ACSWrite(constants::acs::ztorqorder, current_z, constants::acs::zout1, constants::acs::zout2, constants::acs::zPWMpin);
 
-#ifdef ACS_SIM
+#ifdef ACS_DATA
     Serial.print(millis());
     Serial.print(", ");
     Serial.print(sfr::mission::current_mode->get_name().c_str());

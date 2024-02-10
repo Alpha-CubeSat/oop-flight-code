@@ -221,14 +221,23 @@ void IMUMonitor::capture_imu_values()
 
     // IMU PRINT STATEMENTS FOR LOGGING AND GRAPHING IMU DATA
 #ifdef IMU_TESTING
-    Serial.print("Gyro_X: ");
+
+    Serial.print(millis());
+
+    Serial.print(", ");
+    Serial.print(mag.magnetic.x);
+    Serial.print(", ");
+    Serial.print(mag.magnetic.y);
+    Serial.print(", ");
+    Serial.print(mag.magnetic.z);
+    Serial.print(", ");
     Serial.print(gyro.gyro.x);
-    Serial.print(" Gyro_Y: ");
+    Serial.print(", ");
     Serial.print(gyro.gyro.y);
-    Serial.print(" Gyro_Z: ");
+    Serial.print(", ");
     Serial.print(gyro.gyro.z);
-    Serial.print(" Time: ");
-    Serial.println(millis());
+    Serial.print(", ");
+
 #endif
 
     // Save most recent readings
@@ -327,6 +336,21 @@ void IMUMonitor::capture_imu_values()
     ekfObj.Z(5) = gyro_z;
 
     ekfObj.step();
+
+
+#ifdef IMU_TESTING
+    Serial.print(ekfObj.state(0));
+    Serial.print(", ");
+    Serial.print(ekfObj.state(1));
+    Serial.print(", ");
+    Serial.print(ekfObj.state(2));
+    Serial.print(", ");
+    Serial.print(ekfObj.state(3));
+    Serial.print(", ");
+    Serial.print(ekfObj.state(4));
+    Serial.print(", ");
+    Serial.println(ekfObj.state(5));
+#endif
 
     // Add offset readings to buffer
     sfr::imu::mag_x_average->set_value(ekfObj.state(0));
