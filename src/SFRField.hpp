@@ -43,6 +43,7 @@ private:
     T min;      // </brief Inclusive Maximum Value
     int opcode; // </brief Uplink Op Code to set this field
     float resolution;
+    float offset;
     bool restore; // </brief Restore on boot from EEPROM flag
     T initial;    // </brief Default field value
 
@@ -50,10 +51,11 @@ public:
     SFRField(T default_val, T min, T max, int opcode_val)
     {
         value = default_val;
-        this->min = min;
-        this->max = max;
+        min = min;
+        max = max;
         opcode = opcode_val;
         resolution = 1;
+        offset = 0;
         restore = false;
         initial = default_val;
         SFRInterface::opcode_lookup[opcode_val] = this;
@@ -66,30 +68,46 @@ public:
         max = std::numeric_limits<T>::max();
         opcode = opcode_val;
         resolution = 1;
+        offset = 0;
         restore = false;
         initial = default_val;
         SFRInterface::opcode_lookup[opcode_val] = this;
     }
 
-    SFRField(float default_val, float min, float max, int opcode_val, float resolution)
+    SFRField(T default_val, T min, T max, int opcode_val, float resolution)
     {
         value = default_val;
-        this->min = min;
-        this->max = max;
+        min = min;
+        max = max;
         opcode = opcode_val;
-        this->resolution = resolution;
+        resolution = resolution;
+        offset = 0;
         restore = false;
         initial = default_val;
         SFRInterface::opcode_lookup[opcode_val] = this;
     }
 
-    SFRField(float default_val, int opcode_val, float resolution)
+    SFRField(T default_val, int opcode_val, float resolution)
     {
         value = default_val;
         min = std::numeric_limits<T>::min();
         max = std::numeric_limits<T>::max();
         opcode = opcode_val;
-        this->resolution = resolution;
+        resolution = resolution;
+        offset = 0;
+        restore = false;
+        initial = default_val;
+        SFRInterface::opcode_lookup[opcode_val] = this;
+    }
+
+    SFRField(T default_val, T min, T max, int opcode_val, float resolution, float offset)
+    {
+        value = default_val;
+        min = min;
+        max = max;
+        opcode = opcode_val;
+        resolution = resolution;
+        offset = offset;
         restore = false;
         initial = default_val;
         SFRInterface::opcode_lookup[opcode_val] = this;
@@ -107,7 +125,7 @@ public:
 
     float get_float()
     {
-        return value / resolution;
+        return (value / resolution) + offset;
     }
 
     void set(T input)
