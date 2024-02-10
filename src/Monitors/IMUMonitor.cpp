@@ -213,6 +213,28 @@ void IMUMonitor::imu_offset()
     sfr::imu::gyro_z_value->set_value(gyro_z - (-0.01396));
 }
 
+// generate a normal random variable using Box-Muller transform
+float generateGaussian(float mu, float sigma)
+{
+    float u1, u2;
+
+    int seed1 = analogRead(10);
+    int seed2 = analogRead(10);
+    // generate two 'indepdendent' uniform random variables
+    randomSeed(seed1);
+    do {
+        u1 = random(1000000) / 1000000.0;
+    } while (u1 == 0);
+
+    randomSeed(seed2);
+    u2 = random(1000000) / 1000000.0;
+
+    float mag = sqrt(-2.0 * log(u1));
+    float z0 = mag * cos(2 * PI * u2) + mu;
+    // float z1 = mag * sin(2 * PI * u2) + mu;
+    return z0 * sigma + mu;
+}
+
 void IMUMonitor::capture_imu_values()
 {
     sensors_event_t accel, mag, gyro, temp;
@@ -279,6 +301,7 @@ void IMUMonitor::capture_imu_values()
 
 // if ACS_SIM, plant will overwrite the sensor values to the sfr
 #ifdef ACS_SIM
+
     // 1. Pass output of starshot into plant
     for (int i = 0; i < (int)(constants::acs::step_size_input / 0.01); i++) {
         plantObj.rtU.current[0] = sfr::acs::current_x.get_float();
@@ -288,15 +311,23 @@ void IMUMonitor::capture_imu_values()
         plantObj.step();
     }
 
-    sfr::imu::gyro_x_value->set_value(plantObj.rtY.angularvelocity[0]);
-    sfr::imu::gyro_y_value->set_value(plantObj.rtY.angularvelocity[1]);
-    sfr::imu::gyro_z_value->set_value(plantObj.rtY.angularvelocity[2]);
+    float mag_x_noise = generateGaussian(0.0, 2.02559220e-01);
+    float mag_y_noise = generateGaussian(0.0, 1.55389381e-01);
+    float mag_z_noise = generateGaussian(0.0, 3.93162684e-01);
+
+    float gyro_x_noise = generateGaussian(0.0, 1.80161545e-05);
+    float gyro_y_noise = generateGaussian(0.0, 6.70144060e-06);
+    float gyro_z_noise = generateGaussian(0.0, 8.52192033e-06);
+
+    sfr::imu::gyro_x_value->set_value(plantObj.rtY.angularvelocity[0] + gyro_x_noise);
+    sfr::imu::gyro_y_value->set_value(plantObj.rtY.angularvelocity[1] + gyro_y_noise);
+    sfr::imu::gyro_z_value->set_value(plantObj.rtY.angularvelocity[2] + gyro_z_noise);
 
     // Convert to uT
 
-    sfr::imu::mag_x_value->set_value(plantObj.rtY.magneticfield[0] * 1000000.0);
-    sfr::imu::mag_y_value->set_value(plantObj.rtY.magneticfield[1] * 1000000.0);
-    sfr::imu::mag_z_value->set_value(plantObj.rtY.magneticfield[2] * 1000000.0);
+    sfr::imu::mag_x_value->set_value(plantObj.rtY.magneticfield[0] * 1000000.0 + mag_x_noise);
+    sfr::imu::mag_y_value->set_value(plantObj.rtY.magneticfield[1] * 1000000.0 + mag_y_noise);
+    sfr::imu::mag_z_value->set_value(plantObj.rtY.magneticfield[2] * 1000000.0 + mag_z_noise);
 
 #endif
 
