@@ -74,34 +74,34 @@ void ACSControlTask::execute()
 
             // Complete the loop (set current values to output of starshot)
             if (sfr::acs::mode == (uint8_t)acs_mode_type::detumble) {
-                sfr::acs::current_x.set(starshotObj.rtY.detumble[0]);
-                sfr::acs::current_y.set(starshotObj.rtY.detumble[1]);
-                sfr::acs::current_z.set(starshotObj.rtY.detumble[2]);
+                sfr::acs::current_x = starshotObj.rtY.detumble[0];
+                sfr::acs::current_y = starshotObj.rtY.detumble[1];
+                sfr::acs::current_z = starshotObj.rtY.detumble[2];
 
             } else if (sfr::acs::mode == (uint8_t)acs_mode_type::point) {
-                sfr::acs::current_x.set(starshotObj.rtY.point[0]);
-                sfr::acs::current_y.set(starshotObj.rtY.point[1]);
+                sfr::acs::current_x = starshotObj.rtY.point[0];
+                sfr::acs::current_y = starshotObj.rtY.point[1];
 
-                sfr::acs::current_z.set(starshotObj.rtY.point[2]);
+                sfr::acs::current_z = starshotObj.rtY.point[2];
             } else if (sfr::acs::mode == (uint8_t)acs_mode_type::simple) {
-                sfr::acs::current_x.set(0);
-                sfr::acs::current_y.set(0);
-                sfr::acs::current_z.set(0);
+                sfr::acs::current_x = 0;
+                sfr::acs::current_y = 0;
+                sfr::acs::current_z = 0;
                 if (sfr::acs::simple_mag == (uint8_t)mag_type::x) {
-                    sfr::acs::current_x.set(sfr::acs::simple_current);
+                    sfr::acs::current_x = sfr::acs::simple_current;
                 } else if (sfr::acs::simple_mag == (uint8_t)mag_type::y) {
-                    sfr::acs::current_y.set(sfr::acs::simple_current);
+                    sfr::acs::current_y = sfr::acs::simple_current;
                 } else if (sfr::acs::simple_mag == (uint8_t)mag_type::z) {
-                    sfr::acs::current_z.set(sfr::acs::simple_current);
+                    sfr::acs::current_z = sfr::acs::simple_current;
                 }
             }
         }
     }
 
     if (sfr::acs::off || !imu_valid) {
-        sfr::acs::current_x.set(0);
-        sfr::acs::current_y.set(0);
-        sfr::acs::current_z.set(0);
+        sfr::acs::current_x = 0;
+        sfr::acs::current_y = 0;
+        sfr::acs::current_z = 0;
     }
 
     ACSWrite(constants::acs::xtorqorder, sfr::acs::current_x, constants::acs::xout1, constants::acs::xout2, constants::acs::xPWMpin);

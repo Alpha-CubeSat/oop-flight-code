@@ -8,7 +8,7 @@ namespace sfr {
     } // namespace stabilization
     namespace boot {
         // OP Codes 1200
-        SFRField<uint32_t> max_time = SFRField<uint32_t>(2 * constants::time::one_hour, 0x1200);
+        SFRField<uint32_t> max_time = SFRField<uint32_t>(0 * constants::time::one_hour, 0x1200);
     } // namespace boot
     namespace detumble {
         // OP Codes 1500
@@ -23,7 +23,7 @@ namespace sfr {
         SFRField<bool> downlinked = SFRField<bool>(false, 0x1600);
         SFRField<uint16_t> max_downlink_hard_faults = SFRField<uint16_t>(3, 0x1601);
         SFRField<uint16_t> num_hard_faults = SFRField<uint16_t>(0, 0x1602);
-        SFRField<uint32_t> max_time = SFRField<uint32_t>(2 * constants::time::one_hour, 0x1603);
+        SFRField<uint32_t> max_time = SFRField<uint32_t>(0 * constants::time::one_hour, 0x1603);
     } // namespace aliveSignal
     namespace photoresistor {
         // OP Codes 1700
@@ -223,13 +223,13 @@ namespace sfr {
         SFRField<uint32_t> Kp_index = SFRField<uint32_t>(0, 0, (sizeof(constants::acs::Kp_values) / sizeof(constants::acs::Kp_values[0])) - 1, 0x2507);
         SFRField<uint32_t> c_index = SFRField<uint32_t>(0, 0, (sizeof(constants::acs::c_values) / sizeof(constants::acs::c_values[0])) - 1, 0x2508);
 
-        SFRField<uint32_t> current_x = SFRField<uint32_t>(0, -0.3, 0.3, 0x2509, 1.0);
-        SFRField<uint32_t> current_y = SFRField<uint32_t>(0, -0.3, 0.3, 0x2510, 1.0);
-        SFRField<uint32_t> current_z = SFRField<uint32_t>(0, -0.3, 0.3, 0x2511, 1.0);
+        float current_x = 0;
+        float current_y = 0;
+        float current_z = 0;
 
-        SFRField<uint32_t> pwm_x = SFRField<uint32_t>(0, -256, 256, 0x2512);
-        SFRField<uint32_t> pwm_y = SFRField<uint32_t>(0, -256, 256, 0x2513);
-        SFRField<uint32_t> pwm_z = SFRField<uint32_t>(0, -256, 256, 0x2514);
+        float pwm_x = 0;
+        float pwm_y = 0;
+        float pwm_z = 0;
 
     } // namespace acs
     namespace battery {

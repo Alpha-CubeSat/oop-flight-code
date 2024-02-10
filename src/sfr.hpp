@@ -244,13 +244,13 @@ namespace sfr {
         extern SFRField<uint32_t> Kp_index;
         extern SFRField<uint32_t> c_index;
 
-        extern SFRField<uint32_t> current_x;
-        extern SFRField<uint32_t> current_y;
-        extern SFRField<uint32_t> current_z;
+        extern float current_x;
+        extern float current_y;
+        extern float current_z;
 
-        extern SFRField<uint32_t> pwm_x;
-        extern SFRField<uint32_t> pwm_y;
-        extern SFRField<uint32_t> pwm_z;
+        extern float pwm_x;
+        extern float pwm_y;
+        extern float pwm_z;
 
     } // namespace acs
     namespace battery {

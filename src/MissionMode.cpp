@@ -487,8 +487,11 @@ void exit_detumble_phase(MissionMode *mode)
 
     // invalid readings from IMU
     if (sfr::imu::failed_times >= sfr::imu::failed_limit) {
+
+#ifndef NOT_SAT
         sfr::mission::current_mode = mode;
         sfr::acs::mode = (uint8_t)acs_mode_type::point;
+#endif
     }
 
     // cubesat stabilized
@@ -533,7 +536,9 @@ void enter_lp(MissionMode *lp_mode)
 {
     float voltage;
     if (!sfr::battery::voltage_average->is_valid() || (sfr::battery::voltage_average->get_value(&voltage) && voltage <= sfr::battery::min_battery.get_float())) {
+#ifndef NOT_SAT
         sfr::mission::current_mode = lp_mode;
+#endif
     }
 }
 
