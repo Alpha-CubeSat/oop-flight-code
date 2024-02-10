@@ -1,4 +1,4 @@
-#include "ACSControlTask.hpp"sfr::acs::current_y.set(sfr::acs::simple_current);
+#include "ACSControlTask.hpp"
 
 ACSControlTask::ACSControlTask()
 {
