@@ -337,7 +337,6 @@ void IMUMonitor::capture_imu_values()
 
     ekfObj.step();
 
-
 #ifdef IMU_TESTING
     Serial.print(ekfObj.state(0));
     Serial.print(", ");
