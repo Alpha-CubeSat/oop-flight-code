@@ -216,12 +216,21 @@ namespace sfr {
         SFRField<bool> off = SFRField<bool>(true, 0x2500);
         SFRField<uint8_t> mode = SFRField<uint8_t>((uint8_t)acs_mode_type::detumble, 0x2501);
         SFRField<uint8_t> simple_mag = SFRField<uint8_t>((uint8_t)mag_type::z, 0x2502);
-        SFRField<uint32_t> simple_current = SFRField<uint32_t>(0, 0x2503);
+        SFRField<uint32_t> simple_current = SFRField<uint32_t>(0, (-0.25 - constants::acs::current_offset) * constants::acs::current_resolution, (0.25 - constants::acs::current_offset) * constants::acs::current_resolution, 0x2503, constants::acs::current_resolution, constants::acs::current_offset);
         SFRField<uint32_t> on_time = SFRField<uint32_t>(10 * constants::time::one_minute, 0, constants::time::one_revolution, 0x2504);
         SFRField<uint32_t> Id_index = SFRField<uint32_t>(0, 0, (sizeof(constants::acs::Id_values) / sizeof(constants::acs::Id_values[0])) - 1, 0x2505);
         SFRField<uint32_t> Kd_index = SFRField<uint32_t>(0, 0, (sizeof(constants::acs::Kd_values) / sizeof(constants::acs::Kd_values[0])) - 1, 0x2506);
         SFRField<uint32_t> Kp_index = SFRField<uint32_t>(0, 0, (sizeof(constants::acs::Kp_values) / sizeof(constants::acs::Kp_values[0])) - 1, 0x2507);
         SFRField<uint32_t> c_index = SFRField<uint32_t>(0, 0, (sizeof(constants::acs::c_values) / sizeof(constants::acs::c_values[0])) - 1, 0x2508);
+
+        float current_x = 0;
+        float current_y = 0;
+        float current_z = 0;
+
+        float pwm_x = 0;
+        float pwm_y = 0;
+        float pwm_z = 0;
+
     } // namespace acs
     namespace battery {
         // OP Codes 2600

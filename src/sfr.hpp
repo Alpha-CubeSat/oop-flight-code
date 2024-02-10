@@ -196,6 +196,7 @@ namespace sfr {
         extern SFRField<bool> powered;
         extern SFRField<bool> dlink_written;
         extern SFRField<bool> report_ready;
+
         extern SFRField<uint8_t> power_setting;
         extern SFRField<uint8_t> max_fragments;
         extern SFRField<uint16_t> mode;
@@ -242,6 +243,15 @@ namespace sfr {
         extern SFRField<uint32_t> Kd_index;
         extern SFRField<uint32_t> Kp_index;
         extern SFRField<uint32_t> c_index;
+
+        extern float current_x;
+        extern float current_y;
+        extern float current_z;
+
+        extern float pwm_x;
+        extern float pwm_y;
+        extern float pwm_z;
+
     } // namespace acs
     namespace battery {
         // OP Codes 2600
