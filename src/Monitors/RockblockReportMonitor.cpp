@@ -42,7 +42,8 @@ void RockblockReportMonitor::switch_report_type_to(report_type downlink_report_t
 
 void RockblockReportMonitor::schedule_report()
 {
-    if (!sfr::rockblock::sleep_mode && (millis() - sfr::rockblock::last_downlink >= sfr::rockblock::downlink_period || !sfr::aliveSignal::downlinked)) {
+    if (!sfr::rockblock::sleep_mode && (millis() - sfr::rockblock::last_downlink >= sfr::rockblock::downlink_period ||
+                                        (!sfr::aliveSignal::downlinked && sfr::mission::current_mode->get_id() == sfr::mission::aliveSignal->get_id()))) {
         // Check if in a low-power mode
         if (sfr::mission::current_mode->get_type() == mode_type::LP) {
             // In low-power mode; only enable normal report downlinks
