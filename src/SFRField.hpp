@@ -50,66 +50,66 @@ private:
 public:
     SFRField(T default_val, T min, T max, int opcode_val)
     {
-        value = default_val;
-        min = min;
-        max = max;
-        opcode = opcode_val;
-        resolution = 1;
-        offset = 0;
-        restore = false;
-        initial = default_val;
+        this->value = default_val;
+        this->min = min;
+        this->max = max;
+        this->opcode = opcode_val;
+        this->resolution = 1;
+        this->offset = 0;
+        this->restore = false;
+        this->initial = default_val;
         SFRInterface::opcode_lookup[opcode_val] = this;
     }
 
     SFRField(T default_val, int opcode_val)
     {
-        value = default_val;
-        min = std::numeric_limits<T>::min();
-        max = std::numeric_limits<T>::max();
-        opcode = opcode_val;
-        resolution = 1;
-        offset = 0;
-        restore = false;
-        initial = default_val;
+        this->value = default_val;
+        this->min = std::numeric_limits<T>::min();
+        this->max = std::numeric_limits<T>::max();
+        this->opcode = opcode_val;
+        this->resolution = 1;
+        this->offset = 0;
+        this->restore = false;
+        this->initial = default_val;
         SFRInterface::opcode_lookup[opcode_val] = this;
     }
 
     SFRField(T default_val, T min, T max, int opcode_val, float resolution)
     {
-        value = default_val;
-        min = min;
-        max = max;
-        opcode = opcode_val;
-        resolution = resolution;
-        offset = 0;
-        restore = false;
-        initial = default_val;
+        this->value = default_val;
+        this->min = min;
+        this->max = max;
+        this->opcode = opcode_val;
+        this->resolution = resolution;
+        this->offset = 0;
+        this->restore = false;
+        this->initial = default_val;
         SFRInterface::opcode_lookup[opcode_val] = this;
     }
 
     SFRField(T default_val, int opcode_val, float resolution)
     {
-        value = default_val;
-        min = std::numeric_limits<T>::min();
-        max = std::numeric_limits<T>::max();
-        opcode = opcode_val;
-        resolution = resolution;
-        offset = 0;
-        restore = false;
-        initial = default_val;
+        this->value = default_val;
+        this->min = std::numeric_limits<T>::min();
+        this->max = std::numeric_limits<T>::max();
+        this->opcode = opcode_val;
+        this->resolution = resolution;
+        this->offset = 0;
+        this->restore = false;
+        this->initial = default_val;
         SFRInterface::opcode_lookup[opcode_val] = this;
     }
 
     SFRField(T default_val, T min, T max, int opcode_val, float resolution, float offset)
     {
-        value = default_val;
-        min = min;
-        max = max;
-        opcode = opcode_val;
-        resolution = resolution;
-        offset = offset;
-        restore = false;
-        initial = default_val;
+        this->value = default_val;
+        this->min = min;
+        this->max = max;
+        this->opcode = opcode_val;
+        this->resolution = resolution;
+        this->offset = offset;
+        this->restore = false;
+        this->initial = default_val;
         SFRInterface::opcode_lookup[opcode_val] = this;
     }
 
