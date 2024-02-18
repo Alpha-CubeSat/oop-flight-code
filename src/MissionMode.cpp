@@ -488,7 +488,7 @@ void exit_detumble_phase(MissionMode *mode)
     // invalid readings from IMU
     if (sfr::imu::failed_times >= sfr::imu::failed_limit) {
         sfr::mission::current_mode = mode;
-        sfr::acs::mode = (uint8_t)acs_mode_type::point;
+        sfr::acs::mode = (uint8_t)acs_mode_type::simple;
     }
 
     // cubesat stabilized
@@ -496,20 +496,20 @@ void exit_detumble_phase(MissionMode *mode)
         sfr::imu::gyro_x_average->get_value(&gyro_x) && gyro_x <= sfr::detumble::max_stable_gyro_x.get_float() &&
         sfr::imu::gyro_y_average->get_value(&gyro_y) && gyro_y <= sfr::detumble::max_stable_gyro_y.get_float()) {
         sfr::mission::current_mode = mode;
-        sfr::acs::mode = (uint8_t)acs_mode_type::point;
+        sfr::acs::mode = (uint8_t)acs_mode_type::simple;
     }
 
     // cubesat will never stabilize
     if ((sfr::imu::gyro_x_average->get_value(&gyro_x) && gyro_x >= sfr::detumble::min_unstable_gyro_x.get_float()) ||
         (sfr::imu::gyro_y_average->get_value(&gyro_y) && gyro_y >= sfr::detumble::min_unstable_gyro_y.get_float())) {
         sfr::mission::current_mode = mode;
-        sfr::acs::mode = (uint8_t)acs_mode_type::point;
+        sfr::acs::mode = (uint8_t)acs_mode_type::simple;
     }
 
     // detumble has timed out
     if (millis() - sfr::mission::stabilization->start_time >= sfr::stabilization::max_time) {
         sfr::mission::current_mode = mode;
-        sfr::acs::mode = (uint8_t)acs_mode_type::point;
+        sfr::acs::mode = (uint8_t)acs_mode_type::simple;
     }
 }
 
@@ -577,7 +577,7 @@ void exit_alive_signal()
     if (sfr::eeprom::time_alive >= (sfr::boot::max_time + sfr::stabilization::max_time)) {
         sfr::mission::current_mode = sfr::mission::transmit;
         if (sfr::acs::mode == (uint8_t)acs_mode_type::detumble) {
-            sfr::acs::mode = (uint8_t)acs_mode_type::point;
+            sfr::acs::mode = (uint8_t)acs_mode_type::simple;
         }
     } else {
         sfr::mission::current_mode = sfr::mission::detumbleSpin;
