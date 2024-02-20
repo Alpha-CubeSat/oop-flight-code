@@ -65,9 +65,6 @@ void MainControlLoop::execute()
     case ((uint8_t)acs_mode_type::simple):
         Serial.println("SIMPLE");
         break;
-    case ((uint8_t)acs_mode_type::point):
-        Serial.println("POINT");
-        break;
     case ((uint8_t)acs_mode_type::detumble):
         Serial.println("DETUMBLE");
         break;

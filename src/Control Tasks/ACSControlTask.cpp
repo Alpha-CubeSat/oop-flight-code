@@ -77,12 +77,6 @@ void ACSControlTask::execute()
                 sfr::acs::current_x = starshotObj.rtY.detumble[0];
                 sfr::acs::current_y = starshotObj.rtY.detumble[1];
                 sfr::acs::current_z = starshotObj.rtY.detumble[2];
-
-            } else if (sfr::acs::mode == (uint8_t)acs_mode_type::point) {
-                sfr::acs::current_x = starshotObj.rtY.point[0];
-                sfr::acs::current_y = starshotObj.rtY.point[1];
-
-                sfr::acs::current_z = starshotObj.rtY.point[2];
             } else if (sfr::acs::mode == (uint8_t)acs_mode_type::simple) {
                 sfr::acs::current_x = 0;
                 sfr::acs::current_y = 0;
@@ -122,8 +116,6 @@ void ACSControlTask::execute()
     if (sfr::acs::mode == 0) {
         Serial.print("SIMPLE, ");
     } else if (sfr::acs::mode == 1) {
-        Serial.print("POINT, ");
-    } else if (sfr::acs::mode == 2) {
         Serial.print("DETUMBLE, ");
     }
 
