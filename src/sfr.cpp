@@ -153,7 +153,7 @@ namespace sfr {
         SFRField<uint32_t> downlink_period = SFRField<uint32_t>(20 * constants::time::one_minute, 0, 2 * constants::time::one_day, 0x2108);
         SFRField<uint32_t> lp_downlink_period = SFRField<uint32_t>(constants::time::one_hour, constants::time::one_second, 2 * constants::time::one_day, 0x2109);
         SFRField<uint32_t> transmit_downlink_period = SFRField<uint32_t>(20 * constants::time::one_minute, constants::time::one_second, 2 * constants::time::one_day, 0x2110);
-        SFRField<uint32_t> on_time = SFRField<uint32_t>(30 * constants::time::one_minute, 0, constants::time::one_revolution, 0x2111);
+        SFRField<uint32_t> on_time = SFRField<uint32_t>(35 * constants::time::one_minute, 0, constants::time::one_revolution, 0x2111);
 
         char buffer[constants::rockblock::buffer_size] = {0};
         uint8_t commas[constants::rockblock::num_commas] = {0};
@@ -217,7 +217,7 @@ namespace sfr {
         SFRField<uint8_t> mode = SFRField<uint8_t>((uint8_t)acs_mode_type::detumble, 0x2501);
         SFRField<uint8_t> simple_mag = SFRField<uint8_t>((uint8_t)mag_type::z, 0x2502);
         SFRField<uint32_t> simple_current = SFRField<uint32_t>(0, (-0.25 - constants::acs::current_offset) * constants::acs::current_resolution, (0.25 - constants::acs::current_offset) * constants::acs::current_resolution, 0x2503, constants::acs::current_resolution, constants::acs::current_offset);
-        SFRField<uint32_t> on_time = SFRField<uint32_t>(10 * constants::time::one_minute, 0, constants::time::one_revolution, 0x2504);
+        SFRField<uint32_t> on_time = SFRField<uint32_t>(5 * constants::time::one_minute, 0, constants::time::one_revolution, 0x2504);
         SFRField<uint32_t> Id_index = SFRField<uint32_t>(0, 0, (sizeof(constants::acs::Id_values) / sizeof(constants::acs::Id_values[0])) - 1, 0x2505);
         SFRField<uint32_t> Kd_index = SFRField<uint32_t>(0, 0, (sizeof(constants::acs::Kd_values) / sizeof(constants::acs::Kd_values[0])) - 1, 0x2506);
         SFRField<uint32_t> Kp_index = SFRField<uint32_t>(0, 0, (sizeof(constants::acs::Kp_values) / sizeof(constants::acs::Kp_values[0])) - 1, 0x2507);
