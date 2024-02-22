@@ -199,6 +199,8 @@ void MainControlLoop::execute()
     // Pet watchdog
     Watchdog.reset();
 
+
+
 #ifdef VERBOSE
     Serial.print("Cycle time (ms): ");
     Serial.println(millis() - sfr::mission::cycle_start);

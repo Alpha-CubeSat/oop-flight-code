@@ -390,4 +390,38 @@ void IMUMonitor::capture_imu_values()
     sfr::imu::gyro_x_average->set_value(ekfObj.state(3));
     sfr::imu::gyro_y_average->set_value(ekfObj.state(4));
     sfr::imu::gyro_z_average->set_value(ekfObj.state(5));
+
+    /// test
+
+    float temp_c;
+
+
+
+    if (!sfr::temperature::temp_c_value->get_value(&temp_c)) {
+        temp_c = 0;
+    }
+
+    Serial.print(millis() - sfr::mission::cycle_start);
+    Serial.print(ekfObj.state(0));
+    Serial.print(", ");
+    Serial.print(ekfObj.state(1));
+    Serial.print(", ");
+    Serial.print(ekfObj.state(2));
+    Serial.print(", ");
+    Serial.print(ekfObj.state(3));
+    Serial.print(", ");
+    Serial.print(ekfObj.state(4));
+    Serial.print(", ");
+    Serial.print(ekfObj.state(5));
+    Serial.print(", ");
+    Serial.print(sfr::acs::pwm_x);
+    Serial.print(", ");
+    Serial.print(sfr::acs::pwm_y);
+    Serial.print(", ");
+    Serial.print(sfr::acs::pwm_z);
+    Serial.print(", ");
+    Serial.print(voltage);
+    Serial.print(", ");
+    Serial.print(temp_c);
+    Serial.print(", ");
 }
