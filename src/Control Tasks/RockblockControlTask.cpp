@@ -331,10 +331,10 @@ void RockblockControlTask::dispatch_send_message()
         print_SFRField(3, 0x1906);
 
         Serial.print("sfr::rockblock::lp_downlink_period->");
-        print_SFRField(4, 0x2109);
+        print_SFRField(4, 0x2110);
 
         Serial.print("sfr::rockblock::transmit_downlink_period->");
-        print_SFRField(5, 0x2110);
+        print_SFRField(5, 0x2111);
 
         Serial.print("sfr::acs::mode->");
         print_SFRField(6, 0x2501);
@@ -373,7 +373,7 @@ void RockblockControlTask::dispatch_send_message()
         print_SFRField(17, 0x2504);
 
         Serial.print("sfr::rockblock::on_time->");
-        print_SFRField(18, 0x2111);
+        print_SFRField(18, 0x2112);
 
         Serial.print("sfr::photoresistor::covered->");
         Serial.println((bool)(sfr::rockblock::downlink_report[19] & (1 << 0)));

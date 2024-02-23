@@ -23,8 +23,8 @@ void NormalReportMonitor::execute()
         serialize(0x1802), // sfr::mission::boot_time_mins
         serialize(0x1905), // sfr::burnwire::burn_time
         serialize(0x1906), // sfr::burnwire::armed_time
-        serialize(0x2109), // sfr::rockblock::lp_downlink_period
-        serialize(0x2110), // sfr::rockblock::transmit_downlink_period
+        serialize(0x2110), // sfr::rockblock::lp_downlink_period
+        serialize(0x2111), // sfr::rockblock::transmit_downlink_period
         serialize(0x2501), // sfr::acs::mode
         serialize(0x2505), // sfr::acs::Id_index
         serialize(0x2506), // sfr::acs::Kd_index
@@ -37,7 +37,7 @@ void NormalReportMonitor::execute()
         serialize(0x2809), // sfr::eeprom::dynamic_data_age
         serialize(0x2810), // sfr::eeprom::sfr_data_age
         serialize(0x2504), // sfr::acs::on_time
-        serialize(0x2111), // sfr::rockblock::on_time
+        serialize(0x2112), // sfr::rockblock::on_time
         serialize(sfr_packed_bools),
 
         // Sensor readings
