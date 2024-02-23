@@ -51,6 +51,7 @@ private:
     uint32_t same_mode = 0;
     uint8_t look_ahead1 = -1;
     uint8_t look_ahead2 = -1;
+    uint8_t signal_checks = 0;
 };
 
 #endif
