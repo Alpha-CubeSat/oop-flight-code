@@ -147,13 +147,14 @@ namespace sfr {
         SFRField<bool> sleep_mode = SFRField<bool>(false, 0x2102);
         SFRField<uint8_t> max_commands_count = SFRField<uint8_t>(6, 0x2103);
         SFRField<uint8_t> queue_limit = SFRField<uint8_t>(5, 0x2104);
-        SFRField<uint16_t> downlink_report_type = SFRField<uint16_t>((uint16_t)report_type::normal_report, 0x2105);
-        SFRField<uint16_t> mode = SFRField<uint16_t>((uint16_t)rockblock_mode_type::standby, 0x2106);
-        SFRField<uint32_t> last_downlink = SFRField<uint32_t>(0, 0x2107);
-        SFRField<uint32_t> downlink_period = SFRField<uint32_t>(20 * constants::time::one_minute, 0, 2 * constants::time::one_day, 0x2108);
-        SFRField<uint32_t> lp_downlink_period = SFRField<uint32_t>(constants::time::one_hour, constants::time::one_second, 2 * constants::time::one_day, 0x2109);
-        SFRField<uint32_t> transmit_downlink_period = SFRField<uint32_t>(20 * constants::time::one_minute, constants::time::one_second, 2 * constants::time::one_day, 0x2110);
-        SFRField<uint32_t> on_time = SFRField<uint32_t>(35 * constants::time::one_minute, 0, constants::time::one_revolution, 0x2111);
+        SFRField<uint8_t> max_signal_check = SFRField<uint8_t>(3, 0x2105);
+        SFRField<uint16_t> downlink_report_type = SFRField<uint16_t>((uint16_t)report_type::normal_report, 0x2106);
+        SFRField<uint16_t> mode = SFRField<uint16_t>((uint16_t)rockblock_mode_type::standby, 0x2107);
+        SFRField<uint32_t> last_downlink = SFRField<uint32_t>(0, 0x2108);
+        SFRField<uint32_t> downlink_period = SFRField<uint32_t>(20 * constants::time::one_minute, 0, 2 * constants::time::one_day, 0x2109);
+        SFRField<uint32_t> lp_downlink_period = SFRField<uint32_t>(constants::time::one_hour, constants::time::one_second, 2 * constants::time::one_day, 0x2110);
+        SFRField<uint32_t> transmit_downlink_period = SFRField<uint32_t>(20 * constants::time::one_minute, constants::time::one_second, 2 * constants::time::one_day, 0x2111);
+        SFRField<uint32_t> on_time = SFRField<uint32_t>(35 * constants::time::one_minute, 0, constants::time::one_revolution, 0x2112);
 
         char buffer[constants::rockblock::buffer_size] = {0};
         uint8_t commas[constants::rockblock::num_commas] = {0};
