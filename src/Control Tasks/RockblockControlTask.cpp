@@ -621,7 +621,12 @@ void RockblockControlTask::dispatch_create_buffer()
 
 void RockblockControlTask::dispatch_process_mo_status()
 {
-    if (sfr::rockblock::commas[0] == 1 && (sfr::rockblock::buffer[0] == '0' || sfr::rockblock::buffer[0] == '1' || sfr::rockblock::buffer[0] != '2')) {
+    if (sfr::rockblock::commas[0] == 1 &&
+        (sfr::rockblock::buffer[0] == '0' ||
+         sfr::rockblock::buffer[0] == '1' ||
+         sfr::rockblock::buffer[0] == '2' ||
+         sfr::rockblock::buffer[0] == '3' ||
+         sfr::rockblock::buffer[0] == '4')) {
         // nominal
         transition_to(rockblock_mode_type::process_mt_status);
     } else {
