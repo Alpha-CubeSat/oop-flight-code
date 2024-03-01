@@ -636,7 +636,7 @@ void RockblockControlTask::dispatch_process_mo_status()
 #endif
             sfr::aliveSignal::num_hard_faults++;
         }
-        Serial.println("SAT INFO: mo status is greater than 2");
+        Serial.println("SAT INFO: mo status is invalid");
         // off nominal response, but wait until signal is strong to downlink again to preserve power
         transition_to(rockblock_mode_type::send_signal_strength_response);
     }
