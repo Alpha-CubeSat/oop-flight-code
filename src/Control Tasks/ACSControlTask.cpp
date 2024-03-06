@@ -127,8 +127,6 @@ void ACSControlTask::execute()
     Serial.print(", ");
     Serial.print(sfr::acs::current_z);
     Serial.print(", ");
-    Serial.print(sfr::acs::current_x);
-    Serial.print(", ");
     Serial.print(mag_x); // uT
     Serial.print(", ");
     Serial.print(mag_y); // uT
