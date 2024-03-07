@@ -74,9 +74,17 @@ void ACSControlTask::execute()
 
             // Complete the loop (set current values to output of starshot)
             if (sfr::acs::mode == (uint8_t)acs_mode_type::detumble) {
-                sfr::acs::current_x = starshotObj.rtY.detumble[0];
-                sfr::acs::current_y = starshotObj.rtY.detumble[1];
-                sfr::acs::current_z = starshotObj.rtY.detumble[2];
+                // nan handler
+                if (isnan(starshotObj.rtY.detumble[0]) || isnan(starshotObj.rtY.detumble[1]) || isnan(starshotObj.rtY.detumble[2])) {
+                    sfr::acs::current_x = 0;
+                    sfr::acs::current_y = 0;
+                    sfr::acs::current_z = 0;
+                } else {
+                    sfr::acs::current_x = starshotObj.rtY.detumble[0];
+                    sfr::acs::current_y = starshotObj.rtY.detumble[1];
+                    sfr::acs::current_z = starshotObj.rtY.detumble[2];
+                }
+
             } else if (sfr::acs::mode == (uint8_t)acs_mode_type::simple) {
                 sfr::acs::current_x = 0;
                 sfr::acs::current_y = 0;
