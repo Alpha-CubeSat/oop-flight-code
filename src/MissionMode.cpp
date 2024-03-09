@@ -224,7 +224,7 @@ void NormalArmed::transition_to()
 void NormalArmed::dispatch()
 {
     timed_out(sfr::mission::transmitArmed, sfr::acs::on_time);
-    exit_armed_phase(sfr::mission::transmitInSun);
+    exit_armed_phase(sfr::mission::transmitDeployment);
     enter_lp(sfr::mission::lowPowerArmed); // entering lp takes precedence
 }
 
@@ -245,7 +245,7 @@ void TransmitArmed::transition_to()
 void TransmitArmed::dispatch()
 {
     timed_out(sfr::mission::normalArmed, sfr::rockblock::on_time);
-    exit_armed_phase(sfr::mission::transmitInSun);
+    exit_armed_phase(sfr::mission::transmitDeployment);
     enter_lp(sfr::mission::lowPowerArmed); // entering lp takes precedence
 }
 
@@ -266,7 +266,7 @@ void LowPowerArmed::transition_to()
 void LowPowerArmed::dispatch()
 {
     exit_lp(sfr::mission::transmitArmed);
-    exit_armed_phase(sfr::mission::lowPowerInSun);
+    exit_armed_phase(sfr::mission::lowPowerDeployment);
 }
 
 Phase *LowPowerArmed::get_phase()
