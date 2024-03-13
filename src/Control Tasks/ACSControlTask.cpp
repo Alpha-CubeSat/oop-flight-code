@@ -36,6 +36,9 @@ void ACSControlTask::execute()
         }
 
         if (imu_valid) {
+            // setting high so its ready to send current
+            Pins::setPinState(constants::acs::STBXYpin, HIGH);
+            Pins::setPinState(constants::acs::STBZpin, HIGH);
 
             // read sfr data into local variables
             if (!sfr::imu::mag_x_value->get_value(&mag_x)) {
@@ -101,6 +104,9 @@ void ACSControlTask::execute()
     }
 
     if (sfr::acs::off || !imu_valid) {
+        // setting low to save current from the H bridges
+        Pins::setPinState(constants::acs::STBXYpin, LOW);
+        Pins::setPinState(constants::acs::STBZpin, LOW);
         sfr::acs::current_x = 0;
         sfr::acs::current_y = 0;
         sfr::acs::current_z = 0;

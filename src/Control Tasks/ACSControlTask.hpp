@@ -3,6 +3,7 @@
 
 #include "Modes/acs_mode_type.enum"
 #include "Modes/mag_type.enum"
+#include "Pins.hpp"
 #include "StarshotACS.h"
 #include "constants.hpp"
 
