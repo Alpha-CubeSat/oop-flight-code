@@ -89,15 +89,30 @@ void ACSControlTask::execute()
                 }
 
             } else if (sfr::acs::mode == (uint8_t)acs_mode_type::simple) {
+
                 sfr::acs::current_x = 0;
                 sfr::acs::current_y = 0;
                 sfr::acs::current_z = 0;
+
                 if (sfr::acs::simple_mag == (uint8_t)mag_type::x) {
                     sfr::acs::current_x = sfr::acs::simple_current.get_float();
                 } else if (sfr::acs::simple_mag == (uint8_t)mag_type::y) {
                     sfr::acs::current_y = sfr::acs::simple_current.get_float();
                 } else if (sfr::acs::simple_mag == (uint8_t)mag_type::z) {
                     sfr::acs::current_z = sfr::acs::simple_current.get_float();
+                }
+
+                if (sfr::acs::current_x == 0 && sfr::acs::current_y == 0) {
+                    Pins::setPinState(constants::acs::STBXYpin, LOW);
+                } else {
+                    // x or y not zero
+                    Pins::setPinState(constants::acs::STBXYpin, HIGH);
+                }
+
+                if (sfr::acs::current_z == 0) {
+                    Pins::setPinState(constants::acs::STBZpin, LOW);
+                } else {
+                    Pins::setPinState(constants::acs::STBZpin, HIGH);
                 }
             }
         }
