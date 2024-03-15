@@ -36,10 +36,6 @@ void ACSControlTask::execute()
         }
 
         if (imu_valid) {
-            // setting high so its ready to send current
-            Pins::setPinState(constants::acs::STBXYpin, HIGH);
-            Pins::setPinState(constants::acs::STBZpin, HIGH);
-
             // read sfr data into local variables
             if (!sfr::imu::mag_x_value->get_value(&mag_x)) {
                 mag_x = 0;
@@ -77,6 +73,10 @@ void ACSControlTask::execute()
 
             // Complete the loop (set current values to output of starshot)
             if (sfr::acs::mode == (uint8_t)acs_mode_type::detumble) {
+                // setting high so its ready to send current
+                Pins::setPinState(constants::acs::STBXYpin, HIGH);
+                Pins::setPinState(constants::acs::STBZpin, HIGH);
+
                 // nan handler
                 if (std::isnan(starshotObj.rtY.detumble[0]) || std::isnan(starshotObj.rtY.detumble[1]) || std::isnan(starshotObj.rtY.detumble[2])) {
                     sfr::acs::current_x = 0;
