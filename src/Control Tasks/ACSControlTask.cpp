@@ -174,12 +174,18 @@ void ACSControlTask::execute()
 
 int ACSControlTask::current2PWM(float current)
 {
-    if (int(633.5 * pow(fabs(current), 0.6043) + 8.062) < 8.062)
-        return 0;
-    else if (int(633.5 * pow(fabs(current), 0.6043) + 8.062) > 255)
-        return 255;
-    else
-        return int(633.5 * pow(fabs(current), 0.6043) + 8.062);
+    float voltage;
+    if (!sfr::battery::voltage_value->get_value(&voltage)) {
+        voltage = 0;
+    }
+
+    float abs_current = fabs(current);
+    float voltage_cof = voltage * 0.24038134 + 0.02798774;
+    abs_current = abs_current / voltage_cof;
+
+    int PWM = -4474.72 * pow(abs_current, 2) + 2099.351 * abs_current + 14.17;
+
+    return std::max(0, std::min(PWM, 255));
 }
 
 void ACSControlTask::ACSWrite(int torqorder, float current, int out1, int out2, int PWMpin)
