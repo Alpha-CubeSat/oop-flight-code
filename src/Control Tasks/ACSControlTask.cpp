@@ -36,7 +36,6 @@ void ACSControlTask::execute()
         }
 
         if (imu_valid) {
-
             // read sfr data into local variables
             if (!sfr::imu::mag_x_value->get_value(&mag_x)) {
                 mag_x = 0;
@@ -74,6 +73,10 @@ void ACSControlTask::execute()
 
             // Complete the loop (set current values to output of starshot)
             if (sfr::acs::mode == (uint8_t)acs_mode_type::detumble) {
+                // setting high so its ready to send current
+                Pins::setPinState(constants::acs::STBXYpin, HIGH);
+                Pins::setPinState(constants::acs::STBZpin, HIGH);
+
                 // nan handler
                 if (std::isnan(starshotObj.rtY.detumble[0]) || std::isnan(starshotObj.rtY.detumble[1]) || std::isnan(starshotObj.rtY.detumble[2])) {
                     sfr::acs::current_x = 0;
@@ -86,9 +89,11 @@ void ACSControlTask::execute()
                 }
 
             } else if (sfr::acs::mode == (uint8_t)acs_mode_type::simple) {
+
                 sfr::acs::current_x = 0;
                 sfr::acs::current_y = 0;
                 sfr::acs::current_z = 0;
+
                 if (sfr::acs::simple_mag == (uint8_t)mag_type::x) {
                     sfr::acs::current_x = sfr::acs::simple_current.get_float();
                 } else if (sfr::acs::simple_mag == (uint8_t)mag_type::y) {
@@ -96,11 +101,27 @@ void ACSControlTask::execute()
                 } else if (sfr::acs::simple_mag == (uint8_t)mag_type::z) {
                     sfr::acs::current_z = sfr::acs::simple_current.get_float();
                 }
+
+                if (sfr::acs::current_x == 0 && sfr::acs::current_y == 0) {
+                    Pins::setPinState(constants::acs::STBXYpin, LOW);
+                } else {
+                    // x or y not zero
+                    Pins::setPinState(constants::acs::STBXYpin, HIGH);
+                }
+
+                if (sfr::acs::current_z == 0) {
+                    Pins::setPinState(constants::acs::STBZpin, LOW);
+                } else {
+                    Pins::setPinState(constants::acs::STBZpin, HIGH);
+                }
             }
         }
     }
 
     if (sfr::acs::off || !imu_valid) {
+        // setting low to save current from the H bridges
+        Pins::setPinState(constants::acs::STBXYpin, LOW);
+        Pins::setPinState(constants::acs::STBZpin, LOW);
         sfr::acs::current_x = 0;
         sfr::acs::current_y = 0;
         sfr::acs::current_z = 0;
@@ -153,12 +174,18 @@ void ACSControlTask::execute()
 
 int ACSControlTask::current2PWM(float current)
 {
-    if (int(633.5 * pow(fabs(current), 0.6043) + 8.062) < 8.062)
-        return 0;
-    else if (int(633.5 * pow(fabs(current), 0.6043) + 8.062) > 255)
-        return 255;
-    else
-        return int(633.5 * pow(fabs(current), 0.6043) + 8.062);
+    float voltage;
+    if (!sfr::battery::voltage_value->get_value(&voltage)) {
+        voltage = 0;
+    }
+
+    float abs_current = fabs(current);
+    float voltage_cof = voltage * 0.24038134 + 0.02798774;
+    abs_current = abs_current / voltage_cof;
+
+    int PWM = -4474.72 * pow(abs_current, 2) + 2099.351 * abs_current + 14.17;
+
+    return std::max(0, std::min(PWM, 255));
 }
 
 void ACSControlTask::ACSWrite(int torqorder, float current, int out1, int out2, int PWMpin)
