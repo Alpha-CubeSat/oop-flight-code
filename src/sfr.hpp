@@ -244,6 +244,7 @@ namespace sfr {
         extern SFRField<uint32_t> Kd_index;
         extern SFRField<uint32_t> Kp_index;
         extern SFRField<uint32_t> c_index;
+        extern SFRField<uint8_t> target_spin_rate;
 
         extern float current_x;
         extern float current_y;

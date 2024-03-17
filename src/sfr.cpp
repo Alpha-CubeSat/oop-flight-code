@@ -12,12 +12,12 @@ namespace sfr {
     } // namespace boot
     namespace detumble {
         // OP Codes 1500
-        SFRField<uint8_t> min_stable_gyro_z = SFRField<uint8_t>((0.8 * constants::acs::target_spin_rate * constants::imu::sfr_resolution), 0x1500, constants::imu::sfr_resolution); // rad/s
-        SFRField<uint8_t> max_stable_gyro_x = SFRField<uint8_t>((0.1 * constants::imu::sfr_resolution), 0x1501, constants::imu::sfr_resolution);                                    // rad/s
-        SFRField<uint8_t> max_stable_gyro_y = SFRField<uint8_t>((0.1 * constants::imu::sfr_resolution), 0x1502, constants::imu::sfr_resolution);                                    // rad/s
-        SFRField<uint8_t> min_unstable_gyro_x = SFRField<uint8_t>((0.7 * constants::imu::sfr_resolution), 0x1503, constants::imu::sfr_resolution);                                  // rad/s
-        SFRField<uint8_t> min_unstable_gyro_y = SFRField<uint8_t>((0.7 * constants::imu::sfr_resolution), 0x1504, constants::imu::sfr_resolution);                                  // rad/s
-    }                                                                                                                                                                               // namespace detumble
+        SFRField<uint8_t> min_stable_gyro_z = SFRField<uint8_t>((0.8 * sfr::acs::target_spin_rate.get_float() * constants::imu::sfr_resolution), 0x1500, constants::imu::sfr_resolution); // rad/s
+        SFRField<uint8_t> max_stable_gyro_x = SFRField<uint8_t>((0.1 * constants::imu::sfr_resolution), 0x1501, constants::imu::sfr_resolution);                                          // rad/s
+        SFRField<uint8_t> max_stable_gyro_y = SFRField<uint8_t>((0.1 * constants::imu::sfr_resolution), 0x1502, constants::imu::sfr_resolution);                                          // rad/s
+        SFRField<uint8_t> min_unstable_gyro_x = SFRField<uint8_t>((0.7 * constants::imu::sfr_resolution), 0x1503, constants::imu::sfr_resolution);                                        // rad/s
+        SFRField<uint8_t> min_unstable_gyro_y = SFRField<uint8_t>((0.7 * constants::imu::sfr_resolution), 0x1504, constants::imu::sfr_resolution);                                        // rad/s
+    }                                                                                                                                                                                     // namespace detumble
     namespace aliveSignal {
         // OP Codes 1600
         SFRField<bool> downlinked = SFRField<bool>(false, 0x1600);
@@ -223,6 +223,7 @@ namespace sfr {
         SFRField<uint32_t> Kd_index = SFRField<uint32_t>(0, 0, (sizeof(constants::acs::Kd_values) / sizeof(constants::acs::Kd_values[0])) - 1, 0x2506);
         SFRField<uint32_t> Kp_index = SFRField<uint32_t>(0, 0, (sizeof(constants::acs::Kp_values) / sizeof(constants::acs::Kp_values[0])) - 1, 0x2507);
         SFRField<uint32_t> c_index = SFRField<uint32_t>(0, 0, (sizeof(constants::acs::c_values) / sizeof(constants::acs::c_values[0])) - 1, 0x2508);
+        SFRField<uint8_t> target_spin_rate = SFRField<uint8_t>(5.0 * constants::acs::spin_resolution, 0x2509);
 
         float current_x = 0;
         float current_y = 0;
