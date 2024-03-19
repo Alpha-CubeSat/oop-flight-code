@@ -140,6 +140,7 @@ void RockblockControlTask::dispatch_standby()
         Pins::setPinState(constants::rockblock::sleep_pin, LOW);
     }
     good_signal_checks = 0;
+    bad_signal_checks = 0;
 }
 
 void RockblockControlTask::dispatch_send_at()
@@ -158,6 +159,7 @@ void RockblockControlTask::dispatch_await_at()
         Serial.println("SAT INFO: ok");
 #endif
         transition_to(rockblock_mode_type::send_signal_strength);
+        bad_signal_checks = 0;
     }
 }
 
@@ -639,6 +641,7 @@ void RockblockControlTask::dispatch_process_mo_status()
         Serial.println("SAT INFO: mo status is invalid");
         // off nominal response, but wait until signal is strong to downlink again to preserve power
         transition_to(rockblock_mode_type::send_signal_strength_response);
+        bad_signal_checks = 0;
     }
 }
 
@@ -675,6 +678,7 @@ void RockblockControlTask::dispatch_process_mt_status()
     } else {
         Serial.println("SAT INFO: error during check");
         transition_to(rockblock_mode_type::send_signal_strength_response);
+        bad_signal_checks = 0;
     }
 }
 
@@ -922,7 +926,6 @@ void RockblockControlTask::get_valid_signal(rockblock_mode_type good_signal, roc
         Serial.println(signal);
 #endif
         if (signal == '3' || signal == '4' || signal == '5') {
-            bad_signal_checks = 0;
             transition_to(good_signal);
             good_signal_checks++;
         } else {
