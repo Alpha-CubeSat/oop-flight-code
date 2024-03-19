@@ -238,13 +238,13 @@ namespace sfr {
         extern SFRField<bool> off;
         extern SFRField<uint8_t> mode;
         extern SFRField<uint8_t> simple_mag;
+        extern SFRField<uint8_t> target_spin_rate;
         extern SFRField<uint32_t> simple_current;
         extern SFRField<uint32_t> on_time;
         extern SFRField<uint32_t> Id_index;
         extern SFRField<uint32_t> Kd_index;
         extern SFRField<uint32_t> Kp_index;
         extern SFRField<uint32_t> c_index;
-        extern SFRField<uint8_t> target_spin_rate;
 
         extern float current_x;
         extern float current_y;

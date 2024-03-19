@@ -387,7 +387,7 @@ void test_sfr_data_restore()
 
     // Check that all SFR values are still their defaults except for the changed ones
     for (auto const &pair : SFRInterface::opcode_lookup) {
-        if (!is_eeprom_opcode(pair.first) && pair.first != 0x1902 && pair.first != 0x2504) {
+        if (!is_eeprom_opcode(pair.first) && pair.first != 0x1902 && pair.first != 0x2505) {
             // SFR field is not an EEPROM field or one of changed ones
             TEST_ASSERT_EQUAL(pair.second->getDefaultValue(), pair.second->getFieldValue());
             TEST_ASSERT_EQUAL(false, pair.second->getRestoreOnBoot());
@@ -447,7 +447,7 @@ void test_light_switch_off()
 
     // Check that all SFR values are still their defaults
     for (auto const &pair : SFRInterface::opcode_lookup) {
-        if (!is_eeprom_opcode(pair.first) && pair.first != 0x1902 && pair.first != 0x2504) {
+        if (!is_eeprom_opcode(pair.first) && pair.first != 0x1902 && pair.first != 0x2505) {
             // SFR field is not an EEPROM field or one of changed ones
             TEST_ASSERT_EQUAL(pair.second->getDefaultValue(), pair.second->getFieldValue());
             TEST_ASSERT_EQUAL(false, pair.second->getRestoreOnBoot());
