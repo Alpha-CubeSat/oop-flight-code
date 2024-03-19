@@ -939,7 +939,6 @@ void RockblockControlTask::get_valid_signal(rockblock_mode_type good_signal, roc
         }
 
         if (bad_signal_checks >= sfr::rockblock::max_signal_check) {
-            bad_signal_checks = 0;
             Serial.println("SAT INFO: bad signal checks failed max times");
             transition_to(rockblock_mode_type::end_transmission);
         }
