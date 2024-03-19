@@ -139,7 +139,8 @@ void RockblockControlTask::dispatch_standby()
     } else {
         Pins::setPinState(constants::rockblock::sleep_pin, LOW);
     }
-    signal_checks = 0;
+    good_signal_checks = 0;
+    bad_signal_checks = 0;
 }
 
 void RockblockControlTask::dispatch_send_at()
@@ -158,6 +159,7 @@ void RockblockControlTask::dispatch_await_at()
         Serial.println("SAT INFO: ok");
 #endif
         transition_to(rockblock_mode_type::send_signal_strength);
+        bad_signal_checks = 0;
     }
 }
 
@@ -639,6 +641,7 @@ void RockblockControlTask::dispatch_process_mo_status()
         Serial.println("SAT INFO: mo status is invalid");
         // off nominal response, but wait until signal is strong to downlink again to preserve power
         transition_to(rockblock_mode_type::send_signal_strength_response);
+        bad_signal_checks = 0;
     }
 }
 
@@ -675,6 +678,7 @@ void RockblockControlTask::dispatch_process_mt_status()
     } else {
         Serial.println("SAT INFO: error during check");
         transition_to(rockblock_mode_type::send_signal_strength_response);
+        bad_signal_checks = 0;
     }
 }
 
@@ -923,13 +927,19 @@ void RockblockControlTask::get_valid_signal(rockblock_mode_type good_signal, roc
 #endif
         if (signal == '3' || signal == '4' || signal == '5') {
             transition_to(good_signal);
-            signal_checks++;
+            good_signal_checks++;
         } else {
             transition_to(bad_signal);
+            bad_signal_checks++;
         }
 
-        if (signal_checks >= sfr::rockblock::max_signal_check) {
-            Serial.println("SAT INFO: signal checks failed max times");
+        if (good_signal_checks >= sfr::rockblock::max_signal_check) {
+            Serial.println("SAT INFO: good signal checks failed max times");
+            transition_to(rockblock_mode_type::end_transmission);
+        }
+
+        if (bad_signal_checks >= sfr::rockblock::max_signal_check) {
+            Serial.println("SAT INFO: bad signal checks failed max times");
             transition_to(rockblock_mode_type::end_transmission);
         }
     }
