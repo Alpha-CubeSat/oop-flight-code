@@ -26,17 +26,17 @@ void NormalReportMonitor::execute()
         serialize(0x2110), // sfr::rockblock::lp_downlink_period
         serialize(0x2111), // sfr::rockblock::transmit_downlink_period
         serialize(0x2501), // sfr::acs::mode
-        serialize(0x2505), // sfr::acs::Id_index
-        serialize(0x2506), // sfr::acs::Kd_index
-        serialize(0x2507), // sfr::acs::Kp_index
-        serialize(0x2508), // sfr::acs::c_index
+        serialize(0x2506), // sfr::acs::Id_index
+        serialize(0x2507), // sfr::acs::Kd_index
+        serialize(0x2508), // sfr::acs::Kp_index
+        serialize(0x2509), // sfr::acs::c_index
         serialize(0x2805), // sfr::eeprom::boot_counter
         serialize(0x2806), // sfr::eeprom::dynamic_data_addr
         serialize(0x2807), // sfr::eeprom::sfr_data_addr
         serialize(0x2808), // sfr::eeprom::time_alive
         serialize(0x2809), // sfr::eeprom::dynamic_data_age
         serialize(0x2810), // sfr::eeprom::sfr_data_age
-        serialize(0x2504), // sfr::acs::on_time
+        serialize(0x2505), // sfr::acs::on_time
         serialize(0x2112), // sfr::rockblock::on_time
         serialize(sfr_packed_bools),
 

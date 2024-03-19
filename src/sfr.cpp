@@ -12,12 +12,12 @@ namespace sfr {
     } // namespace boot
     namespace detumble {
         // OP Codes 1500
-        SFRField<uint8_t> min_stable_gyro_z = SFRField<uint8_t>((0.8 * constants::acs::target_spin_rate * constants::imu::sfr_resolution), 0x1500, constants::imu::sfr_resolution); // rad/s
-        SFRField<uint8_t> max_stable_gyro_x = SFRField<uint8_t>((0.1 * constants::imu::sfr_resolution), 0x1501, constants::imu::sfr_resolution);                                    // rad/s
-        SFRField<uint8_t> max_stable_gyro_y = SFRField<uint8_t>((0.1 * constants::imu::sfr_resolution), 0x1502, constants::imu::sfr_resolution);                                    // rad/s
-        SFRField<uint8_t> min_unstable_gyro_x = SFRField<uint8_t>((0.7 * constants::imu::sfr_resolution), 0x1503, constants::imu::sfr_resolution);                                  // rad/s
-        SFRField<uint8_t> min_unstable_gyro_y = SFRField<uint8_t>((0.7 * constants::imu::sfr_resolution), 0x1504, constants::imu::sfr_resolution);                                  // rad/s
-    }                                                                                                                                                                               // namespace detumble
+        SFRField<uint8_t> min_stable_gyro_z = SFRField<uint8_t>((0.8 * sfr::acs::target_spin_rate.get_float() * constants::imu::sfr_resolution), 0x1500, constants::imu::sfr_resolution); // rad/s
+        SFRField<uint8_t> max_stable_gyro_x = SFRField<uint8_t>((0.1 * constants::imu::sfr_resolution), 0x1501, constants::imu::sfr_resolution);                                          // rad/s
+        SFRField<uint8_t> max_stable_gyro_y = SFRField<uint8_t>((0.1 * constants::imu::sfr_resolution), 0x1502, constants::imu::sfr_resolution);                                          // rad/s
+        SFRField<uint8_t> min_unstable_gyro_x = SFRField<uint8_t>((0.7 * constants::imu::sfr_resolution), 0x1503, constants::imu::sfr_resolution);                                        // rad/s
+        SFRField<uint8_t> min_unstable_gyro_y = SFRField<uint8_t>((0.7 * constants::imu::sfr_resolution), 0x1504, constants::imu::sfr_resolution);                                        // rad/s
+    }                                                                                                                                                                                     // namespace detumble
     namespace aliveSignal {
         // OP Codes 1600
         SFRField<bool> downlinked = SFRField<bool>(false, 0x1600);
@@ -217,12 +217,13 @@ namespace sfr {
         SFRField<bool> off = SFRField<bool>(true, 0x2500);
         SFRField<uint8_t> mode = SFRField<uint8_t>((uint8_t)acs_mode_type::detumble, 0x2501);
         SFRField<uint8_t> simple_mag = SFRField<uint8_t>((uint8_t)mag_type::z, 0x2502);
-        SFRField<uint32_t> simple_current = SFRField<uint32_t>((0 - constants::acs::current_offset) * constants::acs::current_resolution, (-0.25 - constants::acs::current_offset) * constants::acs::current_resolution, (0.25 - constants::acs::current_offset) * constants::acs::current_resolution, 0x2503, constants::acs::current_resolution, constants::acs::current_offset);
-        SFRField<uint32_t> on_time = SFRField<uint32_t>(5 * constants::time::one_minute, 0, constants::time::one_revolution, 0x2504);
-        SFRField<uint32_t> Id_index = SFRField<uint32_t>(0, 0, (sizeof(constants::acs::Id_values) / sizeof(constants::acs::Id_values[0])) - 1, 0x2505);
-        SFRField<uint32_t> Kd_index = SFRField<uint32_t>(0, 0, (sizeof(constants::acs::Kd_values) / sizeof(constants::acs::Kd_values[0])) - 1, 0x2506);
-        SFRField<uint32_t> Kp_index = SFRField<uint32_t>(0, 0, (sizeof(constants::acs::Kp_values) / sizeof(constants::acs::Kp_values[0])) - 1, 0x2507);
-        SFRField<uint32_t> c_index = SFRField<uint32_t>(0, 0, (sizeof(constants::acs::c_values) / sizeof(constants::acs::c_values[0])) - 1, 0x2508);
+        SFRField<uint8_t> target_spin_rate = SFRField<uint8_t>(5.0 * constants::acs::spin_resolution, 0x2503);
+        SFRField<uint32_t> simple_current = SFRField<uint32_t>((0 - constants::acs::current_offset) * constants::acs::current_resolution, (-0.25 - constants::acs::current_offset) * constants::acs::current_resolution, (0.25 - constants::acs::current_offset) * constants::acs::current_resolution, 0x2504, constants::acs::current_resolution, constants::acs::current_offset);
+        SFRField<uint32_t> on_time = SFRField<uint32_t>(5 * constants::time::one_minute, 0, constants::time::one_revolution, 0x2505);
+        SFRField<uint32_t> Id_index = SFRField<uint32_t>(0, 0, (sizeof(constants::acs::Id_values) / sizeof(constants::acs::Id_values[0])) - 1, 0x2506);
+        SFRField<uint32_t> Kd_index = SFRField<uint32_t>(0, 0, (sizeof(constants::acs::Kd_values) / sizeof(constants::acs::Kd_values[0])) - 1, 0x2507);
+        SFRField<uint32_t> Kp_index = SFRField<uint32_t>(0, 0, (sizeof(constants::acs::Kp_values) / sizeof(constants::acs::Kp_values[0])) - 1, 0x2508);
+        SFRField<uint32_t> c_index = SFRField<uint32_t>(0, 0, (sizeof(constants::acs::c_values) / sizeof(constants::acs::c_values[0])) - 1, 0x2509);
 
         float current_x = 0;
         float current_y = 0;

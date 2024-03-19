@@ -36,6 +36,7 @@ private:
     float old_Kd;
     float old_Kp;
     float old_c;
+    float old_target_spin_rate;
 };
 
 #endif
