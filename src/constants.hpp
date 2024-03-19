@@ -229,7 +229,7 @@ namespace constants {
         constexpr float Kd_values[31] = {0.0007935, 0.0099, 0.01485, 0.0198, 0.02475, 0.0297, 0.03465, 0.0396, 0.04455, 0.0495, 0.05445, 0.0594, 0.06435, 0.0693, 0.07425, 0.0792, 0.08415, 0.0891, 0.09405, 0.099, 0., 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.};
         constexpr float Kp_values[31] = {5.250E-10, 9.9900E-09, 1.4985E-08, 1.9980E-08, 2.4975E-08, 2.9970E-08, 3.4965E-08, 3.9960E-08, 4.4955E-08, 4.9950E-08, 5.4945E-08, 5.9940E-08, 6.4935E-08, 6.9930E-08, 7.4925E-08, 7.9920E-08, 8.4915E-08, 8.9910E-08, 9.4905E-08, 9.9900E-08, 0.0000e+00, 1.0000E-01, 2.0000E-01, 3.0000E-01, 4.0000E-01, 5.0000E-01, 6.0000E-01, 7.0000E-01, 8.0000E-01, 9.0000E-01, 1.0000e+00};
         constexpr float c_values[31] = {1.0E-5, 3.89473684E-06, 4.78947368E-06, 5.68421053E-06, 6.57894737E-06, 7.47368421E-06, 8.36842105E-06, 9.26315789E-06, 1.01578947E-05, 1.10526316E-05, 1.19473684E-05, 1.28421053E-05, 1.37368421E-05, 1.46315789E-05, 1.55263158E-05, 1.64210526E-05, 1.73157895E-05, 1.82105263E-05, 1.91052632E-05, 2.00000000E-05, 0.00000000e+00, 1.00000000E-01, 2.00000000E-01, 3.00000000E-01, 4.00000000E-01, 5.00000000E-01, 6.00000000E-01, 7.00000000E-01, 8.00000000E-01, 9.00000000E-01, 1.00000000e+00};
-        constexpr float target_spin_rate = 5.0;
+        constexpr int spin_resolution = 10;
 
         constexpr float current_resolution = 100;
         constexpr float current_offset = -0.25;
@@ -289,7 +289,7 @@ namespace constants {
         static constexpr unsigned int dynamic_data_start = 10;
         static constexpr unsigned int sfr_data_start = 460;
         static constexpr unsigned int sfr_store_size = 5;
-        static constexpr unsigned int sfr_num_fields = 91;
+        static constexpr unsigned int sfr_num_fields = 92;
         static constexpr unsigned int sfr_data_full_offset = sfr_num_fields * sfr_store_size + 4;
         static constexpr unsigned int write_age_limit = 95000; // Must be less than 100000
 

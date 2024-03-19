@@ -340,16 +340,16 @@ void RockblockControlTask::dispatch_send_message()
         print_SFRField(6, 0x2501);
 
         Serial.print("sfr::acs::Id_index->");
-        print_SFRField(7, 0x2505);
+        print_SFRField(7, 0x2506);
 
         Serial.print("sfr::acs::Kd_index->");
-        print_SFRField(8, 0x2506);
+        print_SFRField(8, 0x2507);
 
         Serial.print("sfr::acs::Kp_index->");
-        print_SFRField(9, 0x2507);
+        print_SFRField(9, 0x2508);
 
         Serial.print("sfr::acs::c_index->");
-        print_SFRField(10, 0x2508);
+        print_SFRField(10, 0x2509);
 
         Serial.print("sfr::eeprom::boot_counter->");
         print_SFRField(11, 0x2805);
@@ -370,7 +370,7 @@ void RockblockControlTask::dispatch_send_message()
         print_SFRField(16, 0x2810);
 
         Serial.print("sfr::acs::on_time->");
-        print_SFRField(17, 0x2504);
+        print_SFRField(17, 0x2505);
 
         Serial.print("sfr::rockblock::on_time->");
         print_SFRField(18, 0x2112);
