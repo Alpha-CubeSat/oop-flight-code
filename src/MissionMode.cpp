@@ -574,11 +574,9 @@ void settings(bool rockblock_sleep_mode, sensor_power_mode_type camera_power_set
 
 void exit_alive_signal()
 {
-    if (sfr::eeprom::time_alive >= (sfr::boot::max_time + sfr::stabilization::max_time)) {
+    if (sfr::eeprom::time_alive >= (sfr::boot::max_time + sfr::stabilization::max_time + sfr::aliveSignal::max_time)) {
         sfr::mission::current_mode = sfr::mission::transmit;
-        if (sfr::acs::mode == (uint8_t)acs_mode_type::detumble) {
-            sfr::acs::mode = (uint8_t)acs_mode_type::simple;
-        }
+        sfr::acs::mode = (uint8_t)acs_mode_type::simple;
     } else {
         sfr::mission::current_mode = sfr::mission::detumbleSpin;
     }
