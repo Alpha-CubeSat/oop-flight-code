@@ -252,6 +252,8 @@ namespace sfr {
         extern float pwm_y;
         extern float pwm_z;
 
+        extern int counter;
+
     } // namespace acs
     namespace battery {
         // OP Codes 2600

@@ -18,10 +18,16 @@ public:
 
 private:
     void ACSWrite(int torqorder, float current, int out1, int out2, int PWMpin);
+    void ACSWrite_PWM(int torqorder, int PWM, int out1, int out2, int PWMpin);
+
     int current2PWM(float current);
 
     bool first = true;
     bool imu_valid = true;
+    //PWM buffer, so it sends the magtorqors immely but delay one cycle to the sfr pwm
+    int prev_PWMx=0;
+    int prev_PWMy=0;
+    int prev_PWMz=0;
 
     float mag_x;
     float mag_y;
@@ -35,6 +41,6 @@ private:
     float old_Kd;
     float old_Kp;
     float old_c;
-};
+    };
 
 #endif

@@ -98,9 +98,34 @@ void ACSControlTask::execute()
         sfr::acs::current_z = 0;
     }
 
-    ACSWrite(constants::acs::xtorqorder, sfr::acs::current_x, constants::acs::xout1, constants::acs::xout2, constants::acs::xPWMpin);
-    ACSWrite(constants::acs::ytorqorder, sfr::acs::current_y, constants::acs::yout1, constants::acs::yout2, constants::acs::yPWMpin);
-    ACSWrite(constants::acs::ztorqorder, sfr::acs::current_z, constants::acs::zout1, constants::acs::zout2, constants::acs::zPWMpin);
+    // ACSWrite(constants::acs::xtorqorder, sfr::acs::current_x, constants::acs::xout1, constants::acs::xout2, constants::acs::xPWMpin);
+    // ACSWrite(constants::acs::ytorqorder, sfr::acs::current_y, constants::acs::yout1, constants::acs::yout2, constants::acs::yPWMpin);
+    // ACSWrite(constants::acs::ztorqorder, sfr::acs::current_z, constants::acs::zout1, constants::acs::zout2, constants::acs::zPWMpin);
+    sfr::acs::counter++;
+    float test_current[9] = {-0.20, -0.15,-0.1,-0.05,0,0.05,0.1,0.15,0.20};
+    // float test_current[2] = {0, 0};
+    int index = sfr::acs::counter % 9;
+
+    Serial.print("current(A): ");
+    Serial.print(test_current[index]);
+    Serial.print(", ");
+
+    ACSWrite(constants::acs::xtorqorder, test_current[index], constants::acs::xout1, constants::acs::xout2, constants::acs::xPWMpin);
+    ACSWrite(constants::acs::ytorqorder, test_current[index], constants::acs::yout1, constants::acs::yout2, constants::acs::yPWMpin);
+    ACSWrite(constants::acs::ztorqorder, test_current[index], constants::acs::zout1, constants::acs::zout2, constants::acs::zPWMpin);
+
+    // int PWM[9] = {-255,-236,-188,-115,14, 115, 188, 236, 255};
+    // int index = sfr::acs::counter % 9;
+    // ACSWrite_PWM(constants::acs::xtorqorder, PWM[index], constants::acs::xout1, constants::acs::xout2, constants::acs::xPWMpin);
+    // ACSWrite_PWM(constants::acs::ytorqorder, PWM[index], constants::acs::yout1, constants::acs::yout2, constants::acs::yPWMpin);
+    // ACSWrite_PWM(constants::acs::ztorqorder, PWM[index], constants::acs::zout1, constants::acs::zout2, constants::acs::zPWMpin);
+    // Serial.print("PWM: ");
+    // Serial.print(PWM[index]);
+    // Serial.print(", ");
+
+    // ACSWrite_PWM(constants::acs::xtorqorder, 0, constants::acs::xout1, constants::acs::xout2, constants::acs::xPWMpin);
+    // ACSWrite_PWM(constants::acs::ytorqorder, 0, constants::acs::yout1, constants::acs::yout2, constants::acs::yPWMpin);
+    // ACSWrite_PWM(constants::acs::ztorqorder, 0, constants::acs::zout1, constants::acs::zout2, constants::acs::zPWMpin);
 
 #ifdef ACS_DATA
     Serial.print(millis());
@@ -127,8 +152,6 @@ void ACSControlTask::execute()
     Serial.print(", ");
     Serial.print(sfr::acs::current_z);
     Serial.print(", ");
-    Serial.print(sfr::acs::current_x);
-    Serial.print(", ");
     Serial.print(mag_x); // uT
     Serial.print(", ");
     Serial.print(mag_y); // uT
@@ -147,53 +170,109 @@ void ACSControlTask::execute()
 
 int ACSControlTask::current2PWM(float current)
 {
-    if (int(633.5 * pow(fabs(current), 0.6043) + 8.062) < 8.062)
-        return 0;
-    else if (int(633.5 * pow(fabs(current), 0.6043) + 8.062) > 255)
-        return 255;
-    else
-        return int(633.5 * pow(fabs(current), 0.6043) + 8.062);
+    float voltage;
+    if (!sfr::battery::voltage_value->get_value(&voltage)) {
+        voltage = 0;
+    }
+
+    float abs_current = fabs(current);
+    float voltage_cof = voltage * 0.24038134 + 0.02798774;
+    abs_current = abs_current / voltage_cof;
+
+    int PWM = -4474.72 * pow(abs_current, 2) + 2099.351 * abs_current + 14.17;
+
+
+    if(current<0){
+        PWM = -PWM;
+    }
+
+    return std::max(-255, std::min(PWM, 255));
 }
 
 void ACSControlTask::ACSWrite(int torqorder, float current, int out1, int out2, int PWMpin)
 {
     int PWM = current2PWM(current);
-#ifdef VERBOSE
-    Serial.print("PWM: ");
-    Serial.println(PWM);
-#endif
+    int abs_PWM = abs(PWM);
+
+
     if (PWMpin == constants::acs::xPWMpin) {
-        sfr::acs::pwm_x = PWM;
+        sfr::acs::pwm_x = prev_PWMx;
+        prev_PWMx = PWM;
     } else if (PWMpin == constants::acs::yPWMpin) {
-        sfr::acs::pwm_y = PWM;
+        sfr::acs::pwm_y = prev_PWMy;
+        prev_PWMy = PWM;
     } else if (PWMpin == constants::acs::zPWMpin) {
-        sfr::acs::pwm_z = PWM;
+        sfr::acs::pwm_z = prev_PWMz;
+        prev_PWMz = PWM;
     }
 
-    if (PWM == 0) {
+    if (current == 0) {
         digitalWrite(out1, LOW);
         digitalWrite(out2, LOW);
     } else if (torqorder == 0) {
         if (current > 0) {
             digitalWrite(out1, HIGH);
             digitalWrite(out2, LOW);
-            analogWrite(PWMpin, PWM);
-        }
-        if (current < 0) {
+            analogWrite(PWMpin, abs_PWM);
+        }else{
             digitalWrite(out1, LOW);
             digitalWrite(out2, HIGH);
-            analogWrite(PWMpin, PWM);
+            analogWrite(PWMpin, abs_PWM);
         }
     } else if (torqorder == 1) {
         if (current > 0) {
             digitalWrite(out1, LOW);
             digitalWrite(out2, HIGH);
-            analogWrite(PWMpin, PWM);
-        }
-        if (current < 0) {
+            analogWrite(PWMpin, abs_PWM);
+        }else{
             digitalWrite(out1, HIGH);
             digitalWrite(out2, LOW);
-            analogWrite(PWMpin, PWM);
+            analogWrite(PWMpin, abs_PWM);
+        }
+    }
+
+}
+
+void ACSControlTask::ACSWrite_PWM(int torqorder, int PWM, int out1, int out2, int PWMpin)
+{
+
+    int PWM_abs = abs(PWM);
+
+    if (PWMpin == constants::acs::xPWMpin) {
+        sfr::acs::pwm_x = prev_PWMx;
+        prev_PWMx = PWM;
+    } else if (PWMpin == constants::acs::yPWMpin) {
+        sfr::acs::pwm_y = prev_PWMy;
+        prev_PWMy = PWM;
+    } else if (PWMpin == constants::acs::zPWMpin) {
+        sfr::acs::pwm_z = prev_PWMz;
+        prev_PWMz = PWM;
+    }
+
+    if (PWM == 0) {
+        digitalWrite(out1, LOW);
+        digitalWrite(out2, LOW);
+    } else if (torqorder == 0) {
+        if (PWM > 0) {
+            digitalWrite(out1, HIGH);
+            digitalWrite(out2, LOW);
+            analogWrite(PWMpin, PWM_abs);
+        }
+        if (PWM < 0) {
+            digitalWrite(out1, LOW);
+            digitalWrite(out2, HIGH);
+            analogWrite(PWMpin, PWM_abs);
+        }
+    } else if (torqorder == 1) {
+        if (PWM > 0) {
+            digitalWrite(out1, LOW);
+            digitalWrite(out2, HIGH);
+            analogWrite(PWMpin, PWM_abs);
+        }
+        if (PWM < 0) {
+            digitalWrite(out1, HIGH);
+            digitalWrite(out2, LOW);
+            analogWrite(PWMpin, PWM_abs);
         }
     }
 }

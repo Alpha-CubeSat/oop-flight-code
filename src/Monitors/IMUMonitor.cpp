@@ -180,37 +180,69 @@ void IMUMonitor::imu_offset()
     float pwmZ_oz = pwmZ_oz_1 * sfr::acs::pwm_z + pwmZ_oz_2 * pow(sfr::acs::pwm_z, 2) + pwmZ_oz_3 * pow(sfr::acs::pwm_z, 3);
     /*******************************************/
     /*Voltage Adjustment Coefficients (ex: volX_ox = coef for pwmX_oX)*/
-    float volX_ox = volX_ox_1 * voltage + volX_ox_c;
-    float volX_oy = volX_oy_1 * voltage + volX_oy_c;
-    float volX_oz = volX_oz_1 * voltage + volX_oz_c;
+    // float volX_ox = volX_ox_1 * voltage + volX_ox_c;
+    // float volX_oy = volX_oy_1 * voltage + volX_oy_c;
+    // float volX_oz = volX_oz_1 * voltage + volX_oz_c;
 
-    float volY_ox = volY_ox_1 * voltage + volY_ox_c;
-    float volY_oy = volY_oy_1 * voltage + volY_oy_c;
-    float volY_oz = volY_oz_1 * voltage + volY_oz_c;
+    // float volY_ox = volY_ox_1 * voltage + volY_ox_c;
+    // float volY_oy = volY_oy_1 * voltage + volY_oy_c;
+    // float volY_oz = volY_oz_1 * voltage + volY_oz_c;
 
-    float volZ_ox = volZ_ox_1 * voltage + volZ_ox_c;
-    float volZ_oy = volZ_oy_1 * voltage + volZ_oy_c;
-    float volZ_oz = volZ_oz_1 * voltage + volZ_oz_c;
+    // float volZ_ox = volZ_ox_1 * voltage + volZ_ox_c;
+    // float volZ_oy = volZ_oy_1 * voltage + volZ_oy_c;
+    // float volZ_oz = volZ_oz_1 * voltage + volZ_oz_c;
+
+    float Volt_c = 0.29981456*voltage - 0.18839838;
     /*******************************************/
     /*Temperature Offset Terms*/
-    float temp_x = temp_x_1 * temp + temp_x_2 * pow(temp, 2) + temp_x_3 * pow(temp, 3) + temp_x_c;
-    float temp_y = temp_y_1 * temp + temp_y_2 * pow(temp, 2) + temp_y_3 * pow(temp, 3) + temp_y_c;
-    float temp_z = temp_z_1 * temp + temp_z_2 * pow(temp, 2) + temp_z_3 * pow(temp, 3) + temp_z_c;
+    // float temp_x = temp_x_1 * temp + temp_x_2 * pow(temp, 2) + temp_x_3 * pow(temp, 3) + temp_x_c;
+    // float temp_y = temp_y_1 * temp + temp_y_2 * pow(temp, 2) + temp_y_3 * pow(temp, 3) + temp_y_c;
+    // float temp_z = temp_z_1 * temp + temp_z_2 * pow(temp, 2) + temp_z_3 * pow(temp, 3) + temp_z_c;
+    sensors_event_t accel, mag, gyro, temp_imu;
+    imu.getEvent(&accel, &mag, &gyro, &temp_imu);
+
+    float temp_x = (-0.06579)* temp_imu.temperature + 1.588;
+    float temp_y = (0.0715) * temp_imu.temperature + (-2.023);
+    float temp_z = (0.206) * temp_imu.temperature + (-6.835);
     /*******************************************/
     /*Total Offsets*/
-    float mag_xoffset = volX_ox * pwmX_ox + volY_ox * pwmY_ox + volZ_ox * pwmZ_ox + temp_x + hardiron_x;
-    float mag_yoffset = volX_oy * pwmX_oy + volY_oy * pwmY_oy + volZ_oy * pwmZ_oy + temp_y + hardiron_y;
-    float mag_zoffset = volX_oz * pwmX_oz + volY_oz * pwmY_oz + volZ_oz * pwmZ_oz + temp_z + hardiron_z;
+    float mag_xoffset = (pwmX_ox + pwmY_ox + pwmZ_ox) * Volt_c + temp_x + hardiron_x;
+    float mag_yoffset = (pwmX_oy + pwmY_oy + pwmZ_oy) * Volt_c + temp_y + hardiron_y;
+    float mag_zoffset = (pwmX_oz + pwmY_oz + pwmZ_oz) * Volt_c + temp_z + hardiron_z;
+
+    // float mag_xoffset = hardiron_x;
+    // float mag_yoffset = hardiron_y;
+    // float mag_zoffset = hardiron_z;
     /*******************************************/
     /* Finally, adjust magnetometer/gyro readings*/
 
-    sfr::imu::mag_x_value->set_value(mag_x - mag_xoffset);
+    sfr::imu::mag_x_value->set_value(mag_x- mag_xoffset);
     sfr::imu::mag_y_value->set_value(mag_y - mag_yoffset);
     sfr::imu::mag_z_value->set_value(mag_z - mag_zoffset);
 
     sfr::imu::gyro_x_value->set_value(gyro_x - (-0.02297));
     sfr::imu::gyro_y_value->set_value(gyro_y - (0.03015));
     sfr::imu::gyro_z_value->set_value(gyro_z - (-0.01396));
+
+    Serial.print(millis());
+    Serial.print(", ");
+    // Serial.print(mag_x - mag_xoffset);
+    // Serial.print(", ");
+    // Serial.print(mag_y - mag_yoffset);
+    // Serial.print(", ");
+    // Serial.print(mag_z - mag_zoffset);
+    // Serial.print(", ");
+
+    Serial.print(sfr::acs::pwm_x);
+    Serial.print(", ");
+    Serial.print(sfr::acs::pwm_y);
+    Serial.print(", ");
+    Serial.print(sfr::acs::pwm_z);
+    Serial.print(", ");
+    Serial.print(voltage);
+    Serial.print(", ");
+    Serial.print(temp_imu.temperature);
+    Serial.println(", ");
 }
 
 // generate a normal random variable using Box-Muller transform
@@ -386,6 +418,13 @@ void IMUMonitor::capture_imu_values()
     sfr::imu::mag_y_average->set_value(ekfObj.state(1));
     sfr::imu::mag_z_average->set_value(ekfObj.state(2));
 
+    Serial.print(ekfObj.state(0));
+    Serial.print(", ");
+    Serial.print(ekfObj.state(1));
+    Serial.print(", ");
+    Serial.print(ekfObj.state(2));
+    Serial.print(", ");
+
     // used outside of ACS Control Task to determine exit conditions for Detumble Spin
     sfr::imu::gyro_x_average->set_value(ekfObj.state(3));
     sfr::imu::gyro_y_average->set_value(ekfObj.state(4));
@@ -395,33 +434,7 @@ void IMUMonitor::capture_imu_values()
 
     float temp_c;
 
-
-
     if (!sfr::temperature::temp_c_value->get_value(&temp_c)) {
         temp_c = 0;
     }
-
-    Serial.print(millis() - sfr::mission::cycle_start);
-    Serial.print(ekfObj.state(0));
-    Serial.print(", ");
-    Serial.print(ekfObj.state(1));
-    Serial.print(", ");
-    Serial.print(ekfObj.state(2));
-    Serial.print(", ");
-    Serial.print(ekfObj.state(3));
-    Serial.print(", ");
-    Serial.print(ekfObj.state(4));
-    Serial.print(", ");
-    Serial.print(ekfObj.state(5));
-    Serial.print(", ");
-    Serial.print(sfr::acs::pwm_x);
-    Serial.print(", ");
-    Serial.print(sfr::acs::pwm_y);
-    Serial.print(", ");
-    Serial.print(sfr::acs::pwm_z);
-    Serial.print(", ");
-    Serial.print(voltage);
-    Serial.print(", ");
-    Serial.print(temp_c);
-    Serial.print(", ");
 }
