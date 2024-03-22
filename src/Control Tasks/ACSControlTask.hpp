@@ -23,6 +23,11 @@ private:
 
     bool first = true;
     bool imu_valid = true;
+    
+    // PWM buffer, so it sends the magtorqors immely but delay one cycle to the sfr pwm
+    int prev_PWMx = 0;
+    int prev_PWMy = 0;
+    int prev_PWMz = 0;
 
     float mag_x;
     float mag_y;
