@@ -184,7 +184,7 @@ void IMUMonitor::imu_offset()
     float Volt_c = 0.29981456 * voltage - 0.18839838;
     /*******************************************/
     /*Temperature Offset Terms*/
-    //just so to get imu temp
+    // just so to get imu temp
     sensors_event_t accel, mag, gyro, temp_imu;
     imu.getEvent(&accel, &mag, &gyro, &temp_imu);
 
@@ -207,8 +207,6 @@ void IMUMonitor::imu_offset()
     sfr::imu::gyro_x_value->set_value(gyro_x - (-0.02297));
     sfr::imu::gyro_y_value->set_value(gyro_y - (0.03015));
     sfr::imu::gyro_z_value->set_value(gyro_z - (-0.01396));
-
-
 }
 
 // generate a normal random variable using Box-Muller transform
