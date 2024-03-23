@@ -179,28 +179,24 @@ void IMUMonitor::imu_offset()
     float pwmZ_oy = pwmZ_oy_1 * sfr::acs::pwm_z + pwmZ_oy_2 * pow(sfr::acs::pwm_z, 2) + pwmZ_oy_3 * pow(sfr::acs::pwm_z, 3);
     float pwmZ_oz = pwmZ_oz_1 * sfr::acs::pwm_z + pwmZ_oz_2 * pow(sfr::acs::pwm_z, 2) + pwmZ_oz_3 * pow(sfr::acs::pwm_z, 3);
     /*******************************************/
-    /*Voltage Adjustment Coefficients (ex: volX_ox = coef for pwmX_oX)*/
-    float volX_ox = volX_ox_1 * voltage + volX_ox_c;
-    float volX_oy = volX_oy_1 * voltage + volX_oy_c;
-    float volX_oz = volX_oz_1 * voltage + volX_oz_c;
+    /*Voltage Adjustment Coefficients */
 
-    float volY_ox = volY_ox_1 * voltage + volY_ox_c;
-    float volY_oy = volY_oy_1 * voltage + volY_oy_c;
-    float volY_oz = volY_oz_1 * voltage + volY_oz_c;
-
-    float volZ_ox = volZ_ox_1 * voltage + volZ_ox_c;
-    float volZ_oy = volZ_oy_1 * voltage + volZ_oy_c;
-    float volZ_oz = volZ_oz_1 * voltage + volZ_oz_c;
+    float Volt_c = 0.29981456 * voltage - 0.18839838;
     /*******************************************/
     /*Temperature Offset Terms*/
-    float temp_x = temp_x_1 * temp + temp_x_2 * pow(temp, 2) + temp_x_3 * pow(temp, 3) + temp_x_c;
-    float temp_y = temp_y_1 * temp + temp_y_2 * pow(temp, 2) + temp_y_3 * pow(temp, 3) + temp_y_c;
-    float temp_z = temp_z_1 * temp + temp_z_2 * pow(temp, 2) + temp_z_3 * pow(temp, 3) + temp_z_c;
+    // just so to get imu temp
+    sensors_event_t accel, mag, gyro, temp_imu;
+    imu.getEvent(&accel, &mag, &gyro, &temp_imu);
+
+    float temp_x = (-0.06579) * temp_imu.temperature + 1.588;
+    float temp_y = (0.0715) * temp_imu.temperature + (-2.023);
+    float temp_z = (0.206) * temp_imu.temperature + (-6.835);
     /*******************************************/
     /*Total Offsets*/
-    float mag_xoffset = volX_ox * pwmX_ox + volY_ox * pwmY_ox + volZ_ox * pwmZ_ox + temp_x + hardiron_x;
-    float mag_yoffset = volX_oy * pwmX_oy + volY_oy * pwmY_oy + volZ_oy * pwmZ_oy + temp_y + hardiron_y;
-    float mag_zoffset = volX_oz * pwmX_oz + volY_oz * pwmY_oz + volZ_oz * pwmZ_oz + temp_z + hardiron_z;
+    float mag_xoffset = (pwmX_ox + pwmY_ox + pwmZ_ox) * Volt_c + temp_x + hardiron_x;
+    float mag_yoffset = (pwmX_oy + pwmY_oy + pwmZ_oy) * Volt_c + temp_y + hardiron_y;
+    float mag_zoffset = (pwmX_oz + pwmY_oz + pwmZ_oz) * Volt_c + temp_z + hardiron_z;
+
     /*******************************************/
     /* Finally, adjust magnetometer/gyro readings*/
 

@@ -133,41 +133,45 @@ namespace constants {
 
         // PWM fit coefficients
         // ex: pwmX_ox_1: coefficient for first degree term in pwmX_ox
-        constexpr float pwmX_ox_1 = 0.063563305433041769609836535437353;
-        constexpr float pwmX_ox_2 = 0.0000024534801053495480847952553427049;
-        constexpr float pwmX_ox_3 = -0.00000004048183650236316959656411693276;
+        constexpr float pwmX_ox_1 = 5.21766488E-2;
+        constexpr float pwmX_ox_2 = -4.56157693E-6;
+        constexpr float pwmX_ox_3 = -2.10754381E-8;
 
-        constexpr float pwmX_oy_1 = -0.016797609228196081626593993973984;
-        constexpr float pwmX_oy_2 = 0.0000080605967200896503065685530509121;
-        constexpr float pwmX_oy_3 = 0.000000012114204069568563619616825333992;
+        constexpr float pwmX_oy_1 = -7.19251021E-03;
+        constexpr float pwmX_oy_2 = 1.28682985E-05;
+        constexpr float pwmX_oy_3 = 3.35875446E-09;
 
-        constexpr float pwmX_oz_1 = 0.0017958858966789052746815258387869;
-        constexpr float pwmX_oz_2 = 0.000029717338935004530305191913774898;
-        constexpr float pwmX_oz_3 = 0.000000011774600680023870762861215393501;
+        constexpr float pwmX_oz_1 = -8.09316675e-03;
+        constexpr float pwmX_oz_2 = -4.12199218e-05;
+        constexpr float pwmX_oz_3 = 1.88584179e-08;
         ///////////////////////////////
-        constexpr float pwmY_ox_1 = -0.029758606652877828135927984476439;
-        constexpr float pwmY_ox_2 = 0.0000036655843236024399974936228280287;
-        constexpr float pwmY_ox_3 = 0.000000023498369011861784752980125408166;
+        constexpr float pwmY_ox_1 = -2.10873715e-02;
+        constexpr float pwmY_ox_2 = -1.49983785e-06;
+        constexpr float pwmY_ox_3 = -1.33605796e-08;
 
-        constexpr float pwmY_oy_1 = 0.042815004635511522135260520371958;
-        constexpr float pwmY_oy_2 = 0.000015182122409661965729810693959134;
-        constexpr float pwmY_oy_3 = -0.000000015456536073234678752023188506685;
+        constexpr float pwmY_oy_1 = 3.84524425e-02;
+        constexpr float pwmY_oy_2 = 1.70575989e-05;
+        constexpr float pwmY_oy_3 = -3.42837575e-08;
 
-        constexpr float pwmY_oz_1 = -0.064033443011555668533674179343507;
-        constexpr float pwmY_oz_2 = 0.000023898623196982134755635487910475;
-        constexpr float pwmY_oz_3 = 0.000000058017983244733767109801910464087;
+        constexpr float pwmY_oz_1 = 5.65194821e-02;
+        constexpr float pwmY_oz_2 = -6.21996583e-05;
+        constexpr float pwmY_oz_3 = -7.88076518e-08;
         /////////////////////////////
-        constexpr float pwmZ_ox_1 = 0.049277911306007247949079186355448;
-        constexpr float pwmZ_ox_2 = 0.0000001823555642185477635673483036774;
-        constexpr float pwmZ_ox_3 = -0.000000025703762479892763114309778196137;
+        constexpr float pwmZ_ox_1 = 3.86522925e-02;
+        constexpr float pwmZ_ox_2 = -3.27902806e-06;
+        constexpr float pwmZ_ox_3 = -1.52763483e-08;
 
-        constexpr float pwmZ_oy_1 = 0.015385071524851799337763047503813;
-        constexpr float pwmZ_oy_2 = 0.000018702657754292684140007621551582;
-        constexpr float pwmZ_oy_3 = -0.0000000031989424202132932197155153338734;
+        constexpr float pwmZ_oy_1 = 1.07442199e-02;
+        constexpr float pwmZ_oy_2 = 1.70881261e-05;
+        constexpr float pwmZ_oy_3 = 9.68654277e-09;
 
-        constexpr float pwmZ_oz_1 = -0.018823855991873226362054438709492;
-        constexpr float pwmZ_oz_2 = 0.000014901521761221710052694455761468;
-        constexpr float pwmZ_oz_3 = 0.000000014948952011168461910939879054225;
+        constexpr float pwmZ_oz_1 = 1.19418558e-02;
+        constexpr float pwmZ_oz_2 = -4.03330468e-05;
+        constexpr float pwmZ_oz_3 = -1.81032312e-08;
+        ///////////////////////////
+        ///////////////////////////
+        // Voltage fit coefficients
+        // ex: volX_ox_1, volX_ox_c --> coefficient and constant respectively for volX_ox
         ///////////////////////////
         // Voltage fit coefficients
         // ex: volX_ox_1, volX_ox_c --> coefficient and constant respectively for volX_ox
@@ -215,9 +219,9 @@ namespace constants {
         constexpr float temp_z_c = -1.7573124306246634684924856628641;
 
         // Hard Iron Offsets
-        constexpr float hardiron_x = -13.65;
-        constexpr float hardiron_y = 36.058;
-        constexpr float hardiron_z = 6.928;
+        constexpr float hardiron_x = -4.150849999999998;
+        constexpr float hardiron_y = 24.28385;
+        constexpr float hardiron_z = 3.2226999999999997;
 
         // Starshot
         constexpr float step_size_input = 0.10;
