@@ -192,6 +192,8 @@ int ACSControlTask::current2PWM(float current)
 
     if (current < 0) {
         PWM = -PWM;
+    } else if (current == 0) {
+        PWM = 0;
     }
 
     return std::max(-255, std::min(PWM, 255));
