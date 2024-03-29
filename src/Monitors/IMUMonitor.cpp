@@ -204,7 +204,8 @@ void IMUMonitor::imu_offset()
     sfr::imu::mag_y_value->set_value(mag_y - mag_yoffset);
     sfr::imu::mag_z_value->set_value(mag_z - mag_zoffset);
 
-    sfr::imu::gyro_x_value->set_value(gyro_x - (-0.02297));
+    // make gyro aligh with mag coor
+    sfr::imu::gyro_x_value->set_value(-(gyro_x - (-0.02297)));
     sfr::imu::gyro_y_value->set_value(gyro_y - (0.03015));
     sfr::imu::gyro_z_value->set_value(gyro_z - (-0.01396));
 }
