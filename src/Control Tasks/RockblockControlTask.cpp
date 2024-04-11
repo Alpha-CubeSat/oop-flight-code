@@ -920,7 +920,7 @@ void RockblockControlTask::get_valid_signal(rockblock_mode_type good_signal, roc
         sfr::rockblock::serial.read() == 'S' &&
         sfr::rockblock::serial.read() == 'Q' &&
         sfr::rockblock::serial.read() == ':') {
-        char signal = sfr::rockblock::serial.read();
+        char signal = 5;
 #ifdef VERBOSE
         Serial.print("SAT INFO: signal level ");
         Serial.println(signal);
