@@ -68,6 +68,8 @@ public:
             set_value = !!((constants::masks::uint32_byte1_mask & f_arg_2) >> 24);   // Whether to override SFR
             set_restore = !!((constants::masks::uint32_byte2_mask & f_arg_2) >> 16); // Whether to override restore boolean
             restore_value = !!(constants::masks::uint32_byte4_mask & f_arg_2);       // Restore boolean value
+        } else {
+            field = nullptr;
         }
     };
 
@@ -108,17 +110,21 @@ public:
     {
         if (FaultInterface::opcode_lookup.find(f_opcode) != FaultInterface::opcode_lookup.end()) {
             fault = FaultInterface::opcode_lookup[f_opcode];
+        } else {
+            fault = nullptr;
         }
     };
 
     void execute()
     {
-        if (f_arg_1 && !f_arg_2) {
-            fault->force();
-        } else if (!f_arg_1 && f_arg_2) {
-            fault->suppress();
-        } else if (!f_arg_1 && !f_arg_2) {
-            fault->restore();
+        if (isValid()) {
+            if (f_arg_1 && !f_arg_2) {
+                fault->force();
+            } else if (!f_arg_1 && f_arg_2) {
+                fault->suppress();
+            } else if (!f_arg_1 && !f_arg_2) {
+                fault->restore();
+            }
         }
     }
 
