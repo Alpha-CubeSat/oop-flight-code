@@ -145,7 +145,7 @@ void Transmit::transition_to()
 void Transmit::dispatch()
 {
     // timed_out(sfr::mission::normal, sfr::rockblock::on_time);
-    //enter_lp(sfr::mission::lowPower); // entering lp takes precedence
+    // enter_lp(sfr::mission::lowPower); // entering lp takes precedence
 }
 
 Phase *Transmit::get_phase()
