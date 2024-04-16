@@ -20,7 +20,7 @@ void Boot::transition_to()
 void Boot::dispatch()
 {
     if (sfr::eeprom::time_alive >= sfr::boot::max_time) {
-        sfr::mission::current_mode = sfr::mission::aliveSignal;
+        sfr::mission::current_mode = sfr::mission::transmit;
     }
 }
 
@@ -144,8 +144,8 @@ void Transmit::transition_to()
 
 void Transmit::dispatch()
 {
-    timed_out(sfr::mission::normal, sfr::rockblock::on_time);
-    enter_lp(sfr::mission::lowPower); // entering lp takes precedence
+    // timed_out(sfr::mission::normal, sfr::rockblock::on_time);
+    //enter_lp(sfr::mission::lowPower); // entering lp takes precedence
 }
 
 Phase *Transmit::get_phase()

@@ -8,7 +8,7 @@ namespace sfr {
     } // namespace stabilization
     namespace boot {
         // OP Codes 1200
-        SFRField<uint32_t> max_time = SFRField<uint32_t>(2 * constants::time::one_hour, 0x1200);
+        SFRField<uint32_t> max_time = SFRField<uint32_t>(2 * constants::time::one_second, 0x1200);
     } // namespace boot
     namespace detumble {
         // OP Codes 1500
@@ -151,9 +151,9 @@ namespace sfr {
         SFRField<uint16_t> downlink_report_type = SFRField<uint16_t>((uint16_t)report_type::normal_report, 0x2106);
         SFRField<uint16_t> mode = SFRField<uint16_t>((uint16_t)rockblock_mode_type::standby, 0x2107);
         SFRField<uint32_t> last_downlink = SFRField<uint32_t>(0, 0x2108);
-        SFRField<uint32_t> downlink_period = SFRField<uint32_t>(20 * constants::time::one_minute, 0, 2 * constants::time::one_day, 0x2109);
+        SFRField<uint32_t> downlink_period = SFRField<uint32_t>(3 * constants::time::one_second, 0, 2 * constants::time::one_day, 0x2109);
         SFRField<uint32_t> lp_downlink_period = SFRField<uint32_t>(constants::time::one_hour, constants::time::one_second, 2 * constants::time::one_day, 0x2110);
-        SFRField<uint32_t> transmit_downlink_period = SFRField<uint32_t>(20 * constants::time::one_minute, constants::time::one_second, 2 * constants::time::one_day, 0x2111);
+        SFRField<uint32_t> transmit_downlink_period = SFRField<uint32_t>(3 * constants::time::one_second, constants::time::one_second, 2 * constants::time::one_day, 0x2111);
         SFRField<uint32_t> on_time = SFRField<uint32_t>(35 * constants::time::one_minute, 0, constants::time::one_revolution, 0x2112);
 
         char buffer[constants::rockblock::buffer_size] = {0};
