@@ -664,15 +664,11 @@ void RockblockControlTask::dispatch_process_mt_status()
     if ((sfr::rockblock::commas[2] - sfr::rockblock::commas[1]) == 2) {
         if (c == '0') {
             Serial.println("SAT INFO: there were no messages to retrieve");
+            clear_reports();
             transition_to(rockblock_mode_type::end_transmission);
         } else if (c == '1') {
             Serial.println("SAT INFO: message retrieved");
-            if (sfr::rockblock::downlink_report_type == (uint16_t)report_type::camera_report) {
-                sfr::rockblock::camera_report.clear();
-            }
-            if (sfr::rockblock::downlink_report_type == (uint16_t)report_type::imu_report) {
-                sfr::rockblock::imu_report.clear();
-            }
+            clear_reports();
             transition_to(rockblock_mode_type::read_message_ok);
         }
     } else {
@@ -787,6 +783,7 @@ void RockblockControlTask::dispatch_queue_check()
     } else if (queued > 0) {
         transition_to(rockblock_mode_type::send_response);
     } else {
+        clear_reports();
         transition_to(rockblock_mode_type::end_transmission);
     }
 }
@@ -819,12 +816,6 @@ void RockblockControlTask::dispatch_end_transmission()
     if (sfr::rockblock::downlink_period > constants::rockblock::min_sleep_period) {
         Pins::setPinState(constants::rockblock::sleep_pin, LOW);
     }
-    if (sfr::rockblock::downlink_report_type == (uint16_t)report_type::camera_report) {
-        sfr::rockblock::camera_report.clear();
-    }
-    if (sfr::rockblock::downlink_report_type == (uint16_t)report_type::imu_report) {
-        sfr::rockblock::imu_report.clear();
-    }
     transition_to(rockblock_mode_type::standby);
 }
 
@@ -832,6 +823,16 @@ void RockblockControlTask::transition_to(rockblock_mode_type new_mode)
 {
     sfr::rockblock::mode = (uint16_t)new_mode;
     same_mode = 0;
+}
+
+void RockblockControlTask::clear_reports()
+{
+    if (sfr::rockblock::downlink_report_type == (uint16_t)report_type::camera_report) {
+        sfr::rockblock::camera_report.clear();
+    }
+    if (sfr::rockblock::downlink_report_type == (uint16_t)report_type::imu_report) {
+        sfr::rockblock::imu_report.clear();
+    }
 }
 
 RockblockCommand *RockblockControlTask::commandFactory(RawRockblockCommand raw)
