@@ -48,6 +48,7 @@ private:
     void print_SFRField(int i, int opcode);
     void print_SensorReading(int i, SensorReading *valueObj);
     void print_Fault(int i, bool shift);
+    void clear_reports();
     uint32_t same_mode = 0;
     uint8_t look_ahead1 = -1;
     uint8_t look_ahead2 = -1;
