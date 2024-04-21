@@ -60,19 +60,11 @@ void SensorReading::set_invalid()
 
 bool SensorReading::repeated_values(float val)
 {
-    int min_loop_max;
-
     if (buffer.empty() || buffer.size() == 1) {
         return false;
     }
 
-    if (buffer.size() > constants::sensor::repeats) {
-        min_loop_max = constants::sensor::repeats;
-    } else {
-        min_loop_max = buffer.size();
-    }
-
-    for (int i = 0; i < min_loop_max; i++) {
+    for (int i = 0; i < buffer.size(); i++) {
         if (buffer.at(i) != val) {
             return false;
         }
