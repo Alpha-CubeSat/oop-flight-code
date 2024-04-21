@@ -18,7 +18,7 @@ namespace constants {
         constexpr uint32_t control_cycle_time_ms = 100;
     } // namespace time
     namespace sensor {
-        constexpr int repeats = 100;
+        constexpr int repeats = 3000;
         constexpr int resolution = 1023;
         constexpr float voltage_ref = 3.3;
     } // namespace sensor

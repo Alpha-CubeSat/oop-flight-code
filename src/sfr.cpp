@@ -240,7 +240,7 @@ namespace sfr {
         SFRField<uint32_t> min_battery = SFRField<uint32_t>((3.75 * constants::battery::sfr_resolution), 0x2601, constants::battery::sfr_resolution);
 
         SensorReading *voltage_value = new SensorReading(fault_groups::power_faults::voltage_value, 1, constants::battery::min_voltage, constants::battery::max_voltage);
-        SensorReading *voltage_average = new SensorReading(fault_groups::power_faults::voltage_average, 300, constants::battery::min_voltage, constants::battery::max_voltage);
+        SensorReading *voltage_average = new SensorReading(fault_groups::power_faults::voltage_average, 3000, constants::battery::min_voltage, constants::battery::max_voltage);
     } // namespace battery
     namespace button {
         // OP Codes 2700
