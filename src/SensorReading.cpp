@@ -64,7 +64,7 @@ bool SensorReading::repeated_values(float val)
         return false;
     }
 
-    for (int i = 0; i < buffer.size(); i++) {
+    for (size_t i = 0; i < buffer.size(); i++) {
         if (buffer.at(i) != val) {
             return false;
         }
