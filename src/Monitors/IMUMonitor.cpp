@@ -377,12 +377,18 @@ void IMUMonitor::capture_imu_values()
     Serial.print(", ");
     Serial.println(ekfObj.state(5));
 #endif
+    // update the EKFed values
+    sfr::imu::mag_x_value->set_value(ekfObj.state(0));
+    sfr::imu::mag_y_value->set_value(ekfObj.state(1));
+    sfr::imu::mag_z_value->set_value(ekfObj.state(2));
+    sfr::imu::gyro_x_value->set_value(ekfObj.state(3));
+    sfr::imu::gyro_y_value->set_value(ekfObj.state(4));
+    sfr::imu::gyro_z_value->set_value(ekfObj.state(5));
 
     // Add offset readings to buffer
     sfr::imu::mag_x_average->set_value(ekfObj.state(0));
     sfr::imu::mag_y_average->set_value(ekfObj.state(1));
     sfr::imu::mag_z_average->set_value(ekfObj.state(2));
-
     // used outside of ACS Control Task to determine exit conditions for Detumble Spin
     sfr::imu::gyro_x_average->set_value(ekfObj.state(3));
     sfr::imu::gyro_y_average->set_value(ekfObj.state(4));
