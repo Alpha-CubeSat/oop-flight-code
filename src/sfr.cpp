@@ -29,7 +29,7 @@ namespace sfr {
         // OP Codes 1700
         SFRField<bool> covered = SFRField<bool>(true, 0x1700);
 
-        SensorReading *light_val_average_standby = new SensorReading(fault_groups::hardware_faults::light_val, 20, constants::photoresistor::min_light_val, constants::photoresistor::max_light_val);
+        SensorReading *light_val_average_standby = new SensorReading(fault_groups::hardware_faults::light_val, 600, constants::photoresistor::min_light_val, constants::photoresistor::max_light_val);
         SensorReading *light_val_average_deployment = new SensorReading(fault_groups::hardware_faults::light_val, 1, constants::photoresistor::min_light_val, constants::photoresistor::max_light_val);
     } // namespace photoresistor
     namespace mission {
@@ -190,12 +190,12 @@ namespace sfr {
         SensorReading *gyro_x_value = new SensorReading(fault_groups::imu_faults::gyro_x_value, 1, constants::imu::min_gyro, constants::imu::max_gyro);
         SensorReading *gyro_y_value = new SensorReading(fault_groups::imu_faults::gyro_y_value, 1, constants::imu::min_gyro, constants::imu::max_gyro);
         SensorReading *gyro_z_value = new SensorReading(fault_groups::imu_faults::gyro_z_value, 1, constants::imu::min_gyro, constants::imu::max_gyro);
-        SensorReading *mag_x_average = new SensorReading(fault_groups::imu_faults::mag_x_average, 20, constants::imu::min_mag, constants::imu::max_mag);
-        SensorReading *mag_y_average = new SensorReading(fault_groups::imu_faults::mag_y_average, 20, constants::imu::min_mag, constants::imu::max_mag);
-        SensorReading *mag_z_average = new SensorReading(fault_groups::imu_faults::mag_z_average, 20, constants::imu::min_mag, constants::imu::max_mag);
-        SensorReading *gyro_x_average = new SensorReading(fault_groups::imu_faults::gyro_x_average, 20, constants::imu::min_gyro, constants::imu::max_gyro);
-        SensorReading *gyro_y_average = new SensorReading(fault_groups::imu_faults::gyro_y_average, 20, constants::imu::min_gyro, constants::imu::max_gyro);
-        SensorReading *gyro_z_average = new SensorReading(fault_groups::imu_faults::gyro_z_average, 20, constants::imu::min_gyro, constants::imu::max_gyro);
+        SensorReading *mag_x_average = new SensorReading(fault_groups::imu_faults::mag_x_average, 600, constants::imu::min_mag, constants::imu::max_mag);
+        SensorReading *mag_y_average = new SensorReading(fault_groups::imu_faults::mag_y_average, 600, constants::imu::min_mag, constants::imu::max_mag);
+        SensorReading *mag_z_average = new SensorReading(fault_groups::imu_faults::mag_z_average, 600, constants::imu::min_mag, constants::imu::max_mag);
+        SensorReading *gyro_x_average = new SensorReading(fault_groups::imu_faults::gyro_x_average, 600, constants::imu::min_gyro, constants::imu::max_gyro);
+        SensorReading *gyro_y_average = new SensorReading(fault_groups::imu_faults::gyro_y_average, 600, constants::imu::min_gyro, constants::imu::max_gyro);
+        SensorReading *gyro_z_average = new SensorReading(fault_groups::imu_faults::gyro_z_average, 600, constants::imu::min_gyro, constants::imu::max_gyro);
 
         std::deque<uint8_t> imu_dlink;
     } // namespace imu
