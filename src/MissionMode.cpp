@@ -492,16 +492,16 @@ void exit_detumble_phase(MissionMode *mode)
     }
 
     // cubesat stabilized
-    if (sfr::imu::gyro_z_average->get_value(&gyro_z) && gyro_z >= sfr::detumble::min_stable_gyro_z.get_float() &&
-        sfr::imu::gyro_x_average->get_value(&gyro_x) && gyro_x <= sfr::detumble::max_stable_gyro_x.get_float() &&
-        sfr::imu::gyro_y_average->get_value(&gyro_y) && gyro_y <= sfr::detumble::max_stable_gyro_y.get_float()) {
+    if (sfr::imu::gyro_z_average->get_value(&gyro_z) && abs(gyro_z) >= sfr::detumble::min_stable_gyro_z.get_float() &&
+        sfr::imu::gyro_x_average->get_value(&gyro_x) && abs(gyro_x) <= sfr::detumble::max_stable_gyro_x.get_float() &&
+        sfr::imu::gyro_y_average->get_value(&gyro_y) && abs(gyro_y) <= sfr::detumble::max_stable_gyro_y.get_float()) {
         sfr::mission::current_mode = mode;
         sfr::acs::mode = (uint8_t)acs_mode_type::simple;
     }
 
     // cubesat will never stabilize
-    if ((sfr::imu::gyro_x_average->get_value(&gyro_x) && gyro_x >= sfr::detumble::min_unstable_gyro_x.get_float()) ||
-        (sfr::imu::gyro_y_average->get_value(&gyro_y) && gyro_y >= sfr::detumble::min_unstable_gyro_y.get_float())) {
+    if ((sfr::imu::gyro_x_average->get_value(&gyro_x) && abs(gyro_x) >= sfr::detumble::min_unstable_gyro_x.get_float()) ||
+        (sfr::imu::gyro_y_average->get_value(&gyro_y) && abs(gyro_y) >= sfr::detumble::min_unstable_gyro_y.get_float())) {
         sfr::mission::current_mode = mode;
         sfr::acs::mode = (uint8_t)acs_mode_type::simple;
     }
