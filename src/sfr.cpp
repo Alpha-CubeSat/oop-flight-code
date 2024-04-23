@@ -218,7 +218,7 @@ namespace sfr {
         SFRField<uint8_t> mode = SFRField<uint8_t>((uint8_t)acs_mode_type::detumble, 0x2501);
         SFRField<uint8_t> simple_mag = SFRField<uint8_t>((uint8_t)mag_type::z, 0x2502);
         SFRField<uint8_t> target_spin_rate = SFRField<uint8_t>((5.0 * constants::acs::spin_resolution), 0x2503, constants::acs::spin_resolution);
-        SFRField<uint32_t> simple_current = SFRField<uint32_t>((50 - constants::acs::current_offset) * constants::acs::current_resolution, (-0.25 - constants::acs::current_offset) * constants::acs::current_resolution, (0.25 - constants::acs::current_offset) * constants::acs::current_resolution, 0x2504, constants::acs::current_resolution, constants::acs::current_offset);
+        SFRField<uint32_t> simple_current = SFRField<uint32_t>((0.05 - constants::acs::current_offset) * constants::acs::current_resolution, (-0.25 - constants::acs::current_offset) * constants::acs::current_resolution, (0.25 - constants::acs::current_offset) * constants::acs::current_resolution, 0x2504, constants::acs::current_resolution, constants::acs::current_offset);
         SFRField<uint32_t> on_time = SFRField<uint32_t>(5 * constants::time::one_minute, 0, constants::time::one_revolution, 0x2505);
         SFRField<uint32_t> Id_index = SFRField<uint32_t>(0, 0, (sizeof(constants::acs::Id_values) / sizeof(constants::acs::Id_values[0])) - 1, 0x2506);
         SFRField<uint32_t> Kd_index = SFRField<uint32_t>(0, 0, (sizeof(constants::acs::Kd_values) / sizeof(constants::acs::Kd_values[0])) - 1, 0x2507);
