@@ -147,7 +147,7 @@ namespace sfr {
         SFRField<bool> sleep_mode = SFRField<bool>(false, 0x2102);
         SFRField<uint8_t> max_commands_count = SFRField<uint8_t>(6, 0x2103);
         SFRField<uint8_t> queue_limit = SFRField<uint8_t>(5, 0x2104);
-        SFRField<uint8_t> max_signal_check = SFRField<uint8_t>(4, 0x2105);
+        SFRField<uint8_t> max_signal_check = SFRField<uint8_t>(3, 0x2105);
         SFRField<uint16_t> downlink_report_type = SFRField<uint16_t>((uint16_t)report_type::normal_report, 0x2106);
         SFRField<uint16_t> mode = SFRField<uint16_t>((uint16_t)rockblock_mode_type::standby, 0x2107);
         SFRField<uint32_t> last_downlink = SFRField<uint32_t>(0, 0x2108);
