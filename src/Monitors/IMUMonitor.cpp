@@ -181,7 +181,7 @@ void IMUMonitor::imu_offset()
     /*******************************************/
     /*Voltage Adjustment Coefficients */
 
-    float Volt_c = 0.29981456 * voltage - 0.18839838;
+    float Volt_c = 0.36432835 * voltage - 0.44007538;
     /*******************************************/
     /*Temperature Offset Terms*/
     // just so to get imu temp
