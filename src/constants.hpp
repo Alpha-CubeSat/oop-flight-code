@@ -107,9 +107,9 @@ namespace constants {
 
     } // namespace masks
     namespace acs {
-        constexpr int xPWMpin = 10;
         constexpr int xPWMpin = 6; // Flight Unit flipped  X Y
         constexpr int yPWMpin = 10;
+        constexpr int zPWMpin = 30;
 
         constexpr int xout1 = 8;
         constexpr int xout2 = 7;
