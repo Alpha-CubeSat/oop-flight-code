@@ -8,7 +8,7 @@ namespace sfr {
     } // namespace stabilization
     namespace boot {
         // OP Codes 1200
-        SFRField<uint32_t> max_time = SFRField<uint32_t>(2 * constants::time::one_hour, 0x1200);
+        SFRField<uint32_t> max_time = SFRField<uint32_t>(0 * constants::time::one_hour, 0x1200);
     } // namespace boot
     namespace detumble {
         // OP Codes 1500
@@ -23,7 +23,7 @@ namespace sfr {
         SFRField<bool> downlinked = SFRField<bool>(false, 0x1600);
         SFRField<uint16_t> max_downlink_hard_faults = SFRField<uint16_t>(3, 0x1601);
         SFRField<uint16_t> num_hard_faults = SFRField<uint16_t>(0, 0x1602);
-        SFRField<uint32_t> max_time = SFRField<uint32_t>(2 * constants::time::one_hour, 0x1603);
+        SFRField<uint32_t> max_time = SFRField<uint32_t>(0 * constants::time::one_hour, 0x1603);
     } // namespace aliveSignal
     namespace photoresistor {
         // OP Codes 1700

@@ -19,6 +19,7 @@ public:
 
 private:
     void ACSWrite(int torqorder, float current, int out1, int out2, int PWMpin);
+    void ACSWritePWM(int torqorder, float PWM, int out1, int out2, int PWMpin);
     int current2PWM(float current);
 
     bool first = true;

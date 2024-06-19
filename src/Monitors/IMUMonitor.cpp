@@ -69,6 +69,10 @@ void IMUMonitor::execute()
         sfr::imu::failed_times = 0;
     }
 
+#ifdef TEENSY_ONLY
+    sfr::imu::powered = true;
+#endif
+
     if (sfr::imu::powered == true) {
 #ifdef VERBOSE
         Serial.println("IMU is on");
@@ -181,7 +185,8 @@ void IMUMonitor::imu_offset()
     /*******************************************/
     /*Voltage Adjustment Coefficients */
 
-    float Volt_c = 0.29981456 * voltage - 0.18839838;
+    // float Volt_c = 0.29981456 * voltage - 0.18839838; //EDU
+    float Volt_c = 0.36432835 * voltage - 0.44007538; //Flight
     /*******************************************/
     /*Temperature Offset Terms*/
     // just so to get imu temp
@@ -205,9 +210,17 @@ void IMUMonitor::imu_offset()
     sfr::imu::mag_z_value->set_value(mag_z - mag_zoffset);
 
     // make gyro aligh with mag coor
-    sfr::imu::gyro_x_value->set_value(-(gyro_x - (-0.02297)));
-    sfr::imu::gyro_y_value->set_value(gyro_y - (0.03015));
-    sfr::imu::gyro_z_value->set_value(gyro_z - (-0.01396));
+    // EDU:
+    //  sfr::imu::gyro_x_value->set_value(-(gyro_x - (-0.02297)));
+    //  sfr::imu::gyro_y_value->set_value(gyro_y - (0.03015));
+    //  sfr::imu::gyro_z_value->set_value(gyro_z - (-0.01396));
+
+    // Flight Unit:
+    sfr::imu::gyro_x_value->set_value(-(gyro_x - (-0.000260)));
+    sfr::imu::gyro_y_value->set_value(gyro_y - (0.104193));
+    sfr::imu::gyro_z_value->set_value(gyro_z - (0.009679));
+
+
 }
 
 // generate a normal random variable using Box-Muller transform
@@ -377,6 +390,60 @@ void IMUMonitor::capture_imu_values()
     Serial.print(", ");
     Serial.println(ekfObj.state(5));
 #endif
+
+    Serial.print(sfr::acs::pwm_x);
+    Serial.print(", ");
+    Serial.print(sfr::acs::pwm_y);
+    Serial.print(", ");
+    Serial.print(sfr::acs::pwm_z);
+    Serial.print(", ");
+    Serial.print(sfr::acs::current_x);
+    Serial.print(", ");
+    Serial.print(sfr::acs::current_y);
+    Serial.print(", ");
+    Serial.print(sfr::acs::current_z);
+    Serial.print(", ");
+    Serial.print(temp.temperature);
+    Serial.print(", ");
+    Serial.print(voltage);
+    Serial.print(", ");
+    Serial.print(mag.magnetic.x);
+    Serial.print(", ");
+    Serial.print(mag.magnetic.y);
+    Serial.print(", ");
+    Serial.print(mag.magnetic.z);
+    Serial.print(", ");
+    Serial.print(gyro.gyro.x);
+    Serial.print(", ");
+    Serial.print(gyro.gyro.y);
+    Serial.print(", ");
+    Serial.print(gyro.gyro.z);
+    Serial.print(", ");
+    Serial.print(mag_x);
+    Serial.print(", ");
+    Serial.print(mag_y);
+    Serial.print(", ");
+    Serial.print(mag_z);
+    Serial.print(", ");
+    Serial.print(gyro_x);
+    Serial.print(", ");
+    Serial.print(gyro_y);
+    Serial.print(", ");
+    Serial.print(gyro_z);
+    Serial.print(", ");
+    Serial.print(ekfObj.state(0));
+    Serial.print(", ");
+    Serial.print(ekfObj.state(1));
+    Serial.print(", ");
+    Serial.print(ekfObj.state(2));
+    Serial.print(", ");
+    Serial.print(ekfObj.state(3));
+    Serial.print(", ");
+    Serial.print(ekfObj.state(4));
+    Serial.print(", ");
+    Serial.println(ekfObj.state(5));
+
+
     // update the EKFed values
     sfr::imu::mag_x_value->set_value(ekfObj.state(0));
     sfr::imu::mag_y_value->set_value(ekfObj.state(1));

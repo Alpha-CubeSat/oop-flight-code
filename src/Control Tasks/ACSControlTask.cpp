@@ -32,6 +32,10 @@ void ACSControlTask::execute()
                 sfr::imu::mag_x_value->get_value(&mag_x) &&
                 sfr::imu::mag_y_value->get_value(&mag_y) &&
                 sfr::imu::mag_z_value->get_value(&mag_z);
+                
+#ifdef TEENSY_ONLY
+    imu_valid = true;
+#endif
 
     if (!sfr::acs::off) {
         if ((!imu_valid && (sfr::imu::mode == (uint16_t)sensor_mode_type::abnormal_init || sfr::imu::mode == (uint16_t)sensor_mode_type::normal)) || sfr::acs::mode == (uint8_t)acs_mode_type::simple) {
@@ -132,9 +136,23 @@ void ACSControlTask::execute()
         sfr::acs::current_z = 0;
     }
 
+// sfr::acs::current_x = (rand() % 50 + 1) / 100.0 - 0.25;
+    // sfr::acs::current_y = (rand() % 50 + 1) / 100.0 - 0.25;
+    // sfr::acs::current_z = (rand() % 50 + 1) / 100.0 - 0.25;
+    // sfr::acs::current_x = 0;
+    // sfr::acs::current_y = 0;
+    // sfr::acs::current_z = 0;
+    // sfr::acs::pwm_x = 255;
+    // sfr::acs::pwm_y = 0;
+    // sfr::acs::pwm_z = 0;
+
     ACSWrite(constants::acs::xtorqorder, sfr::acs::current_x, constants::acs::xout1, constants::acs::xout2, constants::acs::xPWMpin);
     ACSWrite(constants::acs::ytorqorder, sfr::acs::current_y, constants::acs::yout1, constants::acs::yout2, constants::acs::yPWMpin);
     ACSWrite(constants::acs::ztorqorder, sfr::acs::current_z, constants::acs::zout1, constants::acs::zout2, constants::acs::zPWMpin);
+
+    // ACSWritePWM(constants::acs::xtorqorder, sfr::acs::pwm_x, constants::acs::xout1, constants::acs::xout2, constants::acs::xPWMpin);
+    // ACSWritePWM(constants::acs::ytorqorder, sfr::acs::pwm_y, constants::acs::yout1, constants::acs::yout2, constants::acs::yPWMpin);
+    // ACSWritePWM(constants::acs::ztorqorder, sfr::acs::pwm_z, constants::acs::zout1, constants::acs::zout2, constants::acs::zPWMpin);
 
 #ifdef ACS_DATA
     Serial.print(millis());
@@ -185,11 +203,16 @@ int ACSControlTask::current2PWM(float current)
     }
 
     float abs_current = fabs(current);
-    float voltage_cof = voltage * 0.24038134 + 0.02798774;
+    //float voltage_cof = voltage * 0.24038134 + 0.02798774; //EDU
+    float voltage_cof = voltage * 0.239 + 0.051; //Flight
     abs_current = abs_current / voltage_cof;
 
-    int PWM = -4474.72 * pow(abs_current, 2) + 2099.351 * abs_current + 14.17;
-
+    //EDU
+    //int PWM = -4474.72 * pow(abs_current, 2) + 2099.351 * abs_current + 14.17;
+    
+    //Flight
+    int PWM = -2854.12694269 * pow(abs_current, 2) + 1808.084 * abs_current + 14.82;
+ 
     if (current < 0) {
         PWM = -PWM;
     } else if (current == 0) {
@@ -230,6 +253,45 @@ void ACSControlTask::ACSWrite(int torqorder, float current, int out1, int out2, 
         }
     } else if (torqorder == 1) {
         if (current > 0) {
+            digitalWrite(out1, LOW);
+            digitalWrite(out2, HIGH);
+            analogWrite(PWMpin, abs_PWM);
+        } else {
+            digitalWrite(out1, HIGH);
+            digitalWrite(out2, LOW);
+            analogWrite(PWMpin, abs_PWM);
+        }
+    }
+}
+
+void ACSControlTask::ACSWritePWM(int torqorder, float PWM, int out1, int out2, int PWMpin)
+{
+    int abs_PWM = abs(PWM);
+    if (PWMpin == constants::acs::xPWMpin) {
+        sfr::acs::pwm_x = prev_PWMx;
+        prev_PWMx = PWM;
+    } else if (PWMpin == constants::acs::yPWMpin) {
+        sfr::acs::pwm_y = prev_PWMy;
+        prev_PWMy = PWM;
+    } else if (PWMpin == constants::acs::zPWMpin) {
+        sfr::acs::pwm_z = prev_PWMz;
+        prev_PWMz = PWM;
+    }
+    if (PWM == 0) {
+        digitalWrite(out1, LOW);
+        digitalWrite(out2, LOW);
+    } else if (torqorder == 0) {
+        if (PWM > 0) {
+            digitalWrite(out1, HIGH);
+            digitalWrite(out2, LOW);
+            analogWrite(PWMpin, abs_PWM);
+        } else {
+            digitalWrite(out1, LOW);
+            digitalWrite(out2, HIGH);
+            analogWrite(PWMpin, abs_PWM);
+        }
+    } else if (torqorder == 1) {
+        if (PWM > 0) {
             digitalWrite(out1, LOW);
             digitalWrite(out2, HIGH);
             analogWrite(PWMpin, abs_PWM);
