@@ -185,10 +185,10 @@ int ACSControlTask::current2PWM(float current)
     }
 
     float abs_current = fabs(current);
-    float voltage_cof = voltage * 0.24038134 + 0.02798774;
+    float voltage_cof = voltage * 0.239 + 0.051;
     abs_current = abs_current / voltage_cof;
 
-    int PWM = -4474.72 * pow(abs_current, 2) + 2099.351 * abs_current + 14.17;
+    int PWM = -2854.12694269 * pow(abs_current, 2) + 1808.084 * abs_current + 14.82;
 
     if (current < 0) {
         PWM = -PWM;
