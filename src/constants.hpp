@@ -107,15 +107,15 @@ namespace constants {
 
     } // namespace masks
     namespace acs {
-        constexpr int xPWMpin = 10;
-        constexpr int yPWMpin = 6;
+        constexpr int xPWMpin = 6; // Flight Unit flipped  X Y
+        constexpr int yPWMpin = 10;
         constexpr int zPWMpin = 30;
 
-        constexpr int yout1 = 8;
-        constexpr int yout2 = 7;
+        constexpr int xout1 = 8;
+        constexpr int xout2 = 7;
 
-        constexpr int xout1 = 25;
-        constexpr int xout2 = 24;
+        constexpr int yout1 = 25;
+        constexpr int yout2 = 24;
 
         constexpr int zout1 = 28;
         constexpr int zout2 = 29;
@@ -123,50 +123,51 @@ namespace constants {
         constexpr int STBXYpin = 9;
         constexpr int STBZpin = 27;
 
-        // TODO:
-        constexpr int xtorqorder = 0;
-        constexpr int ytorqorder = 0;
-        constexpr int ztorqorder = 0;
+        // ITS 0 for EDU,  1 for Flight UNIT
+        constexpr int xtorqorder = 1;
+        constexpr int ytorqorder = 1;
+        constexpr int ztorqorder = 1;
 
         // IMU Offset Coefficients
 
         // PWM fit coefficients
         // ex: pwmX_ox_1: coefficient for first degree term in pwmX_ox
-        constexpr float pwmX_ox_1 = 5.21766488E-2;
-        constexpr float pwmX_ox_2 = -4.56157693E-6;
-        constexpr float pwmX_ox_3 = -2.10754381E-8;
+        constexpr float pwmX_ox_1 = 5.72642735e-02;
+        constexpr float pwmX_ox_2 = -3.32941558e-06;
+        constexpr float pwmX_ox_3 = 2.51577860e-09;
 
-        constexpr float pwmX_oy_1 = -7.19251021E-03;
-        constexpr float pwmX_oy_2 = 1.28682985E-05;
-        constexpr float pwmX_oy_3 = 3.35875446E-09;
+        constexpr float pwmX_oy_1 = -1.05421663e-02;
+        constexpr float pwmX_oy_2 = 1.49763107e-05;
+        constexpr float pwmX_oy_3 = -4.08621328e-08;
 
-        constexpr float pwmX_oz_1 = -8.09316675e-03;
-        constexpr float pwmX_oz_2 = -4.12199218e-05;
-        constexpr float pwmX_oz_3 = 1.88584179e-08;
+        constexpr float pwmX_oz_1 = 1.35291840e-03;
+        constexpr float pwmX_oz_2 = -4.21466668e-05;
+        constexpr float pwmX_oz_3 = -1.38842133e-08;
         ///////////////////////////////
-        constexpr float pwmY_ox_1 = -2.10873715e-02;
-        constexpr float pwmY_ox_2 = -1.49983785e-06;
-        constexpr float pwmY_ox_3 = -1.33605796e-08;
+        // Flight Unit:
+        constexpr float pwmY_ox_1 = -4.02597445e-02;
+        constexpr float pwmY_ox_2 = 2.63292003e-06;
+        constexpr float pwmY_ox_3 = 3.38826965e-08;
 
-        constexpr float pwmY_oy_1 = 3.84524425e-02;
-        constexpr float pwmY_oy_2 = 1.70575989e-05;
-        constexpr float pwmY_oy_3 = -3.42837575e-08;
+        constexpr float pwmY_oy_1 = 5.01175923e-02;
+        constexpr float pwmY_oy_2 = 9.93774361e-06;
+        constexpr float pwmY_oy_3 = -7.85543938e-09;
 
-        constexpr float pwmY_oz_1 = 5.65194821e-02;
-        constexpr float pwmY_oz_2 = -6.21996583e-05;
-        constexpr float pwmY_oz_3 = -7.88076518e-08;
+        constexpr float pwmY_oz_1 = 5.44496439e-02;
+        constexpr float pwmY_oz_2 = -4.27335254e-05;
+        constexpr float pwmY_oz_3 = 3.92358277e-08;
         /////////////////////////////
-        constexpr float pwmZ_ox_1 = 3.86522925e-02;
-        constexpr float pwmZ_ox_2 = -3.27902806e-06;
-        constexpr float pwmZ_ox_3 = -1.52763483e-08;
+        constexpr float pwmZ_ox_1 = 4.44822795e-02;
+        constexpr float pwmZ_ox_2 = -2.03606573e-06;
+        constexpr float pwmZ_ox_3 = -9.01969790e-09;
 
-        constexpr float pwmZ_oy_1 = 1.07442199e-02;
-        constexpr float pwmZ_oy_2 = 1.70881261e-05;
-        constexpr float pwmZ_oy_3 = 9.68654277e-09;
+        constexpr float pwmZ_oy_1 = 7.50075982e-03;
+        constexpr float pwmZ_oy_2 = 2.31807375e-05;
+        constexpr float pwmZ_oy_3 = 6.45761942e-09;
 
-        constexpr float pwmZ_oz_1 = 1.19418558e-02;
-        constexpr float pwmZ_oz_2 = -4.03330468e-05;
-        constexpr float pwmZ_oz_3 = -1.81032312e-08;
+        constexpr float pwmZ_oz_1 = 1.50101720e-02;
+        constexpr float pwmZ_oz_2 = -4.75292304e-05;
+        constexpr float pwmZ_oz_3 = 2.72118450e-08;
         ///////////////////////////
         ///////////////////////////
         // Voltage fit coefficients
@@ -218,9 +219,9 @@ namespace constants {
         constexpr float temp_z_c = -1.7573124306246634684924856628641;
 
         // Hard Iron Offsets
-        constexpr float hardiron_x = -4.150849999999998;
-        constexpr float hardiron_y = 24.28385;
-        constexpr float hardiron_z = 3.2226999999999997;
+        constexpr float hardiron_x = 21.463;
+        constexpr float hardiron_y = 25.745;
+        constexpr float hardiron_z = -11.539;
 
         // Starshot
         constexpr float step_size_input = 0.10;
@@ -228,23 +229,10 @@ namespace constants {
         constexpr float i_max_input = 0.25;
         constexpr float k_input = 13.5;
         constexpr float n_input = 500.0;
-        constexpr float Id_values[31] = {0.196, 0.14736842, 0.19473684, 0.24210526, 0.28947368, 0.33684211, 0.38421053, 0.43157895, 0.47894737, 0.52631579, 0.57368421, 0.62105263, 0.66842105, 0.71578947, 0.76315789, 0.81052632, 0.85789474, 0.90526316, 0.95263158, 1, 0, 0.01, 0.02, 0.03, 0.04, 0.05, 0.06, 0.07, 0.08, 0.09, 0.1};
         constexpr float Kd_values[31] = {0.0007935, 0.0099, 0.01485, 0.0198, 0.02475, 0.0297, 0.03465, 0.0396, 0.04455, 0.0495, 0.05445, 0.0594, 0.06435, 0.0693, 0.07425, 0.0792, 0.08415, 0.0891, 0.09405, 0.099, 0., 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.};
         constexpr float Kp_values[31] = {5.250E-10, 9.9900E-09, 1.4985E-08, 1.9980E-08, 2.4975E-08, 2.9970E-08, 3.4965E-08, 3.9960E-08, 4.4955E-08, 4.9950E-08, 5.4945E-08, 5.9940E-08, 6.4935E-08, 6.9930E-08, 7.4925E-08, 7.9920E-08, 8.4915E-08, 8.9910E-08, 9.4905E-08, 9.9900E-08, 0.0000e+00, 1.0000E-01, 2.0000E-01, 3.0000E-01, 4.0000E-01, 5.0000E-01, 6.0000E-01, 7.0000E-01, 8.0000E-01, 9.0000E-01, 1.0000e+00};
-        constexpr float c_values[31] = {
-            1.0E-5,
-            2.0000000000000003e-06,
-            3.3362010744001187e-06,
-            5.565118804414253e-06,
-            9.283177667225566e-06,
-            1.5485273653622557e-05,
-            2.5830993300297657e-05,
-            4.308869380063765e-05,
-            7.187627327609252e-05,
-            0.00011989685006378819,
-            0.00020000000000000004,
-
-        };
+        constexpr float Id_values[31] = {0.196, 1.0, 1.6681005372000588, 2.7825594022071245, 4.641588833612778, 7.742636826811269, 12.91549665014884, 21.544346900318832, 35.93813663804626, 59.94842503189409, 100.0, 0.01, 0.0206913808111479, 0.04281332398719394, 0.08858667904100823, 0.18329807108324356, 0.37926901907322497, 0.7847599703514611, 1.623776739188721, 3.359818286283781, 6.951927961775605, 14.38449888287663, 29.76351441631316, 61.584821106602604, 127.42749857031322, 263.6650898730355, 545.5594781168514, 1128.8378916846884, 2335.7214690901214, 4832.930238571752, 10000.0};
+        constexpr float c_values[31] = {1.0E-5, 2.0000000000000003e-06, 3.3362010744001187e-06, 5.565118804414253e-06, 9.283177667225566e-06, 1.5485273653622557e-05, 2.5830993300297657e-05, 4.308869380063765e-05, 7.187627327609252e-05, 0.00011989685006378819, 0.00020000000000000004, 1e-07, 2.6366508987303554e-07, 6.951927961775605e-07, 1.8329807108324375e-06, 4.832930238571752e-06, 1.274274985703132e-05, 3.359818286283781e-05, 8.858667904100833e-05, 0.00023357214690901214, 0.0006158482110660261, 0.001623776739188721, 0.004281332398719396, 0.011288378916846883, 0.02976351441631313, 0.07847599703514607, 0.20691380811147903, 0.5455594781168515, 1.43844988828766, 3.792690190732246, 10.0};
         constexpr float spin_resolution = 10;
 
         constexpr float current_resolution = 100;
