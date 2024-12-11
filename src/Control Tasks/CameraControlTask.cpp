@@ -104,6 +104,7 @@ void CameraControlTask::camera_init()
             sfr::camera::init_mode = (uint16_t)sensor_init_mode_type::complete;
             sfr::camera::power_setting = (uint8_t)sensor_power_mode_type::do_nothing;
             sfr::camera::powered = true;
+            sfr::camera::start_progress = 0;
             break;
         }
         }
@@ -206,7 +207,15 @@ void CameraControlTask::execute()
 #ifdef VERBOSE
                 Serial.println("Done writing file");
 #endif
-                sfr::camera::power_setting = (uint8_t)sensor_power_mode_type::off;
+                if (sfr::camera::images_written == 1) {
+                    sfr::camera::take_photo = true;
+#ifdef VERBOSE
+                    Serial.println("Triggering second activation of optical sensor");
+#endif
+                }
+                if (sfr::camera::images_written >= 2) {
+                    sfr::camera::power_setting = (uint8_t)sensor_power_mode_type::off;
+                }
             }
         }
     }
