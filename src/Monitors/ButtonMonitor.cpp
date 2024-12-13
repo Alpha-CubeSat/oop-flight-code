@@ -23,7 +23,7 @@ void ButtonMonitor::execute()
                 Serial.print("button time: ");
                 Serial.println(millis());
             }
-            sfr::button::button_pressed = false;
+            sfr::button::pressed = false;
         } else {
             sfr::button::pressed = true;
         }
