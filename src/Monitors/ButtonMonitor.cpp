@@ -18,6 +18,14 @@ void ButtonMonitor::execute()
             fault_groups::hardware_faults::button->force();
         }
     } else {
-        sfr::button::pressed = true;
+        if (sfr::mission::possible_uncovered) {
+            if (sfr::button::button_pressed) {
+                Serial.print("button time: ");
+                Serial.println(millis());
+            }
+            sfr::button::button_pressed = false;
+        } else {
+            sfr::button::pressed = true;
+        }
     }
 }
