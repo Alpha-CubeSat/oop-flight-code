@@ -19,7 +19,7 @@ void ButtonMonitor::execute()
         }
     } else {
         if (sfr::mission::possible_uncovered) {
-            if (sfr::button::button_pressed) {
+            if (sfr::button::pressed) {
                 Serial.print("button time: ");
                 Serial.println(millis());
             }
