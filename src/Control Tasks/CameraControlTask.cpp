@@ -161,8 +161,6 @@ void CameraControlTask::execute()
             Serial.println("Failed to snap!");
 #endif
         } else {
-            Serial.print("photo time: ");
-            Serial.println(millis());
             jpglen = adaCam.frameLength();
 #ifdef VERBOSE
             Serial.println("\n\n\nOptical sensor data captured!\n\n\n");
@@ -210,13 +208,13 @@ void CameraControlTask::execute()
                 Serial.println("Done writing file");
 #endif
                 if (sfr::camera::images_written == 1) {
-                    sfr::camera::take_photo = true;
                     if (!adaCam.resumeVideo()) {
 #ifdef VERBOSE
                         Serial.println("Failed to resume camera frame!");
 #endif
                         sfr::camera::power_setting = (uint8_t)sensor_power_mode_type::off;
                     } else {
+                        sfr::camera::take_photo = true;
 #ifdef VERBOSE
                         Serial.println("Triggering second activation of optical sensor");
 #endif
