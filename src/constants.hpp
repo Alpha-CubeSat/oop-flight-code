@@ -89,7 +89,7 @@ namespace constants {
     } // namespace rockblock
     namespace temperature {
         constexpr int pin = 39;
-        constexpr int in_sun_val = 0;
+        constexpr int in_sun_val = 30;
         constexpr int min_temp_c = -100;
         constexpr int max_temp_c = 200;
     } // namespace temperature
