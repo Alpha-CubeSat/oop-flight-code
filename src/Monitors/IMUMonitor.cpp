@@ -23,6 +23,76 @@ void IMUMonitor::IMU_init()
         }
     }
 }
+bool IMUMonitor::getInterpolatedOffsets(double voltage, PWMCoefficients& coeffs, 
+                            const std::map<float, VoltageCoefficients>& voltage_coeffs,
+                            const std::function<const PWMCoefficients&(const VoltageCoefficients&)>& coeffSelector) {
+    // Validate voltage range
+    if (voltage < 3.6 || voltage > 4.2) {
+        return false;
+    }
+    // Find the surrounding voltage levels
+    auto upper_it = voltage_coeffs.upper_bound(static_cast<float>(voltage));
+    if (upper_it == voltage_coeffs.begin() || upper_it == voltage_coeffs.end()) {
+        return false;
+    }
+    auto lower_it = std::prev(upper_it);
+    // Calculate interpolation factor
+    float lower_voltage = lower_it->first;
+    float upper_voltage = upper_it->first;
+    float factor = static_cast<float>((voltage - lower_voltage) / (upper_voltage - lower_voltage));
+    // Get coefficients for both voltage levels
+    const PWMCoefficients& lower_coeffs = coeffSelector(lower_it->second);
+    const PWMCoefficients& upper_coeffs = coeffSelector(upper_it->second);
+    // Interpolate coefficients
+    coeffs.coeff_1 = lower_coeffs.coeff_1 + factor * (upper_coeffs.coeff_1 - lower_coeffs.coeff_1);
+    coeffs.coeff_2 = lower_coeffs.coeff_2 + factor * (upper_coeffs.coeff_2 - lower_coeffs.coeff_2);
+    coeffs.coeff_3 = lower_coeffs.coeff_3 + factor * (upper_coeffs.coeff_3 - lower_coeffs.coeff_3);
+    return true;
+}
+
+bool IMUMonitor::calculatePWMValues(double voltage, float pwm_x, float pwm_y, float pwm_z,
+                       float& pwmX_ox, float& pwmX_oy, float& pwmX_oz,
+                       float& pwmY_ox, float& pwmY_oy, float& pwmY_oz,
+                       float& pwmZ_ox, float& pwmZ_oy, float& pwmZ_oz) {
+    PWMCoefficients x_ox_coeffs, x_oy_coeffs, x_oz_coeffs;
+    PWMCoefficients y_ox_coeffs, y_oy_coeffs, y_oz_coeffs;
+    PWMCoefficients z_ox_coeffs, z_oy_coeffs, z_oz_coeffs;
+    bool success = true;
+    // Get interpolated coefficients for PWM X
+    success &= getInterpolatedOffsets(voltage, x_ox_coeffs, voltage_coefficients,
+        [](const VoltageCoefficients& vc) -> const PWMCoefficients& { return vc.pwmX.ox; });
+    success &= getInterpolatedOffsets(voltage, x_oy_coeffs, voltage_coefficients,
+        [](const VoltageCoefficients& vc) -> const PWMCoefficients& { return vc.pwmX.oy; });
+    success &= getInterpolatedOffsets(voltage, x_oz_coeffs, voltage_coefficients,
+        [](const VoltageCoefficients& vc) -> const PWMCoefficients& { return vc.pwmX.oz; });
+    // Get interpolated coefficients for PWM Y
+    success &= getInterpolatedOffsets(voltage, y_ox_coeffs, voltage_coefficients,
+        [](const VoltageCoefficients& vc) -> const PWMCoefficients& { return vc.pwmY.ox; });
+    success &= getInterpolatedOffsets(voltage, y_oy_coeffs, voltage_coefficients,
+        [](const VoltageCoefficients& vc) -> const PWMCoefficients& { return vc.pwmY.oy; });
+    success &= getInterpolatedOffsets(voltage, y_oz_coeffs, voltage_coefficients,
+        [](const VoltageCoefficients& vc) -> const PWMCoefficients& { return vc.pwmY.oz; });
+    // Get interpolated coefficients for PWM Z
+    success &= getInterpolatedOffsets(voltage, z_ox_coeffs, voltage_coefficients,
+        [](const VoltageCoefficients& vc) -> const PWMCoefficients& { return vc.pwmZ.ox; });
+    success &= getInterpolatedOffsets(voltage, z_oy_coeffs, voltage_coefficients,
+        [](const VoltageCoefficients& vc) -> const PWMCoefficients& { return vc.pwmZ.oy; });
+    success &= getInterpolatedOffsets(voltage, z_oz_coeffs, voltage_coefficients,
+        [](const VoltageCoefficients& vc) -> const PWMCoefficients& { return vc.pwmZ.oz; });
+    // Calculate PWM X values using interpolated coefficients
+    pwmX_ox = x_ox_coeffs.coeff_1 * pwm_x + x_ox_coeffs.coeff_2 * pow(pwm_x, 2) + x_ox_coeffs.coeff_3 * pow(pwm_x, 3);
+    pwmX_oy = x_oy_coeffs.coeff_1 * pwm_x + x_oy_coeffs.coeff_2 * pow(pwm_x, 2) + x_oy_coeffs.coeff_3 * pow(pwm_x, 3);
+    pwmX_oz = x_oz_coeffs.coeff_1 * pwm_x + x_oz_coeffs.coeff_2 * pow(pwm_x, 2) + x_oz_coeffs.coeff_3 * pow(pwm_x, 3);
+    // Calculate PWM Y values using interpolated coefficients
+    pwmY_ox = y_ox_coeffs.coeff_1 * pwm_y + y_ox_coeffs.coeff_2 * pow(pwm_y, 2) + y_ox_coeffs.coeff_3 * pow(pwm_y, 3);
+    pwmY_oy = y_oy_coeffs.coeff_1 * pwm_y + y_oy_coeffs.coeff_2 * pow(pwm_y, 2) + y_oy_coeffs.coeff_3 * pow(pwm_y, 3);
+    pwmY_oz = y_oz_coeffs.coeff_1 * pwm_y + y_oz_coeffs.coeff_2 * pow(pwm_y, 2) + y_oz_coeffs.coeff_3 * pow(pwm_y, 3);
+    // Calculate PWM Z values using interpolated coefficients
+    pwmZ_ox = z_ox_coeffs.coeff_1 * pwm_z + z_ox_coeffs.coeff_2 * pow(pwm_z, 2) + z_ox_coeffs.coeff_3 * pow(pwm_z, 3);
+    pwmZ_oy = z_oy_coeffs.coeff_1 * pwm_z + z_oy_coeffs.coeff_2 * pow(pwm_z, 2) + z_oy_coeffs.coeff_3 * pow(pwm_z, 3);
+    pwmZ_oz = z_oz_coeffs.coeff_1 * pwm_z + z_oz_coeffs.coeff_2 * pow(pwm_z, 2) + z_oz_coeffs.coeff_3 * pow(pwm_z, 3);
+    return success;
+}
 
 void IMUMonitor::execute()
 {
@@ -167,17 +237,15 @@ void IMUMonitor::imu_offset()
     }
 
     /*Offset Contributions from PWM (ex: pwmX_oX is contribution of X mag to offset x)*/
-    float pwmX_ox = pwmX_ox_1 * sfr::acs::pwm_x + pwmX_ox_2 * pow(sfr::acs::pwm_x, 2) + pwmX_ox_3 * pow(sfr::acs::pwm_x, 3);
-    float pwmX_oy = pwmX_oy_1 * sfr::acs::pwm_x + pwmX_oy_2 * pow(sfr::acs::pwm_x, 2) + pwmX_oy_3 * pow(sfr::acs::pwm_x, 3);
-    float pwmX_oz = pwmX_oz_1 * sfr::acs::pwm_x + pwmX_oz_2 * pow(sfr::acs::pwm_x, 2) + pwmX_oz_3 * pow(sfr::acs::pwm_x, 3);
+    float pwmX_ox, pwmX_oy, pwmX_oz;
+    float pwmY_ox, pwmY_oy, pwmY_oz;
+    float pwmZ_ox, pwmZ_oy, pwmZ_oz;
 
-    float pwmY_ox = pwmY_ox_1 * sfr::acs::pwm_y + pwmY_ox_2 * pow(sfr::acs::pwm_y, 2) + pwmY_ox_3 * pow(sfr::acs::pwm_y, 3);
-    float pwmY_oy = pwmY_oy_1 * sfr::acs::pwm_y + pwmY_oy_2 * pow(sfr::acs::pwm_y, 2) + pwmY_oy_3 * pow(sfr::acs::pwm_y, 3);
-    float pwmY_oz = pwmY_oz_1 * sfr::acs::pwm_y + pwmY_oz_2 * pow(sfr::acs::pwm_y, 2) + pwmY_oz_3 * pow(sfr::acs::pwm_y, 3);
-
-    float pwmZ_ox = pwmZ_ox_1 * sfr::acs::pwm_z + pwmZ_ox_2 * pow(sfr::acs::pwm_z, 2) + pwmZ_ox_3 * pow(sfr::acs::pwm_z, 3);
-    float pwmZ_oy = pwmZ_oy_1 * sfr::acs::pwm_z + pwmZ_oy_2 * pow(sfr::acs::pwm_z, 2) + pwmZ_oy_3 * pow(sfr::acs::pwm_z, 3);
-    float pwmZ_oz = pwmZ_oz_1 * sfr::acs::pwm_z + pwmZ_oz_2 * pow(sfr::acs::pwm_z, 2) + pwmZ_oz_3 * pow(sfr::acs::pwm_z, 3);
+    calculatePWMValues(voltage, sfr::acs::pwm_x,    sfr::acs::pwm_y,    sfr::acs::pwm_z, 
+                                pwmX_ox,            pwmX_oy,            pwmX_oz, 
+                                pwmY_ox,            pwmY_oy,            pwmY_oz, 
+                                pwmZ_ox,            pwmZ_oy,            pwmZ_oz
+    );
     /*******************************************/
     /*Voltage Adjustment Coefficients */
 
@@ -189,13 +257,13 @@ void IMUMonitor::imu_offset()
     imu.getEvent(&accel, &mag, &gyro, &temp_imu);
 
     float temp_x = (-0.06579) * temp_imu.temperature + 1.588;
-    float temp_y = (0.0715) * temp_imu.temperature + (-2.023);
+    float temp_y = (0.0715) * temp_imu.temperature + (-2.023);// do not modify, add these values to the offset
     float temp_z = (0.206) * temp_imu.temperature + (-6.835);
     /*******************************************/
     /*Total Offsets*/
-    float mag_xoffset = (pwmX_ox + pwmY_ox + pwmZ_ox) * Volt_c + temp_x + hardiron_x;
+    float mag_xoffset = (pwmX_ox + pwmY_ox + pwmZ_ox) * Volt_c + temp_x + hardiron_x;// rewrite
     float mag_yoffset = (pwmX_oy + pwmY_oy + pwmZ_oy) * Volt_c + temp_y + hardiron_y;
-    float mag_zoffset = (pwmX_oz + pwmY_oz + pwmZ_oz) * Volt_c + temp_z + hardiron_z;
+    float mag_zoffset = (pwmX_oz + pwmY_oz + pwmZ_oz) * Volt_c + temp_z + hardiron_z;// rewrite this
 
     /*******************************************/
     /* Finally, adjust magnetometer/gyro readings*/
@@ -286,7 +354,8 @@ void IMUMonitor::capture_imu_values()
             -7.75657503e-05, -1.26277622e-05, 5.67092127e-05, -6.07376965e-07, 2.97298687e-08, 8.52192033e-06;
         // Hd
         Eigen::MatrixXd Hd = Eigen::MatrixXd::Identity(6, 6);
-        ekfObj.initialize(constants::acs::step_size_input, initial_state, initial_cov, Q, Rd, Hd);
+
+        ekfObj.initialize(constants::acs::step_size_input, initial_state, initial_cov, Q, Rd, Hd); // initialize with voltage
 #ifdef ACS_SIM
         plantObj.initialize(0.01, altitude_input, I_input, inclination_input, m_input, q0_input, wx_input, wy_input, wz_input);
 #endif
