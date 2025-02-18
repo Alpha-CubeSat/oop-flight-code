@@ -4,11 +4,11 @@ namespace sfr {
     namespace stabilization {
         // OP Codes 1100
         // TODO actual default value
-        SFRField<uint32_t> max_time = SFRField<uint32_t>(2 * constants::time::one_hour, 0x1100);
+        SFRField<uint32_t> max_time = SFRField<uint32_t>(1 * constants::time::one_minute, 0x1100);
     } // namespace stabilization
     namespace boot {
         // OP Codes 1200
-        SFRField<uint32_t> max_time = SFRField<uint32_t>(2 * constants::time::one_hour, 0x1200);
+        SFRField<uint32_t> max_time = SFRField<uint32_t>(1 * constants::time::one_minute, 0x1200);
     } // namespace boot
     namespace detumble {
         // OP Codes 1500
@@ -23,7 +23,7 @@ namespace sfr {
         SFRField<bool> downlinked = SFRField<bool>(false, 0x1600);
         SFRField<uint16_t> max_downlink_hard_faults = SFRField<uint16_t>(3, 0x1601);
         SFRField<uint16_t> num_hard_faults = SFRField<uint16_t>(0, 0x1602);
-        SFRField<uint32_t> max_time = SFRField<uint32_t>(2 * constants::time::one_hour, 0x1603);
+        SFRField<uint32_t> max_time = SFRField<uint32_t>(1 * constants::time::one_minute, 0x1603);
     } // namespace aliveSignal
     namespace photoresistor {
         // OP Codes 1700
@@ -111,12 +111,12 @@ namespace sfr {
         // OP Codes 1900
         SFRField<uint16_t> attempts = SFRField<uint16_t>(0, 0x1900);
         SFRField<uint16_t> mode = SFRField<uint16_t>((uint16_t)burnwire_mode_type::standby, 0x1901);
-        SFRField<uint16_t> attempts_limit = SFRField<uint16_t>(10, 0x1902);
+        SFRField<uint16_t> attempts_limit = SFRField<uint16_t>(11, 0x1902);
         SFRField<uint16_t> mandatory_attempts_limit = SFRField<uint16_t>(2, 0x1903);
         SFRField<uint32_t> start_time = SFRField<uint32_t>(0, 0x1904);
         SFRField<uint32_t> burn_time = SFRField<uint32_t>(600, 0, 5 * constants::time::one_second, 0x1905);
         SFRField<uint32_t> armed_time = SFRField<uint32_t>(48 * constants::time::one_hour, 0, 12 * constants::time::one_hour, 0x1906);
-        SFRField<uint32_t> delay_time = SFRField<uint32_t>(constants::time::one_second, 0x1907);
+        SFRField<uint32_t> delay_time = SFRField<uint32_t>(5 * constants::time::one_second, 0x1907);
     } // namespace burnwire
     namespace camera {
         // OP Codes 2000
@@ -151,9 +151,9 @@ namespace sfr {
         SFRField<uint16_t> downlink_report_type = SFRField<uint16_t>((uint16_t)report_type::normal_report, 0x2106);
         SFRField<uint16_t> mode = SFRField<uint16_t>((uint16_t)rockblock_mode_type::standby, 0x2107);
         SFRField<uint32_t> last_downlink = SFRField<uint32_t>(0, 0x2108);
-        SFRField<uint32_t> downlink_period = SFRField<uint32_t>(20 * constants::time::one_minute, 0, 2 * constants::time::one_day, 0x2109);
+        SFRField<uint32_t> downlink_period = SFRField<uint32_t>(3 * constants::time::one_minute, 0, 2 * constants::time::one_day, 0x2109);
         SFRField<uint32_t> lp_downlink_period = SFRField<uint32_t>(constants::time::one_hour, constants::time::one_second, 2 * constants::time::one_day, 0x2110);
-        SFRField<uint32_t> transmit_downlink_period = SFRField<uint32_t>(20 * constants::time::one_minute, constants::time::one_second, 2 * constants::time::one_day, 0x2111);
+        SFRField<uint32_t> transmit_downlink_period = SFRField<uint32_t>(10 * constants::time::one_second, constants::time::one_second, 2 * constants::time::one_day, 0x2111);
         SFRField<uint32_t> on_time = SFRField<uint32_t>(35 * constants::time::one_minute, 0, constants::time::one_revolution, 0x2112);
 
         char buffer[constants::rockblock::buffer_size] = {0};
@@ -240,7 +240,7 @@ namespace sfr {
         SFRField<uint32_t> min_battery = SFRField<uint32_t>((3.75 * constants::battery::sfr_resolution), 0x2601, constants::battery::sfr_resolution);
 
         SensorReading *voltage_value = new SensorReading(fault_groups::power_faults::voltage_value, 1, constants::battery::min_voltage, constants::battery::max_voltage);
-        SensorReading *voltage_average = new SensorReading(fault_groups::power_faults::voltage_average, 3000, constants::battery::min_voltage, constants::battery::max_voltage);
+        SensorReading *voltage_average = new SensorReading(fault_groups::power_faults::voltage_average, 300, constants::battery::min_voltage, constants::battery::max_voltage);
     } // namespace battery
     namespace button {
         // OP Codes 2700
