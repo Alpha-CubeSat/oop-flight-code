@@ -23,12 +23,16 @@ void IMUMonitor::IMU_init()
         }
     }
 }
-bool IMUMonitor::getInterpolatedOffsets(double voltage, PWMCoefficients& coeffs, 
+bool IMUMonitor::getInterpolatedOffsets(double volt, PWMCoefficients& coeffs, 
                             const std::map<float, VoltageCoefficients>& voltage_coeffs,
                             const std::function<const PWMCoefficients&(const VoltageCoefficients&)>& coeffSelector) {
     // Validate voltage range
-    if (voltage < 3.6 || voltage > 4.2) {
+    if (volt < 3.6) {
         return false;
+    }
+    double voltage = volt;
+    if (voltage > 4.2) {
+        voltage = 4.2;
     }
     // Find the surrounding voltage levels
     auto upper_it = voltage_coeffs.upper_bound(static_cast<float>(voltage));
