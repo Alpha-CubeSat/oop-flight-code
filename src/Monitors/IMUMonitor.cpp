@@ -239,6 +239,14 @@ void IMUMonitor::imu_offset()
     if (!sfr::imu::gyro_z_value->get_value(&gyro_z)) {
         gyro_z = 0;
     }
+    Serial.println("Raw IMU Data:");
+    Serial.print("Mag X: "); Serial.println(mag_x);
+    Serial.print("Mag Y: "); Serial.println(mag_y);
+    Serial.print("Mag Z: "); Serial.println(mag_z);
+    Serial.print("Gyro X: "); Serial.println(gyro_x);
+    Serial.print("Gyro Y: "); Serial.println(gyro_y);
+    Serial.print("Gyro Z: "); Serial.println(gyro_z);
+    Serial.println("----------");
 
     /*Offset Contributions from PWM (ex: pwmX_oX is contribution of X mag to offset x)*/
     float pwmX_ox, pwmX_oy, pwmX_oz;
@@ -265,21 +273,51 @@ void IMUMonitor::imu_offset()
     float temp_z = (0.206) * temp_imu.temperature + (-6.835);
     /*******************************************/
     /*Total Offsets*/
+    
     float mag_xoffset = (pwmX_ox + pwmY_ox + pwmZ_ox) * Volt_c + temp_x + hardiron_x;// rewrite
     float mag_yoffset = (pwmX_oy + pwmY_oy + pwmZ_oy) * Volt_c + temp_y + hardiron_y;
     float mag_zoffset = (pwmX_oz + pwmY_oz + pwmZ_oz) * Volt_c + temp_z + hardiron_z;// rewrite this
 
+    Serial.println("Hard Iron Components: ");
+    Serial.print("Mag X: "); Serial.println(hardiron_x);
+    Serial.print("Mag Y: "); Serial.println(hardiron_y);
+    Serial.print("Mag Z: "); Serial.println(hardiron_z);
+    Serial.println("________");
+
     /*******************************************/
     /* Finally, adjust magnetometer/gyro readings*/
+    // Serial.println("Unfiltered:");
+    // Serial.print("Mag X: "); Serial.println(mag_x);
+    // Serial.print("Mag Y: "); Serial.println(mag_y);
+    // Serial.print("Mag Z: "); Serial.println(mag_z);
 
-    sfr::imu::mag_x_value->set_value(mag_x - mag_xoffset);
-    sfr::imu::mag_y_value->set_value(mag_y - mag_yoffset);
-    sfr::imu::mag_z_value->set_value(mag_z - mag_zoffset);
+    // Serial.print("Gyro X: "); Serial.println(gyro_x);
+    // Serial.print("Gyro Y: "); Serial.println(gyro_y);
+    // Serial.print("Gyro Z: "); Serial.println(gyro_z);
+    float mag_x_corrected = mag_x - mag_xoffset;
+    float mag_y_corrected = mag_y - mag_yoffset;
+    float mag_z_corrected = mag_z - mag_zoffset;
 
-    // make gyro aligh with mag coor
-    sfr::imu::gyro_x_value->set_value(-(gyro_x - (-0.02297)));
-    sfr::imu::gyro_y_value->set_value(gyro_y - (0.03015));
-    sfr::imu::gyro_z_value->set_value(gyro_z - (-0.01396));
+    float gyro_x_corrected = -(gyro_x - (-0.02297));
+    float gyro_y_corrected = gyro_y - (0.03015);
+    float gyro_z_corrected = gyro_z - (-0.01396);
+
+    sfr::imu::mag_x_value->set_value(mag_x_corrected);
+    sfr::imu::mag_y_value->set_value(mag_y_corrected);
+    sfr::imu::mag_z_value->set_value(mag_z_corrected);
+
+    sfr::imu::gyro_x_value->set_value(gyro_x_corrected);
+    sfr::imu::gyro_y_value->set_value(gyro_y_corrected);
+    sfr::imu::gyro_z_value->set_value(gyro_z_corrected);
+    Serial.println("Soft-Iron Filtered: ");
+    Serial.print("Mag X: "); Serial.println(mag_x_corrected);
+    Serial.print("Mag Y: "); Serial.println(mag_y_corrected);
+    Serial.print("Mag Z: "); Serial.println(mag_z_corrected);
+
+    Serial.print("Gyro X: "); Serial.println(gyro_x_corrected);
+    Serial.print("Gyro Y: "); Serial.println(gyro_y_corrected);
+    Serial.print("Gyro Z: "); Serial.println(gyro_z_corrected);
+    Serial.print("_________");
 }
 
 // generate a normal random variable using Box-Muller transform
@@ -451,6 +489,15 @@ void IMUMonitor::capture_imu_values()
     Serial.println(ekfObj.state(5));
 #endif
     // update the EKFed values
+    Serial.println("EKF Filtered:");
+    Serial.print("Mag X: "); Serial.println(ekfObj.state(0));
+    Serial.print("Mag Y: ");Serial.println(ekfObj.state(1));
+    Serial.print("Mag Z: "); Serial.println(ekfObj.state(2));
+    Serial.print("Gyro X: "); Serial.println(ekfObj.state(3));
+    Serial.print("Gyro Y: "); Serial.println(ekfObj.state(4));
+    Serial.print("Gyro Z: "); Serial.println(ekfObj.state(5));
+    Serial.println("_______");
+
     sfr::imu::mag_x_value->set_value(ekfObj.state(0));
     sfr::imu::mag_y_value->set_value(ekfObj.state(1));
     sfr::imu::mag_z_value->set_value(ekfObj.state(2));
