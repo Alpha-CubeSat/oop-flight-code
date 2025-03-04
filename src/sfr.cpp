@@ -112,7 +112,7 @@ namespace sfr {
         SFRField<uint16_t> attempts = SFRField<uint16_t>(0, 0x1900);
         SFRField<uint16_t> mode = SFRField<uint16_t>((uint16_t)burnwire_mode_type::standby, 0x1901);
         SFRField<uint16_t> attempts_limit = SFRField<uint16_t>(11, 0x1902);
-        SFRField<uint16_t> mandatory_attempts_limit = SFRField<uint16_t>(2, 0x1903);
+        SFRField<uint16_t> mandatory_attempts_limit = SFRField<uint16_t>(4, 0x1903);
         SFRField<uint32_t> start_time = SFRField<uint32_t>(0, 0x1904);
         SFRField<uint32_t> burn_time = SFRField<uint32_t>(600, 0, 5 * constants::time::one_second, 0x1905);
         SFRField<uint32_t> armed_time = SFRField<uint32_t>(48 * constants::time::one_hour, 0, 12 * constants::time::one_hour, 0x1906);
@@ -153,7 +153,7 @@ namespace sfr {
         SFRField<uint32_t> last_downlink = SFRField<uint32_t>(0, 0x2108);
         SFRField<uint32_t> downlink_period = SFRField<uint32_t>(3 * constants::time::one_minute, 0, 2 * constants::time::one_day, 0x2109);
         SFRField<uint32_t> lp_downlink_period = SFRField<uint32_t>(constants::time::one_hour, constants::time::one_second, 2 * constants::time::one_day, 0x2110);
-        SFRField<uint32_t> transmit_downlink_period = SFRField<uint32_t>(10 * constants::time::one_second, constants::time::one_second, 2 * constants::time::one_day, 0x2111);
+        SFRField<uint32_t> transmit_downlink_period = SFRField<uint32_t>(5 * constants::time::one_second, constants::time::one_second, 2 * constants::time::one_day, 0x2111);
         SFRField<uint32_t> on_time = SFRField<uint32_t>(35 * constants::time::one_minute, 0, constants::time::one_revolution, 0x2112);
 
         char buffer[constants::rockblock::buffer_size] = {0};

@@ -13,7 +13,7 @@ int Pins::getPinState(int pinName)
 
 void Pins::setInitialPinStates()
 {
-    pinMode(constants::button::button_pin, INPUT_PULLDOWN);
+    pinMode(constants::button::button_pin, INPUT);
 
     pinMode(constants::acs::xPWMpin, OUTPUT);
     pinMode(constants::acs::yPWMpin, OUTPUT);
