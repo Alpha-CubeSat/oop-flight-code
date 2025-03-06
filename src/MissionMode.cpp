@@ -20,7 +20,7 @@ void Boot::transition_to()
 void Boot::dispatch()
 {
     if (sfr::eeprom::time_alive >= sfr::boot::max_time) {
-        sfr::mission::current_mode = sfr::mission::aliveSignal;
+        sfr::mission::current_mode = sfr::mission::normalInSun;
     }
 }
 

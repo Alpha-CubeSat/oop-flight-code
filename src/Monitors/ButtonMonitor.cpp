@@ -18,6 +18,10 @@ void ButtonMonitor::execute()
             fault_groups::hardware_faults::button->force();
         }
     } else {
-        sfr::button::pressed = true;
+        if (sfr::mission::possible_uncovered) {
+            sfr::button::pressed = false;
+        } else {
+            sfr::button::pressed = true;
+        }
     }
 }

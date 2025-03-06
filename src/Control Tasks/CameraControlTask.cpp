@@ -104,7 +104,6 @@ void CameraControlTask::camera_init()
             sfr::camera::init_mode = (uint16_t)sensor_init_mode_type::complete;
             sfr::camera::power_setting = (uint8_t)sensor_power_mode_type::do_nothing;
             sfr::camera::powered = true;
-            sfr::camera::start_progress = 0;
             break;
         }
         }
@@ -156,7 +155,11 @@ void CameraControlTask::execute()
 
     // handle taking and storing photos
     if (sfr::camera::take_photo == true && sfr::camera::powered == true) {
-        if (!adaCam.takePicture()) {
+        // extra 100ms between comanding photo and trigging capture
+        if (sfr::camera::start_progress == 6) {
+            Serial.println("photo triggered, delaying 100ms");
+            sfr::camera::start_progress = 0;
+        } else if (!adaCam.takePicture()) {
 #ifdef VERBOSE
             Serial.println("Failed to snap!");
 #endif
@@ -260,6 +263,7 @@ void CameraControlTask::camera_shutdown()
     pinMode(constants::camera::tx, OUTPUT);
     Pins::setPinState(constants::camera::rx, LOW);
     Pins::setPinState(constants::camera::tx, LOW);
+    sfr::camera::start_progress = 0;
 
     // if SD.begin succeeds but camera is never able to snap, reduce SD card power consumption
     File file = SD.open("-", FILE_WRITE);
