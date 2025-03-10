@@ -14,6 +14,7 @@ namespace fault_groups {
         Fault *gyro_y_average = new Fault(0x6009);
         Fault *gyro_z_value = new Fault(0x6010);
         Fault *gyro_z_average = new Fault(0x6011);
+        Fault *imu_disable = new Fault(0x6012);
     } // namespace imu_faults
     namespace power_faults {
         Fault *temp_c_value = new Fault(0x6020);
