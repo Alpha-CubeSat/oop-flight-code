@@ -155,10 +155,12 @@ void CameraControlTask::execute()
 
     // handle taking and storing photos
     if (sfr::camera::take_photo == true && sfr::camera::powered == true) {
-        // extra 100ms between comanding photo and trigging capture
-        if (sfr::camera::start_progress == 6) {
+        // extra 200ms delay between comanding photo and trigging capture
+        if (sfr::camera::start_progress < 8) {
+#ifdef VERBOSE
             Serial.println("photo triggered, delaying 100ms");
-            sfr::camera::start_progress = 0;
+#endif
+            sfr::camera::start_progress++;
         } else if (!adaCam.takePicture()) {
 #ifdef VERBOSE
             Serial.println("Failed to snap!");
