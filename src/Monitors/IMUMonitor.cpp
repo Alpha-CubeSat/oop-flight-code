@@ -36,7 +36,7 @@ void IMUMonitor::execute()
         sfr::imu::power_setting = (uint8_t)sensor_power_mode_type::do_nothing;
     }
 
-    if (sfr::imu::power_setting == (uint8_t)sensor_power_mode_type::on && sfr::imu::powered == false) {
+    if (sfr::imu::power_setting == (uint8_t)sensor_power_mode_type::on && sfr::imu::powered == false && !fault_groups::imu_faults::imu_disable->get_base()) {
 #ifdef VERBOSE
         Serial.println("Turned on IMU");
 #endif
