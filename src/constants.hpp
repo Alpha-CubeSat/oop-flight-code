@@ -86,7 +86,7 @@ namespace constants {
             constexpr uint16_t fault_opcode_max = 0x6100;
 
         } // namespace opcodes
-    }     // namespace rockblock
+    } // namespace rockblock
     namespace temperature {
         constexpr int pin = 39;
         constexpr int in_sun_val = 30;
@@ -98,7 +98,7 @@ namespace constants {
         constexpr float in_sun_val = 70; // mA
         constexpr int load = 30;         // load resister value (kOhm)
         constexpr float shunt = 0.1;     // shunt resistor value (Ohm)
-    }                                    // namespace current
+    } // namespace current
     namespace masks {
         constexpr uint32_t uint32_byte1_mask = 0b11111111000000000000000000000000;
         constexpr uint32_t uint32_byte2_mask = 0b00000000111111110000000000000000;
@@ -248,7 +248,7 @@ namespace constants {
     } // namespace battery
     namespace camera {
         constexpr int power_on_pin = 31;
-        constexpr int content_length = 64;
+        constexpr int content_length = 80;
         constexpr int bytes_allocated_fragment = 4;
         constexpr int tx = 34;
         constexpr int rx = 33;
@@ -304,6 +304,6 @@ namespace constants {
     namespace watchdog {
         constexpr uint32_t max_period_ms = 10000;
     } // namespace watchdog
-};    // namespace constants
+}; // namespace constants
 
 #endif

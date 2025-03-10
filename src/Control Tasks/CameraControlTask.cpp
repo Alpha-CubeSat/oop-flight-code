@@ -155,7 +155,13 @@ void CameraControlTask::execute()
 
     // handle taking and storing photos
     if (sfr::camera::take_photo == true && sfr::camera::powered == true) {
-        if (!adaCam.takePicture()) {
+        // extra 200ms delay between commanding photo and triggering capture
+        if (sfr::camera::start_progress < 8) {
+            sfr::camera::start_progress++;
+#ifdef VERBOSE
+            Serial.println("Photo triggered, delaying additional 100ms");
+#endif
+        } else if (!adaCam.takePicture()) {
 #ifdef VERBOSE
             Serial.println("Failed to snap!");
 #endif
@@ -206,7 +212,21 @@ void CameraControlTask::execute()
 #ifdef VERBOSE
                 Serial.println("Done writing file");
 #endif
-                sfr::camera::power_setting = (uint8_t)sensor_power_mode_type::off;
+                if (sfr::camera::images_written == 1) {
+                    if (!adaCam.resumeVideo()) {
+#ifdef VERBOSE
+                        Serial.println("Failed to resume ODS frame!");
+#endif
+                        sfr::camera::power_setting = (uint8_t)sensor_power_mode_type::off;
+                    } else {
+                        sfr::camera::take_photo = true;
+#ifdef VERBOSE
+                        Serial.println("Triggering second activation of optical sensor");
+#endif
+                    }
+                } else {
+                    sfr::camera::power_setting = (uint8_t)sensor_power_mode_type::off;
+                }
             }
         }
     }
@@ -244,6 +264,7 @@ void CameraControlTask::camera_shutdown()
     pinMode(constants::camera::tx, OUTPUT);
     Pins::setPinState(constants::camera::rx, LOW);
     Pins::setPinState(constants::camera::tx, LOW);
+    sfr::camera::start_progress = 0;
 
     // if SD.begin succeeds but camera is never able to snap, reduce SD card power consumption
     File file = SD.open("-", FILE_WRITE);
