@@ -155,8 +155,8 @@ void CameraControlTask::execute()
 
     // handle taking and storing photos
     if (sfr::camera::take_photo == true && sfr::camera::powered == true) {
-        // extra 200ms delay between commanding photo and triggering capture
-        if (sfr::camera::start_progress < 8) {
+        // extra delay (200 ms default) between commanding photo and triggering capture
+        if (sfr::camera::start_progress < (sfr::camera::delay_count + 6)) {
             sfr::camera::start_progress++;
 #ifdef VERBOSE
             Serial.println("Photo triggered, delaying additional 100ms");

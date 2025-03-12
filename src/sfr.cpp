@@ -17,7 +17,7 @@ namespace sfr {
         SFRField<uint8_t> max_stable_gyro_y = SFRField<uint8_t>((0.2 * constants::imu::sfr_resolution), 0x1502, constants::imu::sfr_resolution);   // rad/s
         SFRField<uint8_t> min_unstable_gyro_x = SFRField<uint8_t>((0.7 * constants::imu::sfr_resolution), 0x1503, constants::imu::sfr_resolution); // rad/s
         SFRField<uint8_t> min_unstable_gyro_y = SFRField<uint8_t>((0.7 * constants::imu::sfr_resolution), 0x1504, constants::imu::sfr_resolution); // rad/s
-    }                                                                                                                                              // namespace detumble
+    } // namespace detumble
     namespace aliveSignal {
         // OP Codes 1600
         SFRField<bool> downlinked = SFRField<bool>(false, 0x1600);
@@ -139,6 +139,7 @@ namespace sfr {
         SFRField<uint32_t> fragment_number_requested = SFRField<uint32_t>(0, 0x2016);
         SFRField<uint32_t> power_start_time = SFRField<uint32_t>(0, 0x2017);
         SFRField<uint32_t> power_time = SFRField<uint32_t>(400, 0x2018);
+        SFRField<uint8_t> delay_count = SFRField<uint8_t>(2, 0x2019);
     } // namespace camera
     namespace rockblock {
         // OP Codes 2100
@@ -283,4 +284,4 @@ namespace sfr {
         SFRField<uint32_t> dynamic_data_age = SFRField<uint32_t>(0, 0x2809);
         SFRField<uint32_t> sfr_data_age = SFRField<uint32_t>(0, 0x2810);
     } // namespace eeprom
-};    // namespace sfr
+}; // namespace sfr
