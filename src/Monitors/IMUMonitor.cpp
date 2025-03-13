@@ -205,9 +205,9 @@ void IMUMonitor::imu_offset()
     sfr::imu::mag_z_value->set_value(mag_z - mag_zoffset);
 
     // make gyro aligh with mag coor
-    sfr::imu::gyro_x_value->set_value(-(gyro_x - (-0.02297)));
-    sfr::imu::gyro_y_value->set_value(gyro_y - (0.03015));
-    sfr::imu::gyro_z_value->set_value(gyro_z - (-0.01396));
+    sfr::imu::gyro_x_value->set_value(-(gyro_x - (-0.001216)));
+    sfr::imu::gyro_y_value->set_value(gyro_y - (0.116));
+    sfr::imu::gyro_z_value->set_value(gyro_z - (0.0133));
 }
 
 // generate a normal random variable using Box-Muller transform
@@ -354,43 +354,20 @@ void IMUMonitor::capture_imu_values()
         gyro_z = 0;
     }
 
-    //  Pass sensor data / output of plant into ekf
-    ekfObj.Z(0) = mag_x;
-    ekfObj.Z(1) = mag_y;
-    ekfObj.Z(2) = mag_z;
-    ekfObj.Z(3) = gyro_x;
-    ekfObj.Z(4) = gyro_y;
-    ekfObj.Z(5) = gyro_z;
-
-    ekfObj.step();
-
-#ifdef IMU_TESTING
-    Serial.print(ekfObj.state(0));
-    Serial.print(", ");
-    Serial.print(ekfObj.state(1));
-    Serial.print(", ");
-    Serial.print(ekfObj.state(2));
-    Serial.print(", ");
-    Serial.print(ekfObj.state(3));
-    Serial.print(", ");
-    Serial.print(ekfObj.state(4));
-    Serial.print(", ");
-    Serial.println(ekfObj.state(5));
-#endif
-    // update the EKFed values
-    sfr::imu::mag_x_value->set_value(ekfObj.state(0));
-    sfr::imu::mag_y_value->set_value(ekfObj.state(1));
-    sfr::imu::mag_z_value->set_value(ekfObj.state(2));
-    sfr::imu::gyro_x_value->set_value(ekfObj.state(3));
-    sfr::imu::gyro_y_value->set_value(ekfObj.state(4));
-    sfr::imu::gyro_z_value->set_value(ekfObj.state(5));
+    // add reading to buffer
+    sfr::imu::mag_x_value->set_value(mag_x);
+    sfr::imu::mag_y_value->set_value(mag_y);
+    sfr::imu::mag_z_value->set_value(mag_z);
+    sfr::imu::gyro_x_value->set_value(gyro_x);
+    sfr::imu::gyro_y_value->set_value(gyro_y);
+    sfr::imu::gyro_z_value->set_value(gyro_z);
 
     // Add offset readings to buffer
-    sfr::imu::mag_x_average->set_value(ekfObj.state(0));
-    sfr::imu::mag_y_average->set_value(ekfObj.state(1));
-    sfr::imu::mag_z_average->set_value(ekfObj.state(2));
+    sfr::imu::mag_x_average->set_value(mag_x);
+    sfr::imu::mag_y_average->set_value(mag_y);
+    sfr::imu::mag_z_average->set_value(mag_z);
     // used outside of ACS Control Task to determine exit conditions for Detumble Spin
-    sfr::imu::gyro_x_average->set_value(ekfObj.state(3));
-    sfr::imu::gyro_y_average->set_value(ekfObj.state(4));
-    sfr::imu::gyro_z_average->set_value(ekfObj.state(5));
+    sfr::imu::gyro_x_average->set_value(gyro_x);
+    sfr::imu::gyro_y_average->set_value(gyro_y);
+    sfr::imu::gyro_z_average->set_value(gyro_z);
 }

@@ -17,7 +17,7 @@ MainControlLoop::MainControlLoop()
       burnwire_control_task(),
       camera_control_task(),
       rockblock_control_task(),
-      eeprom_control_task(), // TODO review
+      eeprom_control_task(),
       mission_manager(),
       clock_manager()
 {
