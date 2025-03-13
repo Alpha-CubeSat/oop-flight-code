@@ -159,6 +159,7 @@ namespace sfr {
         extern SFRField<uint32_t> fragment_number_requested;
         extern SFRField<uint32_t> power_start_time;
         extern SFRField<uint32_t> power_time;
+        extern SFRField<uint8_t> delay_count;
     } // namespace camera
     namespace rockblock {
         // OP Codes 2100
@@ -286,6 +287,6 @@ namespace sfr {
         extern SFRField<uint32_t> dynamic_data_age;
         extern SFRField<uint32_t> sfr_data_age;
     } // namespace eeprom
-};    // namespace sfr
+}; // namespace sfr
 
 #endif
