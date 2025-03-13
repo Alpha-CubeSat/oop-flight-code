@@ -89,13 +89,12 @@ namespace constants {
     } // namespace rockblock
     namespace temperature {
         constexpr int pin = 39;
-        constexpr int in_sun_val = 30;
         constexpr int min_temp_c = -100;
         constexpr int max_temp_c = 200;
     } // namespace temperature
     namespace current {
         constexpr int pin = 22;
-        constexpr float in_sun_val = 70; // mA
+        constexpr float in_sun_val = 50; // mA
         constexpr int load = 30;         // load resister value (kOhm)
         constexpr float shunt = 0.1;     // shunt resistor value (Ohm)
     } // namespace current
@@ -219,9 +218,9 @@ namespace constants {
         constexpr float temp_z_c = -1.7573124306246634684924856628641;
 
         // Hard Iron Offsets
-        constexpr float hardiron_x = 21.463;
-        constexpr float hardiron_y = 25.745;
-        constexpr float hardiron_z = -11.539;
+        constexpr float hardiron_x = 30.925;
+        constexpr float hardiron_y = 14.48;
+        constexpr float hardiron_z = -6.075;
 
         // Starshot
         constexpr float step_size_input = 0.10;
@@ -261,8 +260,8 @@ namespace constants {
         constexpr float min_mag = -150;
         constexpr float max_mag = 150;
 
-        constexpr float min_gyro = -5;
-        constexpr float max_gyro = 5;
+        constexpr float min_gyro = -10;
+        constexpr float max_gyro = 10;
 
         constexpr int CSAG = 21;
         constexpr int CSM = 20;

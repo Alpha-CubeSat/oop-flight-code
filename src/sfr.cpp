@@ -4,11 +4,11 @@ namespace sfr {
     namespace stabilization {
         // OP Codes 1100
         // TODO actual default value
-        SFRField<uint32_t> max_time = SFRField<uint32_t>(2 * constants::time::one_hour, 0x1100);
+        SFRField<uint32_t> max_time = SFRField<uint32_t>(5 * constants::time::one_second, 0x1100);
     } // namespace stabilization
     namespace boot {
         // OP Codes 1200
-        SFRField<uint32_t> max_time = SFRField<uint32_t>(2 * constants::time::one_hour, 0x1200);
+        SFRField<uint32_t> max_time = SFRField<uint32_t>(1 * constants::time::one_hour, 0x1200);
     } // namespace boot
     namespace detumble {
         // OP Codes 1500
@@ -111,12 +111,12 @@ namespace sfr {
         // OP Codes 1900
         SFRField<uint16_t> attempts = SFRField<uint16_t>(0, 0x1900);
         SFRField<uint16_t> mode = SFRField<uint16_t>((uint16_t)burnwire_mode_type::standby, 0x1901);
-        SFRField<uint16_t> attempts_limit = SFRField<uint16_t>(10, 0x1902);
+        SFRField<uint16_t> attempts_limit = SFRField<uint16_t>(11, 0x1902);
         SFRField<uint16_t> mandatory_attempts_limit = SFRField<uint16_t>(2, 0x1903);
         SFRField<uint32_t> start_time = SFRField<uint32_t>(0, 0x1904);
         SFRField<uint32_t> burn_time = SFRField<uint32_t>(600, 0, 5 * constants::time::one_second, 0x1905);
         SFRField<uint32_t> armed_time = SFRField<uint32_t>(48 * constants::time::one_hour, 0, 12 * constants::time::one_hour, 0x1906);
-        SFRField<uint32_t> delay_time = SFRField<uint32_t>(constants::time::one_second, 0x1907);
+        SFRField<uint32_t> delay_time = SFRField<uint32_t>(5 * constants::time::one_second, 0x1907);
     } // namespace burnwire
     namespace camera {
         // OP Codes 2000
@@ -203,6 +203,7 @@ namespace sfr {
     namespace temperature {
         // OP Codes 2300
         SFRField<bool> in_sun = SFRField<bool>(false, 0x2300);
+        SFRField<uint8_t> in_sun_val = SFRField<uint8_t>(23, 0x2301);
 
         SensorReading *temp_c_average = new SensorReading(fault_groups::power_faults::temp_c_average, 1500, constants::temperature::min_temp_c, constants::temperature::max_temp_c);
         SensorReading *temp_c_value = new SensorReading(fault_groups::power_faults::temp_c_value, 1, constants::temperature::min_temp_c, constants::temperature::max_temp_c);
@@ -264,8 +265,8 @@ namespace sfr {
             {constants::camera::rx, LOW},
             {constants::camera::tx, LOW},
             {constants::button::button_pin, HIGH},
-            {constants::acs::STBXYpin, HIGH},
-            {constants::acs::STBZpin, HIGH},
+            {constants::acs::STBXYpin, LOW},
+            {constants::acs::STBZpin, LOW},
             {constants::burnwire::first_pin, LOW},
             {constants::burnwire::second_pin, LOW},
             {constants::rockblock::sleep_pin, LOW}};

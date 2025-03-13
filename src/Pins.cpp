@@ -45,8 +45,8 @@ void Pins::setInitialPinStates()
     Pins::setPinState(constants::camera::power_on_pin, LOW);
     Pins::setPinState(constants::camera::rx, LOW);
     Pins::setPinState(constants::camera::tx, LOW);
-    Pins::setPinState(constants::acs::STBXYpin, HIGH);
-    Pins::setPinState(constants::acs::STBZpin, HIGH);
+    Pins::setPinState(constants::acs::STBXYpin, LOW);
+    Pins::setPinState(constants::acs::STBZpin, LOW);
     Pins::setPinState(constants::burnwire::first_pin, LOW);
     Pins::setPinState(constants::burnwire::second_pin, LOW);
     Pins::setPinState(constants::rockblock::sleep_pin, LOW);
