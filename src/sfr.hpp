@@ -224,6 +224,7 @@ namespace sfr {
     namespace temperature {
         // OP Codes 2300
         extern SFRField<bool> in_sun;
+        extern SFRField<uint8_t> in_sun_val;
 
         extern SensorReading *temp_c_average;
         extern SensorReading *temp_c_value;
