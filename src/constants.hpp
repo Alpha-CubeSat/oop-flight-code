@@ -218,9 +218,9 @@ namespace constants {
         constexpr float temp_z_c = -1.7573124306246634684924856628641;
 
         // Hard Iron Offsets
-        constexpr float hardiron_x = 30.925;
-        constexpr float hardiron_y = 14.48;
-        constexpr float hardiron_z = -6.075;
+        constexpr float hardiron_x = 31.5;
+        constexpr float hardiron_y = 14.5;
+        constexpr float hardiron_z = -6.0;
 
         // Starshot
         constexpr float step_size_input = 0.10;
