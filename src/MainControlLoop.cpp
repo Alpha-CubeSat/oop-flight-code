@@ -68,6 +68,9 @@ void MainControlLoop::execute()
     case ((uint8_t)acs_mode_type::detumble):
         Serial.println("DETUMBLE");
         break;
+    case ((uint8_t)acs_mode_type::point):
+        Serial.println("POINT");
+        break;
     }
 
     if (sfr::acs::off) {
